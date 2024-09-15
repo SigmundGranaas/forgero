@@ -1,0 +1,122 @@
+{
+  "type": "HANDLE",
+  "models": [
+    {
+      "name": "refined_handle",
+      "template": "refined_handle.png",
+      "type": "GENERATE",
+      "palette": "TOOL_MATERIAL",
+      "order": 10,
+      "variants": [
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "refined_tool_handle_long.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "refined_tool_handle_long.png"
+        },
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "template": "refined_tool_handle_short.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "refined_tool_handle_short.png"
+        },
+        {
+          "target": [
+            "type:SWORD"
+          ],
+          "template": "refined_short_handle.png"
+        }
+      ]
+    },
+    {
+      "name": "refined_handle_dye",
+      "template": "refined_handle.png",
+      "type": "GENERATE",
+      "palette": "DYE",
+      "order": 15,
+      "variants": [
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "refined_tool_handle_long.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "refined_tool_handle_long.png"
+        },
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "template": "refined_tool_handle_short.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "refined_tool_handle_short.png"
+        },
+        {
+          "target": [
+            "type:SWORD"
+          ],
+          "template": "refined_short_handle.png"
+        }
+      ]
+    },
+    {
+      "name": "grip",
+      "type": "GENERATE",
+      "palette": "MATERIAL",
+      "template": "handle_grip.png",
+      "order": 20,
+      "variants": [
+        {
+          "target": [
+            "model:refined_short_handle.png"
+          ],
+          "template": "short_handle_grip.png"
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "id:refined_handle-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "refined_handle"
+    },
+    {
+      "target": [
+        "type:POMMEL",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "handle_pommel"
+    },
+    {
+      "target": [
+        "type:DYE",
+        "slot:2"
+      ],
+      "modelType": "UPGRADE",
+      "template": "refined_handle_dye"
+    }
+  ]
+}

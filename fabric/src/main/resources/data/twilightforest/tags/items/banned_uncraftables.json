@@ -1,0 +1,37 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forgero:axe",
+      "required": false
+    },
+    {
+      "id": "#forgero:pickaxe",
+      "required": false
+    },
+    {
+      "id": "#forgero:hoe",
+      "required": false
+    },
+    {
+      "id": "#forgero:shovel",
+      "required": false
+    },
+    {
+      "id": "#forgero:sword",
+      "required": false
+    },
+    {
+      "id": "#forgero:part",
+      "required": false
+    },
+    {
+      "id": "#forgero:schematic",
+      "required": false
+    },
+    {
+      "id": "#forgero:gem",
+      "required": false
+    }
+  ]
+}

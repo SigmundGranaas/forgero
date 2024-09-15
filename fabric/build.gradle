@@ -12,27 +12,21 @@ archivesBaseName = "${rootProject.mod_id}-fabric"
 
 dependencies {
 	include(api(project(":common")))
-
-	minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-
-	// Core fabric module
-	include(project(":fabric:${rootProject.mod_id}-fabric-core"))
-
-	// Fabric mod compat
-	include(project(":fabric:${rootProject.mod_id}-fabric-compat"))
-
-	// Modules
 	dependencies {
 		project(":fabric:modules").subprojects.each { subproject ->
 			dependencies.add("include", project(path: ":fabric:modules:${subproject.name}"))
 		}
 	}
 
-	// Advanced runtime resource pack
-	include modApi("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
+	minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 
-	include modApi("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}")
+	// Fabric Loader
+	modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
+	// Fabric API
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	// Advanced Runtime Resource Pack
+	include(modApi("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}"))
 }
 
 subprojects {
@@ -43,6 +37,11 @@ subprojects {
 
 		minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
 		mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+
+		// Fabric Loader
+		modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
+		// Fabric API
+		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 	}
 
 	processResources {
@@ -52,12 +51,11 @@ subprojects {
 			expand "version": project.version,
 				"mod_id": rootProject.mod_id,
 				"mod_name": rootProject.mod_name,
-//				"mod_description": rootProject.mod_description,
-//				"mod_license": rootProject.mod_license,
-//				"curseforge_project_id": rootProject.curseforge_project_id,
-//				"modrinth_project_id": rootProject.modrinth_project_id,
-				"fabric_loader_version": rootProject.fabric_loader_version
-//				"supported_minecraft_version": rootProject.supported_minecraft_version
+				"mod_description": project.mod_description,
+				"mod_license": rootProject.mod_license,
+				"fabric_loader_version": project.fabric_loader_version,
+				"java_version": rootProject.java_version,
+				"supported_minecraft_version": rootProject.supported_minecraft_version
 		}
 	}
 }

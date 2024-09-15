@@ -1,0 +1,31 @@
+{
+  "type": "SHOVEL_HEAD",
+  "models": [
+    {
+      "name": "shovel_head_material",
+      "variants": [
+        {
+          "target": [
+            "model:piglin_shovel_head.png"
+          ],
+          "template": "piglin_shovel_head_reinforcement.png"
+        }
+      ]
+    },
+    {
+      "name": "piglin_shovel_head",
+      "type": "GENERATE",
+      "template": "piglin_shovel_head.png",
+      "palette": "TOOL_MATERIAL",
+      "order": 20
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "name:piglin_shovel_head-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "piglin_shovel_head"
+    }
+  ]
+}

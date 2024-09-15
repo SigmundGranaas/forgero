@@ -1,0 +1,31 @@
+{
+  "type": "SWORD_GUARD",
+  "models": [
+    {
+      "name": "duelling_guard",
+      "template": "duelling_sword_guard.png",
+      "type": "GENERATE",
+      "palette": "TOOL_MATERIAL",
+      "order": 60
+    },
+    {
+      "name": "sword_guard_dye",
+      "variants": [
+        {
+          "target": [
+            "model:duelling_sword_guard.png"
+          ],
+          "template": "duelling_sword_guard.png"
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "id:duelling_sword_guard-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "duelling_guard"
+    }
+  ]
+}

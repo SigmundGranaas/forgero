@@ -1,0 +1,40 @@
+{
+  "type": "POMMEL",
+  "models": [
+    {
+      "target": [
+        "type:METAL",
+        "name:piglin_pommel-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "piglin_pommel"
+    },
+    {
+      "name": "piglin_pommel",
+      "template": "piglin_pommel.png",
+      "type": "GENERATE",
+      "palette": "METAL",
+      "order": 12,
+      "offset": [
+        5,
+        5
+      ],
+      "variants": [
+        {
+          "target": [
+            "type:SWORD"
+          ],
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "target": [
+            "type:HANDLE"
+          ]
+        }
+      ]
+    }
+  ]
+}

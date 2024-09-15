@@ -1,0 +1,11 @@
+{
+  "type": "CLUB",
+  "models": [
+    {
+      "target": [
+        "type:CLUB"
+      ],
+      "modelType": "COMPOSITE"
+    }
+  ]
+}

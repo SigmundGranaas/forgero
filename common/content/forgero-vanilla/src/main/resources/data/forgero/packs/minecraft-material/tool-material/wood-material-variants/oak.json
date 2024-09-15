@@ -1,0 +1,16 @@
+{
+  "type": "WOOD",
+  "name": "oak",
+  "parent": "wood_base",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:oak_planks"
+  },
+  "properties": {
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "oak"
+  }
+}

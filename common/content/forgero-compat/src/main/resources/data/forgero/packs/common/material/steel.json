@@ -1,0 +1,73 @@
+{
+  "type": "METAL",
+  "parent": "metal_base",
+  "name": "steel",
+  "dependencies": {
+    "any": [
+      "mythicmetals",
+      "techreborn",
+      "modern_industrialization"
+    ]
+  },
+  "container": {
+    "type": "HOST",
+    "tag": "c:steel_ingots"
+  },
+  "palette": {
+    "name": "common/steel"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "metal-durability-composite",
+            "type": "DURABILITY",
+            "value": 360
+          },
+          {
+            "id": "metal-rarity-composite",
+            "type": "RARITY",
+            "value": 50
+          },
+          {
+            "id": "metal-weight-composite",
+            "type": "WEIGHT",
+            "value": 40
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "metal-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 25
+          },
+          {
+            "id": "metal-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 20
+          },
+          {
+            "id": "metal-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 180
+          }
+        ]
+      }
+    ]
+  }
+}

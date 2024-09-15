@@ -1,0 +1,67 @@
+{
+  "type": "STONE",
+  "parent": "stone_base",
+  "name": "excellent_stone",
+  "container": {
+    "type": "HOST",
+    "id": "mysticalcrops:excellent_essence_stone"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "stone-rarity-composite",
+        "type": "RARITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 30
+      },
+      {
+        "id": "stone-mining-level-composite",
+        "type": "MINING_LEVEL",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 2.0
+      },
+      {
+        "id": "stone-mining-speed-composite",
+        "type": "MINING_SPEED",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 4.8
+      },
+      {
+        "id": "stone-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 3
+      },
+      {
+        "id": "stone-durability-composite",
+        "type": "DURABILITY",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 210
+      },
+      {
+        "id": "stone-weight-composite",
+        "type": "WEIGHT",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": 30
+      },
+      {
+        "id": "stone-attack_damage-offensive-upgrade",
+        "type": "ATTACK_DAMAGE",
+        "context": "UPGRADE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "category": "OFFENSIVE",
+        "value": 0.9
+      }
+    ]
+  },
+  "palette": {
+    "name": "mysticalcrops/excellent_stone"
+  }
+}

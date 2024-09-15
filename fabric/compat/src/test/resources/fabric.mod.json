@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "id": "test",
+  "version": "${version}",
+  "environment": "*",
+  "description": "Forgero game tests",
+  "license": "${mod_license}",
+  "authors": [
+    "SigmundGranaas"
+  ],
+  "entrypoints": {
+    "fabric-gametest": [
+      "com.sigmundgranaas.forgerofabric.gametest.EmptyTest"
+    ]
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "type": "DUST",
+  "name": "soul_dust",
+  "parent": "dust_base",
+  "container": {
+    "type": "HOST",
+    "id": "deeperdarker:soul_dust"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "dust-rarity-composite",
+            "type": "RARITY",
+            "value": 50
+          },
+          {
+            "id": "dust-durability-composite",
+            "type": "DURABILITY",
+            "value": 50
+          },
+          {
+            "id": "dust-weight-composite",
+            "type": "WEIGHT",
+            "value": 20
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "dust-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 25
+          },
+          {
+            "id": "dust-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 10
+          },
+          {
+            "id": "dust-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 25
+          },
+          {
+            "id": "dust-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 25
+          },
+          {
+            "id": "dust-draw_power-offensive-upgrade",
+            "type": "forgero:draw_power",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 0.2
+          }
+        ]
+      }
+    ],
+    "features": [
+    ]
+  },
+  "palette": {
+    "name": "deeperanddarker/soul_dust"
+  }
+}

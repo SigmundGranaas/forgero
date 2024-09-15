@@ -1,0 +1,31 @@
+{
+  "type": "GEM",
+  "name": "emerald-gem",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "context": "UPGRADE",
+        "order": "BASE",
+        "category": "ALL",
+        "operation": "ADDITION",
+        "value": 40
+      },
+      {
+        "type": "DURABILITY",
+        "context": "UPGRADE",
+        "order": "BASE",
+        "category": "ALL",
+        "operation": "ADDITION",
+        "value": 300.0
+      }
+    ]
+  },
+  "palette": {
+    "name": "emerald_gem"
+  }
+}

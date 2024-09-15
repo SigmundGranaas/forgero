@@ -1,0 +1,177 @@
+{
+  "type": "TOOL_BINDING",
+  "models": [
+    {
+      "name": "binding",
+      "template": "binding.png",
+      "type": "GENERATE",
+      "palette": "MATERIAL",
+      "order": 40,
+      "variants": [
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "template": "axe_binding.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "pickaxe_binding.png"
+        },
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "hoe_binding.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "shovel_binding.png"
+        }
+      ]
+    },
+    {
+      "name": "binding_dye",
+      "template": "binding.png",
+      "type": "GENERATE",
+      "palette": "DYE",
+      "order": 45,
+      "variants": [
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "template": "axe_binding.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "pickaxe_binding.png"
+        },
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "hoe_binding.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "shovel_binding.png"
+        }
+      ]
+    },
+    {
+      "name": "binding_material",
+      "type": "GENERATE",
+      "palette": "MATERIAL",
+      "template": "binding_reinforcement.png",
+      "order": 50,
+      "variants": [
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "template": "axe_binding_reinforced.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "pickaxe_binding_reinforced.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "shovel_binding_reinforced.png"
+        },
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "hoe_binding_reinforced.png"
+        }
+      ]
+    },
+    {
+      "name": "binding_gem",
+      "type": "GENERATE",
+      "palette": "TRINKET",
+      "template": "binding_gem.png",
+      "order": 90,
+      "variants": [
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "template": "axe_binding_gem.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "pickaxe_binding_gem.png"
+        },
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "hoe_binding_gem.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "shovel_binding_gem.png"
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:MATERIAL",
+        "type:BINDING_SCHEMATIC"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "binding"
+    },
+    {
+      "target": [
+        "type:MATERIAL",
+        "slot:0"
+      ],
+      "modelType": "UPGRADE",
+      "template": "binding_material"
+    },
+    {
+      "target": [
+        "type:TOTEM",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "binding_gem"
+    },
+    {
+      "target": [
+        "type:GEM",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "binding_gem"
+    },
+    {
+      "target": [
+        "type:DYE",
+        "slot:2"
+      ],
+      "modelType": "UPGRADE",
+      "template": "binding_dye"
+    }
+  ]
+}

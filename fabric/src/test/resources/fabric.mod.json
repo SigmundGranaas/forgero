@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "test",
+  "version": "${version}",
+  "environment": "*",
+  "description": "Forgero game tests",
+  "license": "${mod_license}",
+  "authors": [
+    "SigmundGranaas"
+  ],
+  "mixins": [
+    "forgero-test.mixins.json"
+  ],
+  "entrypoints": {
+    "fabric-gametest": [
+      "com.sigmundgranaas.forgero.fabric.gametest.RecipeTest",
+      "com.sigmundgranaas.forgero.fabric.gametest.AssemblyStationTester",
+      "com.sigmundgranaas.forgero.fabric.gametest.RepairKitTest",
+      "com.sigmundgranaas.forgero.fabric.gametest.UpgradeTest",
+      "com.sigmundgranaas.forgero.fabric.gametest.BlockSelectionTest",
+      "com.sigmundgranaas.forgero.fabric.gametest.MiningLevelTest",
+      "com.sigmundgranaas.forgero.fabric.gametest.AttributeApplicationTest",
+      "com.sigmundgranaas.forgero.fabric.gametest.VeinMiningToolTests",
+      "com.sigmundgranaas.forgero.fabric.gametest.PatternMiningToolTests",
+      "com.sigmundgranaas.forgero.fabric.gametest.BlockFilterTest",
+      "com.sigmundgranaas.forgero.fabric.gametest.BlockBreakingSpeedTests",
+      "com.sigmundgranaas.forgero.fabric.gametest.HandlerInteractionTests",
+      "com.sigmundgranaas.forgero.fabric.gametest.HitHandlerTests",
+      "com.sigmundgranaas.forgero.fabric.gametest.StateTests",
+      "com.sigmundgranaas.forgero.fabric.gametest.EntityPredicateTest",
+      "com.sigmundgranaas.forgero.fabric.gametest.BowTest",
+      "com.sigmundgranaas.forgero.fabric.gametest.PredicateTests",
+      "com.sigmundgranaas.forgero.fabric.gametest.ExplosionHandlerTests",
+      "com.sigmundgranaas.forgero.fabric.gametest.TeleportHandlerTest"
+    ]
+  }
+}

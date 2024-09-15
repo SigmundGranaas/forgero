@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-compat",
+  "version": "${version}",
+  "name": "Forgero mod compatibility pack",
+  "description": "Mod compatibility pack for Forgero. Adds compatibility for mods such as Mythic Metals, BetterNether, and BYG.",
+  "authors": [
+    "Sigmund Granaas Sandring"
+  ],
+  "contributors": [
+    "Aulluna",
+    "Rad233",
+    "identithree",
+    "macaroni0423",
+    "Steveplays28",
+    "JorisdeBeer",
+    "holmraven",
+    "Apocip",
+    "temathy"
+  ],
+  "contact": {
+    "homepage": "https://sigmundgranaas.com",
+    "sources": "https://github.com/sigmundgranaas/forgero",
+    "issues": "https://github.com/sigmundgranaas/forgero/issues"
+  },
+  "license": "${mod_license}",
+  "icon": "assets/forgero/icon.png",
+  "environment": "*",
+  "entrypoints": {
+  },
+  "mixins": [
+  ],
+  "depends": {
+    "forgero-core": "*",
+    "java": ">=17"
+  },
+  "custom": {
+    "forgeroResource": true,
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/v6sDsftE9N"
+      },
+      "badges": [
+        "library"
+      ],
+      "parent": {
+        "id": "forgero",
+        "name": "Forgero",
+        "description": "Equipment crafting expansion mod for Fabric!",
+        "icon": "assets/forgero/icon.png"
+      }
+    }
+  }
+}

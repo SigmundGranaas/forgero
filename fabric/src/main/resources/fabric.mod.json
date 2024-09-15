@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": [
+    "Sigmund Granaas Sandring"
+  ],
+  "contributors": [
+    "Aulluna",
+    "Rad233",
+    "identithree",
+    "macaroni0423",
+    "Steveplays28",
+    "JorisdeBeer",
+    "holmraven",
+    "Apocip",
+    "Temathy"
+  ],
+  "contact": {
+    "homepage": "https://sigmundgranaas.com",
+    "sources": "https://github.com/sigmundgranaas/forgero",
+    "issues": "https://github.com/sigmundgranaas/forgero/issues"
+  },
+  "license": "${mod_license}",
+  "icon": "assets/${mod_id}/icon.png",
+  "environment": "*",
+  "accessWidener": "${mod_id}.accesswidener",
+  "entrypoints": {
+    "client": [
+      "com.sigmundgranaas.forgero.fabric.client.ForgeroClient"
+    ],
+    "main": [
+      "com.sigmundgranaas.forgero.fabric.ForgeroInitializer"
+    ],
+    "forgeroInitialized": [
+      "com.sigmundgranaas.forgero.fabric.initialization.ForgeroPostInit"
+    ],
+    "forgeroPreInitialization": [
+      "com.sigmundgranaas.forgero.fabric.initialization.ForgeroPreInit"
+    ]
+  },
+  "mixins": [
+    "${mod_id}-common.mixins.json"
+  ],
+  "depends": {
+    "minecraft": "${supported_minecraft_version}",
+    "java": ">=${java_version}",
+    "fabric-loader": "${fabric_loader_version}"
+  },
+  "custom": {
+    "forgeroResource": true,
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/v6sDsftE9N"
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "type": "CRYSTAL",
+  "name": "prismarine_crystals",
+  "parent": "crystal_base",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:prismarine_crystals"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "forgero:emissive",
+        "value": 4
+      }
+    ],
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ],
+    "features": [
+      {
+        "type": "forgero:emissive",
+        "title": "feature.forgero.emissive",
+        "description": "feature.forgero.emissive.description"
+      }
+    ]
+  },
+  "palette": {
+    "name": "prismarine_crystals"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "type": "HOE_HEAD",
+  "models": [
+    {
+      "name": "hoe_head_material",
+      "variants": [
+        {
+          "target": [
+            "model:mastercrafted_hoe_head.png"
+          ],
+          "template": "mastercrafted_hoe_head_tip_reinforcement.png"
+        }
+      ]
+    },
+    {
+      "name": "hoe_dye",
+      "variants": [
+        {
+          "target": [
+            "model:mastercrafted_hoe_head.png"
+          ],
+          "template": "mastercrafted_hoe_head.png"
+        }
+      ]
+    },
+    {
+      "name": "mastercrafted_hoe_head",
+      "modelType": "GENERATE",
+      "template": "mastercrafted_hoe_head.png",
+      "palette": "TOOL_MATERIAL",
+      "order": 20,
+      "offset": [
+        0,
+        0
+      ]
+
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "id:mastercrafted_hoe_head-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "mastercrafted_hoe_head"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "type": "STONE",
+  "name": "cobbled_travertine",
+  "parent": "stone_base",
+  "container": {
+    "type": "HOST",
+    "id": "natures_spirit:cobbled_travertine"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "stone-durability-composite",
+            "type": "DURABILITY",
+            "value": 160
+          },
+          {
+            "id": "stone-rarity-composite",
+            "type": "RARITY",
+            "value": 25
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "stone-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 12
+          },
+          {
+            "id": "stone-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 80
+          }
+        ]
+      }
+    ],
+    "attributes": [
+    ]
+  },
+  "palette": {
+    "name": "natures_spirit/cobbled_travertine"
+  }
+}

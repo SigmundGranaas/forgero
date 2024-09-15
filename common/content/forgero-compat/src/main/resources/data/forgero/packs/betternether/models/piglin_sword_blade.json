@@ -1,0 +1,31 @@
+{
+  "type": "SWORD_BLADE",
+  "models": [
+    {
+      "name": "sword_blade_material",
+      "variants": [
+        {
+          "target": [
+            "model:piglin_sword_blade.png"
+          ],
+          "template": "piglin_sword_blade_reinforcement.png"
+        }
+      ]
+    },
+    {
+      "name": "piglin_sword_blade",
+      "type": "GENERATE",
+      "template": "piglin_sword_blade.png",
+      "palette": "TOOL_MATERIAL",
+      "order": 20
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "name:piglin_sword_blade-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "piglin_sword_blade"
+    }
+  ]
+}

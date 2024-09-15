@@ -26,13 +26,13 @@ public class DisassemblyRecipeLoader {
 		return entries;
 	}
 
-
 	public static void reload(ResourceManager manager) {
 		Gson gson = new Gson();
 		List<DisassemblyRecipe> localEntries = new ArrayList<>();
 		for (Resource res : manager.findResources("disassembly", path -> path.getPath().endsWith(".json")).values()) {
 			try (InputStream stream = res.getInputStream()) {
-				DisassemblyRecipeLoader.DisassemblyData data = gson.fromJson(new JsonReader(new InputStreamReader(stream)), DisassemblyRecipeLoader.DisassemblyData.class);
+				DisassemblyRecipeLoader.DisassemblyData data = gson.fromJson(
+						new JsonReader(new InputStreamReader(stream)), DisassemblyRecipeLoader.DisassemblyData.class);
 				DisassemblyRecipe.of(data).ifPresent(localEntries::add);
 			} catch (Exception e) {
 				Forgero.LOGGER.error(e);
@@ -53,18 +53,17 @@ public class DisassemblyRecipeLoader {
 		private final List<Item> results;
 		private final Ingredient input;
 
-
 		public static Optional<DisassemblyRecipe> of(DisassemblyData data) {
 			Optional<Ingredient> input = RegistryUtils.safeId(data.getInput())
-					.flatMap(id -> RegistryUtils.safeRegistryLookup(Registries.ITEM, id))
-					.map(Ingredient::ofItems);
+			                                          .flatMap(id -> RegistryUtils.safeRegistryLookup(Registries.ITEM, id))
+			                                          .map(Ingredient::ofItems);
 
 			List<Item> results = data.results.stream()
-					.map(RegistryUtils::safeId)
-					.flatMap(Optional::stream)
-					.map(id -> RegistryUtils.safeRegistryLookup(Registries.ITEM, id))
-					.flatMap(Optional::stream)
-					.toList();
+			                                 .map(RegistryUtils::safeId)
+			                                 .flatMap(Optional::stream)
+			                                 .map(id -> RegistryUtils.safeRegistryLookup(Registries.ITEM, id))
+			                                 .flatMap(Optional::stream)
+			                                 .toList();
 
 			if (input.isPresent() && results.size() == data.results.size()) {
 				return Optional.of(new DisassemblyRecipe(results, input.get()));

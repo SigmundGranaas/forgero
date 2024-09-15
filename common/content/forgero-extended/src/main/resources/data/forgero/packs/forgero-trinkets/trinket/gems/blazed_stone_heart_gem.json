@@ -1,0 +1,35 @@
+{
+  "type": "GEM",
+  "name": "blazed_stone_heart-gem",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "context": "UPGRADE",
+        "order": "BASE",
+        "category": "ALL",
+        "operation": "ADDITION",
+        "value": 30
+      },
+      {
+        "type": "MINING_SPEED",
+        "context": "UPGRADE",
+        "order": "END",
+        "category": "ALL",
+        "operation": "MULTIPLICATION",
+        "value": 1.2,
+        "predicate": {
+          "type": "minecraft:block",
+          "tag": "minecraft:base_stone_nether"
+        }
+      }
+    ]
+  },
+  "palette": {
+    "name": "blazed_stone_heart_gem"
+  }
+}

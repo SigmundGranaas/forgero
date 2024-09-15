@@ -18,8 +18,7 @@ include("common")
 
 // Fabric
 include "fabric"
-include "fabric:${mod_id}-fabric-core"
-include "fabric:${mod_id}-fabric-compat"
+include "fabric:compat"
 
 // Modules
 include "fabric:modules"

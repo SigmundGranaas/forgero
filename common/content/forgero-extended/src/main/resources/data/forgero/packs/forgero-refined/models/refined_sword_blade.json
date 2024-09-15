@@ -1,0 +1,42 @@
+{
+  "type": "SWORD_BLADE",
+  "models": [
+    {
+      "name": "refined_blade",
+      "template": "refined_sword_blade.png",
+      "type": "GENERATE",
+      "palette": "TOOL_MATERIAL",
+      "order": 20
+    },
+    {
+      "name": "sword_blade_material",
+      "variants": [
+        {
+          "target": [
+            "model:refined_sword_blade.png"
+          ],
+          "template": "refined_sword_blade_tip_reinforcement.png"
+        }
+      ]
+    },
+    {
+      "name": "sword_blade_dye",
+      "variants": [
+        {
+          "target": [
+            "model:refined_sword_blade.png"
+          ],
+          "template": "refined_sword_blade.png"
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "id:refined_sword_blade-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "refined_blade"
+    }
+  ]
+}

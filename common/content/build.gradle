@@ -1,0 +1,22 @@
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection DependencyNotationArgument
+
+subprojects {
+	dependencies {
+		implementation(project(":core"))
+		testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+	}
+
+	processResources {
+		inputs.property "version", rootProject.version
+
+		filesMatching("fabric.mod.json") {
+			expand "version": rootProject.version
+		}
+	}
+
+	test {
+		useJUnitPlatform()
+	}
+}
