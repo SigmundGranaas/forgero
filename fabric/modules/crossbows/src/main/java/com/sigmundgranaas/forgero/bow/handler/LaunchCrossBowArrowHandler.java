@@ -74,7 +74,10 @@ public class LaunchCrossBowArrowHandler implements UseHandler {
 			return TypedActionResult.pass(stack);
 		}
 
+		playerEntity.setCurrentHand(hand);
+
 		if (isCharged(stack) && isLoaded(stack)) {
+
 			fireArrow(world, playerEntity, arrowStack, 20, stack.copyWithCount(1));
 			setCharged(stack, false);
 			setLoaded(stack, false);
@@ -89,7 +92,6 @@ public class LaunchCrossBowArrowHandler implements UseHandler {
 			}
 			return TypedActionResult.consume(stack);
 		} else {
-			playerEntity.setCurrentHand(hand);
 			return TypedActionResult.consume(stack);
 		}
 	}

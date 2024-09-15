@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
 public class DynamicCrossBowItem extends CrossbowItem implements ToolStateItem {
@@ -82,5 +83,10 @@ public class DynamicCrossBowItem extends CrossbowItem implements ToolStateItem {
 	@Override
 	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
 		dynamicOnStoppedUsing(stack, world, user, remainingUseTicks);
+	}
+
+	@Override
+	public UseAction getUseAction(ItemStack stack) {
+		return UseAction.CROSSBOW;
 	}
 }

@@ -66,27 +66,6 @@
         "type": "forgero:reach",
         "value": 4.5
       }
-    ],
-    "features": [
-      {
-        "type": "minecraft:on_use",
-        "max_use_time": 7200,
-        "use_action": "BOW",
-        "use": [
-          {
-            "type": "forgero:mount_projectile"
-          }
-        ],
-        "on_stop": [
-          {
-            "type": "forgero:launch_projectile"
-          },
-          {
-            "type": "minecraft:stack_damage",
-            "damage": 1
-          }
-        ]
-      }
     ]
   }
 }

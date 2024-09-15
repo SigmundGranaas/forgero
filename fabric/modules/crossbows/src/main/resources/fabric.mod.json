@@ -24,6 +24,9 @@
       "com.sigmundgranaas.forgero.bow.ForgeroCrossBowInitializer"
     ]
   },
+  "mixins": [
+    "forgero-crossbows.mixins.json"
+  ],
   "depends": {
     "fabricloader": ">=0.12.12",
     "fabric": "*",
