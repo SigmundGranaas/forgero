@@ -1,9 +1,11 @@
-# Forgero Beta release 0.12.6
+# Forgero Beta release 0.12.7
 
 ## Changelog
-* [Patch]: Optimized item conversion and registration by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/1075
-* [Patch]: Handler predicate fixes by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/1078
-* [Patch] Fixed namespaces on packs by @JorisDeBeer in https://github.com/SigmundGranaas/forgero/pull/1081
-* [Patch]: Fix dynamic attribute filtration in slots by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/1084
-* [Patch]: Use dynamic attributes instead of default ones for reach by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/1085
-* [Patch]: Added feature and attribute header to tooltip for tools by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/1086
+* [Patch]: Support infinity enchantment by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/1087
+* [Compat] Beneaththewetlands by @JorisDeBeer in https://github.com/SigmundGranaas/forgero/pull/1057
+* [Feature]: Multiple weapon types by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/1089
+* [Patch]: Features are only applied on tools, weapons and arrows by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/1090
+* [Patch]: Adds a recipe for disassembling the bow by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/1092
+* [Patch]: Added a tooltip for the disassembly station. by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/1094
+* [Patch]: Remove handle weapon model override by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/1097
+* [Patch]: Added particle offset by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/1098

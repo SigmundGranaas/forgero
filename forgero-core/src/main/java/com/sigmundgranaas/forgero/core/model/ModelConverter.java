@@ -280,6 +280,7 @@ public class ModelConverter {
 										.offset(variant.getOffset())
 										.resolution(variant.getResolution())
 										.order(data.order())
+										.displayOverrides(variant.getDisplayOverrides().or(data::displayOverrides).orElse(null))
 										.build()),
 						Stream.of(data))
 				.collect(Collectors.toList());
