@@ -2,7 +2,6 @@
   "type": "CLUB_HEAD_SCHEMATIC",
   "name": "club_head-schematic",
   "parent": "club_head_base",
-  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -85,7 +84,7 @@
           {
             "id": "variant-schematic-weight-composite",
             "type": "WEIGHT",
-            "value": 2
+            "value": 1.5
           }
         ]
       }

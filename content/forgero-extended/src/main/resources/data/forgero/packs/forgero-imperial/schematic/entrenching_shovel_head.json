@@ -76,6 +76,11 @@
     ],
     "attributes": [
       {
+        "id": "schematic-reach",
+        "type": "forgero:reach",
+        "value": 4
+      },
+      {
         "id": "schematic-rarity-local",
         "type": "RARITY",
         "order": "BASE",

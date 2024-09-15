@@ -2,7 +2,6 @@
   "type": "SPEAR_HEAD_SCHEMATIC",
   "name": "spear_head-schematic",
   "parent": "spear_head_base",
-  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -81,7 +80,6 @@
       }
     ],
     "features": [
-
     ]
   },
   "custom_data": {
