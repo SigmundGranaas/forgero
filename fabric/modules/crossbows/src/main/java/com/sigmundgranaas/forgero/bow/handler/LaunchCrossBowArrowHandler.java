@@ -90,6 +90,10 @@ public class LaunchCrossBowArrowHandler implements UseHandler {
 			if (!isCreativeMode(playerEntity) && !hasInfinity(stack)) {
 				decrementArrowStack(playerEntity, arrowStack);
 			}
+
+			if(!isCreativeMode(playerEntity)){
+				stack.damage(1, playerEntity, (p) -> p.sendToolBreakStatus(hand));
+			}
 			return TypedActionResult.consume(stack);
 		} else {
 			return TypedActionResult.consume(stack);
