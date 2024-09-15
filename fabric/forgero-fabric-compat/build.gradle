@@ -10,6 +10,8 @@ dependencies {
 	// Bows
 	localRuntime(project(path: ":fabric:modules:bows", configuration: 'namedElements'))
 
+	localRuntime(project(path: ":fabric:modules:tridents", configuration: 'namedElements'))
+
 	// Trade
 	localRuntime(project(path: ":fabric:modules:trade", configuration: 'namedElements'))
 

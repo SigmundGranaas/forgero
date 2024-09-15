@@ -6,9 +6,10 @@
       "variants": [
         {
           "target": [
-            "type:SPEAR_LIKE"
+            "type:TRIDENT",
+            "model:trident_head.png"
           ],
-          "template": "axe_handle.png"
+          "template": "trident_handle.png"
         }
       ]
     }

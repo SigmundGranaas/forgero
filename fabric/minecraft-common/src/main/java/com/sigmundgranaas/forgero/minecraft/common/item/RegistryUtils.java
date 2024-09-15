@@ -53,8 +53,6 @@ public class RegistryUtils {
 		return converter.apply(provider, settings, params);
 	}
 
-	;
-
 	public static Predicate<StateProvider> typeMatcher(Type type) {
 		return (state) -> state.get().type().test(type);
 	}
