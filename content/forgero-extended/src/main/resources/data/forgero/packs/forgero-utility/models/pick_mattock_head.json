@@ -37,14 +37,6 @@
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "pick_mattock_head"
-    },
-    {
-      "target": [
-        "type:MATERIAL",
-        "slot:0"
-      ],
-      "modelType": "UPGRADE",
-      "template": "pick_mattock_head_reinforcement"
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "type": "SWORD_BLADE",
+  "type": "KNIFE_BLADE",
   "models": [
     {
       "name": "knife_blade",
@@ -9,34 +9,42 @@
       "order": 20
     },
     {
-      "name": "sword_blade_material",
-      "variants": [
-        {
-          "target": [
-            "model:lightweight/knife_blade.png"
-          ],
-          "template": "lightweight/knife_blade_reinforcement.png"
-        }
-      ]
+      "name": "knife_blade_material",
+      "type": "GENERATE",
+      "palette": "MATERIAL",
+      "template": "lightweight/knife_blade_reinforcement.png",
+      "order": 30
     },
     {
-      "name": "sword_blade_dye",
-      "variants": [
-        {
-          "target": [
-            "model:lightweight/knife_blade.png"
-          ],
-          "template": "lightweight/knife_blade.png"
-        }
-      ]
+      "name": "knife_blade_dye",
+      "template": "lightweight/knife_blade.png",
+      "type": "GENERATE",
+      "palette": "DYE",
+      "order": 25
     },
     {
       "target": [
         "type:TOOL_MATERIAL",
-        "id:knife_blade-schematic"
+        "type:KNIFE_BLADE_SCHEMATIC"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "knife_blade"
+    },
+    {
+      "target": [
+        "type:MATERIAL",
+        "slot:0"
+      ],
+      "modelType": "UPGRADE",
+      "template": "knife_blade_material"
+    },
+    {
+      "target": [
+        "type:DYE",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "knife_blade_dye"
     }
   ]
 }

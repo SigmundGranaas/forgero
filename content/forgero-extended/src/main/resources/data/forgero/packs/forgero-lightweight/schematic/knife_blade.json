@@ -1,13 +1,14 @@
 {
-  "type": "SWORD_BLADE_SCHEMATIC",
+  "type": "KNIFE_BLADE_SCHEMATIC",
   "name": "knife_blade-schematic",
-  "parent": "sword_blade_base",
+  "parent": "knife_blade_base",
+  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "SWORD_BLADE",
+    "type": "KNIFE_BLADE",
     "target": "CREATE",
     "recipes": [
       {
