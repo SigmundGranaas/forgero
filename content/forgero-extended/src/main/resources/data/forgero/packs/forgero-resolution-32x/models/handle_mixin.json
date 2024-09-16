@@ -1,0 +1,119 @@
+{
+  "type": "HANDLE",
+  "models": [
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:HANDLE"
+          ],
+          "template": "32x/handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "grip",
+      "variants": [
+        {
+          "target": [
+            "type:HANDLE"
+          ],
+          "template": "32x/handle_grip.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "handle_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HANDLE"
+          ],
+          "template": "32x/handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:AXE",
+            "model:32x/axe_head.png"
+          ],
+          "template": "32x/axe_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:AXE",
+            "model:32x/pickaxe_head.png"
+          ],
+          "template": "32x/pickaxe_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:AXE",
+            "model:32x/shovel_head.png"
+          ],
+          "template": "32x/shovel_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:AXE",
+            "model:32x/refined_axe_head.png"
+          ],
+          "template": "32x/axe_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:AXE",
+            "model:32x/mastercrafted_axe_head.png"
+          ],
+          "template": "32x/axe_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "handle_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HANDLE",
+            "model:32x/axe_handle.png"
+          ],
+          "template": "32x/axe_handle.png",
+          "resolution": 32
+        }
+      ]
+    }
+  ]
+}
