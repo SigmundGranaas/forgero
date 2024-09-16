@@ -1,5 +1,5 @@
 {
-  "type": "CLUB_HEAD",
+  "type": "SIMPLE_WEAPON_HEAD",
   "models": [
     {
       "name": "war_hammer_head",
@@ -9,7 +9,7 @@
       "order": 20
     },
     {
-      "name": "club_head_material",
+      "name": "simple_weapon_head_material",
       "variants": [
         {
           "target": [
@@ -20,7 +20,7 @@
       ]
     },
     {
-      "name": "club_dye",
+      "name": "simple_weapon_head_dye",
       "variants": [
         {
           "target": [

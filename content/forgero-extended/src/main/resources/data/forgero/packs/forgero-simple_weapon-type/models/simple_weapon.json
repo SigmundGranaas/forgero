@@ -1,9 +1,9 @@
 {
-  "type": "CLUB",
+  "type": "SIMPLE_WEAPON",
   "models": [
     {
       "target": [
-        "type:CLUB"
+        "type:SIMPLE_WEAPON"
       ],
       "modelType": "COMPOSITE"
     }

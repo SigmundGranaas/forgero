@@ -1,13 +1,13 @@
 {
-  "type": "CLUB_HEAD_SCHEMATIC",
+  "type": "SIMPLE_WEAPON_HEAD_SCHEMATIC",
   "name": "mace_head-schematic",
-  "parent": "club_head_base",
+  "parent": "simple_weapon_base",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "CLUB_HEAD",
+    "type": "SIMPLE_WEAPON_HEAD",
     "target": "CREATE",
     "recipes": [
       {
@@ -94,6 +94,10 @@
     "ingredient_count": {
       "value": 4,
       "context": "LOCAL"
+    },
+    "name_replacement": {
+      "from": "spear",
+      "to": "mace"
     },
     "better_compat_attribute_container": "forgero:mace"
   }

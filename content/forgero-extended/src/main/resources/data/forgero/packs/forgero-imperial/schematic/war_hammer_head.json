@@ -1,13 +1,13 @@
 {
-  "type": "CLUB_HEAD_SCHEMATIC",
+  "type": "SIMPLE_WEAPON_HEAD_SCHEMATIC",
   "name": "war_hammer_head-schematic",
-  "parent": "club_head_base",
+  "parent": "simple_weapon_head_base",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "CLUB_HEAD",
+    "type": "SIMPLE_WEAPON_HEAD",
     "target": "CREATE",
     "recipes": [
       {
@@ -106,6 +106,10 @@
     "ingredient_count": {
       "value": 4,
       "context": "LOCAL"
+    },
+    "name_replacement": {
+      "from": "spear",
+      "to": "war_hammer"
     },
     "better_compat_attribute_container": "forgero:mace"
   }

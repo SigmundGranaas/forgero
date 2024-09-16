@@ -1,13 +1,13 @@
 {
-  "type": "SWORD_BLADE_SCHEMATIC",
+  "type": "SIMPLE_WEAPON_HEAD_SCHEMATIC",
   "name": "kunai_blade-schematic",
-  "parent": "sword_blade_base",
+  "parent": "simple_weapon_head_base",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "SWORD_BLADE",
+    "type": "SIMPLE_WEAPON_HEAD",
     "target": "CREATE",
     "recipes": [
       {
@@ -133,7 +133,7 @@
       "context": "LOCAL"
     },
     "name_replacement": {
-      "from": "sword",
+      "from": "spear",
       "to": "kunai"
     },
     "better_compat_attribute_container": "forgero:dagger"

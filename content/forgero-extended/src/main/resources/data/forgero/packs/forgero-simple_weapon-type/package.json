@@ -1,5 +1,5 @@
 {
-  "name": "forgero-spear-types",
+  "name": "forgero-simple_weapon-type",
   "resource_type": "PACKAGE",
   "priority": 4,
   "namespace": "forgero",

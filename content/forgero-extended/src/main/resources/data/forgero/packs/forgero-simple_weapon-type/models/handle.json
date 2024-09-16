@@ -6,7 +6,7 @@
       "variants": [
         {
           "target": [
-            "type:CLUB"
+            "type:SIMPLE_WEAPON"
           ],
           "template": "axe_handle.png"
         }

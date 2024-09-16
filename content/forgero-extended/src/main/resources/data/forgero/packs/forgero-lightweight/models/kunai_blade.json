@@ -1,5 +1,5 @@
 {
-  "type": "SWORD_BLADE",
+  "type": "SIMPLE_WEAPON_HEAD",
   "models": [
     {
       "name": "kunai_blade",
@@ -9,7 +9,7 @@
       "order": 20
     },
     {
-      "name": "sword_blade_material",
+      "name": "simple_weapon_head_material",
       "variants": [
         {
           "target": [
@@ -20,7 +20,7 @@
       ]
     },
     {
-      "name": "sword_blade_dye",
+      "name": "simple_weapon_head_dye",
       "variants": [
         {
           "target": [

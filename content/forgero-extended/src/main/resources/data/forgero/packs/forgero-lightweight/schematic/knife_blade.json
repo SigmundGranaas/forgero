@@ -1,14 +1,13 @@
 {
-  "type": "KNIFE_BLADE_SCHEMATIC",
+  "type": "SIMPLE_WEAPON_HEAD_SCHEMATIC",
   "name": "knife_blade-schematic",
-  "parent": "knife_blade_base",
-  "resource_type": "DEFAULT",
+  "parent": "simple_weapon_head_base",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "KNIFE_BLADE",
+    "type": "SIMPLE_WEAPON_HEAD",
     "target": "CREATE",
     "recipes": [
       {
@@ -127,7 +126,8 @@
           {
             "type": "forgero:throw",
             "velocity_multiplier": "2.5",
-            "instability": "2"
+            "instability": "2",
+            "spin_type": "VERTICAL"
           },
           {
             "type": "minecraft:play_sound",
@@ -147,7 +147,7 @@
       "context": "LOCAL"
     },
     "name_replacement": {
-      "from": "sword",
+      "from": "spear",
       "to": "knife"
     },
     "better_compat_attribute_container": "forgero:dagger"
