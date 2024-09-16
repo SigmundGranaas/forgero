@@ -1,0 +1,117 @@
+{
+  "type": "SHOVEL_HEAD",
+  "models": [
+    {
+      "name": "shovel_head",
+      "variants": [
+        {
+          "target": [
+            "type:SHOVEL_HEAD"
+          ],
+          "template": "32x/shovel_head.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "shovel_head_material",
+      "variants": [
+        {
+          "target": [
+            "type:SHOVEL_HEAD"
+          ],
+          "template": "32x/shovel_head_tip_reinforcement.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "shovel_dye",
+      "variants": [
+        {
+          "target": [
+            "type:SHOVEL_HEAD"
+          ],
+          "template": "32x/shovel_head.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "refined_shovel_head",
+      "variants": [
+        {
+          "target": [
+            "type:SHOVEL_HEAD"
+          ],
+          "template": "32x/refined_shovel_head.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "shovel_head_material",
+      "variants": [
+        {
+          "target": [
+            "type:SHOVEL_HEAD",
+            "model:32x/refined_shovel_head.png"
+          ],
+          "template": "32x/refined_shovel_head_tip_reinforcement.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "shovel_dye",
+      "variants": [
+        {
+          "target": [
+            "type:SHOVEL_HEAD",
+            "model:32x/refined_shovel_head.png"
+          ],
+          "template": "32x/refined_shovel_head.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "mastercrafted_shovel_head",
+      "variants": [
+        {
+          "target": [
+            "type:SHOVEL_HEAD"
+          ],
+          "template": "32x/mastercrafted_shovel_head.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "shovel_head_material",
+      "variants": [
+        {
+          "target": [
+            "type:SHOVEL_HEAD",
+            "model:32x/mastercrafted_shovel_head.png"
+          ],
+          "template": "32x/mastercrafted_shovel_head_tip_reinforcement.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "shovel_dye",
+      "variants": [
+        {
+          "target": [
+            "type:SHOVEL_HEAD",
+            "model:32x/mastercrafted_shovel_head.png"
+          ],
+          "template": "32x/mastercrafted_shovel_head.png",
+          "resolution": 32
+        }
+      ]
+    }
+  ]
+}

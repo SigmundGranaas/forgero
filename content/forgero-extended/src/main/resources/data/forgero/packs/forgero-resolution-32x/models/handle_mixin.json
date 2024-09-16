@@ -55,7 +55,7 @@
       "variants": [
         {
           "target": [
-            "type:AXE",
+            "type:PICKAXE",
             "model:32x/pickaxe_head.png"
           ],
           "template": "32x/pickaxe_handle.png",
@@ -68,10 +68,36 @@
       "variants": [
         {
           "target": [
-            "type:AXE",
+            "type:SHOVEL",
             "model:32x/shovel_head.png"
           ],
-          "template": "32x/shovel_handle.png",
+          "template": "32x/medium_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:32x/hoe_head.png"
+          ],
+          "template": "32x/hoe_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD",
+            "model:32x/sword_blade.png"
+          ],
+          "template": "32x/short_handle.png",
           "resolution": 32
         }
       ]
@@ -103,6 +129,123 @@
       ]
     },
     {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD",
+            "model:32x/refined_sword_blade.png"
+          ],
+          "template": "32x/short_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:SWORD",
+            "model:32x/mastercrafted_sword_blade.png"
+          ],
+          "template": "32x/short_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:PICKAXE",
+            "model:32x/refined_pickaxe_head.png"
+          ],
+          "template": "32x/pickaxe_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:PICKAXE",
+            "model:32x/mastercrafted_pickaxe_head.png"
+          ],
+          "template": "32x/pickaxe_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:SHOVEL",
+            "model:32x/refined_shovel_head.png"
+          ],
+          "template": "32x/medium_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:SHOVEL",
+            "model:32x/mastercrafted_shovel_head.png"
+          ],
+          "template": "32x/medium_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:32x/refined_hoe_head.png"
+          ],
+          "template": "32x/hoe_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:32x/mastercrafted_hoe_head.png"
+          ],
+          "template": "32x/hoe_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "handle_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HANDLE",
+            "model:32x/pickaxe_handle.png"
+          ],
+          "template": "32x/pickaxe_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
       "name": "handle_dye",
       "variants": [
         {
@@ -111,6 +254,45 @@
             "model:32x/axe_handle.png"
           ],
           "template": "32x/axe_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "handle_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HANDLE",
+            "model:32x/medium_handle.png"
+          ],
+          "template": "32x/medium_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "handle_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HANDLE",
+            "model:32x/hoe_handle.png"
+          ],
+          "template": "32x/hoe_handle.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "handle_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HANDLE",
+            "model:32x/short_handle.png"
+          ],
+          "template": "32x/short_handle.png",
           "resolution": 32
         }
       ]

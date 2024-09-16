@@ -14,7 +14,7 @@
       ]
     },
     {
-      "name": "pickaxe_head_tip_reinforcement",
+      "name": "pickaxe_head_material",
       "variants": [
         {
           "target": [
@@ -26,97 +26,13 @@
       ]
     },
     {
-      "name": "clumpy_pickaxe_head",
+      "name": "pickaxe_dye",
       "variants": [
         {
           "target": [
-            "type:PICKAXE_HEAD"
+            "type:pickaxe_HEAD"
           ],
-          "template": "32x/clumpy_pickaxe_tip_head.png",
-          "resolution": 32
-        }
-      ]
-    },
-    {
-      "name": "clumpy_pickaxe_head_tip_reinforcement",
-      "variants": [
-        {
-          "target": [
-            "type:PICKAXE_HEAD"
-          ],
-          "template": "32x/clumpy_pickaxe_head_tip_reinforcement.png",
-          "resolution": 32
-        }
-      ]
-    },
-    {
-      "name": "lightweight_pickaxe_head",
-      "variants": [
-        {
-          "target": [
-            "type:PICKAXE_HEAD"
-          ],
-          "template": "32x/lightweight_pickaxe_head.png",
-          "resolution": 32
-        }
-      ]
-    },
-    {
-      "name": "lightweight_pickaxe_head_tip_reinforcement",
-      "variants": [
-        {
-          "target": [
-            "type:PICKAXE_HEAD"
-          ],
-          "template": "32x/lightweight_pickaxe_head_tip_reinforcement.png",
-          "resolution": 32
-        }
-      ]
-    },
-    {
-      "name": "mastercrafted_pickaxe_head",
-      "variants": [
-        {
-          "target": [
-            "type:PICKAXE_HEAD"
-          ],
-          "template": "32x/mastercrafted_pickaxe_head.png",
-          "resolution": 32
-        }
-      ]
-    },
-    {
-      "name": "mastercrafted_pickaxe_head_tip_reinforcement",
-      "variants": [
-        {
-          "target": [
-            "type:PICKAXE_HEAD"
-          ],
-          "template": "32x/mastercrafted_pickaxe_head_tip_reinforcement.png",
-          "resolution": 32
-        }
-      ]
-    },
-    {
-      "name": "pointy_pickaxe_head",
-      "variants": [
-        {
-          "target": [
-            "type:PICKAXE_HEAD"
-          ],
-          "template": "32x/pointy_pickaxe_head.png",
-          "resolution": 32
-        }
-      ]
-    },
-    {
-      "name": "pointy_pickaxe_head_tip_reinforcement",
-      "variants": [
-        {
-          "target": [
-            "type:PICKAXE_HEAD"
-          ],
-          "template": "32x/pointy_pickaxe_head_tip_reinforcement.png",
+          "template": "32x/pickaxe_head.png",
           "resolution": 32
         }
       ]
@@ -134,13 +50,65 @@
       ]
     },
     {
-      "name": "refined_pickaxe_head_tip_reinforcement",
+      "name": "pickaxe_head_material",
+      "variants": [
+        {
+          "target": [
+            "type:PICKAXE_HEAD",
+            "model:32x/refined_pickaxe_head.png"
+          ],
+          "template": "32x/refined_pickaxe_head_tip_reinforcement.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "pickaxe_dye",
+      "variants": [
+        {
+          "target": [
+            "type:PICKAXE_HEAD",
+            "model:32x/refined_pickaxe_head.png"
+          ],
+          "template": "32x/refined_pickaxe_head.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "mastercrafted_pickaxe_head",
       "variants": [
         {
           "target": [
             "type:PICKAXE_HEAD"
           ],
-          "template": "32x/refined_pickaxe_head_tip_reinforcement.png",
+          "template": "32x/mastercrafted_pickaxe_head.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "pickaxe_head_material",
+      "variants": [
+        {
+          "target": [
+            "type:PICKAXE_HEAD",
+            "model:32x/mastercrafted_pickaxe_head.png"
+          ],
+          "template": "32x/mastercrafted_pickaxe_head_tip_reinforcement.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "pickaxe_dye",
+      "variants": [
+        {
+          "target": [
+            "type:PICKAXE_HEAD",
+            "model:32x/mastercrafted_pickaxe_head.png"
+          ],
+          "template": "32x/mastercrafted_pickaxe_head.png",
           "resolution": 32
         }
       ]

@@ -1,0 +1,117 @@
+{
+  "type": "HOE_HEAD",
+  "models": [
+    {
+      "name": "hoe_head",
+      "variants": [
+        {
+          "target": [
+            "type:HOE_HEAD"
+          ],
+          "template": "32x/hoe_head.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "hoe_head_material",
+      "variants": [
+        {
+          "target": [
+            "type:HOE_HEAD"
+          ],
+          "template": "32x/hoe_head_tip_reinforcement.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "hoe_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HOE_HEAD"
+          ],
+          "template": "32x/hoe_head.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "refined_hoe_head",
+      "variants": [
+        {
+          "target": [
+            "type:HOE_HEAD"
+          ],
+          "template": "32x/refined_hoe_head.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "hoe_head_material",
+      "variants": [
+        {
+          "target": [
+            "type:HOE_HEAD",
+            "model:32x/refined_hoe_head.png"
+          ],
+          "template": "32x/refined_hoe_head_tip_reinforcement.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "hoe_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HOE_HEAD",
+            "model:32x/refined_hoe_head.png"
+          ],
+          "template": "32x/refined_hoe_head.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "mastercrafted_hoe_head",
+      "variants": [
+        {
+          "target": [
+            "type:HOE_HEAD"
+          ],
+          "template": "32x/mastercrafted_hoe_head.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "hoe_head_material",
+      "variants": [
+        {
+          "target": [
+            "type:HOE_HEAD",
+            "model:32x/mastercrafted_hoe_head.png"
+          ],
+          "template": "32x/mastercrafted_hoe_head_tip_reinforcement.png",
+          "resolution": 32
+        }
+      ]
+    },
+    {
+      "name": "hoe_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HOE_HEAD",
+            "model:32x/mastercrafted_hoe_head.png"
+          ],
+          "template": "32x/mastercrafted_hoe_head.png",
+          "resolution": 32
+        }
+      ]
+    }
+  ]
+}
