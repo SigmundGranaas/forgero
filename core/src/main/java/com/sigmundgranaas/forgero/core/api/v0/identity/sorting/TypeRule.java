@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.api.identity.sorting;
+package com.sigmundgranaas.forgero.core.api.v0.identity.sorting;
 
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;

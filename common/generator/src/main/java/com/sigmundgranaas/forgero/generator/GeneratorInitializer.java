@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.generator;
 
 import java.util.function.Function;
 
-import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroInitializedEntryPoint;
+import com.sigmundgranaas.forgero.core.api.v0.entrypoint.ForgeroPreInitializedEntryPoint;
 import com.sigmundgranaas.forgero.generator.api.operation.OperationFactory;
 import com.sigmundgranaas.forgero.generator.impl.converter.StringListVariableConverter;
 import com.sigmundgranaas.forgero.generator.impl.converter.TagToItemConverter;
@@ -13,9 +13,9 @@ import net.minecraft.registry.Registries;
 import static com.sigmundgranaas.forgero.generator.api.GeneratorRegistry.operation;
 import static com.sigmundgranaas.forgero.generator.api.GeneratorRegistry.variableConverter;
 
-public class GeneratorInitializer implements ForgeroInitializedEntryPoint {
+public class GeneratorInitializer implements ForgeroPreInitializedEntryPoint {
 	@Override
-	public void onInitialized(com.sigmundgranaas.forgero.service.StateService service) {
+	public void onPreInitialized() {
 		minecraftSetup();
 	}
 

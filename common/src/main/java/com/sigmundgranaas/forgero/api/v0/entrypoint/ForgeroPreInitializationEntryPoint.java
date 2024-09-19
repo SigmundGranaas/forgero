@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.fabric.api.entrypoint;
+package com.sigmundgranaas.forgero.api.v0.entrypoint;
 
 import com.sigmundgranaas.forgero.fabric.initialization.ForgeroPreInit;
 

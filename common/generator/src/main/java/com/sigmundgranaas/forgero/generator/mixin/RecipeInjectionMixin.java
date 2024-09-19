@@ -16,6 +16,7 @@ import com.sigmundgranaas.forgero.generator.impl.VariableToMapTransformer;
 
 import net.fabricmc.loader.api.FabricLoader;
 
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -28,9 +29,8 @@ import net.minecraft.util.profiler.Profiler;
 
 @Mixin(RecipeManager.class)
 public class RecipeInjectionMixin {
-
 	@Inject(method = "apply(Ljava/util/Map;Lnet/minecraft/resource/ResourceManager;Lnet/minecraft/util/profiler/Profiler;)V", at = @At("HEAD"))
-	public void forgero$injectDynamicRecipes(Map<Identifier, JsonElement> map, ResourceManager resourceManager, Profiler profiler, CallbackInfo info) {
+	public void forgero$injectDynamicRecipes(@NotNull Map<Identifier, JsonElement> map, ResourceManager resourceManager, Profiler profiler, CallbackInfo info) {
 		StringReplacer stringReplacer = new StringReplacer(Registries.operationRegistry()::convert);
 		VariableToMapTransformer transformer = new VariableToMapTransformer(Registries.variableConverterRegistry()::convert);
 		Predicate<String> isModLoaded = FabricLoader.getInstance()::isModLoaded;

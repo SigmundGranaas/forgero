@@ -33,6 +33,7 @@ dependencies {
 	api(project(":core"))
 	common(project(path: ":common", configuration: "namedElements")) { transitive false }
 	shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+	api(project(":common:generator"))
 
 	minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"

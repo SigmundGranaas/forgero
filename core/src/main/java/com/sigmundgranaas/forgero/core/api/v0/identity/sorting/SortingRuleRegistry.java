@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.api.identity.sorting;
+package com.sigmundgranaas.forgero.core.api.v0.identity.sorting;
 
 import java.util.Comparator;
 import java.util.Map;

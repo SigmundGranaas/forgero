@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero;
 
-import com.sigmundgranaas.forgero.core.api.identity.DefaultRules;
-import com.sigmundgranaas.forgero.core.api.identity.ModificationRuleRegistry;
-import com.sigmundgranaas.forgero.core.api.identity.sorting.SortingRule;
-import com.sigmundgranaas.forgero.core.api.identity.sorting.SortingRuleRegistry;
+import com.sigmundgranaas.forgero.core.api.v0.identity.DefaultRules;
+import com.sigmundgranaas.forgero.core.api.v0.identity.ModificationRuleRegistry;
+import com.sigmundgranaas.forgero.core.api.v0.identity.sorting.SortingRule;
+import com.sigmundgranaas.forgero.core.api.v0.identity.sorting.SortingRuleRegistry;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.testutil.Tools;

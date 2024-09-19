@@ -2,8 +2,8 @@ package com.sigmundgranaas.forgero.state;
 
 import java.util.List;
 
-import com.sigmundgranaas.forgero.core.api.identity.sorting.SortingRule;
-import com.sigmundgranaas.forgero.core.api.identity.sorting.SortingRuleRegistry;
+import com.sigmundgranaas.forgero.core.api.v0.identity.sorting.SortingRule;
+import com.sigmundgranaas.forgero.core.api.v0.identity.sorting.SortingRuleRegistry;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.testutil.Materials;
 import com.sigmundgranaas.forgero.testutil.Schematics;

@@ -14,7 +14,7 @@ import com.sigmundgranaas.forgero.bow.item.BowGroupRegistrars;
 import com.sigmundgranaas.forgero.bow.item.DynamicBowItemRegistrationHandler;
 import com.sigmundgranaas.forgero.bow.predicate.BowPullPredicate;
 import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.core.api.identity.ModificationRuleRegistry;
+import com.sigmundgranaas.forgero.core.api.v0.identity.ModificationRuleRegistry;
 import com.sigmundgranaas.forgero.core.handler.HandlerBuilderRegistry;
 import com.sigmundgranaas.forgero.core.model.match.PredicateFactory;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;

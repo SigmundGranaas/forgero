@@ -3,10 +3,7 @@ package com.sigmundgranaas.forgero.predicate.util;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -16,19 +13,11 @@ import com.mojang.serialization.MapLike;
 import com.sigmundgranaas.forgero.core.Forgero;
 import org.apache.commons.lang3.StringUtils;
 
-// JSON Utility class
-public class JsonUtils {
-	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-
+public class JsonUtil extends com.sigmundgranaas.forgero.core.util.json.JsonUtil {
 	public static <R> String prettyPrintJson(DynamicOps<R> ops, MapLike<R> mapLike) {
 		Map<R, R> map = mapLike.entries().collect(ImmutableMap.toImmutableMap(Pair::getFirst, Pair::getSecond));
 		String jsonString = ops.convertTo(JsonOps.INSTANCE, ops.createMap(map)).toString();
 		return prettyPrintJson(jsonString);
-	}
-
-	public static <R> String prettyPrintJson(String json) {
-		JsonElement jsonElement = JsonParser.parseString(json);
-		return GSON.toJson(jsonElement);
 	}
 
 	public static <R> String prettyPrintJsonWithHighlight(DynamicOps<R> ops, MapLike<R> mapLike, String highlightKey) {

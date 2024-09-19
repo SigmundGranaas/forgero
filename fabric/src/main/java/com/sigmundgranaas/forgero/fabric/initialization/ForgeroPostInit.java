@@ -1,7 +1,9 @@
 package com.sigmundgranaas.forgero.fabric.initialization;
 
+import static com.sigmundgranaas.forgero.block.assemblystation.AssemblyStationBlock.*;
+import static com.sigmundgranaas.forgero.block.upgradestation.UpgradeStationBlock.*;
 import static com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeModificationRegistry.modificationBuilder;
-2import static com.sigmundgranaas.forgero.generator.api.GeneratorRegistry.operation;
+import static com.sigmundgranaas.forgero.generator.api.GeneratorRegistry.operation;
 import static com.sigmundgranaas.forgero.generator.api.GeneratorRegistry.variableConverter;
 import static com.sigmundgranaas.forgero.block.assemblystation.AssemblyStationScreenHandler.ASSEMBLY_STATION_SCREEN_HANDLER;
 import static com.sigmundgranaas.forgero.block.upgradestation.UpgradeStationScreenHandler.UPGRADE_STATION_SCREEN_HANDLER;
@@ -26,7 +28,7 @@ import com.sigmundgranaas.forgero.core.state.MaterialBased;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.ForgeroInitializer;
-import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroInitializedEntryPoint;
+import com.sigmundgranaas.forgero.api.v0.entrypoint.ForgeroInitializedEntryPoint;
 import com.sigmundgranaas.forgero.fabric.initialization.datareloader.DataPipeLineReloader;
 import com.sigmundgranaas.forgero.fabric.initialization.datareloader.DisassemblyReloader;
 import com.sigmundgranaas.forgero.fabric.initialization.datareloader.LootConditionReloadListener;
@@ -64,6 +66,8 @@ import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * The ForgeroPostInitialization class handles the post-initialization phase of the Forgero mod.
  * This phase involves registering various game elements such as blocks, items, commands, and data reload listeners.
@@ -84,7 +88,7 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	 * @param stateService The state service provides services related to Forgero states.
 	 */
 	@Override
-	public void onInitialized(StateService stateService) {
+	public void onInitialized(@NotNull StateService stateService) {
 		registerBlocks();
 		registerItems(stateService);
 		registerTreasureLoot();
@@ -107,9 +111,10 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 		Function<State, String> tagOrItem = (state) -> stateService.getMapper().stateToTag(state.identifier()).isPresent() ? "tag" : "item";
 		Function<State, String> material = (state) -> state instanceof MaterialBased based ? based.baseMaterial().name() : "";
 		Function<State, String> namespace = (state) -> stateService.getMapper().stateToTag(state.identifier()).map(Identifier::getNamespace)
-				.orElse(state.nameSpace());
+		                                                           .orElse(state.nameSpace());
 		Function<State, String> containerId = (state) -> stateService.getMapper().stateToTag(state.identifier()).map(Identifier::toString)
-				.orElse(stateService.getMapper().stateToContainer(state.identifier()).toString());
+		                                                             .orElse(stateService.getMapper().stateToContainer(
+				                                                             state.identifier()).toString());
 
 		var factory = new OperationFactory<>(State.class);
 
@@ -123,12 +128,15 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 		operation("forgero:tag_or_item", "tagOrItem", factory.build(tagOrItem));
 
 		// Edge cases
-		operation("forgero:state_name_replace_planks", "name_replace_planks", factory.build((State state) -> state.name().replace("_planks", "")));
+		operation(
+				"forgero:state_name_replace_planks", "name_replace_planks",
+				factory.build((State state) -> state.name().replace("_planks", ""))
+		);
 
 		Function<String, List<State>> stateFinder = (type) -> ForgeroStateRegistry.TREE.find(Type.of(type))
-				.map(node -> node.getResources(State.class))
-				.orElse(ImmutableList.<State>builder()
-						.build());
+		                                                                               .map(node -> node.getResources(State.class))
+		                                                                               .orElse(ImmutableList.<State>builder()
+		                                                                                                    .build());
 
 		ForgeroTypeVariableConverter typeConverter = new ForgeroTypeVariableConverter(stateFinder);
 
@@ -136,12 +144,14 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	}
 
 	private void registerToolTipFilters() {
-		var defaults = List.of(AttackDamage.KEY, MiningSpeed.KEY, Durability.KEY, MiningLevel.KEY, AttackSpeed.KEY, Armor.KEY, Weight.KEY, Reach.KEY);
+		var defaults = List.of(
+				AttackDamage.KEY, MiningSpeed.KEY, Durability.KEY, MiningLevel.KEY, AttackSpeed.KEY, Armor.KEY, Weight.KEY, Reach.KEY);
 		defaults.stream()
-				.map(TooltipAttributeRegistry.attributeBuilder()::attribute)
-				.forEach(TooltipAttributeRegistry.AttributeBuilder::register);
+		        .map(TooltipAttributeRegistry.attributeBuilder()::attribute)
+		        .forEach(TooltipAttributeRegistry.AttributeBuilder::register);
 
-		TooltipAttributeRegistry.attributeBuilder().attribute("RARITY").condition(container -> !ForgeroConfigurationLoader.configuration.hideRarity).register();
+		TooltipAttributeRegistry.attributeBuilder().attribute("RARITY").condition(
+				container -> !ForgeroConfigurationLoader.configuration.hideRarity).register();
 
 		var swords = List.of(AttackDamage.KEY, AttackSpeed.KEY, Durability.KEY, Armor.KEY, Weight.KEY, Reach.KEY);
 
@@ -282,9 +292,13 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	private void registerAARPRecipes(StateService service) {
 		ARRPGenerator.register(new RepairKitResourceGenerator(ForgeroConfigurationLoader.configuration, service));
 		if (ForgeroConfigurationLoader.configuration.enableRecipesForAllSchematics) {
-			ARRPGenerator.register(() -> new AllPartToAllSchematicsGenerator(service, new PartToSchematicGenerator.SchematicRecipeCreator(), new PartToSchematicGenerator.AllVariantFilter()));
+			ARRPGenerator.register(() -> new AllPartToAllSchematicsGenerator(service, new PartToSchematicGenerator.SchematicRecipeCreator(),
+					new PartToSchematicGenerator.AllVariantFilter()
+			));
 		} else {
-			ARRPGenerator.register(() -> new PartToSchematicGenerator(service, new PartToSchematicGenerator.SchematicRecipeCreator(), new PartToSchematicGenerator.BaseVariantFilter()));
+			ARRPGenerator.register(() -> new PartToSchematicGenerator(service, new PartToSchematicGenerator.SchematicRecipeCreator(),
+					new PartToSchematicGenerator.BaseVariantFilter()
+			));
 		}
 
 		ARRPGenerator.register(() -> new WoodPartsTag(ForgeroStateRegistry.TREE));

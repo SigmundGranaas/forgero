@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.api.identity;
+package com.sigmundgranaas.forgero.core.api.v0.identity;
 
 import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
 

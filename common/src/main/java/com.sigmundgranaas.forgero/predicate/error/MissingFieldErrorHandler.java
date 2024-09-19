@@ -13,7 +13,7 @@ import com.sigmundgranaas.forgero.core.util.StringSimilarity;
 import com.sigmundgranaas.forgero.predicate.codecs.KeyPair;
 import com.sigmundgranaas.forgero.predicate.codecs.SpecificationRegistry;
 import com.sigmundgranaas.forgero.predicate.util.AnsiColors;
-import com.sigmundgranaas.forgero.predicate.util.JsonUtils;
+import com.sigmundgranaas.forgero.predicate.util.JsonUtil;
 
 public class MissingFieldErrorHandler implements PredicateErrorHandler {
 	@Override
@@ -33,7 +33,7 @@ public class MissingFieldErrorHandler implements PredicateErrorHandler {
 		warningMessage.append("Available keys: ").append(String.join(", ", codecs.keySet())).append("\n");
 
 		warningMessage.append("Wrong structure:\n");
-		warningMessage.append(JsonUtils.prettyPrintJsonWithHighlight(ops, input, key)).append("\n");
+		warningMessage.append(JsonUtil.prettyPrintJsonWithHighlight(ops, input, key)).append("\n");
 		warningMessage.append("Suggested structure:\n");
 		warningMessage.append(createSuggestedStructure(ops, input, key, closestMatch));
 
@@ -50,7 +50,7 @@ public class MissingFieldErrorHandler implements PredicateErrorHandler {
 			}
 			suggestedMap.put(key, value);
 		});
-		return JsonUtils.prettyPrintJson(ops, new MapLike<>() {
+		return JsonUtil.prettyPrintJson(ops, new MapLike<>() {
 			@Override
 			public R get(R key) {
 				return suggestedMap.get(key);

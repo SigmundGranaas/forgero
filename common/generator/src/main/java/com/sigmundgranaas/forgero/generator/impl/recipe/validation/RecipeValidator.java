@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.generator.impl.IdentifiedJson;
 
 import static com.sigmundgranaas.forgero.core.Forgero.LOGGER;
-import static com.sigmundgranaas.forgero.predicate.util.JsonUtils.prettyPrintJson;
+import static com.sigmundgranaas.forgero.core.util.json.JsonUtil.prettyPrintJson;
 
 public class RecipeValidator {
 	private final ResultValidator resultValidator;
@@ -39,9 +39,12 @@ public class RecipeValidator {
 			isValid = false;
 		}
 
-		if(!isValid){
+		if (!isValid) {
 			LOGGER.error("Found error in the following recipe: \n {}", prettyPrintJson(json.toString()));
-			LOGGER.error("The error was found in a recipe generated from this template: \n {}", prettyPrintJson(identifiedJson.template().toString()));
+			LOGGER.error(
+					"The error was found in a recipe generated from this template: \n {}",
+					prettyPrintJson(identifiedJson.template().toString())
+			);
 		}
 		return isValid;
 	}

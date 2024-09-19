@@ -5,8 +5,8 @@ import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATO
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.sigmundgranaas.forgero.core.api.identity.ModificationRuleRegistry;
-import com.sigmundgranaas.forgero.core.api.identity.sorting.SortingRuleRegistry;
+import com.sigmundgranaas.forgero.core.api.v0.identity.ModificationRuleRegistry;
+import com.sigmundgranaas.forgero.core.api.v0.identity.sorting.SortingRuleRegistry;
 
 public class NameCompositor {
 	private ModificationRuleRegistry registry;

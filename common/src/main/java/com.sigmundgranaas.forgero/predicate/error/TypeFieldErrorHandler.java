@@ -11,7 +11,7 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.MapLike;
 import com.sigmundgranaas.forgero.predicate.codecs.KeyPair;
 import com.sigmundgranaas.forgero.predicate.codecs.SpecificationRegistry;
-import com.sigmundgranaas.forgero.predicate.util.JsonUtils;
+import com.sigmundgranaas.forgero.predicate.util.JsonUtil;
 import org.jetbrains.annotations.Nullable;
 
 public class TypeFieldErrorHandler implements PredicateErrorHandler {
@@ -26,14 +26,14 @@ public class TypeFieldErrorHandler implements PredicateErrorHandler {
 
 		warningMessage.append("Ignoring 'type' field in nested map codecs. This field is only needed at the root level. The codec already knows what type it is. \n");
 		warningMessage.append("Wrong structure:\n");
-		warningMessage.append(JsonUtils.prettyPrintJsonWithHighlight(ops, input, "type")).append("\n");
+		warningMessage.append(JsonUtil.prettyPrintJsonWithHighlight(ops, input, "type")).append("\n");
 		warningMessage.append("Correct structure:\n");
 
 		Map<R, R> correctedMap = input.entries()
 				.filter(pair -> !pair.getFirst().equals(ops.createString("type")))
 				.collect(ImmutableMap.toImmutableMap(Pair::getFirst, Pair::getSecond));
 
-		warningMessage.append(JsonUtils.prettyPrintJson(ops, new MapLike<>() {
+		warningMessage.append(JsonUtil.prettyPrintJson(ops, new MapLike<>() {
 			@Nullable
 			@Override
 			public R get(R key) {
