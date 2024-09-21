@@ -1,0 +1,47 @@
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection DependencyNotationArgument
+
+architectury {
+	common(rootProject.enabled_platforms.split(","))
+}
+
+dependencies {
+	// Mod Menu
+	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
+
+	// Yacl
+	modImplementation("maven.modrinth:yacl:${project.yacl_version}")
+
+	// Patchouli
+	// TODO: Switch to Modonomicon
+	modCompileOnly("maven.modrinth:patchouli:${project.patchouli_version}")
+
+	// Modonomicon
+	modImplementation "com.klikli_dev:modonomicon-${minecraft_version}-fabric:${modonomicon_version}"
+
+	// Better Combat
+	modImplementation("maven.modrinth:cloth-config:${project.cloth_config_version}") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
+	modImplementation("maven.modrinth:playeranimator:${project.player_animator_version}")
+	modImplementation("maven.modrinth:better-combat:${project.better_combat_version}")
+
+	// Mythic Metals
+	// OwO thought it would be nice to give users a prompt to accept eula which crashes the test server. Don't enable it for anything but local testing.
+	/**
+	 annotationProcessor(modImplementation("io.wispforest:owo-lib:${project.owo_lib_version}"))
+	 modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_api_version}")
+	 modImplementation("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}")
+	 modImplementation("dev.architectury:architectury-fabric:${project.architectury_version}") {
+	 exclude group: "net.fabricmc", module: "fabric-loader"
+	 }
+	 modImplementation("maven.modrinth:AdditionalEntityAttributes:${project.additional_entity_attributes_version}")
+	 modImplementation("maven.modrinth:mythicmetals:${project.mythic_metals_version}")
+	 modImplementation("maven.modrinth:alloy-forgery:${project.alloy_forgery_version}")
+	 */
+
+	// LambDynamicLights
+	modCompileOnly("dev.lambdaurora:spruceui:${project.spruceui_version}")
+	modCompileOnly("maven.modrinth:lambdynamiclights:${project.lamb_dynamic_lights_version}")
+}

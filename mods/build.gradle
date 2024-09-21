@@ -1,0 +1,35 @@
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection DependencyNotationArgument
+
+plugins {
+	id "architectury-plugin" version "${architectury_plugin_version}"
+	id "dev.architectury.loom" version "${architectury_loom_version}" apply false
+}
+
+architectury {
+	minecraft = rootProject.minecraft_version
+}
+
+subprojects {
+	apply plugin: "architectury-plugin"
+	apply plugin: "dev.architectury.loom"
+	apply plugin: "com.github.johnrengelman.shadow"
+
+	base {
+		archivesName = "${rootProject.mod_id}-${project.name}"
+	}
+
+	dependencies {
+		api(project(":core"))
+
+		minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+		mappings "net.fabricmc:yarn:${rootProject.yarn_mappings}:v2"
+
+		compileOnly("net.fabricmc:sponge-mixin:${project.mixin_version}")
+	}
+
+	java {
+		withSourcesJar()
+	}
+}

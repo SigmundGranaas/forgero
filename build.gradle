@@ -4,8 +4,6 @@
 plugins {
 	id "java-library"
 	id "idea"
-	id "architectury-plugin" version "${architectury_plugin_version}"
-	id "dev.architectury.loom" version "${architectury_loom_version}" apply false
 	id "maven-publish"
 }
 
@@ -39,16 +37,12 @@ def getGitVersion = { ->
 
 println("${rootProject.mod_name} version: ${getGitVersion()}")
 
-architectury {
-	minecraft = rootProject.minecraft_version
-}
-
 allprojects {
 	apply plugin: "java-library"
 	apply plugin: "idea"
 
 	version = "${getGitVersion()}"
-	group = project.maven_group
+	group = rootProject.maven_group
 
 	repositories {
 		mavenCentral()
@@ -103,6 +97,12 @@ allprojects {
 }
 
 subprojects { project ->
+	jar {
+		from("LICENSE") {
+			rename { "${it}_${archivesBaseName}" }
+		}
+	}
+
 	if (project.name != 'content') {
 		apply plugin: "maven-publish"
 
