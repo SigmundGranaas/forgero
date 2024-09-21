@@ -1,13 +1,13 @@
 {
-  "type": "SIMPLE_WEAPON_HEAD_SCHEMATIC",
+  "type": "SWORDLIKE_HEAD_SCHEMATIC",
   "name": "war_hammer_head-schematic",
-  "parent": "simple_weapon_head_base",
+  "parent": "swordlike_head_base",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "SIMPLE_WEAPON_HEAD",
+    "type": "SWORDLIKE_HEAD",
     "target": "CREATE",
     "recipes": [
       {

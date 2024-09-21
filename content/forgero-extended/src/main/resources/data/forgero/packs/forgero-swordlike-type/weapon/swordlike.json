@@ -1,13 +1,13 @@
 {
-  "type": "SIMPLE_WEAPON",
-  "name": "simple_weapon",
+  "type": "SWORDLIKE",
+  "name": "swordlike",
   "resource_type": "CONSTRUCT_TEMPLATE",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "SIMPLE_WEAPON",
+    "type": "SWORDLIKE",
     "target": "CREATE",
     "recipes": [
       {
@@ -15,7 +15,7 @@
         "ingredients": [
           {
             "unique": true,
-            "type": "SIMPLE_WEAPON_HEAD"
+            "type": "SWORDLIKE_HEAD"
           },
           {
             "type": "HANDLE"
@@ -25,7 +25,7 @@
     ],
     "components": [
       {
-        "type": "SIMPLE_WEAPON_HEAD"
+        "type": "SWORDLIKE_HEAD"
       },
       {
         "type": "HANDLE"

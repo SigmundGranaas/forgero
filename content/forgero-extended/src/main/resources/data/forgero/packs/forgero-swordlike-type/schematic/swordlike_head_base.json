@@ -1,5 +1,5 @@
 {
-  "name": "simple_weapon_base",
+  "name": "swordlike_base",
   "resource_type": "ABSTRACT",
   "properties": {
     "grouped_attributes": [

@@ -1,9 +1,9 @@
 {
-  "type": "SWORDSLIKE",
+  "type": "SWORDLIKE",
   "models": [
     {
       "target": [
-        "type:SIMPLE_WEAPON"
+        "type:SWORDLIKE"
       ],
       "modelType": "COMPOSITE"
     }

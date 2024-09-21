@@ -6,7 +6,7 @@
       "variants": [
         {
           "target": [
-            "type:SIMPLE_WEAPON"
+            "type:SWORDLIKE"
           ],
           "template": "axe_handle.png"
         }

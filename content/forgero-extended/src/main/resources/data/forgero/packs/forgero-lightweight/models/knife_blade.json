@@ -1,5 +1,5 @@
 {
-  "type": "SIMPLE_WEAPON_HEAD",
+  "type": "SWORDLIKE_HEAD",
   "models": [
     {
       "name": "knife_blade",
@@ -9,7 +9,7 @@
       "order": 20
     },
     {
-      "name": "simple_weapon_head_material",
+      "name": "swordlike_head_material",
       "variants": [
         {
           "target": [
@@ -20,7 +20,7 @@
       ]
     },
     {
-      "name": "simple_weapon_head_dye",
+      "name": "swordlike_head_dye",
       "variants": [
         {
           "target": [
