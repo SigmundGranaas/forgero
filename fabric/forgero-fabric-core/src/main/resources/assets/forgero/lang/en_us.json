@@ -291,7 +291,7 @@
   "book.forgero.guidebook.upgrading.gems.description": "Not just for decoration!",
   "book.forgero.guidebook.upgrading.gems.text": "Gems add additional base stats to a [#](000CFF)tool[#](). For every stat there is, you have one type of gem that amplifies it. \n\\\n\\\nGems are based on minerals. So for example we have diamond gems, but also lapiz lazuli gems.",
   "book.forgero.guidebook.upgrading.gems.title": "Gems",
-  "book.forgero.guidebook.upgrading.gems.text1": "Gems can be found while mining. \n\\\n\\\nGems can be upgraded to level 5, and each level increases the modifier it gives. To upgrade you will need to gather some unique materials.",
+  "book.forgero.guidebook.upgrading.gems.text1": "Gems are a rare find while mining their respective ores. \n\\\n\\\nGems can be upgraded to level 5, and each level increases the modifier it gives. To upgrade you will need to gather some unique materials.",
   "book.forgero.guidebook.upgrading.gems.title1": "Where to find these",
   "book.forgero.guidebook.upgrading.offensive.name": "Offensive Slots",
   "book.forgero.guidebook.upgrading.offensive.description": "Harder, better, faster, stronger",
