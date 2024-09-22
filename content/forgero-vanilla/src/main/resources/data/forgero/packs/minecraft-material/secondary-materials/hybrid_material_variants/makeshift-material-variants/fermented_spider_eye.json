@@ -63,10 +63,10 @@
           "effect": "minecraft:poison",
           "level": 1
         },
-        "predicate": {
-          "type": "forgero:random",
-          "value": 0.4
-           },
+        "after_use": {
+          "type": "minecraft:cooldown",
+          "duration": 75
+        },
         "title": "feature.forgero.poison",
         "description": "feature.forgero.poison.description"
       }

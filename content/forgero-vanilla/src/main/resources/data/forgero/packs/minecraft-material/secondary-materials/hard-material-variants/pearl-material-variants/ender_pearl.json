@@ -24,18 +24,6 @@
     "attributes": [
     ],
     "features": [
-      {
-        "type": "minecraft:on_swing",
-        "swing": {
-          "type": "minecraft:teleport",
-          "target": "minecraft:hit_position",
-          "random": false,
-          "on_ground": true,
-          "max_distance": 8
-        },
-        "title": "feature.forgero.teleportation",
-        "description": "feature.forgero.teleportation.description"
-      }
     ]
   },
   "palette": {

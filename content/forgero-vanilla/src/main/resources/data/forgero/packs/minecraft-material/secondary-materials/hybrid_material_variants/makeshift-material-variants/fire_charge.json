@@ -30,9 +30,9 @@
           "type": "minecraft:fire",
           "duration": 5
         },
-        "predicate": {
-          "type": "forgero:random",
-          "value": 0.4
+        "after_use": {
+          "type": "minecraft:cooldown",
+          "duration": 75
         },
         "title": "feature.forgero.fire",
         "description": "feature.forgero.fire.description"

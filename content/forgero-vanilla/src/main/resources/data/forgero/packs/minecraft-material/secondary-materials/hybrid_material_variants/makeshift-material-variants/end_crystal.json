@@ -92,7 +92,7 @@
         },
         "after_use": {
           "type": "minecraft:cooldown",
-          "duration": 100
+          "duration": 200
         },
         "title": "feature.forgero.explosive",
         "description": "feature.forgero.explosive.description"
@@ -106,7 +106,7 @@
         },
         "after_use": {
           "type": "minecraft:cooldown",
-          "duration": 100
+          "duration": 200
         }
       }
     ]

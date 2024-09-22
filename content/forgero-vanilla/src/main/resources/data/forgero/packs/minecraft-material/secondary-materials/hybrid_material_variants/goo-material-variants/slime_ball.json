@@ -32,9 +32,9 @@
           "force": 3,
           "direction": "push"
         },
-        "predicate": {
-          "type": "forgero:random",
-          "value": 0.4
+        "after_use": {
+          "type": "minecraft:cooldown",
+          "duration": 75
         },
         "title": "feature.forgero.knockback",
         "description": "feature.forgero.knockback.description"

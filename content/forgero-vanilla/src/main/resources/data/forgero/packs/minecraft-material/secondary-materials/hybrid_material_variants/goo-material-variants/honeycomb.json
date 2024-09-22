@@ -63,9 +63,9 @@
           "effect": "minecraft:slowness",
           "level": 3
         },
-        "predicate": {
-          "type": "forgero:random",
-          "value": 0.5
+        "after_use": {
+          "type": "minecraft:cooldown",
+          "duration": 75
         },
         "title": "feature.forgero.slowness",
         "description": "feature.forgero.slowness.description"

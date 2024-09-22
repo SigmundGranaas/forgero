@@ -92,9 +92,9 @@
           "effect": "minecraft:slow_falling",
           "level": 1
         },
-        "predicate": {
-          "type": "forgero:random",
-          "value": 0.4
+        "after_use": {
+          "type": "minecraft:cooldown",
+          "duration": 75
         },
         "title": "feature.forgero.slow_falling",
         "description": "feature.forgero.slow_falling.description"
