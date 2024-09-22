@@ -1,11 +1,11 @@
 {
-  "parent": "forgero:forgero/root",
+  "parent": "forgero:forgero/upgrade_station",
   "criteria": {
-    "pickaxe": {
+    "pommel": {
       "conditions": {
         "items": [
           {
-            "tag": "minecraft:tools"
+            "tag": "forgero:pommel"
           }
         ]
       },
@@ -15,21 +15,21 @@
   "display": {
     "announce_to_chat": true,
     "description": {
-      "translate": "advancements.forgero.tool.description"
+      "translate": "advancements.forgero.pommel.description"
     },
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "forgero:oak-pickaxe"
+      "item": "forgero:gold-pommel"
     },
     "show_toast": true,
     "title": {
-      "translate": "advancements.forgero.tool.title"
+      "translate": "advancements.forgero.pommel.title"
     }
   },
   "requirements": [
     [
-      "pickaxe"
+      "pommel"
     ]
   ],
   "sends_telemetry_event": true

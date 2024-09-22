@@ -1,0 +1,34 @@
+{
+  "criteria": {
+    "forgero": {
+      "trigger": "minecraft:tick"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.forgero.forgero.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "forgero:iron-pickaxe_head"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.forgero.forgero.title"
+    }
+  },
+  "rewards": {
+    "loot": [
+      "forgero:grant_book_on_advancement"
+    ]
+  },
+  "requirements": [
+    [
+      "forgero"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

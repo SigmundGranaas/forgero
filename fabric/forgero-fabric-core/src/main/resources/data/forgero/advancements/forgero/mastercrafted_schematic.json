@@ -1,84 +1,84 @@
 {
-  "parent": "forgero:forgero/upgrade_station",
+  "parent": "forgero:forgero/refined_schematic",
   "criteria": {
-    "diamond_gem_1": {
+    "mastercrafted_pickaxe": {
       "conditions": {
         "items": [
           {
             "items": [
-              "forgero:diamond_gem_1"
+              "forgero:mastercrafted_pickaxe_head-schematic"
             ]
           }
         ]
       },
       "trigger": "minecraft:inventory_changed"
     },
-    "amethyst_gem_1": {
+    "mastercrafted_pommel": {
       "conditions": {
         "items": [
           {
             "items": [
-              "forgero:amethyst_gem_1"
+              "forgero:mastercrafted_pommel-schematic"
             ]
           }
         ]
       },
       "trigger": "minecraft:inventory_changed"
     },
-    "echo_gem_1": {
+    "mastercrafted_shovel": {
       "conditions": {
         "items": [
           {
             "items": [
-              "forgero:echo_gem_1"
+              "forgero:mastercrafted_shovel_head-schematic"
             ]
           }
         ]
       },
       "trigger": "minecraft:inventory_changed"
     },
-    "emerald_gem_1": {
+    "mastercrafted_sword": {
       "conditions": {
         "items": [
           {
             "items": [
-              "forgero:emerald_gem_1"
+              "forgero:mastercrafted_sword_blade-schematic"
             ]
           }
         ]
       },
       "trigger": "minecraft:inventory_changed"
     },
-    "lapis_gem_1": {
+    "mastercrafted_guard": {
       "conditions": {
         "items": [
           {
             "items": [
-              "forgero:lapis_gem_1"
+              "forgero:mastercrafted_sword_guard-schematic"
             ]
           }
         ]
       },
       "trigger": "minecraft:inventory_changed"
     },
-    "prismarine_gem_1": {
+    "mastercrafted_axe": {
       "conditions": {
         "items": [
           {
             "items": [
-              "forgero:prismarine_gem_1"
+              "forgero:mastercrafted_axe_head-schematic"
             ]
           }
         ]
       },
       "trigger": "minecraft:inventory_changed"
     },
-    "quartz_gem_1": {
+    "mastercrafted_hoe": {
       "conditions": {
         "items": [
           {
             "items": [
-              "forgero:quartz_gem_1"
+              "forgero:mastercrafted_hoe_head-schematic"
             ]
           }
         ]
@@ -89,27 +89,27 @@
   "display": {
     "announce_to_chat": true,
     "description": {
-      "translate": "advancements.forgero.gem.description"
+      "translate": "advancements.forgero.mastercrafted_schematic.description"
     },
-    "frame": "task",
+    "frame": "goal",
     "hidden": false,
     "icon": {
-      "item": "forgero:diamond_gem_1"
+      "item": "forgero:mastercrafted_pickaxe_head-schematic"
     },
     "show_toast": true,
     "title": {
-      "translate": "advancements.forgero.gem.title"
+      "translate": "advancements.forgero.mastercrafted_schematic.title"
     }
   },
   "requirements": [
     [
-      "diamond_gem_1",
-      "lapis_gem_1",
-      "prismarine_gem_1",
-      "quartz_gem_1",
-      "emerald_gem_1",
-      "amethyst_gem_1",
-      "echo_gem_1"
+      "mastercrafted_pickaxe",
+      "mastercrafted_shovel",
+      "mastercrafted_axe",
+      "mastercrafted_hoe",
+      "mastercrafted_sword",
+      "mastercrafted_guard",
+      "mastercrafted_pommel"
     ]
   ],
   "sends_telemetry_event": true
