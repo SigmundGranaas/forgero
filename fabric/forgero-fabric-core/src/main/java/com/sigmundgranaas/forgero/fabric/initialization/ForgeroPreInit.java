@@ -193,6 +193,7 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_SPRINTING);
 		ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_SWIMMING);
 		ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_ON_GROUND);
+		ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_USING);
 
 		// Key options
 		ENTITY_CODEC_REGISTRY.register(KeyPair.pair(FlagGroupPredicate.KEY, FlagGroupPredicate.CODEC_SPECIFICATION));
