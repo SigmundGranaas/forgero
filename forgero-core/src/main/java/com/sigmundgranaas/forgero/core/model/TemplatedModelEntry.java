@@ -18,7 +18,7 @@ public record TemplatedModelEntry(String template) implements ModelMatcher {
 
 	@Override
 	public Optional<ModelTemplate> get(Matchable state, ModelProvider provider, MatchContext context) {
-		var templateModel = provider.find(Identifiable.of(template))
+		Optional<ModelTemplate> templateModel = provider.find(Identifiable.of(template))
 				.filter(matcher -> matcher.match(state, context))
 				.flatMap(matcher -> matcher.get(state, provider, context));
 		if (state instanceof Composite construct) {

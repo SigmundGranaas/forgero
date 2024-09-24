@@ -65,7 +65,9 @@ public class CompositeModelEntry implements ModelMatcher {
 
 	private Optional<ModelTemplate> convert(State state, ModelProvider provider, MatchContext context) {
 		var modelMatcher = provider.find(state);
-		return modelMatcher.filter(matcher -> matcher.match(state, context)).flatMap(matcher -> matcher.get(state, provider, context));
+		return modelMatcher
+				.filter(matcher -> matcher.match(state, context))
+				.flatMap(matcher -> matcher.get(state, provider, context));
 	}
 
 	@Override
