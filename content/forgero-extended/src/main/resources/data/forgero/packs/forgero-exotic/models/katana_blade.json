@@ -4,9 +4,45 @@
     {
       "name": "katana_blade",
       "type": "GENERATE",
-      "template": "exotic/katana_blade.png",
+      "template": "exotic/katana_blade_x32.png",
       "palette": "TOOL_MATERIAL",
-      "order": 20
+      "order": 20,
+      "resolution": 32,
+      "display_overrides": {
+        "ground": {
+          "rotation": [ 0, 0, 0 ],
+          "translation": [ 0, 2, 0],
+          "scale": [ 1, 1, 0.5 ]
+        },
+        "thirdperson_righthand": {
+          "rotation": [ 0, -90, 55 ],
+          "translation": [ 0, 13, 1 ],
+          "scale": [ 1.7, 1.7, 0.85 ]
+        },
+        "thirdperson_lefthand": {
+          "rotation": [ 0, 90, -55 ],
+          "translation": [ 0, 13, 1 ],
+          "scale": [ 1.7, 1.7, 0.85 ]
+        },
+        "firstperson_righthand": {
+          "rotation": [ 0, -90, 25 ],
+          "translation": [ 1.13, 8.4, 1.13 ],
+          "scale": [ 1.36, 1.36, 0.68 ]
+        },
+        "firstperson_lefthand": {
+          "rotation": [ 0, 90, -25 ],
+          "translation": [ 1.13, 8.4, 1.13 ],
+          "scale": [ 1.36, 1.36, 0.68 ]
+        },
+        "fixed": {
+          "rotation": [ 0, 90, 0 ],
+          "scale": [ 2, 2, 1 ]
+        },
+        "gui": {
+          "scale": [ 1.12, 1.12, 0.68 ],
+          "translation": [ 2.5, 2.5, 0]
+        }
+      }
     },
     {
       "name": "sword_blade_material",
