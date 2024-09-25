@@ -1,0 +1,12 @@
+{
+  "name": "PART",
+  "children": [
+    {
+      "name": "CROSSBOW_STOCK"
+    },
+    {
+      "name": "CROSSBOW_LIMB"
+    }
+  ]
+}
+

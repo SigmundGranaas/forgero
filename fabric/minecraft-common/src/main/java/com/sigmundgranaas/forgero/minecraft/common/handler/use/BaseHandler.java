@@ -26,9 +26,6 @@ public interface BaseHandler {
 		return DEFAULT_ITEM_USE_ACTIONS.get().getMaxUseTime(stack);
 	}
 
-	default void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
-	}
-
 	default ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
 		return DEFAULT_ITEM_USE_ACTIONS.get().finishUsing(stack, world, user);
 	}

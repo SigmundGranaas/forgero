@@ -1,0 +1,9 @@
+{
+  "parent": "THROWABLE_WEAPON",
+  "name": "SPEAR",
+  "children": [
+    {
+      "name": "TRIDENT"
+    }
+  ]
+}

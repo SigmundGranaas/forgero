@@ -1,0 +1,50 @@
+ {
+  "type": "ARROW_HEAD",
+  "models": [
+    {
+      "name": "arrow_head",
+      "variants": [
+        {
+          "predicate": [
+            {
+              "type": "forgero:charged",
+              "charged": true
+            },
+            "type:CROSSBOW"
+          ],
+          "template": "arrow_head_in_crossbow.png"
+        }
+       ]
+    },
+    {
+      "name": "arrow_reinforcement",
+      "variants": [
+        {
+          "predicate": [
+            {
+              "type": "forgero:charged",
+              "charged": true
+            },
+            "type:CROSSBOW"
+          ],
+          "template": "arrow_reinforcement_in_bow.png"
+        }
+      ]
+    },
+    {
+      "name": "arrow_dye",
+      "variants": [
+        {
+          "predicate": [
+            {
+              "type": "forgero:charged",
+              "charged": true
+            },
+            "type:CROSSBOW"
+          ],
+          "template": "arrow_head_in_bow.png"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection DependencyNotationArgument
+
+dependencies {
+	implementation(project(":fabric:${rootProject.mod_id}-fabric-core"))
+
+	implementation(project(":fabric:modules:bows"))
+}

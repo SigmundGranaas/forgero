@@ -49,7 +49,6 @@ public abstract class ItemDynamicUseActionMixin {
 	private void forgero$DynamicGetUseAction(ItemStack stack, CallbackInfoReturnable<UseAction> cir) {
 		if (this instanceof DynamicItemUseHandler dynamicUseHandler) {
 			cir.setReturnValue(dynamicUseHandler.dynamicGetUseAction(stack));
-			cir.cancel();
 		}
 	}
 
@@ -64,7 +63,6 @@ public abstract class ItemDynamicUseActionMixin {
 	private void forgero$DynamicGetMaxUseTime(ItemStack stack, CallbackInfoReturnable<Integer> cir) {
 		if (this instanceof DynamicItemUseHandler dynamicUseHandler) {
 			cir.setReturnValue(dynamicUseHandler.dynamicGetMaxUseTime(stack));
-			cir.cancel();
 		}
 	}
 
@@ -98,7 +96,6 @@ public abstract class ItemDynamicUseActionMixin {
 	private void forgero$DynamicFinishUsing(ItemStack stack, World world, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {
 		if (this instanceof DynamicItemUseHandler dynamicUseHandler) {
 			cir.setReturnValue(dynamicUseHandler.dynamicFinishUsing(stack, world, user));
-			cir.cancel();
 		}
 	}
 
@@ -131,7 +128,6 @@ public abstract class ItemDynamicUseActionMixin {
 	private void forgero$DynamicIsUsedOnRelease(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
 		if (this instanceof DynamicItemUseHandler dynamicUseHandler) {
 			cir.setReturnValue(dynamicUseHandler.dynamicIsUsedOnRelease(stack));
-			cir.cancel();
 		}
 	}
 
@@ -148,7 +144,6 @@ public abstract class ItemDynamicUseActionMixin {
 	private void forgero$DynamicUseOnBlock(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {
 		if (this instanceof DynamicItemUseHandler dynamicUseHandler) {
 			cir.setReturnValue(dynamicUseHandler.dynamicUseOnBlock(context));
-			cir.cancel();
 		}
 	}
 
@@ -166,7 +161,6 @@ public abstract class ItemDynamicUseActionMixin {
 	private void forgero$DynamicUseOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
 		if (this instanceof DynamicItemUseHandler dynamicUseHandler) {
 			cir.setReturnValue(dynamicUseHandler.dynamicUseOnEntity(stack, user, entity, hand));
-			cir.cancel();
 		}
 	}
 
@@ -183,7 +177,6 @@ public abstract class ItemDynamicUseActionMixin {
 	private void forgero$DynamicUse(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
 		if (this instanceof DynamicItemUseHandler dynamicUseHandler) {
 			cir.setReturnValue(dynamicUseHandler.dynamicUse(world, user, hand));
-			cir.cancel();
 		}
 	}
 }
