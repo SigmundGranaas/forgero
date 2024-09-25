@@ -79,6 +79,36 @@
           }
         ]
       }
+    ],
+    "attributes": [
+    ],
+    "features": [
+      {
+        "type": "minecraft:on_hit",
+        "on_hit": {
+          "type": "minecraft:explosion",
+          "target": "minecraft:targeted_entity",
+          "power": 3
+        },
+        "after_use": {
+          "type": "minecraft:cooldown",
+          "duration": 200
+        },
+        "title": "feature.forgero.explosive",
+        "description": "feature.forgero.explosive.description"
+      },
+      {
+        "type": "minecraft:on_hit_block",
+        "on_hit": {
+          "type": "minecraft:explosion",
+          "target": "minecraft:block_target",
+          "power": 3
+        },
+        "after_use": {
+          "type": "minecraft:cooldown",
+          "duration": 200
+        }
+      }
     ]
   },
   "palette": {

@@ -20,6 +20,23 @@
         "attributes": [
         ]
       }
+    ],
+    "attributes": [
+    ],
+    "features": [
+      {
+        "type": "minecraft:on_hit",
+        "on_hit": {
+          "type": "minecraft:fire",
+          "duration": 5
+        },
+        "after_use": {
+          "type": "minecraft:cooldown",
+          "duration": 75
+        },
+        "title": "feature.forgero.fire",
+        "description": "feature.forgero.fire.description"
+      }
     ]
   },
   "palette": {
