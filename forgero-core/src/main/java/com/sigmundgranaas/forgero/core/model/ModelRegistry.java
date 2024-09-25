@@ -92,7 +92,7 @@ public class ModelRegistry {
 		} else {
 			var result = new ModelResult();
 			context.put(MODEL_RESULT, result);
-			var modelEntries = tree.find(state.type().typeName())
+			ImmutableList<ModelMatcher> modelEntries = tree.find(state.type().typeName())
 					.map(node -> node.getResources(ModelMatcher.class))
 					.orElse(ImmutableList.<ModelMatcher>builder().build());
 
