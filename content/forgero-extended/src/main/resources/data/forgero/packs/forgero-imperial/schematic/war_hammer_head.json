@@ -1,0 +1,116 @@
+{
+  "type": "SWORDLIKE_HEAD_SCHEMATIC",
+  "name": "war_hammer_head-schematic",
+  "parent": "swordlike_head_base",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "SWORDLIKE_HEAD",
+    "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "SCHEMATIC_PART_CRAFTING",
+        "ingredients": [
+          {
+            "id": "this"
+          },
+          {
+            "type": "TOOL_MATERIAL",
+            "unique": true,
+            "amount": 4
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "TOOL_MATERIAL",
+        "unique": true
+      }
+    ],
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
+        "tier": 1
+      }
+    ]
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "variant-schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 1.375
+          },
+          {
+            "id": "variant-schematic-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "value": 0.25
+          },
+          {
+            "id": "variant-schematic-mining_speed-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 2.4
+          },
+          {
+            "id": "variant-schematic-durability-composite",
+            "type": "DURABILITY",
+            "value": 1.9
+          },
+          {
+            "id": "variant-schematic-weight-composite",
+            "type": "WEIGHT",
+            "value": 1.85
+          }
+        ]
+      }
+    ],
+    "attributes": [
+      {
+        "id": "schematic-rarity-local",
+        "type": "RARITY",
+        "order": "BASE",
+        "category": "LOCAL",
+        "operation": "ADDITION",
+        "value": 75
+      }
+    ],
+    "features": [
+    ]
+  },
+  "custom_data": {
+    "ingredient_count": {
+      "value": 4,
+      "context": "LOCAL"
+    },
+    "name_replacement": {
+      "from": "spear",
+      "to": "war_hammer"
+    },
+    "better_compat_attribute_container": "forgero:mace"
+  }
+}

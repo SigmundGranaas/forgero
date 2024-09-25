@@ -1,0 +1,11 @@
+{
+  "id": "prismarine_gem_from_entity",
+  "tables": [
+    "minecraft:entities/guardian"
+  ],
+  "ids": [
+    "forgero:prismarine_gem_1"
+  ],
+  "chance": 0.025,
+  "rolls": 1
+}

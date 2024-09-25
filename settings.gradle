@@ -16,6 +16,7 @@ include("content:${mod_id}-extended")
 include("content:${mod_id}-vanilla")
 include("content:${mod_id}-compat")
 include("content:${mod_id}-structures")
+include("content:${mod_id}-deprecated")
 
 // Fabric
 include "fabric"

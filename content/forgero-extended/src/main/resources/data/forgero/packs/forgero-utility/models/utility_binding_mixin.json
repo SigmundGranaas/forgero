@@ -1,0 +1,174 @@
+{
+  "type": "TOOL_BINDING",
+  "models": [
+    {
+      "name": "soft_binding",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:utility/cutter_mattock_head.png"
+          ],
+          "template": "utility/soft_mattock_binding.png"
+
+        }
+      ]
+    },
+    {
+      "name": "soft_binding_gem",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:utility/cutter_mattock_head.png"
+          ],
+          "template": "utility/mattock_soft_binding_gem.png"
+        }
+      ]
+    },
+    {
+      "name": "soft_binding_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:utility/cutter_mattock_head.png"
+          ],
+          "template": "utility/soft_mattock_binding.png"
+        }
+      ]
+    },
+    {
+      "name": "binding",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:utility/cutter_mattock_head.png"
+          ],
+          "template": "utility/mattock_binding.png"
+        }
+      ]
+    },
+    {
+      "name": "binding_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:utility/cutter_mattock_head.png"
+          ],
+          "template": "utility/mattock_binding.png"
+        }
+      ]
+    },
+    {
+      "name": "binding_material",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:utility/cutter_mattock_head.png"
+          ],
+          "template": "utility/mattock_binding_reinforced.png"
+        }
+      ]
+    },
+    {
+      "name": "binding_gem",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:utility/cutter_mattock_head.png"
+          ],
+          "template": "utility/mattock_binding_gem.png"
+        }
+      ]
+    },
+    {
+      "name": "soft_binding",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:utility/pick_mattock_head.png"
+          ],
+          "template": "utility/soft_mattock_binding.png"
+        }
+      ]
+    },
+    {
+      "name": "soft_binding_gem",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:utility/pick_mattock_head.png"
+          ],
+          "template": "utility/mattock_soft_binding_gem.png"
+        }
+      ]
+    },
+    {
+      "name": "soft_binding_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:utility/pick_mattock_head.png"
+          ],
+          "template": "utility/soft_mattock_binding.png"
+        }
+      ]
+    },
+    {
+      "name": "binding",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:utility/pick_mattock_head.png"
+          ],
+          "template": "utility/mattock_binding.png"
+        }
+      ]
+    },
+    {
+      "name": "binding_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:utility/pick_mattock_head.png"
+          ],
+          "template": "utility/mattock_binding.png"
+        }
+      ]
+    },
+    {
+      "name": "binding_material",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:utility/pick_mattock_head.png"
+          ],
+          "template": "utility/mattock_binding_reinforced.png"
+        }
+      ]
+    },
+    {
+      "name": "binding_gem",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:utility/pick_mattock_head.png"
+          ],
+          "template": "utility/mattock_binding_gem.png"
+        }
+      ]
+    }
+  ]
+}

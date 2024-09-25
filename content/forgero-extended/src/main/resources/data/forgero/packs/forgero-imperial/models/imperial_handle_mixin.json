@@ -1,0 +1,101 @@
+{
+  "type": "HANDLE",
+  "models": [
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:SPEAR",
+            "model:imperial/spear_head.png"
+          ],
+          "template": "handle.png"
+        }
+      ]
+    },
+    {
+      "name": "handle_dye",
+      "variants": [
+        {
+          "target": [
+            "type:SPEAR",
+            "model:imperial/spear_head.png"
+          ],
+          "template": "handle.png"
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:imperial/scythe_blade.png"
+          ],
+          "template": "imperial/scythe_handle.png"
+        }
+      ]
+    },
+    {
+      "name": "handle_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:imperial/scythe_blade.png"
+          ],
+          "template": "imperial/scythe_handle.png"
+        }
+      ]
+    },
+    {
+      "name": "grip",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:imperial/scythe_blade.png"
+          ],
+          "template": "imperial/scythe_grip.png"
+        }
+      ]
+    },
+    {
+      "name": "grip",
+      "variants": [
+        {
+          "target": [
+            "type:SPEAR",
+            "model:imperial/spear_head.png"
+          ],
+          "template": "imperial/spear_handle_grip.png"
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:imperial/sickle_blade.png"
+          ],
+          "template": "imperial/sickle_handle.png"
+        }
+      ]
+    },
+    {
+      "name": "handle_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:imperial/sickle_blade.png"
+          ],
+          "template": "imperial/sickle_handle.png"
+        }
+      ]
+    }
+  ]
+}

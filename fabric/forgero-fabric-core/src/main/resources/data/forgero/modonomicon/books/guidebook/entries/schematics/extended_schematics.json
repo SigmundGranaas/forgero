@@ -2,7 +2,7 @@
   "category": "forgero:schematics",
   "name": "book.forgero.guidebook.schematics.extended_schematics.name",
   "description": "book.forgero.guidebook.schematics.extended_schematics.description",
-  "icon": "forgero:refined_pickaxe_head-schematic",
+  "icon": "forgero:broadsword_blade-schematic",
   "x": -2,
   "y": -4,
   "pages": [

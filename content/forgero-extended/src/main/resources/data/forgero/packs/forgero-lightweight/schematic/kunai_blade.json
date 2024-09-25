@@ -1,0 +1,141 @@
+{
+  "type": "SWORDLIKE_HEAD_SCHEMATIC",
+  "name": "kunai_blade-schematic",
+  "parent": "swordlike_head_base",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "SWORDLIKE_HEAD",
+    "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "SCHEMATIC_PART_CRAFTING",
+        "ingredients": [
+          {
+            "id": "this"
+          },
+          {
+            "type": "TOOL_MATERIAL",
+            "unique": true,
+            "amount": 1
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "TOOL_MATERIAL",
+        "unique": true
+      }
+    ],
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "type": "UPGRADE_MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
+        "tier": 1
+      }
+
+    ]
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "variant-schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 1.375
+          },
+          {
+            "id": "variant-schematic-mining_speed-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 1.4
+          },
+          {
+            "id": "variant-schematic-durability-composite",
+            "type": "DURABILITY",
+            "value": 1.1
+          },
+          {
+            "id": "variant-schematic-weight-composite",
+            "type": "WEIGHT",
+            "value": 0.45
+          }
+        ]
+      }
+    ],
+    "attributes": [
+      {
+        "id": "schematic-rarity-local",
+        "type": "RARITY",
+        "order": "BASE",
+        "category": "LOCAL",
+        "operation": "ADDITION",
+        "value": 75
+      },
+      {
+        "id": "variant-reach-composite",
+        "type": "forgero:reach",
+        "value": 2.5
+      }
+    ],
+    "features": [
+      {
+        "type": "minecraft:on_use",
+        "max_use_time": 55000,
+        "use_action": "SPEAR",
+        "use": [
+          {
+            "type": "minecraft:consume"
+          }
+        ],
+        "on_stop": [
+          {
+            "type": "forgero:throw",
+            "velocity_multiplier": "2.5",
+            "instability": "2"
+          },
+          {
+            "type": "minecraft:play_sound",
+            "sound": "minecraft:item.trident.throw"
+          },
+          {
+            "type": "minecraft:consume_stack",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  "custom_data": {
+    "ingredient_count": {
+      "value": 1,
+      "context": "LOCAL"
+    },
+    "name_replacement": {
+      "from": "spear",
+      "to": "kunai"
+    },
+    "better_compat_attribute_container": "forgero:dagger"
+  }
+}

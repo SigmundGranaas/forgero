@@ -1,0 +1,116 @@
+{
+  "parent": "forgero:forgero/refined_schematic",
+  "criteria": {
+    "mastercrafted_pickaxe": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:mastercrafted_pickaxe_head-schematic"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "mastercrafted_pommel": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:mastercrafted_pommel-schematic"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "mastercrafted_shovel": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:mastercrafted_shovel_head-schematic"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "mastercrafted_sword": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:mastercrafted_sword_blade-schematic"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "mastercrafted_guard": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:mastercrafted_sword_guard-schematic"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "mastercrafted_axe": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:mastercrafted_axe_head-schematic"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "mastercrafted_hoe": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:mastercrafted_hoe_head-schematic"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.forgero.mastercrafted_schematic.description"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "forgero:mastercrafted_pickaxe_head-schematic"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.forgero.mastercrafted_schematic.title"
+    }
+  },
+  "requirements": [
+    [
+      "mastercrafted_pickaxe",
+      "mastercrafted_shovel",
+      "mastercrafted_axe",
+      "mastercrafted_hoe",
+      "mastercrafted_sword",
+      "mastercrafted_guard",
+      "mastercrafted_pommel"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

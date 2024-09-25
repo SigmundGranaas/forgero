@@ -1,0 +1,42 @@
+{
+  "type": "SWORD_BLADE",
+  "models": [
+    {
+      "name": "rapier_blade",
+      "type": "GENERATE",
+      "template": "exotic/rapier_blade.png",
+      "palette": "TOOL_MATERIAL",
+      "order": 20
+    },
+    {
+      "name": "sword_blade_material",
+      "variants": [
+        {
+          "target": [
+            "model:exotic/rapier_blade.png"
+          ],
+          "template": "exotic/rapier_blade_reinforcement.png"
+        }
+      ]
+    },
+    {
+      "name": "sword_blade_dye",
+      "variants": [
+        {
+          "target": [
+            "model:exotic/rapier_blade.png"
+          ],
+          "template": "exotic/rapier_blade.png"
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "id:rapier_blade-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "rapier_blade"
+    }
+  ]
+}

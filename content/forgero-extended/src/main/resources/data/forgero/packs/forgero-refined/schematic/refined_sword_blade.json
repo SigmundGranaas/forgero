@@ -49,22 +49,17 @@
           {
             "id": "refined-schematic-rarity-composite",
             "type": "RARITY",
-            "value": 1.3
+            "value": 1.25
           },
           {
             "id": "refined-schematic-attack_damage-composite",
             "type": "ATTACK_DAMAGE",
-            "value": 1.3
-          },
-          {
-            "id": "refined-schematic-mining_speed-composite",
-            "type": "MINING_SPEED",
-            "value": 1.3
+            "value": 1.25
           },
           {
             "id": "refined-schematic-durability-composite",
             "type": "DURABILITY",
-            "value": 1.3
+            "value": 1.25
           }
         ]
       }
@@ -77,13 +72,6 @@
         "operation": "ADDITION",
         "category": "LOCAL",
         "value": 50
-      },
-      {
-        "id": "refined_sword_blade_schematic-attack_speed-composite",
-        "type": "ATTACK_SPEED",
-        "context": "COMPOSITE",
-        "operation": "ADDITION",
-        "value": 0.1
       }
     ]
   },
@@ -91,6 +79,7 @@
     "ingredient_count": {
       "value": 3,
       "context": "LOCAL"
-    }
+    },
+    "better_compat_attribute_container": "forgero:sword"
   }
 }

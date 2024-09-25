@@ -3,55 +3,69 @@
   "models": [
     {
       "name": "refined_pommel",
-      "template": "refined_pommel.png",
+      "template": "refined/refined_pommel.png",
       "type": "GENERATE",
       "palette": "METAL",
       "order": 60,
-      "offset": [
-        5,
-        5
-      ],
       "variants": [
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "refined/refined_tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "refined/refined_tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "template": "refined/refined_tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "refined/refined_tool_pommel.png"
+        },
         {
           "target": [
             "type:SWORD"
           ],
-          "offset": [
-            -1,
-            -1
-          ]
+          "template": "refined/refined_sword_pommel.png"
         },
         {
           "target": [
             "type:HANDLE"
-          ]
+          ],
+          "template": "refined/refined_tool_pommel.png"
         }
       ]
     },
     {
-      "name": "refined_pommel_dye",
-      "template": "refined_pommel.png",
-      "type": "GENERATE",
-      "palette": "DYE",
-      "order": 65,
-      "offset": [
-        5,
-        5
-      ],
+      "name": "pommel_dye",
       "variants": [
         {
           "target": [
-            "type:SWORD"
+            "model:refined/refined_pommel.png"
           ],
-          "offset": [
-            -1,
-            -1
-          ]
+          "template": "refined/refined_pommel.png"
         },
         {
           "target": [
-            "type:HANDLE"
-          ]
+            "model:refined/refined_tool_pommel.png"
+          ],
+          "template": "refined/refined_tool_pommel.png"
+        },
+        {
+          "target": [
+            "model:refined/refined_sword_pommel.png"
+          ],
+          "template": "refined/refined_sword_pommel.png"
         }
       ]
     },
@@ -62,14 +76,6 @@
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "refined_pommel"
-    },
-    {
-      "target": [
-        "type:DYE",
-        "slot:0"
-      ],
-      "modelType": "UPGRADE",
-      "template": "refined_pommel_dye"
     }
   ]
 }

@@ -1,57 +1,36 @@
 {
   "parent": "forgero:forgero/tool",
+  "criteria": {
+    "schematic": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "forgero:schematic"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "forgero:pickaxe_head-schematic"
-    },
-    "title": {
-      "translate": "advancements.forgero.schematic.title"
-    },
+    "announce_to_chat": true,
     "description": {
       "translate": "advancements.forgero.schematic.description"
     },
     "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "forgero:pickaxe_head-schematic"
+    },
     "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
-  "criteria": {
-    "default_handle": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "forgero:handle_schematics"
-          }
-        ]
-      }
-    },
-    "default_head": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "forgero:head_schematics"
-          }
-        ]
-      }
-    },
-    "default_binding": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "forgero:binding_schematics"
-          }
-        ]
-      }
+    "title": {
+      "translate": "advancements.forgero.schematic.title"
     }
   },
   "requirements": [
     [
-      "default_handle",
-      "default_binding",
-      "default_head"
+      "schematic"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

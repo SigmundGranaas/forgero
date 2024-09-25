@@ -1,0 +1,8 @@
+{
+    "type": "minecraft:stonecutting",
+    "ingredient": {
+        "item": "forgero:quartz_gem_2"
+    },
+    "result": "forgero:quartz_gem_3",
+    "count": 1
+}

@@ -1,0 +1,42 @@
+{
+  "type": "SWORD_BLADE",
+  "models": [
+    {
+      "name": "broadsword_blade",
+      "type": "GENERATE",
+      "template": "imperial/broadsword_blade.png",
+      "palette": "TOOL_MATERIAL",
+      "order": 20
+    },
+    {
+      "name": "sword_blade_material",
+      "variants": [
+        {
+          "target": [
+            "model:imperial/broadsword_blade.png"
+          ],
+          "template": "imperial/broadsword_blade_reinforcement.png"
+        }
+      ]
+    },
+    {
+      "name": "sword_blade_dye",
+      "variants": [
+        {
+          "target": [
+            "model:imperial/broadsword_blade.png"
+          ],
+          "template": "imperial/broadsword_blade.png"
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "id:broadsword_blade-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "broadsword_blade"
+    }
+  ]
+}

@@ -12,7 +12,7 @@
       "name": "guard_gem",
       "type": "GENERATE",
       "palette": "TRINKET",
-      "template": "guard_gem.png",
+      "template": "gems/guard_gem.png",
       "order": 75
     },
     {

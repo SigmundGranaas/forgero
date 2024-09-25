@@ -1,0 +1,8 @@
+{
+    "type": "minecraft:stonecutting",
+    "ingredient": {
+        "item": "forgero:prismarine_gem_2"
+    },
+    "result": "forgero:prismarine_gem_3",
+    "count": 1
+}

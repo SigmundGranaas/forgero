@@ -1,0 +1,8 @@
+{
+    "type": "minecraft:stonecutting",
+    "ingredient": {
+        "item": "forgero:lapis_gem_2"
+    },
+    "result": "forgero:lapis_gem_3",
+    "count": 1
+}

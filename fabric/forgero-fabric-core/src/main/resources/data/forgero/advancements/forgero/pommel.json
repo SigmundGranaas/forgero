@@ -1,0 +1,36 @@
+{
+  "parent": "forgero:forgero/upgrade_station",
+  "criteria": {
+    "pommel": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "forgero:pommel"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.forgero.pommel.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "forgero:gold-pommel"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.forgero.pommel.title"
+    }
+  },
+  "requirements": [
+    [
+      "pommel"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -38,32 +38,32 @@
       "name": "soft_binding_gem",
       "type": "GENERATE",
       "palette": "TRINKET",
-      "template": "soft_binding_gem.png",
+      "template": "gems/soft_binding_gem.png",
       "order": 50,
       "variants": [
         {
           "target": [
             "type:AXE"
           ],
-          "template": "axe_soft_binding_gem.png"
+          "template": "gems/axe_soft_binding_gem.png"
         },
         {
           "target": [
             "type:PICKAXE"
           ],
-          "template": "pickaxe_soft_binding_gem.png"
+          "template": "gems/pickaxe_soft_binding_gem.png"
         },
         {
           "target": [
             "type:HOE"
           ],
-          "template": "hoe_soft_binding_gem.png"
+          "template": "gems/hoe_soft_binding_gem.png"
         },
         {
           "target": [
             "type:SHOVEL"
           ],
-          "template": "shovel_soft_binding_gem.png"
+          "template": "gems/shovel_soft_binding_gem.png"
         }
       ]
     },

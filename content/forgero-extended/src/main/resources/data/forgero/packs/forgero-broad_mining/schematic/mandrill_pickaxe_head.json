@@ -1,0 +1,113 @@
+{
+  "type": "PICKAXE_HEAD_SCHEMATIC",
+  "name": "mandrill_pickaxe_head-schematic",
+  "parent": "pickaxe_head_base",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "PICKAXE_HEAD",
+    "target": "CREATE",
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "TOOL_MATERIAL",
+        "unique": true,
+        "amount": 3
+      }
+    ],
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
+        "tier": 1
+      }
+    ]
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "variant-schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 1.375
+          },
+          {
+            "id": "variant-schematic-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "value": 1.45
+          },
+          {
+            "id": "variant-schematic-durability-composite",
+            "type": "DURABILITY",
+            "value": 1.75
+          }
+        ]
+      }
+    ],
+    "attributes": [
+      {
+        "id": "schematic-rarity-local",
+        "type": "RARITY",
+        "order": "BASE",
+        "category": "LOCAL",
+        "operation": "ADDITION",
+        "value": 75
+      }
+    ],
+    "features": [
+      {
+        "type": "minecraft:block_breaking",
+        "selector": {
+          "type": "forgero:radius",
+          "filter": [
+            "forgero:can_mine",
+            {
+              "type": "minecraft:block",
+              "tag": "forgero:vein_mining_ores"
+            }
+          ],
+          "radius": 10
+        },
+        "speed": "forgero:all",
+        "predicate": {
+          "type": "minecraft:block",
+          "tag": "forgero:vein_mining_ores"
+        },
+        "title": "feature.forgero.vein_mining.title",
+        "description": "feature.forgero.ore_vein_mining.description"
+      }
+    ]
+  },
+  "custom_data": {
+    "ingredient_count": {
+      "value": 3,
+      "context": "LOCAL"
+    },
+    "name_replacement": {
+      "from": "pickaxe",
+      "to": "mandrill_pickaxe"
+    },
+    "better_compat_attribute_container": "forgero:pickaxe"
+  }
+}

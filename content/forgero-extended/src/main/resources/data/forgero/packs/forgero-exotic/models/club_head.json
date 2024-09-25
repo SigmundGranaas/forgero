@@ -1,0 +1,50 @@
+{
+  "type": "SWORDLIKE_HEAD",
+  "models": [
+    {
+      "name": "club_head",
+      "type": "GENERATE",
+      "template": "exotic/club_head.png",
+      "palette": "WOOD",
+      "order": 20
+    },
+    {
+      "name": "swordlike_head_material",
+      "type": "GENERATE",
+      "palette": "MATERIAL",
+      "template": "exotic/club_head_reinforcement.png",
+      "order": 30
+    },
+    {
+      "name": "swordlike_head_dye",
+      "template": "exotic/club_head.png",
+      "type": "GENERATE",
+      "palette": "DYE",
+      "order": 25
+    },
+    {
+      "target": [
+        "type:WOOD",
+        "type:SWORDLIKE_HEAD_SCHEMATIC"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "club_head"
+    },
+    {
+      "target": [
+        "type:MATERIAL",
+        "slot:0"
+      ],
+      "modelType": "UPGRADE",
+      "template": "swordlike_head_material"
+    },
+    {
+      "target": [
+        "type:DYE",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "swordlike_head_dye"
+    }
+  ]
+}

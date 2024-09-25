@@ -6,19 +6,7 @@
       "type": "TOOL_MATERIAL"
     },
     "variant": [
-      "tsuba_sword_guard",
-      "shortsword_blade",
-      "rapier_blade",
-      "knife_blade",
-      "kimiri_sword_guard",
-      "katana_blade",
-      "duelling_sword_guard",
-      "agile_sword_guard",
-      "path_digger_shovel_head",
-      "reaper_head",
-      "grave_digger_head",
-      "lightweight_pickaxe_head",
-      "spiked_binding"
+
     ]
   },
   "type": "forgero:schematic_part_crafting",

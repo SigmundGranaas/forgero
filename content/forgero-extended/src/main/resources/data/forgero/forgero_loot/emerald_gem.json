@@ -1,0 +1,12 @@
+{
+  "id": "emerald_gem_from_ore",
+  "tables": [
+    "minecraft:blocks/emerald_ore",
+    "minecraft:blocks/deepslate_emerald_ore"
+  ],
+  "ids": [
+    "forgero:emerald_gem_1"
+  ],
+  "chance": 0.025,
+  "rolls": 1
+}

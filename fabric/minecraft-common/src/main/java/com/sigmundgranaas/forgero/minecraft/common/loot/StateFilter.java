@@ -24,8 +24,10 @@ public class StateFilter {
 	private int upperRarity = 0;
 	@Builder.Default
 	private int lowerRarity = 0;
+
 	@Builder.Default
 	private List<String> types = new ArrayList<>();
+
 	@Builder.Default
 	private List<String> ids = new ArrayList<>();
 
@@ -53,23 +55,26 @@ public class StateFilter {
 				.filter(this::filter)
 				.forEach(states::add);
 
-        return states.stream().map(Identifiable::identifier).map(id -> Registries.ITEM.get(new Identifier(id))).toList();
-    }
+		return states.stream().map(Identifiable::identifier).map(id -> Registries.ITEM.get(new Identifier(id))).toList();
+	}
 
 	private boolean filter(State state) {
-		if (state.stream().applyAttribute(Rarity.KEY) < lowerRarity) {
-			return false;
+		if (upperRarity != 0) {
+			if (state.stream().applyAttribute(Rarity.KEY) < lowerRarity) {
+				return false;
+			}
+
+			if (state.stream().applyAttribute(Rarity.KEY) > upperRarity) {
+				return false;
+			}
 		}
 
-		if (state.stream().applyAttribute(Rarity.KEY) > upperRarity) {
-			return false;
-		}
 
 		if (exclusion.stream().anyMatch(exclusion -> stringMatch(exclusion, state))) {
 			return false;
 		}
 
-		return include.size() == 0 || include.stream().anyMatch(include -> stringMatch(include, state));
+		return include.isEmpty() || include.stream().anyMatch(include -> stringMatch(include, state));
 	}
 
 	private boolean stringMatch(String match, State state) {

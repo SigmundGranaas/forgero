@@ -1,0 +1,116 @@
+{
+  "type": "SHOVEL_HEAD_SCHEMATIC",
+  "name": "spade_head-schematic",
+  "parent": "shovel_head_base",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "SHOVEL_HEAD",
+    "target": "CREATE",
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "TOOL_MATERIAL",
+        "unique": true,
+        "amount": 3
+      }
+    ],
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
+        "tier": 1
+      }
+    ]
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "variant-schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 1.375
+          },
+          {
+            "id": "variant-schematic-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "value": 1.35
+          },
+          {
+            "id": "variant-schematic-durability-composite",
+            "type": "DURABILITY",
+            "value": 1.55
+          },
+          {
+            "id": "variant-schematic-weight-composite",
+            "type": "WEIGHT",
+            "value": 1.15
+          }
+        ]
+      }
+    ],
+    "attributes": [
+      {
+        "id": "schematic-rarity-local",
+        "type": "RARITY",
+        "order": "BASE",
+        "category": "LOCAL",
+        "operation": "ADDITION",
+        "value": 75
+      }
+    ],
+    "features": [
+      {
+        "type": "minecraft:block_breaking",
+        "selector": {
+          "type": "forgero:pattern",
+          "pattern": [
+            "xxx",
+            "xxx",
+            "xxx"
+          ],
+          "depth": 1,
+          "direction": "multi",
+          "filter": "forgero:can_mine"
+        },
+        "speed": "forgero:all",
+        "predicate": {
+          "type": "forgero:can_mine"
+        },
+        "title": "feature.forgero.pattern_mining.title",
+        "description": "feature.forgero.pattern_mining.3x3-description"
+      }
+    ]
+  },
+  "custom_data": {
+    "ingredient_count": {
+      "value": 3,
+      "context": "LOCAL"
+    },
+    "name_replacement": {
+      "from": "shovel",
+      "to": "spade"
+    }
+  }
+}
