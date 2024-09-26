@@ -5,6 +5,7 @@
 subprojects {
 	dependencies {
 		implementation(project(":core"))
+		implementation(project(":mods:forgero:base:base-common"))
 		testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
 	}
 

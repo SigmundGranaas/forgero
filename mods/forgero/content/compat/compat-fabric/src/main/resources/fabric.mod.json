@@ -27,6 +27,12 @@
   "icon": "assets/${mod_id}/icon.png",
   "environment": "*",
   "entrypoints": {
+    "modmenu": [
+      "com.sigmundgranaas.forgero.content.compat.modmenu.ForgeroModMenuIntegration"
+    ],
+    "dynamiclights": [
+      "com.sigmundgranaas.forgero.content.compat.dynamiclights.DynamicLightsRegistryEndpoint"
+    ]
   },
   "mixins": [
   ],

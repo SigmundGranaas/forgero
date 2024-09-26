@@ -1,9 +1,9 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "com.sigmundgranaas.forgero.fabric.mixins",
+  "package": "com.sigmundgranaas.forgero.content.compat.mixins",
   "compatibilityLevel": "JAVA_17",
-  "plugin": "com.sigmundgranaas.forgero.fabric.mixins.CompatMixinPlugin",
+  "plugin": "com.sigmundgranaas.forgero.content.compat.mixins.CompatMixinPlugin",
   "mixins": [
     "BetterCombatWeaponRegistryMixin"
   ],

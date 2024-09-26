@@ -12,6 +12,8 @@ dependencies {
 	testImplementation("org.junit.jupiter:junit-jupiter-params:5.11.0")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
 
+	// Advanced Runtime Resource Pack
+	include(modApi("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}"))
 	// Reach Entity Attributes
 	modApi("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}") {
 		exclude(group: "net.fabricmc.fabric-loader")
