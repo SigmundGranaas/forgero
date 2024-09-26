@@ -1,6 +1,8 @@
 package com.sigmundgranaas.forgero.fabric.client;
 
 import com.google.common.collect.ImmutableList;
+import com.sigmundgranaas.forgero.api.v0.entrypoint.ForgeroClientPreInitializationEntryPoint;
+import com.sigmundgranaas.forgero.api.v0.entrypoint.ForgeroPreInitializationEntryPoint;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.model.ModelRegistry;
@@ -20,6 +22,7 @@ import com.sigmundgranaas.forgero.entity.Entities;
 import com.sigmundgranaas.forgero.handler.use.ThrowableItemRenderer;
 import com.sigmundgranaas.forgero.service.StateService;
 import net.devtech.arrp.api.RRPCallback;
+
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -30,7 +33,9 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
+import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
+
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
@@ -43,13 +48,20 @@ import static com.sigmundgranaas.forgero.block.assemblystation.AssemblyStationSc
 import static com.sigmundgranaas.forgero.block.upgradestation.UpgradeStationScreenHandler.UPGRADE_STATION_SCREEN_HANDLER;
 
 @Environment(EnvType.CLIENT)
-public class ForgeroClient implements ClientModInitializer {
-	public static Map<String, ModelTemplate> TEXTURES = new HashMap<>();
-	public static Map<String, String> PALETTE_REMAP = new HashMap<>();
+public class ForgeroBaseClient implements ClientModInitializer {
+	public static final Map<String, ModelTemplate> TEXTURES = new HashMap<>();
+	public static final Map<String, String> PALETTE_REMAP = new HashMap<>();
 
+	private static final List<ForgeroClientPreInitializationEntryPoint> CLIENT_PRE_INITIALIZED_ENTRY_POINTS =
+			FabricLoader.getInstance().getEntrypointContainers(
+					            "forgeroClientPreInitialization", ForgeroClientPreInitializationEntryPoint.class)
+			            .stream()
+			            .map(EntrypointContainer::getEntrypoint)
+			            .toList();
 
 	@Override
 	public void onInitializeClient() {
+		invokeClientPreInitializedEntryPoints();
 		initializeItemModels();
 		HandledScreens.register(ASSEMBLY_STATION_SCREEN_HANDLER, AssemblyStationScreen::new);
 		HandledScreens.register(UPGRADE_STATION_SCREEN_HANDLER, UpgradeStationScreen::new);
@@ -57,7 +69,8 @@ public class ForgeroClient implements ClientModInitializer {
 
 	private void initializeItemModels() {
 		var modelRegistry = new ModelRegistry();
-		var availableDependencies = FabricLoader.getInstance().getAllMods().stream().map(ModContainer::getMetadata).map(ModMetadata::getId).collect(Collectors.toSet());
+		var availableDependencies = FabricLoader.getInstance().getAllMods().stream().map(ModContainer::getMetadata).map(
+				ModMetadata::getId).collect(Collectors.toSet());
 
 		PipelineBuilder
 				.builder()
@@ -69,38 +82,44 @@ public class ForgeroClient implements ClientModInitializer {
 				.build()
 				.execute();
 		// TODO: Set configuration's available dependencies
-		assetReloader();
+		registerAssetReloadListener();
 		registerToolPartTextures(modelRegistry);
 
 		StateService stateService = StateService.INSTANCE;
 		Set<Identifier> models = ForgeroStateRegistry.COMPOSITES.parallelStream()
-				.map(stateService::find)
-				.flatMap(Optional::stream)
-				.map(id -> new Identifier(id.nameSpace(), "item/" + id.name()))
-				.collect(Collectors.toSet());
+		                                                        .map(stateService::find)
+		                                                        .flatMap(Optional::stream)
+		                                                        .map(id -> new Identifier(id.nameSpace(), "item/" + id.name()))
+		                                                        .collect(Collectors.toSet());
 
 		ModelResolver stateModels = new ForgeroStateModelResolver(modelRegistry, StateService.INSTANCE, models);
 		ModelLoadingPlugin.register(pluginContext -> pluginContext.resolveModel().register(stateModels));
 		EntityRendererRegistry.register(Entities.THROWN_ITEM_ENTITY, ThrowableItemRenderer::new);
 	}
 
+	private void invokeClientPreInitializedEntryPoints() {
+		CLIENT_PRE_INITIALIZED_ENTRY_POINTS.forEach(ForgeroClientPreInitializationEntryPoint::onClientPreInitialization);
+	}
+
 	private void registerToolPartTextures(ModelRegistry modelRegistry) {
 		var materials = ForgeroStateRegistry.TREE.find(Type.TOOL_MATERIAL)
-				.map(node -> node.getResources(State.class))
-				.orElse(ImmutableList.<State>builder().build());
+		                                         .map(node -> node.getResources(State.class))
+		                                         .orElse(ImmutableList.<State>builder().build());
 
 		for (State material : materials) {
-			ForgeroClient.TEXTURES.put(String.format("forgero:%s-repair_kit.png", material.name()), new PaletteTemplateModel(material.name(), "repair_kit.png", 30, null, 16, null, null, Collections.emptyList()));
+			ForgeroBaseClient.TEXTURES.put(
+					String.format("forgero:%s-repair_kit.png", material.name()),
+					new PaletteTemplateModel(material.name(), "repair_kit.png", 30, null, 16, null, null, Collections.emptyList())
+			);
 		}
 
 		PALETTE_REMAP.putAll(modelRegistry.getPaletteRemapper());
 		TEXTURES.putAll(modelRegistry.getTextures());
 		Generator.generate();
 		RRPCallback.BEFORE_VANILLA.register(a -> a.add(Generator.RESOURCE_PACK_CLIENT));
-
 	}
 
-	private void assetReloader() {
+	private void registerAssetReloadListener() {
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
 			@Override
 			public void reload(ResourceManager manager) {

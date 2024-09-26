@@ -6,14 +6,14 @@ import java.util.Optional;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import static com.sigmundgranaas.forgero.fabric.client.ForgeroClient.TEXTURES;
+import static com.sigmundgranaas.forgero.fabric.client.ForgeroBaseClient.TEXTURES;
 
 import java.util.List;
 
 import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
 import com.sigmundgranaas.forgero.core.texture.V2.FileLoader;
 import com.sigmundgranaas.forgero.core.texture.V2.TextureGenerator;
-import com.sigmundgranaas.forgero.fabric.client.ForgeroClient;
+import com.sigmundgranaas.forgero.fabric.client.ForgeroBaseClient;
 import com.sigmundgranaas.forgero.fabric.resources.FileService;
 import net.minecraft.resource.*;
 import org.spongepowered.asm.mixin.Final;
@@ -43,9 +43,9 @@ public abstract class LifecycleResourceManagerImplMixin {
 				FileLoader loader = new FileService();
 				var template = TEXTURES.get(textureId);
 				if(template instanceof PaletteTemplateModel paletteTemplateModel){
-					var texture = TextureGenerator.getInstance(loader, ForgeroClient.PALETTE_REMAP).getTexture(paletteTemplateModel);
+					var texture = TextureGenerator.getInstance(loader, ForgeroBaseClient.PALETTE_REMAP).getTexture(paletteTemplateModel);
 					if (texture.isPresent()) {
-						var metadata = TextureGenerator.getInstance(loader, ForgeroClient.PALETTE_REMAP).getMetadata(paletteTemplateModel, ".mcmeta");
+						var metadata = TextureGenerator.getInstance(loader, ForgeroBaseClient.PALETTE_REMAP).getMetadata(paletteTemplateModel, ".mcmeta");
 						Resource resource;
 
 						resource = metadata

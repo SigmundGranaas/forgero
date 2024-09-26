@@ -28,10 +28,10 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "com.sigmundgranaas.forgero.fabric.client.ForgeroClient"
+      "com.sigmundgranaas.forgero.fabric.client.ForgeroBaseClient"
     ],
     "main": [
-      "com.sigmundgranaas.forgero.fabric.ForgeroInitializer"
+      "com.sigmundgranaas.forgero.fabric.ForgeroBase"
     ],
     "forgeroInitialized": [
       "com.sigmundgranaas.forgero.fabric.initialization.ForgeroPostInit"

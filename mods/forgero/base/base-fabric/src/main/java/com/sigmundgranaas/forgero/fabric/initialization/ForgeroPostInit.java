@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import com.google.common.collect.ImmutableList;
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Armor;
@@ -27,7 +28,6 @@ import com.sigmundgranaas.forgero.core.state.Identifiable;
 import com.sigmundgranaas.forgero.core.state.MaterialBased;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.fabric.ForgeroInitializer;
 import com.sigmundgranaas.forgero.api.v0.entrypoint.ForgeroInitializedEntryPoint;
 import com.sigmundgranaas.forgero.fabric.initialization.datareloader.DataPipeLineReloader;
 import com.sigmundgranaas.forgero.fabric.initialization.datareloader.DisassemblyReloader;
@@ -79,7 +79,7 @@ import org.jetbrains.annotations.NotNull;
  * the Forgero mod's post-initialization phase, which supplies a StateService object that can be used to interact with Forgero's States.
  */
 public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
-	public static final Logger LOGGER = LogManager.getLogger(ForgeroInitializer.MOD_ID);
+	public static final Logger LOGGER = LogManager.getLogger(Forgero.NAMESPACE);
 
 	/**
 	 * The onInitialized method is called after core Forgero Systems have been loaded.

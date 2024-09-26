@@ -8,7 +8,7 @@ import com.sigmundgranaas.forgero.core.model.TextureModel;
 import net.devtech.arrp.api.RuntimeResourcePack;
 import net.minecraft.util.Identifier;
 
-import static com.sigmundgranaas.forgero.fabric.client.ForgeroClient.TEXTURES;
+import static com.sigmundgranaas.forgero.fabric.client.ForgeroBaseClient.TEXTURES;
 
 
 public class Generator {
