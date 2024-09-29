@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.sigmundgranaas.forgero.abstractions.utils.ModLoaderUtils;
 import com.sigmundgranaas.forgero.generator.impl.DataDirectoryRecipeGenerator;
 import com.sigmundgranaas.forgero.generator.impl.IdentifiedJson;
 import com.sigmundgranaas.forgero.generator.impl.RecipeGenerator;
@@ -28,15 +29,15 @@ import net.minecraft.util.profiler.Profiler;
 public class RecipeInjectionMixin {
 	@Inject(method = "apply(Ljava/util/Map;Lnet/minecraft/resource/ResourceManager;Lnet/minecraft/util/profiler/Profiler;)V", at = @At("HEAD"))
 	public void forgero$injectDynamicRecipes(@NotNull Map<Identifier, JsonElement> map, ResourceManager resourceManager, Profiler profiler, CallbackInfo info) {
-		StringReplacer stringReplacer = new StringReplacer(Registries.operationRegistry()::convert);
-		VariableToMapTransformer transformer = new VariableToMapTransformer(Registries.variableConverterRegistry()::convert);
-		// TODO
-//		Predicate<String> isModLoaded = FabricLoader.getInstance()::isModLoaded;
-		RecipeGenerator recipeGenerator = new RecipeGenerator(stringReplacer, transformer, s -> false);
+		RecipeGenerator recipeGenerator = new RecipeGenerator(
+				new StringReplacer(Registries.operationRegistry()::convert),
+				new VariableToMapTransformer(Registries.variableConverterRegistry()::convert),
+				ModLoaderUtils::isModPresent
+		);
 		DataDirectoryRecipeGenerator generator = new DataDirectoryRecipeGenerator(
 				"recipe_generators", new ResourceManagerJsonLoader(resourceManager), recipeGenerator);
-		Map<Identifier, JsonObject> recipes = generator.generate().stream().collect(
-				Collectors.toMap(IdentifiedJson::id, IdentifiedJson::json));
+		Map<Identifier, JsonObject> recipes = generator.generate().stream()
+		                                               .collect(Collectors.toMap(IdentifiedJson::id, IdentifiedJson::json));
 		map.putAll(recipes);
 	}
 }

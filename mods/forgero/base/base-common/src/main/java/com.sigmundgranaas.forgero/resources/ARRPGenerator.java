@@ -28,7 +28,6 @@ import net.devtech.arrp.json.tags.JTag;
 import net.minecraft.util.Identifier;
 
 public class ARRPGenerator {
-
 	public static final RuntimeResourcePack RESOURCE_PACK_BUILTIN = RuntimeResourcePack.create("forgero:builtin_generator");
 	public static final RuntimeResourcePack RESOURCE_PACK = RuntimeResourcePack.create("forgero:dynamic_generator");
 	private static final List<DynamicResourceGenerator> generators = new ArrayList<>();
@@ -69,11 +68,11 @@ public class ARRPGenerator {
 	private void createTagFromType(MutableTypeNode node) {
 		JTag typeTag = new JTag();
 		var states = node.getResources(State.class);
-		if (states.size() > 0) {
+		if (!states.isEmpty()) {
 			states.stream()
 			      .map(State::identifier)
 			      .forEach(id -> add(id, typeTag));
-			RESOURCE_PACK_BUILTIN.addTag(new Identifier("assets/forgero", "items/" + node.name().toLowerCase(Locale.ENGLISH)), typeTag);
+			RESOURCE_PACK_BUILTIN.addTag(new Identifier(Forgero.NAMESPACE, "items/" + node.name().toLowerCase(Locale.ENGLISH)), typeTag);
 		}
 	}
 
@@ -82,7 +81,8 @@ public class ARRPGenerator {
 		var materials = ForgeroStateRegistry.STATES.find(Type.TOOL_MATERIAL);
 		Map<String, List<State>> materialMap = materials.stream()
 		                                                .map(Supplier::get)
-		                                                .collect(Collectors.toMap(Identifiable::name,
+		                                                .collect(Collectors.toMap(
+				                                                Identifiable::name,
 				                                                material -> tools.stream().map(Supplier::get)
 				                                                                 .filter(tool -> Arrays.stream(tool.name().split(
 						                                                                                       ELEMENT_SEPARATOR))
@@ -95,7 +95,7 @@ public class ARRPGenerator {
 			String key = entry.getKey();
 			List<State> states = entry.getValue();
 			JTag materialToolTag = new JTag();
-			if (states.size() > 0) {
+			if (!states.isEmpty()) {
 				states.stream()
 				      .map(State::identifier)
 				      .forEach(id -> add(id, materialToolTag));

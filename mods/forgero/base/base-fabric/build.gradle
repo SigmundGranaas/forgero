@@ -7,8 +7,6 @@ plugins {
 	id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
-archivesBaseName = "${rootProject.mod_id}-fabric"
-
 architectury {
 	platformSetupLoomIde()
 	fabric()
@@ -85,6 +83,13 @@ sourcesJar {
 components.java {
 	withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
 		skip()
+	}
+}
+
+sourceSets {
+	test {
+		compileClasspath += main.compileClasspath
+		runtimeClasspath += main.runtimeClasspath
 	}
 }
 

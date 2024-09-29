@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.sigmundgranaas.forgero.abstractions.utils.ModLoaderUtils;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.recipe.RecipeCreator;
 import com.sigmundgranaas.forgero.recipe.RecipeGenerator;
@@ -16,7 +17,6 @@ import com.sigmundgranaas.forgero.recipe.implementation.generator.TemplateGenera
 import net.minecraft.util.Identifier;
 
 public class GuideBookGenerator implements RecipeGenerator {
-
 	private final TemplateGenerator generator;
 	private final String value;
 
@@ -52,6 +52,6 @@ public class GuideBookGenerator implements RecipeGenerator {
 
 	@Override
 	public boolean isValid() {
-		return FabricLoader.getInstance().isModLoaded("patchouli");
+		return ModLoaderUtils.isModPresent("patchouli");
 	}
 }

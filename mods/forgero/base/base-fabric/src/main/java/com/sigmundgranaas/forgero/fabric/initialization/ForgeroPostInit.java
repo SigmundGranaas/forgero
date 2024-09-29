@@ -69,7 +69,7 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The ForgeroPostInitialization class handles the post-initialization phase of the Forgero mod.
+ * Handles the post-initialization phase of the Forgero mod.
  * This phase involves registering various game elements such as blocks, items, commands, and data reload listeners.
  * <p>
  * Post-initialization is typically used for actions that must occur after all states have been loaded into Forgero,
@@ -99,7 +99,7 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 		registerDataReloadListener();
 		registerLootConditionReloadListener();
 		registerRecipeSerializers();
-		registerAARPRecipes(stateService);
+		registerARRPRecipes(stateService);
 		registerHungerCallbacks(stateService);
 		registerToolTipFilters();
 		registerRecipeGenerators(stateService);
@@ -284,12 +284,11 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	}
 
 	/**
-	 * The registerAarpRecipes method registers AARP recipes for the mod.
-	 * These recipes are handled by AARP as a dynamic resource pack
+	 * Registers Advanced Runtime Resource Pack recipes.
 	 *
 	 * @param service The state service provides services related to game states.
 	 */
-	private void registerAARPRecipes(StateService service) {
+	private void registerARRPRecipes(StateService service) {
 		ARRPGenerator.register(new RepairKitResourceGenerator(ForgeroConfigurationLoader.configuration, service));
 		if (ForgeroConfigurationLoader.configuration.enableRecipesForAllSchematics) {
 			ARRPGenerator.register(() -> new AllPartToAllSchematicsGenerator(service, new PartToSchematicGenerator.SchematicRecipeCreator(),

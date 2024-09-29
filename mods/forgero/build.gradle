@@ -4,6 +4,7 @@
 
 subprojects {
 	dependencies {
+		api(project(path: ":mods:abstractions:abstractions-common", configuration: "namedElements")) { transitive false }
 		api(project(path: ":mods:generator:generator-common", configuration: "namedElements")) { transitive false }
 	}
 }

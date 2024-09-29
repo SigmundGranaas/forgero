@@ -23,9 +23,8 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 public class CommandRegistrar implements Registrar {
 	@Override
 	public void register() {
-
 		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated, test) -> {
-			dispatcher.register(CommandManager.literal("assets/forgero").executes(context -> {
+			dispatcher.register(CommandManager.literal(Forgero.NAMESPACE).executes(context -> {
 				Forgero.LOGGER.info("Called Forgero command with no arguments");
 
 				return 1;
@@ -37,17 +36,20 @@ public class CommandRegistrar implements Registrar {
 							.executes(context -> {
 								BlockPos pos = context.getSource().getPlayer().getBlockPos().add(-12, -5, -10);
 								BlockState initialState = context.getSource().getWorld().getBlockState(pos);
-								Optional<StructureTemplate> station = context.getSource().getWorld().getStructureTemplateManager().getTemplate(new Identifier("forgero:forging_house"));
+								Optional<StructureTemplate> station = context.getSource().getWorld().getStructureTemplateManager().getTemplate(
+										new Identifier("forgero:forging_house"));
 								context.getSource().getWorld().setBlockState(pos, Blocks.STRUCTURE_BLOCK.getDefaultState());
 								if (station.isPresent() && !context.getSource().getWorld().isClient) {
-									var structureBlock = new StructureBlockBlockEntity(pos, context.getSource().getWorld().getBlockState(pos));
+									var structureBlock = new StructureBlockBlockEntity(
+											pos, context.getSource().getWorld().getBlockState(pos));
 									//structureBlock.setStructureName(new Identifier("forgero:forgerostation"));
 									structureBlock.loadStructure(context.getSource().getWorld());
 									structureBlock.place(context.getSource().getWorld(), true, station.get());
 									context.getSource().sendMessage(Text.literal("Placed Forgero testing station"));
 									context.getSource().getWorld().setBlockState(pos, initialState);
 
-									station.get().place(context.getSource().getWorld(), pos, pos, new StructurePlacementData(), Random.create(), 3);
+									station.get().place(
+											context.getSource().getWorld(), pos, pos, new StructurePlacementData(), Random.create(), 3);
 								}
 								return 1;
 							})

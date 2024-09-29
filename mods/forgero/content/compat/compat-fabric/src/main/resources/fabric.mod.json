@@ -27,6 +27,12 @@
   "icon": "assets/${mod_id}/icon.png",
   "environment": "*",
   "entrypoints": {
+    "forgeroClientPreInitialization": [
+      "com.sigmundgranaas.forgero.content.compat.ForgeroCompatClient"
+    ],
+    "forgeroInitialized": [
+      "com.sigmundgranaas.forgero.content.compat.ForgeroCompatInitializer"
+    ],
     "modmenu": [
       "com.sigmundgranaas.forgero.content.compat.modmenu.ForgeroModMenuIntegration"
     ],

@@ -3,6 +3,9 @@ package com.sigmundgranaas.forgero.content.compat.tag;
 import static com.sigmundgranaas.forgero.core.Forgero.LOGGER;
 import static com.sigmundgranaas.forgero.resources.ARRPGenerator.RESOURCE_PACK;
 
+import com.sigmundgranaas.forgero.abstractions.utils.ModLoaderUtils;
+
+import net.minecraft.SharedConstants;
 import net.minecraft.util.Identifier;
 
 import net.devtech.arrp.json.tags.JTag;
@@ -23,13 +26,7 @@ public class BlockTagCompatRegistration {
 	}
 
 	private static int checkIfMinecraftVersionIsEqualOrNewer(String version) {
-		var minecraftModContainer = FabricLoader.getInstance().getModContainer(MINECRAFT_NAMESPACE);
-		if (minecraftModContainer.isEmpty()) {
-			LOGGER.error("Couldn't parse Minecraft version (Minecraft mod container is empty).");
-			return -1;
-		}
-
-		var minecraftVersion = minecraftModContainer.get().getMetadata().getVersion();
+		var minecraftVersion = SharedConstants.getGameVersion().getName();
 		try {
 			return minecraftVersion.compareTo(SemanticVersion.parse(version));
 		} catch (VersionParsingException e) {
@@ -45,11 +42,11 @@ public class BlockTagCompatRegistration {
 			cherryPlanksTag.add(new Identifier(MINECRAFT_NAMESPACE, CHERRY_PLANKS));
 		}
 
-		if (FabricLoader.getInstance().isModLoaded(BIOMES_YOULL_GO_NAMESPACE)) {
+		if (ModLoaderUtils.isModPresent(BIOMES_YOULL_GO_NAMESPACE)) {
 			cherryPlanksTag.add(new Identifier(BIOMES_YOULL_GO_NAMESPACE, CHERRY_PLANKS));
 		}
 
-		if (FabricLoader.getInstance().isModLoaded(REGIONS_UNEXPLORED_NAMESPACE)) {
+		if (ModLoaderUtils.isModPresent(REGIONS_UNEXPLORED_NAMESPACE)) {
 			cherryPlanksTag.add(new Identifier(REGIONS_UNEXPLORED_NAMESPACE, CHERRY_PLANKS));
 		}
 

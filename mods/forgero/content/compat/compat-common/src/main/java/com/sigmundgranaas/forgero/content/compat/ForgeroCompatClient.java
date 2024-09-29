@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.content.compat;
 
+import com.sigmundgranaas.forgero.abstractions.utils.ModLoaderUtils;
 import com.sigmundgranaas.forgero.api.v0.entrypoint.ForgeroClientPreInitializationEntryPoint;
 import com.sigmundgranaas.forgero.content.compat.patchouli.GemUpgradeRecipePage;
 import com.sigmundgranaas.forgero.content.compat.patchouli.StateCraftingRecipePage;
@@ -21,7 +22,7 @@ public class ForgeroCompatClient implements ForgeroClientPreInitializationEntryP
 					ctx -> ctx.addModels(new ModelIdentifier(new Identifier(Forgero.NAMESPACE, "guidebook"), "inventory")));
 		}
 
-		if (FabricLoader.getInstance().isModLoaded("patchouli")) {
+		if (ModLoaderUtils.isModPresent("patchouli")) {
 			GemUpgradeRecipePage.register();
 			StateCraftingRecipePage.register();
 			StateUpgradeRecipePage.register();

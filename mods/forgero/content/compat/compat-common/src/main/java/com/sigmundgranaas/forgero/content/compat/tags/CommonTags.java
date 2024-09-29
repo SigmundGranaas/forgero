@@ -19,10 +19,10 @@ public class CommonTags {
 			RegionsUnexplored::new
 	);
 
-	public static void registerAndFilterCommonMaterialTags(){
+	public static void registerAndFilterCommonMaterialTags() {
 		TAGS.stream()
-				.map(Supplier::get)
-				.filter(CommonTagGenerator::isModLoaded)
-				.forEach(CommonTagGenerator::register);
+		    .map(Supplier::get)
+		    .filter(CommonTagGenerator::isModPresent)
+		    .forEach(CommonTagGenerator::register);
 	}
 }

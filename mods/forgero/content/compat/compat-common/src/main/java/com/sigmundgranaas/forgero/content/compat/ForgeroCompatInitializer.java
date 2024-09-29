@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.content.compat;
 
 import java.util.function.Supplier;
 
+import com.sigmundgranaas.forgero.abstractions.utils.ModLoaderUtils;
 import com.sigmundgranaas.forgero.api.v0.entrypoint.ForgeroInitializedEntryPoint;
 import com.sigmundgranaas.forgero.content.compat.patchouli.BookDropOnAdvancement;
 import com.sigmundgranaas.forgero.content.compat.tags.CommonTags;
@@ -17,15 +18,11 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 	public static final Supplier<Boolean> modonomicon;
 
 	static {
-		modonomicon = () -> isModLoaded("modonomicon");
-		toolstats = () -> isModLoaded("toolstats");
-		emi = () -> isModLoaded("emi");
-		bettercombat = () -> isModLoaded("bettercombat");
-		yacl = () -> isModLoaded("yet-another-config-lib") || isModLoaded("yet_another_config_lib_v3");
-	}
-
-	public static boolean isModLoaded(String id) {
-		return FabricLoader.getInstance().isModLoaded(id);
+		modonomicon = () -> ModLoaderUtils.isModPresent("modonomicon");
+		toolstats = () -> ModLoaderUtils.isModPresent("toolstats");
+		emi = () -> ModLoaderUtils.isModPresent("emi");
+		bettercombat = () -> ModLoaderUtils.isModPresent("bettercombat");
+		yacl = () -> ModLoaderUtils.isModPresent("yet-another-config-lib") || ModLoaderUtils.isModPresent("yet_another_config_lib_v3");
 	}
 
 	@Override
