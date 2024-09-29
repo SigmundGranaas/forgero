@@ -5,3 +5,10 @@
 architectury {
 	common(rootProject.enabled_platforms.split(","))
 }
+
+sourceSets {
+	test {
+		compileClasspath += main.compileClasspath
+		runtimeClasspath += main.runtimeClasspath
+	}
+}
