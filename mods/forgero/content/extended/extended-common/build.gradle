@@ -1,0 +1,14 @@
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection DependencyNotationArgument
+
+architectury {
+	common(rootProject.enabled_platforms.split(","))
+}
+
+sourceSets {
+	test {
+		compileClasspath += main.compileClasspath
+		runtimeClasspath += main.runtimeClasspath
+	}
+}
