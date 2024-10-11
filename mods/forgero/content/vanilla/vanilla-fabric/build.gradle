@@ -2,70 +2,11 @@
 //file:noinspection GroovyAssignabilityCheck
 //file:noinspection DependencyNotationArgument
 
-architectury {
-	platformSetupLoomIde()
-	fabric()
-}
-
-configurations {
-	common
-	shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files
-	compileClasspath.extendsFrom common
-	runtimeClasspath.extendsFrom common
-	developmentFabric.extendsFrom common
-}
-
 dependencies {
-	common(project(path: ":mods:forgero:content:vanilla:vanilla-common", configuration: "namedElements")) { transitive false }
-	shadowCommon(project(path: ":mods:forgero:content:vanilla:vanilla-common", configuration: "transformProductionFabric")) { transitive false }
-
 	// Fabric Loader
 	modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
 	// Fabric API
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 	// Advanced Runtime Resource Pack
 	include(modApi("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}"))
-}
-
-processResources {
-	inputs.property "version", rootProject.version
-
-	from(project(":mods:forgero:content:vanilla:vanilla-common").sourceSets["main"].resources) {
-		include("assets", "data", "resourcepacks")
-	}
-
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version,
-			"mod_id": rootProject.mod_id,
-			"mod_name": rootProject.mod_name,
-			"mod_description": project.mod_description,
-			"mod_license": rootProject.mod_license,
-			"fabric_loader_version": project.fabric_loader_version,
-			"java_version": rootProject.java_version,
-			"supported_minecraft_version": rootProject.supported_minecraft_version
-	}
-}
-
-shadowJar {
-	exclude "architectury.common.json"
-
-	configurations = [project.configurations.shadowCommon]
-	archiveClassifier = "dev-shadow"
-}
-
-remapJar {
-	inputFile.set shadowJar.archiveFile
-	dependsOn shadowJar
-}
-
-sourcesJar {
-	def commonSources = project(":mods:forgero:content:vanilla:vanilla-common").sourcesJar
-	dependsOn commonSources
-	from commonSources.archiveFile.map { zipTree(it) }
-}
-
-components.java {
-	withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
-		skip()
-	}
 }

@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.fabric.yacl;
+package com.sigmundgranaas.forgero.content.compat.yacl;
 
 import static com.sigmundgranaas.forgero.core.model.Strategy.PRE_BAKED;
 

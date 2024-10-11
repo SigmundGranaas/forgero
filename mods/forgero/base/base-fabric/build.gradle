@@ -7,26 +7,11 @@ plugins {
 	id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
-architectury {
-	platformSetupLoomIde()
-	fabric()
-}
-
 loom {
 	accessWidenerPath = project(":mods:forgero:base:base-common").loom.accessWidenerPath
 }
 
-configurations {
-	common
-	shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files
-	compileClasspath.extendsFrom common
-	runtimeClasspath.extendsFrom common
-	developmentFabric.extendsFrom common
-}
-
 dependencies {
-	common(project(path: ":mods:forgero:base:base-common", configuration: "namedElements")) { transitive false }
-	shadowCommon(project(path: ":mods:forgero:base:base-common", configuration: "transformProductionFabric")) { transitive false }
 	// Content submods
 	project(":mods:forgero:content").subprojects.each { subproject ->
 		if (!subproject.name.contains("fabric")) {
@@ -40,57 +25,6 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
 	// Fabric API
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-}
-
-processResources {
-	inputs.property "version", rootProject.version
-
-	from(project(":mods:forgero:base:base-common").sourceSets["main"].resources) {
-		include("assets", "data", "resourcepacks", "${rootProject.mod_id}.accesswidener")
-	}
-
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version,
-			"mod_id": rootProject.mod_id,
-			"mod_name": rootProject.mod_name,
-			"mod_description": project.mod_description,
-			"mod_license": rootProject.mod_license,
-			"fabric_loader_version": project.fabric_loader_version,
-			"java_version": rootProject.java_version,
-			"supported_minecraft_version": rootProject.supported_minecraft_version
-	}
-}
-
-shadowJar {
-	exclude "architectury.common.json"
-
-	configurations = [project.configurations.shadowCommon]
-	archiveClassifier = "dev-shadow"
-}
-
-remapJar {
-	injectAccessWidener = true
-	inputFile.set shadowJar.archiveFile
-	dependsOn shadowJar
-}
-
-sourcesJar {
-	def commonSources = project(":mods:forgero:base:base-common").sourcesJar
-	dependsOn commonSources
-	from commonSources.archiveFile.map { zipTree(it) }
-}
-
-components.java {
-	withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
-		skip()
-	}
-}
-
-sourceSets {
-	test {
-		compileClasspath += main.compileClasspath
-		runtimeClasspath += main.runtimeClasspath
-	}
 }
 
 curseforge {

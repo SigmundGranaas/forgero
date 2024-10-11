@@ -2,10 +2,6 @@
 //file:noinspection GroovyAssignabilityCheck
 //file:noinspection DependencyNotationArgument
 
-architectury {
-	common(rootProject.enabled_platforms.split(","))
-}
-
 dependencies {
 	// JUnit
 	testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
@@ -22,13 +18,6 @@ dependencies {
 
 loom {
 	accessWidenerPath = file("src/main/resources/${mod_id}.accesswidener")
-}
-
-sourceSets {
-	test {
-		compileClasspath += main.compileClasspath
-		runtimeClasspath += main.runtimeClasspath
-	}
 }
 
 test {

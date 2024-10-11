@@ -32,4 +32,81 @@ subprojects {
 	java {
 		withSourcesJar()
 	}
+
+	sourceSets {
+		test {
+			compileClasspath += main.compileClasspath
+			runtimeClasspath += main.runtimeClasspath
+		}
+	}
+
+	if (project.name.contains("common")) {
+		architectury {
+			common(rootProject.enabled_platforms.split(","))
+		}
+	} else if (project.name.contains("fabric")) {
+		architectury {
+			platformSetupLoomIde()
+			fabric()
+		}
+
+		configurations {
+			common
+			shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files
+			compileClasspath.extendsFrom common
+			runtimeClasspath.extendsFrom common
+			developmentFabric.extendsFrom common
+		}
+
+		def commonSubProjectPath = "${project.getParent().getPath()}:${project.getParent().getName()}-common"
+		dependencies {
+			common(project(path: commonSubProjectPath, configuration: "namedElements")) { transitive false }
+			shadowCommon(project(path: commonSubProjectPath, configuration: "transformProductionFabric")) { transitive false }
+		}
+
+		def commonSubProject = project(commonSubProjectPath)
+		processResources {
+			inputs.property "version", rootProject.version
+
+			from(commonSubProject.sourceSets["main"].resources) {
+				include("assets", "data", "resourcepacks")
+			}
+
+			filesMatching("fabric.mod.json") {
+				expand "version": project.version,
+					"base_mod_id": rootProject.mod_id,
+					"mod_id": project.mod_id,
+					"mod_name": project.mod_name,
+					"mod_description": project.mod_description,
+					"mod_license": project.mod_license,
+					"fabric_loader_version": project.fabric_loader_version,
+					"java_version": project.java_version,
+					"supported_minecraft_version": project.supported_minecraft_version
+			}
+		}
+
+		shadowJar {
+			exclude "architectury.common.json"
+
+			configurations = [project.configurations.shadowCommon]
+			archiveClassifier = "dev-shadow"
+		}
+
+		remapJar {
+			inputFile.set shadowJar.archiveFile
+			dependsOn shadowJar
+		}
+
+		sourcesJar {
+			def commonSources = commonSubProject.sourcesJar
+			dependsOn commonSources
+			from commonSources.archiveFile.map { zipTree(it) }
+		}
+
+		components.java {
+			withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+				skip()
+			}
+		}
+	}
 }

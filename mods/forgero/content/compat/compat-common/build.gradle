@@ -2,10 +2,6 @@
 //file:noinspection GroovyAssignabilityCheck
 //file:noinspection DependencyNotationArgument
 
-architectury {
-	common(rootProject.enabled_platforms.split(","))
-}
-
 dependencies {
 	// Mod Menu
 	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
