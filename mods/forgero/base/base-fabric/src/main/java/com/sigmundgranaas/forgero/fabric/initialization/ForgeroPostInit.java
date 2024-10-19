@@ -37,14 +37,14 @@ import com.sigmundgranaas.forgero.fabric.initialization.registrar.DynamicItemsRe
 import com.sigmundgranaas.forgero.fabric.initialization.registrar.StateItemRegistrar;
 import com.sigmundgranaas.forgero.fabric.initialization.registrar.TreasureLootRegistrar;
 import com.sigmundgranaas.forgero.fabric.registry.RecipeRegistry;
-import com.sigmundgranaas.forgero.resources.ARRPGenerator;
-import com.sigmundgranaas.forgero.resources.dynamic.AllPartToAllSchematicsGenerator;
-import com.sigmundgranaas.forgero.resources.dynamic.MaterialPartTagGenerator;
-import com.sigmundgranaas.forgero.resources.dynamic.PartToSchematicGenerator;
-import com.sigmundgranaas.forgero.resources.dynamic.PartTypeTagGenerator;
-import com.sigmundgranaas.forgero.resources.dynamic.RepairKitResourceGenerator;
-import com.sigmundgranaas.forgero.resources.dynamic.SchematicPartTagGenerator;
-import com.sigmundgranaas.forgero.resources.dynamic.WoodPartsTag;
+import com.sigmundgranaas.forgero.resources.DynamicResourcePackGenerator;
+import com.sigmundgranaas.forgero.resources.dynamic.impl.AllPartToAllSchematicsGenerator;
+import com.sigmundgranaas.forgero.resources.dynamic.impl.MaterialPartTagGenerator;
+import com.sigmundgranaas.forgero.resources.dynamic.impl.PartToSchematicGenerator;
+import com.sigmundgranaas.forgero.resources.dynamic.impl.PartTypeTagGenerator;
+import com.sigmundgranaas.forgero.resources.dynamic.impl.RepairKitResourceGenerator;
+import com.sigmundgranaas.forgero.resources.dynamic.impl.SchematicPartTagGenerator;
+import com.sigmundgranaas.forgero.resources.dynamic.impl.WoodPartsTag;
 import com.sigmundgranaas.forgero.generator.api.operation.OperationFactory;
 import com.sigmundgranaas.forgero.generator.impl.converter.forgero.ForgeroTypeVariableConverter;
 import com.sigmundgranaas.forgero.registry.registrar.AttributesRegistrar;
@@ -99,7 +99,7 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 		registerDataReloadListener();
 		registerLootConditionReloadListener();
 		registerRecipeSerializers();
-		registerARRPRecipes(stateService);
+		registerDynamicResourcePackRecipes(stateService);
 		registerHungerCallbacks(stateService);
 		registerToolTipFilters();
 		registerRecipeGenerators(stateService);
@@ -219,7 +219,7 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	 *
 	 * @param stateService The state service provides services related to Forgero states.
 	 */
-	private void registerItems(StateService stateService) {
+	private void registerItems(@NotNull StateService stateService) {
 		new StateItemRegistrar(stateService).registerItems(Registries.ITEM);
 		new DynamicItemsRegistrar().register();
 	}
@@ -284,26 +284,26 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	}
 
 	/**
-	 * Registers Advanced Runtime Resource Pack recipes.
+	 * Registers dynamic resource pack recipes.
 	 *
 	 * @param service The state service provides services related to game states.
 	 */
-	private void registerARRPRecipes(StateService service) {
-		ARRPGenerator.register(new RepairKitResourceGenerator(ForgeroConfigurationLoader.configuration, service));
+	private void registerDynamicResourcePackRecipes(@NotNull StateService service) {
+		DynamicResourcePackGenerator.register(new RepairKitResourceGenerator(ForgeroConfigurationLoader.configuration, service));
 		if (ForgeroConfigurationLoader.configuration.enableRecipesForAllSchematics) {
-			ARRPGenerator.register(() -> new AllPartToAllSchematicsGenerator(service, new PartToSchematicGenerator.SchematicRecipeCreator(),
+			DynamicResourcePackGenerator.register(() -> new AllPartToAllSchematicsGenerator(service, new PartToSchematicGenerator.SchematicRecipeCreator(),
 					new PartToSchematicGenerator.AllVariantFilter()
 			));
 		} else {
-			ARRPGenerator.register(() -> new PartToSchematicGenerator(service, new PartToSchematicGenerator.SchematicRecipeCreator(),
+			DynamicResourcePackGenerator.register(() -> new PartToSchematicGenerator(service, new PartToSchematicGenerator.SchematicRecipeCreator(),
 					new PartToSchematicGenerator.BaseVariantFilter()
 			));
 		}
 
-		ARRPGenerator.register(() -> new WoodPartsTag(ForgeroStateRegistry.TREE));
-		ARRPGenerator.register(() -> new MaterialPartTagGenerator(service));
-		ARRPGenerator.register(() -> new SchematicPartTagGenerator(service));
-		ARRPGenerator.register(() -> new PartTypeTagGenerator(service));
-		ARRPGenerator.generate(service);
+		DynamicResourcePackGenerator.register(() -> new WoodPartsTag(ForgeroStateRegistry.TREE));
+		DynamicResourcePackGenerator.register(() -> new MaterialPartTagGenerator(service));
+		DynamicResourcePackGenerator.register(() -> new SchematicPartTagGenerator(service));
+		DynamicResourcePackGenerator.register(() -> new PartTypeTagGenerator(service));
+		DynamicResourcePackGenerator.generate(service);
 	}
 }

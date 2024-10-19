@@ -7,6 +7,4 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
 	// Fabric API
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-	// Advanced Runtime Resource Pack
-	include(modApi("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}"))
 }

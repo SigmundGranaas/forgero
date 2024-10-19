@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.resources.dynamic;
+package com.sigmundgranaas.forgero.resources.dynamic.impl;
 
 import static com.sigmundgranaas.forgero.item.Items.EMPTY_REPAIR_KIT;
 
@@ -8,23 +8,19 @@ import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfiguration;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
+import com.sigmundgranaas.forgero.dynamicresourcepack.resource.DynamicResourcePackImpl;
+import com.sigmundgranaas.forgero.resources.dynamic.DynamicResourceGenerator;
 import com.sigmundgranaas.forgero.service.StateService;
-import net.devtech.arrp.api.RuntimeResourcePack;
-import net.devtech.arrp.json.lang.JLang;
-import net.devtech.arrp.json.models.JModel;
-import net.devtech.arrp.json.models.JTextures;
-import net.devtech.arrp.json.recipe.JIngredient;
-import net.devtech.arrp.json.recipe.JIngredients;
-import net.devtech.arrp.json.recipe.JResult;
-import net.devtech.arrp.json.recipe.JShapelessRecipe;
 
 import net.minecraft.util.Identifier;
 
+import org.jetbrains.annotations.NotNull;
+
 public class RepairKitResourceGenerator implements DynamicResourceGenerator {
 	private final ForgeroConfiguration configuration;
-	private final StateService stateService;
+	private final @NotNull StateService stateService;
 
-	public RepairKitResourceGenerator(ForgeroConfiguration configuration, StateService stateService) {
+	public RepairKitResourceGenerator(ForgeroConfiguration configuration, @NotNull StateService stateService) {
 		this.configuration = configuration;
 		this.stateService = stateService;
 	}
@@ -35,14 +31,14 @@ public class RepairKitResourceGenerator implements DynamicResourceGenerator {
 	}
 
 	@Override
-	public void generate(RuntimeResourcePack pack) {
+	public void generate(@NotNull DynamicResourcePackImpl pack) {
 		createRepairKitsRecipes(pack);
 		createRepairKitLang(pack);
 		createRepairKitModel(pack);
 
 	}
 
-	private void createRepairKitsRecipes(RuntimeResourcePack pack) {
+	private void createRepairKitsRecipes(@NotNull DynamicResourcePackImpl pack) {
 		var materials = ForgeroStateRegistry.TREE.find(Type.TOOL_MATERIAL)
 		                                         .map(node -> node.getResources(State.class))
 		                                         .orElse(ImmutableList.<State>builder().build());
@@ -52,12 +48,12 @@ public class RepairKitResourceGenerator implements DynamicResourceGenerator {
 			ingredients.add(JIngredient.ingredient().item(EMPTY_REPAIR_KIT));
 			var recipe = JShapelessRecipe.shapeless(
 					ingredients, JResult.result(new Identifier(Forgero.NAMESPACE, material.name() + "_repair_kit").toString()));
-			pack.addRecipe(new Identifier(Forgero.NAMESPACE, material.name() + "_repair_kit"), recipe);
+			pack.put(new Identifier(Forgero.NAMESPACE, material.name() + "_repair_kit"), recipe);
 
 		}
 	}
 
-	private JIngredient convertStateToIngredient(State state) {
+	private JIngredient convertStateToIngredient(@NotNull State state) {
 		var tagId = stateService.getMapper().stateToTag(state.identifier());
 		if (tagId.isPresent()) {
 			return JIngredient.ingredient().tag(tagId.get().toString());
@@ -66,7 +62,7 @@ public class RepairKitResourceGenerator implements DynamicResourceGenerator {
 		}
 	}
 
-	private void createRepairKitModel(RuntimeResourcePack pack) {
+	private void createRepairKitModel(@NotNull DynamicResourcePackImpl pack) {
 		var materials = ForgeroStateRegistry.TREE.find(Type.TOOL_MATERIAL)
 		                                         .map(node -> node.getResources(State.class))
 		                                         .orElse(ImmutableList.<State>builder().build());
@@ -77,12 +73,12 @@ public class RepairKitResourceGenerator implements DynamicResourceGenerator {
 			model.textures(new JTextures().layer0("forgero:item/repair_kit_leather_base")
 			                              .layer1("forgero:item/repair_kit_needle_base")
 			                              .layer2(String.format("forgero:item/%s-repair_kit", material.name())));
-			pack.addModel(model, new Identifier(Forgero.NAMESPACE, "item/" + material.name() + "_repair_kit"));
+			pack.put(new Identifier(Forgero.NAMESPACE, "item/" + material.name() + "_repair_kit"), model);
 
 		}
 	}
 
-	private void createRepairKitLang(RuntimeResourcePack pack) {
+	private void createRepairKitLang(@NotNull DynamicResourcePackImpl pack) {
 		var materials = ForgeroStateRegistry.TREE.find(Type.TOOL_MATERIAL)
 		                                         .map(node -> node.getResources(State.class))
 		                                         .orElse(ImmutableList.<State>builder().build());
@@ -93,6 +89,6 @@ public class RepairKitResourceGenerator implements DynamicResourceGenerator {
 				lang.item(new Identifier(Forgero.NAMESPACE, material.name() + "_repair_kit"), String.format("%s Repair kit", name));
 			}
 		}
-		pack.addLang(new Identifier(Forgero.NAMESPACE, "en_us"), lang);
+		pack.put(new Identifier(Forgero.NAMESPACE, "en_us"), lang);
 	}
 }

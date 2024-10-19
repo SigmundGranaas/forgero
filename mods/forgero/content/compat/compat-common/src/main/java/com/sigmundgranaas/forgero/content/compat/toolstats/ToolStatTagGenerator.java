@@ -8,7 +8,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.function.Supplier;
 
-import static com.sigmundgranaas.forgero.resources.ARRPGenerator.RESOURCE_PACK;
+import static com.sigmundgranaas.forgero.resources.DynamicResourcePackGenerator.RESOURCE_PACK;
 
 public class ToolStatTagGenerator {
 	public static void generateTags() {
@@ -21,6 +21,6 @@ public class ToolStatTagGenerator {
 		                           .map(Identifiable::identifier)
 		                           .map(Identifier::new)
 		                           .forEach(tag::add);
-		RESOURCE_PACK.addTag(new Identifier("toolstats", "items/ignored"), tag);
+		RESOURCE_PACK.put(new Identifier("toolstats", "items/ignored"), tag);
 	}
 }

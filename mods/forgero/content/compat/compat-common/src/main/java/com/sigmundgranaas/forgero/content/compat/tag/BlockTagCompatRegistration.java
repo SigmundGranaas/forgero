@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.content.compat.tag;
 
 import static com.sigmundgranaas.forgero.core.Forgero.LOGGER;
-import static com.sigmundgranaas.forgero.resources.ARRPGenerator.RESOURCE_PACK;
+import static com.sigmundgranaas.forgero.resources.DynamicResourcePackGenerator.RESOURCE_PACK;
 
 import com.sigmundgranaas.forgero.abstractions.utils.ModLoaderUtils;
 
@@ -50,7 +50,7 @@ public class BlockTagCompatRegistration {
 			cherryPlanksTag.add(new Identifier(REGIONS_UNEXPLORED_NAMESPACE, CHERRY_PLANKS));
 		}
 
-		RESOURCE_PACK.addTag(new Identifier(COMMON_NAMESPACE, CHERRY_PLANKS), cherryPlanksTag);
+		RESOURCE_PACK.put(new Identifier(COMMON_NAMESPACE, CHERRY_PLANKS), cherryPlanksTag);
 	}
 
 	private static void registerBambooPlanksTag() {
@@ -60,6 +60,6 @@ public class BlockTagCompatRegistration {
 			bambooPlanksTag.add(new Identifier(MINECRAFT_NAMESPACE, BAMBOO_PLANKS));
 		}
 
-		RESOURCE_PACK.addTag(new Identifier(COMMON_NAMESPACE, CHERRY_PLANKS), bambooPlanksTag);
+		RESOURCE_PACK.put(new Identifier(COMMON_NAMESPACE, CHERRY_PLANKS), bambooPlanksTag);
 	}
 }

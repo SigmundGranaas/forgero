@@ -36,6 +36,6 @@ public abstract class CommonTagGenerator {
 	}
 
 	protected void registerCommonItemTag(String item) {
-		resourcePack.addTag(new Identifier("c", "items/" + item), JTag.tag().add(new Identifier(namespace, item)));
+		resourcePack.put(new Identifier("c", "items/" + item), JTag.tag().add(new Identifier(namespace, item)));
 	}
 }
