@@ -140,6 +140,7 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		modification.registerRule("forgero:handle", DefaultRules.handle.build());
 		modification.registerRule("forgero:pickaxe", DefaultRules.pickaxe.build());
 		modification.registerRule("forgero:sword", DefaultRules.sword.build());
+		modification.registerRule("forgero:knife", DefaultRules.knife.build());
 		modification.registerRule("forgero:weapon", DefaultRules.weapon_head.build());
 		modification.registerRule("forgero:hoe", DefaultRules.hoe.build());
 		modification.registerRule("forgero:axe", DefaultRules.axe.build());
