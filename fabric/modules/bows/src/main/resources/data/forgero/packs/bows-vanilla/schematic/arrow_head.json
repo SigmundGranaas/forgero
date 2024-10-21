@@ -34,6 +34,15 @@
       }
     ],
     "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
+        "tier": 1
+      }
     ]
   },
   "properties": {

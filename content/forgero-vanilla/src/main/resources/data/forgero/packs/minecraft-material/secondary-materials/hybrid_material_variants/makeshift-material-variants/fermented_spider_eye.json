@@ -51,6 +51,25 @@
           }
         ]
       }
+    ],
+    "attributes": [
+    ],
+    "features": [
+      {
+        "type": "minecraft:on_hit",
+        "on_hit": {
+          "type": "minecraft:status_effect",
+          "target": "minecraft:targeted_entity",
+          "effect": "minecraft:poison",
+          "level": 1
+        },
+        "after_use": {
+          "type": "minecraft:cooldown",
+          "duration": 75
+        },
+        "title": "feature.forgero.poison",
+        "description": "feature.forgero.poison.description"
+      }
     ]
   },
   "palette": {

@@ -74,6 +74,24 @@
       }
     ],
     "attributes": [
+    ],
+    "features": [
+      {
+        "type": "minecraft:on_hit",
+          "on_hit": {
+            "type": "minecraft:status_effect",
+            "duration": 40,
+            "target": "minecraft:targeted_entity",
+            "effect": "minecraft:levitation",
+            "level": 1
+        },
+        "after_use": {
+          "type": "minecraft:cooldown",
+          "duration": 75
+        },
+        "title": "feature.forgero.levitation",
+        "description": "feature.forgero.levitation.description"
+      }
     ]
   },
   "palette": {

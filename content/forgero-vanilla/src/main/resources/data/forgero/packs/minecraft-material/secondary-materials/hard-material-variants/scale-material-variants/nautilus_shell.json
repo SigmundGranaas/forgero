@@ -74,6 +74,25 @@
       }
     ],
     "attributes": [
+      {
+        "id": "swimming-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "order": "END",
+        "operation": "MULTIPLICATION",
+        "value": 1.5,
+        "predicate": {
+          "type": "minecraft:entity",
+          "flag": {
+            "is_swimming": true
+          }
+        }
+      }
+    ],
+    "features": [
+      {
+        "title": "feature.forgero.swimming",
+        "description": "feature.forgero.swimming.description"
+      }
     ]
   },
   "palette": {
