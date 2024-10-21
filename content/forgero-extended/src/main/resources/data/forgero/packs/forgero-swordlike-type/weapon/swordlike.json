@@ -1,0 +1,40 @@
+{
+  "type": "SWORDLIKE",
+  "name": "swordlike",
+  "resource_type": "CONSTRUCT_TEMPLATE",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "SWORDLIKE",
+    "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "STATE_CRAFTING_RECIPE",
+        "ingredients": [
+          {
+            "unique": true,
+            "type": "SWORDLIKE_HEAD"
+          },
+          {
+            "type": "HANDLE"
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "type": "SWORDLIKE_HEAD"
+      },
+      {
+        "type": "HANDLE"
+      }
+    ],
+    "slots": [
+    ]
+  },
+  "model": {
+    "type": "COMPOSITE"
+  }
+}

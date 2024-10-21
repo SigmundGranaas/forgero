@@ -1,0 +1,42 @@
+{
+  "type": "SWORD_BLADE",
+  "models": [
+    {
+      "name": "katana_blade",
+      "type": "GENERATE",
+      "template": "exotic/katana_blade.png",
+      "palette": "TOOL_MATERIAL",
+      "order": 20
+    },
+    {
+      "name": "sword_blade_material",
+      "variants": [
+        {
+          "target": [
+            "model:exotic/katana_blade.png"
+          ],
+          "template": "exotic/katana_blade_reinforcement.png"
+        }
+      ]
+    },
+    {
+      "name": "sword_blade_dye",
+      "variants": [
+        {
+          "target": [
+            "model:exotic/katana_blade.png"
+          ],
+          "template": "exotic/katana_blade.png"
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "id:katana_blade-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "katana_blade"
+    }
+  ]
+}

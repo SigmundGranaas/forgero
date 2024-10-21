@@ -1,0 +1,31 @@
+{
+  "type": "GEM",
+  "name": "amethyst_gem_1",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "context": "UPGRADE",
+        "order": "BASE",
+        "category": "ALL",
+        "operation": "ADDITION",
+        "value": 30
+      },
+      {
+        "type": "MINING_LEVEL",
+        "context": "UPGRADE",
+        "order": "BASE",
+        "category": "ALL",
+        "operation": "ADDITION",
+        "value": 1
+      }
+    ]
+  },
+  "palette": {
+    "name": "amethyst_gem"
+  }
+}

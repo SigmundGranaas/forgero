@@ -2,74 +2,80 @@
   "type": "POMMEL",
   "models": [
     {
+      "name": "mastercrafted_pommel",
+      "template": "mastercrafted/mastercrafted_pommel.png",
+      "type": "GENERATE",
+      "palette": "METAL",
+      "order": 60,
+      "variants": [
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "mastercrafted/mastercrafted_tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "mastercrafted/mastercrafted_tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "template": "mastercrafted/mastercrafted_tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "mastercrafted/mastercrafted_tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:SWORD"
+          ],
+          "template": "mastercrafted/mastercrafted_sword_pommel.png"
+        },
+        {
+          "target": [
+            "type:HANDLE"
+          ],
+          "template": "mastercrafted/mastercrafted_tool_pommel.png"
+        }
+      ]
+    },
+    {
+      "name": "pommel_dye",
+      "variants": [
+        {
+          "target": [
+            "model:mastercrafted/mastercrafted_pommel.png"
+          ],
+          "template": "mastercrafted/mastercrafted_pommel.png"
+        },
+        {
+          "target": [
+            "model:mastercrafted/mastercrafted_tool_pommel.png"
+          ],
+          "template": "mastercrafted/mastercrafted_tool_pommel.png"
+        },
+        {
+          "target": [
+            "model:mastercrafted/mastercrafted_sword_pommel.png"
+          ],
+          "template": "mastercrafted/mastercrafted_sword_pommel.png"
+        }
+      ]
+    },
+    {
       "target": [
         "type:METAL",
         "id:mastercrafted_pommel-schematic"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "mastercrafted_pommel"
-    },
-    {
-      "name": "mastercrafted_pommel",
-      "template": "mastercrafted_pommel.png",
-      "type": "GENERATE",
-      "palette": "METAL",
-      "order": 60,
-      "offset": [
-        5,
-        5
-      ],
-      "variants": [
-        {
-          "target": [
-            "type:SWORD"
-          ],
-          "offset": [
-            -1,
-            -1
-          ]
-        },
-        {
-          "target": [
-            "type:HANDLE"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "mastercrafted_pommel_dye",
-      "template": "mastercrafted_pommel.png",
-      "type": "GENERATE",
-      "palette": "DYE",
-      "order": 65,
-      "offset": [
-        5,
-        5
-      ],
-      "variants": [
-        {
-          "target": [
-            "type:SWORD"
-          ],
-          "offset": [
-            -1,
-            -1
-          ]
-        },
-        {
-          "target": [
-            "type:HANDLE"
-          ]
-        }
-      ]
-    },
-    {
-      "target": [
-        "type:DYE",
-        "slot:0"
-      ],
-      "modelType": "UPGRADE",
-      "template": "mastercrafted_pommel_dye"
     }
   ]
 }

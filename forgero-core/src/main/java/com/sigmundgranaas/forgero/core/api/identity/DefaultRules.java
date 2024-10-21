@@ -25,6 +25,10 @@ public class DefaultRules {
 			.when(Condition.type(Type.SWORD_BLADE))
 			.replaceElement("_blade", "sword");
 
+	public static ModificationRuleBuilder knife = ModificationRuleBuilder.builder()
+			.when(Condition.type(Type.SWORDLIKE_HEAD))
+			.remove("_blade");
+
 	public static ModificationRuleBuilder weapon_head = ModificationRuleBuilder.builder()
 			.when(Condition.type(Type.WEAPON_HEAD))
 			.remove("_head");
