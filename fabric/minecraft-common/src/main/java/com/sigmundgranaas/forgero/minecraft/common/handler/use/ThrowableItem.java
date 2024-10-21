@@ -5,11 +5,13 @@ import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContext
 
 import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
 import com.sigmundgranaas.forgero.core.property.v2.cache.ContainerTargetPair;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 import com.sigmundgranaas.forgero.minecraft.common.feature.onhit.block.OnHitBlockFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.onhit.entity.OnHitEntityFeature;
+import com.sigmundgranaas.forgero.minecraft.common.feature.tick.EntityTickFeatureExecutor;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.entity.Entity;
@@ -28,6 +30,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
@@ -40,8 +43,12 @@ public class ThrowableItem extends PersistentProjectileEntity {
 	private static final TrackedData<Boolean> hasHit = DataTracker.registerData(ThrowableItem.class, TrackedDataHandlerRegistry.BOOLEAN);
 	public static Identifier THROWN_ENTITY_IDENTIFIER = new Identifier("forgero", "thrown_entity");
 
+	private final MatchContext tickContext;
+
 	public ThrowableItem(EntityType<? extends PersistentProjectileEntity> entityType, World world) {
 		super(entityType, world);
+		this.tickContext = MatchContext.of(new MatchContext.KeyValuePair(ENTITY, this), new MatchContext.KeyValuePair(WORLD, this.getWorld()));
+
 	}
 
 	public ThrowableItem(World world, LivingEntity owner, ItemStack itemStack, Float weight, SpinType spinType) {
@@ -52,6 +59,8 @@ public class ThrowableItem extends PersistentProjectileEntity {
 		this.getDataTracker().set(hasHit, false);
 		this.getDataTracker().set(initialPitch, 0f);
 		this.getDataTracker().set(initialYaw, 0f);
+		this.tickContext = MatchContext.of(new MatchContext.KeyValuePair(ENTITY, this), new MatchContext.KeyValuePair(WORLD, this.getWorld()));
+
 	}
 
 	@Override
@@ -97,6 +106,38 @@ public class ThrowableItem extends PersistentProjectileEntity {
 		this.getDataTracker().set(weight, nbt.getFloat("weight"));
 		this.getDataTracker().set(spinTypeData, nbt.getString("spinType"));
 		this.getDataTracker().set(STACK, ItemStack.fromNbt(nbt.getCompound("Item")));
+	}
+
+	@Override
+	public void tick() {
+		if (this.getStack().isEmpty()) {
+			this.discard();
+		} else {
+			super.tick();
+			EntityTickFeatureExecutor.initFromStack(this.getStack(), this).execute(tickContext);
+
+			if (!this.noClip && !isInGround()) {
+				Vec3d vec3d4 = this.getVelocity();
+				this.setVelocity(vec3d4.x, vec3d4.y - getGravity(), vec3d4.z);
+			}
+		}
+	}
+
+	private double getGravity() {
+		if (getStack() != null) {
+			float weight = StateService.INSTANCE.convert(getStack())
+					.map(state -> ComputedAttribute.apply(state, Weight.KEY))
+					.orElse(20f);
+			if (weight >= 10f) {
+				double logModifier = Math.log10(weight) - Math.log10(20f);
+				return weight * 0.001 * logModifier;
+			}
+		}
+		return 0f;
+	}
+
+	public ItemStack getStack() {
+		return this.getDataTracker().get(STACK);
 	}
 
 	@Override
