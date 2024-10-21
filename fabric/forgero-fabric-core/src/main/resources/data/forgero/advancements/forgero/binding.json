@@ -1,0 +1,36 @@
+{
+  "parent": "forgero:forgero/upgrade_station",
+  "criteria": {
+    "binding": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "forgero:binding"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.forgero.binding.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "forgero:copper-binding"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.forgero.binding.title"
+    }
+  },
+  "requirements": [
+    [
+      "binding"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

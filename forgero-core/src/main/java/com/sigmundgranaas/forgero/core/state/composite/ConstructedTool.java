@@ -31,6 +31,8 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 
 	private final List<PropertyContainer> conditions;
 
+	private List<Property> defaultProps;
+
 	private Integer hashCode;
 
 	public ConstructedTool(State head, State handle, SlotContainer slots, IdentifiableContainer id) {
@@ -128,15 +130,25 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 	@Override
 	public @NotNull
 	List<Property> getRootProperties() {
-		return Stream.of(super.getRootProperties(), conditionProperties(Matchable.DEFAULT_TRUE, MatchContext.of())).flatMap(List::stream).toList();
+		return loadRootProperties(Matchable.DEFAULT_TRUE, MatchContext.of());
+	}
+
+	private List<Property> loadRootProperties(Matchable target, MatchContext context){
+		if(this.defaultProps == null){
+			this.defaultProps = Stream.of(super.getRootProperties(target, context), conditionProperties(target, context)).flatMap(List::stream).toList();
+		}
+		return defaultProps;
 	}
 
 	@Override
 	public @NotNull
 	List<Property> getRootProperties(Matchable target, MatchContext context) {
-		return Stream.of(super.getRootProperties(target, context), conditionProperties(target, context)).flatMap(List::stream).toList();
+		if(target == Matchable.DEFAULT_TRUE && context == MatchContext.of()){
+			return loadRootProperties(target, context);
+		}else{
+			return Stream.of(super.getRootProperties(target, context), conditionProperties(target, context)).flatMap(List::stream).toList();
+		}
 	}
-
 
 	@Override
 	public @NotNull
@@ -208,7 +220,7 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 		}
 
 		public static Optional<ToolBuilder> builder(List<State> parts) {
-			var head = parts.stream().filter(part -> part.test(Type.TOOL_PART_HEAD) || part.test(Type.SWORD_BLADE) || part.test(Type.BOW_LIMB)).findFirst();
+			var head = parts.stream().filter(part -> part.test(Type.TOOL_PART_HEAD) || part.test(Type.WEAPON_HEAD) || part.test(Type.BOW_LIMB)).findFirst();
 			var handle = parts.stream().filter(part -> head.orElse(null) != part).findFirst();
 			if (head.isPresent() && handle.isPresent()) {
 				return Optional.of(builder(head.get(), handle.get()));

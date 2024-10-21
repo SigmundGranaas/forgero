@@ -1,0 +1,11 @@
+{
+  "type": "SWORDLIKE",
+  "models": [
+    {
+      "target": [
+        "type:SWORDLIKE"
+      ],
+      "modelType": "COMPOSITE"
+    }
+  ]
+}

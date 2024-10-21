@@ -66,7 +66,7 @@ public class StateTests {
 		nameTest("iron-pickaxe", "forgero:iron-mastercrafted_pickaxe_head", "forgero:iron-mastercrafted_handle");
 
 		nameTest("iron-sword", "forgero:iron-sword_blade", "forgero:oak-handle");
-		nameTest("iron-sword", "forgero:iron-knife_blade", "forgero:oak-handle");
+		nameTest("iron-knife", "forgero:iron-knife_blade", "forgero:oak-handle");
 		nameTest("iron-sword", "forgero:iron-sword_blade", "forgero:iron-handle");
 		nameTest("iron-sword", "forgero:iron-sword_blade", "forgero:iron-mastercrafted_handle");
 		nameTest("iron-sword", "forgero:iron-mastercrafted_sword_blade", "forgero:iron-mastercrafted_handle");

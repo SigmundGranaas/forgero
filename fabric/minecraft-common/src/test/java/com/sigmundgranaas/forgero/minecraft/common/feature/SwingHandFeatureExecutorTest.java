@@ -32,7 +32,7 @@ class SwingHandFeatureExecutorTest {
 
 		SwingHandFeatureExecutor executor = new SwingHandFeatureExecutor(List.of(feature), null, null, null);
 
-		executor.execute(MatchContext.of());
+		executor.executeIfNotCoolingDown(MatchContext.of());
 
 		Assertions.assertEquals(executionCount.get(), 1, "Feature is executed once");
 	}
@@ -52,7 +52,7 @@ class SwingHandFeatureExecutorTest {
 
 		SwingHandFeatureExecutor executor = new SwingHandFeatureExecutor(List.of(feature), null, null, null);
 
-		executor.execute(MatchContext.of());
+		executor.executeIfNotCoolingDown(MatchContext.of());
 
 		Assertions.assertEquals(1, matchableCount.get(), "The predicate is not executed");
 		Assertions.assertEquals(0, executionCount.get(), "Feature is executed even though the predicate return false.");
@@ -82,7 +82,7 @@ class SwingHandFeatureExecutorTest {
 
 		SwingHandFeatureExecutor executor = new SwingHandFeatureExecutor(List.of(feature, feature2), null, null, null);
 
-		executor.execute(MatchContext.of());
+		executor.executeIfNotCoolingDown(MatchContext.of());
 
 		Assertions.assertEquals(1, matchableCount.get(), "The predicate is not executed");
 		Assertions.assertEquals(1, matchableCount2.get(), "The predicate is not executed");
@@ -103,7 +103,7 @@ class SwingHandFeatureExecutorTest {
 
 		SwingHandFeatureExecutor executor = new SwingHandFeatureExecutor(List.of(feature), null, null, null);
 
-		executor.execute(MatchContext.of());
+		executor.executeIfNotCoolingDown(MatchContext.of());
 
 		Assertions.assertEquals(afterUseCount.get(), executionCount.get(), "Execution and afterUse is not executed the same number of times.");
 	}

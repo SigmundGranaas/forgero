@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.fabric.gametest;
 
+import com.sigmundgranaas.forgero.core.state.Composite;
+import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.testutil.PlayerFactory;
 import com.sigmundgranaas.forgero.testutil.TestPos;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
@@ -34,10 +37,17 @@ public class HandlerInteractionTests {
 
 		createFloor(context);
 
+		State gem = StateService.INSTANCE.find("forgero:magnetico-gem").get();
+		Composite binding = (Composite) StateService.INSTANCE.find("forgero:oak-binding").get();
+		Composite tool = (Composite) StateService.INSTANCE.find("forgero:oak-pickaxe").get();
+
+		State upgraded = tool.upgrade(binding.upgrade(gem));
+
+
 		// Spawn a player with a magnetico gem that triggers the magnetic effect
 		PlayerEntity player = PlayerFactory.builder(context)
 				.pos(playerPos.absolute())
-				.stack(() -> fromId("forgero:magnetico-gem"))
+				.stack(() -> StateService.INSTANCE.convert(upgraded).get())
 				.build()
 				.createPlayer();
 

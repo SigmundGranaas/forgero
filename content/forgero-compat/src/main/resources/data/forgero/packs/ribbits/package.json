@@ -2,7 +2,7 @@
   "name": "ribbits-compat",
   "resource_type": "PACKAGE",
   "priority": 4,
-  "namespace": "ribbits",
+  "namespace": "forgero",
   "dependencies": [
     "minecraft",
     "forgero",

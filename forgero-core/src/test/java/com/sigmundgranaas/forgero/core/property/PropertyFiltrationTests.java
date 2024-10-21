@@ -74,6 +74,21 @@ class PropertyFiltrationTests {
 		Assertions.assertEquals(1, properties.size());
 	}
 
+	@Test
+	void slotsFilterDynamicAttributes() {
+		Feature feature = new TestFeature();
+		Attribute disabledAttribute = new TestDynamicAttribute(false);
+		Attribute activeAttribute = new TestDynamicAttribute(true);
+
+		State testState = new SimpleState("test", Type.of("TEST"), List.of(feature, disabledAttribute, activeAttribute));
+		FilledSlot slot = new FilledSlot(0, Type.of("TEST"), testState, "", Set.of(Category.OFFENSIVE));
+
+		List<Property> properties = slot.getRootProperties(Matchable.DEFAULT_FALSE, MatchContext.of());
+
+		// We are expecting the dynamic attributes to be checked in the slot logic,
+		// while the dynamic features should always be passed along.
+		Assertions.assertEquals(2, properties.size());
+	}
 
 	private record TestFeature() implements Feature {
 
@@ -163,6 +178,83 @@ class PropertyFiltrationTests {
 		@Override
 		public boolean applyCondition(Matchable target, MatchContext context) {
 			return false;
+		}
+	}
+	private record TestDynamicAttribute(boolean isActive) implements Attribute {
+
+		@Override
+		public String getAttributeType() {
+			return "test";
+		}
+
+		@Override
+		public NumericOperation getOperation() {
+			return NumericOperation.ADDITION;
+		}
+
+		@Override
+		public float getValue() {
+			return 1;
+		}
+
+		@Override
+		public Category getCategory() {
+			return Category.OFFENSIVE;
+		}
+
+		@Override
+		public int getLevel() {
+			return 1;
+		}
+
+		@Override
+		public List<String> targets() {
+			return List.of();
+		}
+
+		@Override
+		public String targetType() {
+			return "";
+		}
+
+		@Override
+		public Context getContext() {
+			return Context.of("test");
+		}
+
+		@Override
+		public int getPriority() {
+			return 1;
+		}
+
+		@Override
+		public String getId() {
+			return "test";
+		}
+
+		@Override
+		public float leveledValue() {
+			return 0;
+		}
+
+		@Override
+		public ComputedAttribute compute() {
+			return null;
+		}
+
+		@Override
+		public String type() {
+			return "test";
+		}
+
+		@Override
+		public boolean applyCondition(Matchable target, MatchContext context) {
+			return isActive;
+		}
+
+		@Override
+		public boolean isDynamic() {
+			return true;
 		}
 	}
 }

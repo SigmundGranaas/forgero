@@ -1,0 +1,117 @@
+{
+  "parent": "forgero:forgero/schematic",
+  "criteria": {
+    "refined_pommel": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:refined_pommel-schematic"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "refined_pickaxe": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:refined_pickaxe_head-schematic"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "refined_shovel": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:refined_shovel_head-schematic"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "refined_sword": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:refined_sword_blade-schematic"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "refined_guard": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:refined_sword_guard-schematic"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "refined_axe": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:refined_axe_head-schematic"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "refined_hoe": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:refined_hoe_head-schematic"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.forgero.refined_schematic.description"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "forgero:refined_pickaxe_head-schematic"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.forgero.refined_schematic.title"
+    }
+  },
+  "requirements": [
+    [
+      "refined_pickaxe",
+      "refined_shovel",
+      "refined_axe",
+      "refined_hoe",
+      "refined_sword",
+      "refined_guard",
+      "refined_pommel"
+
+    ]
+  ],
+  "sends_telemetry_event": true
+}

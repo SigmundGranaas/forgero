@@ -1,79 +1,36 @@
 {
   "parent": "forgero:forgero/root",
+  "criteria": {
+    "pickaxe": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "minecraft:tools"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "forgero:iron-pickaxe"
-    },
-    "title": {
-      "translate": "advancements.forgero.tool.title"
-    },
+    "announce_to_chat": true,
     "description": {
       "translate": "advancements.forgero.tool.description"
     },
     "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "forgero:oak-pickaxe"
+    },
     "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
-  "criteria": {
-    "axes": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "fabric:axe"
-          }
-        ]
-      }
-    },
-    "pickaxes": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "fabric:pickaxe"
-          }
-        ]
-      }
-    },
-    "shovels": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "fabric:shovel"
-          }
-        ]
-      }
-    },
-    "hoes": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "fabric:hoe"
-          }
-        ]
-      }
-    },
-    "swords": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "fabric:sword"
-          }
-        ]
-      }
+    "title": {
+      "translate": "advancements.forgero.tool.title"
     }
   },
   "requirements": [
     [
-      "axes",
-      "pickaxes",
-      "hoes",
-      "swords",
-      "shovels"
+      "pickaxe"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

@@ -1,16 +1,15 @@
 package com.sigmundgranaas.forgero.bow.entity;
 
 import static com.sigmundgranaas.forgero.bow.ForgeroBowInitializer.DYNAMIC_ARROW_ENTITY;
-import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.cachedFilteredFeatures;
 import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.*;
 
 import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
-import com.sigmundgranaas.forgero.minecraft.common.feature.tick.EntityTickFeature;
-import com.sigmundgranaas.forgero.minecraft.common.feature.onhit.block.OnHitBlockFeature;
-import com.sigmundgranaas.forgero.minecraft.common.feature.onhit.entity.OnHitEntityFeature;
+import com.sigmundgranaas.forgero.minecraft.common.feature.onhit.block.OnHitBlockFeatureExecutor;
+import com.sigmundgranaas.forgero.minecraft.common.feature.onhit.entity.OnHitEntityFeatureExecutor;
+import com.sigmundgranaas.forgero.minecraft.common.feature.tick.EntityTickFeatureExecutor;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
 import net.minecraft.block.Blocks;
@@ -22,7 +21,6 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
@@ -34,6 +32,7 @@ import net.minecraft.world.World;
 public class DynamicArrowEntity extends PersistentProjectileEntity {
 	private static final TrackedData<ItemStack> STACK;
 	public static Identifier DYNAMIC_ARROW_IDENTIFIER = new Identifier("forgero:dynamic_arrow");
+	private final MatchContext tickContext;
 
 	static {
 		STACK = DataTracker.registerData(DynamicArrowEntity.class, TrackedDataHandlerRegistry.ITEM_STACK);
@@ -41,6 +40,7 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 
 	public DynamicArrowEntity(EntityType<DynamicArrowEntity> entityType, World world) {
 		super(entityType, world);
+		this.tickContext = MatchContext.of(new MatchContext.KeyValuePair(ENTITY, this), new MatchContext.KeyValuePair(WORLD, this.getWorld()));
 	}
 
 	public DynamicArrowEntity(World world, LivingEntity owner, ItemStack stack) {
@@ -49,6 +49,7 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 		StateService.INSTANCE.convert(stack)
 				.map(state -> ComputedAttribute.apply(state, AttackDamage.KEY))
 				.ifPresent(this::setDamage);
+		this.tickContext = MatchContext.of(new MatchContext.KeyValuePair(ENTITY, this), new MatchContext.KeyValuePair(WORLD, this.getWorld()));
 	}
 
 
@@ -75,25 +76,13 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 			this.discard();
 		} else {
 			super.tick();
+			EntityTickFeatureExecutor.initFromStack(this.getStack(), this).execute(tickContext);
 
-			cachedFilteredFeatures(this.getStack(), EntityTickFeature.KEY, MatchContext.of().put(ENTITY, this).put(WORLD, this.getWorld()))
-					.forEach(handler -> handler.handle(this));
-
-			if (!this.noClip) {
+			if (!this.noClip && !this.inGround) {
 				Vec3d vec3d4 = this.getVelocity();
 				this.setVelocity(vec3d4.x, vec3d4.y - getGravity(), vec3d4.z);
 			}
 		}
-	}
-
-
-	public boolean isFireImmune() {
-		return this.getStack().getItem().isFireproof() || super.isFireImmune();
-	}
-
-	protected void initDataTracker() {
-		super.initDataTracker();
-		this.getDataTracker().startTracking(STACK, ItemStack.EMPTY);
 	}
 
 	private double getGravity() {
@@ -109,27 +98,40 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 		return 0f;
 	}
 
+	public boolean isFireImmune() {
+		return this.getStack().getItem().isFireproof() || super.isFireImmune();
+	}
+
+	protected void initDataTracker() {
+		super.initDataTracker();
+		this.getDataTracker().startTracking(STACK, ItemStack.EMPTY);
+	}
+
+
+
 	@Override
 	protected void onCollision(HitResult hitResult) {
 		super.onCollision(hitResult);
-		MatchContext context = MatchContext.of()
-				.put(ENTITY, this.getOwner())
-				.put(WORLD, this.getWorld());
 
 		if (hitResult instanceof BlockHitResult blockHitResult && getWorld().getBlockState(blockHitResult.getBlockPos()).getBlock() != Blocks.AIR) {
 			BlockPos pos = blockHitResult.getBlockPos();
-			cachedFilteredFeatures(this.getStack(), OnHitBlockFeature.KEY, context.put(BLOCK_TARGET, this.getWorld().getBlockState(pos)))
-					.forEach(handler -> {
-						handler.onHit(this.getOwner(), this.getWorld(), pos);
-						handler.handle(this, this.getStack(), Hand.MAIN_HAND);
-					});
-			super.onCollision(hitResult);
+			MatchContext ctx;
+			if(this.getOwner() == null){
+				ctx = MatchContext.of(new MatchContext.KeyValuePair(ENTITY, this), new MatchContext.KeyValuePair(WORLD, this.getWorld()), new MatchContext.KeyValuePair(BLOCK_TARGET, pos));
+			} else {
+				ctx = MatchContext.of(new MatchContext.KeyValuePair(ENTITY, this.getOwner()), new MatchContext.KeyValuePair(WORLD, this.getWorld()), new MatchContext.KeyValuePair(BLOCK_TARGET, pos));
+			}
+			OnHitBlockFeatureExecutor.initFromStack(this.getStack(), this, pos).executeIfNotCoolingDown(ctx);
+
 		} else if (hitResult instanceof EntityHitResult entityHitResult) {
-			cachedFilteredFeatures(this.getStack(), OnHitEntityFeature.KEY, context.put(ENTITY_TARGET, entityHitResult.getEntity()))
-					.forEach(handler -> {
-						handler.onHit(this.getOwner(), this.getWorld(), entityHitResult.getEntity());
-						handler.handle(this, this.getStack(), Hand.MAIN_HAND);
-					});
+			MatchContext ctx;
+			if(this.getOwner() == null){
+				ctx = MatchContext.of(new MatchContext.KeyValuePair(ENTITY, this), new MatchContext.KeyValuePair(WORLD, this.getWorld()), new MatchContext.KeyValuePair(ENTITY_TARGET, entityHitResult.getEntity()));
+			} else {
+				ctx = MatchContext.of(new MatchContext.KeyValuePair(ENTITY, this.getOwner()), new MatchContext.KeyValuePair(WORLD, this.getWorld()), new MatchContext.KeyValuePair(ENTITY_TARGET, entityHitResult.getEntity()));
+			}
+
+			OnHitEntityFeatureExecutor.initFromStack(this.getStack(), this, entityHitResult.getEntity()).executeIfNotCoolingDown(ctx);
 		}
 	}
 

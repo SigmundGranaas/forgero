@@ -141,8 +141,10 @@ curseforge {
 				optionalDependency "dragonloot"
 				optionalDependency "garnished-additions"
 				optionalDependency "mythicmetals-decorations"
+				optionalDependency "eldritch-end"
 				optionalDependency "regions-unexplored"
 				optionalDependency "spelunkery"
+				optionalDependency "beneath-the-wetlands"
 				optionalDependency "enderite-mod"
 				optionalDependency "galosphere"
 				optionalDependency "eden-ring-reforked"
@@ -206,6 +208,7 @@ modrinth {
 		optional.project "galosphere"
 		optional.project "bountiful-fares"
 		optional.project "eden-ring-reforked"
+		optional.project "beneath-the-wetlands"
 		incompatible.project "exordium"
 	}
 }

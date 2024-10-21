@@ -1,0 +1,31 @@
+{
+  "type": "GEM",
+  "name": "diamond_gem_5",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "context": "UPGRADE",
+        "order": "BASE",
+        "category": "ALL",
+        "operation": "ADDITION",
+        "value": 30
+      },
+      {
+        "type": "DURABILITY",
+        "context": "UPGRADE",
+        "order": "BASE",
+        "category": "ALL",
+        "operation": "ADDITION",
+        "value": 2250
+      }
+    ]
+  },
+  "palette": {
+    "name": "diamond_gem"
+  }
+}

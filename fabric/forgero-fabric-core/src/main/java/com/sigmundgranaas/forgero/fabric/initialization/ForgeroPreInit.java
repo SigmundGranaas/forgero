@@ -90,7 +90,6 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.use.ThrowTridentHandl
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.ThrowableHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.UseHandler;
 import com.sigmundgranaas.forgero.minecraft.common.item.BuildableStateConverter;
-import com.sigmundgranaas.forgero.minecraft.common.item.GemItemRegistrar;
 import com.sigmundgranaas.forgero.minecraft.common.item.ItemRegistries;
 import com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils;
 import com.sigmundgranaas.forgero.minecraft.common.item.tool.DynamicToolItemRegistrationHandler;
@@ -141,6 +140,8 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		modification.registerRule("forgero:handle", DefaultRules.handle.build());
 		modification.registerRule("forgero:pickaxe", DefaultRules.pickaxe.build());
 		modification.registerRule("forgero:sword", DefaultRules.sword.build());
+		modification.registerRule("forgero:knife", DefaultRules.knife.build());
+		modification.registerRule("forgero:weapon", DefaultRules.weapon_head.build());
 		modification.registerRule("forgero:hoe", DefaultRules.hoe.build());
 		modification.registerRule("forgero:axe", DefaultRules.axe.build());
 		modification.registerRule("forgero:shovel", DefaultRules.shovel.build());
@@ -167,7 +168,6 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		converterRegistry.register("forgero:default", baseConverter);
 		RegistryUtils.register(converterRegistry, new DynamicWeaponItemRegistrationHandler(baseConverter));
 		RegistryUtils.register(converterRegistry, new DynamicToolItemRegistrationHandler(baseConverter));
-		RegistryUtils.register(converterRegistry, new GemItemRegistrar(baseConverter));
 	}
 
 	private void registerPredicateBuilders() {
@@ -192,6 +192,7 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_SPRINTING);
 		ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_SWIMMING);
 		ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_ON_GROUND);
+		ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_USING);
 
 		// Key options
 		ENTITY_CODEC_REGISTRY.register(KeyPair.pair(FlagGroupPredicate.KEY, FlagGroupPredicate.CODEC_SPECIFICATION));

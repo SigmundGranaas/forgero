@@ -2,7 +2,7 @@
   "name": "eldritch_end-compat",
   "resource_type": "PACKAGE",
   "priority": 4,
-  "namespace": "eldritch_end",
+  "namespace": "forgero",
   "dependencies": [
     "minecraft",
     "forgero",

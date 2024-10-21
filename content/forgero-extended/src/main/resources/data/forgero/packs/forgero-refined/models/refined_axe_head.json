@@ -6,9 +6,9 @@
       "variants": [
         {
           "target": [
-            "model:refined_axe_head.png"
+            "model:refined/refined_axe_head.png"
           ],
-          "template": "refined_axe_head_tip_reinforcement.png"
+          "template": "refined/refined_axe_head_tip_reinforcement.png"
         }
       ]
     },
@@ -17,16 +17,16 @@
       "variants": [
         {
           "target": [
-            "model:refined_axe_head.png"
+            "model:refined/refined_axe_head.png"
           ],
-          "template": "refined_axe_head.png"
+          "template": "refined/refined_axe_head.png"
         }
       ]
     },
     {
       "name": "refined_axe_head",
       "modelType": "GENERATE",
-      "template": "refined_axe_head.png",
+      "template": "refined/refined_axe_head.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },

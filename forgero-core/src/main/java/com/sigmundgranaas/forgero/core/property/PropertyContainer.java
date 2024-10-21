@@ -8,6 +8,7 @@ import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDa
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Rarity;
 import com.sigmundgranaas.forgero.core.property.v2.feature.BasePredicateData;
 import com.sigmundgranaas.forgero.core.property.v2.feature.BasePredicateFeature;
+import com.sigmundgranaas.forgero.core.property.v2.feature.Feature;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import org.jetbrains.annotations.NotNull;
@@ -77,7 +78,7 @@ public interface PropertyContainer extends Comparable<Object> {
 	default List<Property> applyProperty(Matchable target, MatchContext context) {
 		return getRootProperties().stream()
 				.filter(property -> {
-					if (property.isDynamic()) {
+					if (property instanceof Feature && property.isDynamic()) {
 							return true;
 					}
 					return property.applyCondition(target, context);
