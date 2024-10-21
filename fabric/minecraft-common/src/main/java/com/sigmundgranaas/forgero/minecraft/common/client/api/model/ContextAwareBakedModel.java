@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import com.sigmundgranaas.forgero.minecraft.common.client.impl.model.RenderContextManager;
+
+import net.minecraft.client.render.model.json.ModelTransformationMode;
+
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.BlockState;
@@ -49,7 +52,7 @@ public interface ContextAwareBakedModel extends BakedModel {
 	 * @param random A {@code Random} instance for random number generation.
 	 * @return A list of {@code BakedQuad} for the model, tailored to the provided context.
 	 */
-	List<BakedQuad> getQuadsWithContext(@Nullable ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity, int seed, @Nullable Direction face, Random random);
+	List<BakedQuad> getQuadsWithContext(@Nullable ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity, ModelTransformationMode mode, int seed, @Nullable Direction face, Random random);
 
 	default List<BakedQuad> defaultQuads(@Nullable Direction face, Random random) {
 		return Collections.emptyList();
@@ -92,7 +95,7 @@ public interface ContextAwareBakedModel extends BakedModel {
 
 	ModelTransformation getTransformationWithContext(ItemStack stack, ClientWorld world, LivingEntity entity, int seed);
 
-	ModelOverrideList getOverridesWithContext(ItemStack stack, ClientWorld world, LivingEntity entity, int seed);
+	ModelOverrideList getOverridesWithContext(ItemStack stack, ClientWorld world, LivingEntity entity,  int seed);
 
 	/**
 	 * Default method override to integrate context awareness into model rendering. It checks for context availability
@@ -108,7 +111,7 @@ public interface ContextAwareBakedModel extends BakedModel {
 		Optional<RenderContext> ctx = getCurrentContext();
 		if (ctx.isPresent()) {
 			RenderContext context = ctx.get();
-			return getQuadsWithContext(context.stack(), context.world(), context.entity(), context.seed(), face, random);
+			return getQuadsWithContext(context.stack(), context.world(), context.entity(), context.mode().orElse(null), context.seed(), face, random);
 		} else {
 			return defaultQuads(face, random);
 		}
@@ -122,6 +125,6 @@ public interface ContextAwareBakedModel extends BakedModel {
 	 * @param entity The {@code LivingEntity} holding or interacting with the item.
 	 * @param seed   An integer seed for use in randomization during rendering.
 	 */
-	record RenderContext(ItemStack stack, ClientWorld world, LivingEntity entity, int seed) {
+	record RenderContext(ItemStack stack, ClientWorld world, LivingEntity entity, int seed, Optional<ModelTransformationMode> mode) {
 	}
 }

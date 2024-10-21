@@ -32,6 +32,7 @@
     "ItemRenderMixin",
     "LifecycleResourceManagerImplMixin",
     "PlayerInteractionManagerMixin",
+    "RenderContextItemRenderMixin",
     "WorldRenderBlockBreakingMixin"
   ],
   "injectors": {

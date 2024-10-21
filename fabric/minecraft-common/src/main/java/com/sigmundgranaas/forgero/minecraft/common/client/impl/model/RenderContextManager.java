@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.sigmundgranaas.forgero.minecraft.common.client.api.model.ContextAwareBakedModel;
 
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
@@ -17,10 +18,16 @@ public class RenderContextManager {
 	private static final Set<Item> blacklistedItems = new HashSet<>();
 	private static final Set<Item> accessedItems = new HashSet<>();
 
-	public static void setContext(ItemStack stack, ClientWorld world, LivingEntity entity, int seed) {
+	public static void setContext(ItemStack stack, ClientWorld world, LivingEntity entity, ModelTransformationMode mode, int seed) {
 		if (!blacklistedItems.contains(stack.getItem())) {
-			currentContext.set(new ContextAwareBakedModel.RenderContext(stack, world, entity, seed));
+			currentContext.set(new ContextAwareBakedModel.RenderContext(stack, world, entity, seed, Optional.ofNullable(mode)));
 		}
+	}
+
+	public static void mutateContext(ItemStack stack, ModelTransformationMode mode) {
+		ContextAwareBakedModel.RenderContext ctx = currentContext.get();
+		if (!blacklistedItems.contains(stack.getItem()) && ctx != null) {
+			currentContext.set(new ContextAwareBakedModel.RenderContext(stack, ctx.world(), ctx.entity(), ctx.seed(), Optional.of(mode)));}
 	}
 
 	public static Optional<ContextAwareBakedModel.RenderContext> getCurrentContext() {

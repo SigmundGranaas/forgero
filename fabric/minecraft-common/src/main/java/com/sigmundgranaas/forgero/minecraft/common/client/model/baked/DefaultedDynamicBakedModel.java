@@ -8,10 +8,14 @@ import java.util.Objects;
 import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.core.util.match.ContextKey;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.client.api.model.ContextAwareBakedModel;
 import com.sigmundgranaas.forgero.minecraft.common.client.model.baked.strategy.ModelStrategy;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+
+import net.minecraft.client.render.model.json.ModelTransformationMode;
+
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.render.model.BakedModel;
@@ -26,6 +30,8 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 
 public class DefaultedDynamicBakedModel implements ContextAwareBakedModel, ItemModelWrapper {
+	public static final ContextKey<ModelTransformationMode> RENDER_MODE = ContextKey.of("render_mode", ModelTransformationMode.class);
+
 	private final ModelStrategy strategy;
 	private final StateService service;
 	@Nullable
@@ -41,22 +47,22 @@ public class DefaultedDynamicBakedModel implements ContextAwareBakedModel, ItemM
 
 	@Override
 	public List<BakedQuad> defaultQuads(@Nullable Direction face, Random random) {
-		return getModel(stack, null, null, 0).getQuads(null, face, random);
+		return getModel(stack, null, null, null, 0).getQuads(null, face, random);
 	}
 
 	@Override
-	public List<BakedQuad> getQuadsWithContext(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity, int seed, @Nullable Direction face, Random random) {
-		BakedModel result = getModel(stack, world, entity, seed);
+	public List<BakedQuad> getQuadsWithContext(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity, ModelTransformationMode mode, int seed, @Nullable Direction face, Random random) {
+		BakedModel result = getModel(stack, world, entity, mode, seed);
 		return result.getQuads(null, face, random);
 	}
 
-	public BakedModel getModel(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity, int seed) {
+	public BakedModel getModel(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity, ModelTransformationMode mode, int seed) {
 		ItemStack itemStack = Objects.requireNonNullElse(stack, this.stack);
 		Optional<State> state = service.convert(stack);
 		if (state.isPresent()) {
 			MatchContext ctx;
 
-			ctx = MatchContext.of(new MatchContext.KeyValuePair(ENTITY, entity), new MatchContext.KeyValuePair(WORLD, world), new MatchContext.KeyValuePair(STACK, itemStack));
+			ctx = MatchContext.of(new MatchContext.KeyValuePair(ENTITY, entity), new MatchContext.KeyValuePair(WORLD, world), new MatchContext.KeyValuePair(STACK, itemStack), new MatchContext.KeyValuePair(RENDER_MODE, mode));
 
 			BakedModel model = strategy.getModel(state.get(), ctx)
 					.map(BakedModelResult::model)
@@ -71,7 +77,7 @@ public class DefaultedDynamicBakedModel implements ContextAwareBakedModel, ItemM
 
 	@Override
 	public Sprite getParticleSpriteWithContext(ItemStack stack, ClientWorld world, LivingEntity entity, int seed) {
-		return getModel(stack, world, entity, seed).getParticleSprite();
+		return getModel(stack, world, entity, null, seed).getParticleSprite();
 	}
 
 	@Override
@@ -83,7 +89,7 @@ public class DefaultedDynamicBakedModel implements ContextAwareBakedModel, ItemM
 		if (defaultModel != null) {
 			return defaultModel.getTransformation();
 		}
-		BakedModel model = getModel(stack, world, entity, seed);
+		BakedModel model = getModel(stack, world, entity, null, seed);
 		if (model != EMPTY && model.getTransformation() != ModelTransformation.NONE) {
 			this.defaultModel = model;
 			return this.defaultModel.getTransformation();
@@ -97,7 +103,7 @@ public class DefaultedDynamicBakedModel implements ContextAwareBakedModel, ItemM
 		if (defaultModel != null) {
 			return defaultModel.getOverrides();
 		}
-		BakedModel model = getModel(stack, world, entity, seed);
+		BakedModel model = getModel(stack, world, entity, null, seed);
 		if (model != EMPTY && model.getOverrides() != ModelOverrideList.EMPTY) {
 			this.defaultModel = model;
 			return this.defaultModel.getOverrides();

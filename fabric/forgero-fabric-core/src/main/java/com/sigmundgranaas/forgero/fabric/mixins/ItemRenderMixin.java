@@ -1,6 +1,11 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
 import com.sigmundgranaas.forgero.minecraft.common.client.impl.model.RenderContextManager;
+
+import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
+
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,13 +25,13 @@ import net.minecraft.world.World;
 public abstract class ItemRenderMixin {
 	@Inject(method = "getModel", at = @At("HEAD"))
 	private void forgero$injectRenderContext(ItemStack stack, World world, LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> cir) {
-		if (world instanceof ClientWorld clientWorld) {
-			RenderContextManager.setContext(stack, clientWorld, entity, seed);
+		if (world instanceof ClientWorld clientWorld && RenderContextManager.getCurrentContext().isEmpty()) {
+			// RenderContextManager.setContext(stack, clientWorld, entity, null, seed);
 		}
 	}
 
 	@Inject(method = "renderBakedItemModel", at = @At("RETURN"))
 	private void forgero$clearRenderContext(BakedModel model, ItemStack stack, int light, int overlay, MatrixStack matrices, VertexConsumer vertices, CallbackInfo ci) {
-		RenderContextManager.clearContext();
+		// RenderContextManager.clearContext();
 	}
 }
