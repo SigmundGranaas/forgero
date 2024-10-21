@@ -264,19 +264,6 @@ public class DataBuilder {
 
 	}
 
-	private boolean hasDefaults(ConstructData data) {
-		return data.components().stream().allMatch(ingredient -> {
-			if (ingredient.id().equals(Identifiers.EMPTY_IDENTIFIER)) {
-				return false;
-			} else if (ingredient.id().equals("handle_schematic")) {
-				return true;
-			} else {
-				var res = Optional.ofNullable(resolvedResources.get(ingredient.id()));
-				return res.filter(resource -> resource.resourceType() == ResourceType.DEFAULT).isPresent();
-			}
-		});
-	}
-
 	private boolean hasParent(DataResource data) {
 		return !data.parent().equals(Identifiers.EMPTY_IDENTIFIER) && !data.name().equals(Identifiers.EMPTY_IDENTIFIER) && isStatefulResource(data);
 	}

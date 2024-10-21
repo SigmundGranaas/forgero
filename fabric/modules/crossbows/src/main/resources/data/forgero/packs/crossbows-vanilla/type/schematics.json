@@ -1,0 +1,12 @@
+{
+  "name": "SCHEMATIC",
+  "children": [
+    {
+      "name": "CROSSBOW_STOCK_SCHEMATIC"
+    },
+    {
+      "name": "CROSSBOW_LIMB_SCHEMATIC"
+    }
+  ]
+}
+

@@ -1,0 +1,20 @@
+{
+  "type": "FEATHER",
+  "models": [
+    {
+      "name": "feather",
+      "variants": [
+        {
+          "predicate": [
+            {
+              "type": "forgero:charged",
+              "charged": true
+            },
+            "type:CROSSBOW"
+          ],
+          "template": "empty_model.png"
+        }
+      ]
+    }
+  ]
+}
