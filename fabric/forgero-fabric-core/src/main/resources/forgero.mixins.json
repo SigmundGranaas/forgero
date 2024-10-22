@@ -12,8 +12,6 @@
     "ItemDynamicUseActionMixin",
     "ItemSchematicRemainderMixin",
     "ItemStackUnbreakableMixin",
-    "LivingEntityMixin",
-    "LivingEntityReapingMixin",
     "LivingEntitySwingHandMixin",
     "LivingEntityUndyingMixin",
     "LootTableForgeroLootMixin",
