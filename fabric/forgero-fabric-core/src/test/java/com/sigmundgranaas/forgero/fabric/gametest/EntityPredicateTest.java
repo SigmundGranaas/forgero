@@ -12,6 +12,9 @@ import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityPredic
 import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityTypePredicate;
 import com.sigmundgranaas.forgero.testutil.PlayerFactory;
 import com.sigmundgranaas.forgero.testutil.TestPos;
+
+import net.minecraft.util.Hand;
+
 import org.junit.jupiter.api.Assertions;
 
 import net.minecraft.entity.Entity;
@@ -123,6 +126,14 @@ public class EntityPredicateTest {
 		assertTrue(IS_ON_GROUND.value().test(player));
 		player.setOnGround(false);
 		assertFalse(IS_ON_GROUND.value().test(player));
+
+		player.setStackInHand(Hand.MAIN_HAND, new ItemStack(Items.BOW));
+		player.getMainHandStack().use(context.getWorld(), player, Hand.MAIN_HAND);
+		player.tick();
+		assertTrue(IS_USING.value().test(player));
+		player.stopUsingItem();
+		player.tick();
+		assertFalse(IS_USING.value().test(player));
 
 		context.complete();
 	}

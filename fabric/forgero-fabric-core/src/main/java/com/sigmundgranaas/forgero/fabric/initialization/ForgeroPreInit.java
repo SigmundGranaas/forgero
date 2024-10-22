@@ -7,12 +7,6 @@ import static com.sigmundgranaas.forgero.minecraft.common.predicate.block.Adapte
 import static com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityAdapter.*;
 import static com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityFlagPredicates.*;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
-import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.api.identity.DefaultRules;
 import com.sigmundgranaas.forgero.core.api.identity.ModificationRuleRegistry;
 import com.sigmundgranaas.forgero.core.api.identity.sorting.SortingRule;
@@ -28,14 +22,10 @@ import com.sigmundgranaas.forgero.core.model.match.builders.string.StringTypeBui
 import com.sigmundgranaas.forgero.core.property.v2.feature.FeatureRegistry;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
 import com.sigmundgranaas.forgero.core.registry.RegistryFactory;
-import com.sigmundgranaas.forgero.core.registry.SoulLevelPropertyRegistry;
-import com.sigmundgranaas.forgero.core.resource.data.v2.data.SoulLevelPropertyData;
-import com.sigmundgranaas.forgero.core.soul.SoulLevelPropertyDataProcessor;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroPreInitializationEntryPoint;
 import com.sigmundgranaas.forgero.fabric.item.ItemGroupRegisters;
 import com.sigmundgranaas.forgero.fabric.item.ItemSettingRegistrars;
-import com.sigmundgranaas.forgero.fabric.registry.DefaultLevelProperties;
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 import com.sigmundgranaas.forgero.minecraft.common.feature.BlockBreakFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.BlockEfficiencyFeature;
@@ -108,19 +98,10 @@ import com.sigmundgranaas.forgero.minecraft.common.predicate.world.DimensionPred
 import com.sigmundgranaas.forgero.minecraft.common.predicate.world.WorldPredicate;
 
 import net.minecraft.item.ItemGroups;
-import net.minecraft.resource.Resource;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.resource.ResourceType;
-import net.minecraft.util.Identifier;
-
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 
 public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 	@Override
 	public void onPreInitialization() {
-		soulLevelPropertyReloader();
-		DefaultLevelProperties.defaults().forEach(SoulLevelPropertyRegistry::register);
 		Entities.register();
 		registerPredicateBuilders();
 		registerFeatureBuilder();
@@ -193,6 +174,7 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 		ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_SPRINTING);
 		ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_SWIMMING);
 		ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_ON_GROUND);
+		ENTITY_FLAG_PREDICATE_REGISTRY.register(IS_USING);
 
 		// Key options
 		ENTITY_CODEC_REGISTRY.register(KeyPair.pair(FlagGroupPredicate.KEY, FlagGroupPredicate.CODEC_SPECIFICATION));
@@ -319,29 +301,5 @@ public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 				.register(EntityUseHandler.KEY)
 				.register(UseHandler.KEY)
 				.register(StopHandler.KEY);
-	}
-
-	private void soulLevelPropertyReloader() {
-		ResourceManagerHelper.get(ResourceType.SERVER_DATA)
-				.registerReloadListener(new SimpleSynchronousResourceReloadListener() {
-					@Override
-					public void reload(ResourceManager manager) {
-						SoulLevelPropertyRegistry.refresh();
-						Gson gson = new Gson();
-						for (Resource res : manager.findResources("leveled_soul_properties", path -> path.getPath().endsWith(".json")).values()) {
-							try (InputStream stream = res.getInputStream()) {
-								SoulLevelPropertyData data = gson.fromJson(new JsonReader(new InputStreamReader(stream)), SoulLevelPropertyData.class);
-								SoulLevelPropertyRegistry.register(data.getId(), new SoulLevelPropertyDataProcessor(data));
-							} catch (Exception e) {
-								Forgero.LOGGER.error(e);
-							}
-						}
-					}
-
-					@Override
-					public Identifier getFabricId() {
-						return new Identifier(Forgero.NAMESPACE, "soul_level_property");
-					}
-				});
 	}
 }

@@ -5,7 +5,6 @@ import static com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContext
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.feature.onhit.block.OnHitBlockFeatureExecutor;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.PropertyHelper;
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.SoulHandler;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.block.ToolBlockHandler;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
@@ -37,12 +36,9 @@ public abstract class PlayerServerInteractionManagerMixin {
 
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerInteractionManager;finishMining(Lnet/minecraft/util/math/BlockPos;ILjava/lang/String;)V"), method = "processBlockBreakingAction")
 	public void forgero$processBlockBreakingAction(BlockPos pos, PlayerActionC2SPacket.Action action, Direction direction, int worldHeight, int sequence, CallbackInfo ci) {
-		var soulHandler = SoulHandler.of(player.getMainHandStack());
-		soulHandler.ifPresent(soul -> soul.processBlockBreak(pos, world, player));
 		PropertyHelper.ofPlayerHands(player)
 				.flatMap(container -> ToolBlockHandler.of(container, pos, player))
 				.ifPresent(handler -> handler.handleExceptOrigin(info -> {
-					soulHandler.ifPresent(soul -> soul.processBlockBreak(info, world, player));
 					this.finishMining(info, sequence, "destroyed");
 				}).cleanUp());
 	}

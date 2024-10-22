@@ -39,9 +39,9 @@ public class DefaultModelStrategy implements ModelStrategy {
 	@Override
 	public Optional<BakedModelResult> getModel(State state, MatchContext context) {
 		Optional<ItemStack> stack = context.get(STACK);
-		if (stack.isPresent() && !stack.get().hasNbt()) {
+		if (stack.isPresent() && !stack.get().hasNbt() && result.result().isValid(state, context)) {
 			return Optional.of(result);
-		} else if (code == state.hashCode()) {
+		} else if (code == state.hashCode() && result.result().isValid(state, context)) {
 			return Optional.of(result);
 		} else {
 			return Optional.empty();

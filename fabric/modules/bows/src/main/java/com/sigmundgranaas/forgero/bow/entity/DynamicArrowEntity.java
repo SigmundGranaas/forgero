@@ -78,21 +78,11 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 			super.tick();
 			EntityTickFeatureExecutor.initFromStack(this.getStack(), this).execute(tickContext);
 
-			if (!this.noClip) {
+			if (!this.noClip && !this.inGround) {
 				Vec3d vec3d4 = this.getVelocity();
 				this.setVelocity(vec3d4.x, vec3d4.y - getGravity(), vec3d4.z);
 			}
 		}
-	}
-
-
-	public boolean isFireImmune() {
-		return this.getStack().getItem().isFireproof() || super.isFireImmune();
-	}
-
-	protected void initDataTracker() {
-		super.initDataTracker();
-		this.getDataTracker().startTracking(STACK, ItemStack.EMPTY);
 	}
 
 	private double getGravity() {
@@ -107,6 +97,17 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 		}
 		return 0f;
 	}
+
+	public boolean isFireImmune() {
+		return this.getStack().getItem().isFireproof() || super.isFireImmune();
+	}
+
+	protected void initDataTracker() {
+		super.initDataTracker();
+		this.getDataTracker().startTracking(STACK, ItemStack.EMPTY);
+	}
+
+
 
 	@Override
 	protected void onCollision(HitResult hitResult) {
