@@ -114,7 +114,7 @@ public class VeinMiningToolTests {
 
 		ServerPlayerEntity player = PlayerFactory.builder(context)
 				.gameMode(GameMode.SURVIVAL)
-				.stack(NETHERITE_GRAVE_DIGGER_SHOVEL)
+				.stack(NETHERITE_SPADE_SHOVEL)
 				.pos(center.absolute())
 				.build()
 				.createPlayer();
@@ -162,7 +162,7 @@ public class VeinMiningToolTests {
 
 		ServerPlayerEntity player = PlayerFactory.builder(context)
 				.gameMode(GameMode.SURVIVAL)
-				.stack(NETHERITE_TREE_CHOPPER_AXE)
+				.stack(NETHERITE_TREE_FELLER_AXE)
 				.pos(center.absolute())
 				.build()
 				.createPlayer();

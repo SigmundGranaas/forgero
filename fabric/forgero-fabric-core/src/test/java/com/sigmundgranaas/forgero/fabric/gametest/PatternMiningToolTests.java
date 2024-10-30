@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.fabric.gametest;
 
-import static com.sigmundgranaas.forgero.fabric.gametest.BlockSelectionTest.createSquare;
 import static com.sigmundgranaas.forgero.fabric.gametest.cases.ItemStackCase.assertDamage;
 import static com.sigmundgranaas.forgero.testutil.Items.*;
 import static net.minecraft.block.Blocks.*;
@@ -31,7 +30,7 @@ public class PatternMiningToolTests {
 		ServerPlayerEntity player = PlayerFactory.builder(context)
 				.gameMode(GameMode.CREATIVE)
 				.direction(Direction.EAST)
-				.stack(NETHERITE_PATH_MINING_PICKAXE)
+				.stack(NETHERITE_ENTRENCHING_SHOVEL)
 				.pos(center.absolute())
 				.build()
 				.createPlayer();
@@ -40,18 +39,19 @@ public class PatternMiningToolTests {
 		BlockBreakingCase blockBreakingCase = BlockBreakingCase.of(actionHelper);
 		WorldBlockHelper blockHelper = new WorldBlockHelper(context);
 		TestPosCollection box = blockHelper.testCollection();
+		blockHelper.replace(COAL_ORE, DIRT);
 
 		// Break the cluster of coal blocks using pattern mining
 		blockBreakingCase.assertBreakSelection(validationSquare, center);
 
-		blockBreakingCase.assertBlockCount(7, box, COAL_ORE);
+		blockBreakingCase.assertBlockCount(7, box, DIRT);
 
 		context.complete();
 	}
 
 	@GameTest(templateName = "forgero:coal_3x3_east", batchId = "tool_mining_test")
-	public void test_path_mining_pickaxe_head_survival(TestContext context) {
-		int TIME_TO_BREAK_COAL = 50;
+	public void test_path_mining_shovel_head_survival(TestContext context) {
+		int TIME_TO_BREAK_DIRT = 30;
 		TestPos center = TestPos.of(RELATIVE_STAR_X7_CENTER, context);
 		TestPos singleCoal = TestPos.of(RELATIVE_STAR_X7_CENTER.east(), context);
 		context.setBlockState(singleCoal.relative(), COAL_ORE);
@@ -60,7 +60,7 @@ public class PatternMiningToolTests {
 		ServerPlayerEntity player = PlayerFactory.builder(context)
 				.gameMode(GameMode.SURVIVAL)
 				.direction(Direction.EAST)
-				.stack(NETHERITE_PATH_MINING_PICKAXE)
+				.stack(NETHERITE_ENTRENCHING_SHOVEL)
 				.pos(center.absolute())
 				.build()
 				.createPlayer();
@@ -70,12 +70,13 @@ public class PatternMiningToolTests {
 		WorldBlockHelper blockHelper = new WorldBlockHelper(context);
 		TestPosCollection box = blockHelper.testCollection();
 
+
 		// Break a column in the coal blocks using pattern mining
-		blockBreakingCase.assertBreakSelection(validationSquare, center, TIME_TO_BREAK_COAL * 2);
+		blockBreakingCase.assertBreakSelection(validationSquare, center, TIME_TO_BREAK_DIRT * 2);
 
-		blockBreakingCase.assertBlockCount(8, box, COAL_ORE);
+		blockBreakingCase.assertBlockCount(8, box, DIRT);
 
-		blockBreakingCase.assertBreakBlock(singleCoal, TIME_TO_BREAK_COAL);
+		blockBreakingCase.assertBreakBlock(singleCoal, TIME_TO_BREAK_DIRT);
 
 		assertDamage(player.getMainHandStack(), 3);
 
@@ -91,7 +92,7 @@ public class PatternMiningToolTests {
 		ServerPlayerEntity player = PlayerFactory.builder(context)
 				.gameMode(GameMode.SURVIVAL)
 				.direction(Direction.EAST)
-				.stack(NETHERITE_PATH_DIGGER_SHOVEL)
+				.stack(NETHERITE_SPADE_SHOVEL)
 				.pos(center.absolute().west().down(2))
 				.build()
 				.createPlayer();
@@ -112,38 +113,6 @@ public class PatternMiningToolTests {
 		blockBreakingCase.assertBlockCount(0, box, DIRT);
 
 		assertDamage(player.getMainHandStack(), 10);
-
-		context.complete();
-	}
-
-	@GameTest(templateName = "forgero:jungle_tree", batchId = "tool_mining_test")
-	public void test_tree_feller_column_miner(TestContext context) {
-		int TIME_TO_BREAK_WOOD = 30;
-		TestPos center = TestPos.of(RELATIVE_STAR_X7_CENTER.down(2), context);
-		TestPos singleWood = TestPos.of(center.relative().west(3), context);
-		TestPosCollection validationColumn = TestPosCollection.of(createSquare(center, 20, 1, 1));
-
-		ServerPlayerEntity player = PlayerFactory.builder(context)
-				.gameMode(GameMode.SURVIVAL)
-				.stack(NETHERITE_TREE_FELLER_AXE)
-				.pos(center.absolute().west())
-				.build()
-				.createPlayer();
-		context.setBlockState(singleWood.relative(), JUNGLE_WOOD);
-
-		PlayerActionHelper actionHelper = PlayerActionHelper.of(context, player);
-		BlockBreakingCase blockBreakingCase = BlockBreakingCase.of(actionHelper);
-
-		// Confirm the block cannot be mined under the given ticks
-		blockBreakingCase.assertNotBreakBlock(singleWood, TIME_TO_BREAK_WOOD - 10);
-
-		// Confirm the correct tick amount for breaking a single wooden block
-		blockBreakingCase.assertBreakBlock(singleWood, TIME_TO_BREAK_WOOD);
-
-		// Break a single column of the tree
-		blockBreakingCase.assertBreakSelection(validationColumn, center, TIME_TO_BREAK_WOOD * 20);
-
-		assertDamage(player.getMainHandStack(), 21);
 
 		context.complete();
 	}
