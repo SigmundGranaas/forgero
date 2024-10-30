@@ -257,7 +257,7 @@ public class VeinMiningToolTests {
 
 		ServerPlayerEntity player = PlayerFactory.builder(context)
 				.gameMode(GameMode.SURVIVAL)
-				.stack(NETHERITE_REAPER_HOE)
+				.stack(NETHERITE_SCYTHE_HOE)
 				.pos(center.absolute())
 				.build()
 				.createPlayer();
