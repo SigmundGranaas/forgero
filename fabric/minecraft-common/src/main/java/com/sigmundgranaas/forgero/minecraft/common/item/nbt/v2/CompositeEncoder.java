@@ -4,7 +4,6 @@ import static com.sigmundgranaas.forgero.minecraft.common.item.nbt.v2.NbtConstan
 
 import com.sigmundgranaas.forgero.core.condition.Conditional;
 import com.sigmundgranaas.forgero.core.condition.NamedCondition;
-import com.sigmundgranaas.forgero.core.soul.SoulContainer;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.Upgradeable;
 import com.sigmundgranaas.forgero.core.state.composite.Constructed;
@@ -41,9 +40,6 @@ public class CompositeEncoder implements CompoundEncoder<State> {
 		var compound = identifiableEncoder.encode(element);
 		compound.putString(STATE_TYPE_IDENTIFIER, COMPOSITE_IDENTIFIER);
 		compound.putString(TYPE_IDENTIFIER, element.type().typeName());
-		if (element instanceof SoulContainer soulContainer) {
-			compound.put(SOUL_IDENTIFIER, SoulEncoder.ENCODER.encode(soulContainer.getSoul()));
-		}
 
 		if (element instanceof ConstructedTool || element instanceof Constructed constructed && ConstructedTool.ToolBuilder.builder(constructed.parts()).isPresent()) {
 			compound.putString(COMPOSITE_TYPE, TOOL_IDENTIFIER);
