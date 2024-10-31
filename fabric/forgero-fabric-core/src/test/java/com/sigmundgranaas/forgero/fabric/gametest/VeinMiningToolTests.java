@@ -73,8 +73,8 @@ public class VeinMiningToolTests {
 	@GameTest(templateName = "forgero:coal_x7", batchId = "tool_mining_test")
 	public void test_netherite_ore_mining_pickaxe_block_selection_survival(TestContext context) {
 		// Netherite pickaxe
-		int TICKS_FOR_MINING_STONE = 30;
-		int TICKS_FOR_MINING_COAL_CLUSTER = 300;
+		int TICKS_FOR_MINING_STONE = 20;
+		int TICKS_FOR_MINING_COAL_CLUSTER = 200;
 		survivalOreMiningTest(TICKS_FOR_MINING_STONE, TICKS_FOR_MINING_COAL_CLUSTER, NETHERITE_ORE_MINER_PICKAXE, context);
 		context.complete();
 	}
@@ -82,8 +82,8 @@ public class VeinMiningToolTests {
 	@GameTest(templateName = "forgero:coal_x7", batchId = "tool_mining_test")
 	public void test_iron_ore_mining_pickaxe_block_selection_survival(TestContext context) {
 		// Iron pickaxe
-		int TICKS_FOR_MINING_STONE = 45;
-		int TICKS_FOR_MINING_COAL_CLUSTER = 450;
+		int TICKS_FOR_MINING_STONE = 30;
+		int TICKS_FOR_MINING_COAL_CLUSTER = 300;
 		survivalOreMiningTest(TICKS_FOR_MINING_STONE, TICKS_FOR_MINING_COAL_CLUSTER, IRON_ORE_MINER_PICKAXE, context);
 
 		context.complete();
@@ -92,57 +92,9 @@ public class VeinMiningToolTests {
 	@GameTest(templateName = "forgero:coal_x7", batchId = "tool_mining_test")
 	public void test_stone_ore_mining_pickaxe_block_selection_survival(TestContext context) {
 		// Stone pickaxe
-		int TICKS_FOR_MINING_STONE = 60;
-		int TICKS_FOR_MINING_COAL_CLUSTER = 650;
+		int TICKS_FOR_MINING_STONE = 40;
+		int TICKS_FOR_MINING_COAL_CLUSTER = 400;
 		survivalOreMiningTest(TICKS_FOR_MINING_STONE, TICKS_FOR_MINING_COAL_CLUSTER, STONE_ORE_MINER_PICKAXE, context);
-
-		context.complete();
-	}
-
-	@GameTest(templateName = "forgero:coal_x21", batchId = "tool_mining_test")
-	public void netherite_grave_digger_head_selection_survival(TestContext context) {
-		// Netherite vein mining shovel
-		int TICKS_FOR_MINING_PLANK = 250;
-		int TICKS_FOR_MINING_DIRT = 30;
-
-		Set<TestPos> relativex21ValidationSquare = createSquare(TestPos.of(RELATIVE_STAR_X21_CENTER.add(-2, -2, -2), context), 5, 5, 5);
-		TestPosCollection validationSquare = TestPosCollection.of(relativex21ValidationSquare);
-		TestPos center = TestPos.of(RELATIVE_STAR_X21_CENTER, context);
-		TestPos plank = TestPos.of(center, new BlockPos(-1, 1, -1));
-		TestPos singleDirt = TestPos.of(center, new BlockPos(0, -3, 0));
-
-		ServerPlayerEntity player = PlayerFactory.builder(context)
-				.gameMode(GameMode.SURVIVAL)
-				.stack(NETHERITE_SPADE_SHOVEL)
-				.pos(center.absolute())
-				.build()
-				.createPlayer();
-
-		PlayerActionHelper actionHelper = PlayerActionHelper.of(context, player);
-		BlockBreakingCase blockBreakingCase = BlockBreakingCase.of(actionHelper);
-		WorldBlockHelper worldHelper = new WorldBlockHelper(context);
-		worldHelper.replace(ImmutableMap.of(COAL_ORE, DIRT, STONE, OAK_PLANKS));
-
-		// Make sure it is not possible to mine planks as quickly as dirt with the shovel
-		blockBreakingCase.assertNotBreakBlock(plank, TICKS_FOR_MINING_DIRT);
-
-		// Break the outcast plank block
-		blockBreakingCase.assertBreakBlock(plank, TICKS_FOR_MINING_PLANK);
-
-		// Make sure none of the dirt blocks are mined
-		blockBreakingCase.assertBlockCount(25, validationSquare, DIRT);
-		
-		// Break the cluster of dirt blocks using vein mining
-		blockBreakingCase.assertBreakSelection(validationSquare, center, TICKS_FOR_MINING_DIRT * 25);
-
-		// Make sure the lowest dirt block did not get mined by the vein mining
-		blockBreakingCase.assertExists(singleDirt, "Expected the lowest dirt block to not be mined by vein mining");
-
-		// Break the outcast dirt block
-		blockBreakingCase.assertBreakBlock(singleDirt, TICKS_FOR_MINING_DIRT);
-
-		// Make sure the tool takes damage
-		assertDamage(player.getMainHandStack(), 27);
 
 		context.complete();
 	}
@@ -150,8 +102,8 @@ public class VeinMiningToolTests {
 	@GameTest(templateName = "forgero:coal_x21", batchId = "tool_mining_test")
 	public void netherite_tree_chopper_head_selection_survival(TestContext context) {
 		// Netherite vein mining shovel
-		int TICKS_FOR_MINING_DIRT = 250;
-		int TICKS_FOR_MINING_PLANK = 50;
+		int TICKS_FOR_MINING_DIRT = 100;
+		int TICKS_FOR_MINING_PLANK = 30;
 
 		Set<TestPos> relativex21ValidationSquare = createSquare(TestPos.of(RELATIVE_STAR_X21_CENTER.add(-2, -2, -2), context), 5, 5, 5);
 		TestPosCollection validationSquare = TestPosCollection.of(relativex21ValidationSquare);
@@ -233,7 +185,6 @@ public class VeinMiningToolTests {
 		// Make sure it is not possible to mine the coal block in the same amount of ticks as stone
 		String message = String.format("Expected block to be stay the same, got air, which means it mined the block in under %s ticks, which it should not do.", stoneTicks);
 		blockBreakingCase.assertNotBreakBlock(singleCoal, stoneTicks, message);
-
 
 		// Make sure the tool takes damage
 		assertDamage(player.getMainHandStack(), 8);

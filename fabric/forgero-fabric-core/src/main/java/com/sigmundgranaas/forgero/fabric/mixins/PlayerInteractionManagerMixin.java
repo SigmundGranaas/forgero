@@ -31,7 +31,8 @@ public abstract class PlayerInteractionManagerMixin {
 		if (this.currentBreakingProgress >= 1.0F && client.player != null && client.world != null) {
 			PropertyHelper.ofPlayerHands(client.player)
 					.flatMap(container -> ToolBlockHandler.of(container, pos, client.player))
-					.ifPresent(handler -> handler.handleExceptOrigin(this::breakBlock).cleanUp());
+					.ifPresent(handler -> handler.handleExceptOrigin(this::breakBlock)
+							.cleanUp());
 		}
 	}
 }
