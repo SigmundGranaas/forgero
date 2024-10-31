@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.fabric.gametest;
 
+import static com.sigmundgranaas.forgero.fabric.gametest.BlockSelectionTest.createSquare;
 import static com.sigmundgranaas.forgero.fabric.gametest.cases.ItemStackCase.assertDamage;
 import static com.sigmundgranaas.forgero.testutil.Items.*;
 import static net.minecraft.block.Blocks.*;
@@ -70,6 +71,8 @@ public class PatternMiningToolTests {
 		WorldBlockHelper blockHelper = new WorldBlockHelper(context);
 		TestPosCollection box = blockHelper.testCollection();
 
+		blockHelper.replace(COAL_ORE, DIRT);
+
 
 		// Break a column in the coal blocks using pattern mining
 		blockBreakingCase.assertBreakSelection(validationSquare, center, TIME_TO_BREAK_DIRT * 2);
@@ -104,15 +107,15 @@ public class PatternMiningToolTests {
 		TestPosCollection box = blockHelper.testCollection();
 
 		blockHelper.replace(COAL_ORE, DIRT);
-		context.setBlockState(singleCoal.relative(), DIRT);
+		context.setBlockState(singleCoal.relative(), COAL_ORE);
 
 		// Break the 3x3 wall of dirt blocks using pattern mining
-		blockBreakingCase.assertBreakSelection(validationSquare, center, TIME_TO_BREAK_DIRT * 10);
+		blockBreakingCase.assertBreakSelection(validationSquare, center, TIME_TO_BREAK_DIRT * 9);
 
 		// No blocks should be left
 		blockBreakingCase.assertBlockCount(0, box, DIRT);
 
-		assertDamage(player.getMainHandStack(), 10);
+		assertDamage(player.getMainHandStack(), 9);
 
 		context.complete();
 	}

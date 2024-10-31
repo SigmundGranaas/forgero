@@ -27,6 +27,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
 
 public class VeinMiningToolTests {
+	public static BlockPos RELATIVE_STAR_X7_CENTER = new BlockPos(3, 4, 3);
+	public static BlockPos RELATIVE_STAR_X21_CENTER = new BlockPos(3, 4, 3);
 
 
 	@GameTest(templateName = "forgero:coal_x7", batchId = "tool_mining_test")
@@ -66,7 +68,6 @@ public class VeinMiningToolTests {
 		context.complete();
 	}
 
-	public static BlockPos RELATIVE_STAR_X7_CENTER = new BlockPos(3, 4, 3);
 
 
 	@GameTest(templateName = "forgero:coal_x7", batchId = "tool_mining_test")
@@ -97,8 +98,6 @@ public class VeinMiningToolTests {
 
 		context.complete();
 	}
-
-	public static BlockPos RELATIVE_STAR_X21_CENTER = new BlockPos(3, 4, 3);
 
 	@GameTest(templateName = "forgero:coal_x21", batchId = "tool_mining_test")
 	public void netherite_grave_digger_head_selection_survival(TestContext context) {

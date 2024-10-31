@@ -19,10 +19,10 @@ public class Items {
 	public static String NETHERITE_SPADE_HEAD = "forgero:netherite-spade_head";
 
 	// Reaper heads
-	public static String NETHERITE_SCYTHE_HEAD = "forgero:netherite-scythe_head";
+	public static String NETHERITE_SCYTHE_HEAD = "forgero:netherite-scythe_blade";
 
 	// Tree chopper heads
-	public static String TREE_FELLER_AXE_HEAD = "forgero:iron-tree_felling_head";
+	public static String TREE_FELLER_AXE_HEAD = "forgero:iron-felling_axe_head";
 
 	// Handles
 	public static String OAK_HANDLE = "forgero:oak-handle";
