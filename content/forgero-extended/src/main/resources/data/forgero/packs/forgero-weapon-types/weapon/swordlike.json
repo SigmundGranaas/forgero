@@ -9,20 +9,6 @@
   "construct": {
     "type": "SWORDLIKE",
     "target": "CREATE",
-    "recipes": [
-      {
-        "crafting_type": "STATE_CRAFTING_RECIPE",
-        "ingredients": [
-          {
-            "unique": true,
-            "type": "SWORDLIKE_HEAD"
-          },
-          {
-            "type": "HANDLE"
-          }
-        ]
-      }
-    ],
     "components": [
       {
         "type": "SWORDLIKE_HEAD"

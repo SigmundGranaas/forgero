@@ -30,6 +30,9 @@ public interface Type extends Matchable {
 	Type WEAPON_HEAD = new SimpleType("WEAPON_HEAD", Optional.of(PART), new TypeMatcher());
 	Type SWORD_BLADE = new SimpleType("SWORD_BLADE", Optional.of(WEAPON_HEAD), new TypeMatcher());
 	Type SWORDLIKE_HEAD = new SimpleType("SWORDLIKE_HEAD", Optional.of(WEAPON_HEAD), new TypeMatcher());
+	Type SPEAR_HEAD = new SimpleType("SPEAR_HEAD", Optional.of(WEAPON_HEAD), new TypeMatcher());
+	Type BLUNT_WEAPON_HEAD = new SimpleType("BLUNT_WEAPON_HEAD", Optional.of(WEAPON_HEAD), new TypeMatcher());
+
 	Type HANDLE = new SimpleType("HANDLE",  Optional.of(PART), new TypeMatcher());
 
 	Type SCHEMATIC = new SimpleType("SCHEMATIC", Optional.empty(), new SchematicMatcher());

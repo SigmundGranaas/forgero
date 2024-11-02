@@ -1,0 +1,26 @@
+{
+  "type": "SPEAR",
+  "name": "spear",
+  "resource_type": "CONSTRUCT_TEMPLATE",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "SPEAR",
+    "target": "CREATE",
+    "components": [
+      {
+        "type": "SPEAR_HEAD"
+      },
+      {
+        "type": "HANDLE"
+      }
+    ],
+    "slots": [
+    ]
+  },
+  "model": {
+    "type": "COMPOSITE"
+  }
+}

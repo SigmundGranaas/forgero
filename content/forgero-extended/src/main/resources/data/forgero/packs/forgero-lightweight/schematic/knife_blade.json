@@ -2,6 +2,7 @@
   "type": "SWORDLIKE_HEAD_SCHEMATIC",
   "name": "knife_blade-schematic",
   "parent": "swordlike_head_base",
+  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -9,21 +10,6 @@
   "construct": {
     "type": "SWORDLIKE_HEAD",
     "target": "CREATE",
-    "recipes": [
-      {
-        "crafting_type": "SCHEMATIC_PART_CRAFTING",
-        "ingredients": [
-          {
-            "id": "this"
-          },
-          {
-            "type": "TOOL_MATERIAL",
-            "unique": true,
-            "amount": 1
-          }
-        ]
-      }
-    ],
     "components": [
       {
         "id": "this"
@@ -145,10 +131,6 @@
     "ingredient_count": {
       "value": 1,
       "context": "LOCAL"
-    },
-    "name_replacement": {
-      "from": "spear",
-      "to": "knife"
     },
     "better_compat_attribute_container": "forgero:dagger"
   }

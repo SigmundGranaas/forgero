@@ -1,0 +1,11 @@
+{
+  "type": "BLUNT_WEAPON",
+  "models": [
+    {
+      "target": [
+        "type:BLUNT_WEAPON"
+      ],
+      "modelType": "COMPOSITE"
+    }
+  ]
+}

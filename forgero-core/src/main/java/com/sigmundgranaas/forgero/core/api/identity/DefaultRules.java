@@ -27,7 +27,15 @@ public class DefaultRules {
 
 	public static ModificationRuleBuilder knife = ModificationRuleBuilder.builder()
 			.when(Condition.type(Type.SWORDLIKE_HEAD))
-			.remove("_blade");
+			.remove("_blade").remove("_head");
+
+	public static ModificationRuleBuilder spear = ModificationRuleBuilder.builder()
+			.when(Condition.type(Type.SPEAR_HEAD))
+			.replaceElement("_head", "spear");
+
+	public static ModificationRuleBuilder blunt = ModificationRuleBuilder.builder()
+			.when(Condition.type(Type.BLUNT_WEAPON_HEAD))
+			.remove("_head");
 
 	public static ModificationRuleBuilder weapon_head = ModificationRuleBuilder.builder()
 			.when(Condition.type(Type.WEAPON_HEAD))

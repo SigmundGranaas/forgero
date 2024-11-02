@@ -1,0 +1,26 @@
+{
+  "type": "BLUNT_WEAPON",
+  "name": "blunt_weapon",
+  "resource_type": "CONSTRUCT_TEMPLATE",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "BLUNT_WEAPON",
+    "target": "CREATE",
+    "components": [
+      {
+        "type": "BLUNT_WEAPON_HEAD"
+      },
+      {
+        "type": "HANDLE"
+      }
+    ],
+    "slots": [
+    ]
+  },
+  "model": {
+    "type": "COMPOSITE"
+  }
+}
