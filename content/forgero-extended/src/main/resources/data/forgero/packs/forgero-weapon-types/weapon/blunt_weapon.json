@@ -9,6 +9,20 @@
   "construct": {
     "type": "BLUNT_WEAPON",
     "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "STATE_CRAFTING_RECIPE",
+        "ingredients": [
+          {
+            "unique": true,
+            "type": "BLUNT_WEAPON_HEAD"
+          },
+          {
+            "type": "HANDLE"
+          }
+        ]
+      }
+    ],
     "components": [
       {
         "type": "BLUNT_WEAPON_HEAD"

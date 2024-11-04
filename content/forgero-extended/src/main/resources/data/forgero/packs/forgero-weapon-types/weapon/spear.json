@@ -9,6 +9,20 @@
   "construct": {
     "type": "SPEAR",
     "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "STATE_CRAFTING_RECIPE",
+        "ingredients": [
+          {
+            "unique": true,
+            "type": "SPEAR_HEAD"
+          },
+          {
+            "type": "HANDLE"
+          }
+        ]
+      }
+    ],
     "components": [
       {
         "type": "SPEAR_HEAD"
