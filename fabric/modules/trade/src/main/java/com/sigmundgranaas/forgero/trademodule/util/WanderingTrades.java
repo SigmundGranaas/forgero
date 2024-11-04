@@ -55,7 +55,9 @@ public class WanderingTrades {
 	 * </ul>
 	 */
 	public static void registerCustomTrades() {
-
+		tools();
+		weapons();
+		guards();
 	}
 
 	public static void tools(){
