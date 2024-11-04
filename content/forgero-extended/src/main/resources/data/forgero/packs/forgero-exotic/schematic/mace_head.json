@@ -1,13 +1,14 @@
 {
-  "type": "SWORDLIKE_HEAD_SCHEMATIC",
+  "type": "BLUNT_WEAPON_HEAD_SCHEMATIC",
   "name": "mace_head-schematic",
-  "parent": "swordlike_base",
+  "parent": "blunt_weapon_base",
+  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "SWORDLIKE_HEAD",
+    "type": "BLUNT_WEAPON_HEAD",
     "target": "CREATE",
     "recipes": [
       {
@@ -17,7 +18,7 @@
             "id": "this"
           },
           {
-            "type": "METAL",
+            "type": "TOOL_MATERIAL",
             "unique": true,
             "amount": 4
           }
@@ -29,7 +30,7 @@
         "id": "this"
       },
       {
-        "type": "METAL",
+        "type": "TOOL_MATERIAL",
         "unique": true
       }
     ],
@@ -94,10 +95,6 @@
     "ingredient_count": {
       "value": 4,
       "context": "LOCAL"
-    },
-    "name_replacement": {
-      "from": "spear",
-      "to": "mace"
     },
     "better_compat_attribute_container": "forgero:mace"
   }

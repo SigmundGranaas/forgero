@@ -11,6 +11,28 @@
           "template": "axe_handle.png"
         }
       ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:SPEAR"
+          ],
+          "template": "axe_handle.png"
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:BLUNT_WEAPON"
+          ],
+          "template": "axe_handle.png"
+        }
+      ]
     }
   ]
 }

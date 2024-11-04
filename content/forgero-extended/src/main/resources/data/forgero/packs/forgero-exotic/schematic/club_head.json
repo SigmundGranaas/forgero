@@ -1,13 +1,13 @@
 {
-  "type": "SWORDLIKE_HEAD_SCHEMATIC",
+  "type": "BLUNT_WEAPON_HEAD_SCHEMATIC",
   "name": "club_head-schematic",
-  "parent": "swordlike_head_base",
+  "parent": "blunt_weapon_head_base",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "SWORDLIKE_HEAD",
+    "type": "BLUNT_WEAPON_HEAD",
     "target": "CREATE",
     "recipes": [
       {

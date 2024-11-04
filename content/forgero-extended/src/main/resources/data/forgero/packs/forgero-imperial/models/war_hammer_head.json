@@ -9,7 +9,7 @@
       "order": 20
     },
     {
-      "name": "swordlike_head_material",
+      "name": "blunt_weapon_head_material",
       "variants": [
         {
           "target": [
@@ -20,7 +20,7 @@
       ]
     },
     {
-      "name": "swordlike_head_dye",
+      "name": "blunt_weapon_head_dye",
       "variants": [
         {
           "target": [

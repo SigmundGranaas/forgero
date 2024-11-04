@@ -133,7 +133,7 @@
       "context": "LOCAL"
     },
     "name_replacement": {
-      "from": "spear",
+      "from": "knife",
       "to": "kunai"
     },
     "better_compat_attribute_container": "forgero:dagger"
