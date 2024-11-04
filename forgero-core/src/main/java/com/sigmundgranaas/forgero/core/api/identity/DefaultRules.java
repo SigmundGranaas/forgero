@@ -35,7 +35,7 @@ public class DefaultRules {
 
 	public static ModificationRuleBuilder blunt = ModificationRuleBuilder.builder()
 			.when(Condition.type(Type.BLUNT_WEAPON_HEAD))
-			.remove("_head");
+			.replaceElement("_head", "blunt_weapon");
 
 	public static ModificationRuleBuilder weapon_head = ModificationRuleBuilder.builder()
 			.when(Condition.type(Type.WEAPON_HEAD))

@@ -2,7 +2,6 @@
   "type": "BLUNT_WEAPON_HEAD_SCHEMATIC",
   "name": "mace_head-schematic",
   "parent": "blunt_weapon_base",
-  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
@@ -18,7 +17,7 @@
             "id": "this"
           },
           {
-            "type": "TOOL_MATERIAL",
+            "type": "METAL",
             "unique": true,
             "amount": 4
           }
@@ -30,7 +29,7 @@
         "id": "this"
       },
       {
-        "type": "TOOL_MATERIAL",
+        "type": "METAL",
         "unique": true
       }
     ],
@@ -95,6 +94,10 @@
     "ingredient_count": {
       "value": 4,
       "context": "LOCAL"
+    },
+    "name_replacement": {
+      "from": "blunt_weapon",
+      "to": "mace"
     },
     "better_compat_attribute_container": "forgero:mace"
   }

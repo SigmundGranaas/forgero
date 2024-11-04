@@ -5,22 +5,30 @@
       "name": "mace_head",
       "type": "GENERATE",
       "template": "exotic/mace_head.png",
-      "palette": "TOOL_MATERIAL",
+      "palette": "METAL",
       "order": 20
     },
     {
       "name": "blunt_weapon_head_material",
-      "type": "GENERATE",
-      "palette": "MATERIAL",
-      "template": "exotic/mace_head_reinforcement.png",
-      "order": 30
+      "variants": [
+        {
+          "target": [
+            "model:exotic/mace_head.png"
+          ],
+          "template": "exotic/mace_head_reinforcement.png"
+        }
+      ]
     },
     {
       "name": "blunt_weapon_head_dye",
-      "template": "exotic/mace_head.png",
-      "type": "GENERATE",
-      "palette": "DYE",
-      "order": 25
+      "variants": [
+        {
+          "target": [
+            "model:exotic/mace_head.png"
+          ],
+          "template": "exotic/mace_head.png"
+        }
+      ]
     },
     {
       "target": [
@@ -29,22 +37,6 @@
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "mace_head"
-    },
-    {
-      "target": [
-        "type:MATERIAL",
-        "slot:0"
-      ],
-      "modelType": "UPGRADE",
-      "template": "blunt_weapon_head_material"
-    },
-    {
-      "target": [
-        "type:DYE",
-        "slot:1"
-      ],
-      "modelType": "UPGRADE",
-      "template": "blunt_weapon_head_dye"
     }
   ]
 }

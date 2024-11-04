@@ -96,7 +96,7 @@
       "context": "LOCAL"
     },
     "name_replacement": {
-      "from": "spear",
+      "from": "blunt_weapon",
       "to": "club"
     },
     "better_compat_attribute_container": "forgero:mace"
