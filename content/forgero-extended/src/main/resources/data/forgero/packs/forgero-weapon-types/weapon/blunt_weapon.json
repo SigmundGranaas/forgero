@@ -1,0 +1,40 @@
+{
+  "type": "BLUNT_WEAPON",
+  "name": "blunt_weapon",
+  "resource_type": "CONSTRUCT_TEMPLATE",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "BLUNT_WEAPON",
+    "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "STATE_CRAFTING_RECIPE",
+        "ingredients": [
+          {
+            "unique": true,
+            "type": "BLUNT_WEAPON_HEAD"
+          },
+          {
+            "type": "HANDLE"
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "type": "BLUNT_WEAPON_HEAD"
+      },
+      {
+        "type": "HANDLE"
+      }
+    ],
+    "slots": [
+    ]
+  },
+  "model": {
+    "type": "COMPOSITE"
+  }
+}

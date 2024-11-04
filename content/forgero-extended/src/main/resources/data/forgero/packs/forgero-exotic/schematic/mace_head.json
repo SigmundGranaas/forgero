@@ -1,13 +1,13 @@
 {
-  "type": "SWORDLIKE_HEAD_SCHEMATIC",
+  "type": "BLUNT_WEAPON_HEAD_SCHEMATIC",
   "name": "mace_head-schematic",
-  "parent": "swordlike_base",
+  "parent": "blunt_weapon_base",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "SWORDLIKE_HEAD",
+    "type": "BLUNT_WEAPON_HEAD",
     "target": "CREATE",
     "recipes": [
       {
@@ -96,7 +96,7 @@
       "context": "LOCAL"
     },
     "name_replacement": {
-      "from": "spear",
+      "from": "blunt_weapon",
       "to": "mace"
     },
     "better_compat_attribute_container": "forgero:mace"

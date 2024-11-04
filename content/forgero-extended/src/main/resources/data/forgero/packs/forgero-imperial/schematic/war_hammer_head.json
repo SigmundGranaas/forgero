@@ -1,29 +1,15 @@
 {
-  "type": "SWORDLIKE_HEAD_SCHEMATIC",
+  "type": "BLUNT_WEAPON_HEAD_SCHEMATIC",
   "name": "war_hammer_head-schematic",
-  "parent": "swordlike_head_base",
+  "parent": "blunt_weapon_base",
+  "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "SWORDLIKE_HEAD",
+    "type": "BLUNT_WEAPON_HEAD",
     "target": "CREATE",
-    "recipes": [
-      {
-        "crafting_type": "SCHEMATIC_PART_CRAFTING",
-        "ingredients": [
-          {
-            "id": "this"
-          },
-          {
-            "type": "TOOL_MATERIAL",
-            "unique": true,
-            "amount": 4
-          }
-        ]
-      }
-    ],
     "components": [
       {
         "id": "this"
@@ -108,7 +94,7 @@
       "context": "LOCAL"
     },
     "name_replacement": {
-      "from": "spear",
+      "from": "blunt_weapon",
       "to": "war_hammer"
     },
     "better_compat_attribute_container": "forgero:mace"

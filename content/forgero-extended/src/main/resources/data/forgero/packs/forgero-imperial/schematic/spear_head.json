@@ -1,14 +1,14 @@
 {
-  "type": "SWORDLIKE_HEAD_SCHEMATIC",
+  "type": "SPEAR_HEAD_SCHEMATIC",
   "name": "spear_head-schematic",
-  "parent": "swordlike_head_base",
+  "parent": "spear_base",
   "resource_type": "DEFAULT",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "SWORDLIKE_HEAD",
+    "type": "SPEAR_HEAD",
     "target": "CREATE",
     "components": [
       {
