@@ -113,7 +113,8 @@
           {
             "type": "forgero:throw",
             "velocity_multiplier": "2.5",
-            "instability": "2"
+            "instability": "2",
+            "spin_type": "VERTICAL"
           },
           {
             "type": "minecraft:play_sound",
