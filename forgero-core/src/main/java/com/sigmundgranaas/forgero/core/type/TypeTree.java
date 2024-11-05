@@ -148,6 +148,10 @@ public class TypeTree implements UnresolvedTypeTree, MutableTypeTree {
 	}
 
 	public Type type(String type) {
-		return find(type).map(MutableTypeNode::type).orElse(Type.of(Identifiers.EMPTY_IDENTIFIER));
+		return find(type).map(MutableTypeNode::type).orElse(Type.EMPTY);
+	}
+
+	public List<TypeData> getMissingNodes() {
+		return missingNodes;
 	}
 }

@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.util.Identifiers;
 import com.sigmundgranaas.forgero.core.util.SchematicMatcher;
 import com.sigmundgranaas.forgero.core.util.TypeMatcher;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
 public interface Type extends Matchable {
+	Type EMPTY = new SimpleType(Identifiers.EMPTY_IDENTIFIER, Optional.empty(), new TypeMatcher());
 	Type HOLDABLE = new SimpleType("HOLDABLE", Optional.empty(), new TypeMatcher());
 
 	Type TOOL = new SimpleType("TOOL", Optional.of(HOLDABLE), new TypeMatcher());

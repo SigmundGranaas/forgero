@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
 import com.sigmundgranaas.forgero.core.resource.data.factory.PropertyBuilder;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.ConstructData;
@@ -27,7 +28,10 @@ import com.sigmundgranaas.forgero.core.state.upgrade.slot.SlotContainer;
 import com.sigmundgranaas.forgero.core.type.MutableTypeNode;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.type.TypeTree;
+import com.sigmundgranaas.forgero.core.type.TypeTreeDebugger;
 import com.sigmundgranaas.forgero.core.util.Identifiers;
+
+import static com.sigmundgranaas.forgero.core.type.Type.EMPTY;
 
 public class StateConverter implements DataConverter<State> {
 	private final HashMap<String, State> states = new HashMap<>();
@@ -167,6 +171,14 @@ public class StateConverter implements DataConverter<State> {
 	}
 
 	private Optional<State> createState(DataResource resource) {
+		Type type = tree.type(resource.type());
+		if(EMPTY.equals(type)) {
+			Forgero.LOGGER.error("Encountered invalid type: {}. This type was not found in the Type tree. This likely means that the type has been incorrectly initialized or overridden.", resource.type());
+			Forgero.LOGGER.error("Debugged type tree: \n {}", new TypeTreeDebugger(tree).debug());
+
+			throw new IllegalArgumentException(String.format("Encountered invalid type: %s. This type was not found in the Type tree.", resource.type()));
+		}
+
 		var state = State.of(resource.name(),
 				resource.nameSpace(),
 				tree.type(resource.type()),
