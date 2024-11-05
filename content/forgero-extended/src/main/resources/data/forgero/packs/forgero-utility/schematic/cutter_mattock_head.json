@@ -39,6 +39,15 @@
         "category": [
           "OFFENSIVE"
         ],
+        "description": "mattock_upgrade",
+        "type": "MATTOCK_UPGRADE_HEAD",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
         "description": "reinforcement",
         "type": "UPGRADE_MATERIAL",
         "tier": 1
