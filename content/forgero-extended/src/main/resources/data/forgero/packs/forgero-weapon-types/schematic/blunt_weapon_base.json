@@ -1,5 +1,5 @@
 {
-  "name": "swordlike_base",
+  "name": "blunt_weapon_base",
   "resource_type": "ABSTRACT",
   "properties": {
     "grouped_attributes": [

@@ -1,7 +1,7 @@
 {
   "type": "BLUNT_WEAPON_HEAD_SCHEMATIC",
   "name": "club_head-schematic",
-  "parent": "blunt_weapon_head_base",
+  "parent": "blunt_weapon_base",
   "container": {
     "type": "CREATE",
     "id": "this"
