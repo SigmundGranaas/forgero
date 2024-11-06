@@ -23,6 +23,9 @@ public class ModelEntryData {
 	private String template;
 
 	@Nullable
+	private String parent;
+
+	@Nullable
 	private String palette;
 
 	@Builder.Default
@@ -81,6 +84,11 @@ public class ModelEntryData {
 		return Objects.requireNonNullElse(texture, Identifiers.EMPTY_IDENTIFIER);
 	}
 
+
+	@Nullable
+	public String getParent() {
+		return Objects.requireNonNullElse(parent ,Identifiers.EMPTY_IDENTIFIER);
+  }
 	@NotNull
 	public Optional<JsonObject> getDisplayOverrides() {
 		return Optional.ofNullable(displayOverrides);

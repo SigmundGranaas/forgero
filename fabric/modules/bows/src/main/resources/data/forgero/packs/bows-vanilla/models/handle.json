@@ -16,6 +16,13 @@
             "type:BOW"
           ],
           "template": "empty_model"
+        },
+        {
+          "target": [
+            "type:ARROW",
+            "type:CROSSBOW"
+          ],
+          "template": "empty_model"
         }
       ]
     },
@@ -32,6 +39,13 @@
           "target": [
             "type:ARROW",
             "type:BOW"
+          ],
+          "template": "empty_model"
+        },
+        {
+          "target": [
+            "type:ARROW",
+            "type:CROSSBOW"
           ],
           "template": "empty_model"
         }
@@ -99,7 +113,8 @@
             {
               "type": "forgero:bow_pull",
               "pull": 0.9
-            }
+            },
+            "type:BOW"
           ],
           "template": "arrow_shaft_in_bow.png"
         },
@@ -108,7 +123,8 @@
             {
               "type": "forgero:bow_pull",
               "pull": 0.6
-            }
+            },
+            "type:BOW"
           ],
           "template": "arrow_shaft_in_bow.png"
         },
@@ -117,7 +133,8 @@
             {
               "type": "forgero:bow_pull",
               "pull": 0.1
-            }
+            },
+            "type:BOW"
           ],
           "offset": [
             -1,
@@ -134,6 +151,50 @@
             1
           ],
           "template": "arrow_shaft_in_bow.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            },
+            "type:CROSSBOW"
+          ],
+          "template": "arrow_shaft_in_crossbow.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            },
+            "type:CROSSBOW"
+          ],
+          "template": "arrow_shaft_in_crossbow.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            },
+            "type:CROSSBOW"
+          ],
+          "offset": [
+            -1,
+            1
+          ],
+          "template": "arrow_shaft_in_crossbow.png"
+        },
+        {
+          "predicate": [
+            "type:CROSSBOW"
+          ],
+          "offset": [
+            -1,
+            1
+          ],
+          "template": "arrow_shaft_in_crossbow.png"
         },
         {
           "predicate": [

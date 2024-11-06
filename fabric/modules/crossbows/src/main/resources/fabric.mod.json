@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-crossbows",
+  "version": "${version}",
+  "name": "Forgero bow module",
+  "description": "Bows and arrows support for Forgero.",
+  "authors": [
+    "Sigmund Granaas Sandring"
+  ],
+  "contributors": [
+    "JorisdeBeer",
+    "Steveplays28"
+  ],
+  "contact": {
+    "homepage": "https://sigmundgranaas.com",
+    "sources": "https://github.com/sigmundgranaas/forgero",
+    "issues": "https://github.com/sigmundgranaas/forgero/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/forgero/bows.png",
+  "environment": "*",
+  "entrypoints": {
+    "forgeroPreInitialization": [
+      "com.sigmundgranaas.forgero.bow.ForgeroCrossBowInitializer"
+    ]
+  },
+  "mixins": [
+    "forgero-crossbows.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.12.12",
+    "fabric": "*",
+    "minecraft": "1.20.1",
+    "java": ">=17",
+    "forgero-fabric-core": "*"
+  },
+  "suggests": {
+    "patchouli": "*",
+    "lambdynamiclights": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/v6sDsftE9N"
+      },
+      "badges": [
+        "library"
+      ],
+      "parent": {
+        "id": "forgero",
+        "name": "Forgero",
+        "description": "Equipment crafting expansion mod for Fabric!",
+        "icon": "/assets/bows.png"
+      }
+    }
+  }
+}

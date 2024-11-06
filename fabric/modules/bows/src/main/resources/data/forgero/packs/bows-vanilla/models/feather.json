@@ -51,6 +51,50 @@
             1
           ],
           "template": "arrow_feather_in_bow.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            },
+            "type:BOW"
+          ],
+          "template": "arrow_feather_in_bow.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            },
+            "type:CROSSBOW"
+          ],
+          "template": "arrow_feather_in_bow.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            },
+            "type:CROSSBOW"
+          ],
+          "offset": [
+            -1,
+            1
+          ],
+          "template": "arrow_feather_in_bow.png"
+        },
+        {
+          "predicate": [
+            "type:CROSSBOW"
+          ],
+          "offset": [
+            -1,
+            1
+          ],
+          "template": "arrow_feather_in_bow.png"
         }
       ]
     },

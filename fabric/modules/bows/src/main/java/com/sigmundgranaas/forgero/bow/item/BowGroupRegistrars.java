@@ -3,11 +3,11 @@ package com.sigmundgranaas.forgero.bow.item;
 import static com.sigmundgranaas.forgero.bow.ForgeroBowInitializer.FORGERO_BOWS;
 import static com.sigmundgranaas.forgero.minecraft.common.item.RegistryUtils.typeConverter;
 
-import com.sigmundgranaas.forgero.core.state.StateProvider;
-import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.registry.GenericRegistry;
 import com.sigmundgranaas.forgero.core.registry.RankableConverter;
 import com.sigmundgranaas.forgero.core.registry.Registerable;
+import com.sigmundgranaas.forgero.core.state.StateProvider;
+import com.sigmundgranaas.forgero.core.type.Type;
 
 import net.minecraft.item.ItemGroup;
 

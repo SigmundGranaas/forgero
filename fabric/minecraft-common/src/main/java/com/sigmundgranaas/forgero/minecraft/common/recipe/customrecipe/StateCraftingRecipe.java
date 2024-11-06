@@ -45,32 +45,7 @@ public class StateCraftingRecipe extends ShapedRecipe {
 
 	@Override
 	public boolean matches(RecipeInputInventory craftingInventory, World world) {
-		if (super.matches(craftingInventory, world)) {
-			if (result().isPresent() && result().get() instanceof Composite result) {
-
-				return IntStream.range(0, craftingInventory.size())
-						.mapToObj(craftingInventory::getStack)
-						.map(this::convertHead)
-						.flatMap(Optional::stream)
-						.map(State::identifier)
-						.map(id -> id.split(":")[1])
-						.anyMatch(name -> name.split("-")[0].equals(result.name().split("-")[0]));
-			}
-		}
-		return false;
-	}
-
-	private Optional<State> convertHead(ItemStack stack) {
-		var converted = service.convert(stack);
-		Predicate<State> isPartHead = (part) ->
-								part.test(Type.WEAPON_HEAD) ||
-								part.test(Type.TOOL_PART_HEAD) ||
-								part.test(Type.ARROW_HEAD) ||
-								part.test(Type.BOW_LIMB);
-		if (converted.isPresent() && isPartHead.test(converted.get())) {
-			return converted;
-		}
-		return Optional.empty();
+		return super.matches(craftingInventory, world);
 	}
 
 	private List<State> partsFromCraftingInventory(RecipeInputInventory craftingInventory) {

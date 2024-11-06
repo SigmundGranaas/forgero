@@ -67,7 +67,6 @@ public class ForgeroBowInitializer implements ForgeroPreInitializationEntryPoint
 	public void onPreInitialization() {
 		PredicateFactory.register(BowPullPredicate.BowPullPredicateBuilder::new);
 
-
 		var settingRegistry = ItemRegistries.SETTING_PROCESSOR;
 		var groupRegistry = ItemRegistries.GROUP_CONVERTER;
 
@@ -97,6 +96,7 @@ public class ForgeroBowInitializer implements ForgeroPreInitializationEntryPoint
 				.type(Type.BOW_LIMB)
 				.attributes(bows)
 				.register();
+
 
 		var arrows = List.of(AttackDamage.KEY, ACCURACY, Weight.KEY);
 		TooltipAttributeRegistry.filterBuilder()

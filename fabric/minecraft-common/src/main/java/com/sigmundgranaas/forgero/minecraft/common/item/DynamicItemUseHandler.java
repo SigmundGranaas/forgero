@@ -14,6 +14,7 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.use.BaseHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.BlockUseHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.EntityUseHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.UsageTickHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.UseHandler;
 
 import net.minecraft.entity.LivingEntity;
@@ -61,7 +62,7 @@ import net.minecraft.world.World;
  * In this example, a dynamic pickaxe item is created that can have custom behavior
  * when used on entities, blocks, or in general use scenarios.
  */
-public interface DynamicItemUseHandler extends EntityUseHandler, UseHandler, BlockUseHandler, StopHandler {
+public interface DynamicItemUseHandler extends EntityUseHandler, UseHandler, BlockUseHandler, StopHandler, UsageTickHandler {
 
 	default BaseHandler of(ItemStack stack, MatchContext context) {
 		var feature = cachedFilteredFeature(stack, OnUseFeature.KEY, context);
@@ -134,12 +135,12 @@ public interface DynamicItemUseHandler extends EntityUseHandler, UseHandler, Blo
 	default void dynamicUsageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
 		of(
 				stack,
+				OnUseFeature.KEY,
 				MatchContext.of()
 						.put(STACK, stack)
 						.put(WORLD, world)
 						.put(ENTITY, user)
-		)
-				.usageTick(world, user, stack, remainingUseTicks);
+		).ifPresent(feature -> feature.usageTick(world, user, stack, remainingUseTicks));
 	}
 
 

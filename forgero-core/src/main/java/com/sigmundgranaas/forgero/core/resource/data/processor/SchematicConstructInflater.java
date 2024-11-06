@@ -126,7 +126,7 @@ public class SchematicConstructInflater {
 		builder.target(Identifiers.THIS_IDENTIFIER);
 		var construct = builder.build();
 		var templateBuilder = templateProvider.apply(construct.type()).map(DataResource::toBuilder).orElse(DataResource.builder());
-		if (hasDefaults(construct) || resource.resourceType() == ResourceType.DEFAULT || name.equals("handle-schematic-oak")) {
+		if (hasDefaults(construct) || resource.resourceType() == ResourceType.DEFAULT || name.equals("handle-schematic-oak") || name.equals("crossbow_stock-schematic-oak")) {
 			templateBuilder.resourceType(ResourceType.DEFAULT);
 		}
 		return templateBuilder

@@ -6,6 +6,7 @@ import com.sigmundgranaas.forgero.core.registry.GenericRegistry;
 import com.sigmundgranaas.forgero.core.registry.RankableConverter;
 import com.sigmundgranaas.forgero.core.registry.Registerable;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
+import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.minecraft.common.item.BuildableStateConverter;
 import com.sigmundgranaas.forgero.minecraft.common.item.ItemData;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
@@ -27,13 +28,13 @@ public class DynamicBowItemRegistrationHandler implements Registerable<RankableC
 
 		registry.register("forgero:bow", base.toBuilder()
 				.priority(2)
-				.matcher(typeMatcher("BOW"))
+				.matcher(typeMatcher(Type.BOW))
 				.item(this::bow)
 				.build());
 
 		registry.register("forgero:arrow", base.toBuilder()
 				.priority(2)
-				.matcher(typeMatcher("ARROW"))
+				.matcher(typeMatcher(Type.ARROW))
 				.item(this::arrow)
 				.build());
 	}
@@ -41,6 +42,7 @@ public class DynamicBowItemRegistrationHandler implements Registerable<RankableC
 	private Item bow(StateProvider provider, Item.Settings settings) {
 		return new DynamicBowItem(settings, provider, StateService.INSTANCE);
 	}
+
 
 	private Item arrow(StateProvider provider, Item.Settings settings) {
 		return new DynamicArrowItem(settings, provider);

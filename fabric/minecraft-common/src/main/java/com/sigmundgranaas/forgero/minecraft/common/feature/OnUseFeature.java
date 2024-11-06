@@ -18,6 +18,7 @@ import com.sigmundgranaas.forgero.minecraft.common.handler.use.BaseHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.BlockUseHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.EntityUseHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.StopHandler;
+import com.sigmundgranaas.forgero.minecraft.common.handler.use.UsageTickHandler;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.UseHandler;
 
 import net.minecraft.entity.Entity;
@@ -89,10 +90,11 @@ import net.minecraft.world.World;
  *   <li><b>on_stop:</b> Defines a series of actions that occur when the use of the item is stopped. This includes throwing a trident, playing a sound effect, and consuming a stack of the item.</li>
  * </ul>
  */
-public class OnUseFeature extends BasePredicateFeature implements BlockUseHandler, EntityUseHandler, UseHandler, AfterUseHandler, StopHandler {
+public class OnUseFeature extends BasePredicateFeature implements BlockUseHandler, EntityUseHandler, UseHandler, AfterUseHandler, StopHandler, UsageTickHandler {
 	public static final String TYPE = "minecraft:on_use";
 	public static final ClassKey<OnUseFeature> KEY = new ClassKey<>(TYPE, OnUseFeature.class);
 	public static final String USE = "use";
+	public static final String USAGE_TICK = "usage_tick";
 	public static final String ENTIY_USE = "entity";
 	public static final String BLOCK_USE = "block";
 	public static final String STOP_USE = "on_stop";
@@ -101,6 +103,8 @@ public class OnUseFeature extends BasePredicateFeature implements BlockUseHandle
 	public static final FeatureBuilder<OnUseFeature> BUILDER = FeatureBuilder.of(TYPE, OnUseFeature::buildFromBase);
 
 	private final List<UseHandler> onUse;
+
+	List<UsageTickHandler> usageTickHandlers;
 
 	private final List<EntityUseHandler> useOnEntity;
 
@@ -118,7 +122,7 @@ public class OnUseFeature extends BasePredicateFeature implements BlockUseHandle
 
 	private final int maxUseTime;
 
-	public OnUseFeature(BasePredicateData data, List<UseHandler> onUse, List<EntityUseHandler> useOnEntity, List<BlockUseHandler> useOnBlock, List<StopHandler> onStoppedUsing, List<AfterUseHandler> afterUseHandlers, BaseHandler baseHandler, boolean usedOnRelease, UseAction action, int maxUseTime) {
+	public OnUseFeature(BasePredicateData data, List<UseHandler> onUse, List<UsageTickHandler> usageTickHandlers, List<EntityUseHandler> useOnEntity, List<BlockUseHandler> useOnBlock, List<StopHandler> onStoppedUsing, List<AfterUseHandler> afterUseHandlers, BaseHandler baseHandler, boolean usedOnRelease, UseAction action, int maxUseTime) {
 		super(data);
 		this.onUse = onUse;
 		this.useOnEntity = useOnEntity;
@@ -129,7 +133,7 @@ public class OnUseFeature extends BasePredicateFeature implements BlockUseHandle
 		this.usedOnRelease = usedOnRelease;
 		this.action = action;
 		this.maxUseTime = maxUseTime;
-
+		this.usageTickHandlers = usageTickHandlers;
 		if (!data.type().equals(TYPE)) {
 			throw new IllegalArgumentException("Type needs to be: " + TYPE);
 		}
@@ -138,6 +142,8 @@ public class OnUseFeature extends BasePredicateFeature implements BlockUseHandle
 
 	private static OnUseFeature buildFromBase(BasePredicateData data, JsonElement element) {
 		List<UseHandler> use = parseHandler(UseHandler.KEY, element, USE);
+
+		List<UsageTickHandler> usageTick = parseHandler(UsageTickHandler.KEY, element, USAGE_TICK);
 
 		List<EntityUseHandler> entity = parseHandler(EntityUseHandler.KEY, element, ENTIY_USE);
 
@@ -160,15 +166,16 @@ public class OnUseFeature extends BasePredicateFeature implements BlockUseHandle
 			}
 		}
 
-		BaseHandler base = Stream.of(use, entity, block, stop)
+		BaseHandler base = Stream.of(use, usageTick, entity, block, stop)
 				.flatMap(List::stream)
+				.filter(BaseHandler.class::isInstance)
 				.map(BaseHandler.class::cast)
 				.findFirst()
 				.orElse(BaseHandler.DEFAULT);
 
 		boolean usedOnRelease = element.isJsonObject() && element.getAsJsonObject().has("used_on_release") && element.getAsJsonObject().get("used_on_release").getAsBoolean();
 
-		return new OnUseFeature(data, use, entity, block, stop, afterUseHandler, base, usedOnRelease, action, maxUseTime);
+		return new OnUseFeature(data, use, usageTick, entity, block, stop, afterUseHandler, base, usedOnRelease, action, maxUseTime);
 	}
 
 	private static <T> List<T> parseHandler(ClassKey<T> key, JsonElement element, String jsonKey) {
@@ -274,7 +281,7 @@ public class OnUseFeature extends BasePredicateFeature implements BlockUseHandle
 
 	@Override
 	public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
-		baseHandler.usageTick(world, user, stack, remainingUseTicks);
+		usageTickHandlers.forEach(it -> it.usageTick(world, user, stack, remainingUseTicks));
 	}
 
 	@Override
