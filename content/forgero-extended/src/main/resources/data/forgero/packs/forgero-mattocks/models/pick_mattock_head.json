@@ -1,5 +1,5 @@
 {
-  "type": "HOE_HEAD",
+  "type": "PICKAXE_HEAD",
   "models": [
     {
       "name": "pick_mattock_head",
@@ -9,7 +9,7 @@
       "order": 20
     },
     {
-      "name": "hoe_dye",
+      "name": "pickaxe_dye",
       "variants": [
         {
           "target": [
@@ -20,7 +20,7 @@
       ]
     },
     {
-      "name": "hoe_head_material",
+      "name": "pickaxe_head_material",
       "variants": [
         {
           "target": [

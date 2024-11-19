@@ -4,7 +4,7 @@
     {
       "name": "shovel_mattock_head",
       "type": "GENERATE",
-      "template": "utility/cutter_mattock_head.png",
+      "template": "utility/shovel_mattock_head.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },
