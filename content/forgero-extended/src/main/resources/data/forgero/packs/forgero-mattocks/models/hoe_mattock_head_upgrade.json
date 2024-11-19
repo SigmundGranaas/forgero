@@ -2,19 +2,19 @@
   "type": "MATTOCK_UPGRADE_HEAD",
   "models": [
     {
-      "name": "cutter_mattock_head",
+      "name": "hoe_mattock_head",
       "type": "GENERATE",
-      "template": "utility/cutter_mattock_head_upgrade.png",
+      "template": "utility/hoe_mattock_head_upgrade.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },
     {
       "target": [
         "type:TOOL_MATERIAL",
-        "id:cutter_mattock_upgrade_head-schematic"
+        "id:hoe_mattock_upgrade_head-schematic"
       ],
       "modelType": "BASED_COMPOSITE",
-      "template": "cutter_mattock_head"
+      "template": "hoe_mattock_head"
     }
   ]
 }

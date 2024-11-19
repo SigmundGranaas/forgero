@@ -1,13 +1,13 @@
 {
-  "type": "MATTOCK_UPGRADE_SCHEMATIC",
-  "name": "cutter_mattock_upgrade_head-schematic",
-  "parent": "axe_head_base",
+  "type": "PICKAXE_HEAD_SCHEMATIC",
+  "name": "pick_mattock_head-schematic",
+  "parent": "pickaxe_head_base",
   "container": {
     "type": "CREATE",
     "id": "this"
   },
   "construct": {
-    "type": "MATTOCK_UPGRADE_HEAD",
+    "type": "PICKAXE_HEAD",
     "target": "CREATE",
     "recipes": [
       {
@@ -34,6 +34,15 @@
       }
     ],
     "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "description": "mattock_upgrade",
+        "type": "MATTOCK_UPGRADE_HEAD",
+        "tier": 1
+      },
       {
         "upgrade_type": "SMITHING",
         "category": [
@@ -69,17 +78,17 @@
           {
             "id": "variant-schematic-mining_speed-composite",
             "type": "MINING_SPEED",
-            "value": 1.25
+            "value": 1.45
           },
           {
             "id": "variant-schematic-durability-composite",
             "type": "DURABILITY",
-            "value": 1.20
+            "value": 1.35
           },
           {
             "id": "variant-schematic-weight-composite",
             "type": "WEIGHT",
-            "value": 1.35
+            "value": 1.25
           }
         ]
       }
@@ -92,13 +101,21 @@
         "category": "LOCAL",
         "operation": "ADDITION",
         "value": 75
+      },
+      {
+        "id": "schematic-attack_damage-composite",
+        "type": "ATTACK_DAMAGE",
+        "order": "END",
+        "context": "COMPOSITE",
+        "operation": "FORCE",
+        "value": 1
       }
     ],
     "features": [
       {
         "type": "minecraft:block_effectiveness",
         "tags": [
-          "minecraft:mineable/axe"
+          "minecraft:mineable/pickaxe"
         ]
       }
     ]
@@ -110,7 +127,7 @@
     },
     "name_replacement": {
       "from": "hoe",
-      "to": "cutter_mattock"
+      "to": "pick_mattock"
     },
     "better_compat_attribute_container": "forgero:pickaxe"
   }
