@@ -32,6 +32,29 @@ public class CommandRegistrar implements Registrar {
 			}));
 
 			dispatcher.register(literal("forgero")
+					.then(literal("extended_hall")
+							.requires(ctx -> ctx.hasPermissionLevel(2))
+							.executes(context -> {
+								BlockPos pos = context.getSource().getPlayer().getBlockPos().add(-12, -5, -10);
+								BlockState initialState = context.getSource().getWorld().getBlockState(pos);
+								Optional<StructureTemplate> station = context.getSource().getWorld().getStructureTemplateManager().getTemplate(new Identifier("forgero:extended-hall"));
+								context.getSource().getWorld().setBlockState(pos, Blocks.STRUCTURE_BLOCK.getDefaultState());
+								if (station.isPresent() && !context.getSource().getWorld().isClient) {
+									var structureBlock = new StructureBlockBlockEntity(pos, context.getSource().getWorld().getBlockState(pos));
+									//structureBlock.setStructureName(new Identifier("forgero:forgerostation"));
+									structureBlock.loadStructure(context.getSource().getWorld());
+									structureBlock.place(context.getSource().getWorld(), true, station.get());
+									context.getSource().sendMessage(Text.literal("Placed Forgero testing station"));
+									context.getSource().getWorld().setBlockState(pos, initialState);
+
+									station.get().place(context.getSource().getWorld(), pos, pos, new StructurePlacementData(), Random.create(), 3);
+								}
+								return 1;
+							})
+					)
+			);
+
+			dispatcher.register(literal("forgero")
 					.then(literal("createstation")
 							.requires(ctx -> ctx.hasPermissionLevel(2))
 							.executes(context -> {

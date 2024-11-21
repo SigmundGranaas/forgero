@@ -1,0 +1,111 @@
+{
+  "type": "POMMEL",
+  "models": [
+    {
+      "name": "pommel",
+      "template": "pommel.png",
+      "type": "GENERATE",
+      "palette": "METAL",
+      "order": 60,
+      "variants": [
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "template": "tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:SWORD"
+          ],
+          "template": "sword_pommel.png"
+        },
+        {
+          "target": [
+            "type:HANDLE"
+          ],
+          "template": "tool_pommel.png"
+        }
+      ]
+    },
+    {
+      "name": "pommel_dye",
+      "template": "pommel.png",
+      "type": "GENERATE",
+      "palette": "DYE",
+      "order": 65,
+      "variants": [
+        {
+          "target": [
+            "type:HOE"
+          ],
+          "template": "tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:PICKAXE"
+          ],
+          "template": "tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:AXE"
+          ],
+          "template": "tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:SHOVEL"
+          ],
+          "template": "tool_pommel.png"
+        },
+        {
+          "target": [
+            "type:SWORD"
+          ],
+          "template": "sword_pommel.png"
+        },
+        {
+          "target": [
+            "type:HANDLE"
+          ],
+          "template": "tool_pommel.png"
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:METAL",
+        "type:POMMEL_SCHEMATIC"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "pommel"
+    },
+    {
+      "target": [
+        "type:DYE",
+        "slot:0"
+      ],
+      "modelType": "UPGRADE",
+      "template": "pommel_dye"
+    }
+  ]
+}

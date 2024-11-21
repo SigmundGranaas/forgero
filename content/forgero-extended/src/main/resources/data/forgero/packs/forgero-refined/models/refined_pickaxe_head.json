@@ -8,9 +8,9 @@
       "variants": [
         {
           "target": [
-            "model:refined_pickaxe_head.png"
+            "model:refined/refined_pickaxe_head.png"
           ],
-          "template": "refined_pickaxe_head_tip_reinforcement.png"
+          "template": "refined/refined_pickaxe_head_tip_reinforcement.png"
         }
       ]
     },
@@ -19,16 +19,16 @@
       "variants": [
         {
           "target": [
-            "model:refined_pickaxe_head.png"
+            "model:refined/refined_pickaxe_head.png"
           ],
-          "template": "refined_pickaxe_head.png"
+          "template": "refined/refined_pickaxe_head.png"
         }
       ]
     },
     {
       "name": "refined_pickaxe_head",
       "type": "GENERATE",
-      "template": "refined_pickaxe_head.png",
+      "template": "refined/refined_pickaxe_head.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },

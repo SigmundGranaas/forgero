@@ -87,6 +87,51 @@
       }
     ],
     "attributes": [
+    ],
+    "features": [
+      {
+        "type": "minecraft:on_hit",
+        "on_hit": [
+          {
+            "type": "minecraft:teleport",
+            "target": "minecraft:targeted_entity",
+            "random": true,
+            "on_ground": true,
+            "max_distance": 8
+          },
+          {
+            "type": "minecraft:play_sound",
+            "sound": "minecraft:item.chorus_fruit.teleport"
+          },
+          {
+            "type": "minecraft:particle",
+            "particle": "minecraft:portal",
+            "count": 100,
+            "velocity": {
+              "x": 0,
+              "y": 0.2,
+              "z": 0
+            },
+            "velocityRandomness": {
+              "x": 0.1,
+              "y": 0.1,
+              "z": 0.1
+            },
+            "behavior": "INWARD",
+            "offset": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            }
+          }
+        ],
+        "after_use": {
+          "type": "minecraft:cooldown",
+          "duration": 50
+        },
+        "title": "feature.forgero.teleportation",
+        "description": "feature.forgero.teleportation.description"
+      }
     ]
   },
   "palette": {

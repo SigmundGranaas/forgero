@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "###",
+        "#O#",
+        "###"
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:emerald"
+        },
+        "O": {
+            "item": "forgero:emerald_gem_1"
+        }
+    },
+    "result": {
+        "item": "forgero:emerald_gem_2",
+        "count": 1
+    }
+}

@@ -1,0 +1,53 @@
+{
+  "type": "HANDLE",
+  "models": [
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:utility/cutter_mattock_head.png"
+          ],
+          "template": "utility/mattock_handle.png"
+        }
+      ]
+    },
+    {
+      "name": "handle_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:utility/cutter_mattock_head.png"
+          ],
+          "template": "utility/mattock_handle.png"
+        }
+      ]
+    },
+    {
+      "name": "handle",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:utility/pick_mattock_head.png"
+          ],
+          "template": "utility/mattock_handle.png"
+        }
+      ]
+    },
+    {
+      "name": "handle_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:utility/pick_mattock_head.png"
+          ],
+          "template": "utility/mattock_handle.png"
+        }
+      ]
+    }
+  ]
+}
