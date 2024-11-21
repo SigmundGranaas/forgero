@@ -286,8 +286,6 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 		ARRPGenerator.register(new RepairKitResourceGenerator(ForgeroConfigurationLoader.configuration, service));
 		if (ForgeroConfigurationLoader.configuration.enableRecipesForAllSchematics) {
 			ARRPGenerator.register(() -> new AllPartToAllSchematicsGenerator(service, new PartToSchematicGenerator.SchematicRecipeCreator(), new PartToSchematicGenerator.AllVariantFilter()));
-		} else {
-			ARRPGenerator.register(() -> new PartToSchematicGenerator(service, new PartToSchematicGenerator.SchematicRecipeCreator(), new PartToSchematicGenerator.BaseVariantFilter()));
 		}
 
 		ARRPGenerator.register(() -> new WoodPartsTag(ForgeroStateRegistry.TREE));

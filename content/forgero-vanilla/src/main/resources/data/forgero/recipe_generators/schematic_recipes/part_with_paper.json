@@ -1,0 +1,22 @@
+{
+  "generator_type": "forgero:mapped_recipe_generator",
+  "identifier": "forgero:${material.name}-${part}-paper",
+  "variables": {
+    "material": {
+      "type": "TOOL_MATERIAL"
+    },
+    "part": ["pickaxe_head", "axe_head", "hoe_head", "shovel_head", "handle", "binding"]
+  },
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "forgero:${material.name}-${part}"
+    },
+    {
+      "item": "minecraft:paper"
+    }
+  ],
+  "result": {
+    "item":  "forgero:${part}-schematic"
+  }
+}
