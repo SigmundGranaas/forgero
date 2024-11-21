@@ -122,7 +122,9 @@
             "type": "minecraft:consume_stack",
             "count": 1
           }
-        ]
+        ],
+        "title": "feature.forgero.throwable.title",
+        "description": "feature.forgero.throwable.description"
       }
     ]
   },
