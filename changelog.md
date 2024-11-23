@@ -1,6 +1,5 @@
-# Forgero Beta release 0.13-RC-2
+# Forgero Beta release 0.13
 
-## Changelog
 ## Weapons
 A lot of cool new weapons have been added, new weapon types such as spears and clubs are also added. The new weapons each have a distinct purpose and are more historically accurate. They also look a lot better!
 
