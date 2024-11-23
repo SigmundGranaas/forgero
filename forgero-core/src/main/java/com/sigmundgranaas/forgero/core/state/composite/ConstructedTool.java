@@ -42,7 +42,7 @@ public class ConstructedTool extends ConstructedComposite implements Conditional
 
 	public ConstructedTool(State head, State handle, SlotContainer slots, IdentifiableContainer id, List<PropertyContainer> conditions) {
 		super(slots, id, List.of(head, handle));
-		this.conditions = conditions;
+		this.conditions = new ArrayList<>(conditions);
 		this.head = head;
 		this.handle = handle;
 	}
@@ -66,7 +66,7 @@ public class ConstructedTool extends ConstructedComposite implements Conditional
 						var ingredients = new ArrayList<>(parts());
 						ingredients.set(i, compositeRemoved);
 						var optBuilder = ToolBuilder.builder(ingredients).map(builder -> builder.addSlotContainer(slotContainer.copy())
-								.conditions(conditions)
+								.conditions(new ArrayList<>(conditions))
 								.type(type())
 								.id(identifier()));
 						if (optBuilder.isPresent()) {
@@ -112,7 +112,7 @@ public class ConstructedTool extends ConstructedComposite implements Conditional
 		}
 		return ToolBuilder.builder(head, handle)
 				.addSlotContainer(slotContainer.copy())
-				.conditions(conditions)
+				.conditions(new ArrayList<>(conditions))
 				.type(type())
 				.id(identifier());
 	}
@@ -237,7 +237,7 @@ public class ConstructedTool extends ConstructedComposite implements Conditional
 		}
 
 		public ToolBuilder conditions(List<PropertyContainer> conditions) {
-			this.conditions = conditions;
+			this.conditions = new ArrayList<>(conditions);
 			return this;
 		}
 
