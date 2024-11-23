@@ -31,6 +31,7 @@ public class CompositeEncoder implements CompoundEncoder<State> {
 		conditional.namedConditions(conditional.localConditions()).stream()
 				.map(NamedCondition::identifier)
 				.map(NbtString::of)
+				.distinct()
 				.forEach(list::add);
 		return list;
 	}
