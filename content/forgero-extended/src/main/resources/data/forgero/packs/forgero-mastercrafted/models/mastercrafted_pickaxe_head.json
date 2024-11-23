@@ -3,21 +3,19 @@
   "models": [
     {
       "name": "pickaxe_head_material",
-      "type": "GENERATE",
-      "palette": "MATERIAL",
       "variants": [
         {
           "target": [
-            "model:mastercrafted_pickaxe_head.png"
+            "model:mastercrafted/mastercrafted_pickaxe_head.png"
           ],
-          "template": "mastercrafted_pickaxe_head_tip_reinforcement.png"
+          "template": "mastercrafted/mastercrafted_pickaxe_head_tip_reinforcement.png"
         }
       ]
     },
     {
       "name": "mastercrafted_pickaxe_head",
       "type": "GENERATE",
-      "template": "mastercrafted_pickaxe_head.png",
+      "template": "mastercrafted/mastercrafted_pickaxe_head.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },
@@ -26,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:mastercrafted_pickaxe_head.png"
+            "model:mastercrafted/mastercrafted_pickaxe_head.png"
           ],
-          "template": "mastercrafted_pickaxe_head.png"
+          "template": "mastercrafted/mastercrafted_pickaxe_head.png"
         }
       ]
     },

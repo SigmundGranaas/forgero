@@ -6,9 +6,9 @@
       "variants": [
         {
           "target": [
-            "model:refined_hoe_head.png"
+            "model:refined/refined_hoe_head.png"
           ],
-          "template": "refined_hoe_head_tip_reinforcement.png"
+          "template": "refined/refined_hoe_head_tip_reinforcement.png"
         }
       ]
     },
@@ -17,16 +17,16 @@
       "variants": [
         {
           "target": [
-            "model:refined_hoe_head.png"
+            "model:refined/refined_hoe_head.png"
           ],
-          "template": "refined_hoe_head.png"
+          "template": "refined/refined_hoe_head.png"
         }
       ]
     },
     {
       "name": "refined_hoe_head",
       "modelType": "GENERATE",
-      "template": "refined_hoe_head.png",
+      "template": "refined/refined_hoe_head.png",
       "palette": "TOOL_MATERIAL",
       "order": 20
     },

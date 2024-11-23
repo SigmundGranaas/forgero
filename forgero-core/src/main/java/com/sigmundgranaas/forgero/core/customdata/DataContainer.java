@@ -38,4 +38,5 @@ public interface DataContainer {
 
 	//TODO: remove target in favour of a better context solution
 	DataContainer merge(DataContainer other, Context context, Target target);
+
 }

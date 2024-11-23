@@ -5,11 +5,16 @@ import java.util.List;
 import java.util.Optional;
 
 import com.google.common.collect.ImmutableList;
+import com.google.gson.Gson;
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResource;
+import com.sigmundgranaas.forgero.core.resource.data.v2.data.DataResourceSerializer;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.ResourceType;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.TypeData;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.namedElement;
 import com.sigmundgranaas.forgero.core.util.Identifiers;
+
+import static com.sigmundgranaas.forgero.core.util.Identifiers.EMPTY_IDENTIFIER;
 
 public class TypeFactory {
 	public static List<TypeData> convert(List<DataResource> resources) {
@@ -28,10 +33,12 @@ public class TypeFactory {
 	public List<TypeData> handleTypeResource(DataResource type) {
 		String name = type.name();
 		TypeData data;
-		if (name.equals(Identifiers.EMPTY_IDENTIFIER)) {
-			return Collections.emptyList();
+		if (name.equals(EMPTY_IDENTIFIER)) {
+			DataResourceSerializer serializer = new DataResourceSerializer();
+			Forgero.LOGGER.error("Empty identifier for name: {}", serializer.toJson(type));
+			throw new IllegalArgumentException("Empty name field is not allowed in type definitions.");
 		}
-		if (type.parent().equals(Identifiers.EMPTY_IDENTIFIER)) {
+		if (type.parent().equals(EMPTY_IDENTIFIER)) {
 			data = new TypeData(name, Optional.empty(), Collections.emptyList());
 		} else {
 			data = new TypeData(name, Optional.of(type.parent()), Collections.emptyList());

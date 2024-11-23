@@ -6,14 +6,7 @@
       "type": "TOOL_MATERIAL"
     },
     "variant": [
-      "path_mining_pickaxe_head",
-      "tree_feller_head",
-      "ore_miner_pickaxe_head",
-      "tree_chopper_head",
-      "saber_blade",
-      "scimitar_blade",
-      "serrated_sword_blade",
-      "slanted_sword_blade"
+
     ]
   },
   "type": "forgero:schematic_part_crafting",

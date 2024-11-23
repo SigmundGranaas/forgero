@@ -50,7 +50,7 @@ public class ItemGroups {
 	}
 
 	private static ItemStack createTrinketIcon() {
-		return new ItemStack(Registries.ITEM.get(new Identifier("forgero:redstone-gem")));
+		return new ItemStack(Registries.ITEM.get(new Identifier("forgero:diamond_gem_5")));
 	}
 
 	static {

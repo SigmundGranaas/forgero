@@ -14,6 +14,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.List;
@@ -21,6 +23,14 @@ import java.util.Locale;
 import java.util.stream.Stream;
 
 public class AttributeWriterHelper extends BaseWriter {
+	private static final DecimalFormat ENGLISH_FORMAT;
+
+	static {
+		DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.ENGLISH);
+		ENGLISH_FORMAT = new DecimalFormat("0.##", symbols);
+		ENGLISH_FORMAT.setMaximumFractionDigits(2);
+	}
+
 	private final PropertyContainer container;
 	private final AttributeHelper helper;
 	private final TooltipConfiguration configuration;
@@ -35,19 +45,17 @@ public class AttributeWriterHelper extends BaseWriter {
 	}
 
 	public static String number(float attribute) {
-		if (Math.round(attribute) == attribute || roundFloat(attribute) == Math.round(attribute)) {
+		if (Math.round(attribute) == attribute) {
 			return String.valueOf(Math.round(attribute));
 		}
-		return String.valueOf(roundFloat(attribute));
+		return roundFloat(attribute);
 	}
 
-	public static float roundFloat(float number) {
-		NumberFormat format = NumberFormat.getInstance(Locale.ENGLISH);
-		format.setMaximumFractionDigits(2);
+	public static String roundFloat(float number) {
 		try {
-			return Float.parseFloat(format.format(number));
+			return ENGLISH_FORMAT.format(number);
 		} catch (NumberFormatException e) {
-			return 1f;
+			return ENGLISH_FORMAT.format(1f);
 		}
 	}
 
@@ -205,6 +213,4 @@ public class AttributeWriterHelper extends BaseWriter {
 	private MutableText sectionSeparator() {
 		return Text.translatable("tooltip.forgero.section.section_separator");
 	}
-
-
 }

@@ -1,24 +1,23 @@
 {
+  "criteria": {
+    "forgero": {
+      "trigger": "minecraft:tick"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "forgero:diamond-pickaxe"
-    },
-    "title": {
-      "translate": "advancements.forgero.root.title"
-    },
+    "announce_to_chat": true,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
     "description": {
-      "translate": "advancements.forgero.root.description"
+      "translate": "advancements.forgero.forgero.description"
     },
     "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
     "hidden": false,
-    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png"
-  },
-  "criteria": {
-    "default": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {}
+    "icon": {
+      "item": "forgero:iron-pickaxe_head"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.forgero.forgero.title"
     }
   },
   "rewards": {
@@ -28,7 +27,8 @@
   },
   "requirements": [
     [
-      "default"
+      "forgero"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

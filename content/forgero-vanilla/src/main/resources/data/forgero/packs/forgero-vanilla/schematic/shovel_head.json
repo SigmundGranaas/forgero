@@ -64,6 +64,7 @@
     "ingredient_count": {
       "value": 1,
       "context": "LOCAL"
-    }
+    },
+    "better_compat_attribute_container": "forgero:hammer"
   }
 }
