@@ -32,17 +32,23 @@ public abstract class ItemStackUnbreakableMixin {
 	public abstract Item getItem();
 
 	@Inject(at = @At(value = "RETURN"), method = "damage(ILnet/minecraft/util/math/random/Random;Lnet/minecraft/server/network/ServerPlayerEntity;)Z", cancellable = true)
-	public <T extends LivingEntity> void checkIfToolIsUnbreakable(int amount, Random random, @Nullable ServerPlayerEntity player, CallbackInfoReturnable<Boolean> cir) {
+	public <T extends LivingEntity> void forgero$cancelToolBreakIfUnbreakable(int amount, Random random, @Nullable ServerPlayerEntity player, CallbackInfoReturnable<Boolean> cir) {
 		if (cir.getReturnValue() && player != null) {
 			StateService service = StateService.INSTANCE;
-			var stack = player.getMainHandStack();
+			var stack = (ItemStack) (Object) this;
 			Optional<State> tool = service.convert(stack);
 			if (tool.isPresent() && tool.map(UnbreakableHandler::isUnbreakable).filter(bol -> bol).isPresent()) {
 				if (tool.get() instanceof ConstructedTool conditional && !FeatureCache.check(FeatureContainerKey.of(conditional, BROKEN_KEY))) {
 					stack.setDamage(ComputedAttribute.of(conditional, Durability.KEY).asInt());
 					player.getWorld().playSound(player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_ITEM_BREAK, player.getSoundCategory(), 0.8f, 0.8f + player.getWorld().random.nextFloat() * 0.4f, false);
 					State brokenTool = conditional.applyCondition(Conditions.BROKEN);
-					player.getInventory().setStack(player.getInventory().selectedSlot, service.update(brokenTool, stack));
+					int slotIndex = player.getInventory().getSlotWithStack(stack);
+					// -1 means the item has been removed and is no longer in the inventory.
+					if(slotIndex == -1) {
+						player.giveItemStack(service.update(brokenTool, stack));
+					}else{
+						player.getInventory().setStack(slotIndex, service.update(brokenTool, stack));
+					}
 				}
 				cir.setReturnValue(false);
 			}
