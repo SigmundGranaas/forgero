@@ -5,7 +5,7 @@
     "material": {
       "type": "TOOL_MATERIAL"
     },
-    "part": ["pickaxe_head", "axe_head", "hoe_head", "shovel_head", "handle", "binding"]
+    "part": ["pickaxe_head", "axe_head", "hoe_head", "shovel_head", "handle", "binding", "sword_blade"]
   },
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
