@@ -4,9 +4,11 @@ import static com.sigmundgranaas.forgero.bow.Attributes.*;
 import static com.sigmundgranaas.forgero.bow.entity.DynamicArrowEntity.DYNAMIC_ARROW_IDENTIFIER;
 import static com.sigmundgranaas.forgero.bow.item.NamingRules.*;
 import static com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttributeModificationRegistry.modificationBuilder;
+import static com.sigmundgranaas.forgero.item.RegistryUtils.*;
 
 import java.util.List;
 
+import com.sigmundgranaas.forgero.api.v0.entrypoint.ForgeroPreInitializationEntryPoint;
 import com.sigmundgranaas.forgero.bow.entity.DynamicArrowEntity;
 import com.sigmundgranaas.forgero.bow.handler.LaunchProjectileHandler;
 import com.sigmundgranaas.forgero.bow.handler.MountProjectileHandler;
@@ -22,7 +24,6 @@ import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durabili
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
 import com.sigmundgranaas.forgero.core.registry.RegistryFactory;
 import com.sigmundgranaas.forgero.core.type.Type;
-import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroPreInitializationEntryPoint;
 import com.sigmundgranaas.forgero.handler.use.StopHandler;
 import com.sigmundgranaas.forgero.handler.use.UseHandler;
 import com.sigmundgranaas.forgero.item.BuildableStateConverter;
@@ -41,20 +42,9 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-
 public class ForgeroBowInitializer implements ForgeroPreInitializationEntryPoint {
 
 	public static final RegistryKey<ItemGroup> FORGERO_BOWS_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(Forgero.NAMESPACE, "bows"));
-	public static final ItemGroup FORGERO_BOWS = FabricItemGroup.builder()
-			.icon(ForgeroBowInitializer::bowIcon)
-			.displayName(Text.translatable("itemGroup.forgero.bows"
-			))
-			.build();
-
-	static {
-		Registry.register(Registries.ITEM_GROUP, FORGERO_BOWS_KEY, FORGERO_BOWS);
-	}
 
 	public static EntityType<DynamicArrowEntity> DYNAMIC_ARROW_ENTITY = Registry.register(Registries.ENTITY_TYPE, DYNAMIC_ARROW_IDENTIFIER, EntityType.Builder.create((EntityType<DynamicArrowEntity> entity, World world) -> new DynamicArrowEntity(entity, world), SpawnGroup.MISC).build(DYNAMIC_ARROW_IDENTIFIER.toString()));
 

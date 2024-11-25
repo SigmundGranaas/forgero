@@ -21,7 +21,6 @@ import com.sigmundgranaas.forgero.block.upgradestation.UpgradeStationScreen;
 import com.sigmundgranaas.forgero.entity.Entities;
 import com.sigmundgranaas.forgero.handler.use.ThrowableItemRenderer;
 import com.sigmundgranaas.forgero.service.StateService;
-import net.devtech.arrp.api.RRPCallback;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -116,7 +115,6 @@ public class ForgeroBaseClient implements ClientModInitializer {
 		PALETTE_REMAP.putAll(modelRegistry.getPaletteRemapper());
 		TEXTURES.putAll(modelRegistry.getTextures());
 		Generator.generate();
-		RRPCallback.BEFORE_VANILLA.register(a -> a.add(Generator.RESOURCE_PACK_CLIENT));
 	}
 
 	private void registerAssetReloadListener() {

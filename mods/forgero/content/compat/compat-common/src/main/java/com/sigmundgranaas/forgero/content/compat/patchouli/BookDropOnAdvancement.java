@@ -10,6 +10,5 @@ public class BookDropOnAdvancement {
 	public static void registerBookDrop() {
 		var id = new Identifier("forgero:loot_tables/grant_book_on_advancement.json");
 
-		RESOURCE_PACK.addData(id, Advancement.getBytes());
 	}
 }

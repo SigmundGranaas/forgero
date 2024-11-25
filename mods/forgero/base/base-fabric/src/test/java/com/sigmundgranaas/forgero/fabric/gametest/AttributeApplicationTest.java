@@ -35,6 +35,8 @@ import net.minecraft.util.math.BlockPos;
 
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 
+import static com.sigmundgranaas.forgero.match.MinecraftContextKeys.*;
+
 public class AttributeApplicationTest {
 
 	public static float EXPECTED_DIAMOND_SWORD_DAMAGE = 7f;

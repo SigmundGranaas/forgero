@@ -17,6 +17,7 @@ import com.sigmundgranaas.forgero.core.state.Identifiable;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.MutableTypeNode;
 import com.sigmundgranaas.forgero.core.type.Type;
+import com.sigmundgranaas.forgero.dynamicresourcepack.api.resource.TagResource;
 import com.sigmundgranaas.forgero.resources.dynamic.DynamicResourceGenerator;
 import com.sigmundgranaas.forgero.dynamicresourcepack.resource.DynamicResourcePackImpl;
 import com.sigmundgranaas.forgero.service.StateMapper;
@@ -54,13 +55,13 @@ public class DynamicResourcePackGenerator {
 		generators.stream()
 		          .filter(DynamicResourceGenerator::enabled)
 		          .forEach(generator -> generator.generate(RESOURCE_PACK));
-		RRPCallback.BEFORE_VANILLA.register(a -> a.add(RESOURCE_PACK));
+		// RRPCallback.BEFORE_VANILLA.register(a -> a.add(RESOURCE_PACK));
 	}
 
 	public void generateResources() {
 		generateTagsFromStateTree();
 		createMaterialToolTags();
-		RRPCallback.BEFORE_VANILLA.register(a -> a.add(RESOURCE_PACK_BUILTIN));
+		// RRPCallback.BEFORE_VANILLA.register(a -> a.add(RESOURCE_PACK_BUILTIN));
 	}
 
 	public void generateTagsFromStateTree() {
@@ -68,13 +69,13 @@ public class DynamicResourcePackGenerator {
 	}
 
 	private void createTagFromType(@NotNull MutableTypeNode node) {
-		JTag typeTag = new JTag();
+		TagResource typeTag = TagResource.create();
 		var states = node.getResources(State.class);
 		if (!states.isEmpty()) {
 			states.stream()
 			      .map(State::identifier)
 			      .forEach(id -> add(id, typeTag));
-			RESOURCE_PACK_BUILTIN.put(new Identifier(NAMESPACE, "items/" + node.name().toLowerCase(Locale.ENGLISH)), typeTag);
+			// RESOURCE_PACK_BUILTIN.put(new Identifier(NAMESPACE, "items/" + node.name().toLowerCase(Locale.ENGLISH)), typeTag);
 		}
 	}
 
@@ -92,22 +93,22 @@ public class DynamicResourcePackGenerator {
 		for (Map.Entry<String, List<State>> entry : materialMap.entrySet()) {
 			String key = entry.getKey();
 			List<State> states = entry.getValue();
-			JTag materialToolTag = new JTag();
+			TagResource materialToolTag = TagResource.of();
 			if (!states.isEmpty()) {
 				states.stream()
 				      .map(State::identifier)
 				      .forEach(id -> add(id, materialToolTag));
-				RESOURCE_PACK_BUILTIN.put(new Identifier(NAMESPACE, "items/" + key + "_tool"), materialToolTag);
+				// RESOURCE_PACK_BUILTIN.put(new Identifier(NAMESPACE, "items/" + key + "_tool"), materialToolTag);
 			}
 		}
 	}
 
-	private void add(String id, JTag tag) {
+	private void add(String id, TagResource tag) {
 		Optional<Identifier> tagId = mapper.stateToTag(id);
 		if (tagId.isPresent()) {
 			tag.tag(tagId.get());
 		} else {
-			tag.add(mapper.stateToContainer(id));
+			tag.entry(mapper.stateToContainer(id));
 		}
 	}
 }

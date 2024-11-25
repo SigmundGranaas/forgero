@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 public class ResourcePackEvent {
 	@NotNull Observable<@Nullable Void> BEFORE_VANILLA = Observable.just(null);
 
-	public class BeforeVanilla() {
+	public void BeforeVanilla() {
 
 	}
 }

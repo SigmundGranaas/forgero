@@ -5,14 +5,12 @@ import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.model.ModelTemplate;
 import com.sigmundgranaas.forgero.core.model.PaletteTemplateModel;
 import com.sigmundgranaas.forgero.core.model.TextureModel;
-import net.devtech.arrp.api.RuntimeResourcePack;
 import net.minecraft.util.Identifier;
 
 import static com.sigmundgranaas.forgero.fabric.client.ForgeroBaseClient.TEXTURES;
 
 
 public class Generator {
-    public static final RuntimeResourcePack RESOURCE_PACK_CLIENT = RuntimeResourcePack.create("forgero:builtin");
 
     public static void generate() {
         new Generator().generateModels();
@@ -30,7 +28,6 @@ public class Generator {
                 .forEach(textures::add);
         atlas.add("sources", textures);
 
-        RESOURCE_PACK_CLIENT.addAsset(new Identifier("minecraft:atlases/blocks.json"), atlas.toString().getBytes());
     }
 
     private JsonObject textureEntry(String texture) {

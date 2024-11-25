@@ -2,6 +2,9 @@ package com.sigmundgranaas.forgero.dynamicresourcepack.resource;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.dynamicresourcepack.api.resource.DynamicResourcePack;
 
 import com.sigmundgranaas.forgero.dynamicresourcepack.util.resource.json.JsonUtil;

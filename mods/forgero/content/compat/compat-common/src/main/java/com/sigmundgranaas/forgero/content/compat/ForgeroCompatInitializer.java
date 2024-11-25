@@ -5,8 +5,6 @@ import java.util.function.Supplier;
 import com.sigmundgranaas.forgero.abstractions.utils.ModLoaderUtils;
 import com.sigmundgranaas.forgero.api.v0.entrypoint.ForgeroInitializedEntryPoint;
 import com.sigmundgranaas.forgero.content.compat.patchouli.BookDropOnAdvancement;
-import com.sigmundgranaas.forgero.content.compat.tags.CommonTags;
-import com.sigmundgranaas.forgero.content.compat.toolstats.ToolStatTagGenerator;
 import com.sigmundgranaas.forgero.service.StateService;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +26,6 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 	@Override
 	public void onInitialized(@NotNull StateService service) {
 		if (toolstats.get()) {
-			ToolStatTagGenerator.generateTags();
 		}
 
 		if (modonomicon.get()) {
@@ -37,6 +34,5 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 
 		// Goes through all mod compatibilities that have common materials, it checks if the mod is loaded and adds all of their tags to a separate resource pack
 		// Each mod gets its own runtime resource pack to avoid them overriding each other
-		CommonTags.registerAndFilterCommonMaterialTags();
 	}
 }

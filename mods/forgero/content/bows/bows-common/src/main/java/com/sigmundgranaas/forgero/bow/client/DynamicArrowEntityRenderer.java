@@ -2,8 +2,6 @@ package com.sigmundgranaas.forgero.bow.client;
 
 
 import com.sigmundgranaas.forgero.bow.entity.DynamicArrowEntity;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
@@ -36,7 +34,6 @@ import static net.minecraft.util.math.RotationAxis.POSITIVE_Z;
  * <p>
  * Original Author: 'agnor99'
  */
-@Environment(value = EnvType.CLIENT)
 public class DynamicArrowEntityRenderer extends EntityRenderer<DynamicArrowEntity> {
 	private static final Identifier ARROW = new Identifier("textures/entity/projectiles/arrow.png");
 	private final ItemRenderer renderer;

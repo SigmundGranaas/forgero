@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.fabric.gametest;
 
+import static com.sigmundgranaas.forgero.predicate.entity.EntityFlagPredicates.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

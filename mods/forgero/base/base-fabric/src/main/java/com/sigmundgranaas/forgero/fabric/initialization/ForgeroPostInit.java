@@ -38,13 +38,7 @@ import com.sigmundgranaas.forgero.fabric.initialization.registrar.StateItemRegis
 import com.sigmundgranaas.forgero.fabric.initialization.registrar.TreasureLootRegistrar;
 import com.sigmundgranaas.forgero.fabric.registry.RecipeRegistry;
 import com.sigmundgranaas.forgero.resources.DynamicResourcePackGenerator;
-import com.sigmundgranaas.forgero.resources.dynamic.impl.AllPartToAllSchematicsGenerator;
-import com.sigmundgranaas.forgero.resources.dynamic.impl.MaterialPartTagGenerator;
-import com.sigmundgranaas.forgero.resources.dynamic.impl.PartToSchematicGenerator;
-import com.sigmundgranaas.forgero.resources.dynamic.impl.PartTypeTagGenerator;
-import com.sigmundgranaas.forgero.resources.dynamic.impl.RepairKitResourceGenerator;
-import com.sigmundgranaas.forgero.resources.dynamic.impl.SchematicPartTagGenerator;
-import com.sigmundgranaas.forgero.resources.dynamic.impl.WoodPartsTag;
+
 import com.sigmundgranaas.forgero.generator.api.operation.OperationFactory;
 import com.sigmundgranaas.forgero.generator.impl.converter.forgero.ForgeroTypeVariableConverter;
 import com.sigmundgranaas.forgero.registry.registrar.AttributesRegistrar;
@@ -289,21 +283,7 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	 * @param service The state service provides services related to game states.
 	 */
 	private void registerDynamicResourcePackRecipes(@NotNull StateService service) {
-		DynamicResourcePackGenerator.register(new RepairKitResourceGenerator(ForgeroConfigurationLoader.configuration, service));
-		if (ForgeroConfigurationLoader.configuration.enableRecipesForAllSchematics) {
-			DynamicResourcePackGenerator.register(() -> new AllPartToAllSchematicsGenerator(service, new PartToSchematicGenerator.SchematicRecipeCreator(),
-					new PartToSchematicGenerator.AllVariantFilter()
-			));
-		} else {
-			DynamicResourcePackGenerator.register(() -> new PartToSchematicGenerator(service, new PartToSchematicGenerator.SchematicRecipeCreator(),
-					new PartToSchematicGenerator.BaseVariantFilter()
-			));
-		}
 
-		DynamicResourcePackGenerator.register(() -> new WoodPartsTag(ForgeroStateRegistry.TREE));
-		DynamicResourcePackGenerator.register(() -> new MaterialPartTagGenerator(service));
-		DynamicResourcePackGenerator.register(() -> new SchematicPartTagGenerator(service));
-		DynamicResourcePackGenerator.register(() -> new PartTypeTagGenerator(service));
 		DynamicResourcePackGenerator.generate(service);
 	}
 }

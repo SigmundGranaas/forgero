@@ -23,6 +23,11 @@ subprojects {
 	dependencies {
 		api(project(":core"))
 
+		// JUnit
+		testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
+		testImplementation("org.junit.jupiter:junit-jupiter-params:5.11.0")
+		testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
+
 		minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
 		mappings "net.fabricmc:yarn:${rootProject.yarn_mappings}:v2"
 
