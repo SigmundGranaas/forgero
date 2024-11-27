@@ -1,4 +1,10 @@
-# Forgero Beta release 0.13
+##  0.13.1
+* [Patch]: Added a simple wood binding recipe
+* [Patch]: Added c:ore and minecraft:ore to vein mining tag
+* [Patch]: Added missing sword blade schematic recipe
+* [Patch]: Added missing sword guard schematic recipe
+
+## 0.13.0
 
 ## Weapons
 A lot of cool new weapons have been added, new weapon types such as spears and clubs are also added. The new weapons each have a distinct purpose and are more historically accurate. They also look a lot better!
