@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class FabricPackFinder implements PackageSupplier {
-	public final String PACK_LOCATION = "/data/forgero/packs/";
+	public final String PACK_LOCATION = "data/forgero/packs/";
 
 	public static PackageSupplier supplier() {
 		return new FabricPackFinder();
