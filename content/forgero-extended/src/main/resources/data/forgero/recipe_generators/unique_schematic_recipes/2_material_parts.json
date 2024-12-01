@@ -6,7 +6,19 @@
       "type": "TOOL_MATERIAL"
     },
     "variant": [
-
+      "spade_head",
+      "cutlass_blade",
+      "katana_blade",
+      "cruciform_sword_guard",
+      "half_basket_sword_guard",
+      "mechanized_sword_guard",
+      "rounded_sword_guard",
+      "shell_sword_guard",
+      "swept_sword_guard",
+      "tsuba_sword_guard",
+      "entrenching_shovel_head",
+      "sickle_blade",
+      "spear_head"
     ]
   },
   "type": "forgero:schematic_part_crafting",
