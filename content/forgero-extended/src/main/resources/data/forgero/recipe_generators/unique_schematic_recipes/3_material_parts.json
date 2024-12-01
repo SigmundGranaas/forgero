@@ -6,7 +6,12 @@
       "type": "TOOL_MATERIAL"
     },
     "variant": [
-
+      "felling_axe_head",
+      "mandrill_pickaxe_head",
+      "club_head",
+      "broadsword_blade",
+      "scythe_blade",
+      "hammer_head"
     ]
   },
   "type": "forgero:schematic_part_crafting",
