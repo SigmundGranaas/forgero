@@ -31,7 +31,6 @@
   "mixins": [
   ],
   "depends": {
-    "${mod_id}": "*",
     "java": ">=17"
   },
   "custom": {

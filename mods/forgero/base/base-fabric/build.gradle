@@ -7,19 +7,58 @@ plugins {
 	id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
+sourceSets {
+	test {
+		compileClasspath += main.compileClasspath
+		runtimeClasspath += main.runtimeClasspath
+	}
+}
+
 loom {
 	accessWidenerPath = project(":mods:forgero:base:base-common").loom.accessWidenerPath
+
+	runs {
+		testServer {
+			server()
+			ideConfigGenerated project.rootProject == project
+			name = "Test Server"
+			source sourceSets.test
+		}
+		gameTest {
+			inherit testServer
+			name "Game Test"
+			// Enable the gametest runner
+			vmArg "-Dfabric-api.gametest"
+			runDir "build/gameTest"
+		}
+		testClient {
+			client()
+			name = "Test Client"
+			vmArg "-Dfabric-api.gametest.structures.output-dir=${file("src/test/resources/data/${mod_id}/gametest/structures")}"
+
+			ideConfigGenerated = false
+			source sourceSets.test
+		}
+	}
 }
+
+test {
+	useJUnitPlatform()
+	maxParallelForks = 32
+	testLogging.events("failed")
+	testLogging.info.events = ["failed", "skipped"]
+}
+
 
 dependencies {
 	// Content submods
 	project(":mods:forgero:content").subprojects.each { subproject ->
-		if (!subproject.name.contains("fabric")) {
-			return
-		}
-
 		include(runtimeOnly(project(path: subproject.path, configuration: "namedElements"))) { transitive false }
 	}
+	api(project(path: ":mods:dynamicresourcepack:dynamicresourcepack-fabric", configuration: "namedElements")) { transitive false }
+
+	modImplementation(project(path: ":mods:forgero:content:bows:bows-fabric", configuration: "namedElements")) { transitive false }
+	modImplementation(project(path: ":mods:forgero:content:trade:trade-fabric", configuration: "namedElements")) { transitive false }
 
 	// Fabric Loader
 	modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"

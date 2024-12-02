@@ -9,6 +9,7 @@ import com.sigmundgranaas.forgero.dynamicresourcepack.api.resource.DynamicResour
 
 import com.sigmundgranaas.forgero.dynamicresourcepack.util.resource.json.JsonUtil;
 
+import net.minecraft.resource.AbstractFileResourcePack;
 import net.minecraft.resource.InputSupplier;
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.resource.ResourceType;
@@ -28,10 +29,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
-public class DynamicResourcePackImpl implements ResourcePack, DynamicResourcePack {
+public class DynamicResourcePackImpl implements DynamicResourcePack {
 	private final @NotNull Identifier id;
-	private final Map<Path, byte[]> resources = new ConcurrentHashMap<>();
+	private final Map<Identifier, byte[]> resources = new ConcurrentHashMap<>();
 
 	public DynamicResourcePackImpl(@NotNull Identifier id) {
 		this.id = id;
@@ -49,40 +52,52 @@ public class DynamicResourcePackImpl implements ResourcePack, DynamicResourcePac
 
 	@Override
 	public @NotNull Set<String> getNamespaces(ResourceType type) {
-		// TODO
-		return Set.of();
+		return resources.keySet().stream().map(Identifier::getNamespace).collect(Collectors.toSet());
 	}
 
 	@Override
 	public @Nullable <T> T parseMetadata(ResourceMetadataReader<T> metaReader) {
-		// TODO
+		if(metaReader.getKey().equals("pack")) {
+			JsonObject object = new JsonObject();
+			object.addProperty("pack_format", 18);
+			object.addProperty("description", "runtime resource pack");
+			return metaReader.fromJson(object);
+		}
 		return null;
+
 	}
 
 	@Override
 	public @Nullable InputSupplier<InputStream> openRoot(String... segments) {
-		@NotNull var path = PathUtil.getPath(Path.of(""), List.of(segments));
-		return () -> new ByteArrayInputStream(resources.get(path));
+		throw new UnsupportedOperationException("Not implemented");
 	}
 
 	@Override
 	public @Nullable InputSupplier<InputStream> open(@NotNull ResourceType type, @NotNull Identifier id) {
-		@NotNull var path = PathUtil.getPath(Path.of(type.getDirectory()), List.of(id.getPath()));
-		return () -> new ByteArrayInputStream(resources.get(path));
+		if(resources.containsKey(id)) {
+			return () -> new ByteArrayInputStream(resources.get(id));
+		}
+		return  null;
 	}
 
 	@Override
 	public void findResources(ResourceType type, String namespace, String prefix, ResultConsumer consumer) {
-		// TODO
+		for(Identifier identifier : resources.keySet()) {
+			Supplier<byte[]> supplier =  () -> resources.get(identifier);
+			InputSupplier<InputStream> inputSupplier = () -> new ByteArrayInputStream(supplier.get());
+			if(identifier.getNamespace().equals(namespace) && identifier.getPath().startsWith(prefix)) {
+				consumer.accept(identifier, inputSupplier);
+			}
+		}
 	}
 
 	@Override
 	public void put(@NotNull Identifier id, @NotNull JsonArray json) {
-		resources.put(Path.of(id.getPath()), JsonUtil.getGSON().toJson(json).getBytes());
+		resources.put(id, JsonUtil.getGSON().toJson(json).getBytes());
 	}
 
 	@Override
 	public void put(@NotNull Identifier id, byte[] bytes) {
-		resources.put(Path.of(id.getPath()), bytes);
+		resources.put(id, bytes);
 	}
 }

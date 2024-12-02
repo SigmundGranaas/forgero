@@ -65,9 +65,6 @@ public class TagResource {
 	}
 
 	public void tag(Identifier identifier) {
-		if (!identifier.getPath().startsWith("#")) {
-			throw new IllegalArgumentException("Tag references must start with #: " + identifier);
-		}
 		entries.add(new TagEntry(identifier, true));
 	}
 

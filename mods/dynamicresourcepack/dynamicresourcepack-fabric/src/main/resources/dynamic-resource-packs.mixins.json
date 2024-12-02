@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.sigmundgranaas.forgero.dynamicresourcepack.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "FileResourcePackProviderMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

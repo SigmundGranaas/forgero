@@ -24,7 +24,7 @@
     "generator.mixins.json"
   ],
   "depends": {
-    "forgero-fabric-core": "*"
+    "forgero-base": "*"
   },
   "custom": {
     "modmenu": {

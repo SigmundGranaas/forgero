@@ -12,6 +12,7 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 	// Main
 	@NotNull
 	public List<String> disabledResources = Collections.emptyList();
+	
 	@NotNull
 	public List<String> disabledPacks = Collections.emptyList();
 

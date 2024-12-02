@@ -12,6 +12,7 @@ import com.sigmundgranaas.forgero.core.resource.PipelineBuilder;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.texture.V2.TextureGenerator;
 import com.sigmundgranaas.forgero.core.type.Type;
+import com.sigmundgranaas.forgero.dynamicresourcepack.event.ResourcePackEvent;
 import com.sigmundgranaas.forgero.fabric.client.model.ForgeroStateModelResolver;
 import com.sigmundgranaas.forgero.fabric.client.texture.Generator;
 import com.sigmundgranaas.forgero.fabric.resources.FabricPackFinder;
@@ -94,6 +95,7 @@ public class ForgeroBaseClient implements ClientModInitializer {
 		ModelResolver stateModels = new ForgeroStateModelResolver(modelRegistry, StateService.INSTANCE, models);
 		ModelLoadingPlugin.register(pluginContext -> pluginContext.resolveModel().register(stateModels));
 		EntityRendererRegistry.register(Entities.THROWN_ITEM_ENTITY, ThrowableItemRenderer::new);
+
 	}
 
 	private void invokeClientPreInitializedEntryPoints() {
@@ -115,6 +117,7 @@ public class ForgeroBaseClient implements ClientModInitializer {
 		PALETTE_REMAP.putAll(modelRegistry.getPaletteRemapper());
 		TEXTURES.putAll(modelRegistry.getTextures());
 		Generator.generate();
+		ResourcePackEvent.beforeVanilla(Generator.RESOURCE_PACK_CLIENT, ResourceType.CLIENT_RESOURCES);
 	}
 
 	private void registerAssetReloadListener() {

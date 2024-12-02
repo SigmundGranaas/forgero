@@ -21,21 +21,17 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "com.sigmundgranaas.forgero.bow.client.ForgeroClientBowInitializer"
     ],
     "forgeroPreInitialization": [
       "com.sigmundgranaas.forgero.bow.ForgeroBowInitializer"
     ]
   },
-  "mixins": [
-    "forgero-bows.mixins.json"
-  ],
   "depends": {
     "fabricloader": ">=0.12.12",
     "fabric": "*",
     "minecraft": "1.20.1",
     "java": ">=17",
-    "forgero-fabric-core": "*"
+    "forgero-base": "*"
   },
   "suggests": {
     "patchouli": "*",

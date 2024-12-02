@@ -74,7 +74,8 @@ subprojects {
 			inputs.property "version", rootProject.version
 
 			from(commonSubProject.sourceSets["main"].resources) {
-				include("assets", "data", "resourcepacks")
+				// Use /** to ensure deep directory traversal
+				include("assets/**", "data/**", "resourcepacks/**")
 			}
 
 			filesMatching("fabric.mod.json") {

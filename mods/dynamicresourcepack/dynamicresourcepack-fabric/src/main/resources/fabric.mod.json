@@ -1,14 +1,11 @@
 {
   "schemaVersion": 1,
-  "id": "forgero-trades",
+  "id": "dynamic-resource-packs",
   "version": "${version}",
-  "name": "Forgero trade module",
-  "description": "Trade support for Forgero.",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
   "authors": [
-    "JorisDeBeer"
-  ],
-  "contributors": [
-
+    "Sigmund Granaas Sandring"
   ],
   "contact": {
     "homepage": "https://sigmundgranaas.com",
@@ -19,17 +16,12 @@
   "icon": "assets/${mod_id}/icon.png",
   "environment": "*",
   "entrypoints": {
-    "forgeroPreInitialization": [
-    ]
   },
+  "mixins": [
+    "dynamic-resource-packs.mixins.json"
+  ],
   "depends": {
-    "fabricloader": ">=0.12.12",
-    "fabric": "*",
-    "minecraft": "1.20.1",
-    "java": ">=17",
     "forgero-base": "*"
-  },
-  "suggests": {
   },
   "custom": {
     "modmenu": {

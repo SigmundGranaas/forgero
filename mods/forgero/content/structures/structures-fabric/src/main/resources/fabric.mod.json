@@ -31,7 +31,6 @@
   "mixins": [
   ],
   "depends": {
-    "forgero-core": "*",
     "java": ">=17"
   },
   "custom": {

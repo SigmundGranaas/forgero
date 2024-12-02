@@ -8,6 +8,7 @@ public class ModLoaderUtils {
 	 */
 	@ExpectPlatform
 	public static boolean isModPresent(String id) {
-		throw new AssertionError("Platform implementation expected.");
+		return true;
+		// throw new AssertionError("Platform implementation expected.");
 	}
 }

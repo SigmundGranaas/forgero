@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "${mod_id}",
+  "id": "forgero-base",
   "version": "${version}",
   "name": "${mod_name}",
   "description": "${mod_description}",
@@ -41,8 +41,8 @@
     ]
   },
   "mixins": [
-    "${mod_id}-common.mixins.json",
-    "${mod_id}-fabric.mixins.json"
+    "forgero-fabric.mixins.json",
+    "forgero-common.mixins.json"
   ],
   "depends": {
     "java": ">=${java_version}",
