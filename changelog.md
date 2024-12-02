@@ -1,8 +1,18 @@
+##  0.13.2
+
+* [Patch]: Added recipes for extended by @JorisDeBeer in https://github.com/SigmundGranaas/forgero/pull/1125
+* [Patch]: removed traces of patchouli by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/1128
+* [Patch]: Removed all gem upgrade and loot code by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/1127
+* [Patch]: Relative resource loading by @SigmundGranaas in https://github.com/SigmundGranaas/forgero/pull/1126
+
+
 ##  0.13.1
+
 * [Patch]: Added a simple wood binding recipe
 * [Patch]: Added c:ore and minecraft:ore to vein mining tag
 * [Patch]: Added missing sword blade schematic recipe
 * [Patch]: Added missing sword guard schematic recipe
+
 
 ## 0.13.0
 
