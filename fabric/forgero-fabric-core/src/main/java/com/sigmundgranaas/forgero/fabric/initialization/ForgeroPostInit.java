@@ -49,7 +49,6 @@ import com.sigmundgranaas.forgero.fabric.resources.dynamic.WoodPartsTag;
 import com.sigmundgranaas.forgero.generator.api.operation.OperationFactory;
 import com.sigmundgranaas.forgero.generator.impl.converter.forgero.ForgeroTypeVariableConverter;
 import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.AttributesRegistrar;
-import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.LootFunctionRegistrar;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.HungerHandler;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipAttributeRegistry;
@@ -92,7 +91,6 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 		registerItems(stateService);
 		registerTreasureLoot();
 		registerCommands();
-		registerLootFunctions();
 		registerItemAttributes();
 		registerDisassemblyReloadListener();
 		registerDataReloadListener();
@@ -230,14 +228,6 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	 */
 	private void registerCommands() {
 		new CommandRegistrar().register();
-	}
-
-	/**
-	 * The registerLootFunctions method registers the loot functions used by the mod.
-	 * The Loot functions alter the state of looted Forgero items to give them special conditions or levels
-	 */
-	private void registerLootFunctions() {
-		new LootFunctionRegistrar().register();
 	}
 
 	/**

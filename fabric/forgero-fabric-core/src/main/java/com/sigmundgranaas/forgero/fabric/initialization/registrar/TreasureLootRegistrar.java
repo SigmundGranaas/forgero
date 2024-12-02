@@ -48,7 +48,6 @@ public class TreasureLootRegistrar implements Registrar {
 		netherFortress();
 		bastionRemnants();
 		spawner();
-		witch();
 		zombie();
 		pillager();
 
@@ -119,18 +118,6 @@ public class TreasureLootRegistrar implements Registrar {
 				.rolls(2)
 				.build();
 
-
-		var gemFilter = StateFilter.builder()
-				.lowerRarity(30)
-				.upperRarity(60)
-				.types(List.of("GEM"));
-		var gemEntry = SingleLootEntry.builder()
-				.filter(gemFilter.build()::filter)
-				.target(List.of(LootTables.ANCIENT_CITY_CHEST, LootTables.ANCIENT_CITY_ICE_BOX_CHEST))
-				.chance(0.3f)
-				.rolls(2)
-				.build();
-
 		var schematicFilter = StateFilter.builder()
 				.lowerRarity(60)
 				.upperRarity(120)
@@ -142,7 +129,6 @@ public class TreasureLootRegistrar implements Registrar {
 				.rolls(1)
 				.build();
 
-		registerEntry(gemEntry);
 		registerEntry(partEntry);
 		registerEntry(schematicEntry);
 	}
@@ -284,18 +270,6 @@ public class TreasureLootRegistrar implements Registrar {
 				.rolls(2)
 				.build();
 
-		var gemFilter = StateFilter.builder()
-				.lowerRarity(30)
-				.upperRarity(60)
-				.types(List.of("GEM"));
-		var gemEntry = SingleLootEntry.builder()
-				.filter(gemFilter.build()::filter)
-				.target(List.of(LootTables.SHIPWRECK_TREASURE_CHEST))
-				.chance(0.3f)
-				.rolls(2)
-				.build();
-		registerEntry(gemEntry);
-
 		var schematicFilter = StateFilter.builder()
 				.lowerRarity(10)
 				.upperRarity(50)
@@ -335,19 +309,6 @@ public class TreasureLootRegistrar implements Registrar {
 				.rolls(1)
 				.build();
 
-		var gemFilter = StateFilter.builder()
-				.lowerRarity(30)
-				.upperRarity(60)
-				.include(List.of("blazing"))
-				.types(List.of("GEM"));
-		var gemEntry = SingleLootEntry.builder()
-				.filter(gemFilter.build()::filter)
-				.target(List.of(LootTables.NETHER_BRIDGE_CHEST))
-				.chance(0.1f)
-				.rolls(2)
-				.build();
-		registerEntry(gemEntry);
-
 		registerEntry(partEntry);
 		registerEntry(schematicEntry);
 	}
@@ -365,18 +326,6 @@ public class TreasureLootRegistrar implements Registrar {
 				.rolls(2)
 				.build();
 
-		var gemFilter = StateFilter.builder()
-				.lowerRarity(30)
-				.upperRarity(60)
-				.include(List.of("blazed", "quartz"))
-				.types(List.of("GEM"));
-		var gemEntry = SingleLootEntry.builder()
-				.filter(gemFilter.build()::filter)
-				.target(List.of(LootTables.BASTION_TREASURE_CHEST))
-				.chance(0.1f)
-				.rolls(2)
-				.build();
-		registerEntry(gemEntry);
 
 		var partFilter = StateFilter.builder()
 				.lowerRarity(50)
@@ -427,18 +376,6 @@ public class TreasureLootRegistrar implements Registrar {
 				.chance(0.5f)
 				.rolls(1)
 				.build();
-
-		var gemFilter = StateFilter.builder()
-				.lowerRarity(30)
-				.upperRarity(60)
-				.types(List.of("GEM"));
-		var gemEntry = SingleLootEntry.builder()
-				.filter(gemFilter.build()::filter)
-				.target(List.of(LootTables.END_CITY_TREASURE_CHEST))
-				.chance(0.5f)
-				.rolls(2)
-				.build();
-		registerEntry(gemEntry);
 
 		registerEntry(partEntry);
 		registerEntry(schematicEntry);
@@ -525,20 +462,6 @@ public class TreasureLootRegistrar implements Registrar {
 		registerEntry(schematicEntry);
 	}
 
-	private void witch() {
-		var gemFilter = StateFilter.builder()
-				.lowerRarity(30)
-				.upperRarity(60)
-				.types(List.of("GEM"));
-		var gemEntry = SingleLootEntry.builder()
-				.filter(gemFilter.build()::filter)
-				.target(List.of(EntityType.WITCH.getLootTableId()))
-				.chance(0.01f)
-				.rolls(2)
-				.build();
-		registerEntry(gemEntry);
-	}
-
 	private void smallForgingHouse() {
 
 		var id = new Identifier("forgero:chests/treasure_loot");
@@ -552,18 +475,6 @@ public class TreasureLootRegistrar implements Registrar {
 				.chance(0.3f)
 				.rolls(2)
 				.build();
-
-		var gemFilter = StateFilter.builder()
-				.lowerRarity(30)
-				.upperRarity(60)
-				.types(List.of("GEM"));
-		var gemEntry = SingleLootEntry.builder()
-				.filter(gemFilter.build()::filter)
-				.target(List.of(id))
-				.chance(0.3f)
-				.rolls(2)
-				.build();
-		registerEntry(gemEntry);
 
 		var schematicFilter = StateFilter.builder()
 				.lowerRarity(10)
