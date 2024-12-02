@@ -76,7 +76,7 @@ public class FileResourceLoader implements ResourceLoader {
 	private Optional<String> getFilePath(Path path) {
 		String[] elements = path.toString().split("data");
 		if (elements.length == 2) {
-			return Optional.of("/" + "data" + elements[1]);
+			return Optional.of( "data" + elements[1]);
 		}
 		Forgero.LOGGER.error("Unable to resolve path {}, as it could not be split using default split operator {}", path.toString(), File.separator);
 		return Optional.empty();
