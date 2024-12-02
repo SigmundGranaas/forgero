@@ -4,7 +4,6 @@ import java.util.function.Supplier;
 
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroInitializedEntryPoint;
 import com.sigmundgranaas.forgero.fabric.tags.CommonTags;
-import com.sigmundgranaas.forgero.fabric.patchouli.BookDropOnAdvancement;
 import com.sigmundgranaas.forgero.fabric.toolstats.ToolStatTagGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 
@@ -33,10 +32,6 @@ public class ForgeroCompatInitializer implements ForgeroInitializedEntryPoint {
 	public void onInitialized(StateService service) {
 		if (toolstats.get()) {
 			ToolStatTagGenerator.generateTags();
-		}
-
-		if (modonomicon.get()) {
-			BookDropOnAdvancement.registerBookDrop();
 		}
 
 		// Goes through all mod compats that has common materials and checks if the mod is loaded and adds all of their tags to a separate resource pack
