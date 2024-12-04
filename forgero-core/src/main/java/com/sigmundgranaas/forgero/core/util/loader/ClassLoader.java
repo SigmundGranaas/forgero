@@ -3,35 +3,39 @@ package com.sigmundgranaas.forgero.core.util.loader;
 import com.sigmundgranaas.forgero.core.Forgero;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Optional;
 
 public class ClassLoader implements InputStreamLoader {
 	private static final Logger logger = Forgero.LOGGER;
 
-	/**
-	 * Strategies for loading resources
-	 */
 	public enum LoadStrategy {
-		CLASSLOADER,  // Uses ClassLoader.getResourceAsStream()
-		CLASS         // Uses Class.getResourceAsStream()
+		CLASSLOADER, CLASS
 	}
 
 	@Override
 	public Optional<InputStream> load(String location) {
-		// Default to CLASS strategy if path starts with "/", otherwise CLASSLOADER
-		LoadStrategy strategy = location.startsWith("/") ?
-				LoadStrategy.CLASS : LoadStrategy.CLASSLOADER;
-		return load(location, strategy);
+		try {
+			// Try direct file access first for development environment
+			if (isAbsolutePath(location)) {
+				File file = new File(location);
+				if (file.exists() && file.isFile()) {
+					return Optional.of(new FileInputStream(file));
+				}
+				// If absolute path doesn't exist as file, try to extract relative path
+				location = extractResourcePath(location);
+			}
+
+			LoadStrategy strategy = location.startsWith("/") ? LoadStrategy.CLASS : LoadStrategy.CLASSLOADER;
+			return load(location, strategy);
+		} catch (Exception e) {
+			logger.error("Failed to load resource: {}", location, e);
+			return Optional.empty();
+		}
 	}
 
-	/**
-	 * Load a resource using a specific loading strategy.
-	 *
-	 * @param location The resource location
-	 * @param strategy The loading strategy to use
-	 * @return Optional containing the InputStream if found
-	 */
 	public Optional<InputStream> load(String location, LoadStrategy strategy) {
 		if (location == null || location.trim().isEmpty()) {
 			throw new IllegalArgumentException("Resource location cannot be null or empty");
@@ -53,37 +57,38 @@ public class ClassLoader implements InputStreamLoader {
 	}
 
 	private String normalizePath(String location, LoadStrategy strategy) {
-		String normalized = location.replace("\\", "/").trim();
+		String normalized = location.replace('\\', '/').trim();
 
-		switch (strategy) {
-			case CLASSLOADER:
-				// Remove leading slash for ClassLoader.getResourceAsStream()
-				normalized = normalized.replaceAll("^/+", "");
-				break;
-
-			case CLASS:
-				// Ensure leading slash for absolute paths in Class.getResourceAsStream()
-				if (!normalized.startsWith("/")) {
-					normalized = "/" + normalized;
-				}
-				break;
+		if (isAbsolutePath(normalized)) {
+			normalized = extractResourcePath(normalized);
 		}
 
-		// Remove any duplicate slashes
-		return normalized.replaceAll("/+", "/");
+		return switch (strategy) {
+			case CLASSLOADER -> normalized.replaceAll("^/+", "");
+			case CLASS -> normalized.startsWith("/") ? normalized : "/" + normalized;
+		};
+	}
+
+	private String extractResourcePath(String absolutePath) {
+		String[] segments = absolutePath.split("/resources/main/");
+		if (segments.length == 2) {
+			return segments[1];
+		}
+		return absolutePath;
+	}
+
+	private boolean isAbsolutePath(String path) {
+		return path.startsWith("/") && path.contains("/resources/main/");
 	}
 
 	private InputStream loadWithStrategy(String normalizedPath, LoadStrategy strategy) {
 		return switch (strategy) {
-			case CLASSLOADER -> this.getClass().getClassLoader()
-					.getResourceAsStream(normalizedPath);
-			case CLASS -> this.getClass()
-					.getResourceAsStream(normalizedPath);
+			case CLASSLOADER -> this.getClass().getClassLoader().getResourceAsStream(normalizedPath);
+			case CLASS -> this.getClass().getResourceAsStream(normalizedPath);
 		};
 	}
 
 	private InputStream tryAlternateStrategy(String normalizedPath, LoadStrategy strategy) {
-		// If one strategy fails, try the other
 		LoadStrategy alternateStrategy = (strategy == LoadStrategy.CLASS) ?
 				LoadStrategy.CLASSLOADER : LoadStrategy.CLASS;
 
