@@ -70,7 +70,7 @@ public class ClassLoader implements InputStreamLoader {
 	}
 
 	private String extractResourcePath(String absolutePath) {
-		String[] segments = absolutePath.split("/resources/main/");
+		String[] segments = absolutePath.split("/resources/");
 		if (segments.length == 2) {
 			return segments[1];
 		}
@@ -78,7 +78,7 @@ public class ClassLoader implements InputStreamLoader {
 	}
 
 	private boolean isAbsolutePath(String path) {
-		return path.startsWith("/") && path.contains("/resources/main/");
+		return path.startsWith("/") && (path.contains("/resources/"));
 	}
 
 	private InputStream loadWithStrategy(String normalizedPath, LoadStrategy strategy) {
