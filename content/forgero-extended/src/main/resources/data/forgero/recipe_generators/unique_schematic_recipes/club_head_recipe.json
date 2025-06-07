@@ -3,14 +3,10 @@
   "identifier": "forgero:${material.name}-schematic-${variant}",
   "variables": {
     "material": {
-      "type": "TOOL_MATERIAL"
+      "type": "WOOD"
     },
     "variant": [
-      "felling_axe_head",
-      "mandrill_pickaxe_head",
-      "broadsword_blade",
-      "scythe_blade",
-      "hammer_head"
+      "club_head"
     ]
   },
   "type": "forgero:schematic_part_crafting",
