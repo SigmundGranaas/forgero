@@ -55,7 +55,7 @@ jobs:
           cache: gradle
 
       - name: Validate Gradle wrapper
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/actions/wrapper-validation@v3
 
       - name: Run gametest (Fabric compat)
         run: ./gradlew fabric:forgero-fabric-compat:runGameTest
