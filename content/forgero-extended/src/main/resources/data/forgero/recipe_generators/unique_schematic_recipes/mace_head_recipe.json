@@ -3,20 +3,19 @@
   "identifier": "forgero:${material.name}-schematic-${variant}",
   "variables": {
     "material": {
-      "type": "TOOL_MATERIAL"
+      "type": "METAL"
     },
     "variant": [
-      "felling_axe_head",
-      "mandrill_pickaxe_head",
-      "broadsword_blade",
-      "scythe_blade",
-      "hammer_head"
+      "mace_head"
     ]
   },
   "type": "forgero:schematic_part_crafting",
   "ingredients": [
     {
       "item": "forgero:${variant}-schematic"
+    },
+    {
+      "${material.tagOrItem}": "${material.container_id}"
     },
     {
       "${material.tagOrItem}": "${material.container_id}"
