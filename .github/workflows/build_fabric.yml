@@ -67,7 +67,7 @@ jobs:
           arguments: build --stacktrace
 
       - name: Upload Gradle artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: compiled_jar_files
           path: fabric/build/libs/
