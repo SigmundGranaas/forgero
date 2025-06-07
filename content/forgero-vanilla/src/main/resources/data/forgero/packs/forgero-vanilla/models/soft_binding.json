@@ -118,14 +118,6 @@
     },
     {
       "target": [
-        "type:TOTEM",
-        "slot:0"
-      ],
-      "modelType": "UPGRADE",
-      "template": "soft_binding_gem"
-    },
-    {
-      "target": [
         "type:DYE",
         "slot:1"
       ],

@@ -151,14 +151,6 @@
     },
     {
       "target": [
-        "type:TOTEM",
-        "slot:1"
-      ],
-      "modelType": "UPGRADE",
-      "template": "binding_gem"
-    },
-    {
-      "target": [
         "type:GEM",
         "slot:1"
       ],
