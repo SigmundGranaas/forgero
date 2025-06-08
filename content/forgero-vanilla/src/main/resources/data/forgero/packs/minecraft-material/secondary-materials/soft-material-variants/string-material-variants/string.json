@@ -1,5 +1,5 @@
 {
-  "type": "STRING",
+  "type": "STRINGLIKE",
   "name": "string",
   "parent": "string_base",
   "resource_type": "DEFAULT",

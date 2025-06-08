@@ -3,13 +3,13 @@
   "name": "SOFT_MATERIAL",
   "children": [
     {
+      "name": "STRINGLIKE"
+    },
+    {
       "name": "HIDE"
     },
     {
       "name": "SOFT_PLANT"
-    },
-    {
-      "name": "STRING"
     }
   ]
 }

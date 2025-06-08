@@ -102,7 +102,7 @@
     },
     {
       "target": [
-        "type:MATERIAL",
+        "type:SOFT_MATERIAL",
         "id:soft_binding-schematic"
       ],
       "modelType": "BASED_COMPOSITE",
