@@ -17,7 +17,7 @@
       "${material.tagOrItem}": "${material.container_id}"
     },
     "b": {
-      "tag": "forgero:string"
+      "tag": "forgero:cord"
     }
   },
   "result": {

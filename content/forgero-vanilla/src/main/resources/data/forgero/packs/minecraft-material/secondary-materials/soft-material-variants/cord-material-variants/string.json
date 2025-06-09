@@ -1,7 +1,7 @@
 {
-  "type": "STRING",
+  "type": "CORD",
+  "parent": "cord_base",
   "name": "string",
-  "parent": "string_base",
   "resource_type": "DEFAULT",
   "container": {
     "type": "HOST",

@@ -1,6 +1,6 @@
 {
-  "type": "STRING",
-  "name": "string_base",
+  "type": "CORD",
+  "name": "cord_base",
   "resource_type": "ABSTRACT",
   "properties": {
     "grouped_attributes": [
@@ -10,17 +10,17 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "string-rarity-composite",
+            "id": "cord-rarity-composite",
             "type": "RARITY",
             "value": 10
           },
           {
-            "id": "string-durability-composite",
+            "id": "cord-durability-composite",
             "type": "DURABILITY",
             "value": 30
           },
           {
-            "id": "string-weight-composite",
+            "id": "cord-weight-composite",
             "type": "WEIGHT",
             "value": 6
           }
@@ -30,7 +30,7 @@
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "string-rarity-upgrade",
+            "id": "cord-rarity-upgrade",
             "type": "RARITY",
             "order": "BASE",
             "operation": "ADDITION",
@@ -38,7 +38,7 @@
             "value": 5
           },
           {
-            "id": "string-weight-upgrade",
+            "id": "cord-weight-upgrade",
             "type": "WEIGHT",
             "order": "BASE",
             "operation": "ADDITION",
@@ -46,84 +46,84 @@
             "value": 3
           },
           {
-            "id": "string-attack_speed-offensive-upgrade",
+            "id": "cord-attack_speed-offensive-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0
           },
           {
-            "id": "string-attack_damage-offensive-upgrade",
+            "id": "cord-attack_damage-offensive-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0
           },
           {
-            "id": "string-mining_speed-offensive-upgrade",
+            "id": "cord-mining_speed-offensive-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0
           },
           {
-            "id": "string-mining_level-offensive-upgrade",
+            "id": "cord-mining_level-offensive-upgrade",
             "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0
           },
           {
-            "id": "string-durability-offensive-upgrade",
+            "id": "cord-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0
           },
           {
-            "id": "string-attack_speed-utility-upgrade",
+            "id": "cord-attack_speed-utility-upgrade",
             "type": "ATTACK_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0.1
           },
           {
-            "id": "string-attack_damage-utility-upgrade",
+            "id": "cord-attack_damage-utility-upgrade",
             "type": "ATTACK_DAMAGE",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "string-mining_speed-utility-upgrade",
+            "id": "cord-mining_speed-utility-upgrade",
             "type": "MINING_SPEED",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0.1
           },
           {
-            "id": "string-mining_level-utility-upgrade",
+            "id": "cord-mining_level-utility-upgrade",
             "type": "MINING_LEVEL",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 0
           },
           {
-            "id": "string-durability-utility-upgrade",
+            "id": "cord-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 15
           },
           {
-            "id": "string-accuracy-utility-upgrade",
+            "id": "cord-accuracy-utility-upgrade",
             "type": "forgero:accuracy",
             "operation": "ADDITION",
             "category": "UTILITY",
             "value": 1
           },
           {
-            "id": "string-draw_speed-utility-upgrade",
+            "id": "cord-draw_speed-utility-upgrade",
             "type": "forgero:draw_speed",
             "operation": "ADDITION",
             "category": "UTILITY",
@@ -134,7 +134,7 @@
     ],
     "attributes": [
       {
-        "id": "string-durability-bow",
+        "id": "cord-durability-bow",
         "type": "DURABILITY",
         "value": 254,
         "context": "PREDICATE_CONVERTED",

@@ -1,11 +1,11 @@
 {
-  "type": "STRING",
+  "type": "CORD",
   "models": [
     {
       "name": "bow_string",
       "template": "bow_string.png",
       "type": "GENERATE",
-      "palette": "STRING",
+      "palette": "CORD",
       "order": 1,
       "variants": [
         {
@@ -40,7 +40,7 @@
     {
       "target": [
         "type:BOW_LIMB",
-        "type:STRING"
+        "type:CORD"
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "bow_string"

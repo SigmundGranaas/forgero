@@ -14,7 +14,7 @@
         "type": "BOW_LIMB"
       },
       {
-        "type": "STRING"
+        "type": "CORD"
       }
     ],
     "slots": [

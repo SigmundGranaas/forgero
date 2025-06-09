@@ -16,7 +16,7 @@
       "tag": "forgero:${material.name}-bow_limb"
     },
     "b": {
-      "tag": "forgero:string"
+      "tag": "forgero:cord"
     }
   },
   "result": {
