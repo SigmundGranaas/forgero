@@ -130,7 +130,7 @@ public class ForgeroBowInitializer implements ForgeroPreInitializationEntryPoint
 		modification.registerRule("forgero:bow_limb", bowLimb.build());
 		modification.registerRule("forgero:arrow_head", arrowHead.build());
 		modification.registerRule("forgero:feather", feather.build());
-		modification.registerRule("forgero:string", string.build());
+		modification.registerRule("forgero:cord", cord.build());
 	}
 }
 

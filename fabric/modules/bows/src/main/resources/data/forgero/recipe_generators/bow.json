@@ -16,7 +16,7 @@
       "tag": "forgero:${material.name}-bow_limb"
     },
     "b": {
-      "tag": "forgero:cord"
+      "item": "minecraft:string"
     }
   },
   "result": {
