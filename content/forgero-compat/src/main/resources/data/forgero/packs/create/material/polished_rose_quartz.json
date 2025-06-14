@@ -30,17 +30,17 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "mineral-attack_damage-composite",
+            "id": "mineral-attack-damage-composite",
             "type": "ATTACK_DAMAGE",
             "value": 4.5
           },
           {
-            "id": "mineral-mining_speed-composite",
+            "id": "mineral-mining-speed-composite",
             "type": "MINING_SPEED",
             "value": 7.5
           },
           {
-            "id": "mineral-mining_level-composite",
+            "id": "mineral-mining-level-composite",
             "type": "MINING_LEVEL",
             "value": 2
           },
