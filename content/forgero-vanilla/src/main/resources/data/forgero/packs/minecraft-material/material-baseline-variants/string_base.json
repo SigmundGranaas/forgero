@@ -22,7 +22,7 @@
           {
             "id": "string-weight-composite",
             "type": "WEIGHT",
-            "value": 6
+            "value": 0.6
           }
         ]
       },
@@ -43,7 +43,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 3
+            "value": 0.3
           },
           {
             "id": "string-attack_speed-offensive-upgrade",
