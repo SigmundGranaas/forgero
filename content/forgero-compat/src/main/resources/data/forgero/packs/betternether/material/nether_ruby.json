@@ -14,7 +14,7 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "mineral-mining-speed-composite",
+            "id": "mineral-mining_speed-composite",
             "type": "MINING_SPEED",
             "value": 10
           },
