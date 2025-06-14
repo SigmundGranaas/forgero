@@ -11,7 +11,7 @@ public class Attributes {
 
 	public static AttributeModification reduceByWeight = (attribute, state) -> {
 		float weight = ComputedAttribute.apply(state, Weight.KEY);
-		float newValue = attribute.asFloat() - (weight / 100);
+		float newValue = attribute.asFloat() - (weight / 10);
 		return ComputedAttribute.of(newValue, attribute.key());
 	};
 

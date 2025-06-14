@@ -26,7 +26,7 @@
           {
             "id": "dust-weight-composite",
             "type": "WEIGHT",
-            "value": 20
+            "value": 2
           }
         ]
       },
@@ -47,7 +47,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 10
+            "value": 1
           },
           {
             "id": "dust-durability-offensive-upgrade",

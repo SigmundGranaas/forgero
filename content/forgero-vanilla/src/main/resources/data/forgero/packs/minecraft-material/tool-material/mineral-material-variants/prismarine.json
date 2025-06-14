@@ -13,17 +13,17 @@
         "order": "BASE",
         "attributes": [
           {
-            "id": "mineral-attack-damage-composite",
+            "id": "mineral-attack_damage-composite",
             "type": "ATTACK_DAMAGE",
             "value": 6.5
           },
           {
-            "id": "mineral-durability-composite",
+            "id": "mineral-durability_composite",
             "type": "DURABILITY",
             "value": 1150
           },
           {
-            "id": "mineral-rarity-composite",
+            "id": "mineral-rarity_composite",
             "type": "RARITY",
             "value": 70
           },

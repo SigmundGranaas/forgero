@@ -35,7 +35,7 @@
           {
             "id": "mineral-weight-composite",
             "type": "WEIGHT",
-            "value": 60
+            "value": 6
           },
           {
             "id": "mineral-armor-composite",
@@ -61,7 +61,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 30
+            "value": 3
           },
           {
             "id": "mineral-attack_damage-offensive-upgrade",

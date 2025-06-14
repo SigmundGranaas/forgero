@@ -14,17 +14,17 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "mineral-attack-damage-composite",
+            "id": "mineral-attack_damage-composite",
             "type": "ATTACK_DAMAGE",
             "value": 4.5
           },
           {
-            "id": "mineral-mining-speed-composite",
+            "id": "mineral-mining_speed-composite",
             "type": "MINING_SPEED",
             "value": 7
           },
           {
-            "id": "mineral-mining-level-composite",
+            "id": "mineral-mining_level-composite",
             "type": "MINING_LEVEL",
             "value": 3
           },
@@ -41,7 +41,7 @@
           {
             "id": "mineral-weight-composite",
             "type": "WEIGHT",
-            "value": 20
+            "value": 2
           }
         ]
       },
@@ -62,7 +62,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 10
+            "value": 1
           },
           {
             "id": "mineral-attack_damage-offensive-upgrade",

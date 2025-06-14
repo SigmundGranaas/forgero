@@ -13,7 +13,7 @@
         "order": "BASE",
         "attributes": [
           {
-            "id": "mineral-mining-speed-composite",
+            "id": "mineral-mining_speed-composite",
             "type": "MINING_SPEED",
             "value": 8
           },
@@ -51,7 +51,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 10
+            "value": 1
           },
           {
             "id": "mineral-attack_damage-offensive-upgrade",
