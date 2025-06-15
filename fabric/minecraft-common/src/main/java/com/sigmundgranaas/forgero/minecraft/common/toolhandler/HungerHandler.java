@@ -62,13 +62,13 @@ public class HungerHandler {
 
 	private void addCombatExhaustionBasedOnWeight(ServerPlayerEntity player, int weight) {
 		weight = Math.max(0, Math.min(weight, 30));
-		float exhaustion = weight <= 5 ? 0.02f * weight : 0.1f + (weight - 5) * 0.06f;
+		float exhaustion = 0.02f * weight;
 		player.getHungerManager().addExhaustion(exhaustion);
 	}
 
 	private void addMiningExhaustionBasedOnWeight(ServerPlayerEntity player, int weight) {
 		weight = Math.max(0, Math.min(weight, 30));
-		float exhaustion = weight <= 5 ? 0.001f * weight : 0.005f + (weight - 5) * 0.0015f;
+		float exhaustion = 0.001f * weight + 0.0015f;
 		player.getHungerManager().addExhaustion(exhaustion);
 	}
 }
