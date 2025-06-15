@@ -26,7 +26,7 @@
           {
             "id": "stone-weight-composite",
             "type": "WEIGHT",
-            "value": 14
+            "value": 1.4
           }
         ]
       },
@@ -47,7 +47,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 7
+            "value": 0.7
           },
           {
             "id": "stone-durability-offensive-upgrade",

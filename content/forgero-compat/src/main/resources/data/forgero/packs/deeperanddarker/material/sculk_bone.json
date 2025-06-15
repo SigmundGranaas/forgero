@@ -36,7 +36,7 @@
           {
             "id": "bone-weight-composite",
             "type": "WEIGHT",
-            "value": 35
+            "value": 3.5
           },
           {
             "id": "bone-armor-composite",
@@ -62,7 +62,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 17
+            "value": 1.75
           },
           {
             "id": "bone-mining_speed-offensive-upgrade",

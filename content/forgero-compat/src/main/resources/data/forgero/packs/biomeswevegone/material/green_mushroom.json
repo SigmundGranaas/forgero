@@ -30,14 +30,6 @@
             "value": 15
           },
           {
-            "id": "hard_plant-weight-upgrade",
-            "type": "WEIGHT",
-            "order": "BASE",
-            "operation": "ADDITION",
-            "category": "ALL",
-            "value": 5
-          },
-          {
             "id": "hard_plant-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",

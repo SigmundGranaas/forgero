@@ -39,7 +39,7 @@
           {
             "id": "metal-weight-composite",
             "type": "WEIGHT",
-            "value": 52
+            "value": 5.2
           },
           {
             "id": "metal-draw_power-composite",
@@ -65,7 +65,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 26
+            "value": 2.6
           },
           {
             "id": "metal-attack_damage-offensive-upgrade",

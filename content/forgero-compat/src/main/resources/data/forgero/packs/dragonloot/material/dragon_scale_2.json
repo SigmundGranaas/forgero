@@ -45,7 +45,7 @@
           {
             "id": "special-weight-composite",
             "type": "WEIGHT",
-            "value": 40
+            "value": 4
           },
           {
             "id": "special-armor-composite",
@@ -71,7 +71,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 20
+            "value": 2
           },
           {
             "id": "special-attack_speed-offensive-upgrade",

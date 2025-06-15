@@ -127,10 +127,10 @@ public class ThrowableItem extends PersistentProjectileEntity {
 		if (getStack() != null) {
 			float weight = StateService.INSTANCE.convert(getStack())
 					.map(state -> ComputedAttribute.apply(state, Weight.KEY))
-					.orElse(20f);
-			if (weight >= 10f) {
-				double logModifier = Math.log10(weight) - Math.log10(20f);
-				return weight * 0.001 * logModifier;
+					.orElse(2f);
+			if (weight >= 1f) {
+				double logModifier = Math.log10(weight) - Math.log10(2f);
+				return weight * 0.01 * logModifier;
 			}
 		}
 		return 0f;

@@ -37,7 +37,7 @@
             "type": "WEIGHT",
             "context": "COMPOSITE",
             "operation": "ADDITION",
-            "value": 15
+            "value": 1.5
           }
 
         ]
@@ -59,7 +59,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 7
+            "value": 0.75
           },
           {
             "id": "wood-durability-offensive-upgrade",

@@ -31,7 +31,7 @@
           {
             "id": "wood-weight-composite",
             "type": "WEIGHT",
-            "value": 30
+            "value": 3
           }
         ]
       },
@@ -52,7 +52,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 15
+            "value": 1.5
           },
           {
             "id": "wood-attack_damage-offensive-upgrade",

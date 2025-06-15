@@ -32,7 +32,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 10
+            "value": 1
           },
           {
             "id": "hard_plant-durability-offensive-upgrade",

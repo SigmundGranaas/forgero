@@ -26,7 +26,7 @@
           {
             "id": "hard_plant-weight-composite",
             "type": "WEIGHT",
-            "value": 15
+            "value": 1.5
           }
         ]
       },
@@ -47,7 +47,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 7.5
+            "value": 0.75
           },
           {
             "id": "hard_plant-durability-offensive-upgrade",

@@ -31,7 +31,7 @@
           {
             "id": "wood-weight-composite",
             "type": "WEIGHT",
-            "value": 25
+            "value": 2.5
           },
           {
             "id": "wood-draw_speed-composite",
@@ -62,7 +62,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 12.5
+            "value": 1.25
           },
           {
             "id": "wood-durability-offensive-upgrade",

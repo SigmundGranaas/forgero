@@ -1,9 +1,0 @@
-{
-  "namespace": "mysticalcrops",
-  "dependencies": [
-    "minecraft",
-    "forgero",
-    "minecraft-vanilla",
-    "mysticalcrops"
-  ]
-}

@@ -61,7 +61,7 @@
           {
             "id": "metal-weight-composite",
             "type": "WEIGHT",
-            "value": 40
+            "value": 4
           }
         ]
       },
@@ -82,7 +82,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 20
+            "value": 2
           },
           {
             "id": "metal-attack_damage-offensive-upgrade",

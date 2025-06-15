@@ -26,7 +26,7 @@
           {
             "id": "string-weight-composite",
             "type": "WEIGHT",
-            "value": 2
+            "value": 0.2
           }
         ]
       },
@@ -47,7 +47,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 1
+            "value": 0.1
           },
           {
             "id": "string-durability-utility-upgrade",
