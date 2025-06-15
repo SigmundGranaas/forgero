@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.smithing.block.entity;
 
+import static com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities.MOLD;
 
 import com.sigmundgranaas.forgero.smithing.block.custom.MoldBlock;
 
@@ -10,10 +11,9 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import static com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities.MOLD;
 
 public class MoldBlockEntity extends BlockEntity {
 	private Identifier liquid;
@@ -21,31 +21,41 @@ public class MoldBlockEntity extends BlockEntity {
 	private int coolingTime;
 	private int currentCoolingTime;
 	private boolean isSolidified;
-	private ItemStack result;
+	private ItemStack result = ItemStack.EMPTY;
 
 	public MoldBlockEntity(BlockPos pos, BlockState state) {
 		super(MOLD, pos, state);
 	}
 
 	public static void tick(World world, BlockPos pos, BlockState state, MoldBlockEntity be) {
-		if (!world.isClient && state.get(MoldBlock.FILLED) && state.get(MoldBlock.PROGRESS) < 100) {
+		if (!world.isClient && state.get(MoldBlock.FILLED) && !be.isSolidified) {
 			be.currentCoolingTime++;
-			int newProgress = (int) ((float) be.currentCoolingTime / be.coolingTime * 100);
-			world.setBlockState(pos, state.with(MoldBlock.PROGRESS, newProgress));
+			int newProgress = Math.min(100, (int) ((float) be.currentCoolingTime / be.coolingTime * 100));
 
-			if (newProgress >= 100) {
+			// Update block state with new progress
+			BlockState newState = state.with(MoldBlock.PROGRESS, newProgress);
+			if (!state.equals(newState)) {
+				world.setBlockState(pos, newState, 3);
+			}
+
+			// Check if solidification is complete
+			if (newProgress >= 100 && !be.isSolidified) {
 				be.isSolidified = true;
-				world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 1.2F);
+				be.markDirty();
 			}
 		}
 	}
-
 
 	public boolean isSolidified() {
 		return isSolidified;
 	}
 
 	public ItemStack getResult() {
+		if (result.isEmpty()) {
+			return ItemStack.EMPTY;
+		}
+
 		ItemStack resultCopy = result.copy();
 		clear();
 		return resultCopy;
@@ -60,10 +70,14 @@ public class MoldBlockEntity extends BlockEntity {
 		this.liquidAmount = amount;
 		this.coolingTime = coolingTime;
 		this.currentCoolingTime = 0;
-		this.result = result;
+		this.isSolidified = false;
+		this.result = result.copy();
+
 		World world = getWorld();
 		if (world != null) {
-			world.setBlockState(getPos(), getCachedState().with(MoldBlock.FILLED, true).with(MoldBlock.PROGRESS, 0));
+			world.setBlockState(getPos(), getCachedState()
+					.with(MoldBlock.FILLED, true)
+					.with(MoldBlock.PROGRESS, 0), 3);
 		}
 		markDirty();
 	}
@@ -73,12 +87,34 @@ public class MoldBlockEntity extends BlockEntity {
 		this.liquidAmount = 0;
 		this.coolingTime = 0;
 		this.currentCoolingTime = 0;
-		this.result = null;
+		this.isSolidified = false;
+		this.result = ItemStack.EMPTY;
+
 		World world = getWorld();
 		if (world != null) {
-			world.setBlockState(getPos(), getCachedState().with(MoldBlock.FILLED, false).with(MoldBlock.PROGRESS, 0));
+			world.setBlockState(getPos(), getCachedState()
+					.with(MoldBlock.FILLED, false)
+					.with(MoldBlock.PROGRESS, 0), 3);
 		}
 		markDirty();
+	}
+
+	public void dropContents(World world, BlockPos pos) {
+		if (!result.isEmpty()) {
+			ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), result);
+		}
+	}
+
+	public Identifier getLiquid() {
+		return liquid;
+	}
+
+	public int getLiquidAmount() {
+		return liquidAmount;
+	}
+
+	public int getProgress() {
+		return getCachedState().get(MoldBlock.PROGRESS);
 	}
 
 	@Override
@@ -90,7 +126,8 @@ public class MoldBlockEntity extends BlockEntity {
 		nbt.putInt("LiquidAmount", liquidAmount);
 		nbt.putInt("CoolingTime", coolingTime);
 		nbt.putInt("CurrentCoolingTime", currentCoolingTime);
-		if (liquid != null) {
+		nbt.putBoolean("IsSolidified", isSolidified);
+		if (!result.isEmpty()) {
 			nbt.put("Result", result.writeNbt(new NbtCompound()));
 		}
 	}
@@ -104,6 +141,9 @@ public class MoldBlockEntity extends BlockEntity {
 		liquidAmount = nbt.getInt("LiquidAmount");
 		coolingTime = nbt.getInt("CoolingTime");
 		currentCoolingTime = nbt.getInt("CurrentCoolingTime");
-		result = ItemStack.fromNbt(nbt.getCompound("Result"));
+		isSolidified = nbt.getBoolean("IsSolidified");
+		if (nbt.contains("Result")) {
+			result = ItemStack.fromNbt(nbt.getCompound("Result"));
+		}
 	}
 }

@@ -37,16 +37,35 @@ public class MetalMoldRecipe implements Recipe<SimpleInventory> {
 
 	@Override
 	public boolean matches(SimpleInventory inventory, World world) {
+		if (inventory.size() < 3) {
+			return false;
+		}
+
+		ItemStack moldStack = inventory.getStack(0);
 		ItemStack crucible = inventory.getStack(2);
-		return mold.test(inventory.getStack(0))
-				&& crucible.getItem() instanceof LiquidMetalCrucibleItem crucibleItem
-				&& crucibleItem.hasMoreOrEqualLiquid(crucible, liquidAmount)
-				&& crucibleItem.getLiquidType(crucible).equals(liquid);
+
+		// Check if mold matches
+		if (!mold.test(moldStack)) {
+			return false;
+		}
+
+		// Check if crucible is valid and contains the right liquid
+		if (!(crucible.getItem() instanceof LiquidMetalCrucibleItem crucibleItem)) {
+			return false;
+		}
+
+		// Check liquid type and amount
+		Identifier crucibleLiquid = crucibleItem.getLiquidType(crucible);
+		if (crucibleLiquid == null || !crucibleLiquid.equals(liquid)) {
+			return false;
+		}
+
+		return crucibleItem.hasMoreOrEqualLiquid(crucible, liquidAmount);
 	}
 
 	@Override
 	public ItemStack craft(SimpleInventory inventory, DynamicRegistryManager registryManager) {
-		return result;
+		return result.copy();
 	}
 
 	@Override
@@ -74,12 +93,6 @@ public class MetalMoldRecipe implements Recipe<SimpleInventory> {
 		return Type.INSTANCE;
 	}
 
-	public static class Type implements RecipeType<MetalMoldRecipe> {
-		public static final Type INSTANCE = new Type();
-		public static final String ID = "metal_molding";
-	}
-
-
 	public Identifier getLiquid() {
 		return liquid;
 	}
@@ -92,16 +105,25 @@ public class MetalMoldRecipe implements Recipe<SimpleInventory> {
 		return liquidAmount;
 	}
 
+	public Ingredient getMold() {
+		return mold;
+	}
+
+	public static class Type implements RecipeType<MetalMoldRecipe> {
+		public static final Type INSTANCE = new Type();
+		public static final String ID = "metal_molding";
+	}
+
 	public static class Serializer implements RecipeSerializer<MetalMoldRecipe> {
-		public static Serializer INSTANCE = new Serializer();
+		public static final Serializer INSTANCE = new Serializer();
 		public static final String ID = "metal_molding";
 
 		@Override
 		public MetalMoldRecipe read(Identifier id, JsonObject json) {
 			Identifier liquid = new Identifier(JsonHelper.getString(json, "liquid"));
-			int coolingTime = JsonHelper.getInt(json, "cooling_time");
+			int coolingTime = JsonHelper.getInt(json, "cooling_time", 200); // Default 10 seconds
 			int liquidAmount = JsonHelper.getInt(json, "liquid_amount");
-			Ingredient mold = Ingredient.fromJson(json.get("mold"));
+			Ingredient mold = Ingredient.fromJson(JsonHelper.getObject(json, "mold"));
 			ItemStack result = ShapedRecipe.outputFromJson(JsonHelper.getObject(json, "result"));
 
 			return new MetalMoldRecipe(id, liquid, coolingTime, liquidAmount, mold, result);

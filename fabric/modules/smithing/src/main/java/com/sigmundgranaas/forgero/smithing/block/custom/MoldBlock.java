@@ -1,6 +1,13 @@
+// Updated MoldBlock.java
 package com.sigmundgranaas.forgero.smithing.block.custom;
 
+import static com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities.MOLD;
+
 import com.sigmundgranaas.forgero.smithing.block.entity.MoldBlockEntity;
+import com.sigmundgranaas.forgero.smithing.item.custom.LiquidMetalCrucibleItem;
+import com.sigmundgranaas.forgero.smithing.recipe.MetalMoldRecipe;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -11,6 +18,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
@@ -28,11 +36,6 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import static com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities.MOLD;
-
 public class MoldBlock extends BlockWithEntity {
 	public static final IntProperty PROGRESS = IntProperty.of("progress", 0, 100);
 	public static final BooleanProperty FILLED = BooleanProperty.of("filled");
@@ -42,8 +45,8 @@ public class MoldBlock extends BlockWithEntity {
 	public MoldBlock(@NotNull Settings settings) {
 		super(settings.nonOpaque());
 		setDefaultState(getStateManager().getDefaultState()
-		                                 .with(PROGRESS, 0)
-		                                 .with(FILLED, false));
+				.with(PROGRESS, 0)
+				.with(FILLED, false));
 	}
 
 	@SuppressWarnings("deprecation")
@@ -79,23 +82,65 @@ public class MoldBlock extends BlockWithEntity {
 			return ActionResult.PASS;
 		}
 
-		if (moldEntity.isEmpty()) {
-			return ActionResult.PASS;
+		ItemStack heldItem = player.getStackInHand(hand);
+
+		// Handle crucible pouring
+		if (heldItem.getItem() instanceof LiquidMetalCrucibleItem crucibleItem && !crucibleItem.isEmpty(heldItem)) {
+			if (moldEntity.isEmpty()) {
+				// Check for valid recipe
+				MetalMoldRecipe recipe = findRecipe(world, heldItem);
+				if (recipe != null) {
+					// Pour liquid into mold
+					if (crucibleItem.removeLiquid(heldItem, recipe.getLiquidAmount())) {
+						moldEntity.pourLiquid(
+								recipe.getLiquid(),
+								recipe.getLiquidAmount(),
+								recipe.getCoolingTime(),
+								recipe.getOutput(world.getRegistryManager())
+						);
+
+						world.playSound(null, blockPosition, SoundEvents.ITEM_BUCKET_EMPTY_LAVA,
+								SoundCategory.BLOCKS, 0.8F, 1.0F);
+						player.sendMessage(Text.literal("Poured liquid metal into the mold."), true);
+						return ActionResult.SUCCESS;
+					}
+				} else {
+					player.sendMessage(Text.literal("No valid recipe for this liquid and mold combination."), true);
+				}
+			} else {
+				player.sendMessage(Text.literal("The mold is already filled."), true);
+			}
+			return ActionResult.SUCCESS;
 		}
 
-		if (moldEntity.isSolidified()) {
-			ItemStack result = moldEntity.getResult();
-			player.sendMessage(Text.literal("Retrieved " + result.getName().getString() + " from the mold."), true);
-			player.getInventory().offerOrDrop(result);
-			world.playSound(
-					null, blockPosition, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F,
-					((world.random.nextFloat() - world.random.nextFloat()) * 0.7F + 1.0F) * 2.0F
-			);
-		} else {
-			player.sendMessage(Text.literal("The mold is still cooling."), true);
+		// Handle result retrieval
+		if (heldItem.isEmpty() && !moldEntity.isEmpty()) {
+			if (moldEntity.isSolidified()) {
+				ItemStack result = moldEntity.getResult();
+				player.sendMessage(Text.literal("Retrieved " + result.getName().getString() + " from the mold."), true);
+				player.getInventory().offerOrDrop(result);
+				world.playSound(null, blockPosition, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F,
+						((world.random.nextFloat() - world.random.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+				return ActionResult.SUCCESS;
+			} else {
+				int progress = blockState.get(PROGRESS);
+				player.sendMessage(Text.literal("The mold is still cooling... (" + progress + "%)"), true);
+				return ActionResult.SUCCESS;
+			}
 		}
-		return ActionResult.SUCCESS;
 
+		return ActionResult.PASS;
+	}
+
+	private MetalMoldRecipe findRecipe(World world, ItemStack crucible) {
+		// Create a simple inventory for recipe matching
+		SimpleInventory inventory = new SimpleInventory(3);
+		inventory.setStack(0, new ItemStack(this)); // Mold block as item
+		inventory.setStack(2, crucible); // Crucible
+
+		return world.getRecipeManager()
+				.getFirstMatch(MetalMoldRecipe.Type.INSTANCE, inventory, world)
+				.orElse(null);
 	}
 
 	@Override
@@ -105,22 +150,95 @@ public class MoldBlock extends BlockWithEntity {
 
 	@Override
 	public void randomDisplayTick(@NotNull BlockState blockState, @NotNull World world, @NotNull BlockPos blockPosition, @NotNull Random random) {
-		if (blockState.get(FILLED) && blockState.get(PROGRESS) < 100) {
+		if (blockState.get(FILLED)) {
 			double x = blockPosition.getX() + 0.5;
-			double y = blockPosition.getY() + 0.5;
+			double y = blockPosition.getY() + 0.2;
 			double z = blockPosition.getZ() + 0.5;
 
-			if (blockState.get(PROGRESS) > 90) {
-				world.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, x, y, z, 0, 0.05, 0);
+			int progress = blockState.get(PROGRESS);
+
+			// Hot liquid effects (early stages)
+			if (progress < 30) {
+				// Glowing hot liquid particles
+				if (random.nextFloat() < 0.6f) {
+					world.addParticle(ParticleTypes.LAVA,
+							x + (random.nextDouble() - 0.5) * 0.6,
+							y,
+							z + (random.nextDouble() - 0.5) * 0.6,
+							0, 0.01, 0);
+				}
+
+				// Flame particles
+				if (random.nextFloat() < 0.4f) {
+					world.addParticle(ParticleTypes.FLAME,
+							x + (random.nextDouble() - 0.5) * 0.4,
+							y + 0.1,
+							z + (random.nextDouble() - 0.5) * 0.4,
+							0, 0.02, 0);
+				}
+
+				// Crackling sounds
+				if (random.nextFloat() < 0.1f) {
+					world.playSound(x, y, z, SoundEvents.BLOCK_LAVA_POP,
+							SoundCategory.BLOCKS, 0.3F, 1.2F + random.nextFloat() * 0.3F, false);
+				}
 			}
 
-			if (random.nextFloat() < 0.3f) {
-				world.addParticle(ParticleTypes.SMOKE, x, y, z, 0, 0.05, 0);
+			// Cooling effects (middle stages)
+			else if (progress < 70) {
+				// Steam/smoke as it cools
+				if (random.nextFloat() < 0.5f) {
+					world.addParticle(ParticleTypes.SMOKE,
+							x + (random.nextDouble() - 0.5) * 0.5,
+							y + 0.1,
+							z + (random.nextDouble() - 0.5) * 0.5,
+							0, 0.05, 0);
+				}
+
+				// Occasional small flames
+				if (random.nextFloat() < 0.2f) {
+					world.addParticle(ParticleTypes.SMALL_FLAME,
+							x + (random.nextDouble() - 0.5) * 0.3,
+							y + 0.05,
+							z + (random.nextDouble() - 0.5) * 0.3,
+							0, 0.01, 0);
+				}
+
+				// Cooling sounds
+				if (random.nextFloat() < 0.05f) {
+					world.playSound(x, y, z, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE,
+							SoundCategory.BLOCKS, 0.2F, 0.8F + random.nextFloat() * 0.4F, false);
+				}
 			}
-			if (random.nextFloat() < 0.1f) {
-				world.playSound(x, y, z, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+
+			// Final cooling (late stages)
+			else if (progress < 100) {
+				// Light smoke
+				if (random.nextFloat() < 0.3f) {
+					world.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE,
+							x + (random.nextDouble() - 0.5) * 0.3,
+							y + 0.05,
+							z + (random.nextDouble() - 0.5) * 0.3,
+							0, 0.03, 0);
+				}
+
+				// Rare hissing sound
+				if (random.nextFloat() < 0.02f) {
+					world.playSound(x, y, z, SoundEvents.BLOCK_FIRE_EXTINGUISH,
+							SoundCategory.BLOCKS, 0.1F, 1.5F, false);
+				}
 			}
 		}
 	}
 
+	@Override
+	public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+		if (!state.isOf(newState.getBlock())) {
+			BlockEntity blockEntity = world.getBlockEntity(pos);
+			if (blockEntity instanceof MoldBlockEntity moldEntity) {
+				moldEntity.dropContents(world, pos);
+			}
+		}
+		super.onStateReplaced(state, world, pos, newState, moved);
+	}
 }
