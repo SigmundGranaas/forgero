@@ -1,0 +1,13 @@
+{
+  "type": "forgero:metal_molding",
+  "liquid": "forgero:molten_copper",
+  "cooling_time": 300,
+  "liquid_amount": 250,
+  "mold": {
+    "item": "forgero:mold"
+  },
+  "result": {
+    "item": "forgero:copper-pickaxe_head",
+    "count": 1
+  }
+}

@@ -156,13 +156,13 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 
 		if (ore.getItem() == Items.IRON_ORE || ore.getItem() == Items.DEEPSLATE_IRON_ORE) {
 			liquidType = new Identifier("forgero", "molten_iron");
-			liquidAmount = 144; // 1 ingot worth of molten metal (144mB = 1 ingot in most mods)
+			liquidAmount = 100;
 		} else if (ore.getItem() == Items.GOLD_ORE || ore.getItem() == Items.DEEPSLATE_GOLD_ORE) {
 			liquidType = new Identifier("forgero", "molten_gold");
-			liquidAmount = 144;
+			liquidAmount = 100;
 		} else if (ore.getItem() == Items.COPPER_ORE || ore.getItem() == Items.DEEPSLATE_COPPER_ORE) {
 			liquidType = new Identifier("forgero", "molten_copper");
-			liquidAmount = 144;
+			liquidAmount = 100;
 		}
 		// Add more ore types as needed
 
@@ -183,34 +183,53 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 	private void craftItem() {
 		ItemStack crucible = inventory.get(0);
 		ItemStack ore = inventory.get(1);
-		ItemStack result = getRecipeResult(crucible, ore);
 
-		if (!result.isEmpty()) {
-			ItemStack output = inventory.get(3);
-			if (output.isEmpty()) {
-				// First time creating output, move the result crucible to output
-				inventory.set(3, result);
-				// Clear the input crucible since it's now in the output
-				inventory.set(0, ItemStack.EMPTY);
-			} else if (output.getItem() instanceof LiquidMetalCrucibleItem &&
-					result.getItem() instanceof LiquidMetalCrucibleItem) {
-				// Try to merge liquid crucibles
-				LiquidMetalCrucibleItem crucibleItem = (LiquidMetalCrucibleItem) output.getItem();
-				LiquidMetalCrucibleItem resultCrucibleItem = (LiquidMetalCrucibleItem) result.getItem();
+		if (crucible.isEmpty() || ore.isEmpty()) return;
 
-				Identifier resultLiquidType = resultCrucibleItem.getLiquidType(result);
-				int resultLiquidAmount = resultCrucibleItem.getLiquidAmount(result);
+		if (!(crucible.getItem() instanceof LiquidMetalCrucibleItem crucibleItem)) return;
 
-				if (resultLiquidType != null && crucibleItem.canAddLiquid(output, resultLiquidType, resultLiquidAmount)) {
-					// Update the output crucible with the new liquid
-					crucibleItem.addLiquid(output, resultLiquidType, resultLiquidAmount);
-					// Clear the input crucible since its contents are now in the output
+		Identifier liquidType = null;
+		int liquidAmount = 0;
+
+		if (ore.getItem() == Items.IRON_ORE || ore.getItem() == Items.DEEPSLATE_IRON_ORE) {
+			liquidType = new Identifier("forgero", "molten_iron");
+			liquidAmount = 100;
+		} else if (ore.getItem() == Items.GOLD_ORE || ore.getItem() == Items.DEEPSLATE_GOLD_ORE) {
+			liquidType = new Identifier("forgero", "molten_gold");
+			liquidAmount = 100;
+		} else if (ore.getItem() == Items.COPPER_ORE || ore.getItem() == Items.DEEPSLATE_COPPER_ORE) {
+			liquidType = new Identifier("forgero", "molten_copper");
+			liquidAmount = 100;
+		}
+
+		if (liquidType == null) return;
+
+		// Check if crucible can accept liquid
+		if (crucibleItem.canAddLiquid(crucible, liquidType, liquidAmount)) {
+			// Add liquid directly to input crucible (update the input stack)
+			crucibleItem.addLiquid(crucible, liquidType, liquidAmount);
+
+			// Consume ore
+			ore.decrement(1);
+
+			// If crucible is now full (can't add more), move to output
+			if (!crucibleItem.canAddLiquid(crucible, liquidType, liquidAmount)) {
+				ItemStack output = inventory.get(3);
+				if (output.isEmpty()) {
+					inventory.set(3, crucible.copy());
 					inventory.set(0, ItemStack.EMPTY);
+				} else if (output.getItem() instanceof LiquidMetalCrucibleItem) {
+					LiquidMetalCrucibleItem outputCrucible = (LiquidMetalCrucibleItem) output.getItem();
+					Identifier outputLiquidType = outputCrucible.getLiquidType(output);
+					int outputLiquidAmount = outputCrucible.getLiquidAmount(output);
+
+					if (outputLiquidType.equals(liquidType) &&
+							outputCrucible.canAddLiquid(output, liquidType, liquidAmount)) {
+						outputCrucible.addLiquid(output, liquidType, liquidAmount);
+						inventory.set(0, ItemStack.EMPTY);
+					}
 				}
 			}
-
-			// Only consume the ore
-			ore.decrement(1);
 		}
 	}
 

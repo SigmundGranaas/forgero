@@ -152,16 +152,10 @@ public class LiquidMetalCrucibleItem extends Item {
 			String liquidPath = liquidType.getPath().replace("_", " ");
 			String liquidName = liquidPath.substring(0, 1).toUpperCase() + liquidPath.substring(1);
 
-			tooltip.add(Text.literal("Liquid: " + liquidName).formatted(Formatting.BLUE));
+			tooltip.add(Text.literal(liquidName).formatted(Formatting.YELLOW));
 			tooltip.add(Text.literal("Amount: " + amount + "/" + MAX_CAPACITY + " mB").formatted(Formatting.GRAY));
 		} else {
 			tooltip.add(Text.literal("Empty").formatted(Formatting.GRAY));
 		}
-	}
-
-	@Override
-	public boolean hasGlint(ItemStack stack) {
-		// Make crucible enchanted-looking when it contains liquid
-		return !isEmpty(stack);
 	}
 }
