@@ -21,12 +21,7 @@ public class ModRecipes {
 				Registries.RECIPE_SERIALIZER, new Identifier(Forgero.NAMESPACE, MetalSmeltingRecipe.Serializer.ID),
 				MetalSmeltingRecipe.Serializer.INSTANCE
 		);
+		SmithingRecipeManager.initializeRecipes();
 
-		// Smithing
-		Registry.register(
-				Registries.RECIPE_SERIALIZER, new Identifier(Forgero.NAMESPACE, SmithingRecipe.Type.ID),
-				SmithingRecipe.Serializer.INSTANCE
-		);
-		Registry.register(Registries.RECIPE_TYPE, new Identifier(Forgero.NAMESPACE, SmithingRecipe.Type.ID), SmithingRecipe.Type.INSTANCE);
 	}
 }

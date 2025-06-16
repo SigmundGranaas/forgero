@@ -8,8 +8,8 @@
   "identifier": "forgero:${metal.name}-pickaxe_head-mold-recipe",
   "type": "forgero:metal_molding",
   "liquid": "forgero:molten_${metal.name}",
-  "cooling_time": 200,
-  "liquid_amount": 300,
+  "cooling_time": 300,
+  "liquid_amount": 250,
   "mold": {
     "item": "forgero:mold"
   },

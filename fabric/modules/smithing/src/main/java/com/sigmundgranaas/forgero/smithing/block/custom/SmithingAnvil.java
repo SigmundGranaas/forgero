@@ -4,8 +4,12 @@ import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.smithing.block.entity.SmithingAnvilBlockEntity;
+import com.sigmundgranaas.forgero.smithing.component.HeatedItemComponent;
+import com.sigmundgranaas.forgero.smithing.component.SmithingProgress;
 import com.sigmundgranaas.forgero.smithing.item.ModItems;
+import com.sigmundgranaas.forgero.smithing.item.SmithingTongs;
 import com.sigmundgranaas.forgero.smithing.recipe.SmithingRecipe;
+import com.sigmundgranaas.forgero.smithing.recipe.SmithingRecipeManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,13 +22,16 @@ import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.ItemScatterer;
@@ -232,51 +239,189 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
 
 		@NotNull var stackInHand = player.getStackInHand(hand);
 		Inventory inventory = smithingAnvilBlockEntity.getInventory();
+		ItemStack anvilItem = inventory.getStack(0);
+
+		// Update heat of item on anvil
+		if (!anvilItem.isEmpty()) {
+			boolean nearHeat = isNearHeatSource(world, blockPosition);
+			HeatedItemComponent.updateHeat(anvilItem, nearHeat);
+		}
 
 		if (stackInHand.isEmpty()) {
-			// If the player is not holding anything, give them the item from the anvil
-			if (!inventory.getStack(0).isEmpty()) {
-				ItemStack stackToGive = inventory.getStack(0).copy();
-				inventory.setStack(0, ItemStack.EMPTY);
-				player.getInventory().offerOrDrop(stackToGive);
-				smithingAnvilBlockEntity.markDirty();
-			}
-		} else {
-			// Player is holding something
-			if (inventory.getStack(0).isEmpty()) {
-				// Put one item from the player's hand into the anvil
-				ItemStack stackToPut = stackInHand.copy();
-				stackToPut.setCount(1);
-				inventory.setStack(0, stackToPut);
-				stackInHand.decrement(1);
-				smithingAnvilBlockEntity.markDirty();
-			} else if (stackInHand.getItem().equals(ModItems.SMITHING_HAMMER)) {
-				// Smith the tool part using the smithing hammer
-				Optional<SmithingRecipe> recipeOpt = world.getRecipeManager().getFirstMatch(
-						SmithingRecipe.Type.INSTANCE,
-						new SimpleInventory(inventory.getStack(0), stackInHand),
-						world
-				);
-				if (recipeOpt.isPresent()) {
-					recipeOpt.get().craft(smithingAnvilBlockEntity.getInventory(), world.getRegistryManager());
+			// Trying to pick up with bare hands
+			if (!anvilItem.isEmpty()) {
+				if (HeatedItemComponent.canPickupWithHands(anvilItem)) {
+					ItemStack stackToGive = anvilItem.copy();
+					inventory.setStack(0, ItemStack.EMPTY);
+					player.getInventory().offerOrDrop(stackToGive);
 					smithingAnvilBlockEntity.markDirty();
+
+					world.playSound(null, blockPosition, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
+							SoundCategory.BLOCKS, 0.5f, 1.0f);
+				} else {
+					player.sendMessage(Text.literal("The item is too hot to pick up with bare hands! Use tongs.")
+							.formatted(Formatting.RED), true);
+					return ActionResult.FAIL;
 				}
-			} else {
-				// Try to swap items if they're different
-				if (!ItemStack.areItemsEqual(stackInHand, inventory.getStack(0))) {
-					ItemStack temp = inventory.getStack(0).copy();
+			}
+		} else if (stackInHand.getItem() instanceof SmithingTongs) {
+			// Using tongs
+			handleTongsInteraction(stackInHand, inventory, player, world, blockPosition, smithingAnvilBlockEntity);
+		} else if (stackInHand.getItem().equals(ModItems.SMITHING_HAMMER)) {
+			// Using smithing hammer
+			handleHammerInteraction(anvilItem, player, world, blockPosition, smithingAnvilBlockEntity);
+		} else {
+			// Trying to place an item
+			if (anvilItem.isEmpty()) {
+				if (HeatedItemComponent.canPickupWithHands(stackInHand)) {
 					ItemStack stackToPut = stackInHand.copy();
 					stackToPut.setCount(1);
 					inventory.setStack(0, stackToPut);
 					stackInHand.decrement(1);
-					player.getInventory().offerOrDrop(temp);
 					smithingAnvilBlockEntity.markDirty();
+
+					world.playSound(null, blockPosition, SoundEvents.BLOCK_ANVIL_PLACE,
+							SoundCategory.BLOCKS, 0.3f, 1.0f);
+				} else {
+					player.sendMessage(Text.literal("The item is too hot to handle! Use tongs.")
+							.formatted(Formatting.RED), true);
+					return ActionResult.FAIL;
 				}
+			} else {
+				player.sendMessage(Text.literal("The anvil already has an item on it.")
+						.formatted(Formatting.YELLOW), true);
 			}
 		}
 
 		return ActionResult.SUCCESS;
 	}
+
+	private void handleTongsInteraction(ItemStack tongs, Inventory inventory, PlayerEntity player,
+										World world, BlockPos pos, SmithingAnvilBlockEntity blockEntity) {
+		ItemStack anvilItem = inventory.getStack(0);
+		ItemStack tongsHeldItem = SmithingTongs.getHeldItem(tongs);
+
+		if (SmithingTongs.isEmpty(tongs)) {
+			// Tongs are empty, try to pick up from anvil
+			if (!anvilItem.isEmpty()) {
+				SmithingTongs.setHeldItem(tongs, anvilItem.copy());
+				inventory.setStack(0, ItemStack.EMPTY);
+				blockEntity.markDirty();
+
+				world.playSound(null, pos, SoundEvents.ITEM_ARMOR_EQUIP_IRON,
+						SoundCategory.BLOCKS, 0.5f, 1.2f);
+				player.sendMessage(Text.literal("Picked up item with tongs").formatted(Formatting.GREEN), true);
+			}
+		} else {
+			// Tongs have an item, try to place on anvil
+			if (anvilItem.isEmpty()) {
+				inventory.setStack(0, tongsHeldItem.copy());
+				SmithingTongs.setHeldItem(tongs, ItemStack.EMPTY);
+				blockEntity.markDirty();
+
+				world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_PLACE,
+						SoundCategory.BLOCKS, 0.3f, 1.0f);
+				player.sendMessage(Text.literal("Placed item on anvil").formatted(Formatting.GREEN), true);
+			} else {
+				player.sendMessage(Text.literal("The anvil already has an item on it.")
+						.formatted(Formatting.YELLOW), true);
+			}
+		}
+	}
+
+	private void handleHammerInteraction(ItemStack anvilItem, PlayerEntity player, World world,
+										 BlockPos pos, SmithingAnvilBlockEntity blockEntity) {
+		if (anvilItem.isEmpty()) {
+			player.sendMessage(Text.literal("There's nothing to work on the anvil.")
+					.formatted(Formatting.YELLOW), true);
+			return;
+		}
+
+		// Find applicable recipe
+		Optional<SmithingRecipe> recipeOpt = SmithingRecipeManager.findRecipe(anvilItem);
+		if (recipeOpt.isEmpty()) {
+			player.sendMessage(Text.literal("This item cannot be smithed.")
+					.formatted(Formatting.RED), true);
+			return;
+		}
+
+		SmithingRecipe recipe = recipeOpt.get();
+
+		// Check if item can be worked at current temperature
+		if (!recipe.canWork(anvilItem)) {
+			int heat = HeatedItemComponent.getHeat(anvilItem);
+			if (heat < recipe.getMinWorkingHeat()) {
+				player.sendMessage(Text.literal("The item is too cold to work. Heat it up first!")
+						.formatted(Formatting.BLUE), true);
+			} else {
+				player.sendMessage(Text.literal("The item is too hot to work properly. Let it cool down a bit.")
+						.formatted(Formatting.RED), true);
+			}
+			return;
+		}
+
+		// Set recipe ID if not already set
+		if (SmithingProgress.getRecipeId(anvilItem).isEmpty()) {
+			SmithingProgress.setRecipeId(anvilItem, recipe.getId().toString());
+		}
+
+		// Add hammer strike
+		SmithingProgress.addHammerStrike(anvilItem);
+		HeatedItemComponent.reduceHeat(anvilItem, HeatedItemComponent.HAMMER_HEAT_REDUCTION);
+		HeatedItemComponent.setWorked(anvilItem, true);
+
+		// Play anvil sound
+		world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 1.0f, 1.0f);
+
+		// Show progress to player
+		int strikes = SmithingProgress.getHammerStrikes(anvilItem);
+		int required = recipe.getRequiredHammerStrikes();
+
+		player.sendMessage(Text.literal(String.format("Progress: %d/%d strikes", strikes, required))
+				.formatted(Formatting.GREEN), true);
+		player.sendMessage(HeatedItemComponent.getHeatText(anvilItem), true);
+
+		// Check if smithing is complete
+		if (recipe.isComplete(anvilItem)) {
+			if (recipe.requiresCooling() && !SmithingProgress.isCooled(anvilItem)) {
+				player.sendMessage(Text.literal("Smithing complete! Now cool the item in water to finish.")
+						.formatted(Formatting.GOLD), true);
+			} else {
+				// Transform item
+				ItemStack result = recipe.craft(anvilItem);
+				if (!result.isEmpty()) {
+					blockEntity.getInventory().setStack(0, result);
+					player.sendMessage(Text.literal("Smithing successful!")
+							.formatted(Formatting.GOLD), true);
+					world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 0.8f);
+				}
+			}
+		}
+
+		blockEntity.markDirty();
+	}
+
+	private boolean isNearHeatSource(World world, BlockPos anvilPos) {
+		// Check for lava, fire, or other heat sources within 3 blocks
+		for (int x = -3; x <= 3; x++) {
+			for (int y = -2; y <= 2; y++) {
+				for (int z = -3; z <= 3; z++) {
+					BlockPos checkPos = anvilPos.add(x, y, z);
+					BlockState state = world.getBlockState(checkPos);
+
+					if (state.isOf(net.minecraft.block.Blocks.LAVA) ||
+							state.isOf(net.minecraft.block.Blocks.FIRE) ||
+							state.isOf(net.minecraft.block.Blocks.MAGMA_BLOCK) ||
+							state.isOf(net.minecraft.block.Blocks.CAMPFIRE) ||
+							state.isOf(net.minecraft.block.Blocks.SOUL_CAMPFIRE)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {

@@ -18,7 +18,7 @@ public class ModItemGroups {
 			new Identifier(Forgero.NAMESPACE, "smithing"),
 			FabricItemGroup.builder().displayName(Text.translatable("itemgroup.smithing"))
 					.icon(() -> new ItemStack(ModBlocks.SMITHING_ANVIL)).entries((displayContext, entries) -> {
-						entries.add(ModItems.TONGS);
+						entries.add(ModItems.SMITHING_TONGS);
 						entries.add(ModItems.SMITHING_HAMMER);
 						entries.add(ModItems.CLAY_CRUCIBLE);
 						entries.add(ModItems.CRUCIBLE);

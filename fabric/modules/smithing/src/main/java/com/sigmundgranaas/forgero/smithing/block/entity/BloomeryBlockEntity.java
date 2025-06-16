@@ -4,14 +4,21 @@ import javax.annotation.Nullable;
 
 import com.sigmundgranaas.forgero.smithing.block.custom.BloomeryBlock;
 import com.sigmundgranaas.forgero.smithing.item.custom.LiquidMetalCrucibleItem;
+import com.sigmundgranaas.forgero.smithing.screen.BloomeryScreenHandler;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.collection.DefaultedList;
@@ -21,7 +28,7 @@ import net.minecraft.world.World;
 
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 
-public class BloomeryBlockEntity extends BlockEntity implements ImplementedInventory {
+public class BloomeryBlockEntity extends BlockEntity implements ImplementedInventory, NamedScreenHandlerFactory {
 	private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(4, ItemStack.EMPTY);
 
 	private int progress = 0;
@@ -181,7 +188,10 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 		if (!result.isEmpty()) {
 			ItemStack output = inventory.get(3);
 			if (output.isEmpty()) {
+				// First time creating output, move the result crucible to output
 				inventory.set(3, result);
+				// Clear the input crucible since it's now in the output
+				inventory.set(0, ItemStack.EMPTY);
 			} else if (output.getItem() instanceof LiquidMetalCrucibleItem &&
 					result.getItem() instanceof LiquidMetalCrucibleItem) {
 				// Try to merge liquid crucibles
@@ -192,20 +202,15 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 				int resultLiquidAmount = resultCrucibleItem.getLiquidAmount(result);
 
 				if (resultLiquidType != null && crucibleItem.canAddLiquid(output, resultLiquidType, resultLiquidAmount)) {
+					// Update the output crucible with the new liquid
 					crucibleItem.addLiquid(output, resultLiquidType, resultLiquidAmount);
-				} else {
-					// Can't merge, recipe fails
-					return;
+					// Clear the input crucible since its contents are now in the output
+					inventory.set(0, ItemStack.EMPTY);
 				}
-			} else {
-				// Can't stack different items
-				return;
 			}
 
-			// Consume inputs
+			// Only consume the ore
 			ore.decrement(1);
-			// The crucible is replaced by the result crucible, so we remove the original
-			inventory.set(0, ItemStack.EMPTY);
 		}
 	}
 
@@ -213,22 +218,18 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 		return fuelTime > 0;
 	}
 
-	private boolean hasFuel() {
-		return isFuel(inventory.get(2));
+	private void burnFuel() {
+		ItemStack fuelStack = inventory.get(2);  // Changed from 1 to 2 to match the fuel slot
+		if (!fuelStack.isEmpty()) {
+			this.maxFuelTime = this.getFuelTime(fuelStack);
+			this.fuelTime = this.maxFuelTime;
+			fuelStack.decrement(1);
+			this.markDirty();
+		}
 	}
 
-	private void burnFuel() {
-		ItemStack fuel = inventory.get(2);
-		if (isFuel(fuel)) {
-			maxFuelTime = getFuelBurnTime(fuel);
-			fuelTime = maxFuelTime;
-			fuel.decrement(1);
-
-			// Handle lava bucket -> empty bucket
-			if (fuel.getItem() == Items.LAVA_BUCKET) {
-				inventory.set(2, new ItemStack(Items.BUCKET));
-			}
-		}
+	private boolean hasFuel() {
+		return !inventory.get(2).isEmpty() && this.getFuelTime(inventory.get(2)) > 0;  // Changed from 1 to 2 to match the fuel slot
 	}
 
 	private boolean isCrucible(ItemStack stack) {
@@ -252,14 +253,11 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 				stack.getItem() == Items.BLAZE_ROD;
 	}
 
-	private int getFuelBurnTime(ItemStack fuel) {
-		if (fuel.getItem() == Items.COAL || fuel.getItem() == Items.CHARCOAL) {
-			return 1600; // 80 seconds
-		} else if (fuel.getItem() == Items.LAVA_BUCKET) {
-			return 20000; // 1000 seconds
-		} else if (fuel.getItem() == Items.BLAZE_ROD) {
-			return 2400; // 120 seconds
-		}
+	private int getFuelTime(ItemStack fuel) {
+		if (fuel.isEmpty()) return 0;
+		if (fuel.isOf(Items.COAL)) return 1600; // 80 seconds
+		if (fuel.isOf(Items.CHARCOAL)) return 1600;
+		if (fuel.isIn(ConventionalItemTags.COAL)) return 1600;
 		return 0;
 	}
 
@@ -360,5 +358,55 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 		NbtCompound nbt = new NbtCompound();
 		writeNbt(nbt);
 		return nbt;
+	}
+
+	@Override
+	public Text getDisplayName() {
+		return Text.translatable("block.forgero.bloomery");
+	}
+
+	@Override
+	public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+		return new BloomeryScreenHandler(syncId, playerInventory, this);
+	}
+
+	public int getFuelProgress() {
+		return this.fuelTime;
+	}
+
+	public int getMaxFuelProgress() {
+		return this.maxFuelTime;
+	}
+
+	private final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+		@Override
+		public int get(int index) {
+			return switch (index) {
+				case 0 -> progress;
+				case 1 -> maxProgress;
+				case 2 -> fuelTime;
+				case 3 -> maxFuelTime;
+				default -> 0;
+			};
+		}
+
+		@Override
+		public void set(int index, int value) {
+			switch (index) {
+				case 0 -> progress = value;
+				case 1 -> maxProgress = value;
+				case 2 -> fuelTime = value;
+				case 3 -> maxFuelTime = value;
+			}
+		}
+
+		@Override
+		public int size() {
+			return 4;
+		}
+	};
+
+	public PropertyDelegate getPropertyDelegate() {
+		return propertyDelegate;
 	}
 }

@@ -1,98 +1,63 @@
 package com.sigmundgranaas.forgero.smithing.recipe;
 
-import com.google.gson.JsonObject;
-import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
-import lombok.Getter;
+import com.sigmundgranaas.forgero.smithing.component.HeatedItemComponent;
+import com.sigmundgranaas.forgero.smithing.component.SmithingProgress;
 
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.RecipeType;
-import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
 
-import org.jetbrains.annotations.NotNull;
+public class SmithingRecipe {
+	private final Identifier id;
+	private final ItemStack inputItem;
+	private final ItemStack result;
+	private final int requiredHammerStrikes;
+	private final int minWorkingHeat;
+	private final int maxWorkingHeat;
+	private final boolean requiresCooling;
 
-@SuppressWarnings("ClassCanBeRecord")
-public class SmithingRecipe implements Recipe<SimpleInventory> {
-	private final @NotNull Identifier id;
-	@Getter
-	private final @NotNull Ingredient ingredient;
-
-	public SmithingRecipe(@NotNull Identifier id, @NotNull Ingredient ingredient) {
+	public SmithingRecipe(Identifier id, ItemStack inputItem, ItemStack result,
+						  int requiredHammerStrikes, int minWorkingHeat, int maxWorkingHeat,
+						  boolean requiresCooling) {
 		this.id = id;
-		this.ingredient = ingredient;
+		this.inputItem = inputItem;
+		this.result = result;
+		this.requiredHammerStrikes = requiredHammerStrikes;
+		this.minWorkingHeat = minWorkingHeat;
+		this.maxWorkingHeat = maxWorkingHeat;
+		this.requiresCooling = requiresCooling;
 	}
 
-	@Override
-	public @NotNull Identifier getId() {
-		return this.id;
+	public boolean matches(ItemStack input) {
+		return ItemStack.areItemsEqual(input, this.inputItem);
 	}
 
-	@Override
-	public @NotNull RecipeType<?> getType() {
-		return Type.INSTANCE;
+	public boolean canWork(ItemStack input) {
+		int heat = HeatedItemComponent.getHeat(input);
+		return heat >= minWorkingHeat && heat <= maxWorkingHeat;
 	}
 
-	@Override
-	public @NotNull RecipeSerializer<?> getSerializer() {
-		return Serializer.INSTANCE;
+	public boolean isComplete(ItemStack input) {
+		int strikes = SmithingProgress.getHammerStrikes(input);
+		return strikes >= requiredHammerStrikes;
 	}
 
-	@Override
-	public boolean matches(@NotNull SimpleInventory inventory, @NotNull World world) {
-		@NotNull var smithingAnvilItemStack = inventory.getStack(0);
-		if (smithingAnvilItemStack.isEmpty() || !(smithingAnvilItemStack.getItem() instanceof StateItem)) {
-			return false;
+	public boolean needsCooling(ItemStack input) {
+		return requiresCooling && !SmithingProgress.isCooled(input);
+	}
+
+	public ItemStack craft(ItemStack input) {
+		if (isComplete(input) && (!requiresCooling || SmithingProgress.isCooled(input))) {
+			return result.copy();
 		}
-
-		return this.getIngredient().test(inventory.getStack(0));
-	}
-
-	@Override
-	public @NotNull ItemStack craft(@NotNull SimpleInventory inventory, @NotNull DynamicRegistryManager registryManager) {
-		// TODO: Apply modifiers based on the temperature of the tool part
-		return inventory.getStack(0);
-	}
-
-	@Override
-	public boolean fits(int width, int height) {
-		return true;
-	}
-
-	@Override
-	public @NotNull ItemStack getOutput(@NotNull DynamicRegistryManager registryManager) {
 		return ItemStack.EMPTY;
 	}
 
-	public static class Type implements RecipeType<SmithingRecipe> {
-		public static final Type INSTANCE = new Type();
-		public static final String ID = "smithing";
-	}
-
-	public static class Serializer implements RecipeSerializer<SmithingRecipe> {
-		public static final MetalSmeltingRecipe.Serializer INSTANCE = new MetalSmeltingRecipe.Serializer();
-
-		@Override
-		public SmithingRecipe read(@NotNull Identifier id, @NotNull JsonObject json) {
-			Ingredient ingredient = Ingredient.fromJson(json.get("ingredient"));
-			return new SmithingRecipe(id, ingredient);
-		}
-
-		@Override
-		public SmithingRecipe read(@NotNull Identifier id, @NotNull PacketByteBuf buf) {
-			@NotNull Ingredient ingredient = Ingredient.fromPacket(buf);
-			return new SmithingRecipe(id, ingredient);
-		}
-
-		@Override
-		public void write(@NotNull PacketByteBuf buf, @NotNull SmithingRecipe recipe) {
-			buf.writeIdentifier(recipe.getId());
-			recipe.getIngredient().write(buf);
-		}
-	}
+	// Getters
+	public Identifier getId() { return id; }
+	public ItemStack getInputItem() { return inputItem; }
+	public ItemStack getResult() { return result; }
+	public int getRequiredHammerStrikes() { return requiredHammerStrikes; }
+	public int getMinWorkingHeat() { return minWorkingHeat; }
+	public int getMaxWorkingHeat() { return maxWorkingHeat; }
+	public boolean requiresCooling() { return requiresCooling; }
 }

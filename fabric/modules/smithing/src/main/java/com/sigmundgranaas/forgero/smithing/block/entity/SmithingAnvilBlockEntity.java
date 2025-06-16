@@ -83,6 +83,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		// Remove the markDirtyAndUpdateListeners call from here as it can cause issues during loading
 	}
 
+
+
 	@Override
 	public NbtCompound toInitialChunkDataNbt() {
 		return super.createNbt();

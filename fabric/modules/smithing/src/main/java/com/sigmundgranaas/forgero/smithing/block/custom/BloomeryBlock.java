@@ -11,6 +11,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
@@ -52,29 +53,17 @@ public class BloomeryBlock extends BlockWithEntity {
 	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		if (!world.isClient) {
-			BlockEntity entity = world.getBlockEntity(pos);
-			if (entity instanceof BloomeryBlockEntity bloomery) {
-				ItemStack heldItem = player.getStackInHand(hand);
-
-				// Handle item insertion/extraction
-				if (!heldItem.isEmpty()) {
-					// Try to insert items
-					ItemStack remaining = bloomery.insertItem(heldItem);
-					if (remaining.getCount() != heldItem.getCount()) {
-						player.setStackInHand(hand, remaining);
-						return ActionResult.SUCCESS;
-					}
-				} else {
-					// Try to extract items when hand is empty
-					ItemStack extracted = bloomery.extractItem();
-					if (!extracted.isEmpty()) {
-						player.setStackInHand(hand, extracted);
-						return ActionResult.SUCCESS;
-					}
-				}
+			BlockEntity blockEntity = world.getBlockEntity(pos);
+			if (blockEntity instanceof BloomeryBlockEntity) {
+				player.openHandledScreen((NamedScreenHandlerFactory) blockEntity);
 			}
 		}
 		return ActionResult.SUCCESS;
+	}
+
+	@Override
+	public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
+		return world.getBlockEntity(pos) instanceof BloomeryBlockEntity ? (BloomeryBlockEntity)world.getBlockEntity(pos) : null;
 	}
 
 	@Override
