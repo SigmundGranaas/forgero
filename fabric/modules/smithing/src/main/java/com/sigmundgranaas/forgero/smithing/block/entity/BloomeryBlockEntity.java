@@ -32,6 +32,10 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 
 	private int progress = 0;
 	private int maxProgress = 200; // 10 seconds at 20 ticks per second
+
+	// Adjust fuel times to match vanilla furnace
+	private static final int COAL_FUEL_TIME = 1600; // 80 seconds
+	private static final int CHARCOAL_FUEL_TIME = 1600; // 80 seconds
 	private int fuelTime = 0;
 	private int maxFuelTime = 0;
 
@@ -64,22 +68,26 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
         boolean wasLit = state.get(BloomeryBlock.LIT);
         boolean dirty = false;
 
-        // Handle fuel consumption
+        // Handle fuel consumption and refueling
         if (blockEntity.isBurning()) {
             blockEntity.fuelTime--;
+            if (blockEntity.fuelTime <= 0) {
+                if (blockEntity.hasFuel()) {
+                    blockEntity.burnFuel();
+                    dirty = true;
+                } else {
+                    blockEntity.fuelTime = 0;
+                    blockEntity.maxFuelTime = 0;
+                    dirty = true;
+                }
+            }
+        } else if (!blockEntity.isBurning() && blockEntity.hasFuel()) {
+            blockEntity.burnFuel();
             dirty = true;
         }
 
         // Check if we can process
         if (blockEntity.hasRecipe()) {
-            // Start burning new fuel if needed
-            if (!blockEntity.isBurning()) {
-                if (blockEntity.hasFuel()) {
-                    blockEntity.burnFuel();
-                    dirty = true;
-                }
-            }
-
             // Process recipe if burning
             if (blockEntity.isBurning()) {
                 blockEntity.progress++;
@@ -90,6 +98,10 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
                     blockEntity.progress = 0;
                     dirty = true;
                 }
+            } else if (blockEntity.progress > 0) {
+                // Gradually decrease progress when no fuel
+                blockEntity.progress = Math.max(0, blockEntity.progress - 2); // Decrease by 2 each tick
+                dirty = true;
             }
         } else if (blockEntity.progress > 0) {
             // Reset progress if recipe is invalid
@@ -292,9 +304,18 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 
 	private int getFuelTime(ItemStack fuel) {
 		if (fuel.isEmpty()) return 0;
-		if (fuel.isOf(Items.COAL)) return 1600; // 80 seconds
-		if (fuel.isOf(Items.CHARCOAL)) return 1600;
-		if (fuel.isIn(ConventionalItemTags.COAL)) return 1600;
+		if (fuel.isOf(Items.COAL) || fuel.isIn(ConventionalItemTags.COAL)) {
+			return COAL_FUEL_TIME;
+		}
+		if (fuel.isOf(Items.CHARCOAL)) {
+			return CHARCOAL_FUEL_TIME;
+		}
+		if (fuel.isOf(Items.LAVA_BUCKET)) {
+			return 20000; // 1000 seconds
+		}
+		if (fuel.isOf(Items.BLAZE_ROD)) {
+			return 2400; // 120 seconds
+		}
 		return 0;
 	}
 
@@ -404,8 +425,8 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
             return switch (index) {
                 case 0 -> progress;
                 case 1 -> maxProgress;
-                case 2 -> Math.max(0, fuelTime);  // Ensure non-negative
-                case 3 -> Math.max(1, maxFuelTime);  // Ensure non-zero for division
+                case 2 -> fuelTime;
+                case 3 -> maxFuelTime;
                 default -> 0;
             };
         }
@@ -418,6 +439,7 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
                 case 2 -> fuelTime = Math.max(0, value);
                 case 3 -> maxFuelTime = Math.max(1, value);
             }
+            markDirty();
         }
 
         @Override

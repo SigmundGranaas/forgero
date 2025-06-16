@@ -25,8 +25,8 @@ public class BloomeryScreen extends HandledScreen<BloomeryScreenHandler> {
 
         context.drawTexture(TEXTURE, x, y, 0, 0, backgroundWidth, backgroundHeight);
 
-        renderProgressArrow(context, x, y);
         renderFuelIndicator(context, x, y);
+        renderProgressArrow(context, x, y);
     }
 
     private void renderProgressArrow(DrawContext context, int x, int y) {
@@ -37,7 +37,7 @@ public class BloomeryScreen extends HandledScreen<BloomeryScreenHandler> {
             int drawWidth = (maxProgress > 0) ? (progress * arrowWidth) / maxProgress : 0;
             if (drawWidth > 0) {
                 // Texture coordinates: (u, v) = (176, 0), size = (drawWidth, 16)
-                context.drawTexture(TEXTURE, x + 79, y + 50, 176, 0, drawWidth, 17);
+                context.drawTexture(TEXTURE, x + 79, y + 35, 176, 0, drawWidth, 16);
             }
         }
     }
@@ -47,9 +47,15 @@ public class BloomeryScreen extends HandledScreen<BloomeryScreenHandler> {
         int currentFuel = handler.getFuelProgress();
         int fuelHeight = 14;
         int fuelBarHeight = (maxFuel > 0) ? (currentFuel * fuelHeight) / maxFuel : 0;
+        
+        // Always show at least 1 pixel of the fuel bar
+        if (fuelBarHeight <= 0 && currentFuel > 0) {
+            fuelBarHeight = 1;
+        }
+        
         if (fuelBarHeight > 0 && currentFuel > 0) {
             // Texture coordinates: (u, v) = (176, 14 + (fuelHeight - fuelBarHeight)), size = (14, fuelBarHeight)
-            context.drawTexture(TEXTURE, x + 32, y + 50 + (fuelHeight - fuelBarHeight),
+            context.drawTexture(TEXTURE, x + 32, y + 36 + (fuelHeight - fuelBarHeight),
                     176, 17 + (fuelHeight - fuelBarHeight), 14, fuelBarHeight);
         }
     }

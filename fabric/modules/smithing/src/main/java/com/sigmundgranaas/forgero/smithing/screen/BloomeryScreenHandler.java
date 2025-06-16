@@ -17,13 +17,16 @@ public class BloomeryScreenHandler extends ScreenHandler {
     // Client Constructor
     public BloomeryScreenHandler(int syncId, PlayerInventory playerInventory) {
         this(syncId, playerInventory, new SimpleInventory(4), new PropertyDelegate() {
+            private final int[] properties = new int[4];
+
             @Override
             public int get(int index) {
-                return 0;
+                return properties[index];
             }
 
             @Override
             public void set(int index, int value) {
+                properties[index] = value;
             }
 
             @Override
@@ -109,11 +112,7 @@ public class BloomeryScreenHandler extends ScreenHandler {
     }
 
     public int getProgress() {
-        int progress = this.propertyDelegate.get(0);
-        int maxProgress = this.propertyDelegate.get(1);  // Max Progress
-        int progressArrowSize = 24; // Match the width in BloomeryScreen
-
-        return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;
+        return this.propertyDelegate.get(0);
     }
 
     public boolean isSmelting() {
