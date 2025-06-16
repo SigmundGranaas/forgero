@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.smithing.block.inventory;
 
-import com.sigmundgranaas.forgero.smithing.block.entity.ImplementedInventory;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;

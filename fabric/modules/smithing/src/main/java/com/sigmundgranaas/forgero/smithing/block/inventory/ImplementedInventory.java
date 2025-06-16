@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.smithing.block.entity;
+package com.sigmundgranaas.forgero.smithing.block.inventory;
 
 import java.util.List;
 

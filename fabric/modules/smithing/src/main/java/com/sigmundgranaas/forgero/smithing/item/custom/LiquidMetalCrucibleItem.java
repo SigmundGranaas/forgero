@@ -1,9 +1,5 @@
 package com.sigmundgranaas.forgero.smithing.item.custom;
 
-import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -12,6 +8,9 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class LiquidMetalCrucibleItem extends Item {
 	private static final String LIQUID_TYPE_KEY = "LiquidType";
@@ -22,9 +21,6 @@ public class LiquidMetalCrucibleItem extends Item {
 		super(settings.maxCount(1)); // Crucibles don't stack when they can contain liquid
 	}
 
-	/**
-	 * Gets the type of liquid currently stored in the crucible
-	 */
 	@Nullable
 	public Identifier getLiquidType(ItemStack stack) {
 		NbtCompound nbt = stack.getNbt();
@@ -34,9 +30,6 @@ public class LiquidMetalCrucibleItem extends Item {
 		return null;
 	}
 
-	/**
-	 * Gets the amount of liquid currently stored in the crucible
-	 */
 	public int getLiquidAmount(ItemStack stack) {
 		NbtCompound nbt = stack.getNbt();
 		if (nbt != null && nbt.contains(LIQUID_AMOUNT_KEY)) {
@@ -45,16 +38,11 @@ public class LiquidMetalCrucibleItem extends Item {
 		return 0;
 	}
 
-	/**
-	 * Checks if the crucible has at least the specified amount of liquid
-	 */
 	public boolean hasMoreOrEqualLiquid(ItemStack stack, int requiredAmount) {
 		return getLiquidAmount(stack) >= requiredAmount;
 	}
 
-	/**
-	 * Checks if the crucible can accept the specified liquid and amount
-	 */
+
 	public boolean canAddLiquid(ItemStack stack, Identifier liquidType, int amount) {
 		Identifier currentLiquid = getLiquidType(stack);
 		int currentAmount = getLiquidAmount(stack);
@@ -68,9 +56,7 @@ public class LiquidMetalCrucibleItem extends Item {
 		return currentAmount + amount <= MAX_CAPACITY;
 	}
 
-	/**
-	 * Adds liquid to the crucible
-	 */
+
 	public boolean addLiquid(ItemStack stack, Identifier liquidType, int amount) {
 		if (!canAddLiquid(stack, liquidType, amount)) {
 			return false;
@@ -85,9 +71,6 @@ public class LiquidMetalCrucibleItem extends Item {
 		return true;
 	}
 
-	/**
-	 * Removes liquid from the crucible
-	 */
 	public boolean removeLiquid(ItemStack stack, int amount) {
 		int currentAmount = getLiquidAmount(stack);
 		if (currentAmount < amount) {
@@ -108,30 +91,19 @@ public class LiquidMetalCrucibleItem extends Item {
 		return true;
 	}
 
-	/**
-	 * Checks if the crucible is empty
-	 */
 	public boolean isEmpty(ItemStack stack) {
 		return getLiquidAmount(stack) <= 0;
 	}
 
-	/**
-	 * Gets the remaining capacity of the crucible
-	 */
+
 	public int getRemainingCapacity(ItemStack stack) {
 		return MAX_CAPACITY - getLiquidAmount(stack);
 	}
 
-	/**
-	 * Gets the maximum capacity of the crucible
-	 */
 	public int getMaxCapacity() {
 		return MAX_CAPACITY;
 	}
 
-	/**
-	 * Empties the crucible completely
-	 */
 	public void empty(ItemStack stack) {
 		NbtCompound nbt = stack.getNbt();
 		if (nbt != null) {

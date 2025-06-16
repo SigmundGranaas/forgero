@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.smithing.block.entity;
 
 import com.sigmundgranaas.forgero.smithing.block.custom.BloomeryBlock;
+import com.sigmundgranaas.forgero.smithing.block.inventory.ImplementedInventory;
 import com.sigmundgranaas.forgero.smithing.item.custom.LiquidMetalCrucibleItem;
 import com.sigmundgranaas.forgero.smithing.screen.BloomeryScreenHandler;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
