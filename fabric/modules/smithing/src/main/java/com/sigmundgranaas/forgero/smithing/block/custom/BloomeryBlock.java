@@ -11,10 +11,9 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
@@ -119,18 +118,6 @@ public class BloomeryBlock extends BlockWithEntity {
 						z + (random.nextDouble() - 0.5) * 0.4,
 						0.0, 0.05, 0.0);
 			}
-
-			// Crackling furnace particles (flame and sparks)
-			//if (random.nextFloat() < 0.6f) {
-			//	// Flame particles
-			//	world.addParticle(ParticleTypes.FLAME,
-			//			x + (random.nextDouble() - 0.5) * 0.5,
-			//			y + random.nextDouble() * 0.2,
-			//			z + (random.nextDouble() - 0.5) * 0.5,
-			//			(random.nextDouble() - 0.5) * 0.02,
-			//			random.nextDouble() * 0.01 + 0.01,
-			//			(random.nextDouble() - 0.5) * 0.02);
-			//}
 
 			// Lava spark particles for crackling effect
 			if (random.nextFloat() < 0.3f) {

@@ -1,11 +1,9 @@
 package com.sigmundgranaas.forgero.smithing.block.entity;
 
-import javax.annotation.Nullable;
-
 import com.sigmundgranaas.forgero.smithing.block.custom.BloomeryBlock;
 import com.sigmundgranaas.forgero.smithing.item.custom.LiquidMetalCrucibleItem;
 import com.sigmundgranaas.forgero.smithing.screen.BloomeryScreenHandler;
-
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -26,7 +24,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
+import javax.annotation.Nullable;
 
 public class BloomeryBlockEntity extends BlockEntity implements ImplementedInventory, NamedScreenHandlerFactory {
 	private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(4, ItemStack.EMPTY);
@@ -62,39 +60,58 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 	}
 
 	public static void serverTick(World world, BlockPos pos, BlockState state, BloomeryBlockEntity blockEntity) {
-		boolean hasRecipe = blockEntity.hasRecipe();
-		boolean wasBurning = blockEntity.isBurning();
+        boolean wasLit = state.get(BloomeryBlock.LIT);
+        boolean dirty = false;
 
-		if (blockEntity.isBurning()) {
-			blockEntity.fuelTime--;
-		}
+        // Handle fuel consumption
+        if (blockEntity.isBurning()) {
+            blockEntity.fuelTime--;
+            dirty = true;
+        }
 
-		boolean hasFuel = blockEntity.isBurning() || blockEntity.hasFuel();
-		boolean canSmelt = blockEntity.canSmelt();
+        // Check if we can process
+        if (blockEntity.hasRecipe()) {
+            // Start burning new fuel if needed
+            if (!blockEntity.isBurning()) {
+                if (blockEntity.hasFuel()) {
+                    blockEntity.burnFuel();
+                    dirty = true;
+                }
+            }
 
-		if (hasFuel && canSmelt) {
-			if (!blockEntity.isBurning()) {
-				blockEntity.burnFuel();
-			}
+            // Process recipe if burning
+            if (blockEntity.isBurning()) {
+                blockEntity.progress++;
+                dirty = true;
 
-			blockEntity.progress++;
-			if (blockEntity.progress >= blockEntity.maxProgress) {
-				blockEntity.craftItem();
-				blockEntity.progress = 0;
-			}
-		} else {
-			blockEntity.progress = 0;
-		}
+                if (blockEntity.progress >= blockEntity.maxProgress) {
+                    blockEntity.craftItem();
+                    blockEntity.progress = 0;
+                    dirty = true;
+                }
+            }
+        } else if (blockEntity.progress > 0) {
+            // Reset progress if recipe is invalid
+            blockEntity.progress = 0;
+            dirty = true;
+        }
 
-		boolean isBurning = blockEntity.isBurning();
-		if (wasBurning != isBurning) {
-			world.setBlockState(pos, state.with(BloomeryBlock.LIT, isBurning), Block.NOTIFY_ALL);
-		}
+        // Update block state if lighting changed
+        boolean isLit = blockEntity.isBurning();
+        if (wasLit != isLit) {
+            state = state.with(BloomeryBlock.LIT, isLit);
+            world.setBlockState(pos, state, Block.NOTIFY_ALL);
+            dirty = true;
+        }
 
-		if (wasBurning || isBurning || hasRecipe) {
-			blockEntity.markDirty();
-		}
-	}
+        // Mark dirty and sync to client if needed
+        if (dirty) {
+            blockEntity.markDirty();
+            // Ensure client receives updates by marking the chunk dirty
+            world.markDirty(pos);
+            world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
+        }
+    }
 
 	private boolean canSmelt() {
 		ItemStack crucible = inventory.get(0);
@@ -103,7 +120,7 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 		return !crucible.isEmpty() && !ore.isEmpty() && !result.isEmpty();
 	}
 
-	private boolean hasRecipe() {
+	public boolean hasRecipe() {
 		ItemStack crucible = inventory.get(0);
 		ItemStack ore = inventory.get(1);
 		ItemStack output = inventory.get(3);
@@ -379,6 +396,35 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 		return nbt;
 	}
 
+    // Move propertyDelegate definition before createMenu
+    private final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+        @Override
+        public int get(int index) {
+            return switch (index) {
+                case 0 -> progress;
+                case 1 -> maxProgress;
+                case 2 -> Math.max(0, fuelTime);  // Ensure non-negative
+                case 3 -> Math.max(1, maxFuelTime);  // Ensure non-zero for division
+                default -> 0;
+            };
+        }
+
+        @Override
+        public void set(int index, int value) {
+            switch (index) {
+                case 0 -> progress = Math.max(0, Math.min(value, maxProgress));
+                case 1 -> maxProgress = Math.max(1, value);
+                case 2 -> fuelTime = Math.max(0, value);
+                case 3 -> maxFuelTime = Math.max(1, value);
+            }
+        }
+
+        @Override
+        public int size() {
+            return 4;
+        }
+    };
+
 	@Override
 	public Text getDisplayName() {
 		return Text.translatable("block.forgero.bloomery");
@@ -386,46 +432,6 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 
 	@Override
 	public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-		return new BloomeryScreenHandler(syncId, playerInventory, this);
-	}
-
-	public int getFuelProgress() {
-		return this.fuelTime;
-	}
-
-	public int getMaxFuelProgress() {
-		return this.maxFuelTime;
-	}
-
-	private final PropertyDelegate propertyDelegate = new PropertyDelegate() {
-		@Override
-		public int get(int index) {
-			return switch (index) {
-				case 0 -> progress;
-				case 1 -> maxProgress;
-				case 2 -> fuelTime;
-				case 3 -> maxFuelTime;
-				default -> 0;
-			};
-		}
-
-		@Override
-		public void set(int index, int value) {
-			switch (index) {
-				case 0 -> progress = value;
-				case 1 -> maxProgress = value;
-				case 2 -> fuelTime = value;
-				case 3 -> maxFuelTime = value;
-			}
-		}
-
-		@Override
-		public int size() {
-			return 4;
-		}
-	};
-
-	public PropertyDelegate getPropertyDelegate() {
-		return propertyDelegate;
-	}
+        return new BloomeryScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
+    }
 }

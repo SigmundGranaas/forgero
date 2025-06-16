@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.smithing.screen;
 
-import com.sigmundgranaas.forgero.smithing.block.entity.BloomeryBlockEntity;
-
+import com.sigmundgranaas.forgero.smithing.item.ModItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -34,12 +33,7 @@ public class BloomeryScreenHandler extends ScreenHandler {
         });
     }
 
-    // Server Constructor
-    public BloomeryScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory) {
-        this(syncId, playerInventory, inventory, ((BloomeryBlockEntity) inventory).getPropertyDelegate());
-    }
-
-    // Common Constructor
+    // Common Constructor (used for both server and client with explicit delegate)
     public BloomeryScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate delegate) {
         super(ModScreenHandlers.BLOOMERY_SCREEN_HANDLER, syncId);
         checkSize(inventory, 4);
@@ -47,15 +41,22 @@ public class BloomeryScreenHandler extends ScreenHandler {
         this.propertyDelegate = delegate;
         addProperties(delegate);
 
-        // Add Bloomery Inventory Slots
-        // Crucible Slot (top input)
-        addSlot(new Slot(inventory, 0, 48, 17));
-        // Ore Slot (middle input)
-        addSlot(new Slot(inventory, 1, 48, 53));
-        // Fuel Slot
-        addSlot(new Slot(inventory, 2, 48, 35));
-        // Output Slot
-        addSlot(new Slot(inventory, 3, 108, 35) {
+        // Crucible slot (middle)
+        addSlot(new Slot(inventory, 0, 56, 35) {
+            @Override
+            public boolean canInsert(ItemStack stack) {
+                return stack.isOf(ModItems.CRUCIBLE);
+            }
+        });
+
+        // Ore slot (top left) - slot 1
+        addSlot(new Slot(inventory, 1, 31, 17));
+
+        // Fuel slot (bottom left) - slot 2
+        addSlot(new Slot(inventory, 2, 31, 53));
+
+        // Output slot (right side) - slot 3
+        addSlot(new Slot(inventory, 3, 116, 35) {
             @Override
             public boolean canInsert(ItemStack stack) {
                 return false;
@@ -108,7 +109,15 @@ public class BloomeryScreenHandler extends ScreenHandler {
     }
 
     public int getProgress() {
-        return propertyDelegate.get(0);
+        int progress = this.propertyDelegate.get(0);
+        int maxProgress = this.propertyDelegate.get(1);  // Max Progress
+        int progressArrowSize = 24; // Match the width in BloomeryScreen
+
+        return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;
+    }
+
+    public boolean isSmelting() {
+        return propertyDelegate.get(0) > 0 && propertyDelegate.get(1) > 0;
     }
 
     public int getMaxProgress() {

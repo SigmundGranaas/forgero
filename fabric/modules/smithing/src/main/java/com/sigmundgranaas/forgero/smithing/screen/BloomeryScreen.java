@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.smithing.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.GameRenderer;
@@ -19,22 +18,39 @@ public class BloomeryScreen extends HandledScreen<BloomeryScreenHandler> {
     @Override
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexProgram);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         RenderSystem.setShaderTexture(0, TEXTURE);
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
+
         context.drawTexture(TEXTURE, x, y, 0, 0, backgroundWidth, backgroundHeight);
 
-        // Draw progress arrow
-        if (handler.getProgress() > 0) {
-            int progress = handler.getProgress() * 24 / handler.getMaxProgress();
-            context.drawTexture(TEXTURE, x + 73, y + 34, 176, 14, progress + 1, 16);
-        }
+        renderProgressArrow(context, x, y);
+        renderFuelIndicator(context, x, y);
+    }
 
-        // Draw fuel progress (burning indicator)
-        if (handler.getFuelProgress() > 0) {
-            int fuelProgress = handler.getFuelProgress() * 14 / handler.getMaxFuelProgress();
-            context.drawTexture(TEXTURE, x + 48, y + 36 + 12 - fuelProgress, 176, 12 - fuelProgress, 14, fuelProgress + 1);
+    private void renderProgressArrow(DrawContext context, int x, int y) {
+        if (handler.isSmelting()) {
+            int progress = handler.getProgress();
+            int maxProgress = handler.getMaxProgress();
+            int arrowWidth = 24; // Standard furnace arrow width
+            int drawWidth = (maxProgress > 0) ? (progress * arrowWidth) / maxProgress : 0;
+            if (drawWidth > 0) {
+                // Texture coordinates: (u, v) = (176, 0), size = (drawWidth, 16)
+                context.drawTexture(TEXTURE, x + 79, y + 50, 176, 0, drawWidth, 17);
+            }
+        }
+    }
+
+    private void renderFuelIndicator(DrawContext context, int x, int y) {
+        int maxFuel = handler.getMaxFuelProgress();
+        int currentFuel = handler.getFuelProgress();
+        int fuelHeight = 14;
+        int fuelBarHeight = (maxFuel > 0) ? (currentFuel * fuelHeight) / maxFuel : 0;
+        if (fuelBarHeight > 0 && currentFuel > 0) {
+            // Texture coordinates: (u, v) = (176, 14 + (fuelHeight - fuelBarHeight)), size = (14, fuelBarHeight)
+            context.drawTexture(TEXTURE, x + 32, y + 50 + (fuelHeight - fuelBarHeight),
+                    176, 17 + (fuelHeight - fuelBarHeight), 14, fuelBarHeight);
         }
     }
 

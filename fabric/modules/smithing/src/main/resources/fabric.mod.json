@@ -30,6 +30,8 @@
       "com.sigmundgranaas.forgero.smithing.ForgeroSmithingInitializer"
     ]
   },
+  "mixins": [
+  ],
   "depends": {
     "fabricloader": ">=0.12.12",
     "fabric": "*",

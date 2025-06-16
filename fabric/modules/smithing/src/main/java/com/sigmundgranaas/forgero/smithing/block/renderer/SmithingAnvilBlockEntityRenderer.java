@@ -40,18 +40,18 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 		matrices.push();
 
 		// Position the item on top of the anvil
-		matrices.translate(0.5f, 1.015f, 0.5f);
-		matrices.scale(0.35f, 0.35f, 0.35f);
+		matrices.translate(0.4f, 1.015f, 0.4f);
+		matrices.scale(1f, 1f, 1f);
 
 		// Rotate the item to lay flat on the anvil
 		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
 
 		// Rotate based on anvil facing direction
 		switch (entity.getCachedState().get(SmithingAnvil.FACING)) {
-			case NORTH -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(0));
-			case EAST -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(270));
-			case SOUTH -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180));
-			case WEST -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(90));
+			case NORTH -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180));
+			case EAST -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(90));
+			case SOUTH -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(0));
+			case WEST -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(270));
 		}
 
 		// Use proper lighting from the block position

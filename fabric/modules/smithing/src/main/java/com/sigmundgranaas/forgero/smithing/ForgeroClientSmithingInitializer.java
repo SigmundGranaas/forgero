@@ -5,15 +5,14 @@ import com.sigmundgranaas.forgero.smithing.block.renderer.SmithingAnvilBlockEnti
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.screen.BloomeryScreen;
 import com.sigmundgranaas.forgero.smithing.screen.ModScreenHandlers;
-
-import net.minecraft.client.gui.screen.ingame.HandledScreens;
-
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
+import net.minecraft.client.gui.screen.ingame.HandledScreens;
 
 public class ForgeroClientSmithingInitializer implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
+
 
 
 		BlockEntityRendererRegistry.register(ModBlockEntities.SMITHING_ANVIL, SmithingAnvilBlockEntityRenderer::new);

@@ -47,6 +47,11 @@ public class MoldBlockEntity extends BlockEntity {
 		}
 	}
 
+	public float getCoolingProgress() {
+		if (coolingTime == 0) return 0f;
+		return Math.min(1f, (float) currentCoolingTime / coolingTime);
+	}
+
 	public boolean isSolidified() {
 		return isSolidified;
 	}
