@@ -81,7 +81,7 @@ public class BloomeryBlock extends BlockWithEntity {
 	public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
 		if (state.get(LIT)) {
 			double x = pos.getX() + 0.5;
-			double y = pos.getY() + 1.0;
+			double y = pos.getY() + 1.4;
 			double z = pos.getZ() + 0.5;
 
 			// Sound effects
@@ -132,16 +132,16 @@ public class BloomeryBlock extends BlockWithEntity {
 			}
 
 			// Crackling furnace particles (flame and sparks)
-			if (random.nextFloat() < 0.6f) {
-				// Flame particles
-				world.addParticle(ParticleTypes.FLAME,
-						x + (random.nextDouble() - 0.5) * 0.5,
-						y + random.nextDouble() * 0.2,
-						z + (random.nextDouble() - 0.5) * 0.5,
-						(random.nextDouble() - 0.5) * 0.02,
-						random.nextDouble() * 0.01 + 0.01,
-						(random.nextDouble() - 0.5) * 0.02);
-			}
+			//if (random.nextFloat() < 0.6f) {
+			//	// Flame particles
+			//	world.addParticle(ParticleTypes.FLAME,
+			//			x + (random.nextDouble() - 0.5) * 0.5,
+			//			y + random.nextDouble() * 0.2,
+			//			z + (random.nextDouble() - 0.5) * 0.5,
+			//			(random.nextDouble() - 0.5) * 0.02,
+			//			random.nextDouble() * 0.01 + 0.01,
+			//			(random.nextDouble() - 0.5) * 0.02);
+			//}
 
 			// Lava spark particles for crackling effect
 			if (random.nextFloat() < 0.3f) {
@@ -156,13 +156,29 @@ public class BloomeryBlock extends BlockWithEntity {
 
 			// Small ember particles
 			if (random.nextFloat() < 0.4f) {
-				world.addParticle(ParticleTypes.SMALL_FLAME,
-						x + (random.nextDouble() - 0.5) * 0.4,
-						y + random.nextDouble() * 0.3,
-						z + (random.nextDouble() - 0.5) * 0.4,
-						(random.nextDouble() - 0.5) * 0.01,
-						random.nextDouble() * 0.01,
-						(random.nextDouble() - 0.5) * 0.01);
+				Direction direction = state.get(FACING);
+				double particleX = pos.getX() + 0.5;
+				double particleY = pos.getY() + random.nextDouble() * 6.0 / 16.0;
+				double particleZ = pos.getZ() + 0.5;
+
+				double offset = 0.52;
+				double sideOffset = random.nextDouble() * 0.6 - 0.3;
+
+				switch (direction) {
+					case WEST -> particleX -= offset;
+					case EAST -> particleX += offset;
+					case NORTH -> particleZ -= offset;
+					case SOUTH -> particleZ += offset;
+				}
+
+				if (direction.getAxis() == Direction.Axis.X) {
+					particleZ += sideOffset;
+				} else {
+					particleX += sideOffset;
+				}
+
+				world.addParticle(ParticleTypes.SMALL_FLAME, particleX, particleY, particleZ, 0.0, 0.0, 0.0);
+				world.addParticle(ParticleTypes.FLAME, particleX, particleY, particleZ, 0.0, 0.0, 0.0);
 			}
 
 			// Occasional large smoke puffs

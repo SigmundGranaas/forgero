@@ -62,18 +62,17 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 			blockEntity.fuelTime--;
 		}
 
-		if (hasRecipe) {
-			if (!blockEntity.isBurning() && blockEntity.hasFuel()) {
+		boolean hasFuel = blockEntity.isBurning() || blockEntity.hasFuel();
+		boolean canSmelt = blockEntity.canSmelt();
+
+		if (hasFuel && canSmelt) {
+			if (!blockEntity.isBurning()) {
 				blockEntity.burnFuel();
 			}
 
-			if (blockEntity.isBurning()) {
-				blockEntity.progress++;
-				if (blockEntity.progress >= blockEntity.maxProgress) {
-					blockEntity.craftItem();
-					blockEntity.progress = 0;
-				}
-			} else {
+			blockEntity.progress++;
+			if (blockEntity.progress >= blockEntity.maxProgress) {
+				blockEntity.craftItem();
 				blockEntity.progress = 0;
 			}
 		} else {
@@ -88,6 +87,13 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 		if (wasBurning || isBurning || hasRecipe) {
 			blockEntity.markDirty();
 		}
+	}
+
+	private boolean canSmelt() {
+		ItemStack crucible = inventory.get(0);
+		ItemStack ore = inventory.get(1);
+		ItemStack result = getRecipeResult(crucible, ore);
+		return !crucible.isEmpty() && !ore.isEmpty() && !result.isEmpty();
 	}
 
 	private boolean hasRecipe() {

@@ -43,11 +43,14 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		if (world == null) {
 			return;
 		}
+
+		super.markDirty();
+
 		if (world.isClient()) {
-			super.markDirty();
 			return;
 		}
 
+		// Sync to clients
 		@NotNull PacketByteBuf data = PacketByteBufs.create();
 		@NotNull SimpleInventory inventory = getInventory();
 		int inventorySize = getInventory().size();
@@ -60,8 +63,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		for (@NotNull ServerPlayerEntity player : PlayerLookup.tracking((ServerWorld) world, getPos())) {
 			ServerPlayNetworking.send(player, ModMessages.ITEM_SYNC, data);
 		}
-
-		super.markDirty();
 	}
 
 	@Override
@@ -77,9 +78,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 	@Override
 	public void readNbt(@NotNull NbtCompound nbt) {
-		this.getInventory().readNbtList(nbt.getList(INVENTORY_NBT_KEY, NbtElement.LIST_TYPE));
 		super.readNbt(nbt);
-		this.markDirtyAndUpdateListeners();
+		this.getInventory().readNbtList(nbt.getList(INVENTORY_NBT_KEY, NbtElement.LIST_TYPE));
+		// Remove the markDirtyAndUpdateListeners call from here as it can cause issues during loading
 	}
 
 	@Override
@@ -96,12 +97,12 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	}
 
 	private void markDirtyAndUpdateListeners() {
-		if (this.world == null) {
+		if (this.world == null || this.world.isClient()) {
 			return;
 		}
 
 		this.markDirty();
-		this.world.updateListeners(this.pos, this.getCachedState(), this.world.getBlockState(pos), Block.NOTIFY_LISTENERS);
+		this.world.updateListeners(this.pos, this.getCachedState(), this.getCachedState(), Block.NOTIFY_ALL);
 	}
 }
 

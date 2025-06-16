@@ -20,39 +20,55 @@ import net.minecraft.world.World;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-
 @Environment(EnvType.CLIENT)
 public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<SmithingAnvilBlockEntity> {
-    public SmithingAnvilBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {
-    }
+	public SmithingAnvilBlockEntityRenderer(BlockEntityRendererFactory.Context context) {
+	}
 
-    @Override
-    public void render(SmithingAnvilBlockEntity entity, float tickDelta, MatrixStack matrices,
-                       VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
-        int posLong = (int) entity.getPos().asLong();
+	@Override
+	public void render(SmithingAnvilBlockEntity entity, float tickDelta, MatrixStack matrices,
+					   VertexConsumerProvider vertexConsumers, int light, int overlay) {
 
-        ItemStack itemStack = entity.getRenderStack();
-        matrices.push();
-        matrices.translate(0.5f, 1.0150f, 0.5f);
-        matrices.scale(0.5f, 0.5f, 0.5f);
-        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
+		ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
+		ItemStack itemStack = entity.getRenderStack();
 
-        switch (entity.getCachedState().get(SmithingAnvil.FACING)) {
-            case NORTH -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180));
-            case EAST -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(270));
-            case SOUTH -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(0));
-            case WEST -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(90));
-        }
+		// Don't render if there's no item
+		if (itemStack.isEmpty()) {
+			return;
+		}
 
-        itemRenderer.renderItem(itemStack, ModelTransformationMode.FIXED, light, overlay,
-                matrices, vertexConsumers, entity.getWorld(), posLong);
-        matrices.pop();
-    }
+		matrices.push();
 
-    private int getLightLevel(World world, BlockPos pos) {
-        int bLight = world.getLightLevel(LightType.BLOCK, pos);
-        int sLight = world.getLightLevel(LightType.SKY, pos);
-        return LightmapTextureManager.pack(bLight, sLight);
-    }
+		// Position the item on top of the anvil
+		matrices.translate(0.5f, 1.015f, 0.5f);
+		matrices.scale(0.35f, 0.35f, 0.35f);
+
+		// Rotate the item to lay flat on the anvil
+		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
+
+		// Rotate based on anvil facing direction
+		switch (entity.getCachedState().get(SmithingAnvil.FACING)) {
+			case NORTH -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(0));
+			case EAST -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(270));
+			case SOUTH -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180));
+			case WEST -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(90));
+		}
+
+		// Use proper lighting from the block position
+		int lightLevel = getLightLevel(entity.getWorld(), entity.getPos());
+
+		itemRenderer.renderItem(itemStack, ModelTransformationMode.GROUND, lightLevel, overlay,
+				matrices, vertexConsumers, entity.getWorld(), (int) entity.getPos().asLong());
+
+		matrices.pop();
+	}
+
+	private int getLightLevel(World world, BlockPos pos) {
+		if (world == null) {
+			return 15728880; // Full brightness fallback
+		}
+		int blockLight = world.getLightLevel(LightType.BLOCK, pos);
+		int skyLight = world.getLightLevel(LightType.SKY, pos);
+		return LightmapTextureManager.pack(blockLight, skyLight);
+	}
 }

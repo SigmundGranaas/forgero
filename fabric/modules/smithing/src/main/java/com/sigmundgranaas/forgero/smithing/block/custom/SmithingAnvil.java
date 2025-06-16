@@ -1,12 +1,13 @@
 package com.sigmundgranaas.forgero.smithing.block.custom;
 
+import java.util.Optional;
+
 import com.sigmundgranaas.forgero.core.Forgero;
-
 import com.sigmundgranaas.forgero.smithing.block.entity.SmithingAnvilBlockEntity;
-
 import com.sigmundgranaas.forgero.smithing.item.ModItems;
-
 import com.sigmundgranaas.forgero.smithing.recipe.SmithingRecipe;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -19,12 +20,14 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -32,11 +35,6 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
 
 public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvider {
 	public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
@@ -227,47 +225,68 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
 			return ActionResult.SUCCESS;
 		}
 
-		Inventory blockEntity = (Inventory) world.getBlockEntity(blockPosition);
+		BlockEntity blockEntity = world.getBlockEntity(blockPosition);
 		if (player == null || !(blockEntity instanceof SmithingAnvilBlockEntity smithingAnvilBlockEntity)) {
 			return ActionResult.PASS;
 		}
 
 		@NotNull var stackInHand = player.getStackInHand(hand);
+		Inventory inventory = smithingAnvilBlockEntity.getInventory();
+
 		if (stackInHand.isEmpty()) {
-			// If the player is not holding anything we'll get give him the items in the block entity one by one
-			// Find the first slot that has an item and give it to the player
-			if (!blockEntity.getStack(0).isEmpty()) {
-				// Give the player the stack in the inventory
-				player.getInventory().offerOrDrop(blockEntity.getStack(0));
-				// Remove the stack from the inventory
-				blockEntity.removeStack(0);
-			} else if (!blockEntity.getStack(0).isEmpty()) {
-				player.getInventory().offerOrDrop(blockEntity.getStack(0));
-				blockEntity.removeStack(0);
+			// If the player is not holding anything, give them the item from the anvil
+			if (!inventory.getStack(0).isEmpty()) {
+				ItemStack stackToGive = inventory.getStack(0).copy();
+				inventory.setStack(0, ItemStack.EMPTY);
+				player.getInventory().offerOrDrop(stackToGive);
+				smithingAnvilBlockEntity.markDirty();
 			}
 		} else {
-			// Check what is the first open slot and put an item from the player's hand there
-			if (blockEntity.getStack(0).isEmpty()) {
-				// Put the stack the player is holding into the inventory
-				blockEntity.setStack(0, stackInHand.copy());
-				// Remove the stack from the player's hand
-				stackInHand.setCount(0);
+			// Player is holding something
+			if (inventory.getStack(0).isEmpty()) {
+				// Put one item from the player's hand into the anvil
+				ItemStack stackToPut = stackInHand.copy();
+				stackToPut.setCount(1);
+				inventory.setStack(0, stackToPut);
+				stackInHand.decrement(1);
+				smithingAnvilBlockEntity.markDirty();
 			} else if (stackInHand.getItem().equals(ModItems.SMITHING_HAMMER)) {
-				// Smith the tool part using the smithing hammer in the player's hand
+				// Smith the tool part using the smithing hammer
 				Optional<SmithingRecipe> recipeOpt = world.getRecipeManager().getFirstMatch(
 						SmithingRecipe.Type.INSTANCE,
-						new SimpleInventory(blockState.getBlock().asItem().getDefaultStack(), stackInHand),
+						new SimpleInventory(inventory.getStack(0), stackInHand),
 						world
 				);
-				if (recipeOpt.isEmpty()) {
-					return ActionResult.PASS;
+				if (recipeOpt.isPresent()) {
+					recipeOpt.get().craft(smithingAnvilBlockEntity.getInventory(), world.getRegistryManager());
+					smithingAnvilBlockEntity.markDirty();
 				}
-
-				recipeOpt.get().craft(smithingAnvilBlockEntity.getInventory(), world.getRegistryManager());
+			} else {
+				// Try to swap items if they're different
+				if (!ItemStack.areItemsEqual(stackInHand, inventory.getStack(0))) {
+					ItemStack temp = inventory.getStack(0).copy();
+					ItemStack stackToPut = stackInHand.copy();
+					stackToPut.setCount(1);
+					inventory.setStack(0, stackToPut);
+					stackInHand.decrement(1);
+					player.getInventory().offerOrDrop(temp);
+					smithingAnvilBlockEntity.markDirty();
+				}
 			}
 		}
 
-		blockEntity.markDirty();
 		return ActionResult.SUCCESS;
+	}
+	@SuppressWarnings("deprecation")
+	@Override
+	public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+		if (state.getBlock() != newState.getBlock()) {
+			BlockEntity blockEntity = world.getBlockEntity(pos);
+			if (blockEntity instanceof SmithingAnvilBlockEntity smithingAnvil) {
+				ItemScatterer.spawn(world, pos, smithingAnvil.getInventory());
+				world.updateComparators(pos, this);
+			}
+			super.onStateReplaced(state, world, pos, newState, moved);
+		}
 	}
 }
