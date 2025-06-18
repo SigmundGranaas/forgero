@@ -40,11 +40,12 @@ public class MetalSmeltingRecipe implements Recipe<BloomeryInventory> {
 		}
 
 		LiquidMetalCrucibleItem crucibleItem = (LiquidMetalCrucibleItem) crucible.getItem();
+		Identifier currentLiquid = crucibleItem.getLiquidType(crucible);
+		boolean ingredientMatches = this.ingredient.test(ingredient);
+		boolean liquidMatches = currentLiquid == null || currentLiquid.equals(this.liquid);
+		boolean canAddLiquid = crucibleItem.canAddLiquid(crucible, this.liquid, this.liquidAmount);
 
-		return this.ingredient.test(ingredient) &&
-				(crucibleItem.getLiquidType(crucible) == null ||
-						crucibleItem.getLiquidType(crucible).equals(this.liquid)) &&
-				crucibleItem.canAddLiquid(crucible, this.liquid, this.liquidAmount);
+		return ingredientMatches && liquidMatches && canAddLiquid;
 	}
 
 	@Override
@@ -89,6 +90,7 @@ public class MetalSmeltingRecipe implements Recipe<BloomeryInventory> {
 	}
 
 	public int getCookingTime() {
+		System.out.println("Getting cooking time: " + this.cookingTime + " for recipe " + this.id);
 		return this.cookingTime;
 	}
 
@@ -113,6 +115,7 @@ public class MetalSmeltingRecipe implements Recipe<BloomeryInventory> {
 			int cookingTime = JsonHelper.getInt(json, "cooking_time", 200);
 			int liquidAmount = JsonHelper.getInt(json, "liquid_amount");
 
+			System.out.println("Loading recipe " + id + " with cookingTime: " + cookingTime + ", liquid: " + liquid + ", amount: " + liquidAmount);
 			return new MetalSmeltingRecipe(id, ingredient, liquid, cookingTime, liquidAmount);
 		}
 
@@ -128,7 +131,6 @@ public class MetalSmeltingRecipe implements Recipe<BloomeryInventory> {
 
 		@Override
 		public void write(PacketByteBuf buf, MetalSmeltingRecipe recipe) {
-			buf.writeIdentifier(recipe.getId());
 			recipe.getIngredient().write(buf);
 			buf.writeIdentifier(recipe.getLiquid());
 			buf.writeVarInt(recipe.getCookingTime());

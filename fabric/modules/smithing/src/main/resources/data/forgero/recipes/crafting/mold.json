@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CCC",
+    "CPC",
+    "CCC"
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:clay_ball"
+    },
+    "P": {
+      "tag": "forgero:pickaxe_head"
+    }
+  },
+  "result": {
+    "item": "forgero:clay_mold"
+  }
+}

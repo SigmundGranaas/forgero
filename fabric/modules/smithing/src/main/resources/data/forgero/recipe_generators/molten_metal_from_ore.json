@@ -5,10 +5,10 @@
       "type": "METAL"
     }
   },
-  "identifier": "forgero:${metal.name}-ingot_to_molten-recipe",
+  "identifier": "forgero:${metal.name}-ore_to_molten-recipe",
   "type": "forgero:metal_smelting",
   "ingredient": {
-    "item": "minecraft:${metal.name}_ore"
+    "${metal.tagOrItem}": "${metal.identifier}"
   },
   "liquid_amount": 100,
   "liquid": "forgero:molten_${metal.name}",

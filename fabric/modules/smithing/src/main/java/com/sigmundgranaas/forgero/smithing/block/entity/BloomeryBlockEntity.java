@@ -1,10 +1,14 @@
 package com.sigmundgranaas.forgero.smithing.block.entity;
 
+import javax.annotation.Nullable;
+
 import com.sigmundgranaas.forgero.smithing.block.custom.BloomeryBlock;
+import com.sigmundgranaas.forgero.smithing.block.inventory.BloomeryInventory;
 import com.sigmundgranaas.forgero.smithing.block.inventory.ImplementedInventory;
 import com.sigmundgranaas.forgero.smithing.item.custom.LiquidMetalCrucibleItem;
+import com.sigmundgranaas.forgero.smithing.recipe.MetalSmeltingRecipe;
 import com.sigmundgranaas.forgero.smithing.screen.BloomeryScreenHandler;
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -18,20 +22,19 @@ import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 
 public class BloomeryBlockEntity extends BlockEntity implements ImplementedInventory, NamedScreenHandlerFactory {
-	private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(4, ItemStack.EMPTY);
+	private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(BloomeryInventory.INVENTORY_SIZE, ItemStack.EMPTY);
 
 	private int progress = 0;
-	private int maxProgress = 200; // 10 seconds at 20 ticks per second
+	private int maxProgress = 200; // Default value, will be overridden by recipe
 
 	// Adjust fuel times to match vanilla furnace
 	private static final int COAL_FUEL_TIME = 1600; // 80 seconds
@@ -50,18 +53,23 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 
 	@Override
 	public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
-		return switch (slot) {
-			case 0 -> isCrucible(stack); // Crucible slot
-			case 1 -> isOre(stack);      // Ore slot
-			case 2 -> isFuel(stack);     // Fuel slot
-			case 3 -> false;             // Output slot - no direct insertion
-			default -> false;
-		};
+		if (slot == BloomeryInventory.CRUCIBLE_SLOT) {
+			return isCrucible(stack);
+		} else if (slot == BloomeryInventory.INGREDIENT_SLOT) {
+			return isOre(stack);
+		} else if (slot == BloomeryInventory.FUEL_SLOT) {
+			return isFuel(stack);
+		} else if (slot == BloomeryInventory.OUTPUT_SLOT) {
+			// Don't allow inserting into the output slot directly
+			return false;
+		}
+		return false;
 	}
 
 	@Override
 	public boolean canExtract(int slot, ItemStack stack, Direction dir) {
-		return slot == 3; // Only allow extraction from output slot automatically
+		// Only allow extraction from the output slot
+		return slot == BloomeryInventory.OUTPUT_SLOT;
 	}
 
 	public static void serverTick(World world, BlockPos pos, BlockState state, BloomeryBlockEntity blockEntity) {
@@ -91,6 +99,9 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
             // Process recipe if burning
             if (blockEntity.isBurning()) {
                 blockEntity.progress++;
+                if (blockEntity.progress % 20 == 0) { // Log every second
+                    System.out.println("Progress: " + blockEntity.progress + "/" + blockEntity.maxProgress + " (" + (blockEntity.progress * 100 / blockEntity.maxProgress) + "%)");
+                }
                 dirty = true;
 
                 if (blockEntity.progress >= blockEntity.maxProgress) {
@@ -127,137 +138,149 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
     }
 
 	private boolean canSmelt() {
-		ItemStack crucible = inventory.get(0);
-		ItemStack ore = inventory.get(1);
-		ItemStack result = getRecipeResult(crucible, ore);
-		return !crucible.isEmpty() && !ore.isEmpty() && !result.isEmpty();
+		ItemStack crucible = inventory.get(BloomeryInventory.CRUCIBLE_SLOT);
+		ItemStack input = inventory.get(BloomeryInventory.INGREDIENT_SLOT);
+		
+		if (crucible.isEmpty() || input.isEmpty()) {
+			return false;
+		}
+		
+		World world = getWorld();
+		if (world == null) return false;
+		
+		// Create a dummy inventory for recipe matching
+		BloomeryInventory recipeInventory = new BloomeryInventory();
+		recipeInventory.setStack(BloomeryInventory.CRUCIBLE_SLOT, crucible.copy());
+		recipeInventory.setStack(BloomeryInventory.INGREDIENT_SLOT, input.copy());
+		
+		// Check if there's a matching recipe
+		return world.getRecipeManager()
+			.getFirstMatch(MetalSmeltingRecipe.Type.INSTANCE, recipeInventory, world)
+			.isPresent();
 	}
 
 	public boolean hasRecipe() {
-		ItemStack crucible = inventory.get(0);
-		ItemStack ore = inventory.get(1);
-		ItemStack output = inventory.get(3);
+		ItemStack crucible = inventory.get(BloomeryInventory.CRUCIBLE_SLOT);
+		ItemStack input = inventory.get(BloomeryInventory.INGREDIENT_SLOT);
+		ItemStack output = inventory.get(BloomeryInventory.OUTPUT_SLOT);
 
-		if (crucible.isEmpty() || ore.isEmpty()) {
+		if (crucible.isEmpty() || input.isEmpty()) {
 			return false;
 		}
 
-		// Check if crucible and ore are valid
-		if (!isCrucible(crucible) || !isOre(ore)) {
+		// Check if crucible is valid
+		if (!isCrucible(crucible)) {
 			return false;
 		}
 
-		// Get the recipe result
-		ItemStack result = getRecipeResult(crucible, ore);
-		if (result.isEmpty()) {
+		// Try to find a matching recipe
+		World world = getWorld();
+		if (world == null) {
 			return false;
 		}
-
-		// Check if output slot can accept the result
-		if (output.isEmpty()) {
-			return true;
-		}
-
-		// For liquid crucibles, check if they can be merged
-		if (output.getItem() instanceof LiquidMetalCrucibleItem &&
-				result.getItem() instanceof LiquidMetalCrucibleItem) {
-			LiquidMetalCrucibleItem outputCrucible = (LiquidMetalCrucibleItem) output.getItem();
-			LiquidMetalCrucibleItem resultCrucible = (LiquidMetalCrucibleItem) result.getItem();
-
-			Identifier resultLiquidType = resultCrucible.getLiquidType(result);
-			int resultLiquidAmount = resultCrucible.getLiquidAmount(result);
-
-			return resultLiquidType != null && outputCrucible.canAddLiquid(output, resultLiquidType, resultLiquidAmount);
-		}
-
-		return output.getItem() == result.getItem() &&
-				output.getCount() + result.getCount() <= output.getMaxCount();
+		
+		// Get the recipe and update maxProgress
+		BloomeryInventory recipeInventory = new BloomeryInventory();
+		recipeInventory.setStack(BloomeryInventory.CRUCIBLE_SLOT, crucible.copy());
+		recipeInventory.setStack(BloomeryInventory.INGREDIENT_SLOT, input.copy());
+		
+		return world.getRecipeManager()
+			.getFirstMatch(MetalSmeltingRecipe.Type.INSTANCE, recipeInventory, world)
+			.map(recipe -> {
+				// Update maxProgress based on the recipe's cooking time
+				int oldMax = this.maxProgress;
+				this.maxProgress = recipe.getCookingTime();
+				System.out.println("Setting maxProgress: " + oldMax + " -> " + this.maxProgress + " (cookingTime: " + recipe.getCookingTime() + ")");
+				// Check if we can output the result
+				if (output.isEmpty()) {
+					return true;
+				} else if (output.getItem() instanceof LiquidMetalCrucibleItem crucibleItem) {
+					return crucibleItem.canAddLiquid(output, recipe.getLiquid(), recipe.getLiquidAmount());
+				}
+				return false;
+			})
+			.orElse(false);
 	}
 
-	private ItemStack getRecipeResult(ItemStack crucible, ItemStack ore) {
+	@Nullable
+	private ItemStack getRecipeResult(ItemStack crucible, ItemStack input) {
 		// Only process if crucible is a LiquidMetalCrucibleItem
-		if (!(crucible.getItem() instanceof LiquidMetalCrucibleItem crucibleItem)) {
+		if (!(crucible.getItem() instanceof LiquidMetalCrucibleItem)) {
 			return ItemStack.EMPTY;
 		}
 
-		// Define liquid metal recipes based on ore type
-		Identifier liquidType = null;
-		int liquidAmount = 0;
+		World world = getWorld();
+		if (world == null) return ItemStack.EMPTY;
 
-		if (ore.getItem() == Items.IRON_ORE || ore.getItem() == Items.DEEPSLATE_IRON_ORE) {
-			liquidType = new Identifier("forgero", "molten_iron");
-			liquidAmount = 100;
-		} else if (ore.getItem() == Items.GOLD_ORE || ore.getItem() == Items.DEEPSLATE_GOLD_ORE) {
-			liquidType = new Identifier("forgero", "molten_gold");
-			liquidAmount = 100;
-		} else if (ore.getItem() == Items.COPPER_ORE || ore.getItem() == Items.DEEPSLATE_COPPER_ORE) {
-			liquidType = new Identifier("forgero", "molten_copper");
-			liquidAmount = 100;
-		}
-		// Add more ore types as needed
+		// Create a dummy inventory for recipe matching
+		BloomeryInventory recipeInventory = new BloomeryInventory();
+		recipeInventory.setStack(BloomeryInventory.CRUCIBLE_SLOT, crucible.copy());
+		recipeInventory.setStack(BloomeryInventory.INGREDIENT_SLOT, input.copy());
 
-		if (liquidType != null) {
-			// Create a copy of the crucible to modify
-			ItemStack resultCrucible = crucible.copy();
-
-			// Check if we can add the liquid to the crucible
-			if (crucibleItem.canAddLiquid(resultCrucible, liquidType, liquidAmount)) {
-				crucibleItem.addLiquid(resultCrucible, liquidType, liquidAmount);
-				return resultCrucible;
-			}
-		}
-
-		return ItemStack.EMPTY;
+		// Find and execute the recipe
+		return world.getRecipeManager()
+			.getFirstMatch(MetalSmeltingRecipe.Type.INSTANCE, recipeInventory, world)
+			.map(recipe -> {
+				ItemStack resultCrucible = crucible.copy();
+				if (resultCrucible.getItem() instanceof LiquidMetalCrucibleItem crucibleItem) {
+					crucibleItem.addLiquid(resultCrucible, recipe.getLiquid(), recipe.getLiquidAmount());
+					return resultCrucible;
+				}
+				return ItemStack.EMPTY;
+			})
+			.orElse(ItemStack.EMPTY);
 	}
 
 	private void craftItem() {
-		ItemStack crucible = inventory.get(0);
-		ItemStack ore = inventory.get(1);
+		ItemStack crucible = inventory.get(BloomeryInventory.CRUCIBLE_SLOT);
+		ItemStack input = inventory.get(BloomeryInventory.INGREDIENT_SLOT);
+		ItemStack output = inventory.get(BloomeryInventory.OUTPUT_SLOT);
 
-		if (crucible.isEmpty() || ore.isEmpty()) return;
-
-		if (!(crucible.getItem() instanceof LiquidMetalCrucibleItem crucibleItem)) return;
-
-		Identifier liquidType = null;
-		int liquidAmount = 0;
-
-		if (ore.getItem() == Items.IRON_ORE || ore.getItem() == Items.DEEPSLATE_IRON_ORE) {
-			liquidType = new Identifier("forgero", "molten_iron");
-			liquidAmount = 100;
-		} else if (ore.getItem() == Items.GOLD_ORE || ore.getItem() == Items.DEEPSLATE_GOLD_ORE) {
-			liquidType = new Identifier("forgero", "molten_gold");
-			liquidAmount = 100;
-		} else if (ore.getItem() == Items.COPPER_ORE || ore.getItem() == Items.DEEPSLATE_COPPER_ORE) {
-			liquidType = new Identifier("forgero", "molten_copper");
-			liquidAmount = 100;
+		if (crucible.isEmpty() || input.isEmpty()) {
+			return;
 		}
 
-		if (liquidType == null) return;
+		World world = getWorld();
+		if (world == null) {
+			return;
+		}
 
-		// Check if crucible can accept liquid
-		if (crucibleItem.canAddLiquid(crucible, liquidType, liquidAmount)) {
-			// Add liquid directly to input crucible (update the input stack)
-			crucibleItem.addLiquid(crucible, liquidType, liquidAmount);
+		// Create a dummy inventory for recipe matching
+		BloomeryInventory recipeInventory = new BloomeryInventory();
+		recipeInventory.setStack(BloomeryInventory.CRUCIBLE_SLOT, crucible.copy());
+		recipeInventory.setStack(BloomeryInventory.INGREDIENT_SLOT, input.copy());
 
-			// Consume ore
-			ore.decrement(1);
+		// Find and execute the recipe
+		var recipeOpt = world.getRecipeManager().getFirstMatch(MetalSmeltingRecipe.Type.INSTANCE, recipeInventory, world);
+		if (recipeOpt.isEmpty()) {
+			return;
+		}
+		
+		var recipe = recipeOpt.get();
+		
+		// Create a copy of the crucible to modify
+		ItemStack resultCrucible = crucible.copy();
+		if (resultCrucible.getItem() instanceof LiquidMetalCrucibleItem crucibleItem) {
+			// Consume the input
+			input.decrement(1);
+			inventory.set(BloomeryInventory.INGREDIENT_SLOT, input);
 
-			// If crucible is now full (can't add more), move to output
-			if (!crucibleItem.canAddLiquid(crucible, liquidType, liquidAmount)) {
-				ItemStack output = inventory.get(3);
-				if (output.isEmpty()) {
-					inventory.set(3, crucible.copy());
-					inventory.set(0, ItemStack.EMPTY);
-				} else if (output.getItem() instanceof LiquidMetalCrucibleItem) {
-					LiquidMetalCrucibleItem outputCrucible = (LiquidMetalCrucibleItem) output.getItem();
-					Identifier outputLiquidType = outputCrucible.getLiquidType(output);
-					int outputLiquidAmount = outputCrucible.getLiquidAmount(output);
+			// Add the liquid to the crucible
+			crucibleItem.addLiquid(resultCrucible, recipe.getLiquid(), recipe.getLiquidAmount());
+			inventory.set(BloomeryInventory.CRUCIBLE_SLOT, resultCrucible);
 
-					if (outputLiquidType.equals(liquidType) &&
-							outputCrucible.canAddLiquid(output, liquidType, liquidAmount)) {
-						outputCrucible.addLiquid(output, liquidType, liquidAmount);
-						inventory.set(0, ItemStack.EMPTY);
-					}
+			// Always update the crucible in its current slot first
+			inventory.set(BloomeryInventory.CRUCIBLE_SLOT, resultCrucible);
+			
+			// Only move to output slot if the crucible is full or if there's already something in the output slot
+			if (output.isEmpty() && crucibleItem.getLiquidAmount(resultCrucible) >= crucibleItem.getMaxCapacity()) {
+				// If crucible is full and output is empty, move it to output slot
+				inventory.set(BloomeryInventory.OUTPUT_SLOT, resultCrucible.copy());
+				inventory.set(BloomeryInventory.CRUCIBLE_SLOT, ItemStack.EMPTY);
+			} else if (output.getItem() instanceof LiquidMetalCrucibleItem outputCrucibleItem) {
+				// If output is a crucible, try to add the liquid to it
+				if (outputCrucibleItem.canAddLiquid(output, recipe.getLiquid(), recipe.getLiquidAmount())) {
+					outputCrucibleItem.addLiquid(output, recipe.getLiquid(), recipe.getLiquidAmount());
 				}
 			}
 		}
@@ -268,17 +291,18 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 	}
 
 	private void burnFuel() {
-		ItemStack fuelStack = inventory.get(2);  // Changed from 1 to 2 to match the fuel slot
+		ItemStack fuelStack = inventory.get(BloomeryInventory.FUEL_SLOT);
 		if (!fuelStack.isEmpty()) {
 			this.maxFuelTime = this.getFuelTime(fuelStack);
 			this.fuelTime = this.maxFuelTime;
 			fuelStack.decrement(1);
+			inventory.set(BloomeryInventory.FUEL_SLOT, fuelStack);
 			this.markDirty();
 		}
 	}
 
 	private boolean hasFuel() {
-		return !inventory.get(2).isEmpty() && this.getFuelTime(inventory.get(2)) > 0;  // Changed from 1 to 2 to match the fuel slot
+		return !inventory.get(BloomeryInventory.FUEL_SLOT).isEmpty() && this.getFuelTime(inventory.get(BloomeryInventory.FUEL_SLOT)) > 0;
 	}
 
 	private boolean isCrucible(ItemStack stack) {
@@ -286,13 +310,8 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 	}
 
 	private boolean isOre(ItemStack stack) {
-		return stack.getItem() == Items.IRON_ORE ||
-				stack.getItem() == Items.GOLD_ORE ||
-				stack.getItem() == Items.COPPER_ORE ||
-				stack.getItem() == Items.DEEPSLATE_IRON_ORE ||
-				stack.getItem() == Items.DEEPSLATE_GOLD_ORE ||
-				stack.getItem() == Items.DEEPSLATE_COPPER_ORE ||
-				stack.isIn(ConventionalItemTags.ORES);
+		// Check if the item is in the ores tag
+		return stack.isIn(ConventionalItemTags.ORES);
 	}
 
 	private boolean isFuel(ItemStack stack) {
@@ -320,39 +339,77 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 	}
 
 	public ItemStack insertItem(ItemStack stack) {
-		for (int i = 0; i < 3; i++) { // Only insert into input slots
-			if (canInsert(i, stack, null)) {
-				ItemStack existing = inventory.get(i);
-				if (existing.isEmpty()) {
-					inventory.set(i, stack);
-					markDirty();
-					return ItemStack.EMPTY;
-				} else if (existing.getItem() == stack.getItem() &&
-						existing.getCount() < existing.getMaxCount()) {
-					int canInsert = existing.getMaxCount() - existing.getCount();
-					int toInsert = Math.min(canInsert, stack.getCount());
-					existing.increment(toInsert);
-					stack.decrement(toInsert);
-					markDirty();
-					return stack.isEmpty() ? ItemStack.EMPTY : stack;
-				}
+		// Try to insert into the crucible slot first
+		if (canInsert(BloomeryInventory.CRUCIBLE_SLOT, stack, null)) {
+			ItemStack existing = inventory.get(BloomeryInventory.CRUCIBLE_SLOT);
+			if (existing.isEmpty()) {
+				inventory.set(BloomeryInventory.CRUCIBLE_SLOT, stack.copy());
+				markDirty();
+				return ItemStack.EMPTY;
+			} else if (ItemStack.canCombine(existing, stack) && existing.getCount() < existing.getMaxCount()) {
+				int canInsert = existing.getMaxCount() - existing.getCount();
+				int toInsert = Math.min(canInsert, stack.getCount());
+				existing.increment(toInsert);
+				stack.decrement(toInsert);
+				markDirty();
+				return stack.isEmpty() ? ItemStack.EMPTY : stack;
 			}
 		}
+
+		// Then try the ingredient slot
+		if (canInsert(BloomeryInventory.INGREDIENT_SLOT, stack, null)) {
+			ItemStack existing = inventory.get(BloomeryInventory.INGREDIENT_SLOT);
+			if (existing.isEmpty()) {
+				inventory.set(BloomeryInventory.INGREDIENT_SLOT, stack.copy());
+				markDirty();
+				return ItemStack.EMPTY;
+			} else if (ItemStack.canCombine(existing, stack) && existing.getCount() < existing.getMaxCount()) {
+				int canInsert = existing.getMaxCount() - existing.getCount();
+				int toInsert = Math.min(canInsert, stack.getCount());
+				existing.increment(toInsert);
+				stack.decrement(toInsert);
+				markDirty();
+				return stack.isEmpty() ? ItemStack.EMPTY : stack;
+			}
+		}
+
+		// Then try the fuel slot
+		if (canInsert(BloomeryInventory.FUEL_SLOT, stack, null)) {
+			ItemStack existing = inventory.get(BloomeryInventory.FUEL_SLOT);
+			if (existing.isEmpty()) {
+				inventory.set(BloomeryInventory.FUEL_SLOT, stack.copy());
+				markDirty();
+				return ItemStack.EMPTY;
+			} else if (ItemStack.canCombine(existing, stack) && existing.getCount() < existing.getMaxCount()) {
+				int canInsert = existing.getMaxCount() - existing.getCount();
+				int toInsert = Math.min(canInsert, stack.getCount());
+				existing.increment(toInsert);
+				stack.decrement(toInsert);
+				markDirty();
+				return stack.isEmpty() ? ItemStack.EMPTY : stack;
+			}
+		}
+
+		// Don't allow inserting into the output slot directly
+
 		return stack;
 	}
 
 	public ItemStack extractItem() {
-		// Extract from output slot first
-		ItemStack output = inventory.get(3);
+		// Try to extract from output slot first
+		ItemStack output = inventory.get(BloomeryInventory.OUTPUT_SLOT);
 		if (!output.isEmpty()) {
 			ItemStack extracted = output.copy();
-			inventory.set(3, ItemStack.EMPTY);
+			inventory.set(BloomeryInventory.OUTPUT_SLOT, ItemStack.EMPTY);
 			markDirty();
 			return extracted;
 		}
 
-		// Then try other slots
-		for (int i = 0; i < 3; i++) {
+		// Then try other slots for extraction
+		for (int i = 0; i < inventory.size(); i++) {
+			// Skip output slot (already checked)
+			if (i == BloomeryInventory.OUTPUT_SLOT) continue;
+
 			ItemStack stack = inventory.get(i);
 			if (!stack.isEmpty()) {
 				ItemStack extracted = stack.copy();

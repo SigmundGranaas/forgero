@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.smithing.screen;
 
+import com.sigmundgranaas.forgero.smithing.block.inventory.BloomeryInventory;
 import com.sigmundgranaas.forgero.smithing.item.ModItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -45,21 +46,21 @@ public class BloomeryScreenHandler extends ScreenHandler {
         addProperties(delegate);
 
         // Crucible slot (middle)
-        addSlot(new Slot(inventory, 0, 56, 35) {
+        addSlot(new Slot(inventory, BloomeryInventory.CRUCIBLE_SLOT, 56, 35) {
             @Override
             public boolean canInsert(ItemStack stack) {
                 return stack.isOf(ModItems.CRUCIBLE);
             }
         });
 
-        // Ore slot (top left) - slot 1
-        addSlot(new Slot(inventory, 1, 31, 17));
+        // Ore slot (top left)
+        addSlot(new Slot(inventory, BloomeryInventory.INGREDIENT_SLOT, 31, 17));
 
-        // Fuel slot (bottom left) - slot 2
-        addSlot(new Slot(inventory, 2, 31, 53));
+        // Fuel slot (bottom left)
+        addSlot(new Slot(inventory, BloomeryInventory.FUEL_SLOT, 31, 53));
 
-        // Output slot (right side) - slot 3
-        addSlot(new Slot(inventory, 3, 116, 35) {
+        // Output slot (right side)
+        addSlot(new Slot(inventory, BloomeryInventory.OUTPUT_SLOT, 116, 35) {
             @Override
             public boolean canInsert(ItemStack stack) {
                 return false;

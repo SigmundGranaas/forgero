@@ -6,5 +6,7 @@
   "container.forgero.bloomery": "Bloomery",
   "item.forgero.crucible": "Crucible",
   "item.forgero.clay_crucible": "Clay Crucible",
-  "item.forgero.tongs": "Tongs"
+  "item.forgero.clay_mold": "Clay Mold",
+  "item.forgero.tongs": "Tongs",
+  "item.forgero.mold.tooltip": "Used for casting metal parts in the smithing process"
 }
