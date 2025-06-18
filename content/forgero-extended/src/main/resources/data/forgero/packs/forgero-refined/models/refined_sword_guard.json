@@ -3,7 +3,7 @@
   "models": [
     {
       "name": "refined_sword_guard",
-      "template": "refined_sword_guard.png",
+      "template": "refined/refined_sword_guard.png",
       "type": "GENERATE",
       "palette": "TOOL_MATERIAL",
       "order": 60
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:refined_sword_guard.png"
+            "model:refined/refined_sword_guard.png"
           ],
-          "template": "refined_sword_guard_reinforcement.png"
+          "template": "refined/refined_sword_guard_reinforcement.png"
         }
       ]
     },
@@ -24,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:refined_sword_guard.png"
+            "model:refined/refined_sword_guard.png"
           ],
-          "template": "refined_sword_guard.png"
+          "template": "refined/refined_sword_guard.png"
         }
       ]
     },
@@ -37,14 +37,6 @@
       ],
       "modelType": "BASED_COMPOSITE",
       "template": "refined_sword_guard"
-    },
-    {
-      "target": [
-        "type:MATERIAL",
-        "slot:0"
-      ],
-      "modelType": "UPGRADE",
-      "template": "sword_guard_reinforcement"
     }
   ]
 }

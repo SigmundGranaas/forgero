@@ -169,7 +169,7 @@ public class ResourcePipeline {
 	private boolean filterPacks(DataPackage dataPackage) {
 		boolean filter = ForgeroConfigurationLoader.configuration.disabledPacks.stream().noneMatch(disabled -> dataPackage.identifier().equals(disabled));
 		if (!filter && ForgeroConfigurationLoader.configuration.resourceLogging && !silent) {
-			Forgero.LOGGER.info(MessageFormat.format("{0} was disabled by the configuration, located at {1}", dataPackage.identifier(), ForgeroConfigurationLoader.configurationFilePath));
+			Forgero.LOGGER.info(MessageFormat.format("{0} was disabled by the configuration", dataPackage.identifier()));
 		}
 
 		return filter;

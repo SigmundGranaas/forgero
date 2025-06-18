@@ -31,6 +31,7 @@ public class DefaultedDynamicBakedModel implements ContextAwareBakedModel, ItemM
 	@Nullable
 	private BakedModel defaultModel;
 	private final ItemStack stack;
+	private BakedModel lastUsedModel;
 
 	public DefaultedDynamicBakedModel(ModelStrategy strategy, StateService service, ItemStack stack) {
 		this.strategy = strategy;
@@ -62,8 +63,8 @@ public class DefaultedDynamicBakedModel implements ContextAwareBakedModel, ItemM
 					.or(() -> Optional.ofNullable(defaultModel))
 					.orElse(EMPTY);
 
+			this.lastUsedModel = model;
 			return model.getOverrides().apply(model, stack, world, entity, seed);
-
 		}
 		return EMPTY;
 	}
@@ -75,6 +76,10 @@ public class DefaultedDynamicBakedModel implements ContextAwareBakedModel, ItemM
 
 	@Override
 	public ModelTransformation getTransformationWithContext(ItemStack stack, ClientWorld world, LivingEntity entity, int seed) {
+		if(lastUsedModel != null){
+			return lastUsedModel.getTransformation();
+		}
+
 		if (defaultModel != null) {
 			return defaultModel.getTransformation();
 		}

@@ -2,7 +2,7 @@
   "name": "bloomingnature-compat",
   "resource_type": "PACKAGE",
   "priority": 4,
-  "namespace": "bloomingnature",
+  "namespace": "forgero",
   "dependencies": [
     "minecraft",
     "forgero",

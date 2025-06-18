@@ -1,0 +1,127 @@
+{
+  "type": "HOE_HEAD_SCHEMATIC",
+  "name": "sickle_blade-schematic",
+  "parent": "hoe_head_base",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "HOE_HEAD",
+    "target": "CREATE",
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "TOOL_MATERIAL",
+        "unique": true
+      }
+    ],
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
+        "tier": 1
+      }
+    ]
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "variant-schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 1.375
+          },
+          {
+            "id": "variant-schematic-mining_speed-composite",
+            "type": "MINING_SPEED",
+            "value": 1.4
+          },
+          {
+            "id": "variant-schematic-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 1.35
+          },
+          {
+            "id": "variant-schematic-durability-composite",
+            "type": "DURABILITY",
+            "value": 1.15
+          },
+          {
+            "id": "variant-schematic-weight-composite",
+            "type": "WEIGHT",
+            "value": 0.85
+          }
+        ]
+      }
+    ],
+    "attributes": [
+      {
+        "id": "schematic-rarity-local",
+        "type": "RARITY",
+        "order": "BASE",
+        "category": "LOCAL",
+        "operation": "ADDITION",
+        "value": 75
+      },
+      {
+        "id": "variant-reach-composite",
+        "type": "forgero:reach",
+        "value": 3.5
+      }
+    ],
+    "features": [
+      {
+        "type": "minecraft:block_effectiveness",
+        "tags": [
+          "minecraft:mineable/sword"
+        ]
+      },
+      {
+        "type": "minecraft:block_breaking",
+        "selector": {
+          "type": "forgero:radius",
+          "radius": 3,
+          "filter": {
+            "type": "minecraft:block",
+            "tag": "forgero:plants"
+          }
+        },
+        "speed": "forgero:instant",
+        "predicate": {
+          "type": "minecraft:block",
+          "tag": "forgero:plants"
+        },
+        "title": "feature.forgero.vein_mining.title",
+        "description": "feature.forgero.vein_mining.plants_in_area"
+      }
+    ]
+  },
+  "custom_data": {
+    "ingredient_count": "2",
+    "name_replacement": {
+      "from": "hoe",
+      "to": "sickle"
+    },
+    "better_compat_attribute_container": "forgero:sickle"
+  }
+}

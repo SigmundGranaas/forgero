@@ -2,7 +2,7 @@
   "name": "vinery-compat",
   "resource_type": "PACKAGE",
   "priority": 4,
-  "namespace": "vinery",
+  "namespace": "forgero",
   "dependencies": [
     "minecraft",
     "forgero",

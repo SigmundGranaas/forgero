@@ -22,7 +22,7 @@ public class Conditions implements ResourceRegistry<LootCondition> {
 	public static final ClassKey<Feature> UNBREAKABLE_KEY = new ClassKey<>(UNBREAKABLE_TYPE_KEY, Feature.class);
 
 	public static NamedCondition BROKEN = new NamedCondition("broken", Forgero.NAMESPACE, List.of(new ConstantFeature(BROKEN_TYPE_KEY)));
-	public static SimpleCondition UNBREAKABLE = new SimpleCondition(List.of(new ConstantFeature(UNBREAKABLE_TYPE_KEY)));
+	public static NamedCondition UNBREAKABLE = new NamedCondition("unbreakable", Forgero.NAMESPACE, List.of(new ConstantFeature(UNBREAKABLE_TYPE_KEY)));
 	private final Map<String, LootCondition> conditionMap;
 
 	public Conditions(Map<String, LootCondition> conditionMap) {

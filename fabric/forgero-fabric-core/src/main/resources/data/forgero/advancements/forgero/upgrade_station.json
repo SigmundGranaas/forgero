@@ -1,0 +1,37 @@
+{
+  "parent": "forgero:forgero/schematic",
+  "criteria": {
+    "upgrade_station": {
+      "conditions": {
+        "items": [
+          {
+            "items": [ "forgero:upgrade_station"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.forgero.upgrade_station.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "forgero:upgrade_station"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.forgero.upgrade_station.title"
+    }
+  },
+  "requirements": [
+    [
+      "upgrade_station"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

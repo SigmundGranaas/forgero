@@ -10,7 +10,7 @@ public class Weight {
 	public static AttributeModification reduceAttackSpeedByWeight() {
 		return (attribute, state) -> {
 			float weight = ComputedAttribute.apply(state, KEY);
-			float newValue = attribute.asFloat() - (weight / 100);
+			float newValue = attribute.asFloat() - (weight / 10);
 			return ComputedAttribute.of(newValue, attribute.key());
 		};
 	}

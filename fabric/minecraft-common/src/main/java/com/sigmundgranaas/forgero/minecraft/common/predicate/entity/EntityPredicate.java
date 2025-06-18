@@ -47,5 +47,10 @@ public class EntityPredicate implements Predicate<Entity>, Matchable {
 				.map(this::test)
 				.orElse(false);
 	}
+
+	@Override
+	public boolean isDynamic() {
+		return true;
+	}
 }
 

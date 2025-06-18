@@ -16,10 +16,10 @@
       "item": "forgero:${variant}_hoe_head-schematic"
     },
     {
-      "${material.tagOrItem}": "${material.id}"
+      "${material.tagOrItem}": "${material.container_id}"
     },
     {
-      "${material.tagOrItem}": "${material.id}"
+      "${material.tagOrItem}": "${material.container_id}"
     }
   ],
   "result": {

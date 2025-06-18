@@ -2,7 +2,7 @@
   "name": "gardens_of_the_dead-compat",
   "resource_type": "PACKAGE",
   "priority": 4,
-  "namespace": "gardens_of_the_dead",
+  "namespace": "forgero",
   "dependencies": [
     "minecraft",
     "forgero",

@@ -9,6 +9,10 @@ import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.attribute.BaseAttribute;
 import com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity.StatusEffectHandler;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -81,7 +85,10 @@ class StatusEffectHandlerTest implements Bootstrapped {
 	@Test
 	void testInvalidTarget() {
 		handler = new StatusEffectHandler(effect, level, duration, "invalid_target");
-		assertThrows(IllegalArgumentException.class, () -> handler.onHit(null, null, null));
+		// Specifying null as entity to avoid compiler warning due to method overloading
+		Entity entity = null;
+		//noinspection ConstantValue
+		assertThrows(IllegalArgumentException.class, () -> handler.onHit( null, null, entity));
 	}
 
 	@Test

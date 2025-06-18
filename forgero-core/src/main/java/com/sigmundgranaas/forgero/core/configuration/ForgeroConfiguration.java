@@ -13,11 +13,17 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 	@NotNull
 	public List<String> disabledResources = Collections.emptyList();
 	@NotNull
-	public List<String> disabledPacks = Collections.emptyList();
+	public List<String> disabledPacks = List.of(
+			"forgero:extended-handles-deprecated",
+			"forgero:extended-swords-deprecated",
+			"forgero:extended-tools-deprecated",
+			"forgero:material-deprecated",
+			"forgero:trinkets-deprecated"
+	);
 
 	// Recipes, upgrades, and loot
 	@NotNull
-	public Boolean disableVanillaRecipes = false;
+	public Boolean disableVanillaRecipes = true;
 	@NotNull
 	public Boolean enableCustomRecipeDeletion = true;
 	@NotNull
@@ -27,11 +33,11 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 	@NotNull
 	public Boolean disableVanillaLoot = false;
 	@NotNull
-	public Boolean disableVanillaTools = false;
+	public Boolean disableVanillaTools = true;
 	@NotNull
 	public Boolean convertVanillaRecipesToForgeroTools = false;
 	@NotNull
-	public Boolean convertVanillaToolLoot = false;
+	public Boolean convertVanillaToolLoot = true;
 
 	// Repairing
 	@NotNull
@@ -53,7 +59,7 @@ public class ForgeroConfiguration implements ForgeroConfigurationData {
 	@NotNull
 	public Float minimumAttackSpeed = 0.5f;
 	@NotNull
-	public Boolean weightIncreasesHunger = false;
+	public Boolean weightIncreasesHunger = true;
 	@NotNull
 	public Integer weightIncreasesHungerScalar = 10;
 	@NotNull

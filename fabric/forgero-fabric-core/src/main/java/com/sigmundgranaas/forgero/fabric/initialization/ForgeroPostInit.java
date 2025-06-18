@@ -21,6 +21,7 @@ import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.BrokenTo
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Durability;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningLevel;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.MiningSpeed;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Rarity;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Reach;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
 import com.sigmundgranaas.forgero.core.state.Identifiable;
@@ -44,17 +45,19 @@ import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartToSchematicGenera
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartTypeTagGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.RepairKitResourceGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.SchematicPartTagGenerator;
+import com.sigmundgranaas.forgero.fabric.resources.dynamic.WoodPartsTag;
 import com.sigmundgranaas.forgero.generator.api.operation.OperationFactory;
 import com.sigmundgranaas.forgero.generator.impl.converter.forgero.ForgeroTypeVariableConverter;
 import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.AttributesRegistrar;
-import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.LootFunctionRegistrar;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.HungerHandler;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipAttributeRegistry;
+
+import net.minecraft.util.Identifier;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.resource.ResourceType;
@@ -88,7 +91,6 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 		registerItems(stateService);
 		registerTreasureLoot();
 		registerCommands();
-		registerLootFunctions();
 		registerItemAttributes();
 		registerDisassemblyReloadListener();
 		registerDataReloadListener();
@@ -97,22 +99,28 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 		registerAARPRecipes(stateService);
 		registerHungerCallbacks(stateService);
 		registerToolTipFilters();
-		registerRecipeGenerators();
+		registerRecipeGenerators(stateService);
 	}
 
-	private void registerRecipeGenerators() {
-		Function<State, String> idConverter = s -> StateService.INSTANCE.getMapper().stateToContainer(s.identifier()).toString();
+	private void registerRecipeGenerators(StateService stateService) {
+		Function<State, String> idConverter = s -> stateService.getMapper().stateToContainer(s.identifier()).toString();
 
-		Function<State, String> tagOrItem = (state) -> Registries.ITEM.get(StateService.INSTANCE.getMapper().stateToContainer(state.identifier())) == Items.AIR ? "tag" : "item";
+		Function<State, String> tagOrItem = (state) -> stateService.getMapper().stateToTag(state.identifier()).isPresent() ? "tag" : "item";
 		Function<State, String> material = (state) -> state instanceof MaterialBased based ? based.baseMaterial().name() : "";
+		Function<State, String> namespace = (state) -> stateService.getMapper().stateToTag(state.identifier()).map(Identifier::getNamespace)
+				.orElse(state.nameSpace());
+		Function<State, String> containerId = (state) -> stateService.getMapper().stateToTag(state.identifier()).map(Identifier::toString)
+				.orElse(stateService.getMapper().stateToContainer(state.identifier()).toString());
 
 		var factory = new OperationFactory<>(State.class);
 
 		operation("forgero:state_name", "name", factory.build(Identifiable::name));
-		operation("forgero:state_namespace", "namespace", factory.build(Identifiable::nameSpace));
+		operation("forgero:state_namespace", "namespace", factory.build(namespace));
 		operation("forgero:state_material", "material", factory.build(material));
 		operation("forgero:state_identifier", "identifier", factory.build(idConverter));
 		operation("forgero:state_identifier", "id", factory.build(idConverter));
+		operation("forgero:state_identifier", "container_id", factory.build(containerId));
+
 		operation("forgero:tag_or_item", "tagOrItem", factory.build(tagOrItem));
 
 		// Edge cases
@@ -129,16 +137,17 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	}
 
 	private void registerToolTipFilters() {
-		var defaults = List.of(AttackDamage.KEY, MiningSpeed.KEY, Durability.KEY, MiningLevel.KEY, AttackSpeed.KEY, Armor.KEY, Weight.KEY, Reach.KEY);
-		defaults.stream()
-				.map(TooltipAttributeRegistry.attributeBuilder()::attribute)
-				.forEach(TooltipAttributeRegistry.AttributeBuilder::register);
-
-		TooltipAttributeRegistry.attributeBuilder().attribute("RARITY").condition(container -> !ForgeroConfigurationLoader.configuration.hideRarity).register();
+		var defaults = List.of(AttackDamage.KEY, MiningSpeed.KEY, Durability.KEY, MiningLevel.KEY, AttackSpeed.KEY, Armor.KEY, Reach.KEY, Weight.KEY);
+		defaults.stream().map(TooltipAttributeRegistry.attributeBuilder()::attribute).forEach(TooltipAttributeRegistry.AttributeBuilder::register);
+		TooltipAttributeRegistry.attributeBuilder().attribute(Rarity.KEY).condition(container -> !ForgeroConfigurationLoader.configuration.hideRarity).register();
 
 		var swords = List.of(AttackDamage.KEY, AttackSpeed.KEY, Durability.KEY, Armor.KEY, Weight.KEY, Reach.KEY);
 		TooltipAttributeRegistry.filterBuilder().attributes(swords).type(Type.SWORD_BLADE).register();
 		TooltipAttributeRegistry.filterBuilder().attributes(swords).type(Type.SWORD).register();
+		TooltipAttributeRegistry.attributeBuilder().attribute("RARITY").condition(container -> !ForgeroConfigurationLoader.configuration.hideRarity).register();
+
+		TooltipAttributeRegistry.filterBuilder().attributes(swords).type(Type.WEAPON_HEAD).register();
+		TooltipAttributeRegistry.filterBuilder().attributes(swords).type(Type.WEAPON).register();
 		TooltipAttributeRegistry.filterBuilder().attributes(defaults).type(Type.MATERIAL).register();
 		registerAttributeModifications();
 	}
@@ -202,7 +211,7 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	 * @param stateService The state service provides services related to Forgero states.
 	 */
 	private void registerItems(StateService stateService) {
-		new StateItemRegistrar(stateService).registerItem(Registries.ITEM);
+		new StateItemRegistrar(stateService).registerItems(Registries.ITEM);
 		new DynamicItemsRegistrar().register();
 	}
 
@@ -219,14 +228,6 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	 */
 	private void registerCommands() {
 		new CommandRegistrar().register();
-	}
-
-	/**
-	 * The registerLootFunctions method registers the loot functions used by the mod.
-	 * The Loot functions alter the state of looted Forgero items to give them special conditions or levels
-	 */
-	private void registerLootFunctions() {
-		new LootFunctionRegistrar().register();
 	}
 
 	/**
@@ -275,10 +276,9 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 		ARRPGenerator.register(new RepairKitResourceGenerator(ForgeroConfigurationLoader.configuration, service));
 		if (ForgeroConfigurationLoader.configuration.enableRecipesForAllSchematics) {
 			ARRPGenerator.register(() -> new AllPartToAllSchematicsGenerator(service, new PartToSchematicGenerator.SchematicRecipeCreator(), new PartToSchematicGenerator.AllVariantFilter()));
-		} else {
-			ARRPGenerator.register(() -> new PartToSchematicGenerator(service, new PartToSchematicGenerator.SchematicRecipeCreator(), new PartToSchematicGenerator.BaseVariantFilter()));
 		}
 
+		ARRPGenerator.register(() -> new WoodPartsTag(ForgeroStateRegistry.TREE));
 		ARRPGenerator.register(() -> new MaterialPartTagGenerator(service));
 		ARRPGenerator.register(() -> new SchematicPartTagGenerator(service));
 		ARRPGenerator.register(() -> new PartTypeTagGenerator(service));

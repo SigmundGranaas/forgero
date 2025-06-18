@@ -21,7 +21,6 @@ subprojects {
 		api(project(":${rootProject.mod_id}-core"))
 
 		// Content modules
-
 		project(":content").subprojects.each { subproject ->
 			dependencies.add("runtimeOnly", project(path: ":content:${subproject.name}"))
 		}
@@ -36,6 +35,8 @@ dependencies {
 	include(project(":${rootProject.mod_id}-core"))
 	include(project(":fabric:${rootProject.mod_id}-fabric-core"))
 	include(project(":fabric:minecraft-common"))
+
+	api(project(":fabric:${rootProject.mod_id}-fabric-core"))
 
 	// Fabric mod compat
 	include(project(":fabric:${rootProject.mod_id}-fabric-compat"))
@@ -56,6 +57,8 @@ dependencies {
 
 	// Advanced runtime resource pack
 	include modApi("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
+
+	include modApi("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}")
 }
 
 allprojects {
@@ -139,6 +142,13 @@ curseforge {
 				optionalDependency "dragonloot"
 				optionalDependency "garnished-additions"
 				optionalDependency "mythicmetals-decorations"
+				optionalDependency "eldritch-end"
+				optionalDependency "regions-unexplored"
+				optionalDependency "spelunkery"
+				optionalDependency "beneath-the-wetlands"
+				optionalDependency "enderite-mod"
+				optionalDependency "galosphere"
+				optionalDependency "eden-ring-reforked"
 				incompatible "exordium"
 			}
 		}
@@ -191,6 +201,15 @@ modrinth {
 		optional.project "dragonloot"
 		optional.project "garnished-additions"
 		optional.project "mythicmetals-decorations"
+		optional.project "eldritch-end"
+		optional.project "regions-unexplored"
+		optional.project "spelunkery"
+		optional.project "ends-phantasm"
+		optional.project "enderite-mod"
+		optional.project "galosphere"
+		optional.project "bountiful-fares"
+		optional.project "eden-ring-reforked"
+		optional.project "beneath-the-wetlands"
 		incompatible.project "exordium"
 	}
 }

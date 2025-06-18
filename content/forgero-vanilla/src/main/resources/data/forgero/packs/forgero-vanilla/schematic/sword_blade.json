@@ -26,7 +26,7 @@
           "OFFENSIVE"
         ],
         "description": "reinforcement",
-        "type": "MATERIAL"
+        "type": "UPGRADE_MATERIAL"
       },
       {
         "upgrade_type": "SMITHING",
@@ -65,6 +65,7 @@
     "ingredient_count": {
       "value": 2,
       "context": "LOCAL"
-    }
+    },
+    "better_compat_attribute_container": "forgero:sword"
   }
 }

@@ -5,7 +5,6 @@ import static com.sigmundgranaas.forgero.core.type.Type.*;
 import java.util.List;
 
 import com.sigmundgranaas.forgero.core.condition.Conditional;
-import com.sigmundgranaas.forgero.core.soul.SoulContainer;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.DefaultWriter;
@@ -39,10 +38,6 @@ public class StateWriter implements Writer {
 
 	@Override
 	public void write(List<Text> tooltip, TooltipContext context) {
-		if (this.state instanceof SoulContainer container) {
-			new SoulWriter(container.getSoul()).write(tooltip, context);
-		}
-
 		if (this.state instanceof Composite composite) {
 			new CompositeWriter(composite).write(tooltip, context);
 		}

@@ -2,7 +2,7 @@
   "name": "wired-redstone-compat",
   "resource_type": "PACKAGE",
   "priority": 4,
-  "namespace": "wiredredstone",
+  "namespace": "forgero",
   "dependencies": [
     "minecraft",
     "forgero",

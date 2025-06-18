@@ -26,7 +26,7 @@
           {
             "id": "wood-weight-composite",
             "type": "WEIGHT",
-            "value": 15
+            "value": 1.5
           }
         ]
       },
@@ -47,7 +47,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 8
+            "value": 0.75
           },
           {
             "id": "wood-durability-offensive-upgrade",

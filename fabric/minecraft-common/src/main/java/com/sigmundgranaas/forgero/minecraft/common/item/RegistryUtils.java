@@ -1,6 +1,8 @@
 package com.sigmundgranaas.forgero.minecraft.common.item;
 
+import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackDamage;
+import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.AttackSpeed;
 import com.sigmundgranaas.forgero.core.state.MaterialBased;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.StateProvider;
@@ -84,9 +86,9 @@ public class RegistryUtils {
 	public static DynamicToolItemSettings createDynamicSettings(StateProvider provider) {
 		var state = provider.get();
 
-		int attackDamage = (int) state.stream().applyAttribute(AttackDamage.KEY);
+		int attackDamage = ComputedAttribute.of(state, AttackDamage.KEY).asInt();
 
-		float attackSpeed = state.stream().applyAttribute(AttackDamage.KEY);
+		float attackSpeed = ComputedAttribute.of(state, AttackSpeed.KEY).asFloat();
 
 		Ingredient ingredient = createIngredientFromState(provider);
 

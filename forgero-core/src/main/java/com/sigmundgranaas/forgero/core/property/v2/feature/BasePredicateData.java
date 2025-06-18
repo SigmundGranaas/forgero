@@ -54,4 +54,8 @@ public record BasePredicateData(String id,
 		}
 		return Optional.empty();
 	}
+
+	public static BasePredicateData empty(String type){
+		return new BasePredicateData(EMPTY_IDENTIFIER, type, Matchable.DEFAULT_TRUE, EMPTY_IDENTIFIER, Collections.emptyList());
+	}
 }

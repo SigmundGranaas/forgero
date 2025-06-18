@@ -1,22 +1,22 @@
 package com.sigmundgranaas.forgero.fabric.tags;
 
-import static com.sigmundgranaas.forgero.fabric.resources.ARRPGenerator.RESOURCE_PACK;
+public class BiomesWeveGone extends CommonTagGenerator {
 
-import net.devtech.arrp.json.tags.JTag;
+	protected BiomesWeveGone() {
+		super("biomeswevegone");
+	}
 
-import net.minecraft.util.Identifier;
-
-public class BiomesWeveGone {
-	public static void generateTags() {
-		RESOURCE_PACK.addTag(new Identifier("c", "items/aspen_planks"), JTag.tag().add(new Identifier("biomeswevegone:aspen_planks")));
-		RESOURCE_PACK.addTag(new Identifier("c", "items/baobab_planks"), JTag.tag().add(new Identifier("biomeswevegone:baobab_planks")));
-		RESOURCE_PACK.addTag(new Identifier("c", "items/cypress_planks"), JTag.tag().add(new Identifier("biomeswevegone:cypress_planks")));
-		RESOURCE_PACK.addTag(new Identifier("c", "items/fir_planks"), JTag.tag().add(new Identifier("biomeswevegone:fir_planks")));
-		RESOURCE_PACK.addTag(new Identifier("c", "items/mahogany_planks"), JTag.tag().add(new Identifier("biomeswevegone:mahogany_planks")));
-		RESOURCE_PACK.addTag(new Identifier("c", "items/maple_planks"), JTag.tag().add(new Identifier("biomeswevegone:maple_planks")));
-		RESOURCE_PACK.addTag(new Identifier("c", "items/palm_planks"), JTag.tag().add(new Identifier("biomeswevegone:palm_planks")));
-		RESOURCE_PACK.addTag(new Identifier("c", "items/pine_planks"), JTag.tag().add(new Identifier("biomeswevegone:pine_planks")));
-		RESOURCE_PACK.addTag(new Identifier("c", "items/redwood_planks"), JTag.tag().add(new Identifier("biomeswevegone:redwood_planks")));
-		RESOURCE_PACK.addTag(new Identifier("c", "items/willow_planks"), JTag.tag().add(new Identifier("biomeswevegone:willow_planks")));
+	@Override
+	public void addTags() {
+		registerCommonItemTag("aspen_planks");
+		registerCommonItemTag("baobab_planks");
+		registerCommonItemTag("cypress_planks");
+		registerCommonItemTag("fir_planks");
+		registerCommonItemTag("mahogany_planks");
+		registerCommonItemTag("maple_planks");
+		registerCommonItemTag("palm_planks");
+		registerCommonItemTag("pine_planks");
+		registerCommonItemTag("redwood_planks");
+		registerCommonItemTag("willow_planks");
 	}
 }

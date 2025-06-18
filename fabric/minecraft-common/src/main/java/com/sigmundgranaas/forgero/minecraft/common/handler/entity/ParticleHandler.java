@@ -160,9 +160,9 @@ public class ParticleHandler implements EntityBasedHandler, BlockTargetHandler, 
 		spawnParticles(entity, new Vec3d(pos.getX(), pos.getY(), pos.getZ()));
 	}
 
-	private void spawnParticles(Entity entity, Vec3d pos) {
+	private void spawnParticles(Entity entity, Vec3d originPos) {
 		ParticleType<?> particle = Registries.PARTICLE_TYPE.get(particleId);
-
+		Vec3d pos = originPos.add(offset());
 		if (particle instanceof DefaultParticleType defaultParticleType && entity != null) {
 			for (int i = 0; i < count; i++) {
 				double velX = velocity.x;

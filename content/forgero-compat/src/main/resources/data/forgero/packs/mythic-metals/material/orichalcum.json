@@ -63,7 +63,7 @@
             "type": "WEIGHT",
             "context": "COMPOSITE",
             "operation": "ADDITION",
-            "value": 21
+            "value": 2.1
           },
           {
             "id": "metal-rarity-upgrade",
@@ -93,7 +93,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 30
+            "value": 1.05
           },
           {
             "id": "metal-attack_damage-offensive-upgrade",

@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.fabric.mixins;
 
-import com.sigmundgranaas.forgero.minecraft.common.toolhandler.SoulLevelUpHandler;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.TotemEffectHandler;
 
 import net.minecraft.client.MinecraftClient;
@@ -39,8 +38,6 @@ public abstract class ClientPlayNetworkGetTotemMixin {
 		if (entity instanceof PlayerEntity player) {
 			if (packet.getStatus() == ENTITY_STATUS_TOTEM) {
 				TotemEffectHandler.of(client, player, world).run();
-			} else if (packet.getStatus() == ENTITY_STATUS_SOUL_LEVEL_UP) {
-				SoulLevelUpHandler.of(client, player, world).run();
 			}
 		}
 	}

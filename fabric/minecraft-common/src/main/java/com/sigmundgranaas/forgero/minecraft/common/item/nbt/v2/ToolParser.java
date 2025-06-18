@@ -44,12 +44,6 @@ public class ToolParser extends CompositeParser {
 				if (compound.contains(TYPE_IDENTIFIER)) {
 					builder.type(Type.of(compound.getString(TYPE_IDENTIFIER)));
 				}
-				if (compound.contains(SOUL_IDENTIFIER)) {
-					var soul = SoulParser.PARSER.parse(compound.getCompound(SOUL_IDENTIFIER));
-					if (soul.isPresent()) {
-						return Optional.of(builder.soul(soul.get()).build());
-					}
-				}
 				if (compound.contains(CONDITIONS_IDENTIFIER)) {
 					parseConditions(compound.getList(CONDITIONS_IDENTIFIER, NbtElement.STRING_TYPE))
 							.forEach(builder::condition);

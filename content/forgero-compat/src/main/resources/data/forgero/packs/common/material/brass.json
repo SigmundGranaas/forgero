@@ -10,7 +10,7 @@
   },
   "container": {
     "type": "HOST",
-    "tag": "c:brass_ingots"
+    "tag": "c:brass_ingot"
   },
   "palette": {
     "name": "common/brass"

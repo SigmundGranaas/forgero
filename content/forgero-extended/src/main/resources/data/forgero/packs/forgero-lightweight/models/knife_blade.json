@@ -1,0 +1,50 @@
+{
+  "type": "SWORDLIKE_HEAD",
+  "models": [
+    {
+      "name": "knife_blade",
+      "type": "GENERATE",
+      "template": "lightweight/knife_blade.png",
+      "palette": "TOOL_MATERIAL",
+      "order": 20
+    },
+    {
+      "name": "swordlike_head_material",
+      "order": 30,
+      "type": "GENERATE",
+      "palette": "TOOL_MATERIAL",
+      "template": "lightweight/knife_blade_reinforcement.png"
+    },
+    {
+      "name": "swordlike_head_dye",
+      "order": 25,
+      "type": "GENERATE",
+      "palette": "TOOL_MATERIAL",
+      "template": "lightweight/knife_blade.png"
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "id:knife_blade-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "knife_blade"
+    },
+    {
+      "target": [
+        "type:MATERIAL",
+        "slot:0"
+      ],
+      "modelType": "UPGRADE",
+      "template": "swordlike_head_material"
+    },
+    {
+      "target": [
+        "type:DYE",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "swordlike_head_dye"
+    }
+  ]
+}

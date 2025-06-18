@@ -1,12 +1,9 @@
 {
   "generator_type": "forgero:mapped_recipe_generator",
-  "identifier": "forgero:${stone.name}-${wood.name}-${part}-stone_upgrade-recipe",
+  "identifier": "forgero:${stone.name}-wood-${part}-stone_upgrade-recipe",
   "variables": {
     "stone": {
       "type": "STONE"
-    },
-    "wood": {
-      "type": "WOOD"
     },
     "part": [
       "axe_head",
@@ -29,7 +26,7 @@
       "${stone.tagOrItem}": "${stone.id}"
     },
     "y": {
-      "item": "forgero:${wood.name}-${part}"
+      "tag": "forgero:wood-${part}"
     }
   },
   "result": {

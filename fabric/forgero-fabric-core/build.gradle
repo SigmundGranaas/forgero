@@ -25,6 +25,10 @@ dependencies {
 
 	// Advanced Runtime Resource Pack
 	modApi("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
+
+	modApi("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}"){
+		exclude(group: "net.fabricmc.fabric-loader")
+	}
 }
 
 sourceSets {
@@ -38,9 +42,12 @@ loom {
 	accessWidenerPath = file("src/main/resources/${mod_id}-core.accesswidener")
 
 	runs {
+		client {
+			client()
+			ideConfigGenerated = true
+		}
 		testServer {
 			server()
-			ideConfigGenerated project.rootProject == project
 			name = "Test Server"
 			source sourceSets.test
 		}
@@ -56,7 +63,6 @@ loom {
 			name = "Test Client"
 			vmArg "-Dfabric-api.gametest.structures.output-dir=${file("src/test/resources/data/${mod_id}/gametest/structures")}"
 
-			ideConfigGenerated = false
 			source sourceSets.test
 		}
 	}

@@ -16,13 +16,13 @@
       "item": "forgero:${variant}_pickaxe_head-schematic"
     },
     {
-      "${material.tagOrItem}": "${material.id}"
+      "${material.tagOrItem}": "${material.container_id}"
     },
     {
-      "${material.tagOrItem}": "${material.id}"
+      "${material.tagOrItem}": "${material.container_id}"
     },
     {
-      "${material.tagOrItem}": "${material.id}"
+      "${material.tagOrItem}": "${material.container_id}"
     }
   ],
   "result": {

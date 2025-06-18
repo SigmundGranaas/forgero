@@ -27,7 +27,7 @@
           {
             "id": "hide-weight-composite",
             "type": "WEIGHT",
-            "value": 5
+            "value": 0.5
           }
         ]
       },
@@ -71,7 +71,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 2.5
+            "value": 0.25
           },
           {
             "id": "hide-durability-utility-upgrade",

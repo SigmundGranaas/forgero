@@ -14,6 +14,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.List;
@@ -21,6 +23,14 @@ import java.util.Locale;
 import java.util.stream.Stream;
 
 public class AttributeWriterHelper extends BaseWriter {
+	private static final DecimalFormat ENGLISH_FORMAT;
+
+	static {
+		DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.ENGLISH);
+		ENGLISH_FORMAT = new DecimalFormat("0.##", symbols);
+		ENGLISH_FORMAT.setMaximumFractionDigits(2);
+	}
+
 	private final PropertyContainer container;
 	private final AttributeHelper helper;
 	private final TooltipConfiguration configuration;
@@ -35,19 +45,17 @@ public class AttributeWriterHelper extends BaseWriter {
 	}
 
 	public static String number(float attribute) {
-		if (Math.round(attribute) == attribute || roundFloat(attribute) == Math.round(attribute)) {
+		if (Math.round(attribute) == attribute) {
 			return String.valueOf(Math.round(attribute));
 		}
-		return String.valueOf(roundFloat(attribute));
+		return roundFloat(attribute);
 	}
 
-	public static float roundFloat(float number) {
-		NumberFormat format = NumberFormat.getInstance(Locale.ENGLISH);
-		format.setMaximumFractionDigits(2);
+	public static String roundFloat(float number) {
 		try {
-			return Float.parseFloat(format.format(number));
+			return ENGLISH_FORMAT.format(number);
 		} catch (NumberFormatException e) {
-			return 1f;
+			return ENGLISH_FORMAT.format(1f);
 		}
 	}
 
@@ -56,7 +64,12 @@ public class AttributeWriterHelper extends BaseWriter {
 	}
 
 	public MutableText writePercentageAttribute(Attribute attribute) {
-		return writeAttributeType(attribute.type())
+		return writePercentageAttribute(attribute, 1);
+	}
+
+	public MutableText writePercentageAttribute(Attribute attribute, int indent) {
+		return
+				writeAttributeType(attribute.type(), indent)
 				.append(indented(1))
 				.append(percentageNumberText(attribute));
 	}
@@ -73,7 +86,7 @@ public class AttributeWriterHelper extends BaseWriter {
 	}
 
 	private boolean isPartHead(Object o) {
-		return o instanceof Matchable matchable && (matchable.test(Type.SWORD_BLADE) || matchable.test(Type.TOOL_PART_HEAD));
+		return o instanceof Matchable matchable && (matchable.test(Type.WEAPON_HEAD) || matchable.test(Type.TOOL_PART_HEAD));
 	}
 
 	private boolean isSchematic(Object o) {
@@ -109,11 +122,15 @@ public class AttributeWriterHelper extends BaseWriter {
 	}
 
 	public MutableText writeAdditionAttribute(Attribute attribute) {
+		return writeAdditionAttribute(attribute, 1);
+	}
+
+		public MutableText writeAdditionAttribute(Attribute attribute, int indent) {
 		float value = attribute.leveledValue();
 		if (attribute.getAttributeType().equals(AttackSpeed.KEY)) {
 			value = 4 + value;
 		}
-		return writeAttributeType(attribute.type())
+		return writeAttributeType(attribute.type(), indent)
 				.append(indented(1))
 				.append(additionSign(value))
 				.append(number(attribute.leveledValue()));
@@ -166,7 +183,10 @@ public class AttributeWriterHelper extends BaseWriter {
 	}
 
 	public MutableText writeAttributeType(String attribute) {
-		return indented(configuration.baseIndent() + 1)
+		return writeAttributeType(attribute, 1);
+	}
+		public MutableText writeAttributeType(String attribute, int indent) {
+		return indented(configuration.baseIndent() + indent)
 				.append(writeTranslatableAttributeType(attribute)
 						.formatted(neutral()))
 				.append(sectionSeparator()
@@ -193,6 +213,4 @@ public class AttributeWriterHelper extends BaseWriter {
 	private MutableText sectionSeparator() {
 		return Text.translatable("tooltip.forgero.section.section_separator");
 	}
-
-
 }

@@ -18,8 +18,8 @@
     {
       "type": "modonomicon:crafting_recipe",
       "anchor": "",
-      "recipe_id_1": "forgero:handle-schematic_recipe",
-      "recipe_id_2": "forgero:pickaxe_head-schematic_recipe",
+      "recipe_id_1": "forgero:oak_handle-schematic-recipe",
+      "recipe_id_2": "forgero:oak_pickaxe_head-schematic-recipe",
       "text": "book.modonomicon.demo.features.recipe.crafting.text",
       "title1": "",
       "title2": ""

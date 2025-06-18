@@ -26,7 +26,7 @@
           {
             "id": "soft_plant-weight-composite",
             "type": "WEIGHT",
-            "value": 5
+            "value": 0.5
           }
         ]
       },
@@ -47,7 +47,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 2
+            "value": 0.25
           },
           {
             "id": "soft_plant-attack_speed-utility-upgrade",

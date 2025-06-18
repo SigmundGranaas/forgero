@@ -14,7 +14,7 @@
   ],
   "key": {
     "a": {
-      "${material.tagOrItem}": "${material.id}"
+      "${material.tagOrItem}": "${material.container_id}"
     },
     "b": {
       "tag": "forgero:handle"

@@ -2,7 +2,7 @@
   "name": "fruitfulfun-compat",
   "resource_type": "PACKAGE",
   "priority": 4,
-  "namespace": "fruitfulfun",
+  "namespace": "forgero",
   "dependencies": [
     "minecraft",
     "forgero",
