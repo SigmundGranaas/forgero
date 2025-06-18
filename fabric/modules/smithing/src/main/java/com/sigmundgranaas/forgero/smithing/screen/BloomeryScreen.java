@@ -43,21 +43,35 @@ public class BloomeryScreen extends HandledScreen<BloomeryScreenHandler> {
     }
 
     private void renderFuelIndicator(DrawContext context, int x, int y) {
-        int maxFuel = handler.getMaxFuelProgress();
-        int currentFuel = handler.getFuelProgress();
+        int fuelTime = handler.getFuelProgress();
+        int fuelTotal = handler.getMaxFuelProgress();
+        if (fuelTotal <= 0) return;
+        
+        // Vanilla furnace uses a 14-pixel tall flame texture
         int fuelHeight = 14;
-        int fuelBarHeight = (maxFuel > 0) ? (currentFuel * fuelHeight) / maxFuel : 0;
+        // Calculate the height of the filled portion of the fuel bar
+        int filledHeight = (fuelTime * fuelHeight) / fuelTotal;
         
-        // Always show at least 1 pixel of the fuel bar
-        if (fuelBarHeight <= 0 && currentFuel > 0) {
-            fuelBarHeight = 1;
+        // Ensure at least 1 pixel is shown if there's any fuel
+        if (fuelTime > 0 && filledHeight == 0) {
+            filledHeight = 1;
+        } else if (fuelTime <= 0) {
+            return; // Don't render if no fuel
         }
         
-        if (fuelBarHeight > 0 && currentFuel > 0) {
-            // Texture coordinates: (u, v) = (176, 14 + (fuelHeight - fuelBarHeight)), size = (14, fuelBarHeight)
-            context.drawTexture(TEXTURE, x + 32, y + 36 + (fuelHeight - fuelBarHeight),
-                    176, 17 + (fuelHeight - fuelBarHeight), 14, fuelBarHeight);
-        }
+        // Adjust for the flame texture's position in the texture file
+        int vOffset = fuelHeight - filledHeight;
+        
+        // Draw the fuel bar (vanilla flame texture is at u=176, v=0 with size 14x14)
+        // The y position is adjusted to draw from bottom to top
+        context.drawTexture(TEXTURE, 
+            x + 32, // x position of the fuel bar
+            y + 36 + vOffset, // y position (adjusted for height)
+            176, // u (texture x)
+            14 + vOffset, // v (texture y, adjusted for height)
+            14, // width
+            filledHeight // height of the filled portion
+        );
     }
 
     @Override

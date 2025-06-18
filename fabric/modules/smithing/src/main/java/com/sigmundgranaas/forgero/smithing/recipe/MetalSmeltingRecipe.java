@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.smithing.recipe;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import com.sigmundgranaas.forgero.smithing.block.inventory.BloomeryInventory;
 import com.sigmundgranaas.forgero.smithing.item.custom.LiquidMetalCrucibleItem;
 
@@ -90,7 +91,6 @@ public class MetalSmeltingRecipe implements Recipe<BloomeryInventory> {
 	}
 
 	public int getCookingTime() {
-		System.out.println("Getting cooking time: " + this.cookingTime + " for recipe " + this.id);
 		return this.cookingTime;
 	}
 
@@ -99,24 +99,34 @@ public class MetalSmeltingRecipe implements Recipe<BloomeryInventory> {
 	}
 
 
+	public static final String ID = "metal_smelting";
+
 	public static class Type implements RecipeType<MetalSmeltingRecipe> {
 		public static final Type INSTANCE = new Type();
-		public static final String ID = "metal_smelting";
+		public static final String ID = MetalSmeltingRecipe.ID;
 	}
 
 	public static class Serializer implements RecipeSerializer<MetalSmeltingRecipe> {
 		public static final Serializer INSTANCE = new Serializer();
-		public static final String ID = "metal_smelting";
+		public static final String ID = MetalSmeltingRecipe.ID;
 
 		@Override
 		public MetalSmeltingRecipe read(Identifier id, JsonObject json) {
 			Ingredient ingredient = Ingredient.fromJson(json.get("ingredient"));
-			Identifier liquid = new Identifier(JsonHelper.getString(json, "liquid"));
 			int cookingTime = JsonHelper.getInt(json, "cooking_time", 200);
-			int liquidAmount = JsonHelper.getInt(json, "liquid_amount");
-
-			System.out.println("Loading recipe " + id + " with cookingTime: " + cookingTime + ", liquid: " + liquid + ", amount: " + liquidAmount);
-			return new MetalSmeltingRecipe(id, ingredient, liquid, cookingTime, liquidAmount);
+			
+			// Read from result object
+			JsonObject result = JsonHelper.getObject(json, "result");
+			
+			// Handle the new simplified format with direct liquid field
+			if (result.has("liquid")) {
+				Identifier liquid = new Identifier(JsonHelper.getString(result, "liquid"));
+				// Default amount to 100 if not specified
+				int liquidAmount = JsonHelper.getInt(result, "amount", 100);
+				return new MetalSmeltingRecipe(id, ingredient, liquid, cookingTime, liquidAmount);
+			}
+			
+			throw new JsonSyntaxException("Invalid recipe format for " + id + ". Expected 'forgero:molten_metal' object in result");
 		}
 
 		@Override

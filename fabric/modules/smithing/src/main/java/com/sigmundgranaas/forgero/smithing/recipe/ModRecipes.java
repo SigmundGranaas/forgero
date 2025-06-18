@@ -18,12 +18,12 @@ public class ModRecipes {
 
 		// Metal smelting
 		Registry.register(
-				Registries.RECIPE_SERIALIZER, new Identifier(Forgero.NAMESPACE, MetalSmeltingRecipe.Serializer.ID),
-				MetalSmeltingRecipe.Serializer.INSTANCE
+			Registries.RECIPE_SERIALIZER, new Identifier(Forgero.NAMESPACE, MetalSmeltingRecipe.Serializer.ID),
+			MetalSmeltingRecipe.Serializer.INSTANCE
 		);
 		Registry.register(
-				Registries.RECIPE_TYPE, new Identifier(Forgero.NAMESPACE, MetalSmeltingRecipe.Type.ID),
-				MetalSmeltingRecipe.Type.INSTANCE
+			Registries.RECIPE_TYPE, new Identifier(Forgero.NAMESPACE, MetalSmeltingRecipe.Type.ID),
+			MetalSmeltingRecipe.Type.INSTANCE
 		);
 	}
 }

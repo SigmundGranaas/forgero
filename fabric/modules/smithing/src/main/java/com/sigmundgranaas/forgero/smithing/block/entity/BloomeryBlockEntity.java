@@ -15,9 +15,11 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
@@ -28,6 +30,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
+import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 
 public class BloomeryBlockEntity extends BlockEntity implements ImplementedInventory, NamedScreenHandlerFactory {
@@ -75,56 +78,46 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 	public static void serverTick(World world, BlockPos pos, BlockState state, BloomeryBlockEntity blockEntity) {
         boolean wasLit = state.get(BloomeryBlock.LIT);
         boolean dirty = false;
-
-        // Handle fuel consumption and refueling
+        boolean hasValidCrucible = !blockEntity.inventory.get(BloomeryInventory.CRUCIBLE_SLOT).isEmpty();
+        boolean hasValidRecipe = blockEntity.hasRecipe();
+        boolean canSmelt = hasValidCrucible && hasValidRecipe;
+        
+        // Handle fuel consumption (independent of smelting)
         if (blockEntity.isBurning()) {
             blockEntity.fuelTime--;
             if (blockEntity.fuelTime <= 0) {
-                if (blockEntity.hasFuel()) {
-                    blockEntity.burnFuel();
-                    dirty = true;
-                } else {
-                    blockEntity.fuelTime = 0;
-                    blockEntity.maxFuelTime = 0;
-                    dirty = true;
-                }
+                blockEntity.fuelTime = 0;
+                blockEntity.maxFuelTime = 0;
+                dirty = true;
             }
-        } else if (!blockEntity.isBurning() && blockEntity.hasFuel()) {
+        }
+        
+        // Try to start burning if we have fuel and can smelt something
+        if (!blockEntity.isBurning() && blockEntity.hasFuel() && canSmelt) {
             blockEntity.burnFuel();
             dirty = true;
         }
-
-        // Check if we can process
-        if (blockEntity.hasRecipe()) {
-            // Process recipe if burning
-            if (blockEntity.isBurning()) {
-                blockEntity.progress++;
-                if (blockEntity.progress % 20 == 0) { // Log every second
-                    System.out.println("Progress: " + blockEntity.progress + "/" + blockEntity.maxProgress + " (" + (blockEntity.progress * 100 / blockEntity.maxProgress) + "%)");
-                }
-                dirty = true;
-
-                if (blockEntity.progress >= blockEntity.maxProgress) {
-                    blockEntity.craftItem();
-                    blockEntity.progress = 0;
-                    dirty = true;
-                }
-            } else if (blockEntity.progress > 0) {
-                // Gradually decrease progress when no fuel
-                blockEntity.progress = Math.max(0, blockEntity.progress - 2); // Decrease by 2 each tick
-                dirty = true;
-            }
-        } else if (blockEntity.progress > 0) {
-            // Reset progress if recipe is invalid
-            blockEntity.progress = 0;
-            dirty = true;
-        }
-
+        
         // Update block state if lighting changed
         boolean isLit = blockEntity.isBurning();
         if (wasLit != isLit) {
             state = state.with(BloomeryBlock.LIT, isLit);
             world.setBlockState(pos, state, Block.NOTIFY_ALL);
+            dirty = true;
+        }
+        
+        // Handle smelting progress (only if burning and can smelt)
+        if (blockEntity.isBurning() && canSmelt) {
+            blockEntity.progress++;
+            if (blockEntity.progress >= blockEntity.maxProgress) {
+                blockEntity.craftItem();
+                blockEntity.progress = 0; // Reset progress after crafting
+                dirty = true;
+            }
+        } else if (blockEntity.progress > 0) {
+            // Reset progress if we can't smelt or not burning
+            // Reset progress if recipe is invalid
+            blockEntity.progress = 0;
             dirty = true;
         }
 
@@ -269,14 +262,19 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 			crucibleItem.addLiquid(resultCrucible, recipe.getLiquid(), recipe.getLiquidAmount());
 			inventory.set(BloomeryInventory.CRUCIBLE_SLOT, resultCrucible);
 
-			// Always update the crucible in its current slot first
-			inventory.set(BloomeryInventory.CRUCIBLE_SLOT, resultCrucible);
-			
-			// Only move to output slot if the crucible is full or if there's already something in the output slot
-			if (output.isEmpty() && crucibleItem.getLiquidAmount(resultCrucible) >= crucibleItem.getMaxCapacity()) {
-				// If crucible is full and output is empty, move it to output slot
-				inventory.set(BloomeryInventory.OUTPUT_SLOT, resultCrucible.copy());
-				inventory.set(BloomeryInventory.CRUCIBLE_SLOT, ItemStack.EMPTY);
+			// Check if we can add more liquid to the crucible
+			boolean canAddMore = crucibleItem.canAddLiquid(resultCrucible, recipe.getLiquid(), recipe.getLiquidAmount());
+			boolean isFull = crucibleItem.getLiquidAmount(resultCrucible) >= crucibleItem.getMaxCapacity();
+
+			if (output.isEmpty()) {
+				if (!canAddMore || isFull) {
+					// If we can't add more liquid or crucible is full, move to output slot
+					inventory.set(BloomeryInventory.OUTPUT_SLOT, resultCrucible.copy());
+					inventory.set(BloomeryInventory.CRUCIBLE_SLOT, ItemStack.EMPTY);
+				} else {
+					// Otherwise keep it in the crucible slot
+					inventory.set(BloomeryInventory.CRUCIBLE_SLOT, resultCrucible);
+				}
 			} else if (output.getItem() instanceof LiquidMetalCrucibleItem outputCrucibleItem) {
 				// If output is a crucible, try to add the liquid to it
 				if (outputCrucibleItem.canAddLiquid(output, recipe.getLiquid(), recipe.getLiquidAmount())) {
@@ -291,15 +289,32 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 	}
 
 	private void burnFuel() {
-		ItemStack fuelStack = inventory.get(BloomeryInventory.FUEL_SLOT);
-		if (!fuelStack.isEmpty()) {
-			this.maxFuelTime = this.getFuelTime(fuelStack);
-			this.fuelTime = this.maxFuelTime;
-			fuelStack.decrement(1);
-			inventory.set(BloomeryInventory.FUEL_SLOT, fuelStack);
-			this.markDirty();
-		}
-	}
+        ItemStack fuelStack = inventory.get(BloomeryInventory.FUEL_SLOT);
+        if (!fuelStack.isEmpty()) {
+            // Get the fuel time for this item
+            int newFuelTime = this.getFuelTime(fuelStack);
+            
+            // Vanilla behavior: when adding fuel while already burning, add (fuelTime / 2) ticks
+            if (this.fuelTime > 0) {
+                this.fuelTime += newFuelTime / 2;
+            } else {
+                this.fuelTime = newFuelTime;
+            }
+            this.maxFuelTime = Math.max(this.maxFuelTime, this.fuelTime);
+            
+            // Consume the fuel item (if not in creative mode)
+            if (!fuelStack.isIn(ItemTags.NON_FLAMMABLE_WOOD)) {
+                fuelStack.decrement(1);
+                if (fuelStack.isEmpty()) {
+                    Item remainder = fuelStack.getItem().getRecipeRemainder();
+                    inventory.set(BloomeryInventory.FUEL_SLOT, remainder != null ? new ItemStack(remainder) : ItemStack.EMPTY);
+                } else {
+                    inventory.set(BloomeryInventory.FUEL_SLOT, fuelStack);
+                }
+            }
+            this.markDirty();
+        }
+    }
 
 	private boolean hasFuel() {
 		return !inventory.get(BloomeryInventory.FUEL_SLOT).isEmpty() && this.getFuelTime(inventory.get(BloomeryInventory.FUEL_SLOT)) > 0;
@@ -322,15 +337,12 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 	}
 
 	private int getFuelTime(ItemStack fuel) {
-		if (fuel.isEmpty()) return 0;
-		if (fuel.isOf(Items.COAL) || fuel.isIn(ConventionalItemTags.COAL)) {
-			return COAL_FUEL_TIME;
+		if (fuel.isEmpty()) {
+			return 0;
 		}
-		if (fuel.isOf(Items.CHARCOAL)) {
-			return CHARCOAL_FUEL_TIME;
-		}
-		if (fuel.isOf(Items.LAVA_BUCKET)) {
-			return 20000; // 1000 seconds
+		int time = FuelRegistry.INSTANCE.get(fuel.getItem());
+		if (time > 0) {
+			return time;
 		}
 		if (fuel.isOf(Items.BLAZE_ROD)) {
 			return 2400; // 120 seconds
