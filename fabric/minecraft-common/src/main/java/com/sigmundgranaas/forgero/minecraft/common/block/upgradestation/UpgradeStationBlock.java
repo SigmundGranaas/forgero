@@ -1,28 +1,30 @@
 package com.sigmundgranaas.forgero.minecraft.common.block.upgradestation;
 
+import static net.minecraft.block.Blocks.SMITHING_TABLE;
+
 import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.entity.UpgradeStationBlockEntity;
+import com.sigmundgranaas.forgero.minecraft.common.registry.entity.block.BlockEntityRegistry;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.ShapeContext;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.ScreenHandlerContext;
-import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -36,9 +38,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 
-import static net.minecraft.block.Blocks.SMITHING_TABLE;
-
-public class UpgradeStationBlock extends HorizontalFacingBlock {
+public class UpgradeStationBlock extends HorizontalFacingBlock implements BlockEntityProvider {
 
 	public static final EnumProperty<UpgradeStationBlockPart> PART = EnumProperty.of("part", UpgradeStationBlockPart.class);
 	public static final Block UPGRADE_STATION_BLOCK = new UpgradeStationBlock(Settings.copy(SMITHING_TABLE).strength(2.5F).sounds(BlockSoundGroup.WOOD));
@@ -107,13 +107,27 @@ public class UpgradeStationBlock extends HorizontalFacingBlock {
 	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		if (!world.isClient) {
-			//This will call the createScreenHandlerFactory method from BlockWithEntity, which will return our blockEntity casted to
-			//a namedScreenHandlerFactory. If your block class does not extend BlockWithEntity, it needs to implement createScreenHandlerFactory.
-			NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
+			BlockPos actualPos = pos;
 
-			if (screenHandlerFactory != null) {
-				//With this call the server will request the client to open the appropriate Screenhandler
+			// If this is the RIGHT part, get the position of the LEFT part
+			if (state.get(PART) == UpgradeStationBlockPart.RIGHT) {
+				Direction facing = state.get(FACING);
+				actualPos = pos.offset(facing.rotateClockwise(Direction.Axis.Y));
+
+				// Verify the LEFT part exists with the expected block state
+				BlockState leftState = world.getBlockState(actualPos);
+				if (!leftState.isOf(this) || leftState.get(PART) != UpgradeStationBlockPart.LEFT) {
+					return ActionResult.FAIL;
+				}
+			}
+
+			// Get the block entity at the actual position
+			BlockEntity blockEntity = world.getBlockEntity(actualPos);
+			if (blockEntity instanceof NamedScreenHandlerFactory screenHandlerFactory) {
 				player.openHandledScreen(screenHandlerFactory);
+			} else {
+				System.err.println("Failed to open upgrade station GUI: No valid block entity at " + actualPos);
+				return ActionResult.FAIL;
 			}
 		}
 		return ActionResult.SUCCESS;
@@ -126,7 +140,18 @@ public class UpgradeStationBlock extends HorizontalFacingBlock {
 
 	@Override
 	public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
-		return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> new UpgradeStationScreenHandler(syncId, inventory, ScreenHandlerContext.create(world, pos)), Text.literal("assembly_station"));
+		return world.getBlockEntity(pos, BlockEntityRegistry.UPGRADE_STATION_BLOCK_ENTITY)
+			.map(blockEntity -> (NamedScreenHandlerFactory)blockEntity)
+			.orElse(null);
+	}
+
+	@Override
+	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+		// Only create a block entity for the LEFT part
+		if (state.get(PART) == UpgradeStationBlockPart.LEFT) {
+			return new UpgradeStationBlockEntity(pos, state);
+		}
+		return null;
 	}
 
 	@Override
@@ -138,23 +163,48 @@ public class UpgradeStationBlock extends HorizontalFacingBlock {
 			world.setBlockState(blockPos, state.with(PART, UpgradeStationBlockPart.RIGHT), 3);
 			world.updateNeighbors(pos, Blocks.AIR);
 			state.updateNeighbors(world, pos, 3);
+
+			// Transfer the item to the block entity inventory if applicable
+			if (state.get(PART) == UpgradeStationBlockPart.LEFT &&
+				world.getBlockEntity(pos) instanceof UpgradeStationBlockEntity blockEntity &&
+				itemStack.hasNbt() && itemStack.getNbt().contains("StoredItem")) {
+				ItemStack storedItem = ItemStack.fromNbt(itemStack.getNbt().getCompound("StoredItem"));
+				blockEntity.setInventoryStack(storedItem);
+			}
+
+			// Mark the block entity as dirty to ensure it's saved
+			if (world.getBlockEntity(pos) != null) {
+				world.getBlockEntity(pos).markDirty();
+			}
 		}
 	}
 
 	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
 		UpgradeStationBlockPart part = state.get(PART);
-		BlockPos blockPos;
+		BlockPos otherPartPos;
+		BlockPos blockEntityPos = pos;
+
 		if (part == UpgradeStationBlockPart.LEFT) {
-			blockPos = pos.offset(state.get(FACING).rotateCounterclockwise(Direction.Axis.Y));
+			otherPartPos = pos.offset(state.get(FACING).rotateCounterclockwise(Direction.Axis.Y));
 		} else {
-			blockPos = pos.offset(state.get(FACING).rotateClockwise(Direction.Axis.Y));
+			otherPartPos = pos.offset(state.get(FACING).rotateClockwise(Direction.Axis.Y));
+			blockEntityPos = otherPartPos; // If breaking RIGHT part, the inventory is in the LEFT part
 		}
+
+		// Drop items from the LEFT part's inventory
+		if (!world.isClient && world.getBlockEntity(blockEntityPos) instanceof UpgradeStationBlockEntity blockEntity) {
+			ItemStack storedItem = blockEntity.getCompositeInventory().getStack(0);
+			if (!storedItem.isEmpty()) {
+				Block.dropStack(world, pos, storedItem.copy());
+			}
+		}
+
 		if (!world.isClient) {
-			world.setBlockState(blockPos, Blocks.AIR.getDefaultState(), 3);
+			world.setBlockState(otherPartPos, Blocks.AIR.getDefaultState(), 3);
 			world.updateNeighbors(pos, Blocks.AIR);
 			state.updateNeighbors(world, pos, 3);
-
 		}
+
 		super.onBreak(world, pos, state, player);
 	}
 
