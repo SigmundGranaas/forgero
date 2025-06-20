@@ -1,6 +1,11 @@
 package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.entity;
 
+import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationBlock.*;
+import static com.sigmundgranaas.forgero.minecraft.common.registry.entity.block.BlockEntityRegistry.ASSEMBLY_STATION_BLOCK_ENTITY;
+
 import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationScreenHandler;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -18,14 +23,7 @@ import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.text.Text;
-
 import net.minecraft.util.math.BlockPos;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationBlock.*;
-import static com.sigmundgranaas.forgero.minecraft.common.registry.entity.block.BlockEntityRegistry.ASSEMBLY_STATION_BLOCK_ENTITY;
 
 public class AssemblyStationBlockEntity extends BlockEntity implements NamedScreenHandlerFactory {
 	private static final @NotNull String DISASSEMBLY_INVENTORY_NBT_KEY = "DisassemblyInventory";
@@ -70,7 +68,10 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 
 	@Override
 	public NbtCompound toInitialChunkDataNbt() {
-		return super.createNbt();
+		// Create a proper NbtCompound with all the block entity data
+		NbtCompound nbt = new NbtCompound();
+		this.writeNbt(nbt);
+		return nbt;
 	}
 
 	@Override

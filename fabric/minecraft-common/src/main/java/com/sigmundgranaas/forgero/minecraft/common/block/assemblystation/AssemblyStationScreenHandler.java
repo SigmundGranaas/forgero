@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation;
 
 import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.state.DisassemblyHandler;
 import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.state.EmptyHandler;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -13,8 +14,6 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
-
-import org.jetbrains.annotations.NotNull;
 
 public class AssemblyStationScreenHandler extends ScreenHandler {
 	public static ScreenHandler dummyHandler = new ScreenHandler(ScreenHandlerType.CRAFTING, 0) {
@@ -62,7 +61,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		// 3x3
 		for (int yIndex = 0; yIndex < 3; yIndex++) {
 			for (int xIndex = 0; xIndex < 3; xIndex++) {
-				this.addSlot(new ResultSlot(resultInventory, xIndex + yIndex * (1 + yIndex), 92 + xIndex * 18, 17 * (1 + yIndex) + yIndex));
+				this.addSlot(new ResultSlot(resultInventory, xIndex + yIndex * 3, 92 + xIndex * 18, 17 * (1 + yIndex) + yIndex));
 			}
 		}
 		// Player inventory and hotbar
@@ -203,7 +202,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
 			@NotNull var disassembledToolPartItemStacks = this.disassemblyHandler.disassemble();
 			for (int resultInventorySlotId = 0; resultInventorySlotId < disassembledToolPartItemStacks.size(); resultInventorySlotId++) {
-				if (resultInventorySlotId > this.resultInventory.size()) {
+				if (resultInventorySlotId >= this.resultInventory.size()) {
 					continue;
 				}
 
@@ -224,7 +223,24 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 				return;
 			}
 
-			toolItemStack.decrement(1);
+			// Only decrement if any items were taken from the result slots
+			boolean anyResultSlotEmpty = false;
+			for (int i = 0; i < resultInventory.size(); i++) {
+				ItemStack stack = resultInventory.getStack(i);
+				if (stack.isEmpty() && this.disassemblyHandler.disassemble().size() > i) {
+					anyResultSlotEmpty = true;
+					break;
+				}
+			}
+
+			if (anyResultSlotEmpty) {
+				toolItemStack.decrement(1);
+				// Clear the input slot if the item count reaches zero
+				if (toolItemStack.isEmpty()) {
+					this.inventory.setStack(0, ItemStack.EMPTY);
+				}
+			}
+
 			this.isPreviewingToolDisassembly = false;
 		}
 
@@ -245,6 +261,13 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		@Override
 		public boolean canInsert(ItemStack stack) {
 			return false;
+		}
+
+		@Override
+		public void onTakeItem(PlayerEntity player, ItemStack stack) {
+			super.onTakeItem(player, stack);
+			// Mark the slot as empty to trigger consumption of the input item
+			this.setStack(ItemStack.EMPTY);
 		}
 	}
 

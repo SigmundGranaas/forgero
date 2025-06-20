@@ -1,10 +1,12 @@
 package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.render;
 
+import static com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.AssemblyStationBlock.FACING;
+
 import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.entity.AssemblyStationBlockEntity;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-
+import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.OverlayTexture;
@@ -16,12 +18,13 @@ import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 @Environment(EnvType.CLIENT)
 public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<AssemblyStationBlockEntity> {
@@ -38,6 +41,9 @@ public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<A
 			return;
 		}
 
+		BlockState blockState = entity.getCachedState();
+		Direction facing = blockState.get(FACING);
+
 		ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
 		ItemStack inventory = entity.getRenderInventory();
 		ItemStack resultSlot1 = entity.getRenderResultSlot1();
@@ -50,6 +56,26 @@ public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<A
 		ItemStack resultSlot8 = entity.getRenderResultSlot8();
 		ItemStack resultSlot9 = entity.getRenderResultSlot9();
 
+        // Apply rotation based on block facing
+        matrices.push();
+        matrices.translate(0.5, 0, 0.5);
+        switch (facing) {
+            case NORTH:
+                // Default orientation
+                break;
+            case SOUTH:
+                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+                break;
+            case EAST:
+                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(270));
+                break;
+            case WEST:
+                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90));
+                break;
+        }
+        matrices.translate(-0.5, 0, -0.5);
+
+		// Main item render
 		matrices.push();
 		matrices.translate(0.5f, 1.025f, 0.5f);
 		matrices.scale(0.75f, 0.75f, 0.75f);
@@ -168,6 +194,9 @@ public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<A
 				resultSlot9, ModelTransformationMode.GUI, getLightLevel(world, entity.getPos()), OverlayTexture.DEFAULT_UV, matrices,
 				vertexConsumers, world, 1
 		);
+		matrices.pop();
+
+		// End the global rotation that was applied for the facing direction
 		matrices.pop();
 	}
 
