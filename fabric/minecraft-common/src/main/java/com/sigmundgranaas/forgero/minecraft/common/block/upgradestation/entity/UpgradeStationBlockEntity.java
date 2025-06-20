@@ -111,6 +111,12 @@ public class UpgradeStationBlockEntity extends BlockEntity implements NamedScree
         }
     }
 
+    // Get a deep copy of the inventory stack to ensure it's not modified externally
+    public ItemStack getInventoryStack() {
+        ItemStack stack = this.compositeInventory.getStack(0);
+        return stack.isEmpty() ? ItemStack.EMPTY : stack.copy();
+    }
+
     @Override
     public void markDirty() {
         super.markDirty();

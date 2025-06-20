@@ -78,11 +78,17 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 		this.activeSlots = 0;
 
 		// Initialize with the block entity's inventory if available
+		ItemStack storedItem = ItemStack.EMPTY;
+
+		// Get the stored item from the block entity (if any)
+		final boolean[] hasStoredItem = {false};
 		context.run((world, pos) -> {
 			if (world.getBlockEntity(pos) instanceof UpgradeStationBlockEntity blockEntity) {
-				ItemStack storedItem = blockEntity.getCompositeInventory().getStack(0);
-				if (!storedItem.isEmpty()) {
-					this.compositeInventory.setStack(0, storedItem.copy());
+				ItemStack item = blockEntity.getCompositeInventory().getStack(0);
+				if (!item.isEmpty()) {
+					// Don't set it directly yet, as we need to handle it properly after slot initialization
+					this.compositeInventory.setStack(0, item.copy());
+					hasStoredItem[0] = true;
 				}
 			}
 		});
@@ -99,13 +105,28 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 			}
 		}
 
-
 		// initialization of the slot pool
 		for (int j = 0; j < maxSlots; j++) {
 			var inventory = new SimpleInventory(1);
 			var slot = new PositionedSlot(inventory, 0, 0, 0, null, null, null); //initialize with dummy values, will be populated later
 			this.slotPool.add(slot);
 			this.addSlot(slot);
+		}
+
+		// If we have a stored item, manually initialize the component tree
+		// This is needed because setting the inventory item above doesn't always trigger the listener
+		if (hasStoredItem[0]) {
+			// Temporarily disable the building flag to allow manual initialization
+			boolean wasBuilding = this.isBuildingTree;
+			this.isBuildingTree = false;
+
+			try {
+				// Force rebuild the component tree
+				onCompositeSlotChanged(this.compositeInventory);
+			} finally {
+				// Restore the original building flag
+				this.isBuildingTree = wasBuilding;
+			}
 		}
 	}
 
@@ -230,14 +251,34 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 			this.activeSlots++;
 
 			if (!(state instanceof EmptyState)) {
-				if (entity instanceof ServerPlayerEntity serverPlayerEntity) {
-					ItemStack stack = service.convert(state).orElse(ItemStack.EMPTY);
-					newSlot.inventory.setStack(0, stack.copy());
-				}
+				// Set the stack for both server and client
+				ItemStack stack = service.convert(state).orElse(ItemStack.EMPTY);
+				newSlot.inventory.setStack(0, stack.copy());
+
+				// Ensure the slot content is marked as changed
+				newSlot.markDirty();
+
 				placeSlots(child, slotOffsetX + (5 * placedSlots), offsetY + verticalSpacing, slotSpacing, newSlot, entity);
 			}
 			placedSlots += 1;
 			currentWidth += childWidth + slotSpacing;
+		}
+
+		// After placing all slots, make sure we sync the changes
+		sendContentUpdates();
+	}
+
+	@Override
+	public void sendContentUpdates() {
+		super.sendContentUpdates();
+
+		// Force a complete resync of all active slots
+		for (int i = 0; i < this.activeSlots; i++) {
+			PositionedSlot slot = this.slotPool.get(i);
+			if (slot != null && slot.hasStack()) {
+				// This notifies clients of changes to this slot's content
+				slot.markDirty();
+			}
 		}
 	}
 
@@ -503,6 +544,20 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 			return this.slot != null || this.container != null || this.parent != null;
 		}
 
+		@Override
+		public void markDirty() {
+			if (this.inventory != null) {
+				this.inventory.markDirty();
+			}
+		}
+
+		@Override
+		public void setStack(ItemStack stack) {
+			if (this.inventory != null) {
+				this.inventory.setStack(0, stack);
+				this.markDirty();
+			}
+		}
 	}
 
 	public static ScreenHandlerType<UpgradeStationScreenHandler> UPGRADE_STATION_SCREEN_HANDLER = new ScreenHandlerType<>(UpgradeStationScreenHandler::new, FeatureFlags.VANILLA_FEATURES);

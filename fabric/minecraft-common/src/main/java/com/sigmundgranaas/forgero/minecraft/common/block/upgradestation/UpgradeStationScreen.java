@@ -12,15 +12,14 @@ import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section.SlotSectio
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.GameRenderer;
-
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
-
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -93,13 +92,56 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 
 	@Override
 	public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
+		this.renderBackground(matrices);
 		super.render(matrices, mouseX, mouseY, delta);
 		this.tickCounter++;
+
+		// Force refresh slot visuals
+		for (Slot slot : this.handler.slots) {
+			if (slot instanceof UpgradeStationScreenHandler.PositionedSlot && slot.isEnabled()) {
+				// This ensures the slot's item is drawn even if it wasn't initially visible
+				if (slot.hasStack()) {
+					ItemStack stack = slot.getStack();
+					if (!stack.isEmpty()) {
+						int slotX = slot.x + this.x;
+						int slotY = slot.y + this.y;
+						matrices.drawItem(stack, slotX, slotY);
+					}
+				}
+			}
+		}
 
 		drawMouseoverTooltip(matrices, mouseX, mouseY);
 		if (this.handler.compositeSlot.hasStack()) {
 			renderCustomTooltip(matrices, new ArrayList<>(), mouseX, mouseY);
 		}
+	}
+
+	@Override
+	protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
+		RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		int centerX = (this.width - this.backgroundWidth) / 2;
+		int centerY = (this.height - this.backgroundHeight) / 2;
+		context.drawTexture(TEXTURE, centerX, centerY, 0, 0, backgroundWidth, backgroundHeight);
+
+		if (this.handler.compositeSlot.hasStack()) {
+			this.renderLinesBetweenSlots(context);
+			for (Slot slot : handler.slotPool) {
+				if (slot instanceof UpgradeStationScreenHandler.PositionedSlot positioned && slot.isEnabled() && positioned.slot != null) {
+					this.drawDynamicSlot(context, slot);
+
+					// Ensure slot contents are visible
+					if (slot.hasStack() && !slot.getStack().isEmpty()) {
+						ItemStack stack = slot.getStack();
+						int slotX = slot.x;
+						int slotY = slot.y;
+						context.drawItem(stack, centerX + slotX, centerY + slotY);
+					}
+				}
+			}
+		}
+		this.drawDynamicSlot(context, handler.compositeSlot);
 	}
 
 
@@ -194,24 +236,5 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 		titleY = 5;
 
 		playerInventoryTitleY = 127;
-	}
-
-	@Override
-	protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
-		RenderSystem.setShader(GameRenderer::getPositionTexProgram);
-		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		int centerX = (this.width - this.backgroundWidth) / 2;
-		int centerY = (this.height - this.backgroundHeight) / 2;
-		context.drawTexture(TEXTURE, centerX, centerY, 0, 0, backgroundWidth, backgroundHeight);
-
-		if (this.handler.compositeSlot.hasStack()) {
-			this.renderLinesBetweenSlots(context);
-			for (Slot slot : handler.slotPool) {
-				if (slot instanceof UpgradeStationScreenHandler.PositionedSlot positioned && slot.isEnabled() && positioned.slot != null) {
-					this.drawDynamicSlot(context, slot);
-				}
-			}
-		}
-		this.drawDynamicSlot(context, handler.compositeSlot);
 	}
 }
