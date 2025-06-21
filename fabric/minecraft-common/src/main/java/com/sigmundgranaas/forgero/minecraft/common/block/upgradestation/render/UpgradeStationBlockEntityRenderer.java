@@ -54,9 +54,18 @@ public class UpgradeStationBlockEntityRenderer implements BlockEntityRenderer<Up
         ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
         ItemStack inventory = entity.getRenderInventory();
 
-        // Apply rotation based on block facing
+        // Exit early if there's nothing to render
+        if (inventory.isEmpty()) {
+            return;
+        }
+
+        // Apply rotation based on block facing - using the same approach as AssemblyStation
         matrices.push();
+
+        // First translate to center of block
         matrices.translate(0.5, 0, 0.5);
+
+        // Apply rotation based on facing direction
         switch (facing) {
             case NORTH:
                 // Default orientation
@@ -71,25 +80,37 @@ public class UpgradeStationBlockEntityRenderer implements BlockEntityRenderer<Up
                 matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90));
                 break;
         }
+
+        // Translate back to maintain rotated coordinate system
         matrices.translate(-0.5, 0, -0.5);
 
-        // Main item render - floating above the upgrade station
-        if (!inventory.isEmpty()) {
-            matrices.push();
-            matrices.translate(0.5f, 1.25f, 0.5f);
-            matrices.scale(0.75f, 0.75f, 0.75f);
-            
-            // Make the item rotate slowly
-            float angle = (world.getTime() + tickDelta) % 360;
-            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(angle));
+        // From here on, coordinates are relative to the block's facing direction
+        // So the same coordinates work for all facing directions
 
-            itemRenderer.renderItem(
-                    inventory, ModelTransformationMode.FIXED, getLightLevel(world, entity.getPos()), 
-                    OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, world, 1
-            );
-            matrices.pop();
-        }
+        // Position item in the middle of the upgrade station
+        matrices.push();
+        matrices.translate(0, 1.01, 0.30);
 
+        // Rotate to lay flat on the table
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
+
+        // Scale the item
+        float scale = 1.15f;
+        matrices.scale(scale, scale, scale);
+
+        // Render in 3D lying flat
+        itemRenderer.renderItem(
+                inventory,
+                ModelTransformationMode.GROUND,
+                getLightLevel(world, entity.getPos()),
+                OverlayTexture.DEFAULT_UV,
+                matrices,
+                vertexConsumers,
+                world,
+                1
+        );
+
+        matrices.pop();
         matrices.pop();
     }
 

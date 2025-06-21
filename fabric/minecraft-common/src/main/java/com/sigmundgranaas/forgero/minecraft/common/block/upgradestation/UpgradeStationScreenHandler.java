@@ -348,12 +348,56 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 						return ItemStack.EMPTY;
 					}
 				} else {
-					// When the slot is in the player inventory, try moving to the composite slot only
-					// if it can accept the item
-					if (this.compositeSlot.canInsert(originalStack) &&
-                        !this.insertItem(originalStack, 0, 1, false)) {
-                        return ItemStack.EMPTY;
-                    }
+					// When the slot is in the player inventory, try moving to the appropriate upgrade station slot
+					boolean transferred = false;
+
+					// Try inserting into the composite slot first if it can accept the item
+					if (this.compositeSlot.canInsert(originalStack)) {
+						if (this.insertItem(originalStack, 0, 1, false)) {
+							transferred = true;
+						}
+					}
+
+					// If not transferred to composite, try each upgrade slot individually
+					if (!transferred && activeSlots > 0) {
+						// Go through each active slot and try to insert
+						for (int i = 0; i < activeSlots; i++) {
+							PositionedSlot upgradeSlot = this.slotPool.get(i);
+
+							// Check if this specific slot can accept the item
+							if (upgradeSlot != null && upgradeSlot.isEnabled() && upgradeSlot.canInsert(originalStack)) {
+								// Create a copy to prevent modifying the original in case of multiple matches
+								ItemStack stackToInsert = originalStack.copy();
+
+								// First check if we can insert directly
+								if (upgradeSlot.getStack().isEmpty()) {
+									int maxAmount = Math.min(upgradeSlot.getMaxItemCount(), stackToInsert.getCount());
+									ItemStack stackToSet = stackToInsert.copy();
+									stackToSet.setCount(maxAmount);
+									upgradeSlot.setStack(stackToSet);
+									originalStack.decrement(maxAmount);
+									transferred = true;
+									break;
+								}
+							}
+						}
+					}
+
+					// If still not transferred, try the normal player inventory to hotbar transfer
+					if (!transferred && !originalStack.isEmpty()) {
+						// Transfer between player inventory and hotbar
+						if (invSlot >= upgradeStationSlotsCount && invSlot < upgradeStationSlotsCount + 27) {
+							// Player inventory to hotbar
+							if (!this.insertItem(originalStack, upgradeStationSlotsCount + 27, upgradeStationSlotsCount + 36, false)) {
+								return ItemStack.EMPTY;
+							}
+						} else if (invSlot >= upgradeStationSlotsCount + 27 && invSlot < upgradeStationSlotsCount + 36) {
+							// Hotbar to player inventory
+							if (!this.insertItem(originalStack, upgradeStationSlotsCount, upgradeStationSlotsCount + 27, false)) {
+								return ItemStack.EMPTY;
+							}
+						}
+					}
 				}
 
 				// If the original stack is empty after moving, clear the slot; otherwise, handle any leftovers
@@ -361,6 +405,10 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 					slot.setStack(ItemStack.EMPTY);
 				} else {
 					slot.markDirty();
+				}
+
+				if (originalStack.getCount() == newStack.getCount()) {
+					return ItemStack.EMPTY;
 				}
 
 				slot.onQuickTransfer(originalStack, newStack);
