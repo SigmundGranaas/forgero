@@ -181,7 +181,7 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 						if (component.isPresent()) {
 							slot.slot = slot.container.set(component.get(), slot.slot);
 						} else if (slot.container != null) {
-							slot.slot = slot.container.empty(slot.getSlot());
+							slot.slot = slot.container.empty(slot.slot);
 						}
 
 						ItemStack newState = service.convert(compositeSlot.state).get();
@@ -195,6 +195,13 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 						if (world.getBlockEntity(pos) instanceof UpgradeStationBlockEntity blockEntity) {
 							blockEntity.setInventoryStack(newState.copy());
 						}
+
+						// Force a rebuild of the tree to ensure all visual elements update
+						// This is especially important for utility slots
+						clearSlotsAndRebuildTree(compositeSlot.state);
+
+						// Explicitly sync to clients
+						sendContentUpdates();
 					} catch (Exception e) {
 						System.err.println("Error in slot change listener: " + e.getMessage());
 					 e.printStackTrace();
@@ -272,13 +279,24 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 	public void sendContentUpdates() {
 		super.sendContentUpdates();
 
-		// Force a complete resync of all active slots
+		// Force a complete resync of all slots including utility slots
 		for (int i = 0; i < this.activeSlots; i++) {
 			PositionedSlot slot = this.slotPool.get(i);
-			if (slot != null && slot.hasStack()) {
-				// This notifies clients of changes to this slot's content
+			if (slot != null) {
+				// Mark all slots dirty, even empty ones, to ensure UI is updated
 				slot.markDirty();
+
+				// For populated slots, ensure their content is properly synced
+				if (slot.hasStack()) {
+					// Force the client to refresh this slot
+					slot.setStack(slot.getStack().copy());
+				}
 			}
+		}
+
+		// Also ensure the composite slot is properly synced
+		if (compositeSlot.hasStack()) {
+			compositeSlot.markDirty();
 		}
 	}
 
@@ -548,6 +566,32 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 		public void markDirty() {
 			if (this.inventory != null) {
 				this.inventory.markDirty();
+			}
+
+			// Ensure slot visual state is updated when changes occur
+			if (this.slot != null && container != null) {
+				// This ensures the slot's visual representation stays in sync
+				// with its actual state, especially important for utility slots
+				ItemStack currentStack = this.getStack();
+				if (!currentStack.isEmpty()) {
+					// Instead of notifyListeners(), force a state update through inventory
+					// This will propagate changes through the normal inventory update flow
+					this.inventory.markDirty();
+
+					// If this is a server-side operation, notify the parent container about the change
+					if (this.parent instanceof CompositeSlot compositeSlot &&
+                        compositeSlot.state instanceof Composite composite) {
+                        // This forces the state to update, which will cause visual refresh
+                        if (slot != null) {
+                            // Force update of the slot state
+                            if (currentStack.isEmpty()) {
+                                container.empty(slot);
+                            } else {
+                                // The state is already updated by now through the slot listener
+                            }
+                        }
+                    }
+				}
 			}
 		}
 

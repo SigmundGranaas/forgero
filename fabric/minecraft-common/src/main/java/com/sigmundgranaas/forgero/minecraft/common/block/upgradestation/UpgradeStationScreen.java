@@ -98,7 +98,7 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 
 		// Force refresh slot visuals
 		for (Slot slot : this.handler.slots) {
-			if (slot instanceof UpgradeStationScreenHandler.PositionedSlot && slot.isEnabled()) {
+			if (slot instanceof UpgradeStationScreenHandler.PositionedSlot positioned && slot.isEnabled()) {
 				// This ensures the slot's item is drawn even if it wasn't initially visible
 				if (slot.hasStack()) {
 					ItemStack stack = slot.getStack();
@@ -106,6 +106,7 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 						int slotX = slot.x + this.x;
 						int slotY = slot.y + this.y;
 						matrices.drawItem(stack, slotX, slotY);
+						matrices.drawItemInSlot(this.textRenderer, stack, slotX, slotY);
 					}
 				}
 			}

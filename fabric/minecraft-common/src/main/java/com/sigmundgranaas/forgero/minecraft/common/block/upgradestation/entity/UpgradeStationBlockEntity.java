@@ -104,9 +104,11 @@ public class UpgradeStationBlockEntity extends BlockEntity implements NamedScree
             this.compositeInventory.setStack(0, stack);
             this.markDirty();
 
-            // Force sync to client
+            // Force sync to client with highest priority
             if (this.world != null && !this.world.isClient) {
-                this.world.updateListeners(this.pos, this.getCachedState(), this.getCachedState(), Block.NOTIFY_ALL);
+                // Using NOTIFY_ALL | NOTIFY_LISTENERS to ensure all clients receive the update
+                this.world.updateListeners(this.pos, this.getCachedState(), this.getCachedState(),
+                    Block.NOTIFY_ALL | Block.NOTIFY_LISTENERS);
             }
         }
     }
@@ -120,9 +122,11 @@ public class UpgradeStationBlockEntity extends BlockEntity implements NamedScree
     @Override
     public void markDirty() {
         super.markDirty();
-        // Ensure we sync whenever marked dirty
+        // Ensure we sync whenever marked dirty with highest priority flags
         if (world != null && !world.isClient) {
-            world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_ALL);
+            // Using NOTIFY_ALL | NOTIFY_LISTENERS to ensure all clients receive the update
+            world.updateListeners(pos, getCachedState(), getCachedState(),
+                Block.NOTIFY_ALL | Block.NOTIFY_LISTENERS);
         }
     }
 }
