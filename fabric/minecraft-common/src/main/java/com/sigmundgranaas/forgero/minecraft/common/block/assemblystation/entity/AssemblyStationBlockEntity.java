@@ -28,9 +28,17 @@ import net.minecraft.util.math.BlockPos;
 public class AssemblyStationBlockEntity extends BlockEntity implements NamedScreenHandlerFactory {
 	private static final @NotNull String DISASSEMBLY_INVENTORY_NBT_KEY = "DisassemblyInventory";
 	private static final @NotNull String RESULT_INVENTORY_NBT_KEY = "ResultInventory";
+	private static final @NotNull String INPUT_CONSUMED_NBT_KEY = "InputConsumed";
+	private static final @NotNull String EXPECTED_RESULT_COUNT_NBT_KEY = "ExpectedResultCount";
 
 	private final @NotNull SimpleInventory disassemblyInventory = new SimpleInventory(DISASSEMBLY_INVENTORY_SIZE);
 	private final @NotNull SimpleInventory resultInventory = new SimpleInventory(RESULT_INVENTORY_SIZE);
+
+	// Track if the input item has been consumed
+	private boolean inputItemConsumed = false;
+
+	// Track the expected number of result items
+	private int expectedResultCount = 0;
 
 	public AssemblyStationBlockEntity(@NotNull BlockPos blockPosition, @NotNull BlockState blockState) {
 		super(ASSEMBLY_STATION_BLOCK_ENTITY, blockPosition, blockState);
@@ -47,7 +55,7 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 	@Override
 	public @Nullable ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
 		return new AssemblyStationScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(this.world, this.pos),
-				this.getDisassemblyInventory(), this.getResultInventory()
+				this.getDisassemblyInventory(), this.getResultInventory(), this.inputItemConsumed, this.expectedResultCount
 		);
 	}
 
@@ -55,6 +63,8 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 	public void writeNbt(@NotNull NbtCompound nbt) {
 		nbt.put(DISASSEMBLY_INVENTORY_NBT_KEY, this.getDisassemblyInventory().toNbtList());
 		nbt.put(RESULT_INVENTORY_NBT_KEY, this.getResultInventory().toNbtList());
+		nbt.putBoolean(INPUT_CONSUMED_NBT_KEY, this.inputItemConsumed);
+		nbt.putInt(EXPECTED_RESULT_COUNT_NBT_KEY, this.expectedResultCount);
 		super.writeNbt(nbt);
 	}
 
@@ -62,8 +72,29 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 	public void readNbt(@NotNull NbtCompound nbt) {
 		this.getDisassemblyInventory().readNbtList(nbt.getList(DISASSEMBLY_INVENTORY_NBT_KEY, NbtElement.COMPOUND_TYPE));
 		this.getResultInventory().readNbtList(nbt.getList(RESULT_INVENTORY_NBT_KEY, NbtElement.COMPOUND_TYPE));
+		this.inputItemConsumed = nbt.contains(INPUT_CONSUMED_NBT_KEY) ? nbt.getBoolean(INPUT_CONSUMED_NBT_KEY) : false;
+		this.expectedResultCount = nbt.contains(EXPECTED_RESULT_COUNT_NBT_KEY) ? nbt.getInt(EXPECTED_RESULT_COUNT_NBT_KEY) : 0;
 		super.readNbt(nbt);
 		this.markDirtyAndUpdateListeners();
+	}
+
+	// Provide methods to update the state from the screen handler
+	public void setInputItemConsumed(boolean consumed) {
+		this.inputItemConsumed = consumed;
+		this.markDirtyAndUpdateListeners();
+	}
+
+	public void setExpectedResultCount(int count) {
+		this.expectedResultCount = count;
+		this.markDirtyAndUpdateListeners();
+	}
+
+	public boolean isInputItemConsumed() {
+		return this.inputItemConsumed;
+	}
+
+	public int getExpectedResultCount() {
+		return this.expectedResultCount;
 	}
 
 	@Override
