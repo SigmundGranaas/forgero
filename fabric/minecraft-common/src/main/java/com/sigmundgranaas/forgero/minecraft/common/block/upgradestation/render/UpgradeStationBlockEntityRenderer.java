@@ -94,9 +94,11 @@ public class UpgradeStationBlockEntityRenderer implements BlockEntityRenderer<Up
         // Rotate to lay flat on the table
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
 
-        // Scale the item
-        float scale = 1.15f;
-        matrices.scale(scale, scale, scale);
+        // Scale the item with separate x, y, z scale factors
+        float scaleX = 1.15f;  // Width (appears as width when flat)
+        float scaleY = 1.15f;  // Length (appears as height when flat)
+        float scaleZ = 1.15f;  // Thickness (depth when flat on table)
+        matrices.scale(scaleX, scaleY, scaleZ);
 
         // Render in 3D lying flat
         itemRenderer.renderItem(
