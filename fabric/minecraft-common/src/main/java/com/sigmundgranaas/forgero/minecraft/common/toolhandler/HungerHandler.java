@@ -1,8 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.toolhandler;
 
 
-import java.util.Random;
-
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Weight;
@@ -68,7 +66,7 @@ public class HungerHandler {
 
 	private void addMiningExhaustionBasedOnWeight(ServerPlayerEntity player, int weight) {
 		weight = Math.max(0, Math.min(weight, 30));
-		float exhaustion = 0.001f * weight + 0.0015f;
+		float exhaustion = 0.001f * weight;
 		player.getHungerManager().addExhaustion(exhaustion);
 	}
 }
