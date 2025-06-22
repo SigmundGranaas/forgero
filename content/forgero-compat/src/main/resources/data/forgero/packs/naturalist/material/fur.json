@@ -1,10 +1,10 @@
 {
-  "type": "STRING",
-  "name": "cattail_fluff",
-  "parent": "string_base",
+  "type": "HIDE",
+  "name": "fur",
+  "parent": "hide_base",
   "container": {
     "type": "HOST",
-    "id": "naturalist:cattail_fluff"
+    "id": "naturalist:fur"
   },
   "properties": {
     "grouped_attributes": [
@@ -14,19 +14,19 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "string-rarity-composite",
+            "id": "hide-rarity-composite",
             "type": "RARITY",
-            "value": 3
+            "value": 40
           },
           {
-            "id": "string-durability-composite",
+            "id": "hide-durability-composite",
             "type": "DURABILITY",
-            "value": 10
+            "value": 170
           },
           {
-            "id": "string-weight-composite",
+            "id": "hide-weight-composite",
             "type": "WEIGHT",
-            "value": 0.2
+            "value": 3
           }
         ]
       },
@@ -34,27 +34,27 @@
         "context": "UPGRADE",
         "attributes": [
           {
-            "id": "string-rarity-upgrade",
+            "id": "hide-rarity-upgrade",
             "type": "RARITY",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 1
+            "value": 20
           },
           {
-            "id": "string-weight-upgrade",
+            "id": "hide-weight-upgrade",
             "type": "WEIGHT",
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 0.1
+            "value": 1.5
           },
           {
-            "id": "string-durability-utility-upgrade",
+            "id": "hide-durability-utility-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "UTILITY",
-            "value": 5
+            "value": 85
           }
         ]
       }
@@ -63,6 +63,6 @@
     ]
   },
   "palette": {
-    "name": "naturalist/cattail_fluff"
+    "name": "naturalist/fur"
   }
 }
