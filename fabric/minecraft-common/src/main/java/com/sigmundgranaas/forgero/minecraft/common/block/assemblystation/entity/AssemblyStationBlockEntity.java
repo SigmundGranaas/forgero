@@ -54,6 +54,7 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 
 	@Override
 	public @Nullable ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+		// We need to pass the current state to ensure consistency
 		return new AssemblyStationScreenHandler(syncId, playerInventory, ScreenHandlerContext.create(this.world, this.pos),
 				this.getDisassemblyInventory(), this.getResultInventory(), this.inputItemConsumed, this.expectedResultCount
 		);
@@ -70,23 +71,30 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 
 	@Override
 	public void readNbt(@NotNull NbtCompound nbt) {
+		super.readNbt(nbt);
+
 		this.getDisassemblyInventory().readNbtList(nbt.getList(DISASSEMBLY_INVENTORY_NBT_KEY, NbtElement.COMPOUND_TYPE));
 		this.getResultInventory().readNbtList(nbt.getList(RESULT_INVENTORY_NBT_KEY, NbtElement.COMPOUND_TYPE));
 		this.inputItemConsumed = nbt.contains(INPUT_CONSUMED_NBT_KEY) ? nbt.getBoolean(INPUT_CONSUMED_NBT_KEY) : false;
 		this.expectedResultCount = nbt.contains(EXPECTED_RESULT_COUNT_NBT_KEY) ? nbt.getInt(EXPECTED_RESULT_COUNT_NBT_KEY) : 0;
-		super.readNbt(nbt);
+
 		this.markDirtyAndUpdateListeners();
 	}
 
 	// Provide methods to update the state from the screen handler
 	public void setInputItemConsumed(boolean consumed) {
-		this.inputItemConsumed = consumed;
-		this.markDirtyAndUpdateListeners();
+		if (this.inputItemConsumed != consumed) {
+			this.inputItemConsumed = consumed;
+			// Make sure to update the client state immediately
+			this.markDirtyAndUpdateListeners();
+		}
 	}
 
 	public void setExpectedResultCount(int count) {
-		this.expectedResultCount = count;
-		this.markDirtyAndUpdateListeners();
+		if (this.expectedResultCount != count) {
+			this.expectedResultCount = count;
+			this.markDirtyAndUpdateListeners();
+		}
 	}
 
 	public boolean isInputItemConsumed() {
@@ -124,9 +132,11 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 		}
 
 		this.markDirty();
-		this.world.updateListeners(this.pos, this.getCachedState(), this.world.getBlockState(pos), Block.NOTIFY_LISTENERS);
+		// Update both the block and the blockstate to ensure clients get latest data
+		this.world.updateListeners(this.pos, this.getCachedState(), this.getCachedState(), Block.NOTIFY_ALL);
 	}
 
+	// Item getters for rendering
 	public ItemStack getRenderInventory() {
 		return this.disassemblyInventory.getStack(0);
 	}
@@ -153,7 +163,6 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 
 	public ItemStack getRenderResultSlot6() {
 		return this.resultInventory.getStack(5);
-
 	}
 
 	public ItemStack getRenderResultSlot7() {
@@ -168,5 +177,15 @@ public class AssemblyStationBlockEntity extends BlockEntity implements NamedScre
 		return this.resultInventory.getStack(8);
 	}
 
-
+	/**
+	 * Resets the block entity state when all items have been processed
+	 */
+	public void resetState() {
+		// Only reset if both conditions are met to avoid flickering in the UI
+		if (this.inputItemConsumed && this.resultInventory.isEmpty()) {
+			this.inputItemConsumed = false;
+			this.expectedResultCount = 0;
+			this.markDirtyAndUpdateListeners();
+		}
+	}
 }

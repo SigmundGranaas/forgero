@@ -28,24 +28,28 @@ import net.fabricmc.api.Environment;
 
 @Environment(EnvType.CLIENT)
 public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<AssemblyStationBlockEntity> {
-	public AssemblyStationBlockEntityRenderer(BlockEntityRendererFactory.Context ignoredContext) {}
+    // Result slot positioning parameters
+    private static final float RESULT_START_X = -0.15f;
+    private static final float RESULT_Y = 1.025f;
+    private static final float RESULT_START_Z = 0.75f;
+    private static final float RESULT_X_SPACING = 0.25f;
+    private static final float RESULT_Z_SPACING = 0.25f;
+    private static final float RESULT_ITEM_SCALE = 0.30f;
 
-	@Override
-	public void render(@Nullable AssemblyStationBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-		if (entity == null) {
-			return;
-		}
+    public AssemblyStationBlockEntityRenderer(BlockEntityRendererFactory.Context ignoredContext) {}
 
-		@Nullable var world = entity.getWorld();
-		if (world == null) {
-			return;
-		}
+    @Override
+    public void render(@Nullable AssemblyStationBlockEntity entity, float tickDelta, MatrixStack matrices,
+                      VertexConsumerProvider vertexConsumers, int light, int overlay) {
+        if (entity == null || entity.getWorld() == null) {
+            return;
+        }
 
-		BlockState blockState = entity.getCachedState();
-		Direction facing = blockState.get(FACING);
-
-		ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
-		ItemStack inventory = entity.getRenderInventory();
+        World world = entity.getWorld();
+        BlockState blockState = entity.getCachedState();
+        Direction facing = blockState.get(FACING);
+        ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
+        ItemStack mainItem = entity.getRenderInventory();
 
         // Apply rotation based on block facing
         matrices.push();
@@ -66,25 +70,43 @@ public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<A
         }
         matrices.translate(-0.5, 0, -0.5);
 
-		// Main item render
-		matrices.push();
-		matrices.translate(0.5f, 1.025f, 0.5f);
-		matrices.scale(0.75f, 0.75f, 0.75f);
-		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
-
-		itemRenderer.renderItem(
-				inventory, ModelTransformationMode.GUI, getLightLevel(world, entity.getPos()), OverlayTexture.DEFAULT_UV, matrices,
-				vertexConsumers, world, 1
-		);
-		matrices.pop();
+        // Main item render
+        if (!mainItem.isEmpty()) {
+            renderMainItem(matrices, vertexConsumers, world, entity, mainItem, itemRenderer);
+        }
 
         // Render the 9 result slots in a 3x3 grid
-        float startX = -0.15f;
-        float y = 1.025f;
-        float startZ = 0.75f;
-        float xSpacing = 0.25f;  // Spacing between columns
-        float zSpacing = 0.25f;  // Spacing between rows
+        renderResultItems(matrices, vertexConsumers, world, entity, itemRenderer);
 
+        // End the global rotation that was applied for the facing direction
+        matrices.pop();
+    }
+
+    /**
+     * Renders the main input item
+     */
+    private void renderMainItem(MatrixStack matrices, VertexConsumerProvider vertexConsumers,
+                               World world, AssemblyStationBlockEntity entity, ItemStack item,
+                               ItemRenderer itemRenderer) {
+        matrices.push();
+        matrices.translate(0.5f, 1.025f, 0.5f);
+        matrices.scale(0.75f, 0.75f, 0.75f);
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
+
+        itemRenderer.renderItem(
+                item, ModelTransformationMode.GUI,
+                getLightLevel(world, entity.getPos()), OverlayTexture.DEFAULT_UV,
+                matrices, vertexConsumers, world, 1
+        );
+        matrices.pop();
+    }
+
+    /**
+     * Renders all result items in their slots
+     */
+    private void renderResultItems(MatrixStack matrices, VertexConsumerProvider vertexConsumers,
+                                  World world, AssemblyStationBlockEntity entity,
+                                  ItemRenderer itemRenderer) {
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
                 int slotIndex = row * 3 + col;
@@ -93,11 +115,11 @@ public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<A
                 if (!resultItem.isEmpty()) {
                     matrices.push();
                     // Calculate position based on row and column
-                    float x = startX - (col * xSpacing);
-                    float z = startZ + (row * zSpacing);
+                    float x = RESULT_START_X - (col * RESULT_X_SPACING);
+                    float z = RESULT_START_Z + (row * RESULT_Z_SPACING);
 
-                    matrices.translate(x, y, z);
-                    matrices.scale(0.30f, 0.6f, 0.30f);
+                    matrices.translate(x, RESULT_Y, z);
+                    matrices.scale(RESULT_ITEM_SCALE, 0.6f, RESULT_ITEM_SCALE);
                     matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(270));
                     matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180));
 
@@ -115,10 +137,7 @@ public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<A
                 }
             }
         }
-
-		// End the global rotation that was applied for the facing direction
-		matrices.pop();
-	}
+    }
 
     // Helper method to get the appropriate result slot item by index
     private ItemStack getResultSlotItem(AssemblyStationBlockEntity entity, int index) {
@@ -136,9 +155,9 @@ public class AssemblyStationBlockEntityRenderer implements BlockEntityRenderer<A
         }
     }
 
-	private int getLightLevel(@NotNull World world, BlockPos blockPosition) {
-		int bLight = world.getLightLevel(LightType.BLOCK, blockPosition);
-		int sLight = world.getLightLevel(LightType.SKY, blockPosition);
-		return LightmapTextureManager.pack(bLight, sLight);
-	}
+    private int getLightLevel(@NotNull World world, BlockPos blockPosition) {
+        int blockLight = world.getLightLevel(LightType.BLOCK, blockPosition);
+        int skyLight = world.getLightLevel(LightType.SKY, blockPosition);
+        return LightmapTextureManager.pack(blockLight, skyLight);
+    }
 }
