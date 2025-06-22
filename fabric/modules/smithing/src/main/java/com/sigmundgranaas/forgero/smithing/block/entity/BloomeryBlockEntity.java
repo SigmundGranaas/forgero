@@ -340,9 +340,9 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 		if (fuel.isEmpty()) {
 			return 0;
 		}
-		int time = FuelRegistry.INSTANCE.get(fuel.getItem());
-		if (time > 0) {
-			return time;
+		Integer fuelTime = FuelRegistry.INSTANCE.get(fuel.getItem());
+		if (fuelTime != null && fuelTime > 0) {
+			return fuelTime;
 		}
 		if (fuel.isOf(Items.BLAZE_ROD)) {
 			return 2400; // 120 seconds

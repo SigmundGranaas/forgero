@@ -26,7 +26,6 @@ public class ModItemGroups {
 
 				 		entries.add(ModBlocks.SMITHING_ANVIL);
 						entries.add(ModBlocks.BLOOMERY);
-						entries.add(ModBlocks.MOLD);
 
 
 

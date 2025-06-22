@@ -26,6 +26,7 @@ public class ModBlocks {
 	public static final Block MOLD = registerBlock("mold",
 			new MoldBlock(FabricBlockSettings.copyOf(Blocks.STONE_SLAB)));
 
+
 	private static Block registerBlock(String name, Block block) {
 		registerBlockItem(name, block);
 		return Registry.register(Registries.BLOCK, new Identifier(Forgero.NAMESPACE, name), block);
