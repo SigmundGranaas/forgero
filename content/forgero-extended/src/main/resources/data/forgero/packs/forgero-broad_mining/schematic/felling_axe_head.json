@@ -81,7 +81,7 @@
         "selector": {
           "type": "forgero:radius",
           "filter": "forgero:similar_block",
-          "radius": 2
+          "radius": 50
         },
         "speed": {
           "type": "forgero:all"

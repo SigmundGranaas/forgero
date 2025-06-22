@@ -15,22 +15,19 @@ public class BlockSelectionUtils {
 
 	/**
 	 * @param blockPos the root position to find blocks around
-	 * @return A set of all the blocks around the given block position
+	 * @return A set of all the blocks that are directly adjacent to the given block position (sharing a face)
 	 */
 	public static Set<BlockPos> getBlockPositionsAround(BlockPos blockPos) {
 		Set<BlockPos> offsetBlockPositions = new HashSet<>();
 
-		for (int x = -1; x <= 1; x++) {
-			for (int y = -1; y <= 1; y++) {
-				for (int z = -1; z <= 1; z++) {
-					// Skip the center block
-					if (x == 0 && y == 0 && z == 0) {
-						continue;
-					}
-					offsetBlockPositions.add(blockPos.add(x, y, z));
-				}
-			}
-		}
+		// Add only the 6 directly adjacent blocks (sharing a face)
+		offsetBlockPositions.add(blockPos.add(1, 0, 0));  // East
+		offsetBlockPositions.add(blockPos.add(-1, 0, 0)); // West
+		offsetBlockPositions.add(blockPos.add(0, 1, 0));  // Up
+		offsetBlockPositions.add(blockPos.add(0, -1, 0)); // Down
+		offsetBlockPositions.add(blockPos.add(0, 0, 1));  // South
+		offsetBlockPositions.add(blockPos.add(0, 0, -1)); // North
+
 		return offsetBlockPositions;
 	}
 
