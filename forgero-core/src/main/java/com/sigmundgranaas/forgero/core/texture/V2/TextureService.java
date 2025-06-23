@@ -100,4 +100,8 @@ public class TextureService {
 		}
 		return Optional.empty();
 	}
+
+	public Map<String, Palette> getPaletteCache() {
+		return paletteCache;
+	}
 }

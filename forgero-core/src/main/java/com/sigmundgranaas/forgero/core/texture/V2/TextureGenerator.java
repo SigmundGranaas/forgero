@@ -57,6 +57,10 @@ public class TextureGenerator {
 		service.clear();
 	}
 
+	public Map<String, Palette> getPaletteMap() {
+		return service.getPaletteCache();
+	}
+
 	private void saveImage(RawTexture texture, String name) {
 		var outputPath = "./export/generated_textures/";
 		File outputFile = new File(outputPath + name);
