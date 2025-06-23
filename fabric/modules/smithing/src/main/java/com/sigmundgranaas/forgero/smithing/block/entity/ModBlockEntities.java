@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.smithing.block.ModBlocks;
-import com.sigmundgranaas.forgero.smithing.block.custom.MoldBlock;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
@@ -36,37 +35,32 @@ public class ModBlockEntities {
 				FabricBlockEntityTypeBuilder.create(BloomeryBlockEntity::new,
 						ModBlocks.BLOOMERY).build(null));
 
-		// Initialize with a base MOLD type if there's a base mold block
-		if (ModBlocks.MOLD != null) {
-			moldBlocks.add(ModBlocks.MOLD);
-			MOLD = Registry.register(Registries.BLOCK_ENTITY_TYPE,
-					new Identifier(Forgero.NAMESPACE, "mold"),
-					FabricBlockEntityTypeBuilder.create(MoldBlockEntity::new,
-							ModBlocks.MOLD).build(null));
+
+	}
+
+	/**
+	 * Registers a new mold block to use the MoldBlockEntity type.
+	 * This method should be called for every mold block, including those generated at runtime.
+	 * It only adds the block to the list; call rebuildMoldBlockEntityType() after all molds are registered.
+	 * @param moldBlock The mold block to register
+	 */
+	public static void registerMoldBlock(Block moldBlock) {
+		if (!moldBlocks.contains(moldBlock)) {
+			moldBlocks.add(moldBlock);
 		}
 	}
 
 	/**
-	 * Registers a new mold block to use the MoldBlockEntity type
-	 * If the MOLD type hasn't been created yet, it will be created
-	 * @param moldBlock The mold block to register
+	 * (Re)registers the MOLD BlockEntityType with all currently registered mold blocks.
+	 * Call this after all molds have been registered.
 	 */
-	public static void registerMoldBlock(Block moldBlock) {
-		if (!(moldBlock instanceof MoldBlock)) {
-			Forgero.LOGGER.warn("Attempted to register a non-MoldBlock as a mold block entity: {}",
-					Registries.BLOCK.getId(moldBlock));
-			return;
-		}
-
-		moldBlocks.add(moldBlock);
-
-		// If MOLD type hasn't been created yet, create it now
-		if (MOLD == null) {
+	public static void rebuildMoldBlockEntityType() {
+		if (!moldBlocks.isEmpty()) {
 			Block[] blockArray = moldBlocks.toArray(new Block[0]);
 			MOLD = Registry.register(Registries.BLOCK_ENTITY_TYPE,
 					new Identifier(Forgero.NAMESPACE, "mold"),
 					FabricBlockEntityTypeBuilder.create(MoldBlockEntity::new, blockArray).build(null));
-			Forgero.LOGGER.info("Created mold block entity type for {} blocks", blockArray.length);
+			Forgero.LOGGER.info("(Re)registered mold block entity type for {} blocks", blockArray.length);
 		}
 	}
 }

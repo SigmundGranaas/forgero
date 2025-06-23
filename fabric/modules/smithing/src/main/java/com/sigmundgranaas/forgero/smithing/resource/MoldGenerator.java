@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.smithing.resource;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,10 +10,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.fabric.client.texture.FabricTextureLoader;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.DynamicResourceGenerator;
 import com.sigmundgranaas.forgero.smithing.ForgeroSmithingInitializer;
 import com.sigmundgranaas.forgero.smithing.block.custom.MoldBlock;
@@ -73,6 +76,8 @@ public class MoldGenerator implements DynamicResourceGenerator {
 
     // Singleton instance
     private static MoldGenerator INSTANCE;
+
+    private final FabricTextureLoader textureLoader = new FabricTextureLoader(id -> Optional.empty()); // Replace with actual resource getter if needed
 
     public MoldGenerator() {
         INSTANCE = this;
@@ -616,6 +621,23 @@ public class MoldGenerator implements DynamicResourceGenerator {
             joinedElements = allTemplateElements;
         }
 
+        // Generate dynamic fluid texture for this mold/material
+        String fluidTextureName = "fluid_flow_" + textureName;
+        Identifier fluidTextureId = new Identifier("forgero", "textures/block/" + fluidTextureName + ".png");
+        BufferedImage fluidImage = generateDynamicFluidTexture(textureName);
+        if (fluidImage != null) {
+            try (java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream()) {
+                javax.imageio.ImageIO.write(fluidImage, "PNG", baos);
+                pack.addAsset(fluidTextureId, baos.toByteArray());
+                Forgero.LOGGER.info("Added dynamic fluid texture: {}", fluidTextureId);
+            } catch (IOException e) {
+                Forgero.LOGGER.error("Failed to write dynamic fluid texture for {}: {}", textureName, e.getMessage());
+            }
+        }
+
+        // Use the dynamic fluid texture for the template face
+        String templateTexturePath = "forgero:block/" + fluidTextureName;
+
         String filledModelJson = String.format(
             "{\n" +
             "  \"parent\": \"minecraft:block/block\",\n" +
@@ -623,11 +645,11 @@ public class MoldGenerator implements DynamicResourceGenerator {
             "  \"textures\": {\n" +
             "    \"terracotta\": \"forgero:block/terracotta\",\n" +
             "    \"top\": \"forgero:block/terracotta\",\n" +
-            "    \"template\": \"forgero:block/fluid_flow\",\n" +
+            "    \"template\": \"%s\",\n" +
             "    \"particle\": \"forgero:block/terracotta\"\n" +
             "  },\n" +
             "  \"elements\": [\n%s\n  ]\n" +
-            "}", joinedElements);
+            "}", templateTexturePath, joinedElements);
 
         Identifier filledModelId = new Identifier(moldId.getNamespace(), "models/block/" + moldId.getPath() + "_filled.json");
         pack.addAsset(filledModelId, filledModelJson.getBytes(java.nio.charset.StandardCharsets.UTF_8));
@@ -641,11 +663,11 @@ public class MoldGenerator implements DynamicResourceGenerator {
             "  \"textures\": {\n" +
             "    \"terracotta\": \"forgero:block/terracotta\",\n" +
             "    \"top\": \"forgero:block/terracotta\",\n" +
-            "    \"template\": \"forgero:block/fluid_flow\",\n" +
+            "    \"template\": \"%s\",\n" +
             "    \"particle\": \"forgero:block/terracotta\"\n" +
             "  },\n" +
             "  \"elements\": [\n%s\n  ]\n" +
-            "}", joinedElements);
+            "}", templateTexturePath, joinedElements);
 
         Identifier progress33ModelId = new Identifier(moldId.getNamespace(), "models/block/" + moldId.getPath() + "_progress_33.json");
         pack.addAsset(progress33ModelId, progress33ModelJson.getBytes(java.nio.charset.StandardCharsets.UTF_8));
@@ -659,11 +681,11 @@ public class MoldGenerator implements DynamicResourceGenerator {
             "  \"textures\": {\n" +
             "    \"terracotta\": \"forgero:block/terracotta\",\n" +
             "    \"top\": \"forgero:block/terracotta\",\n" +
-            "    \"template\": \"forgero:block/fluid_flow\",\n" +
+            "    \"template\": \"%s\",\n" +
             "    \"particle\": \"forgero:block/terracotta\"\n" +
             "  },\n" +
             "  \"elements\": [\n%s\n  ]\n" +
-            "}", joinedElements);
+            "}", templateTexturePath, joinedElements);
 
         Identifier progress66ModelId = new Identifier(moldId.getNamespace(), "models/block/" + moldId.getPath() + "_progress_66.json");
         pack.addAsset(progress66ModelId, progress66ModelJson.getBytes(java.nio.charset.StandardCharsets.UTF_8));
@@ -879,6 +901,9 @@ public class MoldGenerator implements DynamicResourceGenerator {
 
         // Add the registered mold blocks to the smithing creative tab
         addMoldBlocksToSmithingTab();
+
+        // After all molds are registered, rebuild the BlockEntityType to include all molds
+        com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities.rebuildMoldBlockEntityType();
     }
 
     /**
@@ -1051,5 +1076,58 @@ public class MoldGenerator implements DynamicResourceGenerator {
         }
 
         return elementsJson.toString();
+    }
+
+    /**
+     * Generate a dynamic fluid texture based on the material/template.
+     * This version uses the palette system from FabricTextureLoader to colorize the fluid_flow texture.
+     */
+    private BufferedImage generateDynamicFluidTexture(String textureName) {
+        try {
+            // Use the path string for PaletteTemplateIdentifier constructor
+            String baseFluidPath = "block/fluid_flow";
+            com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteTemplateIdentifier baseFluidIdentifier =
+                new com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteTemplateIdentifier(baseFluidPath);
+
+            BufferedImage baseFluid = textureLoader.getResource(baseFluidIdentifier).getImage();
+
+            // Use the palette system to get the palette for this template/material
+            com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier paletteId =
+                new com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier(textureName);
+
+            BufferedImage palette = textureLoader.getResource(paletteId).getImage();
+
+            if (baseFluid == null || palette == null) {
+                return null;
+            }
+
+            int paletteSize = Math.max(palette.getWidth(), palette.getHeight());
+            int[] paletteColors = new int[paletteSize];
+            for (int i = 0; i < paletteSize; i++) {
+                paletteColors[i] = palette.getRGB(
+                    palette.getWidth() == 1 ? 0 : i,
+                    palette.getHeight() == 1 ? 0 : i
+                );
+            }
+
+            BufferedImage result = new BufferedImage(baseFluid.getWidth(), baseFluid.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            for (int x = 0; x < baseFluid.getWidth(); x++) {
+                for (int y = 0; y < baseFluid.getHeight(); y++) {
+                    int pixel = baseFluid.getRGB(x, y);
+                    int alpha = (pixel >> 24) & 0xff;
+                    int gray = (pixel >> 16) & 0xff; // Assume gray, so R=G=B
+
+                    int paletteIndex = (int) ((gray / 255.0) * (paletteSize - 1));
+                    int color = paletteColors[paletteIndex];
+
+                    int colored = (alpha << 24) | (color & 0x00ffffff);
+                    result.setRGB(x, y, colored);
+                }
+            }
+            return result;
+        } catch (Exception e) {
+            Forgero.LOGGER.error("Failed to generate palette-based fluid texture for {}: {}", textureName, e.getMessage());
+            return null;
+        }
     }
 }

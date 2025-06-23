@@ -19,14 +19,12 @@ public class ModItems {
 	public static final Item SMITHING_TONGS = registerItem("smithing_tongs", new Item(new FabricItemSettings()));
 	public static final Item CLAY_CRUCIBLE = registerItem("clay_crucible", new Item(new FabricItemSettings()));
 	public static final Item CRUCIBLE = registerItem("crucible", new LiquidMetalCrucibleItem(new FabricItemSettings()));
-	public static final Item CLAY_MOLD = registerItem("clay_mold", new MoldItem(new FabricItemSettings()));
 
 	private static void addItemsToIngredientItemGroup(FabricItemGroupEntries entries) {
 		entries.add(SMITHING_HAMMER);
 		entries.add(SMITHING_TONGS);
 		entries.add(CLAY_CRUCIBLE);
 		entries.add(CRUCIBLE);
-		entries.add(CLAY_MOLD);
 	}
 
 	private static Item registerItem(String name, Item item) {
