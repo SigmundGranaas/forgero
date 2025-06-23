@@ -9,6 +9,8 @@ rootProject.name = "${mod_id}"
 
 // Core
 include("${mod_id}-core")
+// This is the new Code for the new architecture
+include("${mod_id}-core-2")
 
 // Content
 include("content")
