@@ -11,7 +11,7 @@
   "cooling_time": 300,
   "liquid_amount": 250,
   "mold": {
-    "item": "forgero:mold"
+    "item": "forgero:pickaxe_head_mold"
   },
   "result": {
     "item": "forgero:${metal.name}-pickaxe_head",

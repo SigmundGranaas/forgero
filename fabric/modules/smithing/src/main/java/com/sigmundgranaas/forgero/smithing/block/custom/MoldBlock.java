@@ -40,19 +40,37 @@ public class MoldBlock extends BlockWithEntity {
 	public static final IntProperty PROGRESS = IntProperty.of("progress", 0, 100);
 	public static final BooleanProperty FILLED = BooleanProperty.of("filled");
 
-	private static final VoxelShape SHAPE = Block.createCuboidShape(0, 0, 0, 16, 2, 16);
+	// Default shape for fallback
+	private static final VoxelShape DEFAULT_SHAPE = Block.createCuboidShape(0, 0, 0, 16, 2, 16);
+
+	// Custom shape for this specific mold type
+	private final VoxelShape customShape;
 
 	public MoldBlock(@NotNull Settings settings) {
 		super(settings.nonOpaque());
 		setDefaultState(getStateManager().getDefaultState()
 				.with(PROGRESS, 0)
 				.with(FILLED, false));
+		this.customShape = DEFAULT_SHAPE;
+	}
+
+	/**
+	 * Constructor that allows specifying a custom VoxelShape for the mold
+	 * @param settings Block settings
+	 * @param customVoxelShape The custom VoxelShape to use for this mold
+	 */
+	public MoldBlock(@NotNull Settings settings, VoxelShape customVoxelShape) {
+		super(settings.nonOpaque());
+		setDefaultState(getStateManager().getDefaultState()
+				.with(PROGRESS, 0)
+				.with(FILLED, false));
+		this.customShape = customVoxelShape != null ? customVoxelShape : DEFAULT_SHAPE;
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-		return SHAPE;
+		return customShape;
 	}
 
 	@Override
