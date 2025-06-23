@@ -26,6 +26,7 @@ public class ModelRegistry {
 
 	@Getter
 	private final Map<String, String> paletteRemapper;
+	@Getter
 	private final Map<String, PaletteData> palettes;
 
 	private final HashMap<String, ArrayList<ModelData>> delayedModels;

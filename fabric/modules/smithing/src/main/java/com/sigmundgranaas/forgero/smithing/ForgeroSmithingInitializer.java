@@ -8,17 +8,15 @@ import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
 import com.sigmundgranaas.forgero.smithing.item.ModItemGroups;
 import com.sigmundgranaas.forgero.smithing.item.ModItems;
 import com.sigmundgranaas.forgero.smithing.recipe.ModRecipes;
-import com.sigmundgranaas.forgero.smithing.resource.LiquidGeneratorResourceReloadMixin;
 import com.sigmundgranaas.forgero.smithing.resource.MoldGenerator;
 import com.sigmundgranaas.forgero.smithing.screen.ModScreenHandlers;
 
 import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+
 
 public class ForgeroSmithingInitializer implements ForgeroPreInitializationEntryPoint {
 	public static final RegistryKey<ItemGroup> FORGERO_SMITHING_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(Forgero.NAMESPACE, "smithing"));
@@ -32,10 +30,8 @@ public class ForgeroSmithingInitializer implements ForgeroPreInitializationEntry
 		ModRecipes.registerRecipes();
 		ModScreenHandlers.registerAllScreenHandlers();
 
-		// Register MoldGenerator
+
 		ARRPGenerator.register(new MoldGenerator());
 
-		// Register LiquidGenerator resource reload listener
-		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new LiquidGeneratorResourceReloadMixin());
 	}
 }

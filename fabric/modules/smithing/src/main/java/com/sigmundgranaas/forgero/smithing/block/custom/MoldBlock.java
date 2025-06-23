@@ -1,4 +1,3 @@
-// Updated MoldBlock.java
 package com.sigmundgranaas.forgero.smithing.block.custom;
 
 import static com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities.MOLD;
@@ -45,14 +44,6 @@ public class MoldBlock extends BlockWithEntity {
 
 	// Custom shape for this specific mold type
 	private final VoxelShape customShape;
-
-	public MoldBlock(@NotNull Settings settings) {
-		super(settings.nonOpaque());
-		setDefaultState(getStateManager().getDefaultState()
-				.with(PROGRESS, 0)
-				.with(FILLED, false));
-		this.customShape = DEFAULT_SHAPE;
-	}
 
 	/**
 	 * Constructor that allows specifying a custom VoxelShape for the mold

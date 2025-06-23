@@ -46,6 +46,7 @@ import static com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.U
 public class ForgeroClient implements ClientModInitializer {
 	public static Map<String, ModelTemplate> TEXTURES = new HashMap<>();
 	public static Map<String, String> PALETTE_REMAP = new HashMap<>();
+	public static ModelRegistry MODEL_REGISTRY;
 
 
 	@Override
@@ -56,7 +57,8 @@ public class ForgeroClient implements ClientModInitializer {
 	}
 
 	private void initializeItemModels() {
-		var modelRegistry = new ModelRegistry();
+		MODEL_REGISTRY = new ModelRegistry();
+		var modelRegistry = MODEL_REGISTRY;
 		var availableDependencies = FabricLoader.getInstance().getAllMods().stream().map(ModContainer::getMetadata).map(ModMetadata::getId).collect(Collectors.toSet());
 
 		PipelineBuilder
