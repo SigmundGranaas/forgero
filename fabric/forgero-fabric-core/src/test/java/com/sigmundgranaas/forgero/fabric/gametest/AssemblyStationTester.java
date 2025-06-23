@@ -149,8 +149,8 @@ public class AssemblyStationTester {
 			assertTrue(blockEntity.isInputItemConsumed(), "inputItemConsumed flag should be true");
 			assertFalse(blockEntity.getResultInventory().isEmpty(), "Other result items should still be present");
 
-			// One item was moved, so we check the handle which is now in the first slot of the result inventory.
-			ItemStack handle = blockEntity.getResultInventory().getStack(0);
+			// One item was moved, so we check the handle.
+			ItemStack handle = blockEntity.getResultInventory().getStack(1);
 			assertEquals("oak-handle", stateService.convert(handle).get().name());
 			context.complete();
 		});
