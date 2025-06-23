@@ -1,9 +1,6 @@
 package com.sigmundgranaas.forgero.minecraft.common.handler.entity;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.Optional;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.Forgero;
@@ -11,6 +8,9 @@ import com.sigmundgranaas.forgero.core.property.v2.feature.HandlerBuilder;
 import com.sigmundgranaas.forgero.core.property.v2.feature.JsonBuilder;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+
+import net.minecraft.util.math.random.Random;
+
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.block.BlockState;
@@ -18,9 +18,11 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -45,8 +47,10 @@ public class TeleportHandler implements EntityBasedHandler {
 	public static final String TYPE = "minecraft:teleport";
 	public static final JsonBuilder<TeleportHandler> BUILDER = HandlerBuilder.fromObject(TeleportHandler.class, TeleportHandler::fromJson);
 
-	private static final int MAX_ATTEMPTS = 10;
+	private static final int MAX_SEARCH_ATTEMPTS = 16;
+	private static final int MAX_SEARCH_RADIUS = 5;
 	private static final Logger LOGGER = Forgero.LOGGER;
+
 	private final boolean random;
 	private final boolean onGround;
 	private final int maxDistance;
@@ -56,8 +60,8 @@ public class TeleportHandler implements EntityBasedHandler {
 	 * Constructs a new {@link TeleportHandler} with the specified parameters.
 	 *
 	 * @param random      Whether to teleport in a random direction.
-	 * @param onGround    Whether the teleportation can occur in the air.
-	 * @param maxDistance Distance to teleport in the look direction.
+	 * @param onGround    Whether the teleportation must be on ground.
+	 * @param maxDistance Maximum distance to teleport.
 	 * @param target      Which entity to teleport.
 	 */
 	public TeleportHandler(boolean random, boolean onGround, int maxDistance, String target) {
@@ -74,215 +78,178 @@ public class TeleportHandler implements EntityBasedHandler {
 	 * @return A new instance of {@link TeleportHandler}.
 	 */
 	public static TeleportHandler fromJson(JsonObject json) {
-		boolean randomDirection = json.has("random") && json.get("random").getAsBoolean();
-		boolean airTeleport = json.has("on_ground") && json.get("on_ground").getAsBoolean();
-		int lookDirectionDistance = json.has("max_distance") ? json.get("max_distance").getAsInt() : 10;
-		String target = json.has("target") ? json.get("target").getAsString() : "target";
-
-		return new TeleportHandler(randomDirection, airTeleport, lookDirectionDistance, target);
+		boolean random = json.has("random") && json.get("random").getAsBoolean();
+		boolean onGround = json.has("on_ground") && json.get("on_ground").getAsBoolean();
+		int maxDistance = json.has("max_distance") ? json.get("max_distance").getAsInt() : 10;
+		String target = json.has("target") ? json.get("target").getAsString() : "minecraft:self";
+		return new TeleportHandler(random, onGround, maxDistance, target);
 	}
 
-	/**
-	 * This method is triggered upon hitting an entity.
-	 * Teleports the entity based on the configured parameters.
-	 *
-	 * @param source       The source entity.
-	 * @param world        The world where the event occurred.
-	 * @param targetEntity The targeted entity.
-	 */
 	@Override
 	public void onHit(Entity source, World world, Entity targetEntity) {
-		if ("minecraft:targeted_entity".equals(target)) {
-			teleportEntity(targetEntity, world);
-		} else if ("minecraft:attacker".equals(target) || "minecraft:self".equals(target)) {
-			teleportEntity(source, world);
-		}else{
-			LOGGER.warn("Not a valid entity target for teleportation: {}", target);
-
+		if (world.isClient) return;
+		Entity entityToTeleport = getEntityToTeleport(source, targetEntity);
+		if (entityToTeleport != null) {
+			teleportEntity(entityToTeleport, world);
 		}
 	}
 
 	@Override
 	public void handle(Entity entity) {
-		teleportEntity(entity, entity.getWorld());
+		if (entity.getWorld().isClient) return;
+		if ("minecraft:self".equals(target)) {
+			teleportEntity(entity, entity.getWorld());
+		}
 	}
 
-	/**
-	 * This method is triggered upon hitting a block.
-	 * Teleports the entity or block based on the configured parameters.
-	 *
-	 * @param source The source entity.
-	 * @param world  The world where the event occurred.
-	 * @param pos    The position of the hit block.
-	 */
 	@Override
 	public void onHit(Entity source, World world, BlockPos pos) {
-		if ("minecraft:self".equals(target)) {
-			teleportEntity(source, world);
-		} else if ("minecraft:hit_position".equals(target)) {
-			teleportToPosition(source, world, pos);
-		} else if ("minecraft:targeted_block".equals(target)) {
-			teleportBlock(world, pos);
+		if (world.isClient) return;
+		switch (target) {
+			case "minecraft:self", "minecraft:attacker" -> teleportEntity(source, world);
+			case "minecraft:hit_position" -> teleportToPosition(source, world, Vec3d.ofCenter(pos));
+			case "minecraft:targeted_block" -> teleportBlock(world, pos);
+			default -> LOGGER.warn("Not a valid block target for teleportation: {}", target);
+		}
+	}
+
+	private void teleportEntity(Entity entity, World world) {
+		for (int i = 0; i < MAX_SEARCH_ATTEMPTS; i++) {
+			Optional<Vec3d> targetPos = getTargetPos(entity, world);
+			if (targetPos.isEmpty()) continue;
+
+			Optional<Vec3d> safePos = findSafeTeleportLocation(entity, world, targetPos.get());
+			if (safePos.isPresent()) {
+				tryTeleport(entity, safePos.get());
+				return;
+			}
+		}
+		LOGGER.warn("Failed to find a safe teleportation location for entity {}", entity.getName().getString());
+	}
+
+	private void teleportToPosition(Entity entity, World world, Vec3d pos) {
+		findSafeTeleportLocation(entity, world, pos).ifPresent(safePos -> tryTeleport(entity, safePos));
+	}
+
+
+	private Entity getEntityToTeleport(Entity source, Entity targetEntity) {
+		return switch (target) {
+			case "minecraft:targeted_entity" -> targetEntity;
+			case "minecraft:attacker", "minecraft:self" -> source;
+			default -> {
+				LOGGER.warn("Not a valid entity target for teleportation: {}", target);
+				yield null;
+			}
+		};
+	}
+
+
+	private Optional<Vec3d> getTargetPos(Entity entity, World world) {
+		Vec3d currentPos = entity.getPos();
+		if (random) {
+			Random rand = world.getRandom();
+			// Ensure we always teleport at least 1 block away to prevent staying in place.
+			double distance = maxDistance > 1 ? 1 + rand.nextDouble() * (maxDistance - 1) : maxDistance;
+			if (distance == 0) {
+				return Optional.of(currentPos);
+			}
+
+			if (onGround) {
+				double angle = rand.nextDouble() * 2.0 * Math.PI;
+				return Optional.of(new Vec3d(currentPos.x + Math.cos(angle) * distance, currentPos.y, currentPos.z + Math.sin(angle) * distance));
+			} else {
+				Vec3d randomVec = new Vec3d(rand.nextGaussian(), rand.nextGaussian(), rand.nextGaussian()).normalize();
+				return Optional.of(currentPos.add(randomVec.multiply(distance)));
+			}
+		} else {
+			Vec3d lookVec = entity.getRotationVector().multiply(maxDistance);
+			return Optional.of(currentPos.add(lookVec));
+		}
+	}
+
+	private Optional<Vec3d> findSafeTeleportLocation(Entity entity, World world, Vec3d target) {
+		BlockPos.Mutable mutable = new BlockPos(MathHelper.floor(target.x), MathHelper.floor(target.y), MathHelper.floor(target.z)).mutableCopy();
+
+		if (onGround) {
+			// Search for ground below the target
+			for (int i = 0; i < MAX_SEARCH_RADIUS && world.getBlockState(mutable.down()).isAir(); i++) {
+				mutable.setY(mutable.getY() - 1);
+			}
+		}
+
+		if (isSafeForEntity(entity, world, mutable)) {
+			return Optional.of(Vec3d.ofBottomCenter(mutable));
+		}
+
+		// Spiral search if initial position is not safe
+		for (int r = 1; r <= MAX_SEARCH_RADIUS; r++) {
+			for (int i = 0; i < r * 8; i++) { // Check all points on the perimeter of a square of radius r
+				BlockPos pos = new BlockPos(MathHelper.floor(target.x), MathHelper.floor(target.y), MathHelper.floor(target.z)).add(getSpiralOffset(i, r));
+				if (isSafeForEntity(entity, world, pos)) {
+					return Optional.of(Vec3d.ofBottomCenter(pos));
+				}
+			}
+		}
+		return Optional.empty();
+	}
+
+	private BlockPos getSpiralOffset(int i, int r) {
+		// Simplified spiral logic
+		int sideLength = r * 2;
+		int side = i / sideLength;
+		int indexOnSide = i % sideLength - r;
+
+		return switch (side) {
+			case 0 -> new BlockPos(indexOnSide, 0, r); // Top
+			case 1 -> new BlockPos(r, 0, -indexOnSide); // Right
+			case 2 -> new BlockPos(-indexOnSide, 0, -r); // Bottom
+			default -> new BlockPos(-r, 0, indexOnSide); // Left
+		};
+	}
+
+	private boolean isSafeForEntity(Entity entity, World world, BlockPos pos) {
+		if (onGround && world.getBlockState(pos.down()).isAir()) {
+			return false;
+		}
+		// Check if entity bounding box at new position is clear
+		Box newBoundingBox = entity.getBoundingBox().offset(Vec3d.ofBottomCenter(pos).subtract(entity.getPos()));
+		return world.isSpaceEmpty(entity, newBoundingBox);
+	}
+
+	private void tryTeleport(Entity entity, Vec3d pos) {
+		if (entity instanceof ServerPlayerEntity player) {
+			player.teleport((ServerWorld) player.getWorld(), pos.x, pos.y, pos.z, player.getYaw(), player.getPitch());
+		} else {
+			entity.teleport(pos.x, pos.y, pos.z);
 		}
 	}
 
 	private void teleportBlock(World world, BlockPos originalPos) {
 		BlockState blockState = world.getBlockState(originalPos);
-
 		if (blockState.isAir()) {
-			return; // Don't teleport air blocks
+			return;
 		}
-
-		for (int attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
-			BlockPos newPos = getRandomPosition(world, originalPos);
-
-			if (isSafeBlockTeleportLocation(world, newPos)) {
-				// Remove the block from its original position
-				world.setBlockState(originalPos, Blocks.AIR.getDefaultState());
-
-				// Place the block in the new position
-				world.setBlockState(newPos, blockState);
-
-				// If the block has a BlockEntity (like a chest), move its data
+		// Complex logic, for now, we leave it simple
+		for (int i = 0; i < 10; i++) {
+			Random rand = world.getRandom();
+			BlockPos newPos = originalPos.add(rand.nextInt(maxDistance * 2 + 1) - maxDistance, rand.nextInt(maxDistance * 2 + 1) - maxDistance, rand.nextInt(maxDistance * 2 + 1) - maxDistance);
+			if (world.getBlockState(newPos).isAir() && (!onGround || !world.getBlockState(newPos.down()).isAir())) {
 				BlockEntity blockEntity = world.getBlockEntity(originalPos);
+				NbtCompound nbt = null;
 				if (blockEntity != null) {
-					NbtCompound nbt = blockEntity.createNbt();
+					nbt = blockEntity.createNbt();
 					world.removeBlockEntity(originalPos);
+				}
+				world.setBlockState(originalPos, Blocks.AIR.getDefaultState());
+				world.setBlockState(newPos, blockState);
+				if (nbt != null) {
 					BlockEntity newBlockEntity = world.getBlockEntity(newPos);
 					if (newBlockEntity != null) {
 						newBlockEntity.readNbt(nbt);
 					}
 				}
-
 				return;
 			}
 		}
-		LOGGER.warn("Failed to find a safe teleportation location for block at {} after {} attempts", originalPos, MAX_ATTEMPTS);
-	}
-
-
-	private BlockPos getRandomPosition(World world, BlockPos originalPos) {
-		Random random = new Random();
-		List<BlockPos> validPositions = new ArrayList<>();
-
-		for (int x = -maxDistance; x <= maxDistance; x++) {
-			for (int z = -maxDistance; z <= maxDistance; z++) {
-				if (onGround) {
-					for (int y = -maxDistance; y <= maxDistance; y++) {
-						BlockPos pos = originalPos.add(x, y, z);
-						if (isValidGroundPosition(world, pos)) {
-							validPositions.add(pos);
-						}
-					}
-				} else {
-					int y = random.nextInt(maxDistance * 2 + 1) - maxDistance;
-					BlockPos pos = originalPos.add(x, y, z);
-					if (isValidAirPosition(world, pos)) {
-						validPositions.add(pos);
-					}
-				}
-			}
-		}
-
-		if (validPositions.isEmpty()) {
-			return originalPos; // Return original position if no valid positions found
-		}
-
-		return validPositions.get(random.nextInt(validPositions.size()));
-	}
-
-	private boolean isValidGroundPosition(World world, BlockPos pos) {
-		return world.getBlockState(pos).isAir() &&
-				world.getBlockState(pos.up()).isAir() &&
-				world.getBlockState(pos.up(2)).isAir() &&
-				!world.getBlockState(pos.down()).isAir();
-	}
-
-	private boolean isValidAirPosition(World world, BlockPos pos) {
-		return world.getBlockState(pos).isAir() &&
-				world.getBlockState(pos.up()).isAir() &&
-				world.getBlockState(pos.down()).isAir();
-	}
-
-	private boolean isSafeBlockTeleportLocation(World world, BlockPos pos) {
-		return world.getBlockState(pos).isAir() &&
-				(world.getBlockState(pos.down()).isSolid() || !onGround);
-	}
-
-	private void teleportEntity(Entity entity, World world) {
-		if (random) {
-			teleportRandomly(entity, world);
-		} else {
-			teleportInLookDirection(entity, world);
-		}
-	}
-
-	private void teleportRandomly(Entity entity, World world) {
-		Random random = new Random();
-		for (int attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
-			double deltaX = random.nextDouble() * 2 - 1; // Random value between -1 and 1
-			double deltaZ = random.nextDouble() * 2 - 1; // Random value between -1 and 1
-			double deltaY = !onGround ? (random.nextDouble() * 2 - 1) : 0; // Random Y if air teleport is allowed
-
-			BlockPos newPos = entity.getBlockPos().add((int) (deltaX * maxDistance),
-					(int) (deltaY * maxDistance),
-					(int) (deltaZ * maxDistance));
-
-			if (tryTeleport(entity, world, newPos)) {
-				return;
-			}
-		}
-		LOGGER.warn("Failed to find a safe teleportation location for entity {} after {} attempts", entity, MAX_ATTEMPTS);
-	}
-
-	private void teleportToPosition(Entity entity, World world, BlockPos pos) {
-		if (tryTeleport(entity, world, pos)) {
-			return;
-		}
-		if (tryTeleport(entity, world, pos.up())) {
-			return;
-		}
-		if (tryTeleport(entity, world, pos.down())) {
-			return;
-		}
-		LOGGER.warn("Failed to find a safe teleportation location for entity {} after {} attempts", entity, MAX_ATTEMPTS);
-	}
-
-	private void teleportInLookDirection(Entity entity, World world) {
-		Vec3d lookVec = entity.getCameraPosVec(0);
-		for (int attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
-			BlockPos newPos = entity.getBlockPos().add((int) (lookVec.x * maxDistance),
-					!onGround ? (int) (lookVec.y * maxDistance) : 0,
-					(int) (lookVec.z * maxDistance));
-
-			if (tryTeleport(entity, world, newPos)) {
-				return;
-			}
-
-			// Adjust look vector slightly for next attempt
-			lookVec = lookVec.add(new Vec3d(0.1, 0.1, 0.1)).normalize();
-		}
-		LOGGER.warn("Failed to find a safe teleportation location for entity {} after {} attempts", entity, MAX_ATTEMPTS);
-	}
-
-	private boolean isSafeTeleportLocation(World world, BlockPos pos) {
-		for (int yOffset = 0; yOffset <= 2; yOffset++) {
-			BlockPos checkPos = pos.up(yOffset);
-			if (!world.getBlockState(checkPos).isReplaceable()) {
-				return false;
-			}
-		}
-		return world.getBlockState(pos.down()).isSolid() || !onGround;
-	}
-
-	private boolean tryTeleport(Entity entity, World world, BlockPos newPos) {
-		if (isSafeTeleportLocation(world, newPos)) {
-			entity.teleport(newPos.getX() + 0.5, newPos.getY(), newPos.getZ() + 0.5);
-			if (entity instanceof ServerPlayerEntity serverPlayer) {
-				serverPlayer.networkHandler.sendPacket(new PlayerPositionLookS2CPacket(entity.getX(), entity.getY(), entity.getZ(), serverPlayer.getYaw(), serverPlayer.getPitch(), Collections.emptySet(), 0));
-			}
-			return true;
-		}
-		return false;
 	}
 }
