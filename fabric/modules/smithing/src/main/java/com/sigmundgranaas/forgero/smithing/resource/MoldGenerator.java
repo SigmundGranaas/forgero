@@ -582,7 +582,7 @@ public class MoldGenerator implements DynamicResourceGenerator {
             }
         }
 
-        // Base model (empty mold) with ambient occlusion enabled - ONLY using terracotta texture
+        // Base model (empty mold) with ambient occlusion enabled - ONLY using terracotta texture for all faces
         String baseModelJson = String.format(
             "{\n" +
             "  \"parent\": \"minecraft:block/block\",\n" +
@@ -601,18 +601,33 @@ public class MoldGenerator implements DynamicResourceGenerator {
         pack.addAsset(baseModelId, baseModelJson.getBytes(java.nio.charset.StandardCharsets.UTF_8));
         Forgero.LOGGER.info("Added base model: {}", baseModelId);
 
-        // Filled model - add top texture for filled state
+        // Filled/progress models: add template voxelshape as a new element with template texture on top
+        String templateElementJson = generateTemplateElementJson(textureName, coloredPixels);
+
+        // Join elements for filled/progress models without leading comma
+        String allFilledElements = elementsJson.toString();
+        String allTemplateElements = templateElementJson;
+        String joinedElements;
+        if (!allFilledElements.isEmpty() && !allTemplateElements.isEmpty()) {
+            joinedElements = allFilledElements + ",\n" + allTemplateElements;
+        } else if (!allFilledElements.isEmpty()) {
+            joinedElements = allFilledElements;
+        } else {
+            joinedElements = allTemplateElements;
+        }
+
         String filledModelJson = String.format(
             "{\n" +
             "  \"parent\": \"minecraft:block/block\",\n" +
             "  \"ambientocclusion\": true,\n" +
             "  \"textures\": {\n" +
             "    \"terracotta\": \"forgero:block/terracotta\",\n" +
-            "    \"top\": \"forgero:block/mold_filled\",\n" +
+            "    \"top\": \"forgero:block/terracotta\",\n" +
+            "    \"template\": \"forgero:block/fluid_flow\",\n" +
             "    \"particle\": \"forgero:block/terracotta\"\n" +
             "  },\n" +
             "  \"elements\": [\n%s\n  ]\n" +
-            "}", generateFilledElementsJson(coloredPixels, outlinePixels));
+            "}", joinedElements);
 
         Identifier filledModelId = new Identifier(moldId.getNamespace(), "models/block/" + moldId.getPath() + "_filled.json");
         pack.addAsset(filledModelId, filledModelJson.getBytes(java.nio.charset.StandardCharsets.UTF_8));
@@ -625,11 +640,12 @@ public class MoldGenerator implements DynamicResourceGenerator {
             "  \"ambientocclusion\": true,\n" +
             "  \"textures\": {\n" +
             "    \"terracotta\": \"forgero:block/terracotta\",\n" +
-            "    \"top\": \"forgero:block/molten_metal_33\",\n" +
+            "    \"top\": \"forgero:block/terracotta\",\n" +
+            "    \"template\": \"forgero:block/fluid_flow\",\n" +
             "    \"particle\": \"forgero:block/terracotta\"\n" +
             "  },\n" +
             "  \"elements\": [\n%s\n  ]\n" +
-            "}", generateFilledElementsJson(coloredPixels, outlinePixels));
+            "}", joinedElements);
 
         Identifier progress33ModelId = new Identifier(moldId.getNamespace(), "models/block/" + moldId.getPath() + "_progress_33.json");
         pack.addAsset(progress33ModelId, progress33ModelJson.getBytes(java.nio.charset.StandardCharsets.UTF_8));
@@ -642,11 +658,12 @@ public class MoldGenerator implements DynamicResourceGenerator {
             "  \"ambientocclusion\": true,\n" +
             "  \"textures\": {\n" +
             "    \"terracotta\": \"forgero:block/terracotta\",\n" +
-            "    \"top\": \"forgero:block/molten_metal_66\",\n" +
+            "    \"top\": \"forgero:block/terracotta\",\n" +
+            "    \"template\": \"forgero:block/fluid_flow\",\n" +
             "    \"particle\": \"forgero:block/terracotta\"\n" +
             "  },\n" +
             "  \"elements\": [\n%s\n  ]\n" +
-            "}", generateFilledElementsJson(coloredPixels, outlinePixels));
+            "}", joinedElements);
 
         Identifier progress66ModelId = new Identifier(moldId.getNamespace(), "models/block/" + moldId.getPath() + "_progress_66.json");
         pack.addAsset(progress66ModelId, progress66ModelJson.getBytes(java.nio.charset.StandardCharsets.UTF_8));
@@ -669,105 +686,38 @@ public class MoldGenerator implements DynamicResourceGenerator {
     }
 
     /**
-     * Generate elements JSON for filled variants
-     * This ensures the top texture is correctly set to the filled variant textures
+     * Generate a JSON element for the template voxelshape (filled state).
+     * This adds a 1x1x1 cube for each colored pixel at y=1..2, with template texture on up face.
      */
-    private String generateFilledElementsJson(boolean[][] coloredPixels, boolean[][] outlinePixels) {
-        StringBuilder elementsJson = new StringBuilder();
-
-        // Add bottom slab for all outline pixels
+    private String generateTemplateElementJson(String textureName, boolean[][] coloredPixels) {
+        StringBuilder templateElements = new StringBuilder();
+        boolean first = true;
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                if (outlinePixels[x][z]) {
-                    if (elementsJson.length() > 0) {
-                        elementsJson.append(",\n");
+                if (coloredPixels[x][z]) {
+                    if (!first) {
+                        templateElements.append(",\n");
                     }
-
-                    // For bottom elements, use terracotta for all faces
-                    // Check if we need to show faces (adjacent to air/non-outline)
-                    boolean showNorth = z == 0 || !outlinePixels[x][z-1];
-                    boolean showSouth = z == 15 || !outlinePixels[x][z+1];
-                    boolean showEast = x == 15 || !outlinePixels[x+1][z];
-                    boolean showWest = x == 0 || !outlinePixels[x-1][z];
-
-                    elementsJson.append(String.format(
+                    templateElements.append(String.format(
                         "    {\n" +
-                        "      \"from\": [%d, 0.0, %d],\n" +
-                        "      \"to\": [%d, 1.0, %d],\n" +
+                        "      \"from\": [%d, 1.0, %d],\n" +
+                        "      \"to\": [%d, 2.0, %d],\n" +
                         "      \"faces\": {\n" +
-                        "%s" +
-                        "%s" +
-                        "%s" +
-                        "%s" +
-                        "        \"up\": {\"texture\": \"#terracotta\"},\n" +
-                        "        \"down\": {\"texture\": \"#terracotta\", \"cullface\": \"down\"}\n" +
+                        "        \"up\": {\"texture\": \"#template\"},\n" +
+                        "        \"down\": {\"texture\": \"#terracotta\"},\n" +
+                        "        \"north\": {\"texture\": \"#terracotta\"},\n" +
+                        "        \"south\": {\"texture\": \"#terracotta\"},\n" +
+                        "        \"east\": {\"texture\": \"#terracotta\"},\n" +
+                        "        \"west\": {\"texture\": \"#terracotta\"}\n" +
                         "      }\n" +
                         "    }",
-                        x, z, x + 1, z + 1,
-                        showNorth ? "        \"north\": {\"texture\": \"#terracotta\"" + (z == 0 ? ", \"cullface\": \"north\"" : "") + "},\n" : "",
-                        showEast ? "        \"east\": {\"texture\": \"#terracotta\"" + (x == 15 ? ", \"cullface\": \"east\"" : "") + "},\n" : "",
-                        showSouth ? "        \"south\": {\"texture\": \"#terracotta\"" + (z == 15 ? ", \"cullface\": \"south\"" : "") + "},\n" : "",
-                        showWest ? "        \"west\": {\"texture\": \"#terracotta\"" + (x == 0 ? ", \"cullface\": \"west\"" : "") + "},\n" : ""
+                        x, z, x + 1, z + 1
                     ));
+                    first = false;
                 }
             }
         }
-
-        // Add walls for outline pixels that are not colored pixels
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                if (outlinePixels[x][z] && !coloredPixels[x][z]) {
-                    // Check if it's on the edge (has a neighboring non-outline pixel)
-                    boolean isEdge = false;
-
-                    for (int dx = -1; dx <= 1; dx++) {
-                        for (int dz = -1; dz <= 1; dz++) {
-                            if (dx == 0 && dz == 0) continue; // Skip self
-
-                            int nx = x + dx;
-                            int nz = z + dz;
-
-                            // If neighbor is outside bounds or not an outline pixel, this is an edge
-                            if (nx < 0 || nx >= 16 || nz < 0 || nz >= 16 || !outlinePixels[nx][nz]) {
-                                isEdge = true;
-                                break;
-                            }
-                        }
-                        if (isEdge) break;
-                    }
-
-                    if (isEdge) {
-                        if (elementsJson.length() > 0) {
-                            elementsJson.append(",\n");
-                        }
-
-                        // Always show all side faces for wall elements regardless of neighbors
-                        // But now use the "top" texture for the top face to show filled status
-                        elementsJson.append(String.format(
-                            "    {\n" +
-                            "      \"from\": [%d, 1.0, %d],\n" +
-                            "      \"to\": [%d, 2.0, %d],\n" +
-                            "      \"shade\": true,\n" +
-                            "      \"faces\": {\n" +
-                            "        \"north\": {\"texture\": \"#terracotta\"%s},\n" +
-                            "        \"east\": {\"texture\": \"#terracotta\"%s},\n" +
-                            "        \"south\": {\"texture\": \"#terracotta\"%s},\n" +
-                            "        \"west\": {\"texture\": \"#terracotta\"%s},\n" +
-                            "        \"up\": {\"texture\": \"#top\"}\n" +
-                            "      }\n" +
-                            "    }",
-                            x, z, x + 1, z + 1,
-                            (z == 0 ? ", \"cullface\": \"north\"" : ""),
-                            (x == 15 ? ", \"cullface\": \"east\"" : ""),
-                            (z == 15 ? ", \"cullface\": \"south\"" : ""),
-                            (x == 0 ? ", \"cullface\": \"west\"" : "")
-                        ));
-                    }
-                }
-            }
-        }
-
-        return elementsJson.toString();
+        return templateElements.toString();
     }
 
     /**
@@ -1011,5 +961,95 @@ public class MoldGenerator implements DynamicResourceGenerator {
         // Create a VoxelShape definition
         return String.format("Block.createCuboidShape(%.1f, %.1f, %.1f, %.1f, %.1f, %.1f)",
                 blockMinX, blockMinY, blockMinZ, blockMaxX, blockMaxY, blockMaxZ);
+    }
+
+    /**
+     * Generate JSON elements for the filled/progress mold models.
+     * Uses terracotta for all faces except the top of the wall elements, which uses the "top" texture.
+     */
+    private String generateFilledElementsJson(boolean[][] coloredPixels, boolean[][] outlinePixels) {
+        StringBuilder elementsJson = new StringBuilder();
+
+        // Add bottom slab for all outline pixels
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                if (outlinePixels[x][z]) {
+                    if (elementsJson.length() > 0) {
+                        elementsJson.append(",\n");
+                    }
+                    boolean showNorth = z == 0 || !outlinePixels[x][z-1];
+                    boolean showSouth = z == 15 || !outlinePixels[x][z+1];
+                    boolean showEast = x == 15 || !outlinePixels[x+1][z];
+                    boolean showWest = x == 0 || !outlinePixels[x-1][z];
+
+                    elementsJson.append(String.format(
+                        "    {\n" +
+                        "      \"from\": [%d, 0.0, %d],\n" +
+                        "      \"to\": [%d, 1.0, %d],\n" +
+                        "      \"faces\": {\n" +
+                        "%s" +
+                        "%s" +
+                        "%s" +
+                        "%s" +
+                        "        \"up\": {\"texture\": \"#terracotta\"},\n" +
+                        "        \"down\": {\"texture\": \"#terracotta\", \"cullface\": \"down\"}\n" +
+                        "      }\n" +
+                        "    }",
+                        x, z, x + 1, z + 1,
+                        showNorth ? "        \"north\": {\"texture\": \"#terracotta\"" + (z == 0 ? ", \"cullface\": \"north\"" : "") + "},\n" : "",
+                        showEast ? "        \"east\": {\"texture\": \"#terracotta\"" + (x == 15 ? ", \"cullface\": \"east\"" : "") + "},\n" : "",
+                        showSouth ? "        \"south\": {\"texture\": \"#terracotta\"" + (z == 15 ? ", \"cullface\": \"south\"" : "") + "},\n" : "",
+                        showWest ? "        \"west\": {\"texture\": \"#terracotta\"" + (x == 0 ? ", \"cullface\": \"west\"" : "") + "},\n" : ""
+                    ));
+                }
+            }
+        }
+
+        // Add walls for outline pixels that are not colored pixels
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                if (outlinePixels[x][z] && !coloredPixels[x][z]) {
+                    boolean isEdge = false;
+                    for (int dx = -1; dx <= 1; dx++) {
+                        for (int dz = -1; dz <= 1; dz++) {
+                            if (dx == 0 && dz == 0) continue;
+                            int nx = x + dx;
+                            int nz = z + dz;
+                            if (nx < 0 || nx >= 16 || nz < 0 || nz >= 16 || !outlinePixels[nx][nz]) {
+                                isEdge = true;
+                                break;
+                            }
+                        }
+                        if (isEdge) break;
+                    }
+                    if (isEdge) {
+                        if (elementsJson.length() > 0) {
+                            elementsJson.append(",\n");
+                        }
+                        elementsJson.append(String.format(
+                            "    {\n" +
+                            "      \"from\": [%d, 1.0, %d],\n" +
+                            "      \"to\": [%d, 2.0, %d],\n" +
+                            "      \"shade\": true,\n" +
+                            "      \"faces\": {\n" +
+                            "        \"north\": {\"texture\": \"#terracotta\"%s},\n" +
+                            "        \"east\": {\"texture\": \"#terracotta\"%s},\n" +
+                            "        \"south\": {\"texture\": \"#terracotta\"%s},\n" +
+                            "        \"west\": {\"texture\": \"#terracotta\"%s},\n" +
+                            "        \"up\": {\"texture\": \"#top\"}\n" +
+                            "      }\n" +
+                            "    }",
+                            x, z, x + 1, z + 1,
+                            (z == 0 ? ", \"cullface\": \"north\"" : ""),
+                            (x == 15 ? ", \"cullface\": \"east\"" : ""),
+                            (z == 15 ? ", \"cullface\": \"south\"" : ""),
+                            (x == 0 ? ", \"cullface\": \"west\"" : "")
+                        ));
+                    }
+                }
+            }
+        }
+
+        return elementsJson.toString();
     }
 }
