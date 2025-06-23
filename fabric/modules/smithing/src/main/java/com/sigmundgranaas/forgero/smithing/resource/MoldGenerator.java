@@ -365,40 +365,24 @@ public class MoldGenerator implements DynamicResourceGenerator {
         // Define model paths
         String baseModelId = moldId.getNamespace() + ":block/" + moldId.getPath();
         String filledModelId = moldId.getNamespace() + ":block/" + moldId.getPath() + "_filled";
-        String progress33ModelId = moldId.getNamespace() + ":block/" + moldId.getPath() + "_progress_33";
-        String progress66ModelId = moldId.getNamespace() + ":block/" + moldId.getPath() + "_progress_66";
 
-        // Create blockstate variants using a multipart approach that handles all progress values
+        // --- Custom blockstate logic for MoldBlock ---
+        // Only three states: empty, filled (progress 0-74), cooled (progress 75-100)
+        String cooledModelId = moldId.getNamespace() + ":block/" + moldId.getPath() + "_cooled";
         JVariant variant = JState.variant();
-
-        // For filled=false states, always use the base model regardless of progress
+        // All empty states
         for (int i = 0; i <= 100; i++) {
             variant.put("filled=false,progress=" + i, JState.model(baseModelId));
         }
-
-        // For filled=true states, use different models based on progress ranges
-        variant.put("filled=true,progress=0", JState.model(filledModelId));
-
-        // Progress 1-32 uses filled model
-        for (int i = 1; i <= 32; i++) {
+        // Filled, progress 0-74
+        for (int i = 0; i < 75; i++) {
             variant.put("filled=true,progress=" + i, JState.model(filledModelId));
         }
-
-        // Progress 33-65 uses 33% progress model
-        for (int i = 33; i <= 65; i++) {
-            variant.put("filled=true,progress=" + i, JState.model(progress33ModelId));
+        // Filled, progress 75-100
+        for (int i = 75; i <= 100; i++) {
+            variant.put("filled=true,progress=" + i, JState.model(cooledModelId));
         }
-
-        // Progress 66-99 uses 66% progress model
-        for (int i = 66; i <= 99; i++) {
-            variant.put("filled=true,progress=" + i, JState.model(progress66ModelId));
-        }
-
-        // Progress 100 (fully cooled) uses base model
-        variant.put("filled=true,progress=100", JState.model(baseModelId));
-
         JState blockState = JState.state().add(variant);
-
         pack.addBlockState(
                 blockState,
                 new Identifier(moldId.getNamespace(), moldId.getPath())
@@ -599,9 +583,7 @@ public class MoldGenerator implements DynamicResourceGenerator {
             "  \"elements\": [\n%s\n  ]\n" +
             "}", elementsJson.toString());
 
-        // Add models with proper paths
-
-        // Base model (empty) - ONLY terracotta texture
+        // Base model (empty)
         Identifier baseModelId = new Identifier(moldId.getNamespace(), "models/block/" + moldId.getPath() + ".json");
         pack.addAsset(baseModelId, baseModelJson.getBytes(java.nio.charset.StandardCharsets.UTF_8));
         Forgero.LOGGER.info("Added base model: {}", baseModelId);
@@ -655,41 +637,9 @@ public class MoldGenerator implements DynamicResourceGenerator {
         pack.addAsset(filledModelId, filledModelJson.getBytes(java.nio.charset.StandardCharsets.UTF_8));
         Forgero.LOGGER.info("Added filled model: {}", filledModelId);
 
-        // Progress 33 model
-        String progress33ModelJson = String.format(
-            "{\n" +
-            "  \"parent\": \"minecraft:block/block\",\n" +
-            "  \"ambientocclusion\": true,\n" +
-            "  \"textures\": {\n" +
-            "    \"terracotta\": \"forgero:block/terracotta\",\n" +
-            "    \"top\": \"forgero:block/terracotta\",\n" +
-            "    \"template\": \"%s\",\n" +
-            "    \"particle\": \"forgero:block/terracotta\"\n" +
-            "  },\n" +
-            "  \"elements\": [\n%s\n  ]\n" +
-            "}", templateTexturePath, joinedElements);
 
-        Identifier progress33ModelId = new Identifier(moldId.getNamespace(), "models/block/" + moldId.getPath() + "_progress_33.json");
-        pack.addAsset(progress33ModelId, progress33ModelJson.getBytes(java.nio.charset.StandardCharsets.UTF_8));
-        Forgero.LOGGER.info("Added progress 33 model: {}", progress33ModelId);
 
-        // Progress 66 model
-        String progress66ModelJson = String.format(
-            "{\n" +
-            "  \"parent\": \"minecraft:block/block\",\n" +
-            "  \"ambientocclusion\": true,\n" +
-            "  \"textures\": {\n" +
-            "    \"terracotta\": \"forgero:block/terracotta\",\n" +
-            "    \"top\": \"forgero:block/terracotta\",\n" +
-            "    \"template\": \"%s\",\n" +
-            "    \"particle\": \"forgero:block/terracotta\"\n" +
-            "  },\n" +
-            "  \"elements\": [\n%s\n  ]\n" +
-            "}", templateTexturePath, joinedElements);
 
-        Identifier progress66ModelId = new Identifier(moldId.getNamespace(), "models/block/" + moldId.getPath() + "_progress_66.json");
-        pack.addAsset(progress66ModelId, progress66ModelJson.getBytes(java.nio.charset.StandardCharsets.UTF_8));
-        Forgero.LOGGER.info("Added progress 66 model: {}", progress66ModelId);
 
         // Item model
         String itemModelJson = String.format(
@@ -702,6 +652,25 @@ public class MoldGenerator implements DynamicResourceGenerator {
         Identifier itemModelId = new Identifier(moldId.getNamespace(), "models/item/" + moldId.getPath() + ".json");
         pack.addAsset(itemModelId, itemModelJson.getBytes(java.nio.charset.StandardCharsets.UTF_8));
         Forgero.LOGGER.info("Added item model: {}", itemModelId);
+
+        // Add cooled model (progress 75-100)
+        // For the cooled model (progress 75-100), use the runtime-generated template texture
+        String cooledTemplateTexturePath = "forgero:block/" + textureName;
+        String cooledModelJson = String.format(
+            "{\n" +
+            "  \"parent\": \"minecraft:block/block\",\n" +
+            "  \"ambientocclusion\": true,\n" +
+            "  \"textures\": {\n" +
+            "    \"terracotta\": \"forgero:block/terracotta\",\n" +
+            "    \"top\": \"forgero:block/terracotta\",\n" +
+            "    \"template\": \"%s\",\n" +
+            "    \"particle\": \"forgero:block/terracotta\"\n" +
+            "  },\n" +
+            "  \"elements\": [\n%s\n  ]\n" +
+            "}", cooledTemplateTexturePath, joinedElements);
+        Identifier cooledModelId = new Identifier(moldId.getNamespace(), "models/block/" + moldId.getPath() + "_cooled.json");
+        pack.addAsset(cooledModelId, cooledModelJson.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+        Forgero.LOGGER.info("Added cooled model: {}", cooledModelId);
 
         // Verify all models were added
         Forgero.LOGGER.info("Successfully added all model files for hollow mold: {}", moldId);
@@ -892,6 +861,9 @@ public class MoldGenerator implements DynamicResourceGenerator {
 
                 // Generate all necessary resources for the mold block
                 generateMoldBlockResources(pack, textureName, moldBlock);
+
+                // Generate the cooled block texture (used for 75-100 filled state)
+                generateBlockTextureFromTemplateAndPalette(textureName, pack);
             } catch (Exception e) {
                 Forgero.LOGGER.error("Failed to process texture for mold: " + textureName, e);
             }
@@ -1128,6 +1100,79 @@ public class MoldGenerator implements DynamicResourceGenerator {
         } catch (Exception e) {
             Forgero.LOGGER.error("Failed to generate palette-based fluid texture for {}: {}", textureName, e.getMessage());
             return null;
+        }
+    }
+
+    /**
+     * Generates a block texture from a template and palette, and writes it to the block texture path.
+     * @param textureName The name of the tool/texture (without extension)
+     * @param pack The runtime resource pack to add the generated texture to
+     */
+    private void generateBlockTextureFromTemplateAndPalette(String textureName, RuntimeResourcePack pack) {
+        try {
+            // Template path: assets/forgero/templates/textures/main/tool_name.png
+            Path templatePath = Paths.get(DEV_TEXTURE_PATH, textureName + TEXTURE_EXTENSION);
+            if (!Files.exists(templatePath)) {
+                Forgero.LOGGER.warn("Template not found at {}. Trying alternative path.", templatePath);
+                templatePath = Paths.get(ALT_TEXTURE_PATH, textureName + TEXTURE_EXTENSION);
+            }
+            if (!Files.exists(templatePath)) {
+                Forgero.LOGGER.error("Template not found for {}. Skipping texture generation.", textureName);
+                return;
+            }
+
+            // Palette path: assets/forgero/templates/materials/tool_name.png
+            Path palettePath = Paths.get(FabricLoader.getInstance().getGameDir().toString(),
+                    "../content/forgero-vanilla/src/main/resources/assets/forgero/templates/materials/", textureName + TEXTURE_EXTENSION);
+            if (!Files.exists(palettePath)) {
+                Forgero.LOGGER.warn("Palette not found at {}. Skipping palette application.", palettePath);
+                return;
+            }
+
+            // Load template and palette images
+            BufferedImage templateImg = javax.imageio.ImageIO.read(templatePath.toFile());
+            BufferedImage paletteImg = javax.imageio.ImageIO.read(palettePath.toFile());
+
+            // Use FabricTextureLoader to apply palette (reusing logic from generateDynamicFluidTexture)
+            com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier paletteId =
+                new com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier(textureName);
+            BufferedImage palette = textureLoader.getResource(paletteId).getImage();
+
+            if (templateImg == null || palette == null) {
+                Forgero.LOGGER.error("Template or palette image missing for {}. Skipping block texture generation.", textureName);
+                return;
+            }
+
+            int paletteSize = Math.max(palette.getWidth(), palette.getHeight());
+            int[] paletteColors = new int[paletteSize];
+            for (int i = 0; i < paletteSize; i++) {
+                paletteColors[i] = palette.getRGB(
+                    palette.getWidth() == 1 ? 0 : i,
+                    palette.getHeight() == 1 ? 0 : i
+                );
+            }
+
+            BufferedImage resultImg = new BufferedImage(templateImg.getWidth(), templateImg.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            for (int x = 0; x < templateImg.getWidth(); x++) {
+                for (int y = 0; y < templateImg.getHeight(); y++) {
+                    int pixel = templateImg.getRGB(x, y);
+                    int alpha = (pixel >> 24) & 0xff;
+                    int gray = (pixel >> 16) & 0xff; // Assume gray, so R=G=B
+                    int paletteIndex = (int) ((gray / 255.0) * (paletteSize - 1));
+                    int color = paletteColors[paletteIndex];
+                    int colored = (alpha << 24) | (color & 0x00ffffff);
+                    resultImg.setRGB(x, y, colored);
+                }
+            }
+
+            // Write the result to the runtime resource pack as a block texture
+            String textureResourcePath = "textures/block/" + textureName + ".png";
+            java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
+            javax.imageio.ImageIO.write(resultImg, "PNG", baos);
+            pack.addAsset(new Identifier("forgero", textureResourcePath), baos.toByteArray());
+            Forgero.LOGGER.info("Generated and registered block texture: {}", textureResourcePath);
+        } catch (IOException e) {
+            Forgero.LOGGER.error("Failed to generate block texture for {}: {}", textureName, e);
         }
     }
 }
