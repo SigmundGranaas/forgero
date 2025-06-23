@@ -2,7 +2,7 @@
   "name": "create-compat",
   "resource_type": "PACKAGE",
   "priority": 4,
-  "namespace": "create",
+  "namespace": "forgero",
   "dependencies": [
     "minecraft",
     "forgero",

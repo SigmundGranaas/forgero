@@ -2,7 +2,7 @@
   "name": "betterend-compat",
   "resource_type": "PACKAGE",
   "priority": 5,
-  "namespace": "betterend",
+  "namespace": "forgero",
   "dependencies": [
     "minecraft",
     "forgero",

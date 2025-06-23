@@ -10,6 +10,10 @@
   "icon": {
     "item": "forgero:oak-pickaxe_head"
   },
+  "condition" : {
+    "type": "modonomicon:entry_read",
+    "entry_id": "forgero:landing/about_this_mod"
+  },
   "max_scroll_x": 512,
   "max_scroll_y": 512,
   "name": "book.forgero.guidebook.category.getting_started.name",

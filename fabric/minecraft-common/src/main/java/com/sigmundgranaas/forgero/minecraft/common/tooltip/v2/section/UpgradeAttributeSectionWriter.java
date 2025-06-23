@@ -92,10 +92,10 @@ public class UpgradeAttributeSectionWriter extends SectionWriter {
 		}
 		var builder = ImmutableList.<Text>builder();
 		if (attribute.getOperation() == NumericOperation.MULTIPLICATION) {
-			builder.add(helper.writePercentageAttribute(attribute));
+			builder.add(helper.writePercentageAttribute(attribute, 2));
 			builder.addAll(helper.writeTarget(attribute));
 		} else {
-			builder.add(helper.writeAdditionAttribute(attribute));
+			builder.add(helper.writeAdditionAttribute(attribute, 2));
 			builder.addAll(helper.writeTarget(attribute));
 		}
 		return builder.build();

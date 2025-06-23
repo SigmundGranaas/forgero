@@ -12,6 +12,9 @@ import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityPredic
 import com.sigmundgranaas.forgero.minecraft.common.predicate.entity.EntityTypePredicate;
 import com.sigmundgranaas.forgero.testutil.PlayerFactory;
 import com.sigmundgranaas.forgero.testutil.TestPos;
+
+import net.minecraft.util.Hand;
+
 import org.junit.jupiter.api.Assertions;
 
 import net.minecraft.entity.Entity;
@@ -124,6 +127,29 @@ public class EntityPredicateTest {
 		player.setOnGround(false);
 		assertFalse(IS_ON_GROUND.value().test(player));
 
+		player.setStackInHand(Hand.MAIN_HAND, new ItemStack(Items.BOW));
+		player.getMainHandStack().use(context.getWorld(), player, Hand.MAIN_HAND);
+		player.tick();
+		assertTrue(IS_USING.value().test(player));
+		player.stopUsingItem();
+		player.tick();
+		assertFalse(IS_USING.value().test(player));
+
+		context.complete();
+	}
+
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "worldEntityPredicateTest")
+	public void testWorldPredicates(TestContext context) {
+		TestPos center = TestPos.of(POS, context);
+		ServerPlayerEntity player = PlayerFactory.builder(context)
+				.pos(center.absolute())
+				.build()
+				.createPlayer();
+
+		assertTrue(entityTypePredicate(overWorldEntityPredicate).test(player));
+		assertTrue(entityTypePredicate(negativeNetherEntityPredicate).test(player));
+		assertFalse(entityTypePredicate(netherEntityPredicate).test(player));
+
 		context.complete();
 	}
 
@@ -132,7 +158,7 @@ public class EntityPredicateTest {
 		String filter = """
 				{
 					"type": "minecraft:entity",
-				    "flags": {
+				    "flag": {
 				      "is_sneaking": true
 				    }
 				}
@@ -149,7 +175,45 @@ public class EntityPredicateTest {
 			}
 			""";
 
+	public static String overWorldEntityPredicate = """
+			{
+				"type": "minecraft:entity",
+			    "world": {
+			      "dimension": {
+			        "dimension": "minecraft:overworld"
+			      }
+			    }
+			}
+			""";
+
+	public static String netherEntityPredicate = """
+			{
+				"type": "minecraft:entity",
+			    "world": {
+			      "dimension": {
+			        "dimension": "minecraft:nether"
+			      }
+			    }
+			}
+			""";
+
+	public static String negativeNetherEntityPredicate = """
+			{
+				"type": "minecraft:entity",
+			    "world": {
+			      "dimension": {
+			        "dimension": "minecraft:nether",
+			        "is_in": false
+			      }
+			    }
+			}
+			""";
+
 	public static EntityPredicate entityTypePredicate() {
 		return EntityPredicate.CODEC.decode(JsonOps.INSTANCE, JsonParser.parseString(entityPredicate)).result().get().getFirst();
+	}
+
+	public static EntityPredicate entityTypePredicate(String predicate) {
+		return EntityPredicate.CODEC.decode(JsonOps.INSTANCE, JsonParser.parseString(predicate)).result().get().getFirst();
 	}
 }

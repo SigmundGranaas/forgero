@@ -29,6 +29,15 @@
       },
       {
         "upgrade_type": "SMITHING",
+        "description": "pummel",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "type": "POMMEL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
         "category": [
           "UTILITY"
         ],

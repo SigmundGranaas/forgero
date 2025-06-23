@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.util.Identifiers;
 import com.sigmundgranaas.forgero.core.util.SchematicMatcher;
 import com.sigmundgranaas.forgero.core.util.TypeMatcher;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.core.util.match.Matchable;
 
 public interface Type extends Matchable {
+	Type EMPTY = new SimpleType(Identifiers.EMPTY_IDENTIFIER, Optional.empty(), new TypeMatcher());
 	Type HOLDABLE = new SimpleType("HOLDABLE", Optional.empty(), new TypeMatcher());
 
 	Type TOOL = new SimpleType("TOOL", Optional.of(HOLDABLE), new TypeMatcher());
@@ -27,9 +29,14 @@ public interface Type extends Matchable {
 	Type HOE_HEAD = new SimpleType("HOE_HEAD", Optional.of(TOOL_PART_HEAD), new TypeMatcher());
 	Type PICKAXE_HEAD = new SimpleType("PICKAXE_HEAD", Optional.of(TOOL_PART_HEAD), new TypeMatcher());
 	Type SHOVEL_HEAD = new SimpleType("SHOVEL_HEAD", Optional.of(TOOL_PART_HEAD), new TypeMatcher());
-	Type HANDLE = new SimpleType("HANDLE", Optional.empty(), new TypeMatcher());
-	Type BLADE = new SimpleType("BLADE", Optional.empty(), new TypeMatcher());
-	Type SWORD_BLADE = new SimpleType("SWORD_BLADE", Optional.of(BLADE), new TypeMatcher());
+	Type WEAPON_HEAD = new SimpleType("WEAPON_HEAD", Optional.of(PART), new TypeMatcher());
+	Type SWORD_BLADE = new SimpleType("SWORD_BLADE", Optional.of(WEAPON_HEAD), new TypeMatcher());
+	Type SWORDLIKE_HEAD = new SimpleType("SWORDLIKE_HEAD", Optional.of(WEAPON_HEAD), new TypeMatcher());
+	Type SPEAR_HEAD = new SimpleType("SPEAR_HEAD", Optional.of(WEAPON_HEAD), new TypeMatcher());
+	Type BLUNT_WEAPON_HEAD = new SimpleType("BLUNT_WEAPON_HEAD", Optional.of(WEAPON_HEAD), new TypeMatcher());
+
+	Type HANDLE = new SimpleType("HANDLE",  Optional.of(PART), new TypeMatcher());
+
 	Type SCHEMATIC = new SimpleType("SCHEMATIC", Optional.empty(), new SchematicMatcher());
 	Type SWORD_BLADE_SCHEMATIC = new SimpleType("SWORD_BLADE_SCHEMATIC", Optional.of(SCHEMATIC), new SchematicMatcher());
 	Type TOOL_PART_HEAD_SCHEMATIC = new SimpleType("SWORD_PART_HEAD_SCHEMATIC", Optional.of(SCHEMATIC), new SchematicMatcher());

@@ -14,9 +14,9 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.MapLike;
 import com.mojang.serialization.RecordBuilder;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.KeyPair;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.KeyProvider;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.SpecificationRegistry;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.KeyPair;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.KeyProvider;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.SpecificationRegistry;
 
 public class FlagGroupCodec<R> implements Codec<KeyPair<FlagGroupPredicate<R>>> {
 	private final Codec<FlagGroupPredicate<R>> codec;

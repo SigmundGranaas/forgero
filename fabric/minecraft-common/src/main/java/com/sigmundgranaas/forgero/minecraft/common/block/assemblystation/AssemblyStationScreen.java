@@ -21,6 +21,7 @@ public class AssemblyStationScreen extends HandledScreen<AssemblyStationScreenHa
 		super(handler, inventory, Text.translatable("block.forgero.assembly_station"));
 	}
 
+
 	@Override
 	protected void init() {
 		super.init();

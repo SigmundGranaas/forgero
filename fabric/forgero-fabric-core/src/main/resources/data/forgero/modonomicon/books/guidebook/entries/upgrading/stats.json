@@ -3,7 +3,7 @@
   "name": "book.forgero.guidebook.upgrading.stats.name",
   "description": "book.forgero.guidebook.upgrading.stats.description",
   "icon": "forgero:iron-axe",
-  "x": -2,
+  "x": -5,
   "y": -2,
   "pages": [
     {
@@ -20,6 +20,7 @@
       "images": [
         "forgero:textures/gui/tooltip.png"
       ],
+      "use_legacy_rendering": false,
       "title":   "book.forgero.guidebook.upgrading.stats.title1"
     }
   ],

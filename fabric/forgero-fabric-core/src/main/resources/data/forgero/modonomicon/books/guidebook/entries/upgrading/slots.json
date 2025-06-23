@@ -4,7 +4,7 @@
   "description": "book.forgero.guidebook.upgrading.slots.description",
   "icon": "forgero:iron-mastercrafted_pickaxe_head",
   "x": -2,
-  "y": 2,
+  "y": 0,
   "pages": [
     {
       "type": "modonomicon:text",

@@ -30,4 +30,8 @@ public interface Property {
 	default boolean applyCondition(Matchable target, MatchContext context) {
 		return true;
 	}
+
+	default boolean isDynamic() {
+		return false;
+	}
 }

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import com.mojang.serialization.Codec;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.KeyPair;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.KeyPair;
 
 import net.minecraft.entity.Entity;
 

@@ -1,0 +1,185 @@
+{
+  "type": "BINDING",
+  "models": [
+    {
+      "name": "soft_binding",
+      "variants": [
+        {
+          "target": [
+            "type:CLUB",
+            "model:imperial/war_hammer_head.png"
+          ],
+          "template": "imperial/soft_warhammer_binding.png"
+        }
+      ]
+    },
+    {
+      "name": "soft_binding",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:imperial/sickle_blade.png"
+          ],
+          "template": "imperial/soft_sickle_binding.png"
+        }
+      ]
+    },
+    {
+      "name": "soft_binding_gem",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:imperial/sickle_blade.png"
+          ],
+          "template": "imperial/soft_sickle_gem.png"
+        }
+      ]
+    },
+    {
+      "name": "soft_binding_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:imperial/sickle_blade.png"
+          ],
+          "template": "imperial/soft_sickle_binding.png"
+        }
+      ]
+    },
+    {
+      "name": "binding",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:imperial/sickle_blade.png"
+          ],
+          "template": "imperial/sickle_binding.png"
+        }
+      ]
+    },
+    {
+      "name": "binding_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:imperial/sickle_blade.png"
+          ],
+          "template": "imperial/sickle_binding.png"
+        }
+      ]
+    },
+    {
+      "name": "binding_material",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:imperial/sickle_blade.png"
+          ],
+          "template": "imperial/sickle_binding_reinforced.png"
+        }
+      ]
+    },
+    {
+      "name": "binding_gem",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:imperial/sickle_blade.png"
+          ],
+          "template": "imperial/sickle_binding_gem.png"
+        }
+      ]
+    },
+    {
+      "name": "soft_binding",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:imperial/scythe_blade.png"
+          ],
+          "template": "imperial/soft_scythe_binding.png"
+        }
+      ]
+    },
+    {
+      "name": "soft_binding_gem",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:imperial/scythe_blade.png"
+          ],
+          "template": "imperial/scythe_soft_binding_gem.png"
+        }
+      ]
+    },
+    {
+      "name": "soft_binding_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:imperial/scythe_blade.png"
+          ],
+          "template": "imperial/soft_scythe_binding.png"
+        }
+      ]
+    },
+    {
+      "name": "binding",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:imperial/scythe_blade.png"
+          ],
+          "template": "imperial/scythe_binding.png"
+        }
+      ]
+    },
+    {
+      "name": "binding_dye",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:imperial/scythe_blade.png"
+          ],
+          "template": "imperial/scythe_binding.png"
+        }
+      ]
+    },
+    {
+      "name": "binding_material",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:imperial/scythe_blade.png"
+          ],
+          "template": "imperial/scythe_binding_reinforced.png"
+        }
+      ]
+    },
+    {
+      "name": "binding_gem",
+      "variants": [
+        {
+          "target": [
+            "type:HOE",
+            "model:imperial/scythe_blade.png"
+          ],
+          "template": "imperial/scythe_binding_gem.png"
+        }
+      ]
+    }
+  ]
+}

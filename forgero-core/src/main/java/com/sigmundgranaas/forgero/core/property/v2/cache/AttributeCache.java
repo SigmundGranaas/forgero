@@ -38,7 +38,7 @@ public class AttributeCache {
 
 	public static Boolean has(AttributeContainerKey pair) {
 		try {
-			return containsAttributeCache.get(pair);
+			return containsAttributeCache.getUnchecked(pair);
 		} catch (Exception e) {
 			return false;
 		}

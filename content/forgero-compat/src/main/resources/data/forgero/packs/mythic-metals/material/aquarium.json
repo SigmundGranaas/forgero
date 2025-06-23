@@ -7,7 +7,7 @@
     "id": "mythicmetals:aquarium_ingot"
   },
   "palette": {
-    "name": "aquarium"
+    "name": "mythicmetals/aquarium"
   },
   "properties": {
     "grouped_attributes": [
@@ -71,19 +71,11 @@
             "category": "OFFENSIVE",
             "value": 3
           },
-
           {
             "id": "metal-durability-offensive-upgrade",
             "type": "DURABILITY",
             "operation": "ADDITION",
             "category": "OFFENSIVE",
-            "value": 227.5
-          },
-          {
-            "id": "metal-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
             "value": 227.5
           }
         ]

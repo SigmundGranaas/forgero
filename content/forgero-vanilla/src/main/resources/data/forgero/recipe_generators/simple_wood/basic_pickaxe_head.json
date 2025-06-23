@@ -13,7 +13,7 @@
   ],
   "key": {
     "x": {
-      "${wood.tagOrItem}": "${wood.namespace}:${wood.name_replace_planks}_planks"
+      "${wood.tagOrItem}": "${wood.container_id}"
     }
   },
   "result": {

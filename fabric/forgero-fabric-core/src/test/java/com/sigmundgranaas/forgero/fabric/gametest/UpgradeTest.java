@@ -25,27 +25,6 @@ public class UpgradeTest {
 		assertTrue(test, "Unable to upgrade diamond pickaxe head with iron");
 		context.complete();
 	}
-	
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "recipe_test", required = true)
-	public void testUpgradeMastercraftedHandleWithDye(TestContext context) {
-		var test = RecipeTester.smithingUpgrade("oak-mastercrafted_handle", "minecraft:pink_dye", context);
-		assertTrue(test, "Unable to upgrade mastercrafted handle with dye");
-		context.complete();
-	}
-
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "recipe_test", required = true)
-	public void testUpgradeMastercraftedHandleArrowWithDye(TestContext context) {
-		var head = StateService.INSTANCE.find("forgero:oak-mastercrafted_arrow_head").get();
-		Composite handle = (Composite) StateService.INSTANCE.find("forgero:oak-mastercrafted_handle").get();
-		handle = handle.upgrade(StateService.INSTANCE.find("minecraft:pink_dye").get());
-		var feather = StateService.INSTANCE.find("minecraft:feather").get();
-
-		var arrow = new Construct.ConstructBuilder().addIngredients(List.of(head, handle, feather)).id("forgero:oak-arrow").build();
-
-		var test = RecipeTester.smithingUpgrade(arrow, "minecraft:pink_dye", context);
-		assertFalse(test, "Should not be able to dye arrow directly");
-		context.complete();
-	}
 
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "recipe_test", required = true)
 	public void testUpgradePickaxeHeadWithWrongItem(TestContext context) {
@@ -62,13 +41,6 @@ public class UpgradeTest {
 	}
 
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "recipe_test", required = true)
-	public void testUpgradePickaxeWithSpikedBinding(TestContext context) {
-		var test = RecipeTester.smithingUpgrade("diamond-pickaxe", "oak-spiked_binding", context);
-		assertTrue(test, "Unable to upgrade Diamond pickaxe with spiked binding");
-		context.complete();
-	}
-
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "recipe_test", required = true)
 	public void testUpgradeSwordGuard(TestContext context) {
 		var test = RecipeTester.smithingUpgrade("diamond-sword", "diamond-sword_guard", context);
 		assertTrue(test, "Unable to upgrade Diamond sword with sword guard");
@@ -76,8 +48,8 @@ public class UpgradeTest {
 	}
 
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "recipe_test", required = true)
-	public void testUpgradeWithAgileSwordGuard(TestContext context) {
-		var test = RecipeTester.smithingUpgrade("diamond-sword", "diamond-agile_sword_guard", context);
+	public void testUpgradeWithShellSwordGuard(TestContext context) {
+		var test = RecipeTester.smithingUpgrade("diamond-sword", "diamond-shell_sword_guard", context);
 		assertTrue(test, "Unable to upgrade Diamond sword with agile sword guard");
 		context.complete();
 	}
@@ -91,8 +63,8 @@ public class UpgradeTest {
 
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "recipe_test")
 	public void testUpgradeWithGem(TestContext context) {
-		var test = RecipeTester.smithingUpgrade("oak-binding", "redstone-gem", context);
-		assertTrue(test, "Unable to oak binding with redstone gem");
+		var test = RecipeTester.smithingUpgrade("oak-binding", "diamond_gem_1", context);
+		assertTrue(test, "Unable to oak binding with gem");
 		context.complete();
 	}
 

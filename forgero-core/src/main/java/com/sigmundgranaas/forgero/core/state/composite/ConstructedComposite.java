@@ -28,6 +28,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class ConstructedComposite extends BaseComposite implements ConstructedState {
 	private final List<State> parts;
+	private final CompositePropertyProcessor compositeProcessor = new CompositePropertyProcessor();
+	private final  PredicateConvertedPropertyProcessor predicateConvertedPropertyProcessor = new PredicateConvertedPropertyProcessor();
+	private List<Property> partProps;
 
 	protected ConstructedComposite(SlotContainer slotContainer, IdentifiableContainer id, List<State> parts) {
 		super(slotContainer, id);
@@ -70,19 +73,23 @@ public class ConstructedComposite extends BaseComposite implements ConstructedSt
 		return this;
 	}
 
+	private List<Property> loadPartProps(){
+		if(this.partProps == null){
+			this.partProps = parts().stream()
+					.flatMap(part -> part.getProperties().stream().map(part::applySource))
+					.toList();
+		}
+		return this.partProps;
+	}
+
 	@Override
 	public List<Property> compositeProperties(Matchable target, MatchContext context) {
-		var propertyProcessor = new CompositePropertyProcessor();
-		var predicateProcessor = new PredicateConvertedPropertyProcessor();
-
 		var props = new ArrayList<>(super.compositeProperties(target, context));
 
-		var partProps = parts().stream()
-				.flatMap(part -> part.getProperties().stream().map(part::applySource))
-				.toList();
+		List<Property> partProps = loadPartProps();
 
-		props.addAll(propertyProcessor.process(partProps, target, context));
-		props.addAll(predicateProcessor.process(partProps, target, context));
+		props.addAll(compositeProcessor.process(partProps, target, context));
+		props.addAll(predicateConvertedPropertyProcessor.process(partProps, target, context));
 
 		var otherProps = partProps.stream()
 				.filter(this::filterNormalProperties)

@@ -7,8 +7,6 @@ import java.util.function.Supplier;
 import com.sigmundgranaas.forgero.core.customdata.VisitorHelper;
 import com.sigmundgranaas.forgero.core.customdata.handler.LootVisitor;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.LootEntryData;
-import com.sigmundgranaas.forgero.minecraft.common.loot.function.ConditionFunction;
-import com.sigmundgranaas.forgero.minecraft.common.loot.function.GemLevelFunction;
 import lombok.Builder;
 import lombok.Data;
 
@@ -33,6 +31,7 @@ public class SingleLootEntry implements LootEntry {
 	public static LootEntry of(LootEntryData data) {
 		StateFilter filter = StateFilter.builder()
 				.types(data.types())
+				.ids(data.ids())
 				.lowerRarity(data.lower_rarity_limit())
 				.upperRarity(data.upper_rarity_limit())
 				.build();
@@ -50,7 +49,7 @@ public class SingleLootEntry implements LootEntry {
 	public void apply(LootTable.Builder builder) {
 		var pool = LootPool.builder()
 				.rolls(BinomialLootNumberProvider.create(rolls, chance));
-		filter.get().stream().filter(this::filter).forEach(item -> pool.with(ItemEntry.builder(item).apply(new GemLevelFunction.Builder()).apply(new ConditionFunction.Builder()).weight(1)));
+		filter.get().stream().filter(this::filter).forEach(item -> pool.with(ItemEntry.builder(item).weight(1)));
 		builder.pool(pool);
 	}
 

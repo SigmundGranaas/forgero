@@ -1,0 +1,41 @@
+{
+  "type": "WOOD",
+  "name": "mossy_oak",
+  "parent": "wood_base",
+  "container": {
+    "type": "HOST",
+    "id": "ribbits:mossy_oak_planks"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "wood-rarity-composite",
+            "type": "RARITY",
+            "value": 15
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "wood-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 7.5
+          }
+        ]
+      }
+    ]
+  },
+  "palette": {
+    "name": "ribbits/mossy_oak"
+  }
+}

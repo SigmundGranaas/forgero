@@ -20,7 +20,7 @@ public class StateTests {
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "recipe_test", required = true)
 	public void testUpgradeAndAssembleArrowName(TestContext context) {
 		var head = StateService.INSTANCE.find("forgero:oak-mastercrafted_arrow_head").get();
-		Composite handle = (Composite) StateService.INSTANCE.find("forgero:oak-mastercrafted_handle").get();
+		Composite handle = (Composite) StateService.INSTANCE.find("forgero:oak-handle").get();
 		handle = handle.upgrade(StateService.INSTANCE.find("minecraft:pink_dye").get());
 		var feather = StateService.INSTANCE.find("minecraft:feather").get();
 
@@ -33,7 +33,7 @@ public class StateTests {
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "recipe_test", required = true)
 	public void testUpgradeAndAssemblePickaxeName(TestContext context) {
 		var head = StateService.INSTANCE.find("forgero:oak-mastercrafted_pickaxe_head").get();
-		Composite handle = (Composite) StateService.INSTANCE.find("forgero:oak-mastercrafted_handle").get();
+		Composite handle = (Composite) StateService.INSTANCE.find("forgero:oak-handle").get();
 		handle = handle.upgrade(StateService.INSTANCE.find("minecraft:pink_dye").get());
 
 		var pickaxe = new Construct.ConstructBuilder().addIngredients(List.of(head, handle)).build();
@@ -45,7 +45,7 @@ public class StateTests {
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "recipe_test", required = true)
 	public void testUpgradeAndAssembleSwordName(TestContext context) {
 		var head = StateService.INSTANCE.find("forgero:oak-mastercrafted_sword_blade").get();
-		Composite handle = (Composite) StateService.INSTANCE.find("forgero:oak-mastercrafted_handle").get();
+		Composite handle = (Composite) StateService.INSTANCE.find("forgero:oak-handle").get();
 		handle = handle.upgrade(StateService.INSTANCE.find("minecraft:pink_dye").get());
 
 		var sword = new Construct.ConstructBuilder().addIngredients(List.of(head, handle)).build();
@@ -66,7 +66,7 @@ public class StateTests {
 		nameTest("iron-pickaxe", "forgero:iron-mastercrafted_pickaxe_head", "forgero:iron-mastercrafted_handle");
 
 		nameTest("iron-sword", "forgero:iron-sword_blade", "forgero:oak-handle");
-		nameTest("iron-sword", "forgero:iron-knife_blade", "forgero:oak-handle");
+		nameTest("iron-knife", "forgero:iron-knife_blade", "forgero:oak-handle");
 		nameTest("iron-sword", "forgero:iron-sword_blade", "forgero:iron-handle");
 		nameTest("iron-sword", "forgero:iron-sword_blade", "forgero:iron-mastercrafted_handle");
 		nameTest("iron-sword", "forgero:iron-mastercrafted_sword_blade", "forgero:iron-mastercrafted_handle");

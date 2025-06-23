@@ -4,5 +4,5 @@ import com.google.gson.JsonObject;
 
 import net.minecraft.util.Identifier;
 
-public record IdentifiedJson(Identifier id, JsonObject json) {
+public record IdentifiedJson(Identifier id, JsonObject json, JsonObject template) {
 }

@@ -1,8 +1,8 @@
 {
-  "name": "betternether-materials",
+  "name": "betternether-compat",
   "resource_type": "PACKAGE",
   "priority": 5,
-  "namespace": "betternether",
+  "namespace": "forgero",
   "dependencies": [
     "minecraft",
     "forgero",

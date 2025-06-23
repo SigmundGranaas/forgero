@@ -33,7 +33,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 20
+            "value": 2
           },
           {
             "id": "scale-attack_damage-offensive-upgrade",
@@ -78,6 +78,21 @@
             "value": 0
           }
         ]
+      }
+    ],
+    "features": [
+      {
+        "type": "minecraft:on_hit",
+        "on_hit": {
+          "type": "minecraft:fire",
+          "duration": 2
+        },
+        "after_use": {
+          "type": "minecraft:cooldown",
+          "duration": 50
+        },
+        "title": "feature.forgero.fire",
+        "description": "feature.forgero.fire.description"
       }
     ]
   },

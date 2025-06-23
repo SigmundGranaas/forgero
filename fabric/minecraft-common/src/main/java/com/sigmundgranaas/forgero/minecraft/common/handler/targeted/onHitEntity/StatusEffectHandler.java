@@ -2,10 +2,14 @@ package com.sigmundgranaas.forgero.minecraft.common.handler.targeted.onHitEntity
 
 import static com.sigmundgranaas.forgero.minecraft.common.feature.FeatureUtils.compute;
 
+import java.util.Objects;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.property.Attribute;
 import com.sigmundgranaas.forgero.core.property.attribute.BaseAttribute;
+import com.sigmundgranaas.forgero.minecraft.common.handler.entity.EntityBasedHandler;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -42,7 +46,7 @@ import net.minecraft.world.World;
  */
 @Getter
 @Accessors(fluent = true)
-public class StatusEffectHandler implements EntityTargetHandler {
+public class StatusEffectHandler implements EntityBasedHandler {
 	public static final String TYPE = "minecraft:status_effect";
 	public static final String EFFECT_LEVEL_ATTRIBUTE_TYPE = "minecraft:effect_level";
 	public static final String EFFECT_DURATION_TYPE = "minecraft:effect_duration";
@@ -53,7 +57,6 @@ public class StatusEffectHandler implements EntityTargetHandler {
 	public static Codec<StatusEffect> STATUS_EFFECT_CODEC = Identifier.CODEC.xmap(Registries.STATUS_EFFECT::get, Registries.STATUS_EFFECT::getId);
 
 	public static final Codec<StatusEffectHandler> BUILDER = codec();
-
 
 	private final StatusEffect effect;
 	private final Attribute level;
@@ -68,11 +71,12 @@ public class StatusEffectHandler implements EntityTargetHandler {
 	 * @param duration Duration in ticks for the effect.
 	 * @param target   The target entity.
 	 */
+	// Add null checks in the constructor
 	public StatusEffectHandler(StatusEffect effect, Attribute level, Attribute duration, String target) {
-		this.effect = effect;
-		this.level = level;
-		this.duration = duration;
-		this.target = target;
+		this.effect = Objects.requireNonNull(effect, "Effect cannot be null");
+		this.level = Objects.requireNonNull(level, "Level cannot be null");
+		this.duration = Objects.requireNonNull(duration, "Duration cannot be null");
+		this.target = Objects.requireNonNull(target, "Target cannot be null");
 	}
 
 	public static Codec<StatusEffectHandler> codec() {
@@ -82,6 +86,15 @@ public class StatusEffectHandler implements EntityTargetHandler {
 				Attribute.defaultOrExplicitTypeCodec(EFFECT_DURATION_TYPE).optionalFieldOf("duration", DEFAULT_DURATION).forGetter(StatusEffectHandler::duration),
 				Codec.STRING.fieldOf("target").forGetter(StatusEffectHandler::target)
 		).apply(instance, StatusEffectHandler::new));
+	}
+
+	@Override
+	public void handle(Entity entity) {
+		if (entity instanceof LivingEntity livingTarget) {
+			livingTarget.addStatusEffect(new StatusEffectInstance(effect, duration(entity), level(entity) - 1));
+		}else {
+			Forgero.LOGGER.warn("Targeted entity is not a living entity!");
+		}
 	}
 
 	/**
@@ -94,10 +107,20 @@ public class StatusEffectHandler implements EntityTargetHandler {
 	 */
 	@Override
 	public void onHit(Entity source, World world, Entity targetEntity) {
-		if ("minecraft:targeted_entity".equals(target) && targetEntity instanceof LivingEntity livingTarget) {
-			livingTarget.addStatusEffect(new StatusEffectInstance(effect, duration(source), level(source) - 1));
-		} else if ("minecraft:attacker".equals(target) && source instanceof LivingEntity livingSource) {
-			livingSource.addStatusEffect(new StatusEffectInstance(effect, duration(source), level(source) - 1));
+		if ("minecraft:targeted_entity".equals(target)) {
+			if (targetEntity instanceof LivingEntity livingTarget) {
+				livingTarget.addStatusEffect(new StatusEffectInstance(effect, duration(source), level(source) - 1));
+			} else {
+				Forgero.LOGGER.warn("Targeted entity is not a living entity!");
+			}
+		} else if ("minecraft:attacker".equals(target)) {
+			if (source instanceof LivingEntity livingSource) {
+				livingSource.addStatusEffect(new StatusEffectInstance(effect, duration(source), level(source) - 1));
+			} else {
+				Forgero.LOGGER.warn("Targeted entity is not a living entity!");
+			}
+		} else {
+			throw new IllegalArgumentException("Invalid target: " + target);
 		}
 	}
 
@@ -106,7 +129,7 @@ public class StatusEffectHandler implements EntityTargetHandler {
 	}
 
 	private int level(Entity source) {
-		return compute(level, source).asInt();
+		return Math.max(1, compute(level, source).asInt());
 	}
 }
 

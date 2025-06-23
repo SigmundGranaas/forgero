@@ -1,0 +1,15 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "forgero:echo_gem_3"
+        },
+        {
+            "item": "minecraft:dragon_breath"
+        }
+    ],
+    "result": {
+        "item": "forgero:echo_gem_4",
+        "count": 1
+    }
+}

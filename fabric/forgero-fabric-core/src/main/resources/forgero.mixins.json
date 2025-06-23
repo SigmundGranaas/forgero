@@ -12,8 +12,6 @@
     "ItemDynamicUseActionMixin",
     "ItemSchematicRemainderMixin",
     "ItemStackUnbreakableMixin",
-    "LivingEntityMixin",
-    "LivingEntityReapingMixin",
     "LivingEntitySwingHandMixin",
     "LivingEntityUndyingMixin",
     "LootTableForgeroLootMixin",
@@ -23,11 +21,9 @@
     "PlayerCritChanceMixin",
     "PlayerEntityAttackMixin",
     "PlayerServerInteractionManagerMixin",
-    "RecipeManagerMixin",
-    "ServerInteractionManagerReachMixin"
+    "RecipeManagerMixin"
   ],
   "client": [
-    "ClientPlayerInteractionManagerReachMixin",
     "ClientPlayNetworkGetTotemMixin",
     "ItemDescriptionInjector",
     "ItemModelGeneratorMixin",

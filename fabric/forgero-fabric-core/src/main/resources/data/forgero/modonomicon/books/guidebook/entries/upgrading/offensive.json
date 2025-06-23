@@ -4,8 +4,8 @@
   "description": "book.forgero.guidebook.upgrading.offensive.description",
   "icon": "minecraft:anvil",
   "background_v_index": 1,
-  "x": 4,
-  "y": 2,
+  "x": 1,
+  "y": 0,
   "pages": [
     {
       "type": "modonomicon:text",

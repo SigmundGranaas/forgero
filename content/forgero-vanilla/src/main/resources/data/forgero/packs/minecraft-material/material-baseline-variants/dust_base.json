@@ -28,7 +28,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 10
+            "value": 1
           },
           {
             "id": "dust-attack_speed-offensive-upgrade",

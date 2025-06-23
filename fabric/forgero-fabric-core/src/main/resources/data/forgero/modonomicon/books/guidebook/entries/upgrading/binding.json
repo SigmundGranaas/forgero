@@ -3,8 +3,8 @@
   "name": "book.forgero.guidebook.upgrading.binding.name",
   "description": "book.forgero.guidebook.upgrading.binding.description",
   "icon": "forgero:vines-soft_binding",
-  "x": -1,
-  "y": 5,
+  "x": -4,
+  "y": 3,
   "pages": [
     {
       "type": "modonomicon:text",

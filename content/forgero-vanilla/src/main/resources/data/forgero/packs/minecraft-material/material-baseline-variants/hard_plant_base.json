@@ -29,7 +29,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 10
+            "value": 1
           },
           {
             "id": "hard_plant-attack_speed-offensive-upgrade",
@@ -55,7 +55,7 @@
           {
             "id": "hard_plant-mining_level-offensive-upgrade",
             "type": "MINING_LEVEL",
-            "operation": "MULTIPLICATION",
+            "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 0
           },

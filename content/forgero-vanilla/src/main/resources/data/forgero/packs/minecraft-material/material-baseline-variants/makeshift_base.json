@@ -29,7 +29,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 15
+            "value": 1.5
           },
           {
             "id": "makeshift-attack_speed-offensive-upgrade",

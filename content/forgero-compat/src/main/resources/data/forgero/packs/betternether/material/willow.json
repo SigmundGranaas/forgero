@@ -42,19 +42,12 @@
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 50
-          },
-          {
-            "id": "wood-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 50
           }
         ]
       }
     ]
   },
   "palette": {
-    "name": "willow"
+    "name": "betternether/willow"
   }
 }

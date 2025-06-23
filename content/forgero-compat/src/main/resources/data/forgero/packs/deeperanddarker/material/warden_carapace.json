@@ -26,7 +26,7 @@
           {
             "id": "scale-weight-composite",
             "type": "WEIGHT",
-            "value": 35
+            "value": 3.5
           }
         ]
       },
@@ -47,7 +47,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 17.5
+            "value": 1.75
           },
           {
             "id": "scale-durability-offensive-upgrade",

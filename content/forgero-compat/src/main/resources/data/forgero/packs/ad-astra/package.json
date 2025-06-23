@@ -2,7 +2,7 @@
   "name": "ad_astra-compat",
   "resource_type": "PACKAGE",
   "priority": 5,
-  "namespace": "minecraft",
+  "namespace": "forgero",
   "dependencies": [
     "minecraft",
     "forgero",

@@ -38,7 +38,8 @@ public record PropertyStream(
 
 	public Stream<Attribute> getAttributeOfType(String attributeType) {
 		var rootAttributes = getAttributes()
-				.filter(attribute -> attributeType.equals(attribute.getAttributeType())).toList();
+				.filter(attribute -> attributeType.equals(attribute.getAttributeType()))
+				.toList();
 
 		return rootAttributes.stream()
 				.sorted(Attribute::compareTo);

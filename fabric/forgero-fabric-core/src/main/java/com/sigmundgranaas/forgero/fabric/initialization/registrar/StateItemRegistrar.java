@@ -3,14 +3,20 @@ package com.sigmundgranaas.forgero.fabric.initialization.registrar;
 
 import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
 
+import java.util.AbstractMap;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
+import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.property.v2.attribute.attributes.Rarity;
 import com.sigmundgranaas.forgero.core.registry.RegistryFactory;
 import com.sigmundgranaas.forgero.core.state.State;
@@ -24,30 +30,45 @@ import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroups;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
+import net.minecraft.util.Pair;
 
 /**
  * A class to handle registration of states.
  */
 public class StateItemRegistrar implements Registrar {
 	private final StateService service;
+	private final RegistryFactory<StateProvider, ItemData> factory = new RegistryFactory<>(ItemRegistries.STATE_CONVERTER);
+	private StateComparator comparator;
+	private final Map<State, Integer> rarityCache;
 
 	public StateItemRegistrar(StateService service) {
 		this.service = service;
+		rarityCache = service.all()
+				.parallelStream()
+				.map(Supplier::get)
+				.collect(Collectors.toConcurrentMap(
+						state -> state,
+						state -> ComputedAttribute.of(state, Rarity.KEY).asInt()
+				));
 	}
 
-	private Map<String, Integer> generateSortingMap() {
-		var sortingMap = new HashMap<String, Integer>();
-		service.all().stream().map(Supplier::get)
+	private void generateSortingMap() {
+		var sortingMap = service.all().parallelStream()
+				.map(Supplier::get)
 				.filter(state -> !state.test(Type.WEAPON) && !state.test(Type.TOOL))
-				.forEach(state -> sortingMap.compute(StateAttributes.getMaterialName(state),
-						(key, value) -> value == null || StateAttributes.getRarity(state) > value ? StateAttributes.getRarity(state) : value));
-		return sortingMap;
+				.collect(Collectors.groupingBy(
+						StateAttributes::getMaterialName,
+						Collectors.mapping(
+								rarityCache::get,
+								Collectors.reducing(Integer.MIN_VALUE, Math::max)
+						)
+				));
+		this.comparator = new StateComparator(sortingMap, rarityCache);
 	}
 
 	private Stream<StateProvider> getValidStates(Registry<Item> registry) {
@@ -56,46 +77,48 @@ public class StateItemRegistrar implements Registrar {
 				.filter(state -> !registry.containsId(new Identifier(state.get().identifier())));
 	}
 
-	private void registerState(StateProvider state) {
-		try {
-			RegistryFactory<StateProvider, ItemData> factory = new RegistryFactory<>(ItemRegistries.STATE_CONVERTER);
-			ItemData data = factory.convert(state);
-			Identifier identifier = data.id();
-			var item = data.item();
-			registerGroup(data);
-			Registry.register(Registries.ITEM, identifier, item);
-		} catch (InvalidIdentifierException e) {
-			Forgero.LOGGER.error("Invalid identifier: {}", state.get().identifier());
-			Forgero.LOGGER.error(e);
-		}
-	}
-
 	private void registerGroup(ItemData data) {
 		Registries.ITEM_GROUP.getKey(data.group())
 				.ifPresent(group -> ItemGroupEvents.modifyEntriesEvent(group)
-						.register((entries) -> {
-							entries.add(new ItemStack(data.item()));
-		}));
+						.register((entries) -> entries.add(new ItemStack(data.item()))));
 	}
 
-	@Override
-	public void registerItem(Registry<Item> registry) {
-		var sortingMap = generateSortingMap();
-		getValidStates(registry)
-				.sorted(new StateComparator(sortingMap))
-				.forEach(this::registerState);
+	public void registerItems(Registry<Item> registry) {
+		long startTime = System.currentTimeMillis();
+
+		generateSortingMap();
+
+		List<StateProvider> validStates = getValidStates(registry).toList();
+
+		List<Map.Entry<StateProvider, ItemData>> convertedItems = validStates.stream()
+				.map(state -> new AbstractMap.SimpleEntry<>(state, convertState(state)))
+				.filter(entry -> entry.getValue() != null)
+				.sorted((e1, e2) -> comparator.compare(() -> e1.getKey().get(), () -> e2.getKey().get()))
+				.collect(Collectors.toList());
+
+		convertedItems.forEach(entry -> registerItem(entry.getValue()));
+
+		long endTime = System.currentTimeMillis();
+		long duration = endTime - startTime;
+
+		Forgero.LOGGER.info("Registered {} items in {} ms", convertedItems.size(), duration);
 	}
 
-	/**
-	 * A utility class to extract and manipulate attributes from State objects.
-	 */
+	private ItemData convertState(StateProvider state) {
+		try {
+			return factory.convert(state);
+		} catch (InvalidIdentifierException e) {
+			Forgero.LOGGER.error("Invalid identifier: {}", state.get().identifier(), e);
+			return null;
+		}
+	}
+
+	private void registerItem(ItemData data) {
+		Registry.register(Registries.ITEM, data.id(), data.item());
+		registerGroup(data);
+	}
+
 	static class StateAttributes {
-		/**
-		 * Retrieves the material name from a State object.
-		 *
-		 * @param state The state object.
-		 * @return The material name.
-		 */
 		static String getMaterialName(State state) {
 			var elements = state.name().split(ELEMENT_SEPARATOR);
 			if (elements.length > 1) {
@@ -109,30 +132,23 @@ public class StateItemRegistrar implements Registrar {
 			}
 		}
 
-		/**
-		 * Retrieves the rarity attribute from a State object.
-		 *
-		 * @param state The state object.
-		 * @return The rarity value.
-		 */
-		static int getRarity(State state) {
-			return (int) state.stream().applyAttribute(Rarity.KEY);
+		static int getRarity(State state, Map<State, Integer> map) {
+			return map.getOrDefault(state, ComputedAttribute.of(state, Rarity.KEY).asInt());
 		}
 	}
 
-	/**
-	 * A comparator class to compare two State objects based on a given ordering map.
-	 */
 	static class StateComparator implements Comparator<Supplier<State>> {
 		private final Map<String, Integer> orderingMap;
+		Map<State, Integer> rarityMap;
 
-		public StateComparator(Map<String, Integer> orderingMap) {
+		public StateComparator(Map<String, Integer> orderingMap, Map<State, Integer> map) {
 			this.orderingMap = orderingMap;
+			this.rarityMap = map;
 		}
 
 		private int getOrderingFromState(State state) {
 			var name = StateAttributes.getMaterialName(state);
-			int rarity = StateAttributes.getRarity(state);
+			int rarity = StateAttributes.getRarity(state, rarityMap);
 			return orderingMap.getOrDefault(name, rarity);
 		}
 
@@ -142,15 +158,16 @@ public class StateItemRegistrar implements Registrar {
 			State element2 = state2.get();
 
 			int elementOrdering = getOrderingFromState(element1) - getOrderingFromState(element2);
-			int nameOrdering = StateAttributes.getMaterialName(element1).compareTo(StateAttributes.getMaterialName(element2));
-
 			if (elementOrdering != 0) {
 				return elementOrdering;
-			} else if (nameOrdering != 0) {
-				return nameOrdering;
-			} else {
-				return StateAttributes.getRarity(element1) - StateAttributes.getRarity(element2);
 			}
+
+			int nameOrdering = StateAttributes.getMaterialName(element1).compareTo(StateAttributes.getMaterialName(element2));
+			if (nameOrdering != 0) {
+				return nameOrdering;
+			}
+
+			return StateAttributes.getRarity(element1, rarityMap) - StateAttributes.getRarity(element2, rarityMap);
 		}
 	}
 }

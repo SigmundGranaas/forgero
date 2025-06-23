@@ -1,0 +1,9 @@
+{
+  "namespace": "biomeswevegone",
+  "dependencies": [
+    "minecraft",
+    "forgero",
+    "minecraft-vanilla",
+    "biomeswevegone"
+  ]
+}

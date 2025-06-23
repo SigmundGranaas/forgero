@@ -1,14 +1,14 @@
 package com.sigmundgranaas.forgero.minecraft.common.predicate.block;
 
-import static com.sigmundgranaas.forgero.minecraft.common.predicate.CodecUtils.generalPredicate;
+import static com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.CodecUtils.generalPredicate;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 import com.mojang.serialization.Codec;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.AdapterCodec;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.KeyPair;
-import com.sigmundgranaas.forgero.minecraft.common.predicate.PredicateAdapter;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.KeyPair;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.PredicateAdapter;
+import com.sigmundgranaas.forgero.minecraft.common.predicate.codecs.AdapterCodec;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

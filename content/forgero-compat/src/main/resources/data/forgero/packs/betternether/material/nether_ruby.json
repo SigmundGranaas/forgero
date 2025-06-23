@@ -14,7 +14,7 @@
         "operation": "ADDITION",
         "attributes": [
           {
-            "id": "mineral-mining-speed-composite",
+            "id": "mineral-mining_speed-composite",
             "type": "MINING_SPEED",
             "value": 10
           },
@@ -31,7 +31,7 @@
           {
             "id": "mineral-weight-composite",
             "type": "WEIGHT",
-            "value": 50
+            "value": 5
           },
           {
             "id": "mineral-armor-composite",
@@ -58,14 +58,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 25
-          },
-          {
-            "id": "mineral-attack_speed-offensive-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "OFFENSIVE",
-            "value": 0
+            "value": 2.5
           },
           {
             "id": "mineral-attack_damage-offensive-upgrade",
@@ -94,41 +87,6 @@
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 1150
-          },
-          {
-            "id": "mineral-attack_speed-utility-upgrade",
-            "type": "ATTACK_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "mineral-attack_damage-utility-upgrade",
-            "type": "ATTACK_DAMAGE",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "mineral-mining_speed-utility-upgrade",
-            "type": "MINING_SPEED",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "mineral-mining_level-utility-upgrade",
-            "type": "MINING_LEVEL",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 0
-          },
-          {
-            "id": "mineral-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 1150
           }
         ]
       }
@@ -137,7 +95,7 @@
     ]
   },
   "palette": {
-    "name": "nether_ruby"
+    "name": "betternether/nether_ruby"
   },
   "custom_data": {
     "enchantment": [

@@ -3,7 +3,7 @@
   "models": [
     {
       "name": "refined_blade",
-      "template": "refined_sword_blade.png",
+      "template": "refined/refined_sword_blade.png",
       "type": "GENERATE",
       "palette": "TOOL_MATERIAL",
       "order": 20
@@ -13,9 +13,9 @@
       "variants": [
         {
           "target": [
-            "model:refined_sword_blade.png"
+            "model:refined/refined_sword_blade.png"
           ],
-          "template": "refined_sword_blade_tip_reinforcement.png"
+          "template": "refined/refined_sword_blade_tip_reinforcement.png"
         }
       ]
     },
@@ -24,9 +24,9 @@
       "variants": [
         {
           "target": [
-            "model:refined_sword_blade.png"
+            "model:refined/refined_sword_blade.png"
           ],
-          "template": "refined_sword_blade.png"
+          "template": "refined/refined_sword_blade.png"
         }
       ]
     },

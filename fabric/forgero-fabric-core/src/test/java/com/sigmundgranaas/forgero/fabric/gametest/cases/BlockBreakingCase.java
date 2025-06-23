@@ -77,7 +77,7 @@ public class BlockBreakingCase {
 
 		// No blocks should be left
 		if (selection.anyMatch(notBroken())) {
-			Forgero.LOGGER.warn("Not all blocks in the selection was broken, here is the result: {}", selection.apply(notBroken()).toString(helper));
+			Forgero.LOGGER.error("Not all blocks in the selection was broken, here is the result: {}", selection.apply(notBroken()).toString(helper));
 			veinMiningErrors(root, ticks);
 		}
 	}

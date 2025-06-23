@@ -4,9 +4,28 @@
 
 dependencies {
 	// Fabric Loader
-	modCompileOnly "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
+	modApi("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}"){
+		exclude(group: "net.fabricmc.fabric-loader")
+	}
 }
 
 loom {
 	accessWidenerPath = file("src/main/resources/minecraft-common.accesswidener")
 }
+
+sourceSets {
+	test {
+		compileClasspath += main.compileClasspath
+		runtimeClasspath += main.runtimeClasspath
+	}
+}
+
+test {
+	useJUnitPlatform()
+	maxParallelForks = 32
+	testLogging.events("failed")
+	testLogging.info.events = ["failed", "skipped"]
+}
+

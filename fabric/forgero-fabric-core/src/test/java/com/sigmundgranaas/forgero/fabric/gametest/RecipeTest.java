@@ -53,6 +53,13 @@ public class RecipeTest {
 	}
 
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "recipe_test", required = true)
+	public void testCreateSwordHeadFromSchematic(TestContext context) {
+		var test = RecipeTester.ofPart("sword_blade-schematic", "minecraft:oak_planks", 2, "oak-sword_blade", context);
+		assertTrue(test, "Unable to craft oak sword blade");
+		context.complete();
+	}
+
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "recipe_test", required = true)
 	public void testCreatePickaxeFromSchematic(TestContext context) {
 		var test = RecipeTester.ofPart("pickaxe_head-schematic", "minecraft:oak_planks", 3, "oak-pickaxe_head", context);
 		assertTrue(test, "Unable to craft oak pickaxe head");

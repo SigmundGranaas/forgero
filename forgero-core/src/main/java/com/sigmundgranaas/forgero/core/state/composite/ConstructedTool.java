@@ -13,8 +13,6 @@ import com.sigmundgranaas.forgero.core.condition.Conditional;
 import com.sigmundgranaas.forgero.core.configuration.ForgeroConfigurationLoader;
 import com.sigmundgranaas.forgero.core.property.Property;
 import com.sigmundgranaas.forgero.core.property.PropertyContainer;
-import com.sigmundgranaas.forgero.core.soul.Soul;
-import com.sigmundgranaas.forgero.core.soul.SoulBindable;
 import com.sigmundgranaas.forgero.core.state.Composite;
 import com.sigmundgranaas.forgero.core.state.IdentifiableContainer;
 import com.sigmundgranaas.forgero.core.state.State;
@@ -25,11 +23,13 @@ import com.sigmundgranaas.forgero.core.util.match.Matchable;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
-public class ConstructedTool extends ConstructedComposite implements SoulBindable, Conditional<ConstructedTool> {
+public class ConstructedTool extends ConstructedComposite implements Conditional<ConstructedTool> {
 	private final State head;
 	private final State handle;
 
 	private final List<PropertyContainer> conditions;
+
+	private List<Property> defaultProps;
 
 	private Integer hashCode;
 
@@ -42,7 +42,7 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 
 	public ConstructedTool(State head, State handle, SlotContainer slots, IdentifiableContainer id, List<PropertyContainer> conditions) {
 		super(slots, id, List.of(head, handle));
-		this.conditions = conditions;
+		this.conditions = new ArrayList<>(conditions);
 		this.head = head;
 		this.handle = handle;
 	}
@@ -66,7 +66,7 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 						var ingredients = new ArrayList<>(parts());
 						ingredients.set(i, compositeRemoved);
 						var optBuilder = ToolBuilder.builder(ingredients).map(builder -> builder.addSlotContainer(slotContainer.copy())
-								.conditions(conditions)
+								.conditions(new ArrayList<>(conditions))
 								.type(type())
 								.id(identifier()));
 						if (optBuilder.isPresent()) {
@@ -112,7 +112,7 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 		}
 		return ToolBuilder.builder(head, handle)
 				.addSlotContainer(slotContainer.copy())
-				.conditions(conditions)
+				.conditions(new ArrayList<>(conditions))
 				.type(type())
 				.id(identifier());
 	}
@@ -128,15 +128,25 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 	@Override
 	public @NotNull
 	List<Property> getRootProperties() {
-		return Stream.of(super.getRootProperties(), conditionProperties(Matchable.DEFAULT_TRUE, MatchContext.of())).flatMap(List::stream).toList();
+		return loadRootProperties(Matchable.DEFAULT_TRUE, MatchContext.of());
+	}
+
+	private List<Property> loadRootProperties(Matchable target, MatchContext context){
+		if(this.defaultProps == null){
+			this.defaultProps = Stream.of(super.getRootProperties(target, context), conditionProperties(target, context)).flatMap(List::stream).toList();
+		}
+		return defaultProps;
 	}
 
 	@Override
 	public @NotNull
 	List<Property> getRootProperties(Matchable target, MatchContext context) {
-		return Stream.of(super.getRootProperties(target, context), conditionProperties(target, context)).flatMap(List::stream).toList();
+		if(target == Matchable.DEFAULT_TRUE && context == MatchContext.of()){
+			return loadRootProperties(target, context);
+		}else{
+			return Stream.of(super.getRootProperties(target, context), conditionProperties(target, context)).flatMap(List::stream).toList();
+		}
 	}
-
 
 	@Override
 	public @NotNull
@@ -147,11 +157,6 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 	@Override
 	public ConstructedTool copy() {
 		return toolBuilder().build();
-	}
-
-	@Override
-	public State bind(Soul soul) {
-		return toolBuilder().soul(soul).build();
 	}
 
 	@Override
@@ -208,7 +213,7 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 		}
 
 		public static Optional<ToolBuilder> builder(List<State> parts) {
-			var head = parts.stream().filter(part -> part.test(Type.TOOL_PART_HEAD) || part.test(Type.SWORD_BLADE) || part.test(Type.BOW_LIMB)).findFirst();
+			var head = parts.stream().filter(part -> part.test(Type.TOOL_PART_HEAD) || part.test(Type.WEAPON_HEAD) || part.test(Type.BOW_LIMB)).findFirst();
 			var handle = parts.stream().filter(part -> head.orElse(null) != part).findFirst();
 			if (head.isPresent() && handle.isPresent()) {
 				return Optional.of(builder(head.get(), handle.get()));
@@ -232,12 +237,8 @@ public class ConstructedTool extends ConstructedComposite implements SoulBindabl
 		}
 
 		public ToolBuilder conditions(List<PropertyContainer> conditions) {
-			this.conditions = conditions;
+			this.conditions = new ArrayList<>(conditions);
 			return this;
-		}
-
-		public SoulBoundTool.SoulBoundToolBuilder soul(Soul soul) {
-			return SoulBoundTool.SoulBoundToolBuilder.of(this, soul);
 		}
 
 		public ConstructedTool build() {

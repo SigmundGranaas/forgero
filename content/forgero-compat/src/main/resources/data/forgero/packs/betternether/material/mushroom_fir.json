@@ -26,7 +26,7 @@
           {
             "id": "wood-weight-composite",
             "type": "WEIGHT",
-            "value": 10
+            "value": 1
           }
         ]
       },
@@ -47,7 +47,7 @@
             "order": "BASE",
             "operation": "ADDITION",
             "category": "ALL",
-            "value": 5
+            "value": 0.5
           },
           {
             "id": "wood-durability-offensive-upgrade",
@@ -55,19 +55,12 @@
             "operation": "ADDITION",
             "category": "OFFENSIVE",
             "value": 20
-          },
-          {
-            "id": "wood-durability-utility-upgrade",
-            "type": "DURABILITY",
-            "operation": "ADDITION",
-            "category": "UTILITY",
-            "value": 20
           }
         ]
       }
     ]
   },
   "palette": {
-    "name": "mushroom_fir"
+    "name": "betternether/mushroom_fir"
   }
 }

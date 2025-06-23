@@ -33,7 +33,7 @@ public class ArrowProperties {
 			State state = optionalState.get();
 			return new ArrowProperties(ComputedAttribute.of(state, Accuracy.KEY).asFloat(), ComputedAttribute.of(state, Weight.KEY).asFloat());
 		} else {
-			return new ArrowProperties(50f, 25f);  // Default values for vanilla arrows
+			return new ArrowProperties(50f, 2.5f);  // Default values for vanilla arrows
 		}
 	}
 

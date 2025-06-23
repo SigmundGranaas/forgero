@@ -56,29 +56,18 @@ public class FileResourceLoader implements ResourceLoader {
 
 	private List<DataResource> rawResources(List<Path> paths) {
 		var resources = paths.stream()
-				.map(this::getFilePath)
-				.flatMap(Optional::stream)
+				.map(Path::toString)
 				.map(this::fileProvider)
 				.map(CompletableFuture::supplyAsync)
 				.toList();
 
-		var completedResources = resources.stream()
+		return resources.stream()
 				.map(CompletableFuture::join)
 				.flatMap(Optional::stream)
 				.toList();
-		return completedResources;
 	}
 
 	private FileResourceProvider fileProvider(String path) {
 		return new FileResourceProvider(path, streamLoader);
-	}
-
-	private Optional<String> getFilePath(Path path) {
-		String[] elements = path.toString().split("data");
-		if (elements.length == 2) {
-			return Optional.of("/" + "data" + elements[1]);
-		}
-		Forgero.LOGGER.error("Unable to resolve path {}, as it could not be split using default split operator {}", path.toString(), File.separator);
-		return Optional.empty();
 	}
 }

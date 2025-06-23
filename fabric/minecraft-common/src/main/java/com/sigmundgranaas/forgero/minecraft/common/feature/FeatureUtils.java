@@ -41,9 +41,7 @@ public class FeatureUtils {
 	}
 
 	public static <T extends Feature> List<T> cachedFilteredFeatures(ItemStack stack, ClassKey<T> key, MatchContext context) {
-		return appliedCachedFeatures(stack, context, key)
-				.stream()
-				.toList();
+		return appliedCachedFeatures(stack, context, key);
 	}
 
 
