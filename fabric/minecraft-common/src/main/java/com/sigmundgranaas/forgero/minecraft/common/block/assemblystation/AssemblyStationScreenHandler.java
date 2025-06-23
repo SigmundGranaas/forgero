@@ -1,7 +1,5 @@
 package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation;
 
-import java.util.List;
-
 import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.entity.AssemblyStationBlockEntity;
 import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.state.DisassemblyHandler;
 import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.state.EmptyHandler;
@@ -42,9 +40,6 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 	// Add a flag to track if we've already consumed the input item
 	private boolean inputItemConsumed = false;
 
-	// Flag to track if this is the first inventory change after opening
-	private boolean firstInventoryChangeAfterOpening = true;
-
 	// Store expected result count at handler level
 	private int expectedResultCount = 0;
 
@@ -75,9 +70,6 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		this.disassemblySlot = new DisassemblySlot(disassemblyInventory, 0, 34, 34, resultInventory);
 		this.addSlot(disassemblySlot);
 
-		// Reset the first inventory change flag when opening
-		this.firstInventoryChangeAfterOpening = true;
-
 		// Add inventory listeners
 		disassemblyInventory.addListener(this::onDisassemblyInventoryChanged);
 		resultInventory.addListener(this::onResultInventoryChanged);
@@ -87,21 +79,18 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		resultInventory.onOpen(playerInventory.player);
 
 		// Restore preview state if we have both input and result items
-		// This fixes the state loss when returning from main menu
 		if (!disassemblyInventory.isEmpty() && !resultInventory.isEmpty()) {
 			this.disassemblySlot.restoreToolDisassemblyState();
 		}
 
 		// Place the inventory slots in the correct locations
 		// Result inventory
-		// 3x3
 		for (int yIndex = 0; yIndex < 3; yIndex++) {
 			for (int xIndex = 0; xIndex < 3; xIndex++) {
 				this.addSlot(new ResultSlot(resultInventory, xIndex + yIndex * 3, 92 + xIndex * 18, 17 * (1 + yIndex) + yIndex));
 			}
 		}
 		// Player inventory and hotbar
-		// 9x4
 		for (int xIndex = 0; xIndex < 9; xIndex++) {
 			for (int yIndex = 0; yIndex < 3; yIndex++) {
 				this.addSlot(new Slot(playerInventory, xIndex + yIndex * 9 + 9, 8 + xIndex * 18, 84 + yIndex * 18));
@@ -123,13 +112,6 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		return this.disassemblyInventory.canPlayerUse(player) && this.resultInventory.canPlayerUse(player);
 	}
 
-	/**
-	 * Invoked when an inventory slot is shift-clicked.
-	 *
-	 * @param player          The {@link PlayerEntity} that shift-clicked the inventory slot.
-	 * @param inventorySlotId The ID of the inventory slot that got shift-clicked.
-	 * @return The {@link ItemStack} that got shift-clicked.
-	 */
 	@Override
 	public ItemStack quickMove(PlayerEntity player, int inventorySlotId) {
 		if (player == null) {
@@ -150,11 +132,10 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 			if (!this.inputItemConsumed) {
 				this.finishToolDisassembly();
 			}
-			inventorySlot.setStack(ItemStack.EMPTY);
 			player.getInventory().insertStack(itemStack);
+			inventorySlot.setStack(ItemStack.EMPTY);
 			return itemStack;
 		} else if (this.disassemblySlot.canInsert(itemStack)) {
-			// Only move items if the disassembly slot is empty
 			if (this.disassemblyInventory.isEmpty()) {
 				ItemStack copy = itemStack.copy();
 				copy.setCount(1);
@@ -167,149 +148,82 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		return ItemStack.EMPTY;
 	}
 
-	private void onDisassemblyInventoryChanged(@NotNull Inventory disassemblyInventory) {
+	private void onDisassemblyInventoryChanged(@NotNull Inventory inventory) {
 		if (isProcessingInventoryChange) {
 			return;
 		}
+		handleDisassemblyInventoryChange();
+		this.onContentChanged(inventory);
+	}
 
-		isProcessingInventoryChange = true;
-		try {
-			// If this is the first change after opening, check if we need to restore state
-			if (firstInventoryChangeAfterOpening) {
-				firstInventoryChangeAfterOpening = false;
-				if (!disassemblyInventory.isEmpty() && !resultInventory.isEmpty()) {
-					// We have both input and result items, check if input was already consumed
-					this.disassemblySlot.restoreToolDisassemblyState();
-					this.onContentChanged(disassemblyInventory);
-					return;
-				}
-			}
+	private void handleDisassemblyInventoryChange() {
+		ItemStack inputStack = disassemblyInventory.getStack(0);
 
-			// Handle new item insertion or removal
-			handleDisassemblyInventoryChange();
-			this.onContentChanged(disassemblyInventory);
-		} finally {
-			isProcessingInventoryChange = false;
+		// If an item is placed, start a new preview. This also handles re-opening the GUI.
+		if (!inputStack.isEmpty() && !disassemblySlot.isPreviewingToolDisassembly()) {
+			this.inputItemConsumed = false;
+			createDisassemblyPreview();
+		}
+		// If the input item is removed by the player BEFORE it has been consumed, it's a cancellation.
+		else if (inputStack.isEmpty() && disassemblySlot.isPreviewingToolDisassembly() && !this.inputItemConsumed) {
+			disassemblySlot.cancelToolDisassembly();
 		}
 	}
 
-	/**
-	 * Handles changes to the input inventory separately from result inventory
-	 */
-	private void handleDisassemblyInventoryChange() {
-		// New item inserted in input slot
-		if (!disassemblyInventory.isEmpty() && !disassemblySlot.hasToolParts()) {
-			// Reset consumption state when starting a new disassembly
-			this.inputItemConsumed = false;
-			updateBlockEntityState();
-			this.createDisassemblyPreview(); // Fixed method name here
-		}
-		// Input slot cleared by player (only if not consumed yet)
-		else if (disassemblyInventory.isEmpty() && !this.inputItemConsumed) {
-			// Only clear results if input was manually removed, not consumed
-			this.disassemblySlot.cancelToolDisassembly();
+	private void onResultInventoryChanged(@NotNull Inventory inventory) {
+		// The listener on result inventory is only for checking if we need to reset.
+		if (this.resultInventory.isEmpty() && this.inputItemConsumed) {
+			this.disassemblySlot.isPreviewingToolDisassembly = false;
 			this.inputItemConsumed = false;
 			this.expectedResultCount = 0;
 			updateBlockEntityState();
+			context.run((world, pos) -> {
+				if (world.getBlockEntity(pos) instanceof AssemblyStationBlockEntity be) {
+					be.resetState();
+				}
+			});
 		}
+		this.onContentChanged(inventory);
 	}
 
-	private void onResultInventoryChanged(@NotNull Inventory resultInventory) {
-		if (isProcessingInventoryChange) {
-			return;
-		}
-
-		isProcessingInventoryChange = true;
-		try {
-			// Just update the UI
-			this.onContentChanged(resultInventory);
-
-			// Check if all results are gone for state reset
-			handleResultInventoryChange();
-		} finally {
-			isProcessingInventoryChange = false;
-		}
-	}
-
-	/**
-	 * Handles changes to the result inventory separately from input inventory
-	 */
-	private void handleResultInventoryChange() {
-		boolean allResultsTaken = true;
-		for (int i = 0; i < resultInventory.size(); i++) {
-			if (!resultInventory.getStack(i).isEmpty()) {
-				allResultsTaken = false;
-				break;
-			}
-		}
-
-		// If all results are taken and input was consumed, reset the state
-		if (allResultsTaken && this.inputItemConsumed) {
-			this.disassemblySlot.isPreviewingToolDisassembly = false;
-		}
-	}
-
-	/**
-	 * Creates a preview of the disassembly results by populating the result inventory
-	 */
-	private void createDisassemblyPreview() { // Renamed from startToolDisassembly
+	private void createDisassemblyPreview() {
 		this.context.run((world, pos) -> {
 			if (world.isClient) {
 				return;
 			}
-
-			// Explicitly reset input consumed state when starting a new disassembly
-			this.inputItemConsumed = false;
 			this.disassemblySlot.startToolDisassembly();
 			this.expectedResultCount = this.disassemblySlot.expectedResultCount;
-
-			// Update the block entity with the new state
 			updateBlockEntityState();
 		});
 	}
 
-	/**
-	 * Consumes the input item when a result item is taken
-	 */
 	private void consumeInputItem() {
-		// Remove the context.run() wrapper which may be preventing execution
-		// This method will only be called from the server side anyway
 		if (this.inputItemConsumed) {
 			return;
 		}
-
-		// Set the flag BEFORE consuming to prevent inventory listeners from clearing results
 		this.inputItemConsumed = true;
 
-		// Consume the input item
-		this.disassemblySlot.silentlyConsumeInputItem();
-
-		// Update the block entity with the new state
-		this.context.run((world, pos) -> {
-			if (world.isClient) {
-				return;
-			}
-
-			if (world.getBlockEntity(pos) instanceof AssemblyStationBlockEntity blockEntity) {
-				blockEntity.setInputItemConsumed(this.inputItemConsumed);
-				blockEntity.setExpectedResultCount(this.expectedResultCount);
-			}
-		});
+		// Use the re-entrancy guard to safely modify the inventory
+		// without triggering the listener's cancellation logic.
+		this.isProcessingInventoryChange = true;
+		try {
+			// Consume the item.
+			this.disassemblyInventory.getStack(0).decrement(1);
+		} finally {
+			this.isProcessingInventoryChange = false;
+		}
+		updateBlockEntityState();
 	}
 
-	// This is the method that gets called when taking a result item
 	private void finishToolDisassembly() {
-		// Directly call consumeInputItem without wrapping in context.run
 		consumeInputItem();
 	}
 
-	// Method to update the block entity with the current state
 	private void updateBlockEntityState() {
 		this.context.run((world, pos) -> {
 			if (world.isClient) {
 				return;
 			}
-
 			if (world.getBlockEntity(pos) instanceof AssemblyStationBlockEntity blockEntity) {
 				blockEntity.setInputItemConsumed(this.inputItemConsumed);
 				blockEntity.setExpectedResultCount(this.expectedResultCount);
@@ -319,11 +233,8 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 
 	private class DisassemblySlot extends Slot {
 		private final @NotNull Inventory resultInventory;
-
 		private @NotNull DisassemblyHandler disassemblyHandler = new EmptyHandler();
 		private boolean isPreviewingToolDisassembly = false;
-
-		// Track the expected number of result items
 		private int expectedResultCount = 0;
 
 		public DisassemblySlot(@NotNull Inventory disassemblyInventory, int index, int x, int y, @NotNull Inventory resultInventory) {
@@ -350,93 +261,33 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 			return !this.resultInventory.isEmpty();
 		}
 
-		/**
-		 * Starts tool disassembly, creating a preview of the resulting tool parts in the {@link DisassemblySlot#resultInventory}.
-		 */
 		public void startToolDisassembly() {
 			this.disassemblyHandler = this.disassemblyHandler.insertIntoDisassemblySlot(this.inventory.getStack(0));
-
 			@NotNull var disassembledToolPartItemStacks = this.disassemblyHandler.disassemble();
-			// Store the expected count for later comparison
 			this.expectedResultCount = disassembledToolPartItemStacks.size();
 
-			// Clear result inventory first to ensure clean state
 			this.resultInventory.clear();
-
-			// Populate result inventory with preview items
-			for (int resultInventorySlotId = 0; resultInventorySlotId < disassembledToolPartItemStacks.size(); resultInventorySlotId++) {
-				if (resultInventorySlotId >= this.resultInventory.size()) {
-					continue;
-				}
-
-				this.resultInventory.setStack(resultInventorySlotId, disassembledToolPartItemStacks.get(resultInventorySlotId));
+			for (int i = 0; i < disassembledToolPartItemStacks.size(); i++) {
+				if (i >= this.resultInventory.size()) continue;
+				this.resultInventory.setStack(i, disassembledToolPartItemStacks.get(i));
 			}
-
 			this.isPreviewingToolDisassembly = true;
 		}
 
-		/**
-		 * Restores the tool disassembly state after player reconnection or screen reopening
-		 */
 		public void restoreToolDisassemblyState() {
 			if (!this.inventory.isEmpty() && !this.resultInventory.isEmpty()) {
 				this.disassemblyHandler = DisassemblyHandler.createHandler(this.inventory.getStack(0));
-
-				// If expectedResultCount is already set from the block entity, use it
 				if (AssemblyStationScreenHandler.this.expectedResultCount > 0) {
 					this.expectedResultCount = AssemblyStationScreenHandler.this.expectedResultCount;
 				} else {
-					// Otherwise calculate it from the disassembly handler
-					List<ItemStack> expectedItems = this.disassemblyHandler.disassemble();
-					this.expectedResultCount = expectedItems.size();
+					this.expectedResultCount = this.disassemblyHandler.disassemble().size();
 					AssemblyStationScreenHandler.this.expectedResultCount = this.expectedResultCount;
 				}
-
 				this.isPreviewingToolDisassembly = true;
-
-				// Update the block entity with this state to ensure consistency
 				AssemblyStationScreenHandler.this.updateBlockEntityState();
 			}
 		}
 
-		/**
-		 * Silently consumes the input item without triggering inventory change listeners
-		 * to prevent the result items from being cleared
-		 */
-		public void silentlyConsumeInputItem() {
-			@NotNull var toolItemStack = this.inventory.getStack(0);
-			if (toolItemStack.isEmpty()) {
-				return;
-			}
-
-			// Skip inventory listener to prevent clearing result items
-			boolean oldFlag = AssemblyStationScreenHandler.this.isProcessingInventoryChange;
-			AssemblyStationScreenHandler.this.isProcessingInventoryChange = true;
-			try {
-				// Consume the input item
-				toolItemStack.decrement(1);
-
-				// Clear the input slot if the item count reaches zero
-				if (toolItemStack.isEmpty()) {
-					this.inventory.setStack(0, ItemStack.EMPTY);
-				}
-			} finally {
-				// Restore the original flag state
-				AssemblyStationScreenHandler.this.isProcessingInventoryChange = oldFlag;
-			}
-			// DO NOT clear result inventory - they should stay until taken individually
-		}
-
-		/**
-		 * Original consume method - left for compatibility but uses the silent version
-		 */
-		public void consumeInputItem() {
-			silentlyConsumeInputItem();
-		}
-
-		/**
-		 * Cancels tool disassembly, removing the results from the {@link DisassemblySlot#resultInventory}.
-		 */
 		public void cancelToolDisassembly() {
 			resultInventory.clear();
 			this.isPreviewingToolDisassembly = false;
@@ -454,22 +305,7 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 		}
 
 		@Override
-		public ItemStack takeStack(int amount) {
-			// Get the item first before any state changes
-			ItemStack stack = super.takeStack(amount);
-
-			// If we've taken any item and the input hasn't been consumed yet,
-			// consume the input immediately but not the result items
-			if (!stack.isEmpty() && !AssemblyStationScreenHandler.this.inputItemConsumed) {
-				AssemblyStationScreenHandler.this.finishToolDisassembly();
-			}
-
-			return stack;
-		}
-
-		@Override
 		public void onTakeItem(PlayerEntity player, ItemStack stack) {
-			// Extra safeguard to ensure input gets consumed
 			if (!stack.isEmpty() && !AssemblyStationScreenHandler.this.inputItemConsumed) {
 				AssemblyStationScreenHandler.this.finishToolDisassembly();
 			}
