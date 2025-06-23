@@ -51,63 +51,48 @@ public class FluidTextureGenerator implements SimpleSynchronousResourceReloadLis
         
         Forgero.LOGGER.info("Found {} palettes for fluid texture generation", palettes.size());
         
-        // Base texture names (without .png extension)
-        String[] baseTextures = {"fluid_still", "fluid_flow"};
+        // Load the base fluid texture
+        String baseTextureName = "fluid";
+        Forgero.LOGGER.info("Loading base fluid texture: {}", baseTextureName);
         
-        // First, generate the base textures that MoldGenerator expects
-        for (String baseName : baseTextures) {
-            Forgero.LOGGER.info("Generating base fluid texture: {}", baseName);
+        BufferedImage baseImage = loadBaseTexture(baseTextureName);
+        if (baseImage == null) {
+            Forgero.LOGGER.error("Failed to load base fluid texture: {}", baseTextureName);
+            return;
+        }
+        
+        Forgero.LOGGER.info("Successfully loaded base texture: {} ({}x{})", 
+            baseTextureName, baseImage.getWidth(), baseImage.getHeight());
+        
+        // Generate palette variants
+        int variantCount = 0;
+        for (Map.Entry<String, Palette> entry : palettes.entrySet()) {
+            String paletteName = entry.getKey();
+            // Remove any existing .png extension from palette name
+            if (paletteName.endsWith(".png")) {
+                paletteName = paletteName.substring(0, paletteName.length() - 4);
+            }
             
-            BufferedImage baseImage = loadBaseTexture(baseName);
-            if (baseImage == null) {
-                Forgero.LOGGER.error("Failed to load base fluid texture: {}", baseName);
+            Palette palette = entry.getValue();
+            
+            if (palette.getColourValues(0).isEmpty()) {
+                Forgero.LOGGER.warn("Skipping empty palette: {}", paletteName);
                 continue;
             }
             
-            // Save the base texture directly, which is what MoldGenerator will look for
-            saveVariant(baseImage, baseName);
-            
-            Forgero.LOGGER.info("Generated base fluid texture: {}", baseName);
+            try {
+                // Create and save the variant using the palette
+                BufferedImage variant = createVariant(baseImage, palette);
+                // Save as paletteName-fluid.png
+                String variantName = String.format("%s-fluid", paletteName);
+                saveVariant(variant, variantName);
+                variantCount++;
+            } catch (Exception e) {
+                Forgero.LOGGER.error("Error creating variant for palette {}: {}", paletteName, e.getMessage(), e);
+            }
         }
         
-        // Then generate all palette variants
-        for (String baseName : baseTextures) {
-            Forgero.LOGGER.info("Processing base texture for palettes: {}", baseName);
-            
-            BufferedImage baseImage = loadBaseTexture(baseName);
-            if (baseImage == null) {
-                Forgero.LOGGER.error("Failed to load base fluid texture: {}", baseName);
-                continue;
-            }
-            
-            Forgero.LOGGER.info("Successfully loaded base texture: {} ({}x{})", 
-                baseName, baseImage.getWidth(), baseImage.getHeight());
-            
-            // Generate variants for each palette
-            int variantCount = 0;
-            for (Map.Entry<String, Palette> entry : palettes.entrySet()) {
-                String paletteName = entry.getKey();
-                Palette palette = entry.getValue();
-                
-                if (palette.getColourValues(0).isEmpty()) {
-                    Forgero.LOGGER.warn("Skipping empty palette: {}", paletteName);
-                    continue;
-                }
-                
-                try {
-                    // Create and save the variant
-                    BufferedImage variant = createVariant(baseImage, palette);
-                    // Format as (material)-fluid_still.png or (material)-fluid_flow.png
-                    String variantName = String.format("%s-%s", paletteName, baseName);
-                    saveVariant(variant, variantName);
-                    variantCount++;
-                } catch (Exception e) {
-                    Forgero.LOGGER.error("Error creating variant for palette {}: {}", paletteName, e.getMessage(), e);
-                }
-            }
-            
-            Forgero.LOGGER.info("Generated {} variants for {}", variantCount, baseName);
-        }
+        Forgero.LOGGER.info("Generated {} fluid texture variants", variantCount);
     }
     
     private BufferedImage loadBaseTexture(String name) {
@@ -205,8 +190,11 @@ public class FluidTextureGenerator implements SimpleSynchronousResourceReloadLis
                 Files.createDirectories(outputDir);
             }
             
+            // Ensure the name doesn't already end with .png
+            String baseName = name.endsWith(".png") ? name.substring(0, name.length() - 4) : name;
+            
             // Save with the palette name prefix (e.g., "iron-fluid_still.png")
-            Path outputPath = outputDir.resolve(name + ".png");
+            Path outputPath = outputDir.resolve(baseName + ".png");
             Forgero.LOGGER.debug("Saving fluid texture to: {}", outputPath.toAbsolutePath());
             
             // Ensure the parent directory exists
@@ -218,7 +206,7 @@ public class FluidTextureGenerator implements SimpleSynchronousResourceReloadLis
                 Forgero.LOGGER.info("Successfully generated fluid texture: {}", outputPath.toAbsolutePath());
                 
                 // Also save a copy in the resources directory for development
-                Path devOutputPath = Paths.get(workingDir, "src", "main", "resources", "assets", "forgero", "textures", "block", name + ".png");
+                Path devOutputPath = Paths.get(workingDir, "src", "main", "resources", "assets", "forgero", "textures", "block", baseName + ".png");
                 if (!Files.exists(devOutputPath.getParent())) {
                     Files.createDirectories(devOutputPath.getParent());
                 }
@@ -227,8 +215,8 @@ public class FluidTextureGenerator implements SimpleSynchronousResourceReloadLis
                 
                 // If this is a base texture (no palette name), also save it without any prefix
                 // for MoldGenerator to find
-                if (!name.contains("-")) {
-                    Path basePath = outputDir.getParent().resolve("block/" + name + ".png");
+                if (!baseName.contains("-")) {
+                    Path basePath = outputDir.getParent().resolve("block/" + baseName + ".png");
                     Files.createDirectories(basePath.getParent());
                     ImageIO.write(image, "PNG", basePath.toFile());
                     Forgero.LOGGER.info("Saved base texture for MoldGenerator: {}", basePath.toAbsolutePath());

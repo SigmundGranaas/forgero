@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.smithing;
 
 import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.core.texture.V2.Palette;
 import com.sigmundgranaas.forgero.core.texture.V2.TextureGenerator;
 import com.sigmundgranaas.forgero.fabric.client.ForgeroClient;
 import com.sigmundgranaas.forgero.fabric.resources.FileService;
@@ -20,6 +21,8 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 
+import java.util.Map;
+
 public class ForgeroClientSmithingInitializer implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
@@ -37,14 +40,30 @@ public class ForgeroClientSmithingInitializer implements ClientModInitializer {
     }
     
     private void registerFluidTextureGenerator() {
-        // Get the texture generator instance with the same parameters as in ForgeroClient
-        var textureGenerator = TextureGenerator.getInstance(new FileService(), ForgeroClient.PALETTE_REMAP);
-        
-        // Create and register the fluid texture generator
-        ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(
-            new FluidTextureGenerator(textureGenerator)
-        );
-        
-        Forgero.LOGGER.info("Registered FluidTextureGenerator");
+        try {
+            // Get the texture generator instance with the same parameters as in ForgeroClient
+            var textureGenerator = TextureGenerator.getInstance(new FileService(), ForgeroClient.PALETTE_REMAP);
+            
+            // Create the fluid texture generator
+            FluidTextureGenerator fluidTextureGenerator = new FluidTextureGenerator(textureGenerator);
+            
+            // Register the fluid texture generator
+            ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(fluidTextureGenerator);
+            
+            // Log palette information
+            Map<String, Palette> palettes = textureGenerator.getPaletteMap();
+            Forgero.LOGGER.info("Found {} palettes for fluid texture generation", palettes.size());
+            
+            // Log the palette names for debugging
+            if (!palettes.isEmpty()) {
+                Forgero.LOGGER.debug("Available palettes: {}", String.join(", ", palettes.keySet()));
+            } else {
+                Forgero.LOGGER.warn("No palettes found in TextureGenerator. Fluid textures may not be generated correctly.");
+            }
+            
+            Forgero.LOGGER.info("Successfully registered FluidTextureGenerator");
+        } catch (Exception e) {
+            Forgero.LOGGER.error("Failed to initialize FluidTextureGenerator: {}", e.getMessage(), e);
+        }
     }
 }
