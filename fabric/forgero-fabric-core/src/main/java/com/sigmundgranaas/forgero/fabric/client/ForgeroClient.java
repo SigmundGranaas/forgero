@@ -29,7 +29,7 @@ import com.sigmundgranaas.forgero.minecraft.common.block.assemblystation.render.
 import com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationScreen;
 import com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.render.UpgradeStationBlockEntityRenderer;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.ThrowableItemRenderer;
-import com.sigmundgranaas.forgero.minecraft.common.registry.entity.EntityRegistry;
+import com.sigmundgranaas.forgero.minecraft.common.entity.EntityRegistry;
 import com.sigmundgranaas.forgero.minecraft.common.registry.entity.block.BlockEntityRegistry;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import net.devtech.arrp.api.RRPCallback;
