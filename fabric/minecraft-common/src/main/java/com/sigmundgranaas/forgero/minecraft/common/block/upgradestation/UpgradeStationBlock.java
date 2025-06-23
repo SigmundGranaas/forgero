@@ -133,8 +133,8 @@ public class UpgradeStationBlock extends HorizontalFacingBlock implements BlockE
 	@Override
 	public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
 		return world.getBlockEntity(pos, BlockEntityRegistry.UPGRADE_STATION_BLOCK_ENTITY)
-			.map(blockEntity -> (NamedScreenHandlerFactory)blockEntity)
-			.orElse(null);
+				.map(blockEntity -> (NamedScreenHandlerFactory)blockEntity)
+				.orElse(null);
 	}
 
 	@Override
@@ -158,8 +158,8 @@ public class UpgradeStationBlock extends HorizontalFacingBlock implements BlockE
 
 			// Transfer the item to the block entity inventory if applicable
 			if (state.get(PART) == UpgradeStationBlockPart.LEFT &&
-				world.getBlockEntity(pos) instanceof UpgradeStationBlockEntity blockEntity &&
-				itemStack.hasNbt() && itemStack.getNbt().contains("StoredItem")) {
+					world.getBlockEntity(pos) instanceof UpgradeStationBlockEntity blockEntity &&
+					itemStack.hasNbt() && itemStack.getNbt().contains("StoredItem")) {
 				ItemStack storedItem = ItemStack.fromNbt(itemStack.getNbt().getCompound("StoredItem"));
 				blockEntity.setInventoryStack(storedItem);
 			}
@@ -171,32 +171,49 @@ public class UpgradeStationBlock extends HorizontalFacingBlock implements BlockE
 		}
 	}
 
-	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-		UpgradeStationBlockPart part = state.get(PART);
-		BlockPos otherPartPos;
-		BlockPos blockEntityPos = pos;
-
-		if (part == UpgradeStationBlockPart.LEFT) {
-			otherPartPos = pos.offset(state.get(FACING).rotateCounterclockwise(Direction.Axis.Y));
-		} else {
-			otherPartPos = pos.offset(state.get(FACING).rotateClockwise(Direction.Axis.Y));
-			blockEntityPos = otherPartPos; // If breaking RIGHT part, the inventory is in the LEFT part
-		}
-
-		// Drop items from the LEFT part's inventory
-		if (!world.isClient && world.getBlockEntity(blockEntityPos) instanceof UpgradeStationBlockEntity blockEntity) {
-			ItemStack storedItem = blockEntity.getCompositeInventory().getStack(0);
-			if (!storedItem.isEmpty()) {
-				Block.dropStack(world, pos, storedItem.copy());
-			}
+	@Override
+	public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+		if (state.isOf(newState.getBlock())) {
+			super.onStateReplaced(state, world, pos, newState, moved);
+			return;
 		}
 
 		if (!world.isClient) {
-			world.setBlockState(otherPartPos, Blocks.AIR.getDefaultState(), 3);
-			world.updateNeighbors(pos, Blocks.AIR);
-			state.updateNeighbors(world, pos, 3);
+			UpgradeStationBlockPart part = state.get(PART);
+			BlockPos otherPartPos;
+			BlockPos blockEntityPos;
+
+			if (part == UpgradeStationBlockPart.LEFT) {
+				otherPartPos = pos.offset(state.get(FACING).rotateCounterclockwise(Direction.Axis.Y));
+				blockEntityPos = pos;
+			} else { // part == RIGHT
+				otherPartPos = pos.offset(state.get(FACING).rotateClockwise(Direction.Axis.Y));
+				blockEntityPos = otherPartPos;
+			}
+
+			BlockEntity be = world.getBlockEntity(blockEntityPos);
+			if (be instanceof UpgradeStationBlockEntity blockEntity) {
+				ItemStack storedItem = blockEntity.getCompositeInventory().getStack(0);
+				if (!storedItem.isEmpty()) {
+					Block.dropStack(world, pos, storedItem.copy());
+					// Clear the inventory to prevent the other block part from dropping items too
+					blockEntity.getCompositeInventory().clear();
+				}
+			}
+
+			BlockState otherPartState = world.getBlockState(otherPartPos);
+			if (otherPartState.isOf(this)) {
+				// Setting a block to air will trigger onStateReplaced for the other part,
+				// but since the inventory is now clear, no duplicate items will be dropped.
+				world.setBlockState(otherPartPos, Blocks.AIR.getDefaultState(), 3);
+			}
 		}
 
+		super.onStateReplaced(state, world, pos, newState, moved);
+	}
+
+	@Override
+	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
 		super.onBreak(world, pos, state, player);
 	}
 

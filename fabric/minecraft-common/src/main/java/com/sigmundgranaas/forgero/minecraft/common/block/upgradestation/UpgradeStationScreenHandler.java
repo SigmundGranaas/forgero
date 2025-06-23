@@ -170,6 +170,10 @@ public class UpgradeStationScreenHandler extends ScreenHandler {
 		}
 	}
 
+	public List<PositionedSlot> getSlotPool() {
+		return slotPool;
+	}
+
 	private InventoryChangedListener createPartSlotFn(PositionedSlot slot) {
 		return (Inventory partInventory) -> this.context.run((world, pos) -> {
 			if (!world.isClient()) {
