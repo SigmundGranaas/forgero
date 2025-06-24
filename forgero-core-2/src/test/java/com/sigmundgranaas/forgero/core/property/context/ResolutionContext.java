@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.sigmundgranaas.forgero.core.ForgeroTest;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.structure.ComponentStructure;
-import com.sigmundgranaas.forgero.core.component.variant.StaticPart;
+import com.sigmundgranaas.forgero.core.component.variant.StaticComponent;
 import com.sigmundgranaas.forgero.core.component.variant.StructuredPart;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,9 +20,9 @@ class ResolutionContextTest extends ForgeroTest {
 
 	private StructuredPart pickaxe;
 	private StructuredPart pickaxeHead;
-	private StaticPart iron;
-	private StaticPart handle;
-	private StaticPart binding;
+	private StaticComponent iron;
+	private StaticComponent handle;
+	private StaticComponent binding;
 
 	@BeforeEach
 	void setUp() {

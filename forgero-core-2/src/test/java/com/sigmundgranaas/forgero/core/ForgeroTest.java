@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.core;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.structure.StructureSlot;
-import com.sigmundgranaas.forgero.core.component.variant.StaticPart;
+import com.sigmundgranaas.forgero.core.component.variant.StaticComponent;
 import com.sigmundgranaas.forgero.core.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.property.api.Property;
@@ -56,31 +56,31 @@ public class ForgeroTest {
 
 
 	// Builder Methods
-	public StaticPart part(OpenIdentifier id, Set<OpenIdentifier> tags, List<Property> props) {
-		return new StaticPart(id, tags, props);
+	public StaticComponent part(OpenIdentifier id, Set<OpenIdentifier> tags, List<Property> props) {
+		return new StaticComponent(id, tags, props);
 	}
-	public StaticPart part(OpenIdentifier id, OpenIdentifier tag, List<Property> props) {
-		return new StaticPart(id, Set.of(tag), props);
+	public StaticComponent part(OpenIdentifier id, OpenIdentifier tag, List<Property> props) {
+		return new StaticComponent(id, Set.of(tag), props);
 	}
 
-	public StaticPart part(OpenIdentifier id, Set<OpenIdentifier> tags) {
+	public StaticComponent part(OpenIdentifier id, Set<OpenIdentifier> tags) {
 		return part(id, tags, Collections.emptyList());
 	}
 
-	public StaticPart part(OpenIdentifier id, OpenIdentifier tag) {
+	public StaticComponent part(OpenIdentifier id, OpenIdentifier tag) {
 		return part(id, Set.of(tag), Collections.emptyList());
 	}
 
-	public StaticPart material(OpenIdentifier id, OpenIdentifier tag, List<Property> props) {
+	public StaticComponent material(OpenIdentifier id, OpenIdentifier tag, List<Property> props) {
 		return part(id, Set.of(tag), props);
 	}
 
-	public StaticPart material(OpenIdentifier id, OpenIdentifier tag) {
+	public StaticComponent material(OpenIdentifier id, OpenIdentifier tag) {
 		return part(id, Set.of(tag), Collections.emptyList());
 	}
 
-	public StaticPart schematic(OpenIdentifier id) {
-		return new StaticPart(id, Collections.emptySet(), Collections.emptyList());
+	public StaticComponent schematic(OpenIdentifier id) {
+		return new StaticComponent(id, Collections.emptySet(), Collections.emptyList());
 	}
 
 	public StructureSlot slot(OpenIdentifier id, OpenIdentifier type, Component component) {

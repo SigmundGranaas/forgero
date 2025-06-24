@@ -9,7 +9,7 @@ import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.structure.ComponentStructure;
-import com.sigmundgranaas.forgero.core.component.variant.StaticPart;
+import com.sigmundgranaas.forgero.core.component.variant.StaticComponent;
 import com.sigmundgranaas.forgero.core.component.variant.StructuredPart;
 import com.sigmundgranaas.forgero.core.feature.api.Feature;
 import com.sigmundgranaas.forgero.core.feature.impl.FeatureEngine;
@@ -44,7 +44,7 @@ public class AdvancedConditionalPropertyTest extends ForgeroTest {
 	@Test
 	void testIsRootConditionForSchematicRecipe() {
 		var recipeFeature = new Feature(idFactory.of("custom_recipe"), new Condition(List.of(StaticConditions.isRoot()), List.of()));
-		var schematic = new StaticPart(idFactory.of("pickaxe_head_schematic"), Set.of(), List.of(recipeFeature));
+		var schematic = new StaticComponent(idFactory.of("pickaxe_head_schematic"), Set.of(), List.of(recipeFeature));
 		var iron = material(IRON_ID, METAL_TAG);
 		var head = new StructuredPart(PICKAXE_HEAD_ID, Set.of(), List.of(), new ComponentStructure(List.of(slot(idFactory.of("material_slot"), MATERIAL_ID, iron), slot(idFactory.of("schematic_slot"), SCHEMATIC_ID, schematic))));
 		var handle = part(HANDLE_ID, WOOD_TAG);
@@ -66,7 +66,7 @@ public class AdvancedConditionalPropertyTest extends ForgeroTest {
 		var UTILITY_SLOT_TYPE = idFactory.of("utility_slot_type");
 		var damageBonus = new Attribute(ATTACK_DAMAGE, 10f, new Condition(List.of(StaticConditions.selfInSlot(OFFENSIVE_SLOT_TYPE)), List.of()));
 		var speedBonus = new Attribute(MINING_SPEED, 5f, new Condition(List.of(StaticConditions.selfInSlot(UTILITY_SLOT_TYPE)), List.of()));
-		var powerCrystal = new StaticPart(idFactory.of("power_crystal"), Set.of(GEM_TAG), List.of(damageBonus, speedBonus));
+		var powerCrystal = new StaticComponent(idFactory.of("power_crystal"), Set.of(GEM_TAG), List.of(damageBonus, speedBonus));
 
 		var blade = part(BLADE_ID, METAL_TAG, List.of(new Attribute(ATTACK_DAMAGE, 5f)));
 		var swordHilt = new StructuredPart(idFactory.of("hilt"), Set.of(), List.of(), new ComponentStructure(List.of(slot(idFactory.of("offensive_slot"), OFFENSIVE_SLOT_TYPE, powerCrystal))));
@@ -93,12 +93,12 @@ public class AdvancedConditionalPropertyTest extends ForgeroTest {
 		var fireDamageType = idFactory.of("fire_damage");
 		var baseFireDamage = new Attribute(fireDamageType, 2f);
 		var synergyFireDamage = new Attribute(fireDamageType, 3f, new Condition(List.of(StaticConditions.hasSibling(SAPPHIRE_ID)), List.of()));
-		var ruby = new StaticPart(idFactory.of("ruby_of_fire"), Set.of(GEM_TAG), List.of(baseFireDamage, synergyFireDamage));
-		var sapphire = new StaticPart(SAPPHIRE_ID, Set.of(GEM_TAG), List.of());
+		var ruby = new StaticComponent(idFactory.of("ruby_of_fire"), Set.of(GEM_TAG), List.of(baseFireDamage, synergyFireDamage));
+		var sapphire = new StaticComponent(SAPPHIRE_ID, Set.of(GEM_TAG), List.of());
 
 		var oakDurability = new Attribute(DURABILITY, 50f, new Condition(List.of(StaticConditions.atDepth(2)), List.of()));
 		var oakSpeed = new Attribute(ATTACK_SPEED, 10f, new Condition(List.of(StaticConditions.atDepth(1)), List.of()));
-		var enchantedOak = new StaticPart(OAK_ID, Set.of(WOOD_TAG), List.of(oakDurability, oakSpeed));
+		var enchantedOak = new StaticComponent(OAK_ID, Set.of(WOOD_TAG), List.of(oakDurability, oakSpeed));
 
 		var hiltWithTwoGems = new StructuredPart(idFactory.of("synergy_hilt"), Set.of(), List.of(), new ComponentStructure(List.of(slot(idFactory.of("gem_slot_1"), GEM_SLOT_TYPE_TAG, ruby), slot(idFactory.of("gem_slot_2"), GEM_SLOT_TYPE_TAG, sapphire))));
 		var swordWithSynergy = new StructuredPart(SWORD_ID, Set.of(), List.of(), new ComponentStructure(List.of(slot(idFactory.of("blade_slot"), BLADE_TAG, part(BLADE_ID, METAL_TAG)), slot(idFactory.of("hilt_slot"), idFactory.of("hilt_type"), hiltWithTwoGems))));

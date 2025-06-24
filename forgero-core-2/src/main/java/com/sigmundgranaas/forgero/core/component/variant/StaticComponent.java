@@ -11,7 +11,7 @@ import java.util.Set;
  * This represents fundamental building blocks.
  * Example: An iron ingot, an oak log, or a simple gem.
  */
-public record StaticPart(
+public record StaticComponent(
 		OpenIdentifier id,
 		Set<OpenIdentifier> tags,
 		List<Property> properties

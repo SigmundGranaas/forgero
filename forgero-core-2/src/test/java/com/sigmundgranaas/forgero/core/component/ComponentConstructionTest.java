@@ -15,7 +15,7 @@ import com.sigmundgranaas.forgero.core.component.structure.ComponentStructure;
 import com.sigmundgranaas.forgero.core.component.variant.ExtensibleEquipment;
 import com.sigmundgranaas.forgero.core.component.variant.ExtensiblePart;
 import com.sigmundgranaas.forgero.core.component.variant.StaticEquipment;
-import com.sigmundgranaas.forgero.core.component.variant.StaticPart;
+import com.sigmundgranaas.forgero.core.component.variant.StaticComponent;
 import com.sigmundgranaas.forgero.core.component.variant.StructuredEquipment;
 import com.sigmundgranaas.forgero.core.component.variant.StructuredExtensibleEquipment;
 import com.sigmundgranaas.forgero.core.component.variant.StructuredExtensiblePart;
@@ -30,7 +30,7 @@ class ComponentConstructionTest extends ForgeroTest {
 
 	@Test
 	void testStaticPart() {
-		var part = new StaticPart(IRON_ID, Set.of(METAL_TAG), List.of(attribute(ATTACK_DAMAGE, 10)));
+		var part = new StaticComponent(IRON_ID, Set.of(METAL_TAG), List.of(attribute(ATTACK_DAMAGE, 10)));
 		assertEquals(IRON_ID, part.id());
 		assertTrue(part.getTags().contains(METAL_TAG));
 		assertEquals(10, part.getProperties().stream().filter(Attribute.class::isInstance).map(Attribute.class::cast).findFirst().get().value());
@@ -84,8 +84,8 @@ class ComponentConstructionTest extends ForgeroTest {
 
 	@Test
 	void testStructuredEquipment() {
-		var head = new StaticPart(PICKAXE_HEAD_ID, Set.of(PICKAXE_HEAD_TAG), List.of());
-		var handle = new StaticPart(HANDLE_ID, Set.of(HANDLE_TAG), List.of());
+		var head = new StaticComponent(PICKAXE_HEAD_ID, Set.of(PICKAXE_HEAD_TAG), List.of());
+		var handle = new StaticComponent(HANDLE_ID, Set.of(HANDLE_TAG), List.of());
 		var structure = new ComponentStructure(List.of(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head), slot(HANDLE_SLOT_ID, HANDLE_TAG, handle)));
 		var equipment = new StructuredEquipment(PICKAXE_ID, Set.of(), List.of(), structure);
 		assertEquals(2, equipment.getChildren().size());
@@ -93,8 +93,8 @@ class ComponentConstructionTest extends ForgeroTest {
 
 	@Test
 	void testStructuredExtensibleEquipment() {
-		var head = new StaticPart(PICKAXE_HEAD_ID, Set.of(PICKAXE_HEAD_TAG), List.of());
-		var handle = new StaticPart(HANDLE_ID, Set.of(HANDLE_TAG), List.of());
+		var head = new StaticComponent(PICKAXE_HEAD_ID, Set.of(PICKAXE_HEAD_TAG), List.of());
+		var handle = new StaticComponent(HANDLE_ID, Set.of(HANDLE_TAG), List.of());
 		var structure = new ComponentStructure(List.of(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head), slot(HANDLE_SLOT_ID, HANDLE_TAG, handle)));
 		var upgradeSlot = new UpgradeSlot(BINDING_SLOT_ID, BINDING_TAG, "Binding slot", (comp) -> true, Optional.empty());
 		var upgrades = new ComponentUpgrades(List.of(upgradeSlot));

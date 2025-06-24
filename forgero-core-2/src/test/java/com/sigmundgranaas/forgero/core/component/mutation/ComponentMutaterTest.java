@@ -8,7 +8,7 @@ import com.sigmundgranaas.forgero.core.component.slot.ComponentUpgrades;
 import com.sigmundgranaas.forgero.core.component.slot.UpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.structure.ComponentStructure;
 import com.sigmundgranaas.forgero.core.component.structure.StructureSlot;
-import com.sigmundgranaas.forgero.core.component.variant.StaticPart;
+import com.sigmundgranaas.forgero.core.component.variant.StaticComponent;
 import com.sigmundgranaas.forgero.core.component.variant.StructuredExtensibleEquipment;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,12 +25,12 @@ class ComponentMutaterTest extends ForgeroTest {
 	private ComponentMutater mutater;
 
 	// Component parts
-	private StaticPart originalHead;
-	private StaticPart originalHandle;
-	private StaticPart originalBinding;
-	private StaticPart diamondGem;
-	private StaticPart newHandle;
-	private StaticPart invalidHandle;
+	private StaticComponent originalHead;
+	private StaticComponent originalHandle;
+	private StaticComponent originalBinding;
+	private StaticComponent diamondGem;
+	private StaticComponent newHandle;
+	private StaticComponent invalidHandle;
 
 	// Full component
 	private StructuredExtensibleEquipment pickaxe;
@@ -118,7 +118,7 @@ class ComponentMutaterTest extends ForgeroTest {
 
 	@Test
 	void testSettingInvalidComponentInUpgradeSlotThrowsException() {
-		StaticPart invalidGem = part(idFactory.of("not_a_gem"), WOOD_TAG);
+		StaticComponent invalidGem = part(idFactory.of("not_a_gem"), WOOD_TAG);
 		assertThrows(IllegalArgumentException.class, () -> mutater.setSlot(pickaxe, GEM_SLOT_ID, invalidGem),
 				"Should fail predicate validation for gem slot.");
 	}

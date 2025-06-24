@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.component;
 
-import com.sigmundgranaas.forgero.core.component.variant.StaticPart;
+import com.sigmundgranaas.forgero.core.component.variant.StaticComponent;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.property.api.Property;
@@ -22,7 +22,7 @@ class StaticPartTest {
 		List<Property> properties = List.of(new Attribute(DURABILITY, 250f));
 
 		// ACT
-		StaticPart part = new StaticPart(id, tags, properties);
+		StaticComponent part = new StaticComponent(id, tags, properties);
 
 		// ASSERT
 		assertEquals(id, part.id());
