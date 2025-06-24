@@ -45,8 +45,10 @@ public record OpenIdentifier(String namespace, String path) {
 				yield nameOnly.equals(pattern);
 			}
 			case FILETYPE -> {
-				String extension = lastDot == -1 || lastDot == fileName.length() - 1 ? "" : fileName.substring(lastDot + 1);
-				yield extension.equals(pattern);
+				// Corrected logic: FILETYPE refers to the first segment of the path, not the extension.
+				final int firstSlash = this.path.indexOf('/');
+				String category = firstSlash == -1 ? this.path : this.path.substring(0, firstSlash);
+				yield category.equals(pattern);
 			}
 		};
 	}

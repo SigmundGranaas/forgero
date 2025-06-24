@@ -2,6 +2,8 @@
 //file:noinspection GroovyAssignabilityCheck
 
 dependencies {
+	api group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.2.1'
+
 	// JUnit
 	testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
