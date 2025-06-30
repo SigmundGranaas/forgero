@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.smithing.resource;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -603,22 +602,8 @@ public class MoldGenerator implements DynamicResourceGenerator {
             joinedElements = allTemplateElements;
         }
 
-        // Generate dynamic fluid texture for this mold/material
-        String fluidTextureName = "fluid_flow_" + textureName;
-        Identifier fluidTextureId = new Identifier("forgero", "textures/block/" + fluidTextureName + ".png");
-        BufferedImage fluidImage = generateDynamicFluidTexture(textureName);
-        if (fluidImage != null) {
-            try (java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream()) {
-                javax.imageio.ImageIO.write(fluidImage, "PNG", baos);
-                pack.addAsset(fluidTextureId, baos.toByteArray());
-                Forgero.LOGGER.info("Added dynamic fluid texture: {}", fluidTextureId);
-            } catch (IOException e) {
-                Forgero.LOGGER.error("Failed to write dynamic fluid texture for {}: {}", textureName, e.getMessage());
-            }
-        }
-
-        // Use the dynamic fluid texture for the template face
-        String templateTexturePath = "forgero:block/" + fluidTextureName;
+        // Use the fluid texture for the template face
+        String templateTexturePath = "forgero:block/fluid_flow_" + textureName;
 
         String filledModelJson = String.format(
             "{\n" +
@@ -862,8 +847,7 @@ public class MoldGenerator implements DynamicResourceGenerator {
                 // Generate all necessary resources for the mold block
                 generateMoldBlockResources(pack, textureName, moldBlock);
 
-                // Generate the cooled block texture (used for 75-100 filled state)
-                generateBlockTextureFromTemplateAndPalette(textureName, pack);
+
             } catch (Exception e) {
                 Forgero.LOGGER.error("Failed to process texture for mold: " + textureName, e);
             }
@@ -1050,129 +1034,5 @@ public class MoldGenerator implements DynamicResourceGenerator {
         return elementsJson.toString();
     }
 
-    /**
-     * Generate a dynamic fluid texture based on the material/template.
-     * This version uses the palette system from FabricTextureLoader to colorize the fluid_flow texture.
-     */
-    private BufferedImage generateDynamicFluidTexture(String textureName) {
-        try {
-            // Use the path string for PaletteTemplateIdentifier constructor
-            String baseFluidPath = "block/fluid_flow";
-            com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteTemplateIdentifier baseFluidIdentifier =
-                new com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteTemplateIdentifier(baseFluidPath);
 
-            BufferedImage baseFluid = textureLoader.getResource(baseFluidIdentifier).getImage();
-
-            // Use the palette system to get the palette for this template/material
-            com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier paletteId =
-                new com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier(textureName);
-
-            BufferedImage palette = textureLoader.getResource(paletteId).getImage();
-
-            if (baseFluid == null || palette == null) {
-                return null;
-            }
-
-            int paletteSize = Math.max(palette.getWidth(), palette.getHeight());
-            int[] paletteColors = new int[paletteSize];
-            for (int i = 0; i < paletteSize; i++) {
-                paletteColors[i] = palette.getRGB(
-                    palette.getWidth() == 1 ? 0 : i,
-                    palette.getHeight() == 1 ? 0 : i
-                );
-            }
-
-            BufferedImage result = new BufferedImage(baseFluid.getWidth(), baseFluid.getHeight(), BufferedImage.TYPE_INT_ARGB);
-            for (int x = 0; x < baseFluid.getWidth(); x++) {
-                for (int y = 0; y < baseFluid.getHeight(); y++) {
-                    int pixel = baseFluid.getRGB(x, y);
-                    int alpha = (pixel >> 24) & 0xff;
-                    int gray = (pixel >> 16) & 0xff; // Assume gray, so R=G=B
-
-                    int paletteIndex = (int) ((gray / 255.0) * (paletteSize - 1));
-                    int color = paletteColors[paletteIndex];
-
-                    int colored = (alpha << 24) | (color & 0x00ffffff);
-                    result.setRGB(x, y, colored);
-                }
-            }
-            return result;
-        } catch (Exception e) {
-            Forgero.LOGGER.error("Failed to generate palette-based fluid texture for {}: {}", textureName, e.getMessage());
-            return null;
-        }
-    }
-
-    /**
-     * Generates a block texture from a template and palette, and writes it to the block texture path.
-     * @param textureName The name of the tool/texture (without extension)
-     * @param pack The runtime resource pack to add the generated texture to
-     */
-    private void generateBlockTextureFromTemplateAndPalette(String textureName, RuntimeResourcePack pack) {
-        try {
-            // Template path: assets/forgero/templates/textures/main/tool_name.png
-            Path templatePath = Paths.get(DEV_TEXTURE_PATH, textureName + TEXTURE_EXTENSION);
-            if (!Files.exists(templatePath)) {
-                Forgero.LOGGER.warn("Template not found at {}. Trying alternative path.", templatePath);
-                templatePath = Paths.get(ALT_TEXTURE_PATH, textureName + TEXTURE_EXTENSION);
-            }
-            if (!Files.exists(templatePath)) {
-                Forgero.LOGGER.error("Template not found for {}. Skipping texture generation.", textureName);
-                return;
-            }
-
-            // Palette path: assets/forgero/templates/materials/tool_name.png
-            Path palettePath = Paths.get(FabricLoader.getInstance().getGameDir().toString(),
-                    "../content/forgero-vanilla/src/main/resources/assets/forgero/templates/materials/", textureName + TEXTURE_EXTENSION);
-            if (!Files.exists(palettePath)) {
-                Forgero.LOGGER.warn("Palette not found at {}. Skipping palette application.", palettePath);
-                return;
-            }
-
-            // Load template and palette images
-            BufferedImage templateImg = javax.imageio.ImageIO.read(templatePath.toFile());
-            BufferedImage paletteImg = javax.imageio.ImageIO.read(palettePath.toFile());
-
-            // Use FabricTextureLoader to apply palette (reusing logic from generateDynamicFluidTexture)
-            com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier paletteId =
-                new com.sigmundgranaas.forgero.core.identifier.texture.toolpart.PaletteIdentifier(textureName);
-            BufferedImage palette = textureLoader.getResource(paletteId).getImage();
-
-            if (templateImg == null || palette == null) {
-                Forgero.LOGGER.error("Template or palette image missing for {}. Skipping block texture generation.", textureName);
-                return;
-            }
-
-            int paletteSize = Math.max(palette.getWidth(), palette.getHeight());
-            int[] paletteColors = new int[paletteSize];
-            for (int i = 0; i < paletteSize; i++) {
-                paletteColors[i] = palette.getRGB(
-                    palette.getWidth() == 1 ? 0 : i,
-                    palette.getHeight() == 1 ? 0 : i
-                );
-            }
-
-            BufferedImage resultImg = new BufferedImage(templateImg.getWidth(), templateImg.getHeight(), BufferedImage.TYPE_INT_ARGB);
-            for (int x = 0; x < templateImg.getWidth(); x++) {
-                for (int y = 0; y < templateImg.getHeight(); y++) {
-                    int pixel = templateImg.getRGB(x, y);
-                    int alpha = (pixel >> 24) & 0xff;
-                    int gray = (pixel >> 16) & 0xff; // Assume gray, so R=G=B
-                    int paletteIndex = (int) ((gray / 255.0) * (paletteSize - 1));
-                    int color = paletteColors[paletteIndex];
-                    int colored = (alpha << 24) | (color & 0x00ffffff);
-                    resultImg.setRGB(x, y, colored);
-                }
-            }
-
-            // Write the result to the runtime resource pack as a block texture
-            String textureResourcePath = "textures/block/" + textureName + ".png";
-            java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
-            javax.imageio.ImageIO.write(resultImg, "PNG", baos);
-            pack.addAsset(new Identifier("forgero", textureResourcePath), baos.toByteArray());
-            Forgero.LOGGER.info("Generated and registered block texture: {}", textureResourcePath);
-        } catch (IOException e) {
-            Forgero.LOGGER.error("Failed to generate block texture for {}: {}", textureName, e);
-        }
-    }
 }
