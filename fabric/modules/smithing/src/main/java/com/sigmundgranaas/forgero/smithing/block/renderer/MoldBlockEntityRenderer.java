@@ -20,6 +20,7 @@ import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.item.ItemStack;
 
 public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEntity> {
     private static final SpriteIdentifier LAVA_TEXTURE = new SpriteIdentifier(
@@ -72,14 +73,14 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
             return;
         }
 
-        // --- Smooth interpolation for cooling ---
+        // --- Smooth interpolation for cooling when progress >= 0.75 ---
         float targetProgress = entity.getProgress() / 100f;
         float displayedProgress = displayedProgressMap.getOrDefault(entity, targetProgress);
 
-        // If cooling (progress is 100%), interpolate slowly toward 1.0
-        if (targetProgress == 1.0f && displayedProgress < 1.0f) {
+        // If progress >= 0.75, interpolate displayedProgress toward targetProgress (1.0)
+        if (targetProgress >= 0.75f) {
             float lerpSpeed = 0.05f; // Lower = slower
-            displayedProgress = Math.min(1.0f, displayedProgress + lerpSpeed * (1.0f + tickDelta));
+            displayedProgress = displayedProgress + (targetProgress - displayedProgress) * lerpSpeed * (1.0f + tickDelta);
         } else {
             // Snap to target if not cooling, or update instantly
             displayedProgress = targetProgress;
@@ -200,6 +201,26 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
         }
 
         matrices.pop();
+
+        // --- Render the resulting tool/item if present ---
+        ItemStack result = entity.getResult();
+        if (!result.isEmpty()) {
+            matrices.push();
+            matrices.translate(0.5, 0.15, 0.5);
+            matrices.scale(0.5f, 0.5f, 0.5f);
+            net.minecraft.client.MinecraftClient mc = net.minecraft.client.MinecraftClient.getInstance();
+            mc.getItemRenderer().renderItem(
+                result,
+                net.minecraft.client.render.model.json.ModelTransformationMode.FIXED,
+                light,
+                overlay,
+                matrices,
+                vertexConsumers,
+                entity.getWorld(),
+                0 // seed
+            );
+            matrices.pop();
+        }
     }
 
     @Override
