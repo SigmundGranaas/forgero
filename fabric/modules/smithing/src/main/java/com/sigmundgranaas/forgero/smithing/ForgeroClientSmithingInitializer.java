@@ -1,11 +1,14 @@
 package com.sigmundgranaas.forgero.smithing;
 
+import java.util.Map;
+
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.texture.V2.Palette;
 import com.sigmundgranaas.forgero.core.texture.V2.TextureGenerator;
 import com.sigmundgranaas.forgero.fabric.client.ForgeroClient;
 import com.sigmundgranaas.forgero.fabric.resources.FileService;
 import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
+import com.sigmundgranaas.forgero.smithing.block.renderer.MoldBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.block.renderer.SmithingAnvilBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.resource.FluidTextureGenerator;
@@ -13,22 +16,18 @@ import com.sigmundgranaas.forgero.smithing.screen.BloomeryScreen;
 import com.sigmundgranaas.forgero.smithing.screen.ModScreenHandlers;
 
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
+import net.minecraft.resource.ResourceType;
+
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.resource.ResourceType;
-import net.minecraft.util.Identifier;
-
-import java.util.Map;
 
 public class ForgeroClientSmithingInitializer implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         // Register block entity renderers
         BlockEntityRendererRegistry.register(ModBlockEntities.SMITHING_ANVIL, SmithingAnvilBlockEntityRenderer::new);
-        
+		BlockEntityRendererRegistry.register(ModBlockEntities.MOLD, MoldBlockEntityRenderer::new);
         // Register screens
         HandledScreens.register(ModScreenHandlers.BLOOMERY_SCREEN_HANDLER, BloomeryScreen::new);
         
