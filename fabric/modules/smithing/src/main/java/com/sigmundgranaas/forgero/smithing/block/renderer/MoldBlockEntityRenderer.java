@@ -10,6 +10,7 @@ import com.sigmundgranaas.forgero.smithing.block.custom.MoldBlock;
 import com.sigmundgranaas.forgero.smithing.block.entity.MoldBlockEntity;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -19,8 +20,8 @@ import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Identifier;
 
 public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEntity> {
     private static final SpriteIdentifier LAVA_TEXTURE = new SpriteIdentifier(
@@ -125,12 +126,20 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
             }
         }
 
-        // Texture and color setup
+        // --- Blending logic for lava/result transition ---
+        float blendStart = 0.60f; // Start blending at 70% (was 0.85)
+        float blendEnd = 1.0f;    // End at 100%
+        float blendFactor = 0.0f;
+        if (progress >= blendStart) {
+            blendFactor = Math.min(1.0f, (progress - blendStart) / (blendEnd - blendStart));
+        }
+
+        // Texture and color setup for lava
         float heat = 1.0f - progress;
         float red = 0.9f + (heat * 0.1f);
         float green = 0.3f + (heat * 0.3f);
         float blue = 0.1f;
-        float alpha = 0.8f + (heat * 0.2f);
+        float lavaAlpha = (0.8f + (heat * 0.2f)) * (1.0f - blendFactor);
 
         Sprite lavaSprite = LAVA_FLOW_TEXTURE.getSprite();
         float minU = lavaSprite.getMinU();
@@ -150,75 +159,134 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
         float uSpan = maxU - minU;
         float vSpan = maxV - minV;
 
-        // For each colored pixel, render a 1x1 "voxel" quad at maxY
-        for (int x = minX; x <= maxX; x++) {
-            for (int z = minZ; z <= maxZ; z++) {
-                if (!coloredPixels[x][z]) continue;
-                float fx0 = x / 16.0f;
-                float fx1 = (x + 1) / 16.0f;
-                float fz0 = z / 16.0f;
-                float fz1 = (z + 1) / 16.0f;
+        // For each colored pixel, render a 1x1 "voxel" quad at maxY (lava, fading out)
+        if (lavaAlpha > 0.01f) {
+            for (int x = minX; x <= maxX; x++) {
+                for (int z = minZ; z <= maxZ; z++) {
+                    if (!coloredPixels[x][z]) continue;
+                    float fx0 = x / 16.0f;
+                    float fx1 = (x + 1) / 16.0f;
+                    float fz0 = z / 16.0f;
+                    float fz1 = (z + 1) / 16.0f;
 
-                // Calculate UVs so the full texture is mapped over the whole colored region
-                float u0 = minU + uSpan * (x - minX) / (float)(maxX - minX + 1);
-                float u1 = minU + uSpan * (x - minX + 1) / (float)(maxX - minX + 1);
-                float v0 = minV + vSpan * (z - minZ) / (float)(maxZ - minZ + 1);
-                float v1 = minV + vSpan * (z - minZ + 1) / (float)(maxZ - minZ + 1);
+                    // Calculate UVs so the full texture is mapped over the whole colored region
+                    float u0 = minU + uSpan * (x - minX) / (float)(maxX - minX + 1);
+                    float u1 = minU + uSpan * (x - minX + 1) / (float)(maxX - minX + 1);
+                    float v0 = minV + vSpan * (z - minZ) / (float)(maxZ - minZ + 1);
+                    float v1 = minV + vSpan * (z - minZ + 1) / (float)(maxZ - minZ + 1);
 
-                // Top face (up)
-                vertexConsumer.vertex(entry.getPositionMatrix(), fx0, maxY, fz0)
-                        .color(red, green, blue, alpha)
-                        .texture(u0, v0)
-                        .overlay(overlay)
-                        .light(light)
-                        .normal(entry.getNormalMatrix(), 0, 1, 0)
-                        .next();
+                    // Top face (up)
+                    vertexConsumer.vertex(entry.getPositionMatrix(), fx0, maxY, fz0)
+                            .color(red, green, blue, lavaAlpha)
+                            .texture(u0, v0)
+                            .overlay(overlay)
+                            .light(light)
+                            .normal(entry.getNormalMatrix(), 0, 1, 0)
+                            .next();
 
-                vertexConsumer.vertex(entry.getPositionMatrix(), fx1, maxY, fz0)
-                        .color(red, green, blue, alpha)
-                        .texture(u1, v0)
-                        .overlay(overlay)
-                        .light(light)
-                        .normal(entry.getNormalMatrix(), 0, 1, 0)
-                        .next();
+                    vertexConsumer.vertex(entry.getPositionMatrix(), fx1, maxY, fz0)
+                            .color(red, green, blue, lavaAlpha)
+                            .texture(u1, v0)
+                            .overlay(overlay)
+                            .light(light)
+                            .normal(entry.getNormalMatrix(), 0, 1, 0)
+                            .next();
 
-                vertexConsumer.vertex(entry.getPositionMatrix(), fx1, maxY, fz1)
-                        .color(red, green, blue, alpha)
-                        .texture(u1, v1)
-                        .overlay(overlay)
-                        .light(light)
-                        .normal(entry.getNormalMatrix(), 0, 1, 0)
-                        .next();
+                    vertexConsumer.vertex(entry.getPositionMatrix(), fx1, maxY, fz1)
+                            .color(red, green, blue, lavaAlpha)
+                            .texture(u1, v1)
+                            .overlay(overlay)
+                            .light(light)
+                            .normal(entry.getNormalMatrix(), 0, 1, 0)
+                            .next();
 
-                vertexConsumer.vertex(entry.getPositionMatrix(), fx0, maxY, fz1)
-                        .color(red, green, blue, alpha)
-                        .texture(u0, v1)
-                        .overlay(overlay)
-                        .light(light)
-                        .normal(entry.getNormalMatrix(), 0, 1, 0)
-                        .next();
+                    vertexConsumer.vertex(entry.getPositionMatrix(), fx0, maxY, fz1)
+                            .color(red, green, blue, lavaAlpha)
+                            .texture(u0, v1)
+                            .overlay(overlay)
+                            .light(light)
+                            .normal(entry.getNormalMatrix(), 0, 1, 0)
+                            .next();
+                }
             }
         }
 
         matrices.pop();
 
-        // --- Render the resulting tool/item if present ---
+        // --- Render the resulting tool/item as a 2D sprite overlay, fading in ---
         ItemStack result = entity.getResult();
-        if (!result.isEmpty()) {
+        // DEBUG: Print info about the result and blendFactor
+        if (result == null) {
+            System.out.println("[Renderer] entity.getResult() returned null");
+        } else if (result.isEmpty()) {
+            System.out.println("[Renderer] entity.getResult() is EMPTY at progress=" + progress + " (blockPos=" + entity.getPos() + ")");
+        } else {
+            System.out.println("[Renderer] entity.getResult(): " + result.getItem().getName().getString() + " x" + result.getCount() + " at progress=" + progress + " blendFactor=" + blendFactor + " (blockPos=" + entity.getPos() + ")");
+        }
+
+        if (!result.isEmpty() && blendFactor > 0.0f) {
+            // Get the item sprite
+            Sprite itemSprite = MinecraftClient.getInstance()
+                .getItemRenderer()
+                .getModel(result, entity.getWorld(), null, 0)
+                .getParticleSprite();
+
+            float itemAlpha = blendFactor;
+
+            // Use the correct VertexConsumer for the item sprite
+            VertexConsumer itemConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(itemSprite.getAtlasId()));
+
             matrices.push();
-            matrices.translate(0.5, 0.15, 0.5);
-            matrices.scale(0.5f, 0.5f, 0.5f);
-            net.minecraft.client.MinecraftClient mc = net.minecraft.client.MinecraftClient.getInstance();
-            mc.getItemRenderer().renderItem(
-                result,
-                net.minecraft.client.render.model.json.ModelTransformationMode.FIXED,
-                light,
-                overlay,
-                matrices,
-                vertexConsumers,
-                entity.getWorld(),
-                0 // seed
-            );
+            MatrixStack.Entry itemEntry = matrices.peek();
+
+            // Render the item sprite only where the template mask is set, using the original sprite pixel mapping
+            for (int x = minX; x <= maxX; x++) {
+                for (int z = minZ; z <= maxZ; z++) {
+                    if (!coloredPixels[x][z]) continue;
+                    float fx0 = x / 16.0f;
+                    float fx1 = (x + 1) / 16.0f;
+                    float fz0 = z / 16.0f;
+                    float fz1 = (z + 1) / 16.0f;
+
+                    // Map each mold pixel directly to the corresponding item sprite pixel (1:1 mapping)
+                    float u0 = itemSprite.getMinU() + (itemSprite.getMaxU() - itemSprite.getMinU()) * x / 16.0f;
+                    float u1 = itemSprite.getMinU() + (itemSprite.getMaxU() - itemSprite.getMinU()) * (x + 1) / 16.0f;
+                    float v0 = itemSprite.getMinV() + (itemSprite.getMaxV() - itemSprite.getMinV()) * z / 16.0f;
+                    float v1 = itemSprite.getMinV() + (itemSprite.getMaxV() - itemSprite.getMinV()) * (z + 1) / 16.0f;
+
+                    itemConsumer.vertex(itemEntry.getPositionMatrix(), fx0, maxY, fz0)
+                            .color(1f, 1f, 1f, itemAlpha)
+                            .texture(u0, v0)
+                            .overlay(overlay)
+                            .light(light)
+                            .normal(itemEntry.getNormalMatrix(), 0, 1, 0)
+                            .next();
+
+                    itemConsumer.vertex(itemEntry.getPositionMatrix(), fx1, maxY, fz0)
+                            .color(1f, 1f, 1f, itemAlpha)
+                            .texture(u1, v0)
+                            .overlay(overlay)
+                            .light(light)
+                            .normal(itemEntry.getNormalMatrix(), 0, 1, 0)
+                            .next();
+
+                    itemConsumer.vertex(itemEntry.getPositionMatrix(), fx1, maxY, fz1)
+                            .color(1f, 1f, 1f, itemAlpha)
+                            .texture(u1, v1)
+                            .overlay(overlay)
+                            .light(light)
+                            .normal(itemEntry.getNormalMatrix(), 0, 1, 0)
+                            .next();
+
+                    itemConsumer.vertex(itemEntry.getPositionMatrix(), fx0, maxY, fz1)
+                            .color(1f, 1f, 1f, itemAlpha)
+                            .texture(u0, v1)
+                            .overlay(overlay)
+                            .light(light)
+                            .normal(itemEntry.getNormalMatrix(), 0, 1, 0)
+                            .next();
+                }
+            }
             matrices.pop();
         }
     }

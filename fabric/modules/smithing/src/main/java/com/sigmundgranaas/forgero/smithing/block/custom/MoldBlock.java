@@ -125,7 +125,7 @@ public class MoldBlock extends BlockWithEntity {
 		// Handle result retrieval
 		if (heldItem.isEmpty() && !moldEntity.isEmpty()) {
 			if (moldEntity.isSolidified()) {
-				ItemStack result = moldEntity.getResult();
+				ItemStack result = moldEntity.takeResult(); // Use takeResult to clear the mold
 				player.sendMessage(Text.literal("Retrieved " + result.getName().getString() + " from the mold."), true);
 				player.getInventory().offerOrDrop(result);
 				world.playSound(null, blockPosition, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F,

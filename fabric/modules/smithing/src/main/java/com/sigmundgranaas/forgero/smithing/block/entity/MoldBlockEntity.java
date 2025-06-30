@@ -8,6 +8,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
@@ -30,7 +31,12 @@ public class MoldBlockEntity extends BlockEntity {
 	public static void tick(World world, BlockPos pos, BlockState state, MoldBlockEntity be) {
 		if (!world.isClient && state.get(MoldBlock.FILLED) && !be.isSolidified) {
 			be.currentCoolingTime++;
-			int newProgress = Math.min(100, (int) ((float) be.currentCoolingTime / be.coolingTime * 100));
+			int newProgress;
+			if (be.currentCoolingTime >= be.coolingTime) {
+				newProgress = 100;
+			} else {
+				newProgress = Math.min(100, (int) ((float) be.currentCoolingTime / be.coolingTime * 100));
+			}
 
 			// Update block state with new progress
 			BlockState newState = state.with(MoldBlock.PROGRESS, newProgress);
@@ -57,13 +63,18 @@ public class MoldBlockEntity extends BlockEntity {
 	}
 
 	public ItemStack getResult() {
-		if (result.isEmpty()) {
-			return ItemStack.EMPTY;
-		}
+		// Only return a copy, do not clear here
+		return result == null ? ItemStack.EMPTY : result.copy();
+	}
 
-		ItemStack resultCopy = result.copy();
-		clear();
-		return resultCopy;
+	/**
+	 * Returns the result and clears it from the mold.
+	 */
+	public ItemStack takeResult() {
+		ItemStack toReturn = result == null ? ItemStack.EMPTY : result.copy();
+		result = ItemStack.EMPTY;
+		clear(); // Reset the mold state
+		return toReturn;
 	}
 
 	public boolean isEmpty() {
@@ -78,6 +89,8 @@ public class MoldBlockEntity extends BlockEntity {
 		this.isSolidified = false;
 		this.result = result.copy();
 
+		System.out.println("[MoldBlockEntity] pourLiquid: result set to " + (result.isEmpty() ? "EMPTY" : result.getItem().getName().getString() + " x" + result.getCount()));
+
 		World world = getWorld();
 		if (world != null) {
 			world.setBlockState(getPos(), getCachedState()
@@ -88,6 +101,7 @@ public class MoldBlockEntity extends BlockEntity {
 	}
 
 	private void clear() {
+		System.out.println("[MoldBlockEntity] clear() called, result was: " + (result.isEmpty() ? "EMPTY" : result.getItem().getName().getString() + " x" + result.getCount()));
 		this.liquid = null;
 		this.liquidAmount = 0;
 		this.coolingTime = 0;
@@ -123,6 +137,24 @@ public class MoldBlockEntity extends BlockEntity {
 	}
 
 	@Override
+	public NbtCompound toInitialChunkDataNbt() {
+		return createNbt();
+	}
+
+	@Override
+	public BlockEntityUpdateS2CPacket toUpdatePacket() {
+		return BlockEntityUpdateS2CPacket.create(this);
+	}
+
+	@Override
+	public void markDirty() {
+		super.markDirty();
+		if (world != null && !world.isClient) {
+			world.updateListeners(pos, getCachedState(), getCachedState(), 3);
+		}
+	}
+
+	@Override
 	public void writeNbt(NbtCompound nbt) {
 		super.writeNbt(nbt);
 		if (liquid != null) {
@@ -133,7 +165,10 @@ public class MoldBlockEntity extends BlockEntity {
 		nbt.putInt("CurrentCoolingTime", currentCoolingTime);
 		nbt.putBoolean("IsSolidified", isSolidified);
 		if (!result.isEmpty()) {
+			System.out.println("[MoldBlockEntity] writeNbt: saving result " + result.getItem().getName().getString() + " x" + result.getCount());
 			nbt.put("Result", result.writeNbt(new NbtCompound()));
+		} else {
+			System.out.println("[MoldBlockEntity] writeNbt: result is EMPTY");
 		}
 	}
 
@@ -149,6 +184,10 @@ public class MoldBlockEntity extends BlockEntity {
 		isSolidified = nbt.getBoolean("IsSolidified");
 		if (nbt.contains("Result")) {
 			result = ItemStack.fromNbt(nbt.getCompound("Result"));
+			System.out.println("[MoldBlockEntity] readNbt: loaded result " + (result.isEmpty() ? "EMPTY" : result.getItem().getName().getString() + " x" + result.getCount()));
+		} else {
+			result = ItemStack.EMPTY;
+			System.out.println("[MoldBlockEntity] readNbt: result is EMPTY");
 		}
 	}
 }
