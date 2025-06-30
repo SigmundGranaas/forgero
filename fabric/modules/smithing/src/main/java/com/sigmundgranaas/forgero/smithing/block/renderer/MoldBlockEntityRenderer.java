@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.smithing.block.renderer;
 
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
+import java.util.WeakHashMap;
 
 import javax.imageio.ImageIO;
 
@@ -29,6 +30,9 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
             SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE,
             new Identifier("block/lava_flow")
     );
+
+    // Track displayed progress for smooth cooling interpolation
+    private final WeakHashMap<MoldBlockEntity, Float> displayedProgressMap = new WeakHashMap<>();
 
     public MoldBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {
     }
@@ -68,12 +72,25 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
             return;
         }
 
-        BlockState state = entity.getCachedState();
-        float progress = entity.getProgress() / 100f;
+        // --- Smooth interpolation for cooling ---
+        float targetProgress = entity.getProgress() / 100f;
+        float displayedProgress = displayedProgressMap.getOrDefault(entity, targetProgress);
 
-        // Fixed height for the liquid (5 pixels high)
+        // If cooling (progress is 100%), interpolate slowly toward 1.0
+        if (targetProgress == 1.0f && displayedProgress < 1.0f) {
+            float lerpSpeed = 0.05f; // Lower = slower
+            displayedProgress = Math.min(1.0f, displayedProgress + lerpSpeed * (1.0f + tickDelta));
+        } else {
+            // Snap to target if not cooling, or update instantly
+            displayedProgress = targetProgress;
+        }
+        displayedProgressMap.put(entity, displayedProgress);
+
+        // Use displayedProgress instead of progress for rendering
+        float progress = displayedProgress;
+
         float minY = 0.05f;
-        float maxY = minY + (5.0f / 16.0f);
+        float maxY = minY + (1.0f / 16.0f);
 
         // Get template name and image
         String templateName = getTemplateName(entity);

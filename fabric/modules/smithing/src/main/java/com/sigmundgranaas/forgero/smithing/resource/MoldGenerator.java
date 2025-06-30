@@ -361,25 +361,14 @@ public class MoldGenerator implements DynamicResourceGenerator {
                                 .condition(JLootTable.predicate("minecraft:survives_explosion")))
         );
 
-        // Define model paths
+        // Define model path
         String baseModelId = moldId.getNamespace() + ":block/" + moldId.getPath();
-        String filledModelId = moldId.getNamespace() + ":block/" + moldId.getPath() + "_filled";
 
-        // --- Custom blockstate logic for MoldBlock ---
-        // Only three states: empty, filled (progress 0-74), cooled (progress 75-100)
-        String cooledModelId = moldId.getNamespace() + ":block/" + moldId.getPath() + "_cooled";
+        // --- Blockstate: All states reference only the base model ---
         JVariant variant = JState.variant();
-        // All empty states
         for (int i = 0; i <= 100; i++) {
             variant.put("filled=false,progress=" + i, JState.model(baseModelId));
-        }
-        // Filled, progress 0-74
-        for (int i = 0; i < 75; i++) {
-            variant.put("filled=true,progress=" + i, JState.model(filledModelId));
-        }
-        // Filled, progress 75-100
-        for (int i = 75; i <= 100; i++) {
-            variant.put("filled=true,progress=" + i, JState.model(cooledModelId));
+            variant.put("filled=true,progress=" + i, JState.model(baseModelId));
         }
         JState blockState = JState.state().add(variant);
         pack.addBlockState(
@@ -587,45 +576,6 @@ public class MoldGenerator implements DynamicResourceGenerator {
         pack.addAsset(baseModelId, baseModelJson.getBytes(java.nio.charset.StandardCharsets.UTF_8));
         Forgero.LOGGER.info("Added base model: {}", baseModelId);
 
-        // Filled/progress models: add template voxelshape as a new element with template texture on top
-        String templateElementJson = generateTemplateElementJson(textureName, coloredPixels);
-
-        // Join elements for filled/progress models without leading comma
-        String allFilledElements = elementsJson.toString();
-        String allTemplateElements = templateElementJson;
-        String joinedElements;
-        if (!allFilledElements.isEmpty() && !allTemplateElements.isEmpty()) {
-            joinedElements = allFilledElements + ",\n" + allTemplateElements;
-        } else if (!allFilledElements.isEmpty()) {
-            joinedElements = allFilledElements;
-        } else {
-            joinedElements = allTemplateElements;
-        }
-
-        // Use the fluid texture for the template face
-        String templateTexturePath = "forgero:block/fluid_flow_" + textureName;
-
-        String filledModelJson = String.format(
-            "{\n" +
-            "  \"parent\": \"minecraft:block/block\",\n" +
-            "  \"ambientocclusion\": true,\n" +
-            "  \"textures\": {\n" +
-            "    \"terracotta\": \"forgero:block/terracotta\",\n" +
-            "    \"top\": \"forgero:block/terracotta\",\n" +
-            "    \"template\": \"%s\",\n" +
-            "    \"particle\": \"forgero:block/terracotta\"\n" +
-            "  },\n" +
-            "  \"elements\": [\n%s\n  ]\n" +
-            "}", templateTexturePath, joinedElements);
-
-        Identifier filledModelId = new Identifier(moldId.getNamespace(), "models/block/" + moldId.getPath() + "_filled.json");
-        pack.addAsset(filledModelId, filledModelJson.getBytes(java.nio.charset.StandardCharsets.UTF_8));
-        Forgero.LOGGER.info("Added filled model: {}", filledModelId);
-
-
-
-
-
         // Item model
         String itemModelJson = String.format(
             "{\n" +
@@ -638,62 +588,7 @@ public class MoldGenerator implements DynamicResourceGenerator {
         pack.addAsset(itemModelId, itemModelJson.getBytes(java.nio.charset.StandardCharsets.UTF_8));
         Forgero.LOGGER.info("Added item model: {}", itemModelId);
 
-        // Add cooled model (progress 75-100)
-        // For the cooled model (progress 75-100), use the runtime-generated template texture
-        String cooledTemplateTexturePath = "forgero:block/" + textureName;
-        String cooledModelJson = String.format(
-            "{\n" +
-            "  \"parent\": \"minecraft:block/block\",\n" +
-            "  \"ambientocclusion\": true,\n" +
-            "  \"textures\": {\n" +
-            "    \"terracotta\": \"forgero:block/terracotta\",\n" +
-            "    \"top\": \"forgero:block/terracotta\",\n" +
-            "    \"template\": \"%s\",\n" +
-            "    \"particle\": \"forgero:block/terracotta\"\n" +
-            "  },\n" +
-            "  \"elements\": [\n%s\n  ]\n" +
-            "}", cooledTemplateTexturePath, joinedElements);
-        Identifier cooledModelId = new Identifier(moldId.getNamespace(), "models/block/" + moldId.getPath() + "_cooled.json");
-        pack.addAsset(cooledModelId, cooledModelJson.getBytes(java.nio.charset.StandardCharsets.UTF_8));
-        Forgero.LOGGER.info("Added cooled model: {}", cooledModelId);
-
-        // Verify all models were added
-        Forgero.LOGGER.info("Successfully added all model files for hollow mold: {}", moldId);
-    }
-
-    /**
-     * Generate a JSON element for the template voxelshape (filled state).
-     * This adds a 1x1x1 cube for each colored pixel at y=1..2, with template texture on up face.
-     */
-    private String generateTemplateElementJson(String textureName, boolean[][] coloredPixels) {
-        StringBuilder templateElements = new StringBuilder();
-        boolean first = true;
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                if (coloredPixels[x][z]) {
-                    if (!first) {
-                        templateElements.append(",\n");
-                    }
-                    templateElements.append(String.format(
-                        "    {\n" +
-                        "      \"from\": [%d, 1.0, %d],\n" +
-                        "      \"to\": [%d, 2.0, %d],\n" +
-                        "      \"faces\": {\n" +
-                        "        \"up\": {\"texture\": \"#template\"},\n" +
-                        "        \"down\": {\"texture\": \"#terracotta\"},\n" +
-                        "        \"north\": {\"texture\": \"#terracotta\"},\n" +
-                        "        \"south\": {\"texture\": \"#terracotta\"},\n" +
-                        "        \"east\": {\"texture\": \"#terracotta\"},\n" +
-                        "        \"west\": {\"texture\": \"#terracotta\"}\n" +
-                        "      }\n" +
-                        "    }",
-                        x, z, x + 1, z + 1
-                    ));
-                    first = false;
-                }
-            }
-        }
-        return templateElements.toString();
+        // No filled or cooled model generation here anymore
     }
 
     /**
