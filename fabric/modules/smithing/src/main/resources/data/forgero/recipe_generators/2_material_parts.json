@@ -1,0 +1,40 @@
+{
+  "generator_type": "forgero:mapped_recipe_generator",
+  "identifier": "forgero:${material.name}-${variant}-mold-recipe",
+  "variables": {
+    "material": {
+      "type": "TOOL_MATERIAL"
+    },
+    "variant": [
+      "spade_head",
+      "cutlass_blade",
+      "katana_blade",
+      "cruciform_sword_guard",
+      "half_basket_sword_guard",
+      "mechanized_sword_guard",
+      "rounded_sword_guard",
+      "shell_sword_guard",
+      "swept_sword_guard",
+      "tsuba_sword_guard",
+      "entrenching_shovel_head",
+      "sickle_blade",
+      "spear_head",
+      "sword_blade",
+      "hoe_head",
+      "sword_guard",
+      "refined_sword_guard",
+      "mastercrafted_sword_guard"
+    ]
+  },
+  "type": "forgero:metal_molding",
+  "liquid": "forgero:molten_${material.name}",
+  "cooling_time": 900,
+  "liquid_amount": 200,
+  "mold": {
+    "item": "forgero:${variant}_mold"
+  },
+  "result": {
+    "item": "forgero:${material.name}-${variant}",
+    "count": 1
+  }
+}

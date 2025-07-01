@@ -5,16 +5,16 @@
       "type": "METAL"
     }
   },
-  "identifier": "forgero:${metal.name}-axe_head-mold-recipe",
+  "identifier": "forgero:${metal.name}-mace_head-mold-recipe",
   "type": "forgero:metal_molding",
   "liquid": "forgero:molten_${metal.name}",
-  "cooling_time": 300,
-  "liquid_amount": 250,
+  "cooling_time": 900,
+  "liquid_amount": 400,
   "mold": {
-    "item": "forgero:axe_head_mold"
+    "item": "forgero:mace_head_mold"
   },
   "result": {
-    "item": "forgero:${metal.name}-axe_head",
+    "item": "forgero:${metal.name}-mace_head",
     "count": 1
   }
 }
