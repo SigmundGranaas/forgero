@@ -35,7 +35,8 @@ public class ModBlockEntities {
 				FabricBlockEntityTypeBuilder.create(BloomeryBlockEntity::new,
 						ModBlocks.BLOOMERY).build(null));
 
-
+		// Initialize MOLD BlockEntityType with any already registered mold blocks
+		rebuildMoldBlockEntityType();
 	}
 
 	/**
@@ -57,10 +58,26 @@ public class ModBlockEntities {
 	public static void rebuildMoldBlockEntityType() {
 		if (!moldBlocks.isEmpty()) {
 			Block[] blockArray = moldBlocks.toArray(new Block[0]);
-			MOLD = Registry.register(Registries.BLOCK_ENTITY_TYPE,
-					new Identifier(Forgero.NAMESPACE, "mold"),
-					FabricBlockEntityTypeBuilder.create(MoldBlockEntity::new, blockArray).build(null));
-			Forgero.LOGGER.info("(Re)registered mold block entity type for {} blocks", blockArray.length);
+			try {
+				// If MOLD is already registered, unregister it to avoid conflicts
+				if (MOLD != null && Registries.BLOCK_ENTITY_TYPE.containsId(new Identifier(Forgero.NAMESPACE, "mold"))) {
+					Forgero.LOGGER.info("MOLD BlockEntityType already exists, attempting to replace it");
+				}
+
+				MOLD = Registry.register(Registries.BLOCK_ENTITY_TYPE,
+						new Identifier(Forgero.NAMESPACE, "mold"),
+						FabricBlockEntityTypeBuilder.create(MoldBlockEntity::new, blockArray).build(null));
+				Forgero.LOGGER.info("(Re)registered mold block entity type for {} blocks", blockArray.length);
+			} catch (Exception e) {
+				Forgero.LOGGER.error("Failed to register MOLD BlockEntityType: {}", e.getMessage(), e);
+			}
+		} else {
+			Forgero.LOGGER.warn("Cannot register MOLD BlockEntityType: no mold blocks registered");
+		}
+
+		// Double-check registration was successful
+		if (MOLD == null) {
+			Forgero.LOGGER.error("MOLD BlockEntityType is still null after attempted registration");
 		}
 	}
 }

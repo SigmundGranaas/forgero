@@ -85,12 +85,17 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
 
     // Helper to extract the palette name from the fluid in the mold
     private String getFluidPaletteName(MoldBlockEntity entity) {
+        if (entity == null) {
+            LOGGER.warn("[FluidColor][DEBUG] MoldBlockEntity is null. Using fallback palette 'iron'.");
+            return "iron";
+        }
+
         Identifier fluidId = entity.getLiquid();
         if (fluidId != null) {
             String path = fluidId.getPath(); // e.g., "molten_iron"
             if (path.startsWith("molten_")) {
                 String palette = path.substring("molten_".length());
-                return palette; // e.g., "iron"
+                return palette != null && !palette.isEmpty() ? palette : "iron"; // e.g., "iron"
             } else {
                 LOGGER.warn("[FluidColor][DEBUG] Fluid path does not start with 'molten_': {}. Using fallback.", path);
             }
@@ -103,11 +108,23 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
 
     // Helper to colorize the grayscale fluid image with the palette
     private NativeImageBackedTexture getColoredFluidTexture(String paletteName) {
+        if (paletteName == null) {
+            LOGGER.error("[FluidColor][DEBUG] Palette name is null! Using fallback.");
+            paletteName = "iron";
+        }
+
         String actualPaletteName = paletteName.endsWith(".png") ? paletteName : paletteName + ".png";
         TextureService textureService = ForgeroClientSmithingInitializer.getTextureService();
+
+        if (textureService == null) {
+            LOGGER.error("[FluidColor][DEBUG] TextureService is null! Cannot load palettes.");
+            return null;
+        }
+
         if (coloredFluidTextureCache.containsKey(actualPaletteName)) {
             return coloredFluidTextureCache.get(actualPaletteName);
         }
+
         Optional<Palette> paletteOpt = textureService.getPalette(actualPaletteName);
         if (paletteOpt.isEmpty()) {
             LOGGER.error("[FluidColor][DEBUG] Palette '{}' not found! Using fallback color (likely brown).", actualPaletteName);

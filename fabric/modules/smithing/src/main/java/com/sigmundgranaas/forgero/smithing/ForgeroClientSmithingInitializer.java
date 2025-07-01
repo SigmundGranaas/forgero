@@ -32,9 +32,24 @@ public class ForgeroClientSmithingInitializer implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        // Register block entity renderers
-        BlockEntityRendererRegistry.register(ModBlockEntities.SMITHING_ANVIL, SmithingAnvilBlockEntityRenderer::new);
-		BlockEntityRendererRegistry.register(ModBlockEntities.MOLD, MoldBlockEntityRenderer::new);
+		        // Make sure MOLD is registered (null check)
+		        if (ModBlockEntities.MOLD == null) {
+		            Forgero.LOGGER.warn("MOLD BlockEntityType is null, rebuilding it...");
+		            ModBlockEntities.rebuildMoldBlockEntityType();
+
+		            // If still null after rebuilding, log error and skip registration
+		            if (ModBlockEntities.MOLD == null) {
+		                Forgero.LOGGER.error("Failed to rebuild MOLD BlockEntityType, renderer will not be registered");
+		                // Continue with other initializations, skipping the MOLD renderer
+		            }
+		        }
+
+		        // Register block entity renderers
+		        BlockEntityRendererRegistry.register(ModBlockEntities.SMITHING_ANVIL, SmithingAnvilBlockEntityRenderer::new);
+		// Only register MOLD renderer if the BlockEntityType is not null
+		if (ModBlockEntities.MOLD != null) {
+		    BlockEntityRendererRegistry.register(ModBlockEntities.MOLD, MoldBlockEntityRenderer::new);
+		}
         // Register screens
         HandledScreens.register(ModScreenHandlers.BLOOMERY_SCREEN_HANDLER, BloomeryScreen::new);
         

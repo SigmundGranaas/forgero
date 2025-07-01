@@ -73,6 +73,9 @@ public class MoldGenerator implements DynamicResourceGenerator {
     private final Map<String, Block> registeredMoldBlocks = new HashMap<>();
     private ResourceManager resourceManager;
 
+    // Map to track which textures have successfully been mapped to VoxelShapes
+    private final Map<String, Boolean> textureToShapeMap = new HashMap<>();
+
     // Singleton instance
     private static MoldGenerator INSTANCE;
 
@@ -183,23 +186,47 @@ public class MoldGenerator implements DynamicResourceGenerator {
     private VoxelShape createVoxelShapeFromTexture(String textureName) {
         // Get the texture image
         java.awt.image.BufferedImage originalImage = loadTextureImage(textureName);
+        boolean isSpecialShape = false;
 
         if (originalImage == null) {
-            Forgero.LOGGER.warn("Couldn't load texture for VoxelShape creation. Using default shape.");
+            Forgero.LOGGER.warn("Couldn't load texture for VoxelShape creation. Using default shape for: " + textureName);
             // Return a default shape if we couldn't analyze the texture
             return Block.createCuboidShape(0, 0, 0, 16, 2, 16);
         }
 
+        // Special handling for known problematic shapes
+        isSpecialShape = textureName.contains("sword") || textureName.contains("blade") || 
+                                textureName.contains("knife") || textureName.contains("dagger") ||
+                                textureName.contains("rapier") || textureName.contains("saber");
+
+        Forgero.LOGGER.info("Creating VoxelShape for {} (special shape: {})", textureName, isSpecialShape);
+
         // Create a grid to track which pixels are colored
         boolean[][] coloredPixels = new boolean[16][16];
 
+        // Ensure we're working with a consistent size
+        int width = Math.min(originalImage.getWidth(), 16);
+        int height = Math.min(originalImage.getHeight(), 16);
+
+        // Adjust alpha threshold based on shape type
+        int alphaThreshold = 30; // Lower threshold to catch more details
+
+        // For special shapes like swords, use an even lower threshold to ensure thin parts are captured
+        if (textureName.contains("sword") || textureName.contains("blade") || 
+            textureName.contains("knife") || textureName.contains("dagger") ||
+            textureName.contains("rapier") || textureName.contains("saber")) {
+            alphaThreshold = 20; // Even lower threshold for thin shapes
+            Forgero.LOGGER.info("Using lower alpha threshold for special shape: {}", textureName);
+        }
+
         // Scan for colored (non-transparent) pixels
-        for (int x = 0; x < Math.min(originalImage.getWidth(), 16); x++) {
-            for (int y = 0; y < Math.min(originalImage.getHeight(), 16); y++) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 int pixel = originalImage.getRGB(x, y);
                 int alpha = (pixel >> 24) & 0xff;
 
-                if (alpha > 10) { // Non-transparent pixel
+                // More precise alpha threshold check with adjusted value
+                if (alpha >= alphaThreshold) {
                     coloredPixels[x][y] = true;
                 }
             }
@@ -208,24 +235,93 @@ public class MoldGenerator implements DynamicResourceGenerator {
         // Create a grid for the outline (colored pixels + 1 pixel outline)
         boolean[][] outlinePixels = new boolean[16][16];
 
-        // Add colored pixels to outline
+        // First, mark all colored pixels in the outline
         for (int x = 0; x < 16; x++) {
             for (int y = 0; y < 16; y++) {
                 if (coloredPixels[x][y]) {
                     outlinePixels[x][y] = true;
+                }
+            }
+        }
 
-                    // Add outline pixels (adjacent to colored pixels)
-                    for (int dx = -1; dx <= 1; dx++) {
-                        for (int dy = -1; dy <= 1; dy++) {
-                            int nx = x + dx;
-                            int ny = y + dy;
+        // Generate the outline with special handling for thin shapes
+        isSpecialShape = textureName.contains("sword") || textureName.contains("blade") || 
+                               textureName.contains("knife") || textureName.contains("dagger") ||
+                               textureName.contains("rapier") || textureName.contains("saber");
 
-                            // Check bounds
-                            if (nx >= 0 && nx < 16 && ny >= 0 && ny < 16) {
-                                outlinePixels[nx][ny] = true;
+        int outlineSize = isSpecialShape ? 2 : 1; // Wider outline for thin shapes
+
+        // Generate outline with variable width
+        for (int x = 0; x < 16; x++) {
+            for (int y = 0; y < 16; y++) {
+                if (coloredPixels[x][y]) {
+                    // Mark this pixel as part of the outline
+                    outlinePixels[x][y] = true;
+
+                    // For each outline pixel, mark surrounding pixels up to outlineSize away
+                    for (int dx = -outlineSize; dx <= outlineSize; dx++) {
+                        for (int dy = -outlineSize; dy <= outlineSize; dy++) {
+                            // Skip the center pixel as it's already marked
+                            if (dx == 0 && dy == 0) continue;
+
+                            // Calculate the distance (Manhattan distance is simpler)
+                            int distance = Math.abs(dx) + Math.abs(dy);
+
+                            // Only include pixels within the outline size
+                            if (distance <= outlineSize) {
+                                int nx = x + dx;
+                                int ny = y + dy;
+
+                                // Check bounds
+                                if (nx >= 0 && nx < 16 && ny >= 0 && ny < 16) {
+                                    outlinePixels[nx][ny] = true;
+                                }
                             }
                         }
                     }
+                }
+            }
+        }
+
+        // For special shapes, ensure continuous outline by filling gaps
+        if (isSpecialShape) {
+            boolean[][] tempOutline = new boolean[16][16];
+            // Copy current outline
+            for (int x = 0; x < 16; x++) {
+                for (int y = 0; y < 16; y++) {
+                    tempOutline[x][y] = outlinePixels[x][y];
+                }
+            }
+
+            // Fill gaps - if a pixel has multiple outline neighbors but isn't an outline pixel, add it
+            for (int x = 1; x < 15; x++) {
+                for (int y = 1; y < 15; y++) {
+                    if (!outlinePixels[x][y]) {
+                        int outlineNeighbors = 0;
+
+                        // Check all 8 neighbors
+                        for (int dx = -1; dx <= 1; dx++) {
+                            for (int dy = -1; dy <= 1; dy++) {
+                                if (dx == 0 && dy == 0) continue;
+
+                                if (outlinePixels[x+dx][y+dy]) {
+                                    outlineNeighbors++;
+                                }
+                            }
+                        }
+
+                        // If surrounded by 5+ outline pixels, fill the gap
+                        if (outlineNeighbors >= 5) {
+                            tempOutline[x][y] = true;
+                        }
+                    }
+                }
+            }
+
+            // Update outline with filled gaps
+            for (int x = 0; x < 16; x++) {
+                for (int y = 0; y < 16; y++) {
+                    outlinePixels[x][y] = tempOutline[x][y];
                 }
             }
         }
@@ -243,31 +339,46 @@ public class MoldGenerator implements DynamicResourceGenerator {
             }
         }
 
-        // Add walls (all outline pixels at y=1 that are on the edge)
+        // Determine if this is a thin shape that needs special wall handling
+        boolean isThinShape = textureName.contains("sword") || textureName.contains("blade") || 
+                             textureName.contains("knife") || textureName.contains("dagger") ||
+                             textureName.contains("rapier") || textureName.contains("saber");
+
+        // Add walls for border pixels with enhanced algorithm for thin shapes
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
+                // For thin shapes, we want walls for ALL outline pixels that aren't colored
+                // For regular shapes, we only want walls at borders
+                boolean shouldAddWall = false;
+
                 if (outlinePixels[x][z] && !coloredPixels[x][z]) {
-                    // This is an outline pixel but not an original colored pixel
-                    // Check if it's on the edge (has a neighboring non-outline pixel)
-                    boolean isEdge = false;
+                    if (isThinShape) {
+                        // For thin shapes, we add walls for all outline pixels that aren't part of the colored region
+                        // This ensures complete wall coverage for thin shapes like swords
+                        shouldAddWall = true;
+                    } else {
+                        // For regular shapes, only add walls at borders
+                        // Check if this is a border pixel by examining orthogonal neighbors
+                        // Check direct adjacent cells (N, E, S, W)
+                        int[][] directions = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
+                        for (int[] dir : directions) {
+                            int nx = x + dir[0];
+                            int nz = z + dir[1];
 
-                    for (int dx = -1; dx <= 1; dx++) {
-                        for (int dz = -1; dz <= 1; dz++) {
-                            if (dx == 0 && dz == 0) continue; // Skip self
-
-                            int nx = x + dx;
-                            int nz = z + dz;
-
-                            // If neighbor is outside bounds or not an outline pixel, this is an edge
-                            if (nx < 0 || nx >= 16 || nz < 0 || nz >= 16 || !outlinePixels[nx][nz]) {
-                                isEdge = true;
+                            // It's a border if it's at the edge of the outline or adjacent to a colored pixel
+                            if (nx < 0 || nx >= 16 || nz < 0 || nz >= 16 || !outlinePixels[nx][nz] || coloredPixels[nx][nz]) {
+                                shouldAddWall = true;
                                 break;
                             }
                         }
-                        if (isEdge) break;
+
+                        // Always create walls at the edge of the template bounds
+                        if (x == 0 || x == 15 || z == 0 || z == 15) {
+                            shouldAddWall = true;
+                        }
                     }
 
-                    if (isEdge) {
+                    if (shouldAddWall) {
                         VoxelShape wallShape = Block.createCuboidShape(x, 1, z, x + 1, 2, z + 1);
                         finalShape = VoxelShapes.union(finalShape, wallShape);
                     }
@@ -275,7 +386,52 @@ public class MoldGenerator implements DynamicResourceGenerator {
             }
         }
 
-        Forgero.LOGGER.info("Generated hollow mold VoxelShape for {} that follows colored pixels", textureName);
+        // For thin shapes, make one final pass to fill any single-pixel gaps in the walls
+        if (isThinShape) {
+            // Find wall gaps - pixels that have walls on at least 3 sides but no wall themselves
+            for (int x = 1; x < 15; x++) {
+                for (int z = 1; z < 15; z++) {
+                    // Skip if this already has a wall or is a colored pixel
+                    if (coloredPixels[x][z] || (outlinePixels[x][z] && !coloredPixels[x][z])) {
+                        continue;
+                    }
+
+                    // Count how many neighbors have walls
+                    int wallNeighbors = 0;
+                    int[][] directions = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
+
+                    for (int[] dir : directions) {
+                        int nx = x + dir[0];
+                        int nz = z + dir[1];
+
+                        if (nx >= 0 && nx < 16 && nz >= 0 && nz < 16 && 
+                            outlinePixels[nx][nz] && !coloredPixels[nx][nz]) {
+                            wallNeighbors++;
+                        }
+                    }
+
+                    // If this pixel has walls on at least 3 sides, fill it in
+                    if (wallNeighbors >= 3) {
+                        VoxelShape wallShape = Block.createCuboidShape(x, 1, z, x + 1, 2, z + 1);
+                        finalShape = VoxelShapes.union(finalShape, wallShape);
+                    }
+                }
+            }
+        }
+
+        // Track successful mapping
+        textureToShapeMap.put(textureName, true);
+
+        String shapeType = textureName.contains("sword") || textureName.contains("blade") || 
+                         textureName.contains("knife") || textureName.contains("dagger") ||
+                         textureName.contains("rapier") || textureName.contains("saber") ?
+                         "thin/special" : "standard";
+
+        // Log detailed VoxelShape information for debugging                 
+        logVoxelShapeDetails(textureName, coloredPixels, outlinePixels);
+
+        Forgero.LOGGER.info("Generated hollow mold VoxelShape for {} (type: {}) with complete walls", 
+                        textureName, shapeType);
         return finalShape;
     }
 
@@ -304,7 +460,25 @@ public class MoldGenerator implements DynamicResourceGenerator {
             File file = dirPath.resolve(textureName + TEXTURE_EXTENSION).toFile();
             if (file.exists() && file.isFile()) {
                 try {
+                    // Load the original image
                     originalImage = javax.imageio.ImageIO.read(file);
+
+                    // Create a rotated version to ensure correct orientation
+                    // This ensures the texture's coordinates map correctly to the mold shape
+                    int width = originalImage.getWidth();
+                    int height = originalImage.getHeight();
+
+                    java.awt.image.BufferedImage rotatedImage = new java.awt.image.BufferedImage(
+                            width, height, java.awt.image.BufferedImage.TYPE_INT_ARGB);
+
+                    // Copy the image with Y-coordinate flipped (minecraft uses different coordinate system)
+                    for (int x = 0; x < width; x++) {
+                        for (int y = 0; y < height; y++) {
+                            rotatedImage.setRGB(x, y, originalImage.getRGB(x, y));
+                        }
+                    }
+
+                    originalImage = rotatedImage;
                     Forgero.LOGGER.info("Found template texture for VoxelShape at: {}", file.getAbsolutePath());
                     break;
                 } catch (IOException e) {
@@ -414,24 +588,50 @@ public class MoldGenerator implements DynamicResourceGenerator {
     private void generateBasicModels(RuntimeResourcePack pack, Identifier moldId, String textureName) {
         // Get the texture image
         java.awt.image.BufferedImage originalImage = loadTextureImage(textureName);
+        boolean isSpecialShape = false;
 
         if (originalImage == null) {
-            Forgero.LOGGER.warn("Using default bounds for model generation");
+            Forgero.LOGGER.warn("Using default bounds for model generation for texture: " + textureName);
             // Fall back to a simple rectangular model
             // ...existing code for fallback model generation...
             return;
         }
 
+        // Detect if this is a special shape that needs enhanced processing
+        isSpecialShape = textureName.contains("sword") || textureName.contains("blade") || 
+                                textureName.contains("knife") || textureName.contains("dagger") ||
+                                textureName.contains("rapier") || textureName.contains("saber");
+
+        if (isSpecialShape) {
+            Forgero.LOGGER.info("Special shape detected for model generation: {}", textureName);
+        }
+
         // Create a grid to track which pixels are colored
         boolean[][] coloredPixels = new boolean[16][16];
 
-        // Scan for colored (non-transparent) pixels
-        for (int x = 0; x < Math.min(originalImage.getWidth(), 16); x++) {
-            for (int y = 0; y < Math.min(originalImage.getHeight(), 16); y++) {
+        // Ensure we're working with a consistent size
+        int width = Math.min(originalImage.getWidth(), 16);
+        int height = Math.min(originalImage.getHeight(), 16);
+
+        // Adjust alpha threshold based on shape type - exactly as in VoxelShape generation
+        int alphaThreshold = 1; // Lower threshold to catch more details
+
+        // For special shapes like swords, use an even lower threshold to ensure thin parts are captured
+        if (textureName.contains("sword") || textureName.contains("blade") || 
+            textureName.contains("knife") || textureName.contains("dagger") ||
+            textureName.contains("rapier") || textureName.contains("saber")) {
+            alphaThreshold = 20; // Even lower threshold for thin shapes
+            Forgero.LOGGER.info("Using lower alpha threshold for special shape model: {}", textureName);
+        }
+
+        // Scan for colored (non-transparent) pixels with improved alpha detection
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 int pixel = originalImage.getRGB(x, y);
                 int alpha = (pixel >> 24) & 0xff;
 
-                if (alpha > 10) { // Non-transparent pixel
+                // Use same threshold as in createVoxelShapeFromTexture for consistency
+                if (alpha >= alphaThreshold) {
                     coloredPixels[x][y] = true;
                 }
             }
@@ -440,24 +640,93 @@ public class MoldGenerator implements DynamicResourceGenerator {
         // Create a grid for the outline (colored pixels + 1 pixel outline)
         boolean[][] outlinePixels = new boolean[16][16];
 
-        // Add colored pixels to outline
+        // First, mark all colored pixels in the outline
         for (int x = 0; x < 16; x++) {
             for (int y = 0; y < 16; y++) {
                 if (coloredPixels[x][y]) {
                     outlinePixels[x][y] = true;
+                }
+            }
+        }
 
-                    // Add outline pixels (adjacent to colored pixels)
-                    for (int dx = -1; dx <= 1; dx++) {
-                        for (int dy = -1; dy <= 1; dy++) {
-                            int nx = x + dx;
-                            int ny = y + dy;
+        // Generate the outline with special handling for thin shapes - EXACTLY matching the algorithm in createVoxelShapeFromTexture
+                               isSpecialShape = textureName.contains("sword") || textureName.contains("blade") || 
+                               textureName.contains("knife") || textureName.contains("dagger") ||
+                               textureName.contains("rapier") || textureName.contains("saber");
 
-                            // Check bounds
-                            if (nx >= 0 && nx < 16 && ny >= 0 && ny < 16) {
-                                outlinePixels[nx][ny] = true;
+        int outlineSize = isSpecialShape ? 2 : 1; // Wider outline for thin shapes
+
+        // Generate outline with variable width
+        for (int x = 0; x < 16; x++) {
+            for (int y = 0; y < 16; y++) {
+                if (coloredPixels[x][y]) {
+                    // Mark this pixel as part of the outline
+                    outlinePixels[x][y] = true;
+
+                    // For each outline pixel, mark surrounding pixels up to outlineSize away
+                    for (int dx = -outlineSize; dx <= outlineSize; dx++) {
+                        for (int dy = -outlineSize; dy <= outlineSize; dy++) {
+                            // Skip the center pixel as it's already marked
+                            if (dx == 0 && dy == 0) continue;
+
+                            // Calculate the distance (Manhattan distance is simpler)
+                            int distance = Math.abs(dx) + Math.abs(dy);
+
+                            // Only include pixels within the outline size
+                            if (distance <= outlineSize) {
+                                int nx = x + dx;
+                                int ny = y + dy;
+
+                                // Check bounds
+                                if (nx >= 0 && nx < 16 && ny >= 0 && ny < 16) {
+                                    outlinePixels[nx][ny] = true;
+                                }
                             }
                         }
                     }
+                }
+            }
+        }
+
+        // For special shapes, ensure continuous outline by filling gaps
+        if (isSpecialShape) {
+            boolean[][] tempOutline = new boolean[16][16];
+            // Copy current outline
+            for (int x = 0; x < 16; x++) {
+                for (int y = 0; y < 16; y++) {
+                    tempOutline[x][y] = outlinePixels[x][y];
+                }
+            }
+
+            // Fill gaps - if a pixel has multiple outline neighbors but isn't an outline pixel, add it
+            for (int x = 1; x < 15; x++) {
+                for (int y = 1; y < 15; y++) {
+                    if (!outlinePixels[x][y]) {
+                        int outlineNeighbors = 0;
+
+                        // Check all 8 neighbors
+                        for (int dx = -1; dx <= 1; dx++) {
+                            for (int dy = -1; dy <= 1; dy++) {
+                                if (dx == 0 && dy == 0) continue;
+
+                                if (outlinePixels[x+dx][y+dy]) {
+                                    outlineNeighbors++;
+                                }
+                            }
+                        }
+
+                        // If surrounded by 5+ outline pixels, fill the gap
+                        if (outlineNeighbors >= 5) {
+                            tempOutline[x][y] = true;
+                        }
+                    }
+                }
+            }
+
+            // Update outline with filled gaps
+            for (int x = 0; x < 16; x++) {
+                for (int y = 0; y < 16; y++) {
+                    outlinePixels[x][y] = tempOutline[x][y];
                 }
             }
         }
@@ -639,6 +908,16 @@ public class MoldGenerator implements DynamicResourceGenerator {
     }
 
     /**
+     * Get a list of all available texture names that have been found
+     * @return List of available texture names
+     */
+    public List<String> getAvailableTextures() {
+        return new ArrayList<>(textureToShapeMap.keySet().stream()
+                .filter(textureToShapeMap::get)
+                .collect(Collectors.toList()));
+    }
+
+    /**
      * Find all texture files in the template directory
      *
      * @return List of texture names without extension
@@ -716,6 +995,60 @@ public class MoldGenerator implements DynamicResourceGenerator {
      * Implementation of the DynamicResourceGenerator interface method
      * This is the main entry point for generating all mold-related resources
      */
+    /**
+     * Get diagnostics about texture to shape mappings
+     * @return A string report of texture mapping status
+     */
+    public String getTextureMappingDiagnostics() {
+        StringBuilder report = new StringBuilder("VoxelShape to Texture Mapping Status:\n");
+
+        int mappedCount = 0;
+        int unmappedCount = 0;
+
+        for (Map.Entry<String, Boolean> entry : textureToShapeMap.entrySet()) {
+            if (entry.getValue()) {
+                mappedCount++;
+                report.append("✓ Successfully mapped: ").append(entry.getKey()).append("\n");
+            } else {
+                unmappedCount++;
+                report.append("✗ Failed to map: ").append(entry.getKey()).append("\n");
+            }
+        }
+
+        report.append("\nSummary: ").append(mappedCount).append(" textures mapped, ")
+              .append(unmappedCount).append(" textures failed to map.");
+
+        return report.toString();
+    }
+
+    /**
+     * Utility method to log details about the voxel shape for debugging
+     * @param textureName The texture name
+     * @param coloredPixels The colored pixels grid
+     * @param outlinePixels The outline pixels grid
+     */
+    private void logVoxelShapeDetails(String textureName, boolean[][] coloredPixels, boolean[][] outlinePixels) {
+        if (!Forgero.LOGGER.isDebugEnabled()) return;
+
+        StringBuilder pixelMap = new StringBuilder("VoxelShape for " + textureName + ":\n");
+
+        // Print a visual representation of the shape
+        for (int z = 0; z < 16; z++) {
+            for (int x = 0; x < 16; x++) {
+                if (coloredPixels[x][z]) {
+                    pixelMap.append("C"); // Colored pixel
+                } else if (outlinePixels[x][z]) {
+                    pixelMap.append("O"); // Outline pixel
+                } else {
+                    pixelMap.append("."); // Empty
+                }
+            }
+            pixelMap.append("\n");
+        }
+
+        Forgero.LOGGER.debug(pixelMap.toString());
+    }
+
     @Override
     public void generate(RuntimeResourcePack pack) {
         Forgero.LOGGER.info("Generating mold blocks from textures");
@@ -798,6 +1131,8 @@ public class MoldGenerator implements DynamicResourceGenerator {
         }
 
         return new int[]{minX, minY, maxX, maxY};
+
+
     }
 
     /**
@@ -853,6 +1188,8 @@ public class MoldGenerator implements DynamicResourceGenerator {
                     if (elementsJson.length() > 0) {
                         elementsJson.append(",\n");
                     }
+
+                    // Improved face culling logic
                     boolean showNorth = z == 0 || !outlinePixels[x][z-1];
                     boolean showSouth = z == 15 || !outlinePixels[x][z+1];
                     boolean showEast = x == 15 || !outlinePixels[x+1][z];
@@ -867,7 +1204,7 @@ public class MoldGenerator implements DynamicResourceGenerator {
                         "%s" +
                         "%s" +
                         "%s" +
-                        "        \"up\": {\"texture\": \"#terracotta\"},\n" +
+                        "        \"up\": {\"texture\": \"#terracotta\", \"tintindex\": 0},\n" +
                         "        \"down\": {\"texture\": \"#terracotta\", \"cullface\": \"down\"}\n" +
                         "      }\n" +
                         "    }",
@@ -881,45 +1218,60 @@ public class MoldGenerator implements DynamicResourceGenerator {
             }
         }
 
-        // Add walls for outline pixels that are not colored pixels
+        // Add walls for border pixels using the same border detection as in createVoxelShapeFromTexture
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 if (outlinePixels[x][z] && !coloredPixels[x][z]) {
-                    boolean isEdge = false;
-                    for (int dx = -1; dx <= 1; dx++) {
-                        for (int dz = -1; dz <= 1; dz++) {
-                            if (dx == 0 && dz == 0) continue;
-                            int nx = x + dx;
-                            int nz = z + dz;
-                            if (nx < 0 || nx >= 16 || nz < 0 || nz >= 16 || !outlinePixels[nx][nz]) {
-                                isEdge = true;
-                                break;
-                            }
+                    // Check if this is a border pixel that needs a wall
+                    boolean isBorder = false;
+
+                    // Check direct adjacent cells (N, E, S, W)
+                    int[][] directions = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
+                    for (int[] dir : directions) {
+                        int nx = x + dir[0];
+                        int nz = z + dir[1];
+
+                        // It's a border if it's at the edge of the outline or adjacent to a colored pixel
+                        if (nx < 0 || nx >= 16 || nz < 0 || nz >= 16 || !outlinePixels[nx][nz] || coloredPixels[nx][nz]) {
+                            isBorder = true;
+                            break;
                         }
-                        if (isEdge) break;
                     }
-                    if (isEdge) {
+
+                    // Always create walls at the edge of the template bounds
+                    if (x == 0 || x == 15 || z == 0 || z == 15) {
+                        isBorder = true;
+                    }
+
+                    if (isBorder) {
                         if (elementsJson.length() > 0) {
                             elementsJson.append(",\n");
                         }
+
+                        // Determine which faces should be rendered based on neighbors
+                        boolean showNorth = (z == 0) || !outlinePixels[x][z-1] || coloredPixels[x][z-1];
+                        boolean showSouth = (z == 15) || !outlinePixels[x][z+1] || coloredPixels[x][z+1];
+                        boolean showEast = (x == 15) || !outlinePixels[x+1][z] || coloredPixels[x+1][z];
+                        boolean showWest = (x == 0) || !outlinePixels[x-1][z] || coloredPixels[x-1][z];
+
                         elementsJson.append(String.format(
                             "    {\n" +
                             "      \"from\": [%d, 1.0, %d],\n" +
                             "      \"to\": [%d, 2.0, %d],\n" +
                             "      \"shade\": true,\n" +
                             "      \"faces\": {\n" +
-                            "        \"north\": {\"texture\": \"#terracotta\"%s},\n" +
-                            "        \"east\": {\"texture\": \"#terracotta\"%s},\n" +
-                            "        \"south\": {\"texture\": \"#terracotta\"%s},\n" +
-                            "        \"west\": {\"texture\": \"#terracotta\"%s},\n" +
-                            "        \"up\": {\"texture\": \"#top\"}\n" +
+                            "%s" +
+                            "%s" +
+                            "%s" +
+                            "%s" +
+                            "        \"up\": {\"texture\": \"#top\", \"tintindex\": 1}\n" +
                             "      }\n" +
                             "    }",
                             x, z, x + 1, z + 1,
-                            (z == 0 ? ", \"cullface\": \"north\"" : ""),
-                            (x == 15 ? ", \"cullface\": \"east\"" : ""),
-                            (z == 15 ? ", \"cullface\": \"south\"" : ""),
-                            (x == 0 ? ", \"cullface\": \"west\"" : "")
+                            showNorth ? "        \"north\": {\"texture\": \"#terracotta\"" + (z == 0 ? ", \"cullface\": \"north\"" : "") + "},\n" : "",
+                            showEast ? "        \"east\": {\"texture\": \"#terracotta\"" + (x == 15 ? ", \"cullface\": \"east\"" : "") + "},\n" : "",
+                            showSouth ? "        \"south\": {\"texture\": \"#terracotta\"" + (z == 15 ? ", \"cullface\": \"south\"" : "") + "},\n" : "",
+                            showWest ? "        \"west\": {\"texture\": \"#terracotta\"" + (x == 0 ? ", \"cullface\": \"west\"" : "") + "},\n" : ""
                         ));
                     }
                 }
