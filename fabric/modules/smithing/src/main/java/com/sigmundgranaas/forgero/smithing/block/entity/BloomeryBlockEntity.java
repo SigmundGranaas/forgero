@@ -330,11 +330,9 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 	}
 
 	private boolean isFuel(ItemStack stack) {
-		return stack.getItem() == Items.COAL ||
-				stack.getItem() == Items.CHARCOAL ||
-				stack.getItem() == Items.LAVA_BUCKET ||
-				stack.getItem() == Items.BLAZE_ROD;
+		return getFuelTime(stack) > 0;
 	}
+
 
 	private int getFuelTime(ItemStack fuel) {
 		if (fuel.isEmpty()) {
