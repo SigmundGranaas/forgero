@@ -32,23 +32,31 @@ public class TextureService {
 	}
 
 	public Optional<Palette> getPalette(String name) {
+		Forgero.LOGGER.info("[TextureService] getPalette called with name: {}", name);
 		var remapped = Optional.ofNullable(paletteRemap.get(name)).flatMap(this::getPalette);
 		if (remapped.isPresent()) {
+			Forgero.LOGGER.info("[TextureService] Palette '{}' remapped to another palette.", name);
 			return remapped;
 		}
 		if (paletteCache.containsKey(name)) {
+			Forgero.LOGGER.info("[TextureService] Palette '{}' found in cache.", name);
 			return Optional.ofNullable(paletteCache.get(name));
 		}
-		var paletteTexture = loader.load(PALETTE_PATH + name);
+		String palettePath = PALETTE_PATH + name;
+		Forgero.LOGGER.info("[TextureService] Attempting to load palette from path: {}", palettePath);
+		var paletteTexture = loader.load(palettePath);
 		var paletteOpt = paletteTexture.map(Palette::new);
 		if (paletteOpt.isPresent()) {
 			var palette = paletteOpt.get();
 			if (palette.getColourValues(0).size() >= 2) {
+				Forgero.LOGGER.info("[TextureService] Palette '{}' loaded successfully with {} colors.", name, palette.getColourValues(0).size());
 				paletteCache.put(name, palette);
 				return Optional.of(palette);
 			} else {
-				Forgero.LOGGER.error("Encountered Palette texture: {} with a limited number of color values: {}. This palette will not be processed.", PALETTE_PATH + name, palette.getColourValues(0).size());
+				Forgero.LOGGER.error("Encountered Palette texture: {} with a limited number of color values: {}. This palette will not be processed.", palettePath, palette.getColourValues(0).size());
 			}
+		} else {
+			Forgero.LOGGER.warn("[TextureService] Palette '{}' could not be loaded from path: {}", name, palettePath);
 		}
 		return Optional.empty();
 	}

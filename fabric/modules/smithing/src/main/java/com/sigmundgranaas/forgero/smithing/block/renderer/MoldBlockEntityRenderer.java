@@ -2,12 +2,22 @@ package com.sigmundgranaas.forgero.smithing.block.renderer;
 
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
+import java.util.List;
+import java.util.Optional;
 import java.util.WeakHashMap;
 
 import javax.imageio.ImageIO;
 
+import com.sigmundgranaas.forgero.core.texture.V2.Palette;
+import com.sigmundgranaas.forgero.core.texture.V2.TextureService;
+import com.sigmundgranaas.forgero.core.texture.V2.TemplateTexture;
+import com.sigmundgranaas.forgero.core.texture.V2.recolor.DefaultRecolorStrategy;
+import com.sigmundgranaas.forgero.core.texture.utils.RgbColour;
+import com.sigmundgranaas.forgero.smithing.ForgeroClientSmithingInitializer;
 import com.sigmundgranaas.forgero.smithing.block.custom.MoldBlock;
 import com.sigmundgranaas.forgero.smithing.block.entity.MoldBlockEntity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
@@ -16,6 +26,8 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
+import net.minecraft.client.texture.NativeImage;
+import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.SpriteIdentifier;
@@ -24,17 +36,20 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
 public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEntity> {
-    private static final SpriteIdentifier LAVA_TEXTURE = new SpriteIdentifier(
+
+
+    private static final SpriteIdentifier FLUID_TEXTURE = new SpriteIdentifier(
             SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE,
-            new Identifier("block/lava_still")
-    );
-    private static final SpriteIdentifier LAVA_FLOW_TEXTURE = new SpriteIdentifier(
-            SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE,
-            new Identifier("block/lava_flow")
+            new Identifier("forgero", "block/fluid")
     );
 
     // Track displayed progress for smooth cooling interpolation
     private final WeakHashMap<MoldBlockEntity, Float> displayedProgressMap = new WeakHashMap<>();
+
+    // Cache for colored textures to avoid regenerating every frame
+    private final WeakHashMap<String, NativeImageBackedTexture> coloredFluidTextureCache = new WeakHashMap<>();
+
+    private static final Logger LOGGER = LogManager.getLogger("MoldBlockEntityRenderer");
 
     public MoldBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {
     }
@@ -66,6 +81,88 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
             } catch (Exception ignored) {}
         }
         return img;
+    }
+
+    // Helper to extract the palette name from the fluid in the mold
+    private String getFluidPaletteName(MoldBlockEntity entity) {
+        Identifier fluidId = entity.getLiquid();
+        if (fluidId != null) {
+            String path = fluidId.getPath(); // e.g., "molten_iron"
+            if (path.startsWith("molten_")) {
+                String palette = path.substring("molten_".length());
+                return palette; // e.g., "iron"
+            } else {
+                LOGGER.warn("[FluidColor][DEBUG] Fluid path does not start with 'molten_': {}. Using fallback.", path);
+            }
+        } else {
+            LOGGER.warn("[FluidColor][DEBUG] MoldBlockEntity.getLiquid() returned null. Using fallback palette 'iron'.");
+        }
+        // fallback to "iron"
+        return "iron";
+    }
+
+    // Helper to colorize the grayscale fluid image with the palette
+    private NativeImageBackedTexture getColoredFluidTexture(String paletteName) {
+        String actualPaletteName = paletteName.endsWith(".png") ? paletteName : paletteName + ".png";
+        TextureService textureService = ForgeroClientSmithingInitializer.getTextureService();
+        if (coloredFluidTextureCache.containsKey(actualPaletteName)) {
+            return coloredFluidTextureCache.get(actualPaletteName);
+        }
+        Optional<Palette> paletteOpt = textureService.getPalette(actualPaletteName);
+        if (paletteOpt.isEmpty()) {
+            LOGGER.error("[FluidColor][DEBUG] Palette '{}' not found! Using fallback color (likely brown).", actualPaletteName);
+            return null;
+        }
+        BufferedImage grayscale = null;
+        try {
+            String generatedPath = System.getProperty("user.dir") + "/generated/assets/forgero/textures/block/fluid.png";
+            java.io.File generatedFile = new java.io.File(generatedPath);
+            if (generatedFile.exists()) {
+                grayscale = ImageIO.read(generatedFile);
+            } else {
+                try (InputStream is = MoldBlockEntityRenderer.class.getResourceAsStream("/assets/forgero/textures/block/fluid.png")) {
+                    if (is != null) {
+                        grayscale = ImageIO.read(is);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.error("[FluidColor] Error loading grayscale fluid image: {}", e.getMessage());
+        }
+        if (grayscale == null) {
+            LOGGER.error("[FluidColor] Grayscale fluid image is null!");
+            return null;
+        }
+        // --- Refactored: Use DefaultRecolorStrategy and TemplateTexture ---
+        DefaultRecolorStrategy recolorStrategy = new DefaultRecolorStrategy();
+        TemplateTexture templateTexture = new TemplateTexture(grayscale, recolorStrategy);
+        BufferedImage coloredImage = recolorStrategy.recolor(templateTexture, paletteOpt.get());
+        NativeImage colored;
+        try (java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream()) {
+            javax.imageio.ImageIO.write(coloredImage, "PNG", baos);
+            baos.flush();
+            colored = NativeImage.read(baos.toByteArray());
+        } catch (Exception e) {
+            LOGGER.error("[FluidColor] Error converting BufferedImage to NativeImage: {}", e.getMessage());
+            return null;
+        }
+        NativeImageBackedTexture tex = new NativeImageBackedTexture(colored);
+        coloredFluidTextureCache.put(actualPaletteName, tex);
+        return tex;
+    }
+
+    // Minimal implementation for DefaultRecolorStrategy
+    private static class FluidGreyscaleTemplate {
+        private final List<RgbColour> greyScaleValues;
+        public FluidGreyscaleTemplate(List<RgbColour> greyScaleValues) {
+            this.greyScaleValues = greyScaleValues;
+        }
+        public int getNumberOfGreyScales() {
+            return 1;
+        }
+        public List<RgbColour> getGreyScaleValues(int frameIndex) {
+            return greyScaleValues;
+        }
     }
 
     @Override
@@ -100,27 +197,19 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
 
         // Prepare colored pixel mask
         boolean[][] coloredPixels = new boolean[16][16];
-        int minX = 16, minZ = 16, maxX = -1, maxZ = -1;
+        int minX = 0, minZ = 0, maxX = 15, maxZ = 15; // Always use full 16x16 template
         if (template != null) {
-            for (int x = 0; x < Math.min(16, template.getWidth()); x++) {
-                for (int z = 0; z < Math.min(16, template.getHeight()); z++) {
+            for (int x = 0; x < 16; x++) {
+                for (int z = 0; z < 16; z++) {
                     int pixel = template.getRGB(x, z);
                     int alpha = (pixel >> 24) & 0xff;
-                    if (alpha > 10) {
-                        coloredPixels[x][z] = true;
-                        if (x < minX) minX = x;
-                        if (x > maxX) maxX = x;
-                        if (z < minZ) minZ = z;
-                        if (z > maxZ) maxZ = z;
-                    }
+                    coloredPixels[x][z] = alpha > 10;
                 }
             }
-        }
-        // Fallback to a default region if no template or no colored pixels
-        if (minX > maxX || minZ > maxZ) {
-            minX = 3; maxX = 12; minZ = 3; maxZ = 12;
-            for (int x = minX; x <= maxX; x++) {
-                for (int z = minZ; z <= maxZ; z++) {
+        } else {
+            // If no template, fallback to all true (render all)
+            for (int x = 0; x < 16; x++) {
+                for (int z = 0; z < 16; z++) {
                     coloredPixels[x][z] = true;
                 }
             }
@@ -141,16 +230,41 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
         float blue = 0.1f;
         float lavaAlpha = (0.8f + (heat * 0.2f)) * (1.0f - blendFactor);
 
-        Sprite lavaSprite = LAVA_FLOW_TEXTURE.getSprite();
-        float minU = lavaSprite.getMinU();
-        float maxU = lavaSprite.getMaxU();
-        float minV = lavaSprite.getMinV();
-        float maxV = lavaSprite.getMaxV();
+        // Get palette name for current fluid/material
+        String paletteName = getFluidPaletteName(entity);
+        NativeImageBackedTexture coloredFluidTexture = getColoredFluidTexture(paletteName);
 
-        VertexConsumer vertexConsumer = LAVA_FLOW_TEXTURE.getVertexConsumer(
-                vertexConsumers,
-                RenderLayer::getEntityTranslucent
-        );
+        Sprite lavaSprite;
+        Identifier dynamicId = null;
+        if (coloredFluidTexture != null) {
+            // Register the colored texture as a dynamic texture and use its Identifier for rendering
+            dynamicId = MinecraftClient.getInstance().getTextureManager().registerDynamicTexture(
+                "forgero_fluid_colored_" + paletteName, coloredFluidTexture
+            );
+            lavaSprite = null;
+        } else {
+            lavaSprite = FLUID_TEXTURE.getSprite();
+        }
+
+        float minU, maxU, minV, maxV;
+        Identifier textureId;
+        if (lavaSprite != null) {
+            minU = lavaSprite.getMinU();
+            maxU = lavaSprite.getMaxU();
+            minV = lavaSprite.getMinV();
+            maxV = lavaSprite.getMaxV();
+            textureId = lavaSprite.getAtlasId();
+        } else {
+            // Full texture UVs for dynamic texture
+            minU = 0.0f;
+            maxU = 1.0f;
+            minV = 0.0f;
+            maxV = 1.0f;
+            // Use the dynamicId returned by registerDynamicTexture
+            textureId = dynamicId;
+        }
+
+        VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(textureId));
 
         matrices.push();
         MatrixStack.Entry entry = matrices.peek();
@@ -175,9 +289,9 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
                     float v0 = minV + vSpan * (z - minZ) / (float)(maxZ - minZ + 1);
                     float v1 = minV + vSpan * (z - minZ + 1) / (float)(maxZ - minZ + 1);
 
-                    // Top face (up)
+                    // Remove tint: use white color and full alpha
                     vertexConsumer.vertex(entry.getPositionMatrix(), fx0, maxY, fz0)
-                            .color(red, green, blue, lavaAlpha)
+                            .color(1f, 1f, 1f, 1f)
                             .texture(u0, v0)
                             .overlay(overlay)
                             .light(light)
@@ -185,7 +299,7 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
                             .next();
 
                     vertexConsumer.vertex(entry.getPositionMatrix(), fx1, maxY, fz0)
-                            .color(red, green, blue, lavaAlpha)
+                            .color(1f, 1f, 1f, 1f)
                             .texture(u1, v0)
                             .overlay(overlay)
                             .light(light)
@@ -193,7 +307,7 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
                             .next();
 
                     vertexConsumer.vertex(entry.getPositionMatrix(), fx1, maxY, fz1)
-                            .color(red, green, blue, lavaAlpha)
+                            .color(1f, 1f, 1f, 1f)
                             .texture(u1, v1)
                             .overlay(overlay)
                             .light(light)
@@ -201,7 +315,7 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
                             .next();
 
                     vertexConsumer.vertex(entry.getPositionMatrix(), fx0, maxY, fz1)
-                            .color(red, green, blue, lavaAlpha)
+                            .color(1f, 1f, 1f, 1f)
                             .texture(u0, v1)
                             .overlay(overlay)
                             .light(light)
@@ -215,14 +329,8 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
 
         // --- Render the resulting tool/item as a 2D sprite overlay, fading in ---
         ItemStack result = entity.getResult();
-        // DEBUG: Print info about the result and blendFactor
-        if (result == null) {
-            System.out.println("[Renderer] entity.getResult() returned null");
-        } else if (result.isEmpty()) {
-            System.out.println("[Renderer] entity.getResult() is EMPTY at progress=" + progress + " (blockPos=" + entity.getPos() + ")");
-        } else {
-            System.out.println("[Renderer] entity.getResult(): " + result.getItem().getName().getString() + " x" + result.getCount() + " at progress=" + progress + " blendFactor=" + blendFactor + " (blockPos=" + entity.getPos() + ")");
-        }
+
+
 
         if (!result.isEmpty() && blendFactor > 0.0f) {
             // Get the item sprite

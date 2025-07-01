@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
+import com.sigmundgranaas.forgero.core.Forgero;
 
 public class TextureLoader {
 	private final FileLoader loader;
@@ -18,15 +19,19 @@ public class TextureLoader {
 	}
 
 	Optional<BufferedImage> load(String location) {
+		Forgero.LOGGER.info("[TextureLoader] Attempting to load image from: {}", location);
 		var streamOpt = loader.getStream(location);
 		if (streamOpt.isPresent()) {
 			var stream = streamOpt.get();
 			try (stream) {
+				Forgero.LOGGER.info("[TextureLoader] Successfully opened stream for: {}", location);
 				return Optional.of(ImageIO.read(stream));
 			} catch (Exception e) {
+				Forgero.LOGGER.error("[TextureLoader] Exception reading image from {}: {}", location, e.getMessage());
 				return Optional.empty();
 			}
 		}
+		Forgero.LOGGER.warn("[TextureLoader] No stream found for: {}", location);
 		return Optional.empty();
 	}
 

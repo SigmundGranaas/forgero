@@ -1,6 +1,13 @@
 package com.sigmundgranaas.forgero.smithing;
 
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.texture.V2.Palette;
@@ -23,6 +30,12 @@ import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 
 public class ForgeroClientSmithingInitializer implements ClientModInitializer {
+    private static com.sigmundgranaas.forgero.core.texture.V2.TextureService textureService;
+
+    public static com.sigmundgranaas.forgero.core.texture.V2.TextureService getTextureService() {
+        return textureService;
+    }
+
     @Override
     public void onInitializeClient() {
         // Register block entity renderers
@@ -36,6 +49,14 @@ public class ForgeroClientSmithingInitializer implements ClientModInitializer {
         
         // Register fluid texture generator
         registerFluidTextureGenerator();
+
+        // Initialize and store the TextureService for smithing
+        textureService = com.sigmundgranaas.forgero.core.texture.V2.TextureGenerator
+                .getInstance(new FileService(), ForgeroClient.PALETTE_REMAP)
+                .getService();
+
+        // Ensure grayscale fluid texture is present in generated assets for palette variants
+        ensureGrayscaleFluidTexture();
     }
     
     private void registerFluidTextureGenerator() {
@@ -63,6 +84,26 @@ public class ForgeroClientSmithingInitializer implements ClientModInitializer {
             Forgero.LOGGER.info("Successfully registered FluidTextureGenerator");
         } catch (Exception e) {
             Forgero.LOGGER.error("Failed to initialize FluidTextureGenerator: {}", e.getMessage(), e);
+        }
+    }
+
+    private void ensureGrayscaleFluidTexture() {
+        try {
+            String resourcePath = "/assets/forgero/textures/block/fluid.png";
+            Path outputPath = Paths.get(System.getProperty("user.dir"), "generated", "assets", "forgero", "textures", "block", "fluid.png");
+            if (!Files.exists(outputPath)) {
+                InputStream stream = getClass().getResourceAsStream(resourcePath);
+                if (stream != null) {
+                    BufferedImage img = ImageIO.read(stream);
+                    Files.createDirectories(outputPath.getParent());
+                    ImageIO.write(img, "PNG", outputPath.toFile());
+                    Forgero.LOGGER.info("Copied grayscale fluid texture to: {}", outputPath.toAbsolutePath());
+                } else {
+                    Forgero.LOGGER.warn("Could not find grayscale fluid texture at: {}", resourcePath);
+                }
+            }
+        } catch (Exception e) {
+            Forgero.LOGGER.error("Failed to ensure grayscale fluid texture: {}", e.getMessage(), e);
         }
     }
 }
