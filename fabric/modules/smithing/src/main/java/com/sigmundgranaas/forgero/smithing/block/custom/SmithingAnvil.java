@@ -1,6 +1,8 @@
 package com.sigmundgranaas.forgero.smithing.block.custom;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.SmithingAnvilBlockEntity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,6 +40,8 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
     private static final VoxelShape SHAPE_EAST;
     private static final VoxelShape SHAPE_SOUTH;
     private static final VoxelShape SHAPE_WEST;
+
+    private static final Logger LOGGER = LogManager.getLogger(SmithingAnvil.class);
 
     static {
         VoxelShape shapeS = VoxelShapes.empty();
@@ -212,15 +216,31 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
         return BlockRenderType.MODEL;
     }
 
+    private boolean isToolPartHeadOrToolPart(com.sigmundgranaas.forgero.core.type.Type type) {
+        if (type.equals(com.sigmundgranaas.forgero.core.type.Type.TOOL_PART_HEAD)
+            || type.typeName().equals("TOOL_PART")) {
+            return true;
+        }
+        for (com.sigmundgranaas.forgero.core.type.Type parent : type.parent()) {
+            if (isToolPartHeadOrToolPart(parent)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @SuppressWarnings("deprecation")
     @Override
     public ActionResult onUse(@NotNull BlockState blockState, @NotNull World world, @NotNull BlockPos blockPosition, @Nullable PlayerEntity player, @Nullable Hand hand, @NotNull BlockHitResult blockHitResult) {
+        LOGGER.info("SmithingAnvil onUse called");
         if (world.isClient) {
+            LOGGER.info("onUse: world is client, returning SUCCESS");
             return ActionResult.SUCCESS;
         }
 
         BlockEntity blockEntity = world.getBlockEntity(blockPosition);
         if (!(blockEntity instanceof SmithingAnvilBlockEntity smithingAnvilBlockEntity) || player == null) {
+            LOGGER.info("onUse: Not a SmithingAnvilBlockEntity or player is null");
             return ActionResult.PASS;
         }
 
@@ -228,15 +248,65 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
         ItemStack stackInHand = player.getStackInHand(hand);
         ItemStack anvilItem = inventory.getStack(0);
 
+        // Hammer logic: apply random condition to toolpart
+        if (stackInHand.getItem().getTranslationKey().contains("smithing_hammer")) {
+            LOGGER.info("onUse: Player is holding a smithing hammer");
+            if (!anvilItem.isEmpty()) {
+                var stateOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert(anvilItem);
+                if (stateOpt.isPresent() && stateOpt.get() instanceof com.sigmundgranaas.forgero.core.condition.Conditional<?> conditional) {
+                    var state = stateOpt.get();
+                    if (state instanceof com.sigmundgranaas.forgero.core.state.Typed) {
+                        com.sigmundgranaas.forgero.core.state.Typed typed = (com.sigmundgranaas.forgero.core.state.Typed) state;
+                        if (isToolPartHeadOrToolPart(typed.type())) {
+                            LOGGER.info("onUse: Toolpart found in anvil: {}", anvilItem);
+                            var allConditions = com.sigmundgranaas.forgero.core.condition.Conditions.INSTANCE.all();
+                            if (!allConditions.isEmpty()) {
+                                var randomCondition = allConditions.get(world.getRandom().nextInt(allConditions.size()));
+                                LOGGER.info("onUse: Applying random condition: {}", randomCondition.name());
+                                var conditioned = conditional.applyCondition(randomCondition);
+                                var newStackOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert((com.sigmundgranaas.forgero.core.state.State)conditioned);
+                                newStackOpt.ifPresent(newStack -> {
+                                    LOGGER.info("onUse: Condition applied, updating anvil slot");
+                                    inventory.setStack(0, newStack);
+                                    smithingAnvilBlockEntity.markDirty();
+                                });
+                            } else {
+                                LOGGER.info("onUse: No conditions available to apply");
+                            }
+                        } else {
+                            // Log type and parent chain for debugging
+                            StringBuilder parentChain = new StringBuilder();
+                            com.sigmundgranaas.forgero.core.type.Type current = typed.type();
+                            parentChain.append(current.typeName());
+                            while (!current.parent().isEmpty()) {
+                                current = current.parent().get(0);
+                                parentChain.append(" <- ").append(current.typeName());
+                            }
+                            LOGGER.info("onUse: Item in anvil is not a toolpart. Type: {}. Parent chain: {}", typed.type().typeName(), parentChain);
+                        }
+                    } else {
+                        LOGGER.info("onUse: Item in anvil is not a toolpart");
+                    }
+                } else {
+                    LOGGER.info("onUse: Could not convert anvilItem to Conditional");
+                }
+            } else {
+                LOGGER.info("onUse: No item found in anvil");
+            }
+            return ActionResult.SUCCESS;
+        }
+
         // Simple logic: right-click with empty hand to pick up, with item to place if empty
         if (stackInHand.isEmpty()) {
             if (!anvilItem.isEmpty()) {
+                LOGGER.info("onUse: Picking up item from anvil: {}", anvilItem);
                 player.getInventory().offerOrDrop(anvilItem.copy());
                 inventory.setStack(0, ItemStack.EMPTY);
                 smithingAnvilBlockEntity.markDirty();
             }
         } else {
             if (anvilItem.isEmpty()) {
+                LOGGER.info("onUse: Placing item in anvil: {}", stackInHand);
                 ItemStack toPlace = stackInHand.copy();
                 toPlace.setCount(1);
                 inventory.setStack(0, toPlace);
