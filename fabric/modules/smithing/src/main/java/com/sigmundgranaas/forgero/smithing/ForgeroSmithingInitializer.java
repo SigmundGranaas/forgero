@@ -11,6 +11,8 @@ import com.sigmundgranaas.forgero.smithing.recipe.ModRecipes;
 import com.sigmundgranaas.forgero.smithing.resource.MoldGenerator;
 import com.sigmundgranaas.forgero.smithing.screen.ModScreenHandlers;
 
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureHandler;
+
 import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -33,5 +35,6 @@ public class ForgeroSmithingInitializer implements ForgeroPreInitializationEntry
 
 		ARRPGenerator.register(new MoldGenerator());
 
+		TemperatureHandler.register();
 	}
 }
