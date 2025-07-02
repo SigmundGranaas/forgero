@@ -10,7 +10,6 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 
@@ -18,19 +17,22 @@ public class TemperatureHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger("ForgeroTemperature");
     private static final int HEAT_PER_TICK = 1;
     private static final int COOL_PER_TICK = 2;
+    private static int tickCounter = 0;
+    private static final int TICK_INTERVAL = 5; // Only update every 5 ticks
 
     public static void register() {
         ServerTickEvents.END_WORLD_TICK.register(TemperatureHandler::onWorldTick);
     }
 
     private static void onWorldTick(ServerWorld world) {
-        Box worldBox = new Box(
-            world.getWorldBorder().getBoundWest(), world.getBottomY(), world.getWorldBorder().getBoundNorth(),
-            world.getWorldBorder().getBoundEast(), world.getTopY(), world.getWorldBorder().getBoundSouth()
-        );
-        for (ItemEntity entity : world.getEntitiesByClass(ItemEntity.class, worldBox, entity -> true)) {
-            ItemStack stack = entity.getStack();
-            LOGGER.debug("Checking item entity: {} at {}", stack.getItem().getTranslationKey(), entity.getBlockPos());
+        tickCounter++;
+        if (tickCounter % TICK_INTERVAL != 0) {
+            return;
+        }
+        for (var entity : world.iterateEntities()) {
+            if (!(entity instanceof ItemEntity itemEntity)) continue;
+            ItemStack stack = itemEntity.getStack();
+            LOGGER.debug("Checking item entity: {} at {}", stack.getItem().getTranslationKey(), itemEntity.getBlockPos());
             // Only apply to tool part heads or tool parts
             if (!(stack.getItem() instanceof StateItem stateItem)) {
                 LOGGER.debug("Skipped: Not a StateItem");
@@ -42,7 +44,7 @@ public class TemperatureHandler {
                 LOGGER.debug("Skipped: Not a tool part head or tool part");
                 continue;
             }
-            BlockPos pos = entity.getBlockPos();
+            BlockPos pos = itemEntity.getBlockPos();
             var blockState = world.getBlockState(pos);
             var blockStateBelow = world.getBlockState(pos.down());
             LOGGER.debug("Block at {}: {} | Block below: {}", pos, blockState.getBlock().getTranslationKey(), blockStateBelow.getBlock().getTranslationKey());
@@ -71,7 +73,7 @@ public class TemperatureHandler {
             }
             if (changed) {
                 TemperatureUtils.setTemperature(stack, clampedTemp);
-                entity.setStack(stack.copy()); // Force sync to client for real-time color update
+                itemEntity.setStack(stack.copy()); // Force sync to client for real-time color update
                 LOGGER.info("Temperature of item {} at {} changed from {} to {}", stack.getItem().getTranslationKey(), pos, prevTemp, clampedTemp);
             }
         }
