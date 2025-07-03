@@ -59,12 +59,13 @@ public class TemperatureHandler {
                 // Log every time the inventory cooling logic is checked
                 LOGGER.debug("Inventory cooling check: {} temp={} prevTemp={}", stack.getItem().getTranslationKey(), temp, prevTemp);
                 // Cool in inventory down to DEFAULT_TEMPERATURE, slower than in fluid
+                // Only update NBT if the value is truly different
                 if (temp > TemperatureUtils.DEFAULT_TEMPERATURE) {
-                    temp -= INVENTORY_COOL_PER_TICK;
-                    if (temp < TemperatureUtils.DEFAULT_TEMPERATURE) temp = TemperatureUtils.DEFAULT_TEMPERATURE;
-                    if (temp != prevTemp) {
-                        TemperatureUtils.setTemperature(stack, temp);
-                        LOGGER.debug("Cooled inventory item {} to {} (inventory slow)", stack.getItem().getTranslationKey(), temp);
+                    int newTemp = temp - INVENTORY_COOL_PER_TICK;
+                    if (newTemp < TemperatureUtils.DEFAULT_TEMPERATURE) newTemp = TemperatureUtils.DEFAULT_TEMPERATURE;
+                    if (newTemp != temp) {
+                        TemperatureUtils.setTemperature(stack, newTemp);
+                        LOGGER.debug("Cooled inventory item {} to {} (inventory slow)", stack.getItem().getTranslationKey(), newTemp);
                     }
                 }
             }
