@@ -5,7 +5,7 @@ import net.minecraft.nbt.NbtCompound;
 
 public class TemperatureUtils {
     public static final String TEMPERATURE_KEY = "forgero_temperature";
-    public static final int DEFAULT_TEMPERATURE = 10;
+    public static final int DEFAULT_TEMPERATURE = 20;
     public static final int MIN_TEMPERATURE = 0;
     public static final int MAX_TEMPERATURE = 2000;
 
