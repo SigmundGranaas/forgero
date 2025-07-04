@@ -3,9 +3,10 @@ package com.sigmundgranaas.forgero.core.tags.engine;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TagGraphBuilder {
-	private final Map<OpenIdentifier, Set<OpenIdentifier>> parentRelationships = new HashMap<>();
+	private final Map<OpenIdentifier, Set<OpenIdentifier>> parentRelationships = new ConcurrentHashMap<>();
 
 	public TagGraphBuilder add(OpenIdentifier id, Collection<OpenIdentifier> parents) {
 		parentRelationships.computeIfAbsent(id, k -> new HashSet<>()).addAll(parents);

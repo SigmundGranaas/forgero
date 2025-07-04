@@ -1,4 +1,5 @@
-package com.sigmundgranaas.forgero.core.tag.tagloading;
+// File: /home/sigmund/Documents/projects/forgero/1-20/forgero-core-2/src/main/java/com/sigmundgranaas/forgero/core/tags/engine/TagLoadingService.java
+package com.sigmundgranaas.forgero.core.tags.engine;
 
 import com.sigmundgranaas.forgero.core.identifier.api.Identifiable;
 import com.sigmundgranaas.forgero.core.identifier.api.IdentifierFactory;
@@ -7,10 +8,6 @@ import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceConverter;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceProvider;
 import com.sigmundgranaas.forgero.utility.resource.loader.implementation.ClassPathResourceProvider;
 import com.sigmundgranaas.forgero.utility.resource.loader.implementation.ResourceLoader;
-import com.sigmundgranaas.forgero.core.tags.engine.TagDefinition;
-import com.sigmundgranaas.forgero.core.tags.engine.TagGraph;
-import com.sigmundgranaas.forgero.core.tags.engine.TagGraphBuilder;
-import com.sigmundgranaas.forgero.core.tags.engine.TagParser;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -28,6 +25,7 @@ public class TagLoadingService {
 	private final ResourceLoader<IdentifiableTagDefinition> resourceLoader;
 	private final TagParser tagParser = new TagParser();
 	private static final String JSON_EXTENSION = ".json";
+	private static final String TAGS_PATH_FOLDER = "tags/"; // The specific folder name for tags
 
 	public TagLoadingService(IdentifierFactory factory) {
 		this.factory = factory;
@@ -37,15 +35,30 @@ public class TagLoadingService {
 		// The converter reads the stream, parses it into a TagDefinition, and pairs it with its cleaned ID.
 		ResourceConverter<IdentifiableTagDefinition> converter = (stream, id) -> {
 			try {
-				String path = id.path();
-				if (!path.endsWith(JSON_EXTENSION)) {
-					// We only care about .json files for tag definitions.
+				String rawPath = id.path(); // Example: "tags/materials/iron.json"
+
+				// Ensure it's a JSON file
+				if (!rawPath.endsWith(JSON_EXTENSION)) {
 					return Optional.empty();
 				}
 
-				// The actual tag identifier is the file path WITHOUT the .json extension.
-				String tagPath = path.substring(0, path.length() - JSON_EXTENSION.length());
-				OpenIdentifier tagId = new OpenIdentifier(id.namespace(), tagPath);
+				// Check if the resource is in the designated 'tags/' folder.
+				// This acts as a filter to ensure only actual tag definitions are processed by this service.
+				if (!rawPath.startsWith(TAGS_PATH_FOLDER)) {
+					return Optional.empty();
+				}
+
+				// Extract the part of the path that represents the tag's actual name/location in the graph.
+				// E.g., "tags/materials/material.json" -> "materials/material"
+				String tagRelativePath = rawPath.substring(TAGS_PATH_FOLDER.length());
+				if (tagRelativePath.endsWith(JSON_EXTENSION)) {
+					tagRelativePath = tagRelativePath.substring(0, tagRelativePath.length() - JSON_EXTENSION.length());
+				}
+
+				// Create the canonical OpenIdentifier for the tag.
+				// The factory.of() method will now handle the final normalization to a single-level name.
+				// So, "materials/material" becomes "material" here.
+				OpenIdentifier tagId = factory.of(id.namespace(), tagRelativePath);
 
 				String content = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
 				TagDefinition definition = tagParser.parse(content);
@@ -66,9 +79,14 @@ public class TagLoadingService {
 	 */
 	public TagGraph loadTags(OpenIdentifier rootPath) {
 		TagGraphBuilder builder = new TagGraphBuilder();
+		// The rootPath passed to load is still a path-like OpenIdentifier (e.g., "forgero:tags").
 		Stream<IdentifiableTagDefinition> definitions = resourceLoader.load(rootPath, true);
 
 		definitions.forEach(def -> {
+			// When resolving parent IDs from strings (like "forgero:materials/material" from JSON),
+			// the factory.of(String) method is used. This method will automatically
+			// canonicalize these parent IDs (e.g., "forgero:materials/material" -> "forgero:material").
+			// This ensures all IDs in the TagGraph are canonical.
 			Set<OpenIdentifier> parentIds = def.parents().stream()
 					.map(factory::of)
 					.collect(Collectors.toSet());

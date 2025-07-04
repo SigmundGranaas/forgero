@@ -7,5 +7,5 @@ public class DefaultAttributes {
 	public static final OpenIdentifier ATTACK_DAMAGE = new OpenIdentifier("forgero", "attack_damage");
 	public static final OpenIdentifier MINING_SPEED = new OpenIdentifier("forgero", "mining_speed");
 	public static final OpenIdentifier MINING_LEVEL = new OpenIdentifier("forgero", "mining_level");
-	public static final OpenIdentifier ATTACK_SPEED = new OpenIdentifier("forgero", "attack_speed"); // new
+	public static final OpenIdentifier ATTACK_SPEED = new OpenIdentifier("forgero", "attack_speed");
 }

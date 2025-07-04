@@ -1,0 +1,28 @@
+{
+  "type": "forgero:part_template",
+  "name": "Pickaxe Head",
+  "tags": ["forgero:parts/pickaxe_head_type"],
+  "structure": {
+    "material": {
+      "type": "forgero:tool_material",
+      "count": 1
+    }
+  },
+  "naming": {
+    "pattern": "{material_name} {part_template_name}"
+  },
+  "attributes": [
+    {
+      "id": "forgero:template-durability-composite",
+      "type": "forgero:durability",
+      "composite": "forgero:material-durability",
+      "computation": { "multiply": 1.5 }
+    },
+    {
+      "id": "forgero:template-mining_speed-composite",
+      "type": "forgero:mining_speed",
+      "composite": "forgero:material-mining_speed",
+      "computation": { "multiply": 1.2 }
+    }
+  ]
+}

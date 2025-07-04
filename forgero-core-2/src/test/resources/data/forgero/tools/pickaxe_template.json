@@ -1,0 +1,14 @@
+{
+  "type": "forgero:tool_template",
+  "name": "Pickaxe",
+  "tags": ["forgero:tools/pickaxe"],
+  "structure": {
+    "head": {
+      "type": "forgero:parts/pickaxe_head_type"
+    },
+    "handle": {
+      "type": "forgero:parts/handle_type",
+      "default": "forgero:static_oak_handle"
+    }
+  }
+}
