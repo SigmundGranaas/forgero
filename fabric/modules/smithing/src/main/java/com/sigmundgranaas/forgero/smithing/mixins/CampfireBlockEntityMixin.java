@@ -20,7 +20,9 @@ public class CampfireBlockEntityMixin {
 
     @Inject(method = "litServerTick", at = @At("TAIL"))
     private static void forgero$increaseToolPartTemperature(net.minecraft.world.World world, net.minecraft.util.math.BlockPos pos, net.minecraft.block.BlockState state, CampfireBlockEntity campfire, CallbackInfo ci) {
-        DefaultedList<ItemStack> items = campfire.getItemsBeingCooked();boolean changed = false;
+        DefaultedList<ItemStack> items = campfire.getItemsBeingCooked();
+        boolean changed = false;
+        boolean isSoulCampfire = state.getBlock() == net.minecraft.block.Blocks.SOUL_CAMPFIRE;
         for (int i = 0; i < items.size(); i++) {
             ItemStack stack = items.get(i);
             if (stack.getItem() instanceof StateItem stateItem) {
