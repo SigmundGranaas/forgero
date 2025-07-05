@@ -195,7 +195,7 @@ public class MoldGenerator implements DynamicResourceGenerator {
         }
 
         // Special handling for known problematic shapes
-        isSpecialShape = textureName.contains("sword") || textureName.contains("blade") || 
+        isSpecialShape = textureName.contains("sword") || textureName.contains("blade") ||
                                 textureName.contains("knife") || textureName.contains("dagger") ||
                                 textureName.contains("rapier") || textureName.contains("saber");
 
@@ -212,7 +212,7 @@ public class MoldGenerator implements DynamicResourceGenerator {
         int alphaThreshold = 30; // Lower threshold to catch more details
 
         // For special shapes like swords, use an even lower threshold to ensure thin parts are captured
-        if (textureName.contains("sword") || textureName.contains("blade") || 
+        if (textureName.contains("sword") || textureName.contains("blade") ||
             textureName.contains("knife") || textureName.contains("dagger") ||
             textureName.contains("rapier") || textureName.contains("saber")) {
             alphaThreshold = 20; // Even lower threshold for thin shapes
@@ -245,7 +245,7 @@ public class MoldGenerator implements DynamicResourceGenerator {
         }
 
         // Generate the outline with special handling for thin shapes
-        isSpecialShape = textureName.contains("sword") || textureName.contains("blade") || 
+        isSpecialShape = textureName.contains("sword") || textureName.contains("blade") ||
                                textureName.contains("knife") || textureName.contains("dagger") ||
                                textureName.contains("rapier") || textureName.contains("saber");
 
@@ -340,97 +340,98 @@ public class MoldGenerator implements DynamicResourceGenerator {
         }
 
         // Determine if this is a thin shape that needs special wall handling
-        boolean isThinShape = textureName.contains("sword") || textureName.contains("blade") || 
+        boolean isThinShape = textureName.contains("sword") || textureName.contains("blade") ||
                              textureName.contains("knife") || textureName.contains("dagger") ||
                              textureName.contains("rapier") || textureName.contains("saber");
 
-        // Add walls for border pixels with enhanced algorithm for thin shapes
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                // For thin shapes, we want walls for ALL outline pixels that aren't colored
-                // For regular shapes, we only want walls at borders
-                boolean shouldAddWall = false;
+		// Enhanced wall generation for border pixels - fixed edge handling
+		for (int x = 0; x < 16; x++) {
+			for (int z = 0; z < 16; z++) {
+				boolean shouldAddWall = false;
 
-                if (outlinePixels[x][z] && !coloredPixels[x][z]) {
-                    if (isThinShape) {
-                        // For thin shapes, we add walls for all outline pixels that aren't part of the colored region
-                        // This ensures complete wall coverage for thin shapes like swords
-                        shouldAddWall = true;
-                    } else {
-                        // For regular shapes, only add walls at borders
-                        // Check if this is a border pixel by examining orthogonal neighbors
-                        // Check direct adjacent cells (N, E, S, W)
-                        int[][] directions = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
-                        for (int[] dir : directions) {
-                            int nx = x + dir[0];
-                            int nz = z + dir[1];
+				if (outlinePixels[x][z] && !coloredPixels[x][z]) {
+					if (isThinShape) {
+						// For thin shapes, we add walls for all outline pixels that aren't part of the colored region
+						shouldAddWall = true;
+					} else {
+						// For regular shapes, check if this is a border pixel
+						boolean isAtTemplateEdge = (x == 0 || x == 15 || z == 0 || z == 15);
 
-                            // It's a border if it's at the edge of the outline or adjacent to a colored pixel
-                            if (nx < 0 || nx >= 16 || nz < 0 || nz >= 16 || !outlinePixels[nx][nz] || coloredPixels[nx][nz]) {
-                                shouldAddWall = true;
-                                break;
-                            }
-                        }
+						if (isAtTemplateEdge) {
+							// Always create walls for pixels at the 16x16 template boundary
+							shouldAddWall = true;
+						} else {
+							// For interior pixels, check if this is a border by examining orthogonal neighbors
+							int[][] directions = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
+							for (int[] dir : directions) {
+								int nx = x + dir[0];
+								int nz = z + dir[1];
 
-                        // Always create walls at the edge of the template bounds
-                        if (x == 0 || x == 15 || z == 0 || z == 15) {
-                            shouldAddWall = true;
-                        }
-                    }
+								// It's a border if adjacent to a non-outline pixel or a colored pixel
+								if (nx < 0 || nx >= 16 || nz < 0 || nz >= 16 || !outlinePixels[nx][nz] || coloredPixels[nx][nz]) {
+									shouldAddWall = true;
+									break;
+								}
+							}
+						}
+					}
 
-                    if (shouldAddWall) {
-                        VoxelShape wallShape = Block.createCuboidShape(x, 1, z, x + 1, 2, z + 1);
-                        finalShape = VoxelShapes.union(finalShape, wallShape);
-                    }
-                }
-            }
-        }
+					if (shouldAddWall) {
+						VoxelShape wallShape = Block.createCuboidShape(x, 1, z, x + 1, 2, z + 1);
+						finalShape = VoxelShapes.union(finalShape, wallShape);
+					}
+				}
+			}
+		}
 
-        // For thin shapes, make one final pass to fill any single-pixel gaps in the walls
-        if (isThinShape) {
-            // Find wall gaps - pixels that have walls on at least 3 sides but no wall themselves
-            for (int x = 1; x < 15; x++) {
-                for (int z = 1; z < 15; z++) {
-                    // Skip if this already has a wall or is a colored pixel
-                    if (coloredPixels[x][z] || (outlinePixels[x][z] && !coloredPixels[x][z])) {
-                        continue;
-                    }
+// Additional pass for edge pixel wall reinforcement
+// This ensures that pixels touching the 16x16 boundary get proper wall coverage
+		for (int x = 0; x < 16; x++) {
+			for (int z = 0; z < 16; z++) {
+				if (outlinePixels[x][z] && !coloredPixels[x][z]) {
+					boolean needsEdgeWall = false;
 
-                    // Count how many neighbors have walls
-                    int wallNeighbors = 0;
-                    int[][] directions = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
+					// Check if this pixel is adjacent to the template boundary
+					if (x == 0 || x == 15 || z == 0 || z == 15) {
+						needsEdgeWall = true;
+					}
 
-                    for (int[] dir : directions) {
-                        int nx = x + dir[0];
-                        int nz = z + dir[1];
+					// Also check if any neighboring colored pixels are at the boundary
+					// This handles cases where the template shape extends to the very edge
+					int[][] directions = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
+					for (int[] dir : directions) {
+						int nx = x + dir[0];
+						int nz = z + dir[1];
 
-                        if (nx >= 0 && nx < 16 && nz >= 0 && nz < 16 && 
-                            outlinePixels[nx][nz] && !coloredPixels[nx][nz]) {
-                            wallNeighbors++;
-                        }
-                    }
+						if (nx >= 0 && nx < 16 && nz >= 0 && nz < 16 && coloredPixels[nx][nz]) {
+							// If the colored neighbor is at the boundary, we need a wall
+							if (nx == 0 || nx == 15 || nz == 0 || nz == 15) {
+								needsEdgeWall = true;
+								break;
+							}
+						}
+					}
 
-                    // If this pixel has walls on at least 3 sides, fill it in
-                    if (wallNeighbors >= 3) {
-                        VoxelShape wallShape = Block.createCuboidShape(x, 1, z, x + 1, 2, z + 1);
-                        finalShape = VoxelShapes.union(finalShape, wallShape);
-                    }
-                }
-            }
-        }
+					if (needsEdgeWall) {
+						VoxelShape wallShape = Block.createCuboidShape(x, 1, z, x + 1, 2, z + 1);
+						finalShape = VoxelShapes.union(finalShape, wallShape);
+					}
+				}
+			}
+		}
 
         // Track successful mapping
         textureToShapeMap.put(textureName, true);
 
-        String shapeType = textureName.contains("sword") || textureName.contains("blade") || 
+        String shapeType = textureName.contains("sword") || textureName.contains("blade") ||
                          textureName.contains("knife") || textureName.contains("dagger") ||
                          textureName.contains("rapier") || textureName.contains("saber") ?
                          "thin/special" : "standard";
 
-        // Log detailed VoxelShape information for debugging                 
+        // Log detailed VoxelShape information for debugging
         logVoxelShapeDetails(textureName, coloredPixels, outlinePixels);
 
-        Forgero.LOGGER.info("Generated hollow mold VoxelShape for {} (type: {}) with complete walls", 
+        Forgero.LOGGER.info("Generated hollow mold VoxelShape for {} (type: {}) with complete walls",
                         textureName, shapeType);
         return finalShape;
     }
