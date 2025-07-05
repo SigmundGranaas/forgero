@@ -44,6 +44,31 @@ public class CampfireBlockEntityMixin {
         }
     }
 
+    @Inject(method = "litServerTick", at = @At("HEAD"), cancellable = true)
+    private static void forgero$preventEjectAtMaxTemp(net.minecraft.world.World world, net.minecraft.util.math.BlockPos pos, net.minecraft.block.BlockState state, CampfireBlockEntity campfire, CallbackInfo ci) {
+        DefaultedList<ItemStack> items = campfire.getItemsBeingCooked();
+        for (int i = 0; i < items.size(); i++) {
+            ItemStack stack = items.get(i);
+            if (stack.getItem() instanceof StateItem stateItem) {
+                var type = stateItem.dynamicState(stack).type();
+                if (ToolPartTypeUtils.isToolPartHeadOrToolPart(type)) {
+                    int temp = TemperatureUtils.getTemperature(stack);
+                    if (temp >= TemperatureUtils.MAX_TEMPERATURE) {
+                        // Prevent vanilla from ejecting the item by resetting the cook time to 0
+                        try {
+                            java.lang.reflect.Field cookingTimes = CampfireBlockEntity.class.getDeclaredField("cookingTimes");
+                            cookingTimes.setAccessible(true);
+                            int[] times = (int[]) cookingTimes.get(campfire);
+                            times[i] = 0;
+                        } catch (Exception e) {
+                            // Log or ignore
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     @Inject(method = "addItem", at = @At("HEAD"), cancellable = true)
     private void forgero$allowToolPartPlacement(@org.jetbrains.annotations.Nullable net.minecraft.entity.Entity user, ItemStack stack, int cookTime, org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable<Boolean> cir) {
         if (stack.getItem() instanceof StateItem stateItem) {
@@ -98,6 +123,28 @@ public class CampfireBlockEntityMixin {
             campfire.markDirty();
             campfire.getWorld().updateListeners(campfire.getPos(), campfire.getCachedState(), campfire.getCachedState(), net.minecraft.block.Block.NOTIFY_ALL);
             ci.cancel(); // Prevent vanilla logic from running
+        }
+    }
+
+    @Inject(method = "litServerTick", at = @At("TAIL"))
+    private static void forgero$toolPartCampfireEffects(net.minecraft.world.World world, net.minecraft.util.math.BlockPos pos, net.minecraft.block.BlockState state, CampfireBlockEntity campfire, CallbackInfo ci) {
+        DefaultedList<ItemStack> items = campfire.getItemsBeingCooked();
+        boolean isLitCampfire = state.isOf(net.minecraft.block.Blocks.CAMPFIRE) || state.isOf(net.minecraft.block.Blocks.SOUL_CAMPFIRE);
+        if (!isLitCampfire || !state.get(net.minecraft.state.property.Properties.LIT)) return;
+        for (int i = 0; i < items.size(); i++) {
+            ItemStack stack = items.get(i);
+            if (stack.getItem() instanceof StateItem stateItem) {
+                var type = stateItem.dynamicState(stack).type();
+                if (ToolPartTypeUtils.isToolPartHeadOrToolPart(type)) {
+                    int temp = TemperatureUtils.getTemperature(stack);
+                    int newTemp = Math.min(temp + 10, TemperatureUtils.MAX_TEMPERATURE);
+                    if (newTemp > temp) {
+                        // Play a more fitting sound and spawn particles when heating up
+                        world.playSound(null, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, net.minecraft.sound.SoundEvents.BLOCK_FIRE_AMBIENT, net.minecraft.sound.SoundCategory.BLOCKS, 0.7F, 1.0F);
+                        world.addParticle(net.minecraft.particle.ParticleTypes.LAVA, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 0, 0.05, 0);
+                    }
+                }
+            }
         }
     }
 }

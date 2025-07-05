@@ -5,12 +5,12 @@ import com.sigmundgranaas.forgero.smithing.util.ToolPartTypeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.state.property.Properties;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 
@@ -19,9 +19,10 @@ public class TemperatureHandler {
     private static final int HEAT_PER_TICK = 1;
     private static final int COOL_PER_TICK = 2;
     private static final int INVENTORY_COOL_PER_TICK = 1; // Slower cooling in inventory
-    private static final int INVENTORY_COOL_TICK_INTERVAL = 20; // Only cool every 10 ticks
+    private static final int INVENTORY_COOL_TICK_INTERVAL = 20; // Only cool every 20 ticks
     private static int tickCounter = 0;
-    private static final int TICK_INTERVAL = 5; // Only update every 5 ticks
+    private static final int TICK_INTERVAL = 20; // Only update every 20 ticks
+    private static final int FLUID_COOL_PER_TICK = 2; // Cooling rate in fluid
 
     public static void register() {
         ServerTickEvents.END_WORLD_TICK.register(TemperatureHandler::onWorldTick);
@@ -58,7 +59,7 @@ public class TemperatureHandler {
                     }
                 }
                 // Log every time the inventory cooling logic is checked
-                if (tickCounter % INVENTORY_COOL_TICK_INTERVAL == 0) {
+                if (tickCounter % 20 == 0) { // Changed to every 20 ticks
                     if (temp > 20) {
                         temp = Math.max(20, temp - INVENTORY_COOL_PER_TICK);
                         TemperatureUtils.setTemperature(stack, temp);
@@ -87,35 +88,27 @@ public class TemperatureHandler {
             }
             BlockPos pos = itemEntity.getBlockPos();
             var blockState = world.getBlockState(pos);
-            var blockStateBelow = world.getBlockState(pos.down());
-            LOGGER.debug("Block at {}: {} | Block below: {}", pos, blockState.getBlock().getTranslationKey(), blockStateBelow.getBlock().getTranslationKey());
+            // Use the block at the item's position for cauldron detection
+            LOGGER.info("[Forgero] Item at {}: blockAt registry={} class={}", pos, blockState.getBlock().getTranslationKey(), blockState.getBlock().getClass().getName());
             boolean changed = false;
             int temp = TemperatureUtils.getTemperature(stack);
             int prevTemp = temp;
-            boolean inMagma = blockState.isOf(Blocks.MAGMA_BLOCK) || blockStateBelow.isOf(Blocks.MAGMA_BLOCK);
-            boolean inFluid = !blockState.getFluidState().isEmpty();
-            // Heat up if on magma block (at or below)
-            if (inMagma) {
-                temp += HEAT_PER_TICK;
+            // Improved cauldron detection for water cauldron at the item's position
+            boolean isWaterCauldron = blockState.isOf(net.minecraft.block.Blocks.WATER_CAULDRON);
+            int cauldronLevel = isWaterCauldron && blockState.contains(Properties.LEVEL_3) ? blockState.get(Properties.LEVEL_3) : 0;
+            boolean inFilledCauldron = isWaterCauldron && cauldronLevel == 3;
+            LOGGER.info("[Forgero] Checking for filled water cauldron at item pos {}: isWaterCauldron={} level={}", pos, isWaterCauldron, cauldronLevel);
+            if (inFilledCauldron) {
+                if (temp > 100) {
+                    // Spawn cloud particles and play extinguish sound
+                    world.spawnParticles(net.minecraft.particle.ParticleTypes.CLOUD, itemEntity.getX(), itemEntity.getY() + 0.2, itemEntity.getZ(), 8, 0.2, 0.1, 0.2, 0.01);
+                    world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_FIRE_EXTINGUISH, net.minecraft.sound.SoundCategory.BLOCKS, 0.7F, 1.2F);
+                }
+                temp = Math.max(20, temp - FLUID_COOL_PER_TICK);
                 changed = true;
-                LOGGER.debug("Heating up item at {}: {} -> {} (magma)", pos, prevTemp, temp);
-            // Cool down if in water or any liquid
-            } else if (inFluid) {
-                temp -= COOL_PER_TICK;
-                changed = true;
-                LOGGER.debug("Cooling down item at {}: {} -> {} (fluid)", pos, prevTemp, temp);
+                LOGGER.info("[Forgero] Cooling down item at {}: {} -> {} (filled water cauldron)", pos, prevTemp, temp);
             } else {
-                LOGGER.debug("No heating/cooling at {}: block={} blockBelow={} fluid={} (no effect)", pos, blockState.getBlock().getTranslationKey(), blockStateBelow.getBlock().getTranslationKey(), blockState.getFluidState().getFluid().toString());
-            }
-            // Clamp temperature
-            int clampedTemp = TemperatureUtils.clamp(temp);
-            if (clampedTemp != temp) {
-                LOGGER.debug("Clamped temperature at {}: {} -> {}", pos, temp, clampedTemp);
-            }
-            if (changed) {
-                TemperatureUtils.setTemperature(stack, clampedTemp);
-                itemEntity.setStack(stack.copy()); // Force sync to client for real-time color update
-                LOGGER.info("Temperature of item {} at {} changed from {} to {}", stack.getItem().getTranslationKey(), pos, prevTemp, clampedTemp);
+                LOGGER.info("[Forgero] No heating/cooling at {}: block={} (no effect)", pos, blockState.getBlock().getTranslationKey());
             }
         }
     }
