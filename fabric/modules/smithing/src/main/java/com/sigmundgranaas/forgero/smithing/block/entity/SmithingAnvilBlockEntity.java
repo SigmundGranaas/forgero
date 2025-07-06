@@ -55,6 +55,12 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	private static final int MARKER_LIFETIME_TICKS = 30; // 1.5 seconds
 	private final Random random = new Random();
 
+	// Add this constant to match TemperatureHandler
+	private static final int ANVIL_INVENTORY_COOL_PER_TICK = 1;
+	private static final int ANVIL_INVENTORY_COOL_TICK_INTERVAL = 20; // 20 = every 20 ticks (1 per second)
+
+	private int anvilInventoryCoolTickCounter = 0;
+
 	public SmithingAnvilBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.SMITHING_ANVIL, pos, state);
 	}
@@ -175,7 +181,16 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	public void processMarkerAttempt(boolean hit) {
 		if (markerAttempts >= 3) return;
 		markerAttempts++;
-		if (hit) markerHitsCount++;
+		ItemStack stack = inventory.getStack(0);
+		int temp = TemperatureUtils.getTemperature(stack);
+		int depletion = hit ? 40 : 10; // 40 for hit, 10 for miss
+		if (hit) {
+			markerHitsCount++;
+		}
+		// --- Deplete temperature on every attempt ---
+		int newTemp = Math.max(TemperatureUtils.MIN_TEMPERATURE, temp - depletion);
+		TemperatureUtils.setTemperature(stack, newTemp);
+		markDirty();
 		markerPositions.clear();
 		markerHits.clear();
 		if (markerAttempts < 3) {
@@ -231,10 +246,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			double worldZ = this.getPos().getZ() + marker.y;
 			for (int i = 0; i < 2; i++) {
 				this.world.addParticle(
-					new net.minecraft.particle.DustParticleEffect(
-						new Vector3f(1.0f, 0.5f, 0.0f), 0.2f),
-					worldX, worldY, worldZ,
-					0.0, 0.02, 0.0
+						new net.minecraft.particle.DustParticleEffect(
+								new Vector3f(1.0f, 0.5f, 0.0f), 0.2f),
+						worldX, worldY, worldZ,
+						0.0, 0.02, 0.0
 				);
 			}
 		}
@@ -246,47 +261,61 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			this.clientTick();
 			return;
 		}
-		// --- Random marker spawning logic ---
-		ItemStack stack = inventory.getStack(0);
-		int temp = TemperatureUtils.getTemperature(stack);
-		boolean valid = !stack.isEmpty() && ToolPartTypeUtils.isToolPartHeadOrToolPart(
-			StateService.INSTANCE.convert(stack)
-				.filter(s -> s instanceof Typed)
-				.map(s -> ((Typed) s).type())
-				.orElse(null)
-		);
-		if (valid && temp >= 400 && temp <= 600) {
-			if (markerPositions.isEmpty() && markerCooldown <= 0) {
-				// Spawn a marker
-				markerPositions.clear();
-				markerHits.clear();
-				float x = 0.35f + random.nextFloat() * 0.3f;
-				float y = 0.35f + random.nextFloat() * 0.3f;
-				markerPositions.add(new Vec2f(x, y));
-				markerHits.add(false);
-				markerTimeout = MARKER_LIFETIME_TICKS;
-				markDirty();
-			} else if (!markerPositions.isEmpty()) {
-				// Marker is active, count down its lifetime
-				markerTimeout--;
-				if (markerTimeout <= 0) {
-					markerPositions.clear();
-					markerHits.clear();
-					// Set a random cooldown before next marker
-					markerCooldown = MIN_COOLDOWN_TICKS + random.nextInt(MAX_COOLDOWN_TICKS - MIN_COOLDOWN_TICKS + 1);
+
+		// --- Inventory cooling for item in anvil slot (now matches world tick rate) ---
+		anvilInventoryCoolTickCounter++;
+		if (anvilInventoryCoolTickCounter >= ANVIL_INVENTORY_COOL_TICK_INTERVAL) {
+			anvilInventoryCoolTickCounter = 0;
+			ItemStack stack = inventory.getStack(0);
+			if (!stack.isEmpty()) {
+				int temp = TemperatureUtils.getTemperature(stack);
+				if (temp > 20) {
+					temp = Math.max(20, temp - ANVIL_INVENTORY_COOL_PER_TICK);
+					TemperatureUtils.setTemperature(stack, temp);
 					markDirty();
 				}
-			} else if (markerCooldown > 0) {
-				markerCooldown--;
 			}
-		} else {
-			// Not in valid temp range or not a tool part: clear markers and timers
-			if (!markerPositions.isEmpty() || markerCooldown > 0) {
-				markerPositions.clear();
-				markerHits.clear();
-				markerCooldown = 0;
-				markerTimeout = 0;
-				markDirty();
+			// --- Random marker spawning logic ---
+			int temp = TemperatureUtils.getTemperature(stack);
+			boolean valid = !stack.isEmpty() && ToolPartTypeUtils.isToolPartHeadOrToolPart(
+					StateService.INSTANCE.convert(stack)
+							.filter(s -> s instanceof Typed)
+							.map(s -> ((Typed) s).type())
+							.orElse(null)
+			);
+			if (valid && temp >= 400 && temp <= 600) {
+				if (markerPositions.isEmpty() && markerCooldown <= 0) {
+					// Spawn a marker
+					markerPositions.clear();
+					markerHits.clear();
+					float x = 0.35f + random.nextFloat() * 0.3f;
+					float y = 0.35f + random.nextFloat() * 0.3f;
+					markerPositions.add(new Vec2f(x, y));
+					markerHits.add(false);
+					markerTimeout = MARKER_LIFETIME_TICKS;
+					markDirty();
+				} else if (!markerPositions.isEmpty()) {
+					// Marker is active, count down its lifetime
+					markerTimeout--;
+					if (markerTimeout <= 0) {
+						markerPositions.clear();
+						markerHits.clear();
+						// Set a random cooldown before next marker
+						markerCooldown = MIN_COOLDOWN_TICKS + random.nextInt(MAX_COOLDOWN_TICKS - MIN_COOLDOWN_TICKS + 1);
+						markDirty();
+					}
+				} else if (markerCooldown > 0) {
+					markerCooldown--;
+				}
+			} else {
+				// Not in valid temp range or not a tool part: clear markers and timers
+				if (!markerPositions.isEmpty() || markerCooldown > 0) {
+					markerPositions.clear();
+					markerHits.clear();
+					markerCooldown = 0;
+					markerTimeout = 0;
+					markDirty();
+				}
 			}
 		}
 	}
