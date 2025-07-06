@@ -2,22 +2,16 @@ package com.sigmundgranaas.forgero.smithing.block.renderer;
 
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
-import java.util.List;
-import java.util.Optional;
 import java.util.WeakHashMap;
-
 import javax.imageio.ImageIO;
 
 import com.sigmundgranaas.forgero.core.texture.V2.Palette;
 import com.sigmundgranaas.forgero.core.texture.V2.TextureService;
 import com.sigmundgranaas.forgero.core.texture.V2.TemplateTexture;
 import com.sigmundgranaas.forgero.core.texture.V2.recolor.DefaultRecolorStrategy;
-import com.sigmundgranaas.forgero.core.texture.utils.RgbColour;
 import com.sigmundgranaas.forgero.smithing.ForgeroClientSmithingInitializer;
 import com.sigmundgranaas.forgero.smithing.block.custom.MoldBlock;
 import com.sigmundgranaas.forgero.smithing.block.entity.MoldBlockEntity;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
@@ -36,25 +30,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
 public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEntity> {
-
-
     private static final SpriteIdentifier FLUID_TEXTURE = new SpriteIdentifier(
             SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE,
             new Identifier("forgero", "block/fluid")
     );
-
-    // Track displayed progress for smooth cooling interpolation
     private final WeakHashMap<MoldBlockEntity, Float> displayedProgressMap = new WeakHashMap<>();
-
-    // Cache for colored textures to avoid regenerating every frame
     private final WeakHashMap<String, NativeImageBackedTexture> coloredFluidTextureCache = new WeakHashMap<>();
 
-    private static final Logger LOGGER = LogManager.getLogger("MoldBlockEntityRenderer");
+    public MoldBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {}
 
-    public MoldBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {
-    }
-
-    // Helper to get the template name from the block registry name (e.g., axe_head_mold -> axe_head)
     private String getTemplateName(MoldBlockEntity entity) {
         BlockState state = entity.getCachedState();
         Identifier id = net.minecraft.registry.Registries.BLOCK.getId(state.getBlock());
@@ -65,60 +49,45 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
         return path;
     }
 
-    // Helper to load the template PNG as a BufferedImage (from resources)
-    private BufferedImage getTemplateImage(String templateName) {
-        String[] resourcePaths = {
-            "/assets/forgero/templates/textures/smithing/" + templateName + ".png",
-            "/assets/forgero/textures/templates/main/" + templateName + ".png"
-        };
-        BufferedImage img = null;
-        for (String path : resourcePaths) {
-            try (InputStream is = MoldBlockEntityRenderer.class.getResourceAsStream(path)) {
-                if (is != null) {
-                    img = ImageIO.read(is);
-                    break;
-                }
-            } catch (Exception ignored) {}
-        }
-        return img;
+    // Only use the mold template from /assets/forgero/templates/textures/molds/
+    private BufferedImage getMoldTemplateImage(String templateName) {
+        String resourcePath = "/assets/forgero/templates/textures/molds/" + templateName + ".png";
+        try (InputStream is = MoldBlockEntityRenderer.class.getResourceAsStream(resourcePath)) {
+            if (is != null) {
+                return ImageIO.read(is);
+            }
+        } catch (Exception ignored) {}
+        return null;
     }
 
-    // Helper to extract the palette name from the fluid in the mold
     private String getFluidPaletteName(MoldBlockEntity entity) {
         if (entity == null) {
             return "iron";
         }
-
         Identifier fluidId = entity.getLiquid();
         if (fluidId != null) {
-            String path = fluidId.getPath(); // e.g., "molten_iron"
+            String path = fluidId.getPath();
             if (path.startsWith("molten_")) {
                 String palette = path.substring("molten_".length());
-                return palette != null && !palette.isEmpty() ? palette : "iron"; // e.g., "iron"
+                return palette != null && !palette.isEmpty() ? palette : "iron";
             }
         }
-        // fallback to "iron"
         return "iron";
     }
 
-    // Helper to colorize the grayscale fluid image with the palette
     private NativeImageBackedTexture getColoredFluidTexture(String paletteName) {
         if (paletteName == null) {
             paletteName = "iron";
         }
-
         String actualPaletteName = paletteName.endsWith(".png") ? paletteName : paletteName + ".png";
         TextureService textureService = ForgeroClientSmithingInitializer.getTextureService();
-
         if (textureService == null) {
             return null;
         }
-
         if (coloredFluidTextureCache.containsKey(actualPaletteName)) {
             return coloredFluidTextureCache.get(actualPaletteName);
         }
-
-        Optional<Palette> paletteOpt = textureService.getPalette(actualPaletteName);
+        java.util.Optional<Palette> paletteOpt = textureService.getPalette(actualPaletteName);
         if (paletteOpt.isEmpty()) {
             return null;
         }
@@ -141,7 +110,6 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
         if (grayscale == null) {
             return null;
         }
-        // --- Refactored: Use DefaultRecolorStrategy and TemplateTexture ---
         DefaultRecolorStrategy recolorStrategy = new DefaultRecolorStrategy();
         TemplateTexture templateTexture = new TemplateTexture(grayscale, recolorStrategy);
         BufferedImage coloredImage = recolorStrategy.recolor(templateTexture, paletteOpt.get());
@@ -158,93 +126,60 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
         return tex;
     }
 
-    // Minimal implementation for DefaultRecolorStrategy
-    private static class FluidGreyscaleTemplate {
-        private final List<RgbColour> greyScaleValues;
-        public FluidGreyscaleTemplate(List<RgbColour> greyScaleValues) {
-            this.greyScaleValues = greyScaleValues;
-        }
-        public int getNumberOfGreyScales() {
-            return 1;
-        }
-        public List<RgbColour> getGreyScaleValues(int frameIndex) {
-            return greyScaleValues;
-        }
-    }
-
     @Override
     public void render(MoldBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         if (!entity.getCachedState().get(MoldBlock.FILLED)) {
             return;
         }
 
-        // --- Smooth interpolation for cooling when progress >= 0.75 ---
         float targetProgress = entity.getProgress() / 100f;
         float displayedProgress = displayedProgressMap.getOrDefault(entity, targetProgress);
-
-        // If progress >= 0.75, interpolate displayedProgress toward targetProgress (1.0)
         if (targetProgress >= 0.75f) {
-            float lerpSpeed = 0.05f; // Lower = slower
+            float lerpSpeed = 0.05f;
             displayedProgress = displayedProgress + (targetProgress - displayedProgress) * lerpSpeed * (1.0f + tickDelta);
         } else {
-            // Snap to target if not cooling, or update instantly
             displayedProgress = targetProgress;
         }
         displayedProgressMap.put(entity, displayedProgress);
-
-        // Use displayedProgress instead of progress for rendering
         float progress = displayedProgress;
 
         float minY = 0.05f;
         float maxY = minY + (1.0f / 16.0f);
 
-        // Get template name and image
         String templateName = getTemplateName(entity);
-        BufferedImage template = getTemplateImage(templateName);
+        BufferedImage moldTemplate = getMoldTemplateImage(templateName);
 
-        // Prepare colored pixel mask
-        boolean[][] coloredPixels = new boolean[16][16];
-        int minX = 0, minZ = 0, maxX = 15, maxZ = 15; // Always use full 16x16 template
-        if (template != null) {
+        // Only render fluid where the mold template is opaque
+        boolean[][] moldMask = new boolean[16][16];
+        if (moldTemplate != null) {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
-                    int pixel = template.getRGB(x, z);
+                    int pixel = moldTemplate.getRGB(x, z);
                     int alpha = (pixel >> 24) & 0xff;
-                    coloredPixels[x][z] = alpha > 10;
+                    moldMask[x][z] = alpha > 10;
                 }
             }
         } else {
-            // If no template, fallback to all true (render all)
-            for (int x = 0; x < 16; x++) {
-                for (int z = 0; z < 16; z++) {
-                    coloredPixels[x][z] = true;
-                }
-            }
+            // If no template, render nothing
+            return;
         }
 
-        // --- Blending logic for lava/result transition ---
-        float blendStart = 0.60f; // Start blending at 70% (was 0.85)
-        float blendEnd = 1.0f;    // End at 100%
+        float blendStart = 0.60f;
+        float blendEnd = 1.0f;
         float blendFactor = 0.0f;
         if (progress >= blendStart) {
             blendFactor = Math.min(1.0f, (progress - blendStart) / (blendEnd - blendStart));
         }
 
-        // Texture and color setup for lava
         float heat = 1.0f - progress;
-        float red = 0.9f + (heat * 0.1f);
-        float green = 0.3f + (heat * 0.3f);
-        float blue = 0.1f;
         float lavaAlpha = (0.8f + (heat * 0.2f)) * (1.0f - blendFactor);
 
-        // Get palette name for current fluid/material
         String paletteName = getFluidPaletteName(entity);
         NativeImageBackedTexture coloredFluidTexture = getColoredFluidTexture(paletteName);
 
         Sprite lavaSprite;
         Identifier dynamicId = null;
         if (coloredFluidTexture != null) {
-            // Register the colored texture as a dynamic texture and use its Identifier for rendering
             dynamicId = MinecraftClient.getInstance().getTextureManager().registerDynamicTexture(
                 "forgero_fluid_colored_" + paletteName, coloredFluidTexture
             );
@@ -262,12 +197,10 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
             maxV = lavaSprite.getMaxV();
             textureId = lavaSprite.getAtlasId();
         } else {
-            // Full texture UVs for dynamic texture
             minU = 0.0f;
             maxU = 1.0f;
             minV = 0.0f;
             maxV = 1.0f;
-            // Use the dynamicId returned by registerDynamicTexture
             textureId = dynamicId;
         }
 
@@ -276,27 +209,24 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
         matrices.push();
         MatrixStack.Entry entry = matrices.peek();
 
-        // Map the full texture to the bounds of the colored region
         float uSpan = maxU - minU;
         float vSpan = maxV - minV;
 
-        // For each colored pixel, render a 1x1 "voxel" quad at maxY (lava, fading out)
+        // Only render fluid on mold pixels
         if (lavaAlpha > 0.01f) {
-            for (int x = minX; x <= maxX; x++) {
-                for (int z = minZ; z <= maxZ; z++) {
-                    if (!coloredPixels[x][z]) continue;
+            for (int x = 0; x < 16; x++) {
+                for (int z = 0; z < 16; z++) {
+                    if (!moldMask[x][z]) continue;
                     float fx0 = x / 16.0f;
                     float fx1 = (x + 1) / 16.0f;
                     float fz0 = z / 16.0f;
                     float fz1 = (z + 1) / 16.0f;
 
-                    // Calculate UVs so the full texture is mapped over the whole colored region
-                    float u0 = minU + uSpan * (x - minX) / (float)(maxX - minX + 1);
-                    float u1 = minU + uSpan * (x - minX + 1) / (float)(maxX - minX + 1);
-                    float v0 = minV + vSpan * (z - minZ) / (float)(maxZ - minZ + 1);
-                    float v1 = minV + vSpan * (z - minZ + 1) / (float)(maxZ - minZ + 1);
+                    float u0 = minU + uSpan * x / 16.0f;
+                    float u1 = minU + uSpan * (x + 1) / 16.0f;
+                    float v0 = minV + vSpan * z / 16.0f;
+                    float v1 = minV + vSpan * (z + 1) / 16.0f;
 
-                    // Remove tint: use white color and full alpha
                     vertexConsumer.vertex(entry.getPositionMatrix(), fx0, maxY, fz0)
                             .color(1f, 1f, 1f, 1f)
                             .texture(u0, v0)
@@ -334,36 +264,28 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
 
         matrices.pop();
 
-        // --- Render the resulting tool/item as a 2D sprite overlay, fading in ---
+        // Render the resulting tool/item as a 2D sprite overlay, fading in, only on mold pixels
         ItemStack result = entity.getResult();
-
-
-
         if (!result.isEmpty() && blendFactor > 0.0f) {
-            // Get the item sprite
             Sprite itemSprite = MinecraftClient.getInstance()
                 .getItemRenderer()
                 .getModel(result, entity.getWorld(), null, 0)
                 .getParticleSprite();
 
             float itemAlpha = blendFactor;
-
-            // Use the correct VertexConsumer for the item sprite
             VertexConsumer itemConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(itemSprite.getAtlasId()));
 
             matrices.push();
             MatrixStack.Entry itemEntry = matrices.peek();
 
-            // Render the item sprite only where the template mask is set, using the original sprite pixel mapping
-            for (int x = minX; x <= maxX; x++) {
-                for (int z = minZ; z <= maxZ; z++) {
-                    if (!coloredPixels[x][z]) continue;
+            for (int x = 0; x < 16; x++) {
+                for (int z = 0; z < 16; z++) {
+                    if (!moldMask[x][z]) continue;
                     float fx0 = x / 16.0f;
                     float fx1 = (x + 1) / 16.0f;
                     float fz0 = z / 16.0f;
                     float fz1 = (z + 1) / 16.0f;
 
-                    // Map each mold pixel directly to the corresponding item sprite pixel (1:1 mapping)
                     float u0 = itemSprite.getMinU() + (itemSprite.getMaxU() - itemSprite.getMinU()) * x / 16.0f;
                     float u1 = itemSprite.getMinU() + (itemSprite.getMaxU() - itemSprite.getMinU()) * (x + 1) / 16.0f;
                     float v0 = itemSprite.getMinV() + (itemSprite.getMaxV() - itemSprite.getMinV()) * z / 16.0f;
