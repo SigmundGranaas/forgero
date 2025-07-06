@@ -279,6 +279,9 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
                         LOGGER.info("onUse: Marker hit!");
                     }
                 }
+                if (!hit) {
+                    smithingAnvilBlockEntity.playMissSound();
+                }
                 smithingAnvilBlockEntity.processMarkerAttempt(hit);
                 if (smithingAnvilBlockEntity.getMarkerAttempts() >= 3) {
                     if (!anvilItem.isEmpty()) {

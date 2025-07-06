@@ -27,6 +27,8 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec2f;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -210,7 +212,28 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	public void setMarkerHit(int index) {
 		if (index >= 0 && index < markerHits.size()) {
 			markerHits.set(index, true);
+			// Play anvil use sound when marker is hit
+			if (world != null && !world.isClient) {
+				world.playSound(null, getPos(), SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 0.5f, 1.0f);
+				// Spawn sparks particles when marker is hit
+				if (world instanceof ServerWorld serverWorld) {
+					Vec2f marker = markerPositions.size() > index ? markerPositions.get(index) : new Vec2f(0.5f, 0.5f);
+					double px = getPos().getX() + marker.x;
+					double py = getPos().getY() + 1.05;
+					double pz = getPos().getZ() + marker.y;
+					for (int i = 0; i < 8; i++) {
+						serverWorld.spawnParticles(net.minecraft.particle.ParticleTypes.CRIT, px, py, pz, 1, 0.1, 0.05, 0.1, 0.15);
+					}
+				}
+			}
 			markDirty();
+		}
+	}
+
+	// Play anvil hit sound when the player misses the marker
+	public void playMissSound() {
+		if (world != null && !world.isClient) {
+			world.playSound(null, getPos(), SoundEvents.BLOCK_ANVIL_HIT, SoundCategory.BLOCKS, 1.0f, 1.0f);
 		}
 	}
 
