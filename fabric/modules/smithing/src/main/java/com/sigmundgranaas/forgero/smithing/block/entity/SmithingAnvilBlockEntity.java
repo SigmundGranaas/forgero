@@ -8,6 +8,7 @@ import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.util.ToolPartTypeUtils;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -145,8 +146,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				}
 			}
 		}
-		if (stack.isEmpty() || !isToolPart) {
-			System.out.println("[SmithingAnvilBlockEntity] No valid toolpart, clearing markers");
+		// --- Only spawn markers if temperature is between 400 and 600 ---
+		int temp = TemperatureUtils.getTemperature(stack);
+		if (stack.isEmpty() || !isToolPart || temp < 400 || temp > 600) {
+			System.out.println("[SmithingAnvilBlockEntity] No valid toolpart or temperature out of range, clearing markers");
 			markerPositions.clear();
 			markerHits.clear();
 			markDirty();
@@ -166,6 +169,14 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	}
 
 	public void generateSingleMarker() {
+		ItemStack stack = inventory.getStack(0);
+		int temp = TemperatureUtils.getTemperature(stack);
+		if (stack.isEmpty() || temp < 400 || temp > 600) {
+			markerPositions.clear();
+			markerHits.clear();
+			markDirty();
+			return;
+		}
 		markerPositions.clear();
 		markerHits.clear();
 		float x = 0.35f + (float) Math.random() * 0.3f;

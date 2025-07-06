@@ -316,6 +316,9 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
                                         var newStackOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert((com.sigmundgranaas.forgero.core.state.State)conditioned);
                                         newStackOpt.ifPresent(newStack -> {
                                             LOGGER.info("onUse: Condition applied, updating anvil slot");
+                                            // --- Preserve temperature NBT ---
+                                            int temp = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getTemperature(anvilItem);
+                                            com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.setTemperature(newStack, temp);
                                             inventory.setStack(0, newStack);
                                             smithingAnvilBlockEntity.markDirty();
                                         });
