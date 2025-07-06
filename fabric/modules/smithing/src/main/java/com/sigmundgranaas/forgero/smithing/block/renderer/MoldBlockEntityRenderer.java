@@ -164,6 +164,25 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
             return;
         }
 
+        // --- Centering logic (same as MoldGenerator) ---
+        int minX = 16, maxX = -1, minZ = 16, maxZ = -1;
+        for (int x = 0; x < 16; x++) for (int z = 0; z < 16; z++) {
+            if (moldMask[x][z]) {
+                if (x < minX) minX = x;
+                if (x > maxX) maxX = x;
+                if (z < minZ) minZ = z;
+                if (z > maxZ) maxZ = z;
+            }
+        }
+        int dx = 0, dz = 0;
+        if (maxX >= minX && maxZ >= minZ) {
+            int shapeWidth = maxX - minX + 1, shapeDepth = maxZ - minZ + 1;
+            int centerX = minX + shapeWidth / 2, centerZ = minZ + shapeDepth / 2, gridCenter = 8;
+            dx = gridCenter - centerX;
+            dz = gridCenter - centerZ;
+        }
+        // -----------------------------------------------
+
         float blendStart = 0.60f;
         float blendEnd = 1.0f;
         float blendFactor = 0.0f;
@@ -212,15 +231,17 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
         float uSpan = maxU - minU;
         float vSpan = maxV - minV;
 
-        // Only render fluid on mold pixels
+        // Only render fluid on mold pixels, centered
         if (lavaAlpha > 0.01f) {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
+                    int sx = x + dx, sz = z + dz;
+                    if (sx < 0 || sx >= 16 || sz < 0 || sz >= 16) continue;
                     if (!moldMask[x][z]) continue;
-                    float fx0 = x / 16.0f;
-                    float fx1 = (x + 1) / 16.0f;
-                    float fz0 = z / 16.0f;
-                    float fz1 = (z + 1) / 16.0f;
+                    float fx0 = sx / 16.0f;
+                    float fx1 = (sx + 1) / 16.0f;
+                    float fz0 = sz / 16.0f;
+                    float fz1 = (sz + 1) / 16.0f;
 
                     float u0 = minU + uSpan * x / 16.0f;
                     float u1 = minU + uSpan * (x + 1) / 16.0f;
@@ -264,7 +285,7 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
 
         matrices.pop();
 
-        // Render the resulting tool/item as a 2D sprite overlay, fading in, only on mold pixels
+        // Render the resulting tool/item as a 2D sprite overlay, fading in, only on mold pixels, centered
         ItemStack result = entity.getResult();
         if (!result.isEmpty() && blendFactor > 0.0f) {
             Sprite itemSprite = MinecraftClient.getInstance()
@@ -280,11 +301,13 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
 
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
+                    int sx = x + dx, sz = z + dz;
+                    if (sx < 0 || sx >= 16 || sz < 0 || sz >= 16) continue;
                     if (!moldMask[x][z]) continue;
-                    float fx0 = x / 16.0f;
-                    float fx1 = (x + 1) / 16.0f;
-                    float fz0 = z / 16.0f;
-                    float fz1 = (z + 1) / 16.0f;
+                    float fx0 = sx / 16.0f;
+                    float fx1 = (sx + 1) / 16.0f;
+                    float fz0 = sz / 16.0f;
+                    float fz1 = (sz + 1) / 16.0f;
 
                     float u0 = itemSprite.getMinU() + (itemSprite.getMaxU() - itemSprite.getMinU()) * x / 16.0f;
                     float u1 = itemSprite.getMinU() + (itemSprite.getMaxU() - itemSprite.getMinU()) * (x + 1) / 16.0f;

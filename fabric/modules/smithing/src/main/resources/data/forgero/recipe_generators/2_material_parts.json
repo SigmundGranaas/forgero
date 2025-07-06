@@ -23,7 +23,10 @@
       "hoe_head",
       "sword_guard",
       "refined_sword_guard",
-      "mastercrafted_sword_guard"
+      "mastercrafted_sword_guard",
+      "refined_sword_blade",
+      "mastercrafted_sword_blade",
+      "binding"
     ]
   },
   "type": "forgero:metal_molding",
