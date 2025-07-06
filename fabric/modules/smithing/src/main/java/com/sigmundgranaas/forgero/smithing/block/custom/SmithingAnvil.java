@@ -366,6 +366,7 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
         if (stackInHand.isEmpty()) {
             if (!anvilItem.isEmpty()) {
                 LOGGER.info("onUse: Picking up item from anvil: {}", anvilItem);
+                smithingAnvilBlockEntity.saveProgressToItem(); // Save progress to item NBT
                 player.getInventory().offerOrDrop(anvilItem.copy());
                 inventory.setStack(0, ItemStack.EMPTY);
                 smithingAnvilBlockEntity.markDirty();
@@ -388,6 +389,7 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
                 ItemStack toPlace = stackInHand.copy();
                 toPlace.setCount(1);
                 inventory.setStack(0, toPlace);
+                smithingAnvilBlockEntity.loadProgressFromItem(); // Restore progress from item NBT
                 LOGGER.info("onUse: Anvil slot now contains: {}", inventory.getStack(0));
                 stackInHand.decrement(1);
                 smithingAnvilBlockEntity.markDirty();

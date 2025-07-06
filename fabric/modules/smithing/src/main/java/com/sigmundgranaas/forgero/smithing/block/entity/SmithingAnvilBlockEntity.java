@@ -61,6 +61,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 	private int anvilInventoryCoolTickCounter = 0;
 
+	private static final String HITS_NBT_KEY = "forgero_markerHitsCount";
+	private static final String ATTEMPTS_NBT_KEY = "forgero_markerAttempts";
+
 	public SmithingAnvilBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.SMITHING_ANVIL, pos, state);
 	}
@@ -121,6 +124,13 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			markerNbt.putBoolean("hit", markerHits.size() > i && markerHits.get(i));
 			nbt.put("marker_" + i, markerNbt);
 		}
+		// Store progress in item NBT if present
+		ItemStack stack = inventory.getStack(0);
+		if (!stack.isEmpty()) {
+			NbtCompound itemNbt = stack.getOrCreateNbt();
+			itemNbt.putInt(HITS_NBT_KEY, markerHitsCount);
+			itemNbt.putInt(ATTEMPTS_NBT_KEY, markerAttempts);
+		}
 	}
 
 	@Override
@@ -137,6 +147,16 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				markerPositions.add(new Vec2f(markerNbt.getFloat("x"), markerNbt.getFloat("y")));
 				markerHits.add(markerNbt.getBoolean("hit"));
 			}
+		}
+		// Restore progress from item NBT if present
+		ItemStack stack = inventory.getStack(0);
+		if (!stack.isEmpty()) {
+			NbtCompound itemNbt = stack.getOrCreateNbt();
+			this.markerHitsCount = itemNbt.getInt(HITS_NBT_KEY);
+			this.markerAttempts = itemNbt.getInt(ATTEMPTS_NBT_KEY);
+		} else {
+			this.markerHitsCount = 0;
+			this.markerAttempts = 0;
 		}
 	}
 
@@ -317,6 +337,29 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 					markDirty();
 				}
 			}
+		}
+	}
+
+	// Persist marker progress to the item NBT
+	public void saveProgressToItem() {
+		ItemStack stack = inventory.getStack(0);
+		if (!stack.isEmpty()) {
+			NbtCompound itemNbt = stack.getOrCreateNbt();
+			itemNbt.putInt(HITS_NBT_KEY, markerHitsCount);
+			itemNbt.putInt(ATTEMPTS_NBT_KEY, markerAttempts);
+		}
+	}
+
+	// Restore marker progress from the item NBT
+	public void loadProgressFromItem() {
+		ItemStack stack = inventory.getStack(0);
+		if (!stack.isEmpty()) {
+			NbtCompound itemNbt = stack.getOrCreateNbt();
+			this.markerHitsCount = itemNbt.getInt(HITS_NBT_KEY);
+			this.markerAttempts = itemNbt.getInt(ATTEMPTS_NBT_KEY);
+		} else {
+			this.markerHitsCount = 0;
+			this.markerAttempts = 0;
 		}
 	}
 }
