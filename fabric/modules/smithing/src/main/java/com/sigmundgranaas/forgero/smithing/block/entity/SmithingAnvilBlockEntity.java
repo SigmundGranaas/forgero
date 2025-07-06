@@ -11,6 +11,7 @@ import com.sigmundgranaas.forgero.smithing.util.ToolPartTypeUtils;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -39,6 +40,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	private int hammerHits = 0;
 	private List<Vec2f> markerPositions = new ArrayList<>();
 	private List<Boolean> markerHits = new ArrayList<>();
+	private int markerAttempts = 0;
+	private int markerHitsCount = 0;
 
 	public SmithingAnvilBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.SMITHING_ANVIL, pos, state);
@@ -160,6 +163,49 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		markDirty();
 	}
 
+	public void generateSingleMarker() {
+		markerPositions.clear();
+		markerHits.clear();
+		float x = 0.35f + (float) Math.random() * 0.3f;
+		float y = 0.35f + (float) Math.random() * 0.3f;
+		markerPositions.add(new Vec2f(x, y));
+		markerHits.add(false);
+		markDirty();
+	}
+
+	public void resetMarkerProgress() {
+		markerPositions.clear();
+		markerHits.clear();
+		markerAttempts = 0;
+		markerHitsCount = 0;
+		markDirty();
+	}
+
+	public boolean hasActiveMarker() {
+		return !markerPositions.isEmpty() && markerAttempts < 3;
+	}
+
+	public int getMarkerAttempts() {
+		return markerAttempts;
+	}
+
+	public int getMarkerHitsCount() {
+		return markerHitsCount;
+	}
+
+	public void processMarkerAttempt(boolean hit) {
+		if (markerAttempts >= 3) return;
+		markerAttempts++;
+		if (hit) markerHitsCount++;
+		markerPositions.clear();
+		markerHits.clear();
+		if (markerAttempts < 3) {
+			generateSingleMarker();
+		} else {
+			markDirty();
+		}
+	}
+
 	// Mark a marker as hit and sync
 	public void setMarkerHit(int index) {
 		if (index >= 0 && index < markerHits.size()) {
@@ -170,28 +216,25 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 	// Reset all markers and sync
 	public void resetMarkers() {
-		markerPositions.clear();
-		markerHits.clear();
-		markDirty();
+		resetMarkerProgress();
 	}
 
 	// Client-side tick for spawning firework particles at unhit marker positions
 	public void clientTick() {
 		if (this.world == null || !this.world.isClient) return;
 		if (inventory.getStack(0).isEmpty()) return;
-		if (this.world.getTime() % 10 != 0) return;
-		for (int i = 0; i < markerPositions.size(); i++) {
-			if (markerHits.size() > i && !markerHits.get(i)) {
-				Vec2f marker = markerPositions.get(i);
-				double worldX = this.getPos().getX() + marker.x;
-				double worldY = this.getPos().getY() + 1.22;
-				double worldZ = this.getPos().getZ() + marker.y;
-				this.world.addParticle(
-					net.minecraft.particle.ParticleTypes.FIREWORK,
-					worldX, worldY, worldZ,
-					0.0, 0.02, 0.0
-				);
-			}
+		// Removed tick interval check to spawn particle every tick for longer effect
+		if (markerPositions.size() == 1 && markerAttempts < 3) {
+			Vec2f marker = markerPositions.get(0);
+			double worldX = this.getPos().getX() + marker.x;
+			double worldY = this.getPos().getY() + 1.025;
+			double worldZ = this.getPos().getZ() + marker.y;
+			this.world.addParticle(
+				new net.minecraft.particle.DustParticleEffect(
+					new Vector3f(1.0f, 0.5f, 0.0f), 0.2f),
+				worldX, worldY, worldZ,
+				0.0, 0.02, 0.0
+			);
 		}
 	}
 

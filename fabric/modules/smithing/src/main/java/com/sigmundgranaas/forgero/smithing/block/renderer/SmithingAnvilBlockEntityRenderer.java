@@ -40,8 +40,8 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 		matrices.push();
 
 		// Position the item on top of the anvil
-		matrices.translate(0.4f, 1.015f, 0.4f);
-		matrices.scale(1f, 1f, 1f);
+		matrices.translate(0.4f, 1.025f, 0.4f);
+		matrices.scale(1.25f, 1.25f, 1.25f);
 
 		// Rotate the item to lay flat on the anvil
 		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
