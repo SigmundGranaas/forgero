@@ -248,9 +248,17 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
         ItemStack stackInHand = player.getStackInHand(hand);
         ItemStack anvilItem = inventory.getStack(0);
 
-        // Hammer logic: apply random condition to toolpart
+        // Hammer logic: apply random condition to toolpart after 3 hits
         if (stackInHand.getItem().getTranslationKey().contains("smithing_hammer")) {
             LOGGER.info("onUse: Player is holding a smithing hammer");
+            int hits = smithingAnvilBlockEntity.getHammerHits() + 1;
+            smithingAnvilBlockEntity.setHammerHits(hits);
+            smithingAnvilBlockEntity.markDirty();
+            LOGGER.info("onUse: Hammer hit count: {}", hits);
+            if (hits < 3) {
+                return ActionResult.SUCCESS;
+            }
+            smithingAnvilBlockEntity.setHammerHits(0); // Reset after 3rd hit
             if (!anvilItem.isEmpty()) {
                 var stateOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert(anvilItem);
                 if (stateOpt.isPresent() && stateOpt.get() instanceof com.sigmundgranaas.forgero.core.condition.Conditional<?> conditional) {

@@ -1,21 +1,17 @@
 package com.sigmundgranaas.forgero.smithing.block.entity;
 
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
-
 import lombok.Getter;
-
-import net.minecraft.block.Block;
-import net.minecraft.inventory.SimpleInventory;
-
-import net.minecraft.nbt.NbtElement;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
@@ -33,6 +29,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	private static final @NotNull String INVENTORY_NBT_KEY = "inventory";
 
 	private @NotNull SimpleInventory inventory = new SimpleInventory(1);
+	private int hammerHits = 0;
 
 	public SmithingAnvilBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.SMITHING_ANVIL, pos, state);
@@ -72,14 +69,16 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 	@Override
 	public void writeNbt(@NotNull NbtCompound nbt) {
-		nbt.put(INVENTORY_NBT_KEY, this.getInventory().toNbtList());
 		super.writeNbt(nbt);
+		nbt.put(INVENTORY_NBT_KEY, this.getInventory().toNbtList());
+		nbt.putInt("hammerHits", hammerHits);
 	}
 
 	@Override
 	public void readNbt(@NotNull NbtCompound nbt) {
 		super.readNbt(nbt);
 		this.getInventory().readNbtList(nbt.getList(INVENTORY_NBT_KEY, NbtElement.LIST_TYPE));
+		this.hammerHits = nbt.getInt("hammerHits");
 		// Remove the markDirtyAndUpdateListeners call from here as it can cause issues during loading
 	}
 
@@ -98,6 +97,14 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		this.inventory = inventory;
 	}
 
+	public int getHammerHits() {
+		return hammerHits;
+	}
+
+	public void setHammerHits(int hits) {
+		this.hammerHits = hits;
+	}
+
 	private void markDirtyAndUpdateListeners() {
 		if (this.world == null || this.world.isClient()) {
 			return;
@@ -107,5 +114,3 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		this.world.updateListeners(this.pos, this.getCachedState(), this.getCachedState(), Block.NOTIFY_ALL);
 	}
 }
-
-
