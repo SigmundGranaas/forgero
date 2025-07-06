@@ -11,7 +11,10 @@
       "kunai_blade",
       "pommel",
       "refined_pommel",
-      "mastercrafted_pommel"
+      "mastercrafted_pommel",
+      "shovel_head",
+      "refined_shovel_head",
+      "mastercrafted_shovel_head"
     ]
   },
   "type": "forgero:metal_molding",

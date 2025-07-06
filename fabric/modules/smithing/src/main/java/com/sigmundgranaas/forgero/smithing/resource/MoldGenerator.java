@@ -42,6 +42,7 @@ public class MoldGenerator implements DynamicResourceGenerator {
     private ResourceManager resourceManager;
     private final Map<String, Boolean> textureToShapeMap = new HashMap<>();
     private static MoldGenerator INSTANCE;
+    private final Map<String, String> langEntries = new HashMap<>();
 
     public MoldGenerator() {
         INSTANCE = this;
@@ -345,9 +346,7 @@ public class MoldGenerator implements DynamicResourceGenerator {
         Identifier baseModelId = new Identifier(moldId.getNamespace(), "models/block/" + moldId.getPath() + ".json");
         pack.addAsset(baseModelId, baseModelJson.getBytes(java.nio.charset.StandardCharsets.UTF_8));
         String itemModelJson = String.format(
-            "{\n" +
-            "  \"parent\": \"%s:block/%s\"\n" +
-            "}",
+            "{\n  \"parent\": \"%s:block/%s\"\n}",
             moldId.getNamespace(), moldId.getPath()
         );
         Identifier itemModelId = new Identifier(moldId.getNamespace(), "models/item/" + moldId.getPath() + ".json");
