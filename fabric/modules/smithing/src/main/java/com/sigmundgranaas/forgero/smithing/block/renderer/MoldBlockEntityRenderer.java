@@ -68,7 +68,7 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
     // Helper to load the template PNG as a BufferedImage (from resources)
     private BufferedImage getTemplateImage(String templateName) {
         String[] resourcePaths = {
-            "/assets/forgero/templates/textures/main/" + templateName + ".png",
+            "/assets/forgero/templates/textures/smithing/" + templateName + ".png",
             "/assets/forgero/textures/templates/main/" + templateName + ".png"
         };
         BufferedImage img = null;
@@ -86,7 +86,6 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
     // Helper to extract the palette name from the fluid in the mold
     private String getFluidPaletteName(MoldBlockEntity entity) {
         if (entity == null) {
-            LOGGER.warn("[FluidColor][DEBUG] MoldBlockEntity is null. Using fallback palette 'iron'.");
             return "iron";
         }
 
@@ -96,11 +95,7 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
             if (path.startsWith("molten_")) {
                 String palette = path.substring("molten_".length());
                 return palette != null && !palette.isEmpty() ? palette : "iron"; // e.g., "iron"
-            } else {
-                LOGGER.warn("[FluidColor][DEBUG] Fluid path does not start with 'molten_': {}. Using fallback.", path);
             }
-        } else {
-            LOGGER.warn("[FluidColor][DEBUG] MoldBlockEntity.getLiquid() returned null. Using fallback palette 'iron'.");
         }
         // fallback to "iron"
         return "iron";
@@ -109,7 +104,6 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
     // Helper to colorize the grayscale fluid image with the palette
     private NativeImageBackedTexture getColoredFluidTexture(String paletteName) {
         if (paletteName == null) {
-            LOGGER.error("[FluidColor][DEBUG] Palette name is null! Using fallback.");
             paletteName = "iron";
         }
 
@@ -117,7 +111,6 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
         TextureService textureService = ForgeroClientSmithingInitializer.getTextureService();
 
         if (textureService == null) {
-            LOGGER.error("[FluidColor][DEBUG] TextureService is null! Cannot load palettes.");
             return null;
         }
 
@@ -127,7 +120,6 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
 
         Optional<Palette> paletteOpt = textureService.getPalette(actualPaletteName);
         if (paletteOpt.isEmpty()) {
-            LOGGER.error("[FluidColor][DEBUG] Palette '{}' not found! Using fallback color (likely brown).", actualPaletteName);
             return null;
         }
         BufferedImage grayscale = null;
@@ -144,10 +136,9 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
                 }
             }
         } catch (Exception e) {
-            LOGGER.error("[FluidColor] Error loading grayscale fluid image: {}", e.getMessage());
+            return null;
         }
         if (grayscale == null) {
-            LOGGER.error("[FluidColor] Grayscale fluid image is null!");
             return null;
         }
         // --- Refactored: Use DefaultRecolorStrategy and TemplateTexture ---
@@ -160,7 +151,6 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
             baos.flush();
             colored = NativeImage.read(baos.toByteArray());
         } catch (Exception e) {
-            LOGGER.error("[FluidColor] Error converting BufferedImage to NativeImage: {}", e.getMessage());
             return null;
         }
         NativeImageBackedTexture tex = new NativeImageBackedTexture(colored);

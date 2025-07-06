@@ -183,7 +183,6 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 				// Update maxProgress based on the recipe's cooking time
 				int oldMax = this.maxProgress;
 				this.maxProgress = recipe.getCookingTime();
-				System.out.println("Setting maxProgress: " + oldMax + " -> " + this.maxProgress + " (cookingTime: " + recipe.getCookingTime() + ")");
 				// Check if we can output the result
 				if (output.isEmpty()) {
 					return true;

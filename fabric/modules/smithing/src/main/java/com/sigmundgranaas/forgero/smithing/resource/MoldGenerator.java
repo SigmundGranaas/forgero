@@ -2,16 +2,12 @@ package com.sigmundgranaas.forgero.smithing.resource;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.fabric.client.texture.FabricTextureLoader;
@@ -43,7 +39,6 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
-import net.fabricmc.loader.api.FabricLoader;
 
 /**
  * Generator that creates mold blocks based on texture files
@@ -51,24 +46,11 @@ import net.fabricmc.loader.api.FabricLoader;
 public class MoldGenerator implements DynamicResourceGenerator {
 
     // Path within the resources directory for templates
-    private static final String TEMPLATE_PATH = "templates/textures/main";
+    private static final String TEMPLATE_PATH = "assets/forgero/templates/textures/molds";
     private static final String TEXTURE_EXTENSION = ".png";
 
-    // Get the actual source directory path from the project - corrected paths
-    private static final String DEV_TEXTURE_PATH = FabricLoader.getInstance().getGameDir()
-            .resolve("../content/forgero-vanilla/src/main/resources/assets/forgero/templates/textures/main").normalize().toString();
-
-    // Alternative path for when running in the build environment
-    private static final String ALT_TEXTURE_PATH = FabricLoader.getInstance().getGameDir()
-            .resolve("../content/forgero-vanilla/build/resources/main/assets/forgero/templates/textures/main").normalize().toString();
-
-    // Additional paths to try
-    private static final String[] ADDITIONAL_TEXTURE_PATHS = {
-            "../../../content/forgero-vanilla/src/main/resources/assets/forgero/templates/textures/main",
-            "../../content/forgero-vanilla/src/main/resources/assets/forgero/templates/textures/main",
-            "../content/forgero-vanilla/src/main/resources/assets/forgero/templates/textures/main",
-            "./content/forgero-vanilla/src/main/resources/assets/forgero/templates/textures/main"
-    };
+    // Only use this directory for textures (relative to project root)
+    private static final String MOLD_TEXTURE_PATH = "fabric/modules/smithing/src/main/resources/assets/forgero/templates/textures/molds";
 
     private final Map<String, Block> registeredMoldBlocks = new HashMap<>();
     private ResourceManager resourceManager;
@@ -177,29 +159,20 @@ public class MoldGenerator implements DynamicResourceGenerator {
 
     /**
      * Creates a VoxelShape for a mold based on the template texture.
-     * Adds a 1-pixel outline to sides and bottom, removing the original template pixels
-     * to create a hollow 2-pixel high mold.
+     * Adds a 1-pixel outline to sides and bottom.
      *
      * @param textureName The name of the texture to use for the shape
-     * @return A hollow VoxelShape representing a mold
+     * @return A VoxelShape based on colored pixels with added outlines
      */
     private VoxelShape createVoxelShapeFromTexture(String textureName) {
         // Get the texture image
         java.awt.image.BufferedImage originalImage = loadTextureImage(textureName);
-        boolean isSpecialShape = false;
 
         if (originalImage == null) {
             Forgero.LOGGER.warn("Couldn't load texture for VoxelShape creation. Using default shape for: " + textureName);
             // Return a default shape if we couldn't analyze the texture
             return Block.createCuboidShape(0, 0, 0, 16, 2, 16);
         }
-
-        // Special handling for known problematic shapes
-        isSpecialShape = textureName.contains("sword") || textureName.contains("blade") ||
-                                textureName.contains("knife") || textureName.contains("dagger") ||
-                                textureName.contains("rapier") || textureName.contains("saber");
-
-        Forgero.LOGGER.info("Creating VoxelShape for {} (special shape: {})", textureName, isSpecialShape);
 
         // Create a grid to track which pixels are colored
         boolean[][] coloredPixels = new boolean[16][16];
@@ -208,24 +181,12 @@ public class MoldGenerator implements DynamicResourceGenerator {
         int width = Math.min(originalImage.getWidth(), 16);
         int height = Math.min(originalImage.getHeight(), 16);
 
-        // Adjust alpha threshold based on shape type
-        int alphaThreshold = 30; // Lower threshold to catch more details
-
-        // For special shapes like swords, use an even lower threshold to ensure thin parts are captured
-        if (textureName.contains("sword") || textureName.contains("blade") ||
-            textureName.contains("knife") || textureName.contains("dagger") ||
-            textureName.contains("rapier") || textureName.contains("saber")) {
-            alphaThreshold = 20; // Even lower threshold for thin shapes
-            Forgero.LOGGER.info("Using lower alpha threshold for special shape: {}", textureName);
-        }
-
         // Scan for colored (non-transparent) pixels
+        int alphaThreshold = 30;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 int pixel = originalImage.getRGB(x, y);
                 int alpha = (pixel >> 24) & 0xff;
-
-                // More precise alpha threshold check with adjusted value
                 if (alpha >= alphaThreshold) {
                     coloredPixels[x][y] = true;
                 }
@@ -244,35 +205,19 @@ public class MoldGenerator implements DynamicResourceGenerator {
             }
         }
 
-        // Generate the outline with special handling for thin shapes
-        isSpecialShape = textureName.contains("sword") || textureName.contains("blade") ||
-                               textureName.contains("knife") || textureName.contains("dagger") ||
-                               textureName.contains("rapier") || textureName.contains("saber");
-
-        int outlineSize = isSpecialShape ? 2 : 1; // Wider outline for thin shapes
-
-        // Generate outline with variable width
+        // Generate the outline with fixed width
+        int outlineSize = 1;
         for (int x = 0; x < 16; x++) {
             for (int y = 0; y < 16; y++) {
                 if (coloredPixels[x][y]) {
-                    // Mark this pixel as part of the outline
                     outlinePixels[x][y] = true;
-
-                    // For each outline pixel, mark surrounding pixels up to outlineSize away
                     for (int dx = -outlineSize; dx <= outlineSize; dx++) {
                         for (int dy = -outlineSize; dy <= outlineSize; dy++) {
-                            // Skip the center pixel as it's already marked
                             if (dx == 0 && dy == 0) continue;
-
-                            // Calculate the distance (Manhattan distance is simpler)
                             int distance = Math.abs(dx) + Math.abs(dy);
-
-                            // Only include pixels within the outline size
                             if (distance <= outlineSize) {
                                 int nx = x + dx;
                                 int ny = y + dy;
-
-                                // Check bounds
                                 if (nx >= 0 && nx < 16 && ny >= 0 && ny < 16) {
                                     outlinePixels[nx][ny] = true;
                                 }
@@ -283,53 +228,52 @@ public class MoldGenerator implements DynamicResourceGenerator {
             }
         }
 
-        // For special shapes, ensure continuous outline by filling gaps
-        if (isSpecialShape) {
-            boolean[][] tempOutline = new boolean[16][16];
-            // Copy current outline
-            for (int x = 0; x < 16; x++) {
-                for (int y = 0; y < 16; y++) {
-                    tempOutline[x][y] = outlinePixels[x][y];
-                }
-            }
-
-            // Fill gaps - if a pixel has multiple outline neighbors but isn't an outline pixel, add it
-            for (int x = 1; x < 15; x++) {
-                for (int y = 1; y < 15; y++) {
-                    if (!outlinePixels[x][y]) {
-                        int outlineNeighbors = 0;
-
-                        // Check all 8 neighbors
-                        for (int dx = -1; dx <= 1; dx++) {
-                            for (int dy = -1; dy <= 1; dy++) {
-                                if (dx == 0 && dy == 0) continue;
-
-                                if (outlinePixels[x+dx][y+dy]) {
-                                    outlineNeighbors++;
-                                }
-                            }
-                        }
-
-                        // If surrounded by 5+ outline pixels, fill the gap
-                        if (outlineNeighbors >= 5) {
-                            tempOutline[x][y] = true;
-                        }
-                    }
-                }
-            }
-
-            // Update outline with filled gaps
-            for (int x = 0; x < 16; x++) {
-                for (int y = 0; y < 16; y++) {
-                    outlinePixels[x][y] = tempOutline[x][y];
+        // --- Centering logic start ---
+        // Find bounding box of outlinePixels
+        int minX = 16, maxX = -1, minZ = 16, maxZ = -1;
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                if (outlinePixels[x][z]) {
+                    if (x < minX) minX = x;
+                    if (x > maxX) maxX = x;
+                    if (z < minZ) minZ = z;
+                    if (z > maxZ) maxZ = z;
                 }
             }
         }
+        // Only center if there are any outline pixels
+        int dx = 0, dz = 0;
+        if (maxX >= minX && maxZ >= minZ) {
+            int shapeWidth = maxX - minX + 1;
+            int shapeDepth = maxZ - minZ + 1;
+            int centerX = minX + shapeWidth / 2;
+            int centerZ = minZ + shapeDepth / 2;
+            int gridCenter = 8; // Center of 16x16 grid
+            dx = gridCenter - centerX;
+            dz = gridCenter - centerZ;
+        }
+        // Create shifted versions of outlinePixels and coloredPixels
+        boolean[][] shiftedOutline = new boolean[16][16];
+        boolean[][] shiftedColored = new boolean[16][16];
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                int sx = x + dx;
+                int sz = z + dz;
+                if (sx >= 0 && sx < 16 && sz >= 0 && sz < 16) {
+                    shiftedOutline[sx][sz] = outlinePixels[x][z];
+                    shiftedColored[sx][sz] = coloredPixels[x][z];
+                }
+            }
+        }
+        // Use shiftedOutline and shiftedColored from here on
+        outlinePixels = shiftedOutline;
+        coloredPixels = shiftedColored;
+        // --- Centering logic end ---
 
         // Start with empty shape
         VoxelShape finalShape = VoxelShapes.empty();
 
-        // First add the bottom layer (all outline pixels at y=0)
+        // Add the bottom layer (all outline pixels at y=0)
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 if (outlinePixels[x][z]) {
@@ -339,159 +283,90 @@ public class MoldGenerator implements DynamicResourceGenerator {
             }
         }
 
-        // Determine if this is a thin shape that needs special wall handling
-        boolean isThinShape = textureName.contains("sword") || textureName.contains("blade") ||
-                             textureName.contains("knife") || textureName.contains("dagger") ||
-                             textureName.contains("rapier") || textureName.contains("saber");
+        // Standard wall handling logic
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                boolean shouldAddWall = false;
+                if (outlinePixels[x][z] && (x == 0 || x == 15 || z == 0 || z == 15)) {
+                    shouldAddWall = true;
+                }
+                else if (outlinePixels[x][z] && !coloredPixels[x][z]) {
+                    boolean isAtTemplateEdge = (x == 0 || x == 15 || z == 0 || z == 15);
+                    if (isAtTemplateEdge) {
+                        shouldAddWall = true;
+                    } else {
+                        int[][] directions = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
+                        for (int[] dir : directions) {
+                            int nx = x + dir[0];
+                            int nz = z + dir[1];
+                            if (nx < 0 || nx >= 16 || nz < 0 || nz >= 16 || !outlinePixels[nx][nz] || coloredPixels[nx][nz]) {
+                                shouldAddWall = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (shouldAddWall) {
+                    VoxelShape wallShape = Block.createCuboidShape(x, 1, z, x + 1, 2, z + 1);
+                    finalShape = VoxelShapes.union(finalShape, wallShape);
+                }
+            }
+        }
 
-		// Enhanced wall generation for border pixels - fixed edge handling
-		for (int x = 0; x < 16; x++) {
-			for (int z = 0; z < 16; z++) {
-				boolean shouldAddWall = false;
-
-				if (outlinePixels[x][z] && !coloredPixels[x][z]) {
-					if (isThinShape) {
-						// For thin shapes, we add walls for all outline pixels that aren't part of the colored region
-						shouldAddWall = true;
-					} else {
-						// For regular shapes, check if this is a border pixel
-						boolean isAtTemplateEdge = (x == 0 || x == 15 || z == 0 || z == 15);
-
-						if (isAtTemplateEdge) {
-							// Always create walls for pixels at the 16x16 template boundary
-							shouldAddWall = true;
-						} else {
-							// For interior pixels, check if this is a border by examining orthogonal neighbors
-							int[][] directions = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
-							for (int[] dir : directions) {
-								int nx = x + dir[0];
-								int nz = z + dir[1];
-
-								// It's a border if adjacent to a non-outline pixel or a colored pixel
-								if (nx < 0 || nx >= 16 || nz < 0 || nz >= 16 || !outlinePixels[nx][nz] || coloredPixels[nx][nz]) {
-									shouldAddWall = true;
-									break;
-								}
-							}
-						}
-					}
-
-					if (shouldAddWall) {
-						VoxelShape wallShape = Block.createCuboidShape(x, 1, z, x + 1, 2, z + 1);
-						finalShape = VoxelShapes.union(finalShape, wallShape);
-					}
-				}
-			}
-		}
-
-// Additional pass for edge pixel wall reinforcement
-// This ensures that pixels touching the 16x16 boundary get proper wall coverage
-		for (int x = 0; x < 16; x++) {
-			for (int z = 0; z < 16; z++) {
-				if (outlinePixels[x][z] && !coloredPixels[x][z]) {
-					boolean needsEdgeWall = false;
-
-					// Check if this pixel is adjacent to the template boundary
-					if (x == 0 || x == 15 || z == 0 || z == 15) {
-						needsEdgeWall = true;
-					}
-
-					// Also check if any neighboring colored pixels are at the boundary
-					// This handles cases where the template shape extends to the very edge
-					int[][] directions = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
-					for (int[] dir : directions) {
-						int nx = x + dir[0];
-						int nz = z + dir[1];
-
-						if (nx >= 0 && nx < 16 && nz >= 0 && nz < 16 && coloredPixels[nx][nz]) {
-							// If the colored neighbor is at the boundary, we need a wall
-							if (nx == 0 || nx == 15 || nz == 0 || nz == 15) {
-								needsEdgeWall = true;
-								break;
-							}
-						}
-					}
-
-					if (needsEdgeWall) {
-						VoxelShape wallShape = Block.createCuboidShape(x, 1, z, x + 1, 2, z + 1);
-						finalShape = VoxelShapes.union(finalShape, wallShape);
-					}
-				}
-			}
-		}
+        // Additional pass for edge pixel wall reinforcement
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                if (outlinePixels[x][z] && !coloredPixels[x][z]) {
+                    boolean needsEdgeWall = false;
+                    if (x == 0 || x == 15 || z == 0 || z == 15) {
+                        needsEdgeWall = true;
+                    }
+                    int[][] directions = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
+                    for (int[] dir : directions) {
+                        int nx = x + dir[0];
+                        int nz = z + dir[1];
+                        if (nx >= 0 && nx < 16 && nz >= 0 && nz < 16 && coloredPixels[nx][nz]) {
+                            if (nx == 0 || nx == 15 || nz == 0 || nz == 15) {
+                                needsEdgeWall = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (needsEdgeWall) {
+                        VoxelShape wallShape = Block.createCuboidShape(x, 1, z, x + 1, 2, z + 1);
+                        finalShape = VoxelShapes.union(finalShape, wallShape);
+                    }
+                }
+            }
+        }
 
         // Track successful mapping
         textureToShapeMap.put(textureName, true);
 
-        String shapeType = textureName.contains("sword") || textureName.contains("blade") ||
-                         textureName.contains("knife") || textureName.contains("dagger") ||
-                         textureName.contains("rapier") || textureName.contains("saber") ?
-                         "thin/special" : "standard";
-
-        // Log detailed VoxelShape information for debugging
-        logVoxelShapeDetails(textureName, coloredPixels, outlinePixels);
-
-        Forgero.LOGGER.info("Generated hollow mold VoxelShape for {} (type: {}) with complete walls",
-                        textureName, shapeType);
         return finalShape;
     }
 
     /**
-     * Load the texture image from file or resource manager
+     * Load the texture image from the classpath resource or resource manager
      */
     private java.awt.image.BufferedImage loadTextureImage(String textureName) {
-        // Try to find the texture file
         java.awt.image.BufferedImage originalImage = null;
 
-        // Paths to try in order
-        List<Path> pathsToCheck = new ArrayList<>();
-
-        // Add the additional paths first since they were detected to work
-        for (String additionalPath : ADDITIONAL_TEXTURE_PATHS) {
-            Path resolvedPath = FabricLoader.getInstance().getGameDir().resolve(additionalPath).normalize();
-            pathsToCheck.add(resolvedPath);
-        }
-
-        // Then add the standard paths as fallbacks
-        pathsToCheck.add(Paths.get(DEV_TEXTURE_PATH));
-        pathsToCheck.add(Paths.get(ALT_TEXTURE_PATH));
-
-        // Try each path in order
-        for (Path dirPath : pathsToCheck) {
-            File file = dirPath.resolve(textureName + TEXTURE_EXTENSION).toFile();
-            if (file.exists() && file.isFile()) {
-                try {
-                    // Load the original image
-                    originalImage = javax.imageio.ImageIO.read(file);
-
-                    // Create a rotated version to ensure correct orientation
-                    // This ensures the texture's coordinates map correctly to the mold shape
-                    int width = originalImage.getWidth();
-                    int height = originalImage.getHeight();
-
-                    java.awt.image.BufferedImage rotatedImage = new java.awt.image.BufferedImage(
-                            width, height, java.awt.image.BufferedImage.TYPE_INT_ARGB);
-
-                    // Copy the image with Y-coordinate flipped (minecraft uses different coordinate system)
-                    for (int x = 0; x < width; x++) {
-                        for (int y = 0; y < height; y++) {
-                            rotatedImage.setRGB(x, y, originalImage.getRGB(x, y));
-                        }
-                    }
-
-                    originalImage = rotatedImage;
-                    Forgero.LOGGER.info("Found template texture for VoxelShape at: {}", file.getAbsolutePath());
-                    break;
-                } catch (IOException e) {
-                    Forgero.LOGGER.warn("Error reading texture file: {}", file.getAbsolutePath());
-                }
+        // Try loading from classpath (resources)
+        String resourcePath = TEMPLATE_PATH + "/" + textureName + TEXTURE_EXTENSION;
+        try (java.io.InputStream is = getClass().getClassLoader().getResourceAsStream(resourcePath)) {
+            if (is != null) {
+                originalImage = javax.imageio.ImageIO.read(is);
+                Forgero.LOGGER.info("Found template texture for VoxelShape at: {}", resourcePath);
             }
+        } catch (IOException e) {
+            Forgero.LOGGER.warn("Error reading texture file: {}", resourcePath);
         }
 
         // If still not found, try loading from resource manager
         if (originalImage == null && resourceManager != null) {
             try {
-                Identifier textureId = new Identifier("forgero", TEMPLATE_PATH + "/" + textureName + TEXTURE_EXTENSION);
+                Identifier textureId = new Identifier("forgero", "templates/textures/molds/" + textureName + TEXTURE_EXTENSION);
                 Resource resource = resourceManager.getResource(textureId).orElse(null);
 
                 if (resource != null) {
@@ -589,22 +464,12 @@ public class MoldGenerator implements DynamicResourceGenerator {
     private void generateBasicModels(RuntimeResourcePack pack, Identifier moldId, String textureName) {
         // Get the texture image
         java.awt.image.BufferedImage originalImage = loadTextureImage(textureName);
-        boolean isSpecialShape = false;
 
         if (originalImage == null) {
             Forgero.LOGGER.warn("Using default bounds for model generation for texture: " + textureName);
             // Fall back to a simple rectangular model
             // ...existing code for fallback model generation...
             return;
-        }
-
-        // Detect if this is a special shape that needs enhanced processing
-        isSpecialShape = textureName.contains("sword") || textureName.contains("blade") || 
-                                textureName.contains("knife") || textureName.contains("dagger") ||
-                                textureName.contains("rapier") || textureName.contains("saber");
-
-        if (isSpecialShape) {
-            Forgero.LOGGER.info("Special shape detected for model generation: {}", textureName);
         }
 
         // Create a grid to track which pixels are colored
@@ -616,14 +481,6 @@ public class MoldGenerator implements DynamicResourceGenerator {
 
         // Adjust alpha threshold based on shape type - exactly as in VoxelShape generation
         int alphaThreshold = 1; // Lower threshold to catch more details
-
-        // For special shapes like swords, use an even lower threshold to ensure thin parts are captured
-        if (textureName.contains("sword") || textureName.contains("blade") || 
-            textureName.contains("knife") || textureName.contains("dagger") ||
-            textureName.contains("rapier") || textureName.contains("saber")) {
-            alphaThreshold = 20; // Even lower threshold for thin shapes
-            Forgero.LOGGER.info("Using lower alpha threshold for special shape model: {}", textureName);
-        }
 
         // Scan for colored (non-transparent) pixels with improved alpha detection
         for (int x = 0; x < width; x++) {
@@ -650,35 +507,19 @@ public class MoldGenerator implements DynamicResourceGenerator {
             }
         }
 
-        // Generate the outline with special handling for thin shapes - EXACTLY matching the algorithm in createVoxelShapeFromTexture
-                               isSpecialShape = textureName.contains("sword") || textureName.contains("blade") || 
-                               textureName.contains("knife") || textureName.contains("dagger") ||
-                               textureName.contains("rapier") || textureName.contains("saber");
-
-        int outlineSize = isSpecialShape ? 2 : 1; // Wider outline for thin shapes
-
-        // Generate outline with variable width
+        // Generate the outline with fixed width
+        int outlineSize = 1;
         for (int x = 0; x < 16; x++) {
             for (int y = 0; y < 16; y++) {
                 if (coloredPixels[x][y]) {
-                    // Mark this pixel as part of the outline
                     outlinePixels[x][y] = true;
-
-                    // For each outline pixel, mark surrounding pixels up to outlineSize away
                     for (int dx = -outlineSize; dx <= outlineSize; dx++) {
                         for (int dy = -outlineSize; dy <= outlineSize; dy++) {
-                            // Skip the center pixel as it's already marked
                             if (dx == 0 && dy == 0) continue;
-
-                            // Calculate the distance (Manhattan distance is simpler)
                             int distance = Math.abs(dx) + Math.abs(dy);
-
-                            // Only include pixels within the outline size
                             if (distance <= outlineSize) {
                                 int nx = x + dx;
                                 int ny = y + dy;
-
-                                // Check bounds
                                 if (nx >= 0 && nx < 16 && ny >= 0 && ny < 16) {
                                     outlinePixels[nx][ny] = true;
                                 }
@@ -689,50 +530,45 @@ public class MoldGenerator implements DynamicResourceGenerator {
             }
         }
 
-        // For special shapes, ensure continuous outline by filling gaps
-        if (isSpecialShape) {
-            boolean[][] tempOutline = new boolean[16][16];
-            // Copy current outline
-            for (int x = 0; x < 16; x++) {
-                for (int y = 0; y < 16; y++) {
-                    tempOutline[x][y] = outlinePixels[x][y];
-                }
-            }
-
-            // Fill gaps - if a pixel has multiple outline neighbors but isn't an outline pixel, add it
-            for (int x = 1; x < 15; x++) {
-                for (int y = 1; y < 15; y++) {
-                    if (!outlinePixels[x][y]) {
-                        int outlineNeighbors = 0;
-
-                        // Check all 8 neighbors
-                        for (int dx = -1; dx <= 1; dx++) {
-                            for (int dy = -1; dy <= 1; dy++) {
-                                if (dx == 0 && dy == 0) continue;
-
-                                if (outlinePixels[x+dx][y+dy]) {
-                                    outlineNeighbors++;
-                                }
-                            }
-                        }
-
-                        // If surrounded by 5+ outline pixels, fill the gap
-                        if (outlineNeighbors >= 5) {
-                            tempOutline[x][y] = true;
-                        }
-                    }
-                }
-            }
-
-            // Update outline with filled gaps
-            for (int x = 0; x < 16; x++) {
-                for (int y = 0; y < 16; y++) {
-                    outlinePixels[x][y] = tempOutline[x][y];
+        // --- Centering logic start (models) ---
+        // Find bounding box of outlinePixels
+        int minX = 16, maxX = -1, minZ = 16, maxZ = -1;
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                if (outlinePixels[x][z]) {
+                    if (x < minX) minX = x;
+                    if (x > maxX) maxX = x;
+                    if (z < minZ) minZ = z;
+                    if (z > maxZ) maxZ = z;
                 }
             }
         }
-
-        Forgero.LOGGER.info("Creating hollow mold model that follows colored pixels");
+        int dx = 0, dz = 0;
+        if (maxX >= minX && maxZ >= minZ) {
+            int shapeWidth = maxX - minX + 1;
+            int shapeDepth = maxZ - minZ + 1;
+            int centerX = minX + shapeWidth / 2;
+            int centerZ = minZ + shapeDepth / 2;
+            int gridCenter = 8;
+            dx = gridCenter - centerX;
+            dz = gridCenter - centerZ;
+        }
+        // Create shifted versions of outlinePixels and coloredPixels
+        boolean[][] shiftedOutline = new boolean[16][16];
+        boolean[][] shiftedColored = new boolean[16][16];
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                int sx = x + dx;
+                int sz = z + dz;
+                if (sx >= 0 && sx < 16 && sz >= 0 && sz < 16) {
+                    shiftedOutline[sx][sz] = outlinePixels[x][z];
+                    shiftedColored[sx][sz] = coloredPixels[x][z];
+                }
+            }
+        }
+        outlinePixels = shiftedOutline;
+        coloredPixels = shiftedColored;
+        // --- Centering logic end (models) ---
 
         // Generate the model elements
         StringBuilder elementsJson = new StringBuilder();
@@ -782,12 +618,12 @@ public class MoldGenerator implements DynamicResourceGenerator {
                     // Check if it's on the edge (has a neighboring non-outline pixel)
                     boolean isEdge = false;
 
-                    for (int dx = -1; dx <= 1; dx++) {
-                        for (int dz = -1; dz <= 1; dz++) {
-                            if (dx == 0 && dz == 0) continue; // Skip self
+                    for (int dx2 = -1; dx2 <= 1; dx2++) {
+                        for (int dz2 = -1; dz2 <= 1; dz2++) {
+                            if (dx2 == 0 && dz2 == 0) continue; // Skip self
 
-                            int nx = x + dx;
-                            int nz = z + dz;
+                            int nx = x + dx2;
+                            int nz = z + dz2;
 
                             // If neighbor is outside bounds or not an outline pixel, this is an edge
                             if (nx < 0 || nx >= 16 || nz < 0 || nz >= 16 || !outlinePixels[nx][nz]) {
@@ -919,57 +755,53 @@ public class MoldGenerator implements DynamicResourceGenerator {
     }
 
     /**
-     * Find all texture files in the template directory
+     * Find all texture files in the template directory (classpath)
      *
      * @return List of texture names without extension
      */
     private List<String> findTextureFiles() {
         List<String> textureFiles = new ArrayList<>();
 
-        // First check the additional paths that we've confirmed work
-        List<Path> pathsToCheck = new ArrayList<>();
-
-        // Add the additional paths first since they were detected to work
-        for (String additionalPath : ADDITIONAL_TEXTURE_PATHS) {
-            Path resolvedPath = FabricLoader.getInstance().getGameDir().resolve(additionalPath).normalize();
-            pathsToCheck.add(resolvedPath);
-        }
-
-        // Then add the standard paths as fallbacks
-        pathsToCheck.add(Paths.get(DEV_TEXTURE_PATH));
-        pathsToCheck.add(Paths.get(ALT_TEXTURE_PATH));
-
-        // Try each path in order
-        for (Path dirPath : pathsToCheck) {
-            if (Files.exists(dirPath) && Files.isDirectory(dirPath)) {
-                try {
-                    try (Stream<Path> stream = Files.list(dirPath)) {
-                        List<String> foundTextures = stream
-                                .filter(Files::isRegularFile)
-                                .map(p -> p.getFileName().toString())
-                                .filter(name -> name.endsWith(TEXTURE_EXTENSION))
-                                .map(name -> name.substring(0, name.length() - TEXTURE_EXTENSION.length()))
-                                .collect(Collectors.toList());
-
-                        if (!foundTextures.isEmpty()) {
-                            Forgero.LOGGER.info("Found {} textures in {} for mold generation", foundTextures.size(), dirPath);
-                            for (String texture : foundTextures) {
-                                Forgero.LOGGER.info("Found texture for mold: {}", texture);
-                            }
-                            textureFiles.addAll(foundTextures);
-                            break; // Stop searching if we found textures
+        // Try to list resources from the classpath
+        try {
+            java.net.URL dirURL = getClass().getClassLoader().getResource(TEMPLATE_PATH);
+            if (dirURL != null && dirURL.getProtocol().equals("file")) {
+                File dir = new File(dirURL.toURI());
+                File[] files = dir.listFiles((d, name) -> name.endsWith(TEXTURE_EXTENSION));
+                if (files != null) {
+                    for (File file : files) {
+                        String name = file.getName();
+                        if (name.endsWith(TEXTURE_EXTENSION)) {
+                            String textureName = name.substring(0, name.length() - TEXTURE_EXTENSION.length());
+                            textureFiles.add(textureName);
+                            Forgero.LOGGER.info("Found texture for mold: {}", textureName);
                         }
                     }
-                } catch (Exception e) {
-                    Forgero.LOGGER.warn("Error scanning texture directory: {}", dirPath);
+                }
+            } else if (dirURL != null && dirURL.getProtocol().equals("jar")) {
+                String path = TEMPLATE_PATH + "/";
+                String jarPath = dirURL.getPath().substring(5, dirURL.getPath().indexOf("!"));
+                try (java.util.jar.JarFile jar = new java.util.jar.JarFile(jarPath)) {
+                    java.util.Enumeration<java.util.jar.JarEntry> entries = jar.entries();
+                    while (entries.hasMoreElements()) {
+                        String entryName = entries.nextElement().getName();
+                        if (entryName.startsWith(path) && entryName.endsWith(TEXTURE_EXTENSION)) {
+                            String fileName = entryName.substring(path.length());
+                            String textureName = fileName.substring(0, fileName.length() - TEXTURE_EXTENSION.length());
+                            textureFiles.add(textureName);
+                            Forgero.LOGGER.info("Found texture for mold: {}", textureName);
+                        }
+                    }
                 }
             }
+        } catch (Exception e) {
+            Forgero.LOGGER.warn("Error scanning texture directory in resources: {}", TEMPLATE_PATH);
         }
 
         // If still no textures found, try using the resource manager
         if (textureFiles.isEmpty() && resourceManager != null) {
             try {
-                Map<Identifier, Resource> resources = resourceManager.findResources(TEMPLATE_PATH,
+                Map<Identifier, Resource> resources = resourceManager.findResources("templates/textures/molds",
                         id -> id.getPath().endsWith(TEXTURE_EXTENSION));
 
                 if (!resources.isEmpty()) {
@@ -1022,33 +854,6 @@ public class MoldGenerator implements DynamicResourceGenerator {
         return report.toString();
     }
 
-    /**
-     * Utility method to log details about the voxel shape for debugging
-     * @param textureName The texture name
-     * @param coloredPixels The colored pixels grid
-     * @param outlinePixels The outline pixels grid
-     */
-    private void logVoxelShapeDetails(String textureName, boolean[][] coloredPixels, boolean[][] outlinePixels) {
-        if (!Forgero.LOGGER.isDebugEnabled()) return;
-
-        StringBuilder pixelMap = new StringBuilder("VoxelShape for " + textureName + ":\n");
-
-        // Print a visual representation of the shape
-        for (int z = 0; z < 16; z++) {
-            for (int x = 0; x < 16; x++) {
-                if (coloredPixels[x][z]) {
-                    pixelMap.append("C"); // Colored pixel
-                } else if (outlinePixels[x][z]) {
-                    pixelMap.append("O"); // Outline pixel
-                } else {
-                    pixelMap.append("."); // Empty
-                }
-            }
-            pixelMap.append("\n");
-        }
-
-        Forgero.LOGGER.debug(pixelMap.toString());
-    }
 
     @Override
     public void generate(RuntimeResourcePack pack) {

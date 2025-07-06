@@ -89,7 +89,6 @@ public class MoldBlockEntity extends BlockEntity {
 		this.isSolidified = false;
 		this.result = result.copy();
 
-		System.out.println("[MoldBlockEntity] pourLiquid: result set to " + (result.isEmpty() ? "EMPTY" : result.getItem().getName().getString() + " x" + result.getCount()));
 
 		World world = getWorld();
 		if (world != null) {
@@ -101,7 +100,6 @@ public class MoldBlockEntity extends BlockEntity {
 	}
 
 	private void clear() {
-		System.out.println("[MoldBlockEntity] clear() called, result was: " + (result.isEmpty() ? "EMPTY" : result.getItem().getName().getString() + " x" + result.getCount()));
 		this.liquid = null;
 		this.liquidAmount = 0;
 		this.coolingTime = 0;
@@ -165,10 +163,7 @@ public class MoldBlockEntity extends BlockEntity {
 		nbt.putInt("CurrentCoolingTime", currentCoolingTime);
 		nbt.putBoolean("IsSolidified", isSolidified);
 		if (!result.isEmpty()) {
-			System.out.println("[MoldBlockEntity] writeNbt: saving result " + result.getItem().getName().getString() + " x" + result.getCount());
 			nbt.put("Result", result.writeNbt(new NbtCompound()));
-		} else {
-			System.out.println("[MoldBlockEntity] writeNbt: result is EMPTY");
 		}
 	}
 
@@ -184,10 +179,8 @@ public class MoldBlockEntity extends BlockEntity {
 		isSolidified = nbt.getBoolean("IsSolidified");
 		if (nbt.contains("Result")) {
 			result = ItemStack.fromNbt(nbt.getCompound("Result"));
-			System.out.println("[MoldBlockEntity] readNbt: loaded result " + (result.isEmpty() ? "EMPTY" : result.getItem().getName().getString() + " x" + result.getCount()));
 		} else {
 			result = ItemStack.EMPTY;
-			System.out.println("[MoldBlockEntity] readNbt: result is EMPTY");
 		}
 	}
 }

@@ -19,12 +19,10 @@ public class TextureLoader {
 	}
 
 	Optional<BufferedImage> load(String location) {
-		Forgero.LOGGER.info("[TextureLoader] Attempting to load image from: {}", location);
 		var streamOpt = loader.getStream(location);
 		if (streamOpt.isPresent()) {
 			var stream = streamOpt.get();
 			try (stream) {
-				Forgero.LOGGER.info("[TextureLoader] Successfully opened stream for: {}", location);
 				return Optional.of(ImageIO.read(stream));
 			} catch (Exception e) {
 				Forgero.LOGGER.error("[TextureLoader] Exception reading image from {}: {}", location, e.getMessage());
