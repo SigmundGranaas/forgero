@@ -12,8 +12,8 @@
   },
   "type": "forgero:metal_molding",
   "liquid": "forgero:molten_${material.name}",
-  "cooling_time": 900,
-  "liquid_amount": 800,
+  "cooling_time": 100,
+  "liquid_amount": 1,
   "mold": {
     "item": "forgero:${variant}_mold"
   },

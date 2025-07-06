@@ -181,10 +181,12 @@ public class MoldGenerator implements DynamicResourceGenerator {
         int width = Math.min(originalImage.getWidth(), 16);
         int height = Math.min(originalImage.getHeight(), 16);
 
-        // Scan for colored (non-transparent) pixels
+        // --- Remove border padding: Only consider inner area, ignore border pixels ---
         int alphaThreshold = 30;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
+                // Ignore border pixels (padding)
+                if (x == 0 || x == width - 1 || y == 0 || y == height - 1) continue;
                 int pixel = originalImage.getRGB(x, y);
                 int alpha = (pixel >> 24) & 0xff;
                 if (alpha >= alphaThreshold) {
@@ -479,15 +481,15 @@ public class MoldGenerator implements DynamicResourceGenerator {
         int width = Math.min(originalImage.getWidth(), 16);
         int height = Math.min(originalImage.getHeight(), 16);
 
-        // Adjust alpha threshold based on shape type - exactly as in VoxelShape generation
-        int alphaThreshold = 1; // Lower threshold to catch more details
+        int alphaThreshold = 1;
 
-        // Scan for colored (non-transparent) pixels with improved alpha detection
+        // --- Remove border padding: Only consider inner area, ignore border pixels ---
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
+                // Ignore border pixels (padding)
+                if (x == 0 || x == width - 1 || y == 0 || y == height - 1) continue;
                 int pixel = originalImage.getRGB(x, y);
                 int alpha = (pixel >> 24) & 0xff;
-
                 // Use same threshold as in createVoxelShapeFromTexture for consistency
                 if (alpha >= alphaThreshold) {
                     coloredPixels[x][y] = true;
