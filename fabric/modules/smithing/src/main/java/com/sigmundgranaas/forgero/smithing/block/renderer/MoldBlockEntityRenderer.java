@@ -164,14 +164,16 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
             return;
         }
 
-        // --- Centering logic (same as MoldGenerator) ---
+        // --- Centering logic with padding (matches MoldGenerator) ---
         int minX = 16, maxX = -1, minZ = 16, maxZ = -1;
-        for (int x = 0; x < 16; x++) for (int z = 0; z < 16; z++) {
-            if (moldMask[x][z]) {
-                if (x < minX) minX = x;
-                if (x > maxX) maxX = x;
-                if (z < minZ) minZ = z;
-                if (z > maxZ) maxZ = z;
+        for (int x = 1; x < 15; x++) {
+            for (int z = 1; z < 15; z++) {
+                if (moldMask[x][z]) {
+                    if (x < minX) minX = x;
+                    if (x > maxX) maxX = x;
+                    if (z < minZ) minZ = z;
+                    if (z > maxZ) maxZ = z;
+                }
             }
         }
         int dx = 0, dz = 0;
@@ -181,7 +183,7 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
             dx = gridCenter - centerX;
             dz = gridCenter - centerZ;
         }
-        // -----------------------------------------------
+        // ------------------------------------------------------------
 
         float blendStart = 0.60f;
         float blendEnd = 1.0f;
