@@ -237,6 +237,8 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
         if (lavaAlpha > 0.01f) {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
+                    // Skip uppermost corners to avoid rendering outside the mold
+                    if ((x == 0 || x == 15) && (z == 0 || z == 15)) continue;
                     int sx = x + dx, sz = z + dz;
                     if (sx < 0 || sx >= 16 || sz < 0 || sz >= 16) continue;
                     if (!moldMask[x][z]) continue;
@@ -303,6 +305,8 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
 
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
+                    // Skip uppermost corners to avoid rendering outside the mold
+                    if ((x == 0 || x == 15) && (z == 0 || z == 15)) continue;
                     int sx = x + dx, sz = z + dz;
                     if (sx < 0 || sx >= 16 || sz < 0 || sz >= 16) continue;
                     if (!moldMask[x][z]) continue;
