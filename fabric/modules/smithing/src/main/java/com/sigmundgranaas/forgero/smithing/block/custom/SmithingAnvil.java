@@ -1,6 +1,10 @@
 package com.sigmundgranaas.forgero.smithing.block.custom;
 
+import java.util.stream.Collectors;
+
+import com.sigmundgranaas.forgero.core.condition.NamedCondition;
 import com.sigmundgranaas.forgero.smithing.block.entity.SmithingAnvilBlockEntity;
+import com.sigmundgranaas.forgero.smithing.condition.ConditionLootTables;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -277,7 +281,7 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
                 }
                 smithingAnvilBlockEntity.processMarkerAttempt(hit);
                 if (smithingAnvilBlockEntity.getMarkerAttempts() >= 3) {
-                    if (smithingAnvilBlockEntity.getMarkerHitsCount() == 3 && !anvilItem.isEmpty()) {
+                    if (!anvilItem.isEmpty()) {
                         var stateOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert(anvilItem);
                         if (stateOpt.isPresent() && stateOpt.get() instanceof com.sigmundgranaas.forgero.core.condition.Conditional<?> conditional) {
                             var state = stateOpt.get();
@@ -285,10 +289,26 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
                                 com.sigmundgranaas.forgero.core.state.Typed typed = (com.sigmundgranaas.forgero.core.state.Typed) state;
                                 if (isToolPartHeadOrToolPart(typed.type())) {
                                     LOGGER.info("onUse: Toolpart found in anvil: {}", anvilItem);
-                                    var allConditions = com.sigmundgranaas.forgero.core.condition.Conditions.INSTANCE.all();
-                                    if (!allConditions.isEmpty()) {
-                                        var randomCondition = allConditions.get(world.getRandom().nextInt(allConditions.size()));
-                                        LOGGER.info("onUse: Applying random condition: {}", randomCondition.name());
+                                    // Loot table selection based on markerHitsCount
+                                    int hits = smithingAnvilBlockEntity.getMarkerHitsCount();
+                                    java.util.List<com.sigmundgranaas.forgero.core.condition.NamedCondition> lootTable;
+                                    if (hits == 3) {
+                                        lootTable = ConditionLootTables.BEST;
+                                    } else if (hits == 2) {
+                                        lootTable = ConditionLootTables.GOOD;
+                                    } else if (hits == 1) {
+                                        lootTable = ConditionLootTables.NEUTRAL;
+                                    } else if (hits == 0) {
+                                        lootTable = ConditionLootTables.BAD;
+                                    } else {
+                                        lootTable = com.sigmundgranaas.forgero.core.condition.Conditions.INSTANCE.all().stream()
+                                                .filter(c -> c instanceof NamedCondition)
+                                                .map(c -> (NamedCondition) c)
+                                                .collect(Collectors.toList());
+                                    }
+                                    if (!lootTable.isEmpty()) {
+                                        var randomCondition = ConditionLootTables.getRandomCondition(lootTable);
+                                        LOGGER.info("onUse: Applying loot table condition: {}", randomCondition.name());
                                         var conditioned = conditional.applyCondition(randomCondition);
                                         var newStackOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert((com.sigmundgranaas.forgero.core.state.State)conditioned);
                                         newStackOpt.ifPresent(newStack -> {
