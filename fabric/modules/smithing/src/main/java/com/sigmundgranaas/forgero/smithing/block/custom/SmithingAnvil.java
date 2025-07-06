@@ -284,7 +284,7 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
                 }
 
                 // --- Temperature check before allowing hit ---
-                if (temp < 100) {
+                if (temp < 0) {
                     if (player != null && world instanceof net.minecraft.server.world.ServerWorld serverWorld) {
                         player.sendMessage(net.minecraft.text.Text.literal("The tool is too cold to work!"), true);
                     }
