@@ -279,7 +279,7 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
                             world.playSound(null, blockPosition, net.minecraft.sound.SoundEvents.BLOCK_ANVIL_LAND, net.minecraft.sound.SoundCategory.BLOCKS, 1.0f, 1.0f);
                         }
                         smithingAnvilBlockEntity.resetMarkerProgress();
-                        return ActionResult.SUCCESS;
+                        return ActionResult.FAIL; // <--- Prevent further right-clicks
                     }
                 }
 

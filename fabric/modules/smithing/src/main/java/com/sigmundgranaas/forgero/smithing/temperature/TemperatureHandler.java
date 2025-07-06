@@ -104,9 +104,13 @@ public class TemperatureHandler {
                     world.spawnParticles(net.minecraft.particle.ParticleTypes.CLOUD, itemEntity.getX(), itemEntity.getY() + 0.2, itemEntity.getZ(), 8, 0.2, 0.1, 0.2, 0.01);
                     world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_FIRE_EXTINGUISH, net.minecraft.sound.SoundCategory.BLOCKS, 0.7F, 1.2F);
                 }
-                temp = Math.max(20, temp - FLUID_COOL_PER_TICK);
-                changed = true;
-                LOGGER.info("[Forgero] Cooling down item at {}: {} -> {} (filled water cauldron)", pos, prevTemp, temp);
+                // --- Fix: Always cool if temp > 20, not just once ---
+                if (temp > 20) {
+                    temp = Math.max(20, temp - FLUID_COOL_PER_TICK);
+                    TemperatureUtils.setTemperature(stack, temp);
+                    changed = true;
+                    LOGGER.info("[Forgero] Cooling down item at {}: {} -> {} (filled water cauldron)", pos, prevTemp, temp);
+                }
             } else {
                 LOGGER.info("[Forgero] No heating/cooling at {}: block={} (no effect)", pos, blockState.getBlock().getTranslationKey());
             }
