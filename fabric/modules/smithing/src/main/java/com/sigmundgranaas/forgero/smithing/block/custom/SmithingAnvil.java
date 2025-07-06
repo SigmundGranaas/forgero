@@ -321,6 +321,17 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
             }
         } else {
             if (anvilItem.isEmpty()) {
+                // Prevent placing items with a condition on the anvil
+                var stateOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert(stackInHand);
+                if (stateOpt.isPresent() && stateOpt.get() instanceof com.sigmundgranaas.forgero.core.condition.Conditional<?> conditional) {
+                    if (!conditional.localConditions().isEmpty()) {
+                        LOGGER.info("onUse: Tried to place item with condition on anvil, action blocked: {}", stackInHand);
+                        if (player != null && world instanceof net.minecraft.server.world.ServerWorld serverWorld) {
+                            player.sendMessage(net.minecraft.text.Text.literal("That item already has a condition!"), true);
+                        }
+                        return ActionResult.FAIL;
+                    }
+                }
                 LOGGER.info("onUse: Placing item in anvil: {}", stackInHand);
                 ItemStack toPlace = stackInHand.copy();
                 toPlace.setCount(1);

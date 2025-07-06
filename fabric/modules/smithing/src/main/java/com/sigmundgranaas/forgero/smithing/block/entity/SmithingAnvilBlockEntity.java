@@ -227,14 +227,16 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		if (markerPositions.size() == 1 && markerAttempts < 3) {
 			Vec2f marker = markerPositions.get(0);
 			double worldX = this.getPos().getX() + marker.x;
-			double worldY = this.getPos().getY() + 1.025;
+			double worldY = this.getPos().getY() + 1.05;
 			double worldZ = this.getPos().getZ() + marker.y;
-			this.world.addParticle(
-				new net.minecraft.particle.DustParticleEffect(
-					new Vector3f(1.0f, 0.5f, 0.0f), 0.2f),
-				worldX, worldY, worldZ,
-				0.0, 0.02, 0.0
-			);
+			for (int i = 0; i < 2; i++) {
+				this.world.addParticle(
+					new net.minecraft.particle.DustParticleEffect(
+						new Vector3f(1.0f, 0.5f, 0.0f), 0.2f),
+					worldX, worldY, worldZ,
+					0.0, 0.02, 0.0
+				);
+			}
 		}
 	}
 
