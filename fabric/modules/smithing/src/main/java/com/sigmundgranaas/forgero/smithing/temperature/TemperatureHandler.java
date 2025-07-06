@@ -22,7 +22,7 @@ public class TemperatureHandler {
     private static final int INVENTORY_COOL_TICK_INTERVAL = 20; // Only cool every 20 ticks
     private static int tickCounter = 0;
     private static final int TICK_INTERVAL = 20; // Only update every 20 ticks
-    private static final int FLUID_COOL_PER_TICK = 2; // Cooling rate in fluid
+    private static final int FLUID_COOL_PER_TICK = 20; // Cooling rate in fluid
 
     public static void register() {
         ServerTickEvents.END_WORLD_TICK.register(TemperatureHandler::onWorldTick);

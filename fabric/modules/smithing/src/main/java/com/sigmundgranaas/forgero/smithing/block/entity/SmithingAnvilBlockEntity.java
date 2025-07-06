@@ -2,13 +2,13 @@ package com.sigmundgranaas.forgero.smithing.block.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.sigmundgranaas.forgero.core.state.Typed;
-import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
-import com.sigmundgranaas.forgero.smithing.util.ToolPartTypeUtils;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
+import com.sigmundgranaas.forgero.smithing.util.ToolPartTypeUtils;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,10 +26,10 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec2f;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec2f;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -45,6 +45,15 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	private List<Boolean> markerHits = new ArrayList<>();
 	private int markerAttempts = 0;
 	private int markerHitsCount = 0;
+
+	// --- Marker timing fields ---
+	private int markerTicks = 0;
+	private int markerTimeout = 0;
+	private int markerCooldown = 0;
+	private static final int MIN_COOLDOWN_TICKS = 40;  // 2 seconds
+	private static final int MAX_COOLDOWN_TICKS = 100; // 5 seconds
+	private static final int MARKER_LIFETIME_TICKS = 30; // 1.5 seconds
+	private final Random random = new Random();
 
 	public SmithingAnvilBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.SMITHING_ANVIL, pos, state);
@@ -125,49 +134,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		}
 	}
 
-	public void generateRandomMarkers() {
-		System.out.println("[SmithingAnvilBlockEntity] generateRandomMarkers called");
-		ItemStack stack = inventory.getStack(0);
-		boolean isToolPart = false;
-		if (!stack.isEmpty()) {
-			System.out.println("[SmithingAnvilBlockEntity] Stack in slot: " + stack);
-			var stateOpt = StateService.INSTANCE.convert(stack);
-			System.out.println("[SmithingAnvilBlockEntity] StateService conversion present: " + stateOpt.isPresent());
-			if (stateOpt.isPresent()) {
-				System.out.println("[SmithingAnvilBlockEntity] StateService state: " + stateOpt.get());
-				if (stateOpt.get() instanceof Typed) {
-					Typed typed = (Typed) stateOpt.get();
-					Type type = typed.type();
-					System.out.println("[SmithingAnvilBlockEntity] Type: " + type.typeName());
-					isToolPart = ToolPartTypeUtils.isToolPartHeadOrToolPart(type);
-					System.out.println("[SmithingAnvilBlockEntity] isToolPartHeadOrToolPart: " + isToolPart);
-				} else {
-					System.out.println("[SmithingAnvilBlockEntity] State is not Typed, it is: " + stateOpt.get().getClass().getName());
-				}
-			}
-		}
-		// --- Only spawn markers if temperature is between 400 and 600 ---
-		int temp = TemperatureUtils.getTemperature(stack);
-		if (stack.isEmpty() || !isToolPart || temp < 400 || temp > 600) {
-			System.out.println("[SmithingAnvilBlockEntity] No valid toolpart or temperature out of range, clearing markers");
-			markerPositions.clear();
-			markerHits.clear();
-			markDirty();
-			return;
-		}
-		markerPositions.clear();
-		markerHits.clear();
-		for (int i = 0; i < 3; i++) {
-			float x = 0.35f + (float) Math.random() * 0.3f;
-			float y = 0.35f + (float) Math.random() * 0.3f;
-			markerPositions.add(new Vec2f(x, y));
-			markerHits.add(false);
-			System.out.println("[SmithingAnvilBlockEntity] Generated marker " + i + ": (" + x + ", " + y + ")");
-		}
-		System.out.println("[SmithingAnvilBlockEntity] markerPositions size after generation: " + markerPositions.size());
-		markDirty();
-	}
-
 	public void generateSingleMarker() {
 		ItemStack stack = inventory.getStack(0);
 		int temp = TemperatureUtils.getTemperature(stack);
@@ -244,7 +210,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	// Play anvil hit sound when the player misses the marker
 	public void playMissSound() {
 		if (world != null && !world.isClient) {
-			world.playSound(null, getPos(), SoundEvents.BLOCK_ANVIL_HIT, SoundCategory.BLOCKS, 1.0f, 1.0f);
+			world.playSound(null, getPos(), SoundEvents.BLOCK_ANVIL_PLACE, SoundCategory.BLOCKS, 1.0f, 1.0f);
 		}
 	}
 
@@ -278,6 +244,50 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	public void tick() {
 		if (this.world != null && this.world.isClient) {
 			this.clientTick();
+			return;
+		}
+		// --- Random marker spawning logic ---
+		ItemStack stack = inventory.getStack(0);
+		int temp = TemperatureUtils.getTemperature(stack);
+		boolean valid = !stack.isEmpty() && ToolPartTypeUtils.isToolPartHeadOrToolPart(
+			StateService.INSTANCE.convert(stack)
+				.filter(s -> s instanceof Typed)
+				.map(s -> ((Typed) s).type())
+				.orElse(null)
+		);
+		if (valid && temp >= 400 && temp <= 600) {
+			if (markerPositions.isEmpty() && markerCooldown <= 0) {
+				// Spawn a marker
+				markerPositions.clear();
+				markerHits.clear();
+				float x = 0.35f + random.nextFloat() * 0.3f;
+				float y = 0.35f + random.nextFloat() * 0.3f;
+				markerPositions.add(new Vec2f(x, y));
+				markerHits.add(false);
+				markerTimeout = MARKER_LIFETIME_TICKS;
+				markDirty();
+			} else if (!markerPositions.isEmpty()) {
+				// Marker is active, count down its lifetime
+				markerTimeout--;
+				if (markerTimeout <= 0) {
+					markerPositions.clear();
+					markerHits.clear();
+					// Set a random cooldown before next marker
+					markerCooldown = MIN_COOLDOWN_TICKS + random.nextInt(MAX_COOLDOWN_TICKS - MIN_COOLDOWN_TICKS + 1);
+					markDirty();
+				}
+			} else if (markerCooldown > 0) {
+				markerCooldown--;
+			}
+		} else {
+			// Not in valid temp range or not a tool part: clear markers and timers
+			if (!markerPositions.isEmpty() || markerCooldown > 0) {
+				markerPositions.clear();
+				markerHits.clear();
+				markerCooldown = 0;
+				markerTimeout = 0;
+				markDirty();
+			}
 		}
 	}
 }
