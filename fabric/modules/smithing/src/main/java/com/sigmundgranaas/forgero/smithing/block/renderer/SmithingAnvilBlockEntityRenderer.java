@@ -30,7 +30,7 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 					   VertexConsumerProvider vertexConsumers, int light, int overlay) {
 
 		ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
-		ItemStack itemStack = entity.getRenderStack();
+		ItemStack itemStack = entity.getInventory().getStack(0);
 
 		// Don't render if there's no item
 		if (itemStack.isEmpty()) {

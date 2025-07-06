@@ -27,6 +27,7 @@ import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
@@ -248,58 +249,91 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
         ItemStack stackInHand = player.getStackInHand(hand);
         ItemStack anvilItem = inventory.getStack(0);
 
-        // Hammer logic: apply random condition to toolpart after 3 hits
+        // Generate new markers when a toolpart is placed
+        if (!stackInHand.isEmpty() && anvilItem.isEmpty()) {
+            smithingAnvilBlockEntity.generateRandomMarkers();
+        }
+
+        // Hammer logic: apply random condition to toolpart after 3 correct hits on markers
         if (stackInHand.getItem().getTranslationKey().contains("smithing_hammer")) {
             LOGGER.info("onUse: Player is holding a smithing hammer");
-            int hits = smithingAnvilBlockEntity.getHammerHits() + 1;
-            smithingAnvilBlockEntity.setHammerHits(hits);
-            smithingAnvilBlockEntity.markDirty();
-            LOGGER.info("onUse: Hammer hit count: {}", hits);
-            if (hits < 3) {
-                return ActionResult.SUCCESS;
-            }
-            smithingAnvilBlockEntity.setHammerHits(0); // Reset after 3rd hit
-            if (!anvilItem.isEmpty()) {
-                var stateOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert(anvilItem);
-                if (stateOpt.isPresent() && stateOpt.get() instanceof com.sigmundgranaas.forgero.core.condition.Conditional<?> conditional) {
-                    var state = stateOpt.get();
-                    if (state instanceof com.sigmundgranaas.forgero.core.state.Typed) {
-                        com.sigmundgranaas.forgero.core.state.Typed typed = (com.sigmundgranaas.forgero.core.state.Typed) state;
-                        if (isToolPartHeadOrToolPart(typed.type())) {
-                            LOGGER.info("onUse: Toolpart found in anvil: {}", anvilItem);
-                            var allConditions = com.sigmundgranaas.forgero.core.condition.Conditions.INSTANCE.all();
-                            if (!allConditions.isEmpty()) {
-                                var randomCondition = allConditions.get(world.getRandom().nextInt(allConditions.size()));
-                                LOGGER.info("onUse: Applying random condition: {}", randomCondition.name());
-                                var conditioned = conditional.applyCondition(randomCondition);
-                                var newStackOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert((com.sigmundgranaas.forgero.core.state.State)conditioned);
-                                newStackOpt.ifPresent(newStack -> {
-                                    LOGGER.info("onUse: Condition applied, updating anvil slot");
-                                    inventory.setStack(0, newStack);
-                                    smithingAnvilBlockEntity.markDirty();
-                                });
+            if (blockHitResult instanceof BlockHitResult) {
+                BlockHitResult bhr = (BlockHitResult) blockHitResult;
+                // Convert hit position to local coordinates (relative to block)
+                double localX = bhr.getPos().x - blockPosition.getX();
+                double localZ = bhr.getPos().z - blockPosition.getZ();
+                var markers = smithingAnvilBlockEntity.getMarkerPositions();
+                var hits = smithingAnvilBlockEntity.getMarkerHits();
+                boolean matched = false;
+                for (int i = 0; i < markers.size(); i++) {
+                    if (!hits.get(i)) {
+                        Vec2f marker = markers.get(i);
+                        double dx = marker.x - localX;
+                        double dz = marker.y - localZ;
+                        if (dx * dx + dz * dz < 0.01) { // threshold squared (0.1^2)
+                            smithingAnvilBlockEntity.setMarkerHit(i);
+                            matched = true;
+                            LOGGER.info("onUse: Marker {} hit!", i);
+                            break;
+                        }
+                    }
+                }
+                if (!matched) {
+                    LOGGER.info("onUse: Missed all markers");
+                    return ActionResult.SUCCESS;
+                }
+                // Count correct hits
+                int correctHits = 0;
+                for (boolean h : smithingAnvilBlockEntity.getMarkerHits()) {
+                    if (h) correctHits++;
+                }
+                if (correctHits < 3) {
+                    return ActionResult.SUCCESS;
+                }
+                smithingAnvilBlockEntity.resetMarkers(); // Reset after 3rd correct hit
+                if (!anvilItem.isEmpty()) {
+                    var stateOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert(anvilItem);
+                    if (stateOpt.isPresent() && stateOpt.get() instanceof com.sigmundgranaas.forgero.core.condition.Conditional<?> conditional) {
+                        var state = stateOpt.get();
+                        if (state instanceof com.sigmundgranaas.forgero.core.state.Typed) {
+                            com.sigmundgranaas.forgero.core.state.Typed typed = (com.sigmundgranaas.forgero.core.state.Typed) state;
+                            if (isToolPartHeadOrToolPart(typed.type())) {
+                                LOGGER.info("onUse: Toolpart found in anvil: {}", anvilItem);
+                                var allConditions = com.sigmundgranaas.forgero.core.condition.Conditions.INSTANCE.all();
+                                if (!allConditions.isEmpty()) {
+                                    var randomCondition = allConditions.get(world.getRandom().nextInt(allConditions.size()));
+                                    LOGGER.info("onUse: Applying random condition: {}", randomCondition.name());
+                                    var conditioned = conditional.applyCondition(randomCondition);
+                                    var newStackOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert((com.sigmundgranaas.forgero.core.state.State)conditioned);
+                                    newStackOpt.ifPresent(newStack -> {
+                                        LOGGER.info("onUse: Condition applied, updating anvil slot");
+                                        inventory.setStack(0, newStack);
+                                        smithingAnvilBlockEntity.markDirty();
+                                    });
+                                } else {
+                                    LOGGER.info("onUse: No conditions available to apply");
+                                }
                             } else {
-                                LOGGER.info("onUse: No conditions available to apply");
+                                // Log type and parent chain for debugging
+                                StringBuilder parentChain = new StringBuilder();
+                                com.sigmundgranaas.forgero.core.type.Type current = typed.type();
+                                parentChain.append(current.typeName());
+                                while (!current.parent().isEmpty()) {
+                                    current = current.parent().get(0);
+                                    parentChain.append(" <- ").append(current.typeName());
+                                }
+                                LOGGER.info("onUse: Item in anvil is not a toolpart. Type: {}. Parent chain: {}", typed.type().typeName(), parentChain);
                             }
                         } else {
-                            // Log type and parent chain for debugging
-                            StringBuilder parentChain = new StringBuilder();
-                            com.sigmundgranaas.forgero.core.type.Type current = typed.type();
-                            parentChain.append(current.typeName());
-                            while (!current.parent().isEmpty()) {
-                                current = current.parent().get(0);
-                                parentChain.append(" <- ").append(current.typeName());
-                            }
-                            LOGGER.info("onUse: Item in anvil is not a toolpart. Type: {}. Parent chain: {}", typed.type().typeName(), parentChain);
+                            LOGGER.info("onUse: Item in anvil is not a toolpart");
                         }
                     } else {
-                        LOGGER.info("onUse: Item in anvil is not a toolpart");
+                        LOGGER.info("onUse: Could not convert anvilItem to Conditional");
                     }
                 } else {
-                    LOGGER.info("onUse: Could not convert anvilItem to Conditional");
+                    LOGGER.info("onUse: No item found in anvil");
                 }
-            } else {
-                LOGGER.info("onUse: No item found in anvil");
+                return ActionResult.SUCCESS;
             }
             return ActionResult.SUCCESS;
         }
@@ -311,6 +345,7 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
                 player.getInventory().offerOrDrop(anvilItem.copy());
                 inventory.setStack(0, ItemStack.EMPTY);
                 smithingAnvilBlockEntity.markDirty();
+                smithingAnvilBlockEntity.resetMarkers();
             }
         } else {
             if (anvilItem.isEmpty()) {
@@ -318,8 +353,11 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
                 ItemStack toPlace = stackInHand.copy();
                 toPlace.setCount(1);
                 inventory.setStack(0, toPlace);
+                LOGGER.info("onUse: Anvil slot now contains: {}", inventory.getStack(0));
                 stackInHand.decrement(1);
                 smithingAnvilBlockEntity.markDirty();
+                LOGGER.info("onUse: Called markDirty after placing item");
+                smithingAnvilBlockEntity.generateRandomMarkers();
             }
         }
         return ActionResult.SUCCESS;
@@ -336,5 +374,14 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
             }
             super.onStateReplaced(state, world, pos, newState, moved);
         }
+    }
+
+    @Override
+    public <T extends BlockEntity> net.minecraft.block.entity.BlockEntityTicker<T> getTicker(World world, BlockState state, net.minecraft.block.entity.BlockEntityType<T> type) {
+        return type == com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities.SMITHING_ANVIL ? (w, pos, s, be) -> {
+            if (be instanceof SmithingAnvilBlockEntity anvil) {
+                anvil.tick();
+            }
+        } : null;
     }
 }

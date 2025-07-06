@@ -1,6 +1,8 @@
 package com.sigmundgranaas.forgero.smithing.networking.packet;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.SmithingAnvilBlockEntity;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
@@ -10,9 +12,6 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.BlockPos;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class ItemStackSyncS2CPacket {
 	@SuppressWarnings("unused")
@@ -31,6 +30,21 @@ public class ItemStackSyncS2CPacket {
 			return;
 		}
 
-		smithingAnvilBlockEntity.setInventory(inventory);
+		smithingAnvilBlockEntity.getInventory().clear();
+		for (int i = 0; i < inventory.size(); i++) {
+			smithingAnvilBlockEntity.getInventory().setStack(i, inventory.getStack(i));
+		}
+
+		// --- Read marker positions and hits from packet ---
+		int markerCount = buf.readInt();
+		smithingAnvilBlockEntity.getMarkerPositions().clear();
+		smithingAnvilBlockEntity.getMarkerHits().clear();
+		for (int i = 0; i < markerCount; i++) {
+			float x = buf.readFloat();
+			float y = buf.readFloat();
+			boolean hit = buf.readBoolean();
+			smithingAnvilBlockEntity.getMarkerPositions().add(new net.minecraft.util.math.Vec2f(x, y));
+			smithingAnvilBlockEntity.getMarkerHits().add(hit);
+		}
 	}
 }
