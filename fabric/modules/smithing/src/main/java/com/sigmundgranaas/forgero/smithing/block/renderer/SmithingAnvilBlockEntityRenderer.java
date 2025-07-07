@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.smithing.block.renderer;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.util.Map;
@@ -9,7 +10,7 @@ import javax.imageio.ImageIO;
 
 import com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil;
 import com.sigmundgranaas.forgero.smithing.block.entity.SmithingAnvilBlockEntity;
-import com.sigmundgranaas.forgero.smithing.util.TextureCenteringUtil;
+import com.sigmundgranaas.forgero.smithing.util.BoundingBoxUtil;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.LightmapTextureManager;
@@ -34,6 +35,7 @@ import net.fabricmc.api.Environment;
 @Environment(EnvType.CLIENT)
 public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<SmithingAnvilBlockEntity> {
     private final Map<Identifier, int[]> offsetCache = new ConcurrentHashMap<>();
+    private final BoundingBoxUtil boundingBoxUtil = new BoundingBoxUtil();
 
     public SmithingAnvilBlockEntityRenderer(BlockEntityRendererFactory.Context context) {
     }
@@ -51,11 +53,11 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 
         matrices.push();
 
-        // Position the item on top of the anvil
-        matrices.translate(0.23f, 1.025f, 0.5);
+        // Clamp y at 1.025, use x and z for centering
+        matrices.translate(0.5f, 1.025f, 0.65);
+
         matrices.scale(1.25f, 1.25f, 1.25f);
 
-        // Rotate the item to lay flat on the anvil
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
 
         // Rotate based on anvil facing direction
@@ -69,7 +71,7 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
         // --- Centering logic start ---
         int[] offset = getItemTextureOffset(itemStack);
         float dx = offset[0] / 16.0f;
-        float dz = offset[1] / 16.0f;
+        float dz = offset[1] / 16.0f; // Invert y offset for correct z translation
         matrices.translate(dx, 0, dz);
         // --- Centering logic end ---
 
@@ -113,7 +115,15 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
                 try (InputStream stream = client.getResourceManager().getResource(resourceId).get().getInputStream()) {
                     image = ImageIO.read(stream);
                 }
-                return TextureCenteringUtil.getTextureCenterOffset(image);
+                // Use BoundingBoxUtil to calculate the offset and access more info
+                BoundingBoxUtil.BoundingBox box = boundingBoxUtil.calculateBoundingBox(image);
+
+
+
+                // Use centering offset for 16x16 target
+                Point offset = box.getCenteringOffset16x16();
+                // Use both x and y offsets
+                return new int[] {offset.x, 0};
             } catch (Exception e) {
                 return new int[] {0, 0};
             }
