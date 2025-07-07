@@ -40,6 +40,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	private static final @NotNull String INVENTORY_NBT_KEY = "inventory";
 
 	private @NotNull SimpleInventory inventory = new SimpleInventory(1);
+
 	private int hammerHits = 0;
 	private List<Vec2f> markerPositions = new ArrayList<>();
 	private List<Boolean> markerHits = new ArrayList<>();
@@ -364,7 +365,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			}
 			// --- Marker spawn logic with delay ---
 			int temp = TemperatureUtils.getTemperature(stack);
-			boolean valid = !stack.isEmpty() && ToolPartTypeUtils.isToolPartHeadOrToolPart(
+			boolean valid = !stack.isEmpty() && ToolPartTypeUtils.isToolPartType(
 					StateService.INSTANCE.convert(stack)
 							.filter(s -> s instanceof Typed)
 							.map(s -> ((Typed) s).type())

@@ -12,7 +12,7 @@ public class TemperatureColorProvider {
         Registries.ITEM.forEach(item -> {
             if (item instanceof StateItem stateItem) {
                 var type = stateItem.defaultState().type();
-                if (ToolPartTypeUtils.isToolPartHeadOrToolPart(type)) {
+                if (ToolPartTypeUtils.isToolPartType(type)) {
                     ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
                         int temp = TemperatureUtils.getTemperature(stack);
                         return getHeatColor(temp);

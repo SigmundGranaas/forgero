@@ -218,7 +218,10 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
     }
 
     private boolean isToolPartHeadOrToolPart(com.sigmundgranaas.forgero.core.type.Type type) {
-        if (type.equals(com.sigmundgranaas.forgero.core.type.Type.TOOL_PART_HEAD)
+        if (type == null) {
+            return false;
+        }
+        if (type.equals(com.sigmundgranaas.forgero.core.type.Type.PART)
             || type.typeName().equals("TOOL_PART")) {
             return true;
         }
@@ -246,8 +249,16 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
         ItemStack stackInHand = player.getStackInHand(hand);
         ItemStack anvilItem = inventory.getStack(0);
 
-        // Generate new marker sequence when a toolpart is placed
+        // Only allow PART items to be placed in the anvil
         if (!stackInHand.isEmpty() && anvilItem.isEmpty()) {
+            var type = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert(stackInHand)
+                .filter(s -> s instanceof com.sigmundgranaas.forgero.core.state.Typed)
+                .map(s -> ((com.sigmundgranaas.forgero.core.state.Typed) s).type())
+                .orElse(null);
+            if (!isToolPartHeadOrToolPart(type)) {
+                // Reject non-PART items, do not consume from hand
+                return ActionResult.FAIL;
+            }
             if (world.isClient) {
                 smithingAnvilBlockEntity.clearMarkerProgress();
             } else {

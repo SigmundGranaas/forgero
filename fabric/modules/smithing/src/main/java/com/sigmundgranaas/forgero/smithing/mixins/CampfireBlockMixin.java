@@ -28,7 +28,7 @@ public class CampfireBlockMixin {
         // If the player is holding an item, try to place it
         if (!stack.isEmpty() && stack.getItem() instanceof StateItem stateItem) {
             var type = stateItem.dynamicState(stack).type();
-            if (ToolPartTypeUtils.isToolPartHeadOrToolPart(type)) {
+            if (ToolPartTypeUtils.isToolPartType(type)) {
                 BlockEntity be = world.getBlockEntity(pos);
                 if (be instanceof CampfireBlockEntity campfire) {
                     if (campfire.addItem(player, stack, 600)) {

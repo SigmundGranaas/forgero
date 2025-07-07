@@ -27,7 +27,7 @@ public class CampfireBlockEntityMixin {
             ItemStack stack = items.get(i);
             if (stack.getItem() instanceof StateItem stateItem) {
                 var type = stateItem.dynamicState(stack).type();
-                if (ToolPartTypeUtils.isToolPartHeadOrToolPart(type)) {
+                if (ToolPartTypeUtils.isToolPartType(type)) {
                     int temp = TemperatureUtils.getTemperature(stack);
                     int newTemp = Math.min(temp + 10, TemperatureUtils.MAX_TEMPERATURE);
                     if (newTemp != temp) {
@@ -51,7 +51,7 @@ public class CampfireBlockEntityMixin {
             ItemStack stack = items.get(i);
             if (stack.getItem() instanceof StateItem stateItem) {
                 var type = stateItem.dynamicState(stack).type();
-                if (ToolPartTypeUtils.isToolPartHeadOrToolPart(type)) {
+                if (ToolPartTypeUtils.isToolPartType(type)) {
                     int temp = TemperatureUtils.getTemperature(stack);
                     if (temp >= TemperatureUtils.MAX_TEMPERATURE) {
                         // Prevent vanilla from ejecting the item by resetting the cook time to 0
@@ -73,7 +73,7 @@ public class CampfireBlockEntityMixin {
     private void forgero$allowToolPartPlacement(@org.jetbrains.annotations.Nullable net.minecraft.entity.Entity user, ItemStack stack, int cookTime, org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable<Boolean> cir) {
         if (stack.getItem() instanceof StateItem stateItem) {
             var type = stateItem.dynamicState(stack).type();
-            if (ToolPartTypeUtils.isToolPartHeadOrToolPart(type)) {
+            if (ToolPartTypeUtils.isToolPartType(type)) {
                 CampfireBlockEntity campfire = (CampfireBlockEntity)(Object)this;
                 for (int i = 0; i < campfire.getItemsBeingCooked().size(); i++) {
                     ItemStack itemStack = campfire.getItemsBeingCooked().get(i);
@@ -135,7 +135,7 @@ public class CampfireBlockEntityMixin {
             ItemStack stack = items.get(i);
             if (stack.getItem() instanceof StateItem stateItem) {
                 var type = stateItem.dynamicState(stack).type();
-                if (ToolPartTypeUtils.isToolPartHeadOrToolPart(type)) {
+                if (ToolPartTypeUtils.isToolPartType(type)) {
                     int temp = TemperatureUtils.getTemperature(stack);
                     int newTemp = Math.min(temp + 10, TemperatureUtils.MAX_TEMPERATURE);
                     if (newTemp > temp) {
