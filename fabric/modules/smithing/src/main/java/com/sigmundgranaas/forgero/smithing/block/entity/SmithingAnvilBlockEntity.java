@@ -238,7 +238,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		markerHitsCount = 0;
 		markerSpawnDelay = FIRST_MARKER_DELAY_TICKS;
 		nextMarkerDelay = FIRST_MARKER_DELAY_TICKS;
-		fastMarkerIndices.clear();
 	}
 
 	public boolean hasActiveMarker() {
@@ -327,7 +326,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			double worldX = this.getPos().getX() + marker.x;
 			double worldY = this.getPos().getY() + 1.05;
 			double worldZ = this.getPos().getZ() + marker.y;
-			LOGGER.info("[SmithingAnvil] markerAttempts: {}, fastMarkerIndices: {}", markerAttempts, fastMarkerIndices);
+			LOGGER.info("[SmithingAnvil] markerAttempts: {}, fastMarkerIndices: {}", markerAttempts, new ArrayList<>(fastMarkerIndices));
 			boolean isFastCurrent = fastMarkerIndices.contains(markerAttempts);
 			boolean isFastPrev = markerAttempts > 0 && fastMarkerIndices.contains(markerAttempts - 1);
 			LOGGER.info("[SmithingAnvil] isFastCurrent: {}, isFastPrev: {}", isFastCurrent, isFastPrev);
@@ -430,7 +429,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 						markerHits.add(false);
 						// Use markerAttempts as the index for fast marker check
 						if (fastMarkerIndices.contains(markerAttempts)) {
-							markerTimeout = 2; // Fast marker: vanish after 1 tick
+							markerTimeout = 1; // Fast marker: vanish after 1 tick
 							LOGGER.info("[SmithingAnvil] Fast marker spawned at attempt {} (timeout set to 1 tick)", markerAttempts);
 						} else {
 							markerTimeout = MARKER_LIFETIME_TICKS;
@@ -475,6 +474,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			NbtCompound itemNbt = stack.getOrCreateNbt();
 			itemNbt.putInt(HITS_NBT_KEY, markerHitsCount);
 			itemNbt.putInt(ATTEMPTS_NBT_KEY, markerAttempts);
+			// Save fastMarkerIndices to NBT
+			itemNbt.putIntArray("fastMarkerIndices", fastMarkerIndices);
 		}
 	}
 
@@ -485,9 +486,20 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			NbtCompound itemNbt = stack.getOrCreateNbt();
 			this.markerHitsCount = itemNbt.getInt(HITS_NBT_KEY);
 			this.markerAttempts = itemNbt.getInt(ATTEMPTS_NBT_KEY);
+			// Restore fastMarkerIndices from NBT only if present and non-empty
+			if (itemNbt.contains("fastMarkerIndices")) {
+				int[] arr = itemNbt.getIntArray("fastMarkerIndices");
+				if (arr.length > 0) {
+					fastMarkerIndices.clear();
+					for (int idx : arr) {
+						fastMarkerIndices.add(idx);
+					}
+				}
+			}
 		} else {
 			this.markerHitsCount = 0;
 			this.markerAttempts = 0;
+			// Do not clear fastMarkerIndices here; let sync handle it
 		}
 	}
 

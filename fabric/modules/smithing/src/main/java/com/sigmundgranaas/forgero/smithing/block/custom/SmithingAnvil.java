@@ -397,7 +397,12 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
                 ItemStack toPlace = stackInHand.copy();
                 toPlace.setCount(1);
                 inventory.setStack(0, toPlace);
-                smithingAnvilBlockEntity.loadProgressFromItem(); // Restore progress from item NBT
+                // Ensure both client and server load progress from item NBT
+                // smithingAnvilBlockEntity.loadProgressFromItem(); // <-- REMOVE THIS LINE
+                // Only call loadProgressFromItem on the server after placing an item in the anvil
+                if (!world.isClient) {
+                    smithingAnvilBlockEntity.loadProgressFromItem();
+                }
                 LOGGER.info("onUse: Anvil slot now contains: {}", inventory.getStack(0));
                 stackInHand.decrement(1);
                 smithingAnvilBlockEntity.markDirty();
