@@ -233,6 +233,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 	public void processMarkerAttempt(boolean hit) {
 		if (markerAttempts >= TOTAL_MARKERS) return;
+		// Fast markers should always count as an attempt, even if missed
+		boolean isFast = fastMarkerIndices.contains(markerAttempts);
 		markerAttempts++;
 		ItemStack stack = inventory.getStack(0);
 		int temp = TemperatureUtils.getTemperature(stack);
@@ -246,11 +248,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		markDirty();
 		markerPositions.clear();
 		markerHits.clear();
-		// Always set up for next marker if not done, regardless of hit or miss
+		// Always set up for next marker if not done, regardless of hit or miss, including fast markers
 		if (markerAttempts < TOTAL_MARKERS) {
 			nextMarkerDelay = SUBSEQUENT_MARKER_DELAY_TICKS;
 			markerSpawnDelay = nextMarkerDelay;
-			// Ensure markerCooldown is reset so cooldown doesn't block next marker
 			markerCooldown = 0;
 		} else {
 			markDirty();
@@ -363,10 +364,21 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				// --- If a marker timed out (missed), automatically advance to next marker ---
 				if (markerPositions.isEmpty() && markerCooldown > 0 && markerAttempts < TOTAL_MARKERS) {
 					// Marker was missed, so prepare to spawn the next marker after the delay
-					markerCooldown--;
-					if (markerCooldown <= 0) {
+					// Advance the attempt if the last marker was a fast marker
+					if (fastMarkerIndices.contains(markerAttempts)) {
+						// Fast marker missed: count as an attempt and advance
+						markerAttempts++;
 						nextMarkerDelay = SUBSEQUENT_MARKER_DELAY_TICKS;
 						markerSpawnDelay = nextMarkerDelay;
+						markerCooldown = 0;
+						markDirty();
+					} else {
+						// Normal marker missed: old behavior
+						markerCooldown--;
+						if (markerCooldown <= 0) {
+							nextMarkerDelay = SUBSEQUENT_MARKER_DELAY_TICKS;
+							markerSpawnDelay = nextMarkerDelay;
+						}
 					}
 				}
 				if (markerPositions.isEmpty() && markerCooldown <= 0 && markerAttempts < TOTAL_MARKERS) {
