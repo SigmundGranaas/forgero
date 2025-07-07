@@ -254,6 +254,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 					}
 				}
 			}
+			// Remove marker immediately after hit
+			markerPositions.clear();
+			markerHits.clear();
 			markDirty();
 		}
 	}
