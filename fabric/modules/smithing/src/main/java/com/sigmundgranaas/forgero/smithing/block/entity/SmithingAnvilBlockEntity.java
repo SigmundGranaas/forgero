@@ -41,6 +41,9 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.util.math.Direction;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -199,7 +202,30 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		}
 	}
 
-	// Helper: get a random marker position within the bounding box, centered as in the renderer
+	// Helper: check if a normalized (x, z) is inside the top face of the anvil's voxel shape
+	private boolean isInsideAnvilTopLayer(float x, float z) {
+		// Get the anvil's facing direction
+		Direction facing = getCachedState().getOrEmpty(com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.FACING)
+				.orElse(Direction.NORTH);
+		VoxelShape shape = switch (facing) {
+			case NORTH -> com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.SHAPE_NORTH;
+			case SOUTH -> com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.SHAPE_SOUTH;
+			case EAST -> com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.SHAPE_EAST;
+			case WEST -> com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.SHAPE_WEST;
+			default -> VoxelShapes.fullCube();
+		};
+		// The top layer is at y = 1.0 (normalized)
+		double testY = 1.0 - 1e-6; // Slightly below 1.0 to avoid floating point issues
+		// Test if the point (x, testY, z) is inside the shape
+		for (net.minecraft.util.math.Box box : shape.getBoundingBoxes()) {
+			if (box.contains(x, testY, z)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	// Helper: get a random marker position within the bounding box, centered as in the renderer, and inside the anvil top layer
 	private Vec2f getRandomMarkerPosition(ItemStack stack) {
 		try {
 			MinecraftClient client = MinecraftClient.getInstance();
@@ -233,30 +259,42 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			BoundingBoxUtil.BoundingBox box = util.calculateBoundingBox(image);
 			LOGGER.info("[SmithingAnvil] BoundingBox for {}: minX={}, minY={}, maxX={}, maxY={}, validPixels={}", resourceId, box.minX(), box.minY(), box.maxX(), box.maxY(), box.validPixels().size());
 			if (!box.validPixels().isEmpty()) {
-				// Get centering offset (as in renderer)
 				java.awt.Point offset = box.getCenteringOffset16x16();
 				LOGGER.info("[SmithingAnvil] Centering offset for {}: x={}, y={}", resourceId, offset.x, offset.y);
-				// Pick a random pixel within the bounding box
-				Point p = box.validPixels().get(random.nextInt(box.validPixels().size()));
-				// Apply centering offset
-				int centeredX = p.x + offset.x;
-				int centeredY = p.y + offset.y;
-				// Clamp to [0, 15] to avoid out-of-bounds
-				centeredX = Math.max(0, Math.min(15, centeredX));
-				centeredY = Math.max(0, Math.min(15, centeredY));
-				// Convert to [0,1] range for marker placement
-				float markerX = (centeredX + 0.5f) / 16.0f;
-				float markerY = (centeredY + 0.5f) / 16.0f;
-				LOGGER.info("[SmithingAnvil] Marker pixel: ({}, {}), Centered: ({}, {}), Normalized: ({}, {})", p.x, p.y, centeredX, centeredY, markerX, markerY);
-				return new Vec2f(markerX, markerY);
+
+				// Calculate the same offset as the renderer
+				int[] textureOffset = BoundingBoxUtil.getItemTextureOffsetFromImage(image);
+				float dx = textureOffset[0] / 16.0f;
+				float dz = textureOffset[1] / 16.0f;
+
+				// Try up to 32 times to find a marker inside the anvil top layer
+				for (int attempt = 0; attempt < 32; attempt++) {
+					Point p = box.validPixels().get(random.nextInt(box.validPixels().size()));
+					int centeredX = p.x + offset.x;
+					int centeredY = p.y + offset.y;
+					centeredX = Math.max(0, Math.min(15, centeredX));
+					centeredY = Math.max(0, Math.min(15, centeredY));
+					float markerX = (centeredX + 0.5f) / 16.0f + dx;
+					float markerY = (centeredY + 0.5f) / 16.0f + dz;
+					// markerX = x, markerY = z (since marker is on top face)
+					if (isInsideAnvilTopLayer(markerX, markerY)) {
+						LOGGER.info("[SmithingAnvil] Marker pixel: ({}, {}), Centered: ({}, {}), Normalized: ({}, {}) [INSIDE]", p.x, p.y, centeredX, centeredY, markerX, markerY);
+						return new Vec2f(markerX, markerY);
+					} else {
+						LOGGER.info("[SmithingAnvil] Marker pixel: ({}, {}), Centered: ({}, {}), Normalized: ({}, {}) [OUTSIDE]", p.x, p.y, centeredX, centeredY, markerX, markerY);
+					}
+				}
+				// If none found, fallback to center with offset
+				return new Vec2f(0.5f + dx, 0.5f + dz);
 			} else {
 				LOGGER.warn("[SmithingAnvil] No valid pixels found in bounding box for {}", resourceId);
+				return new Vec2f(0.5f, 0.5f);
 			}
 		} catch (Exception e) {
 			LOGGER.error("[SmithingAnvil] Error generating marker position: ", e);
+			// fallback: center
+			return new Vec2f(0.5f, 0.5f);
 		}
-		// fallback: center
-		return new Vec2f(0.5f, 0.5f);
 	}
 
 	public void generateSingleMarker() {

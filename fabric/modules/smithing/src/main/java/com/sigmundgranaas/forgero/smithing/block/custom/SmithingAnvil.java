@@ -41,10 +41,10 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     public static final Identifier SMITHING_ANVIL_ID = new Identifier("forgero", "smithing_anvil");
 
-    private static final VoxelShape SHAPE_NORTH;
-    private static final VoxelShape SHAPE_EAST;
-    private static final VoxelShape SHAPE_SOUTH;
-    private static final VoxelShape SHAPE_WEST;
+    public static final VoxelShape SHAPE_NORTH;
+    public static final VoxelShape SHAPE_EAST;
+    public static final VoxelShape SHAPE_SOUTH;
+    public static final VoxelShape SHAPE_WEST;
 
     static {
         VoxelShape shapeS = VoxelShapes.empty();
