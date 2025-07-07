@@ -1,21 +1,31 @@
 package com.sigmundgranaas.forgero.smithing.block.entity;
 
+import java.awt.Point;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import javax.imageio.ImageIO;
 
 import com.sigmundgranaas.forgero.core.state.Typed;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
+import com.sigmundgranaas.forgero.smithing.util.BoundingBoxUtil;
 import com.sigmundgranaas.forgero.smithing.util.ToolPartTypeUtils;
 import lombok.Getter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.texture.Sprite;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -28,6 +38,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec2f;
 
@@ -37,6 +48,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 @Getter
 public class SmithingAnvilBlockEntity extends BlockEntity {
+	private static final Logger LOGGER = LogManager.getLogger("ForgeroSmithingAnvil");
 	private static final @NotNull String INVENTORY_NBT_KEY = "inventory";
 
 	private @NotNull SimpleInventory inventory = new SimpleInventory(1);
@@ -187,10 +199,72 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		}
 	}
 
+	// Helper: get a random marker position within the bounding box, centered as in the renderer
+	private Vec2f getRandomMarkerPosition(ItemStack stack) {
+		try {
+			MinecraftClient client = MinecraftClient.getInstance();
+			BakedModel model = client.getItemRenderer().getModel(stack, null, null, 0);
+			var quads = model.getQuads(null, null, client.world.getRandom());
+			java.util.Set<Identifier> loggedTextures = new java.util.HashSet<>();
+			Sprite textureSprite = null;
+			for (var quad : quads) {
+				Sprite quadSprite = quad.getSprite();
+				Identifier quadSpriteId = quadSprite.getContents().getId();
+				Identifier quadResourceId = new Identifier(quadSpriteId.getNamespace(), "textures/" + quadSpriteId.getPath() + ".png");
+				if (loggedTextures.add(quadResourceId)) {
+					LOGGER.info("[SmithingAnvil] Quad PNG resource: {}", quadResourceId);
+				}
+				if (textureSprite == null) {
+					textureSprite = quadSprite;
+				}
+			}
+			if (textureSprite == null) {
+				// Fallback to particle sprite
+				textureSprite = model.getParticleSprite();
+			}
+			Identifier spriteId = textureSprite.getContents().getId();
+			Identifier resourceId = new Identifier(spriteId.getNamespace(), "textures/" + spriteId.getPath() + ".png");
+			LOGGER.info("[SmithingAnvil] Using PNG resource for marker: {}", resourceId);
+			BufferedImage image;
+			try (java.io.InputStream stream = client.getResourceManager().getResource(resourceId).get().getInputStream()) {
+				image = ImageIO.read(stream);
+			}
+			BoundingBoxUtil util = new BoundingBoxUtil();
+			BoundingBoxUtil.BoundingBox box = util.calculateBoundingBox(image);
+			LOGGER.info("[SmithingAnvil] BoundingBox for {}: minX={}, minY={}, maxX={}, maxY={}, validPixels={}", resourceId, box.minX(), box.minY(), box.maxX(), box.maxY(), box.validPixels().size());
+			if (!box.validPixels().isEmpty()) {
+				// Get centering offset (as in renderer)
+				java.awt.Point offset = box.getCenteringOffset16x16();
+				LOGGER.info("[SmithingAnvil] Centering offset for {}: x={}, y={}", resourceId, offset.x, offset.y);
+				// Pick a random pixel within the bounding box
+				Point p = box.validPixels().get(random.nextInt(box.validPixels().size()));
+				// Apply centering offset
+				int centeredX = p.x + offset.x;
+				int centeredY = p.y + offset.y;
+				// Clamp to [0, 15] to avoid out-of-bounds
+				centeredX = Math.max(0, Math.min(15, centeredX));
+				centeredY = Math.max(0, Math.min(15, centeredY));
+				// Convert to [0,1] range for marker placement
+				float markerX = (centeredX + 0.5f) / 16.0f;
+				float markerY = (centeredY + 0.5f) / 16.0f;
+				LOGGER.info("[SmithingAnvil] Marker pixel: ({}, {}), Centered: ({}, {}), Normalized: ({}, {})", p.x, p.y, centeredX, centeredY, markerX, markerY);
+				return new Vec2f(markerX, markerY);
+			} else {
+				LOGGER.warn("[SmithingAnvil] No valid pixels found in bounding box for {}", resourceId);
+			}
+		} catch (Exception e) {
+			LOGGER.error("[SmithingAnvil] Error generating marker position: ", e);
+		}
+		// fallback: center
+		return new Vec2f(0.5f, 0.5f);
+	}
+
 	public void generateSingleMarker() {
 		ItemStack stack = inventory.getStack(0);
 		int temp = TemperatureUtils.getTemperature(stack);
+		LOGGER.info("[SmithingAnvil] generateSingleMarker called. Stack: {}, Temp: {}", stack, temp);
 		if (stack.isEmpty() || temp < 400 || temp > 600) {
+			LOGGER.info("[SmithingAnvil] No marker generated: stack empty or temp out of range.");
 			markerPositions.clear();
 			markerHits.clear();
 			markDirty();
@@ -198,9 +272,11 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		}
 		markerPositions.clear();
 		markerHits.clear();
-		float x = 0.35f + (float) Math.random() * 0.3f;
-		float y = 0.35f + (float) Math.random() * 0.3f;
-		markerPositions.add(new Vec2f(x, y));
+
+		// --- Use random marker position within bounding box ---
+		Vec2f marker = getRandomMarkerPosition(stack);
+		LOGGER.info("[SmithingAnvil] Generated marker at: {}", marker);
+		markerPositions.add(marker);
 		markerHits.add(false);
 		markDirty();
 	}
@@ -411,13 +487,13 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 					if (markerSpawnDelay == 0) {
 						markerPositions.clear();
 						markerHits.clear();
-						float x = 0.35f + random.nextFloat() * 0.3f;
-						float y = 0.35f + random.nextFloat() * 0.3f;
-						markerPositions.add(new Vec2f(x, y));
+						// --- Use random marker position within bounding box ---
+						Vec2f marker = getRandomMarkerPosition(stack);
+						LOGGER.info("[SmithingAnvil] (tick) Generated marker at: {}", marker);
+						markerPositions.add(marker);
 						markerHits.add(false);
-						// Use markerAttempts as the index for fast marker check
 						if (fastMarkerIndices.contains(markerAttempts)) {
-							markerTimeout = 1; // Fast marker: vanish after 1 tick
+							markerTimeout = 1;
 						} else {
 							markerTimeout = MARKER_LIFETIME_TICKS;
 						}

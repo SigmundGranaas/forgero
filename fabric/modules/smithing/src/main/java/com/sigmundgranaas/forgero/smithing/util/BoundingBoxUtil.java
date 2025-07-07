@@ -3,9 +3,12 @@ package com.sigmundgranaas.forgero.smithing.util;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.List; // <-- Added missing import
+import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class BoundingBoxUtil {
+	private static final Logger LOGGER = LogManager.getLogger("ForgeroBoundingBoxUtil");
 
 	public BoundingBox calculateBoundingBox(BufferedImage image) {
 		if (image == null) {
@@ -49,6 +52,7 @@ public class BoundingBoxUtil {
 			maxY = -1; // Max Y < Min Y indicates no height
 		}
 
+		LOGGER.info("[BoundingBoxUtil] Calculated bounding box: minX={}, minY={}, maxX={}, maxY={}, validPixels={}", minX, minY, maxX, maxY, validPixels.size());
 		return new BoundingBox(minX, minY, maxX, maxY, validPixels);
 	}
 
@@ -105,11 +109,22 @@ public class BoundingBoxUtil {
 			int offsetX = targetCenterX - getVisualCenterX();
 			int offsetY = targetCenterY - getVisualCenterY();
 
-			return new Point(offsetX, offsetY);
+			Point offset = new Point(offsetX, offsetY);
+			LOGGER.info("[BoundingBoxUtil] Centering offset for target {}x{}: {}", targetWidth, targetHeight, offset);
+			return offset;
 		}
 
 		public Point getCenteringOffset16x16() {
 			return getCenteringOffset(16, 16);
 		}
+	}
+
+	// New static method to calculate item texture offset from image
+	public static int[] getItemTextureOffsetFromImage(BufferedImage image) {
+		BoundingBoxUtil util = new BoundingBoxUtil();
+		BoundingBoxUtil.BoundingBox box = util.calculateBoundingBox(image);
+		Point offset = box.getCenteringOffset16x16();
+		LOGGER.info("[BoundingBoxUtil] getItemTextureOffsetFromImage: offset=({}, {})", offset.x, offset.y);
+		return new int[] { offset.x, 0};
 	}
 }

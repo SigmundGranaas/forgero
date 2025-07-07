@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.smithing.block.renderer;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.util.Map;
@@ -11,6 +10,8 @@ import javax.imageio.ImageIO;
 import com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil;
 import com.sigmundgranaas.forgero.smithing.block.entity.SmithingAnvilBlockEntity;
 import com.sigmundgranaas.forgero.smithing.util.BoundingBoxUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.LightmapTextureManager;
@@ -34,6 +35,7 @@ import net.fabricmc.api.Environment;
 
 @Environment(EnvType.CLIENT)
 public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<SmithingAnvilBlockEntity> {
+    private static final Logger LOGGER = LogManager.getLogger("ForgeroSmithingAnvilRenderer");
     private final Map<Identifier, int[]> offsetCache = new ConcurrentHashMap<>();
     private final BoundingBoxUtil boundingBoxUtil = new BoundingBoxUtil();
 
@@ -98,7 +100,7 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
                     Identifier quadSpriteId = quadSprite.getContents().getId();
                     Identifier quadResourceId = new Identifier(quadSpriteId.getNamespace(), "textures/" + quadSpriteId.getPath() + ".png");
                     if (loggedTextures.add(quadResourceId)) {
-                        System.out.println("SmithingAnvilBlockEntityRenderer: Quad PNG resource: " + quadResourceId);
+                        LOGGER.info("[Renderer] Quad PNG resource: {}", quadResourceId);
                     }
                     if (textureSprite == null) {
                         textureSprite = quadSprite;
@@ -110,21 +112,16 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
                 }
                 Identifier spriteId = textureSprite.getContents().getId();
                 Identifier resourceId = new Identifier(spriteId.getNamespace(), "textures/" + spriteId.getPath() + ".png");
-                System.out.println("SmithingAnvilBlockEntityRenderer: Using PNG resource: " + resourceId);
+                LOGGER.info("[Renderer] Using PNG resource: {}", resourceId);
                 BufferedImage image;
                 try (InputStream stream = client.getResourceManager().getResource(resourceId).get().getInputStream()) {
                     image = ImageIO.read(stream);
                 }
-                // Use BoundingBoxUtil to calculate the offset and access more info
-                BoundingBoxUtil.BoundingBox box = boundingBoxUtil.calculateBoundingBox(image);
-
-
-
-                // Use centering offset for 16x16 target
-                Point offset = box.getCenteringOffset16x16();
-                // Use both x and y offsets
-                return new int[] {offset.x, 0};
+                int[] offset = BoundingBoxUtil.getItemTextureOffsetFromImage(image);
+                LOGGER.info("[Renderer] Calculated offset for {}: ({}, {})", resourceId, offset[0], offset[1]);
+                return offset;
             } catch (Exception e) {
+                LOGGER.error("[Renderer] Error calculating texture offset: ", e);
                 return new int[] {0, 0};
             }
         });
