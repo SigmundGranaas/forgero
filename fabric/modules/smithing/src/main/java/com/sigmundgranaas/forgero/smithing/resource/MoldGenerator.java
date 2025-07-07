@@ -36,7 +36,7 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 
 public class MoldGenerator implements DynamicResourceGenerator {
-    private static final String TEMPLATE_PATH = "assets/forgero/templates/textures";
+    private static final String TEMPLATE_PATH = "assets/forgero/templates/textures/molds";
     private static final String TEXTURE_EXTENSION = ".png";
     private final Map<String, Block> registeredMoldBlocks = new HashMap<>();
     private ResourceManager resourceManager;

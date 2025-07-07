@@ -55,25 +55,31 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 
         matrices.push();
 
-        // Clamp y at 1.025, use x and z for centering
-        matrices.translate(0.5f, 1.025f, 0.65);
+        // First, translate to the center of the block (0.5, 1.025, 0.5)
+        matrices.translate(0.5f, 1.025f, 0.5f);
+
+        // Then, rotate based on anvil facing direction (Y axis)
+        switch (entity.getCachedState().get(SmithingAnvil.FACING)) {
+            case NORTH -> matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(0));
+            case EAST -> matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-90));
+            case SOUTH -> matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+            case WEST -> matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90));
+        }
+
+        // Rotate the tool 180 degrees around Y to turn it around
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+
+        // Now, translate forward to the "anvil top" (relative to facing)
+        matrices.translate(0, 0, 0.15f);
 
         matrices.scale(1.25f, 1.25f, 1.25f);
 
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
 
-        // Rotate based on anvil facing direction
-        switch (entity.getCachedState().get(SmithingAnvil.FACING)) {
-            case NORTH -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180));
-            case EAST -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(90));
-            case SOUTH -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(0));
-            case WEST -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(270));
-        }
-
         // --- Centering logic start ---
         int[] offset = getItemTextureOffset(itemStack);
         float dx = offset[0] / 16.0f;
-        float dz = offset[1] / 16.0f; // Invert y offset for correct z translation
+        float dz = offset[1] / 16.0f;
         matrices.translate(dx, 0, dz);
         // --- Centering logic end ---
 
