@@ -29,7 +29,7 @@ public class CampfireBlockEntityMixin {
                 var type = stateItem.dynamicState(stack).type();
                 if (ToolPartTypeUtils.isToolPartType(type)) {
                     int temp = TemperatureUtils.getTemperature(stack);
-                    int newTemp = Math.min(temp + 10, TemperatureUtils.MAX_TEMPERATURE);
+                    int newTemp = Math.min(temp + 10, TemperatureUtils.getMaxTemp(stack));
                     if (newTemp != temp) {
                         TemperatureUtils.setTemperature(stack, newTemp);
                         items.set(i, stack.copy()); // Force update for client sync
@@ -53,7 +53,7 @@ public class CampfireBlockEntityMixin {
                 var type = stateItem.dynamicState(stack).type();
                 if (ToolPartTypeUtils.isToolPartType(type)) {
                     int temp = TemperatureUtils.getTemperature(stack);
-                    if (temp >= TemperatureUtils.MAX_TEMPERATURE) {
+                    if (temp >= TemperatureUtils.getMaxTemp(stack)) {
                         // Prevent vanilla from ejecting the item by resetting the cook time to 0
                         try {
                             java.lang.reflect.Field cookingTimes = CampfireBlockEntity.class.getDeclaredField("cookingTimes");
@@ -137,7 +137,7 @@ public class CampfireBlockEntityMixin {
                 var type = stateItem.dynamicState(stack).type();
                 if (ToolPartTypeUtils.isToolPartType(type)) {
                     int temp = TemperatureUtils.getTemperature(stack);
-                    int newTemp = Math.min(temp + 10, TemperatureUtils.MAX_TEMPERATURE);
+                    int newTemp = Math.min(temp + 10, TemperatureUtils.getMaxTemp(stack));
                     if (newTemp > temp) {
                         // Play a more fitting sound and spawn particles when heating up
                         world.playSound(null, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, net.minecraft.sound.SoundEvents.BLOCK_FIRE_AMBIENT, net.minecraft.sound.SoundCategory.BLOCKS, 0.7F, 1.0F);

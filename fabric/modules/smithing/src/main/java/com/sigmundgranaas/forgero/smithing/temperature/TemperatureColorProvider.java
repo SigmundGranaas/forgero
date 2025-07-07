@@ -15,17 +15,18 @@ public class TemperatureColorProvider {
                 if (ToolPartTypeUtils.isToolPartType(type)) {
                     ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
                         int temp = TemperatureUtils.getTemperature(stack);
-                        return getHeatColor(temp);
+                        int maxTemp = TemperatureUtils.getMaxTemp(stack); // You need to implement this method to get the metal's maxTemp
+                        return getHeatColor(temp, maxTemp);
                     }, item);
                 }
             }
         });
     }
 
-    // Map temperature to color according to the provided scale
-    private static int getHeatColor(int temperature) {
+    // Map temperature to color according to the provided scale, scaled to maxTemp
+    private static int getHeatColor(int temperature, int maxTemp) {
         // Colors are in 0xRRGGBB format
-        final int[][] scale = {
+        final int[][] baseScale = {
             {2000, 0xFFFF00}, // Bright Yellow
             {1900, 0xFFD700}, // Dark Yellow
             {1800, 0xFFC800}, // Orange Yellow
@@ -49,18 +50,40 @@ public class TemperatureColorProvider {
             {0,    0xCCCCCC}  // Default cold (grey)
         };
 
-        for (int i = 0; i < scale.length - 1; i++) {
-            int tHigh = scale[i][0];
-            int tLow = scale[i + 1][0];
-            int cHigh = scale[i][1];
-            int cLow = scale[i + 1][1];
+        // If maxTemp >= 2000, use the original scale
+        if (maxTemp >= 2000) {
+            for (int i = 0; i < baseScale.length - 1; i++) {
+                int tHigh = baseScale[i][0];
+                int tLow = baseScale[i + 1][0];
+                int cHigh = baseScale[i][1];
+                int cLow = baseScale[i + 1][1];
+                if (temperature >= tLow && temperature <= tHigh) {
+                    float t = (temperature - tLow) / (float)(tHigh - tLow);
+                    return lerpColor(cLow, cHigh, t);
+                }
+            }
+            return baseScale[baseScale.length - 1][1];
+        }
+
+        // Scale the stops to fit maxTemp
+        int[][] scaledScale = new int[baseScale.length][2];
+        for (int i = 0; i < baseScale.length; i++) {
+            int origTemp = baseScale[i][0];
+            int scaledTemp = (int)(origTemp / 2000.0 * maxTemp);
+            scaledScale[i][0] = scaledTemp;
+            scaledScale[i][1] = baseScale[i][1];
+        }
+        for (int i = 0; i < scaledScale.length - 1; i++) {
+            int tHigh = scaledScale[i][0];
+            int tLow = scaledScale[i + 1][0];
+            int cHigh = scaledScale[i][1];
+            int cLow = scaledScale[i + 1][1];
             if (temperature >= tLow && temperature <= tHigh) {
                 float t = (temperature - tLow) / (float)(tHigh - tLow);
                 return lerpColor(cLow, cHigh, t);
             }
         }
-        // Below lowest, return cold color
-        return scale[scale.length - 1][1];
+        return scaledScale[scaledScale.length - 1][1];
     }
 
     // Linear interpolation between two RGB colors
