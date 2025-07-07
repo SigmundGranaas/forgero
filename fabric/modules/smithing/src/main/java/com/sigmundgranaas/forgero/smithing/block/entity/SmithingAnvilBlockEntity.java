@@ -114,6 +114,16 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			data.writeBoolean(hit);
 		}
 
+		// --- Sync fast marker indices ---
+		data.writeInt(fastMarkerIndices.size());
+		for (int i = 0; i < fastMarkerIndices.size(); i++) {
+			data.writeInt(fastMarkerIndices.get(i));
+		}
+
+		// --- Sync markerAttempts and markerHitsCount ---
+		data.writeInt(markerAttempts);
+		data.writeInt(markerHitsCount);
+
 		for (@NotNull ServerPlayerEntity player : PlayerLookup.tracking((ServerWorld) world, getPos())) {
 			ServerPlayNetworking.send(player, ModMessages.ITEM_SYNC, data);
 		}
@@ -200,6 +210,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		markDirty();
 	}
 
+	// Only call this on the server! Generates new fast marker indices.
 	public void resetMarkerProgress() {
 		markerPositions.clear();
 		markerHits.clear();
@@ -217,6 +228,17 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		}
 		LOGGER.info("[SmithingAnvil] Fast marker indices: {}", fastMarkerIndices); // Debug log
 		markDirty();
+	}
+
+	// Use this on the client to clear state, but NOT generate new fast markers
+	public void clearMarkerProgress() {
+		markerPositions.clear();
+		markerHits.clear();
+		markerAttempts = 0;
+		markerHitsCount = 0;
+		markerSpawnDelay = FIRST_MARKER_DELAY_TICKS;
+		nextMarkerDelay = FIRST_MARKER_DELAY_TICKS;
+		fastMarkerIndices.clear();
 	}
 
 	public boolean hasActiveMarker() {
@@ -305,19 +327,31 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			double worldX = this.getPos().getX() + marker.x;
 			double worldY = this.getPos().getY() + 1.05;
 			double worldZ = this.getPos().getZ() + marker.y;
-			// Use markerAttempts as the current marker index
-			boolean isFast = fastMarkerIndices.contains(markerAttempts);
+			LOGGER.info("[SmithingAnvil] markerAttempts: {}, fastMarkerIndices: {}", markerAttempts, fastMarkerIndices);
+			boolean isFastCurrent = fastMarkerIndices.contains(markerAttempts);
+			boolean isFastPrev = markerAttempts > 0 && fastMarkerIndices.contains(markerAttempts - 1);
+			LOGGER.info("[SmithingAnvil] isFastCurrent: {}, isFastPrev: {}", isFastCurrent, isFastPrev);
+			boolean isFast = isFastCurrent;
 			for (int i = 0; i < 2; i++) {
 				if (isFast) {
-					LOGGER.info("[SmithingAnvil] Spawning FAST marker at attempt {} (marker index: {}) at position ({}, {}, {})", markerAttempts, i, worldX, worldY, worldZ);
+					this.world.addParticle(
+							new net.minecraft.particle.DustParticleEffect(
+									new Vector3f(1.0f, 0.0f, 0.0f),
+									0.2f
+							),
+							worldX, worldY, worldZ,
+							0.0, 0.02, 0.0
+					);
+				} else {
+					this.world.addParticle(
+						new net.minecraft.particle.DustParticleEffect(
+							new Vector3f(1.0f, 0.5f, 0.0f),
+							0.2f
+						),
+						worldX, worldY, worldZ,
+						0.0, 0.02, 0.0
+					);
 				}
-				this.world.addParticle(
-					new net.minecraft.particle.DustParticleEffect(
-						isFast ? new Vector3f(1.0f, 0.0f, 0.0f) : new Vector3f(1.0f, 0.5f, 0.0f),
-						isFast ? 0.5f : 0.2f), // Larger size for fast markers
-					worldX, worldY, worldZ,
-					0.0, 0.02, 0.0
-				);
 			}
 		}
 	}
@@ -455,5 +489,15 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			this.markerHitsCount = 0;
 			this.markerAttempts = 0;
 		}
+	}
+
+	// Setter for markerAttempts (needed for client sync)
+	public void setMarkerAttempts(int markerAttempts) {
+		this.markerAttempts = markerAttempts;
+	}
+
+	// Setter for markerHitsCount (needed for client sync)
+	public void setMarkerHitsCount(int markerHitsCount) {
+		this.markerHitsCount = markerHitsCount;
 	}
 }

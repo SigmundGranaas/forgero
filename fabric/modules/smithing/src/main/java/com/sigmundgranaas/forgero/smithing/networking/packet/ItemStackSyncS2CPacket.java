@@ -46,5 +46,17 @@ public class ItemStackSyncS2CPacket {
 			smithingAnvilBlockEntity.getMarkerPositions().add(new net.minecraft.util.math.Vec2f(x, y));
 			smithingAnvilBlockEntity.getMarkerHits().add(hit);
 		}
+
+		// --- Read fast marker indices from packet ---
+		smithingAnvilBlockEntity.getFastMarkerIndices().clear();
+		int fastMarkerCount = buf.readInt();
+		for (int i = 0; i < fastMarkerCount; i++) {
+			int idx = buf.readInt();
+			smithingAnvilBlockEntity.getFastMarkerIndices().add(idx);
+		}
+
+		// --- Read markerAttempts and markerHitsCount from packet ---
+		smithingAnvilBlockEntity.setMarkerAttempts(buf.readInt());
+		smithingAnvilBlockEntity.setMarkerHitsCount(buf.readInt());
 	}
 }
