@@ -55,7 +55,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	private int markerSpawnDelay = 3; // Initial delay for first marker
 	private int nextMarkerDelay = 3;  // Controls delay for next marker (3 for first, 1 for subsequent)
 	private static final int FIRST_MARKER_DELAY_TICKS = 3; // 0.5 seconds
-	private static final int SUBSEQUENT_MARKER_DELAY_TICKS = 1;
+	private static final int SUBSEQUENT_MARKER_DELAY_TICKS = 2; // Increased delay for subsequent markers
 	private static final int MIN_COOLDOWN_TICKS = 40;  // 2 seconds
 	private static final int MAX_COOLDOWN_TICKS = 100; // 5 seconds
 	private static final int MARKER_LIFETIME_TICKS = 30; // 1.5 seconds
@@ -71,6 +71,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	private static final String ATTEMPTS_NBT_KEY = "forgero_markerAttempts";
 
 	private static final Logger LOGGER = LogManager.getLogger(SmithingAnvilBlockEntity.class);
+
+	private static final int TOTAL_MARKERS = 10; // Add this constant for 10 markers
 
 	public SmithingAnvilBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.SMITHING_ANVIL, pos, state);
@@ -149,7 +151,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		// Load marker positions
 		markerPositions.clear();
 		markerHits.clear();
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < TOTAL_MARKERS; i++) { // Changed from 3 to 10
 			if (nbt.contains("marker_" + i)) {
 				NbtCompound markerNbt = nbt.getCompound("marker_" + i);
 				markerPositions.add(new Vec2f(markerNbt.getFloat("x"), markerNbt.getFloat("y")));
@@ -198,7 +200,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	}
 
 	public boolean hasActiveMarker() {
-		return !markerPositions.isEmpty() && markerAttempts < 3;
+		return !markerPositions.isEmpty() && markerAttempts < TOTAL_MARKERS;
 	}
 
 	public int getMarkerAttempts() {
@@ -210,7 +212,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	}
 
 	public void processMarkerAttempt(boolean hit) {
-		if (markerAttempts >= 3) return;
+		if (markerAttempts >= TOTAL_MARKERS) return; // Changed from 3 to 10
 		markerAttempts++;
 		ItemStack stack = inventory.getStack(0);
 		int temp = TemperatureUtils.getTemperature(stack);
@@ -224,7 +226,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		markDirty();
 		markerPositions.clear();
 		markerHits.clear();
-		if (markerAttempts < 3) {
+		if (markerAttempts < TOTAL_MARKERS) { // Changed from 3 to 10
 			// Set delay for subsequent marker
 			nextMarkerDelay = SUBSEQUENT_MARKER_DELAY_TICKS;
 			markerSpawnDelay = nextMarkerDelay;
@@ -273,7 +275,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		if (this.world == null || !this.world.isClient) return;
 		if (inventory.getStack(0).isEmpty()) return;
 		// Removed tick interval check to spawn particle every tick for longer effect
-		if (markerPositions.size() == 1 && markerAttempts < 3) {
+		if (markerPositions.size() == 1 && markerAttempts < TOTAL_MARKERS) { // Changed from 3 to 10
 			Vec2f marker = markerPositions.get(0);
 			double worldX = this.getPos().getX() + marker.x;
 			double worldY = this.getPos().getY() + 1.05;
@@ -288,7 +290,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			}
 		}
 	}
-
 
 	public void tick() {
 		if (this.world != null && this.world.isClient) {
@@ -329,7 +330,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			}
 
 			if (valid && inTemp && !hasCondition) {
-				if (markerPositions.isEmpty() && markerCooldown <= 0 && markerAttempts < 3) {
+				if (markerPositions.isEmpty() && markerCooldown <= 0 && markerAttempts < TOTAL_MARKERS) { // Changed from 3 to 10
 					if (markerSpawnDelay > 0) {
 						LOGGER.info("[SmithingAnvil] Marker spawn delay: {} ticks remaining", markerSpawnDelay);
 						markerSpawnDelay--;

@@ -258,7 +258,7 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
             smithingAnvilBlockEntity.resetMarkerProgress();
         }
 
-        // Hammer logic: apply random condition to toolpart after 3 correct hits on markers
+        // Hammer logic: apply random condition to toolpart after 10 correct hits on markers
         if (stackInHand.getItem().getTranslationKey().contains("smithing_hammer")) {
             LOGGER.info("onUse: Player is holding a smithing hammer");
             if (blockHitResult instanceof BlockHitResult) {
@@ -313,18 +313,19 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
                     smithingAnvilBlockEntity.playMissSound();
                 }
                 smithingAnvilBlockEntity.processMarkerAttempt(hit);
-                if (smithingAnvilBlockEntity.getMarkerAttempts() >= 3) {
+                if (smithingAnvilBlockEntity.getMarkerAttempts() >= 10) { // Changed from 3 to 10
                     if (!anvilItem.isEmpty()) {
                         // Loot table selection based on markerHitsCount
                         int hits = smithingAnvilBlockEntity.getMarkerHitsCount();
                         java.util.List<com.sigmundgranaas.forgero.core.condition.NamedCondition> lootTable;
-                        if (hits == 3) {
+                        // Adjust loot table logic if needed for more granularity, or keep as is
+                        if (hits == 10) {
                             lootTable = ConditionLootTables.BEST;
-                        } else if (hits == 2) {
+                        } else if (hits >= 7) {
                             lootTable = ConditionLootTables.GOOD;
-                        } else if (hits == 1) {
+                        } else if (hits >= 4) {
                             lootTable = ConditionLootTables.NEUTRAL;
-                        } else if (hits == 0) {
+                        } else if (hits >= 0) {
                             lootTable = ConditionLootTables.BAD;
                         } else {
                             lootTable = com.sigmundgranaas.forgero.core.condition.Conditions.INSTANCE.all().stream()
