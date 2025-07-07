@@ -5,8 +5,6 @@ import java.util.stream.Collectors;
 import com.sigmundgranaas.forgero.core.condition.NamedCondition;
 import com.sigmundgranaas.forgero.smithing.block.entity.SmithingAnvilBlockEntity;
 import com.sigmundgranaas.forgero.smithing.condition.ConditionLootTables;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,8 +43,6 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
     private static final VoxelShape SHAPE_EAST;
     private static final VoxelShape SHAPE_SOUTH;
     private static final VoxelShape SHAPE_WEST;
-
-    private static final Logger LOGGER = LogManager.getLogger(SmithingAnvil.class);
 
     static {
         VoxelShape shapeS = VoxelShapes.empty();
@@ -237,15 +233,12 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
     @SuppressWarnings("deprecation")
     @Override
     public ActionResult onUse(@NotNull BlockState blockState, @NotNull World world, @NotNull BlockPos blockPosition, @Nullable PlayerEntity player, @Nullable Hand hand, @NotNull BlockHitResult blockHitResult) {
-        LOGGER.info("SmithingAnvil onUse called");
         if (world.isClient) {
-            LOGGER.info("onUse: world is client, returning SUCCESS");
             return ActionResult.SUCCESS;
         }
 
         BlockEntity blockEntity = world.getBlockEntity(blockPosition);
         if (!(blockEntity instanceof SmithingAnvilBlockEntity smithingAnvilBlockEntity) || player == null) {
-            LOGGER.info("onUse: Not a SmithingAnvilBlockEntity or player is null");
             return ActionResult.PASS;
         }
 
@@ -264,44 +257,37 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
 
         // Hammer logic: apply random condition to toolpart after 10 correct hits on markers
         if (stackInHand.getItem().getTranslationKey().contains("smithing_hammer")) {
-            LOGGER.info("onUse: Player is holding a smithing hammer");
             if (blockHitResult instanceof BlockHitResult) {
                 BlockHitResult bhr = (BlockHitResult) blockHitResult;
                 int temp = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getTemperature(anvilItem);
 
-                // --- Only allow once: check if already has a condition ---
+                // Only allow once: check if already has a condition
                 var stateOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert(anvilItem);
                 if (stateOpt.isPresent() && stateOpt.get() instanceof com.sigmundgranaas.forgero.core.condition.Conditional<?> conditional) {
                     if (!anvilItem.isEmpty() && !conditional.localConditions().isEmpty()) {
-                        LOGGER.info("The tool is too weak to perform this again");
-                        if (player != null && world instanceof net.minecraft.server.world.ServerWorld serverWorld) {
+                        if (world instanceof net.minecraft.server.world.ServerWorld && player != null) {
                             player.sendMessage(net.minecraft.text.Text.literal("The tool is too weak to perform this again"), true);
                         }
-                        // Play anvil land sound for blocked action
-                        if (world != null) {
-                            world.playSound(null, blockPosition, net.minecraft.sound.SoundEvents.BLOCK_ANVIL_LAND, net.minecraft.sound.SoundCategory.BLOCKS, 1.0f, 1.0f);
-                        }
+                        world.playSound(null, blockPosition, net.minecraft.sound.SoundEvents.BLOCK_ANVIL_LAND, net.minecraft.sound.SoundCategory.BLOCKS, 1.0f, 1.0f);
                         if (world.isClient) {
                             smithingAnvilBlockEntity.clearMarkerProgress();
                         } else {
                             smithingAnvilBlockEntity.resetMarkerProgress();
                         }
-                        return ActionResult.FAIL; // <--- Prevent further right-clicks
+                        return ActionResult.FAIL;
                     }
                 }
 
-                // --- Temperature check before allowing hit ---
+                // Temperature check before allowing hit
                 if (temp < 0) {
-                    if (player != null && world instanceof net.minecraft.server.world.ServerWorld serverWorld) {
+                    if (world instanceof net.minecraft.server.world.ServerWorld && player != null) {
                         player.sendMessage(net.minecraft.text.Text.literal("The tool is too cold to work!"), true);
                     }
-                    // Play anvil land sound for blocked action
-                    if (world != null) {
-                        world.playSound(null, blockPosition, net.minecraft.sound.SoundEvents.BLOCK_ANVIL_LAND, net.minecraft.sound.SoundCategory.BLOCKS, 1.0f, 1.0f);
-                    }
+                    world.playSound(null, blockPosition, net.minecraft.sound.SoundEvents.BLOCK_ANVIL_LAND, net.minecraft.sound.SoundCategory.BLOCKS, 1.0f, 1.0f);
                     smithingAnvilBlockEntity.playMissSound();
                     return ActionResult.FAIL;
                 }
+
                 // Convert hit position to local coordinates (relative to block)
                 double localX = bhr.getPos().x - blockPosition.getX();
                 double localZ = bhr.getPos().z - blockPosition.getZ();
@@ -311,22 +297,20 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
                     Vec2f marker = markers.get(0);
                     double dx = marker.x - localX;
                     double dz = marker.y - localZ;
-                    if (dx * dx + dz * dz < 0.01) { // threshold squared (0.1^2)
+                    if (dx * dx + dz * dz < 0.01) {
                         smithingAnvilBlockEntity.setMarkerHit(0);
                         hit = true;
-                        LOGGER.info("onUse: Marker hit!");
                     }
                 }
                 if (!hit) {
                     smithingAnvilBlockEntity.playMissSound();
                 }
                 smithingAnvilBlockEntity.processMarkerAttempt(hit);
-                if (smithingAnvilBlockEntity.getMarkerAttempts() >= 10) { // Changed from 3 to 10
+
+                if (smithingAnvilBlockEntity.getMarkerAttempts() >= 10) {
                     if (!anvilItem.isEmpty()) {
-                        // Loot table selection based on markerHitsCount
                         int hits = smithingAnvilBlockEntity.getMarkerHitsCount();
                         java.util.List<com.sigmundgranaas.forgero.core.condition.NamedCondition> lootTable;
-                        // Adjust loot table logic if needed for more granularity, or keep as is
                         if (hits == 10) {
                             lootTable = ConditionLootTables.BEST;
                         } else if (hits >= 7) {
@@ -341,32 +325,25 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
                                     .map(c -> (NamedCondition) c)
                                     .collect(Collectors.toList());
                         }
-                        // --- Fix: get conditional from stateOpt ---
                         var stateOpt2 = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert(anvilItem);
                         if (stateOpt2.isPresent() && stateOpt2.get() instanceof com.sigmundgranaas.forgero.core.condition.Conditional<?> conditional2) {
                             if (!lootTable.isEmpty()) {
                                 var randomCondition = ConditionLootTables.getRandomCondition(lootTable);
-                                LOGGER.info("onUse: Applying loot table condition: {}", randomCondition.name());
                                 var conditioned = conditional2.applyCondition(randomCondition);
                                 var newStackOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert((com.sigmundgranaas.forgero.core.state.State)conditioned);
                                 newStackOpt.ifPresent(newStack -> {
-                                    LOGGER.info("onUse: Condition applied, updating anvil slot");
-                                    // --- Preserve temperature NBT ---
                                     com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.setTemperature(newStack, temp);
                                     inventory.setStack(0, newStack);
                                     smithingAnvilBlockEntity.markDirty();
                                 });
-                                // --- Play anvil fall sound for completion ---
-                                if (world != null) {
-                                    world.playSound(
-                                        null,
-                                        blockPosition,
-                                        net.minecraft.sound.SoundEvents.BLOCK_SMITHING_TABLE_USE, // Changed to a more satisfying sound
-                                        net.minecraft.sound.SoundCategory.BLOCKS,
-                                        1.0f,
-                                        1.0f
-                                    );
-                                }
+                                world.playSound(
+                                    null,
+                                    blockPosition,
+                                    net.minecraft.sound.SoundEvents.BLOCK_SMITHING_TABLE_USE,
+                                    net.minecraft.sound.SoundCategory.BLOCKS,
+                                    1.0f,
+                                    1.0f
+                                );
                             }
                         }
                     }
@@ -377,44 +354,34 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
             return ActionResult.SUCCESS;
         }
 
-        // Simple logic: right-click with empty hand to pick up, with item to place if empty
+        // Right-click with empty hand to pick up, with item to place if empty
         if (stackInHand.isEmpty()) {
             if (!anvilItem.isEmpty()) {
-                LOGGER.info("onUse: Picking up item from anvil: {}", anvilItem);
-                smithingAnvilBlockEntity.saveProgressToItem(); // Save progress to item NBT
+                smithingAnvilBlockEntity.saveProgressToItem();
                 player.getInventory().offerOrDrop(anvilItem.copy());
                 inventory.setStack(0, ItemStack.EMPTY);
                 smithingAnvilBlockEntity.markDirty();
                 smithingAnvilBlockEntity.resetMarkers();
             }
-        } else {
-            if (anvilItem.isEmpty()) {
-                // Prevent placing items with a condition on the anvil
-                var stateOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert(stackInHand);
-                if (stateOpt.isPresent() && stateOpt.get() instanceof com.sigmundgranaas.forgero.core.condition.Conditional<?> conditional) {
-                    if (!conditional.localConditions().isEmpty()) {
-                        LOGGER.info("onUse: Tried to place item with condition on anvil, action blocked: {}", stackInHand);
-                        if (player != null && world instanceof net.minecraft.server.world.ServerWorld serverWorld) {
-                            player.sendMessage(net.minecraft.text.Text.literal("That item already has a condition!"), true);
-                        }
-                        return ActionResult.FAIL;
+        } else if (anvilItem.isEmpty()) {
+            // Prevent placing items with a condition on the anvil
+            var stateOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert(stackInHand);
+            if (stateOpt.isPresent() && stateOpt.get() instanceof com.sigmundgranaas.forgero.core.condition.Conditional<?> conditional) {
+                if (!conditional.localConditions().isEmpty()) {
+                    if (world instanceof net.minecraft.server.world.ServerWorld && player != null) {
+                        player.sendMessage(net.minecraft.text.Text.literal("That item already has a condition!"), true);
                     }
+                    return ActionResult.FAIL;
                 }
-                LOGGER.info("onUse: Placing item in anvil: {}", stackInHand);
-                ItemStack toPlace = stackInHand.copy();
-                toPlace.setCount(1);
-                inventory.setStack(0, toPlace);
-                // Ensure both client and server load progress from item NBT
-                // smithingAnvilBlockEntity.loadProgressFromItem(); // <-- REMOVE THIS LINE
-                // Only call loadProgressFromItem on the server after placing an item in the anvil
-                if (!world.isClient) {
-                    smithingAnvilBlockEntity.loadProgressFromItem();
-                }
-                LOGGER.info("onUse: Anvil slot now contains: {}", inventory.getStack(0));
-                stackInHand.decrement(1);
-                smithingAnvilBlockEntity.markDirty();
-                LOGGER.info("onUse: Called markDirty after placing item");
             }
+            ItemStack toPlace = stackInHand.copy();
+            toPlace.setCount(1);
+            inventory.setStack(0, toPlace);
+            if (!world.isClient) {
+                smithingAnvilBlockEntity.loadProgressFromItem();
+            }
+            stackInHand.decrement(1);
+            smithingAnvilBlockEntity.markDirty();
         }
         return ActionResult.SUCCESS;
     }

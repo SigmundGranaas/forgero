@@ -10,8 +10,6 @@ import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 import com.sigmundgranaas.forgero.smithing.util.ToolPartTypeUtils;
 import lombok.Getter;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
@@ -52,30 +50,26 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	private int markerTicks = 0;
 	private int markerTimeout = 0;
 	private int markerCooldown = 0;
-	private int markerSpawnDelay = 3; // Initial delay for first marker
-	private int nextMarkerDelay = 3;  // Controls delay for next marker (3 for first, 1 for subsequent)
-	private static final int FIRST_MARKER_DELAY_TICKS = 2; // 0.5 seconds
-	private static final int SUBSEQUENT_MARKER_DELAY_TICKS = 2; // 0 ticks for instant spawn after first
-	private static final int MIN_COOLDOWN_TICKS = 40;  // 2 seconds
-	private static final int MAX_COOLDOWN_TICKS = 100; // 5 seconds
-	private static final int MARKER_LIFETIME_TICKS = 30; // 1.5 seconds
+	private int markerSpawnDelay = 3;
+	private int nextMarkerDelay = 3;
+	private static final int FIRST_MARKER_DELAY_TICKS = 2;
+	private static final int SUBSEQUENT_MARKER_DELAY_TICKS = 2;
+	private static final int MIN_COOLDOWN_TICKS = 40;
+	private static final int MAX_COOLDOWN_TICKS = 100;
+	private static final int MARKER_LIFETIME_TICKS = 30;
 	private final Random random = new Random();
 
-	// Add this constant to match TemperatureHandler
 	private static final int ANVIL_INVENTORY_COOL_PER_TICK = 1;
-	private static final int ANVIL_INVENTORY_COOL_TICK_INTERVAL = 20; // 20 = every 20 ticks (1 per second)
+	private static final int ANVIL_INVENTORY_COOL_TICK_INTERVAL = 20;
 
 	private int anvilInventoryCoolTickCounter = 0;
 
 	private static final String HITS_NBT_KEY = "forgero_markerHitsCount";
 	private static final String ATTEMPTS_NBT_KEY = "forgero_markerAttempts";
 
-	private static final Logger LOGGER = LogManager.getLogger(SmithingAnvilBlockEntity.class);
-
 	private static final int TOTAL_MARKERS = 10;
-	private static final int FAST_MARKERS = 4; // Number of fast/red markers (was 3, now 5)
+	private static final int FAST_MARKERS = 5; // Number of fast/red markers
 
-	// Track which marker indices are "fast" (red)
 	private final List<Integer> fastMarkerIndices = new ArrayList<>();
 
 	public SmithingAnvilBlockEntity(BlockPos pos, BlockState state) {
@@ -226,7 +220,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				fastMarkerIndices.add(idx);
 			}
 		}
-		LOGGER.info("[SmithingAnvil] Fast marker indices: {}", fastMarkerIndices); // Debug log
 		markDirty();
 	}
 
@@ -320,17 +313,12 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	public void clientTick() {
 		if (this.world == null || !this.world.isClient) return;
 		if (inventory.getStack(0).isEmpty()) return;
-		// Show marker for current attempt (markerAttempts is the index of the marker about to be hit)
 		if (markerPositions.size() == 1 && markerAttempts < TOTAL_MARKERS) {
 			Vec2f marker = markerPositions.get(0);
 			double worldX = this.getPos().getX() + marker.x;
 			double worldY = this.getPos().getY() + 1.05;
 			double worldZ = this.getPos().getZ() + marker.y;
-			LOGGER.info("[SmithingAnvil] markerAttempts: {}, fastMarkerIndices: {}", markerAttempts, new ArrayList<>(fastMarkerIndices));
-			boolean isFastCurrent = fastMarkerIndices.contains(markerAttempts);
-			boolean isFastPrev = markerAttempts > 0 && fastMarkerIndices.contains(markerAttempts - 1);
-			LOGGER.info("[SmithingAnvil] isFastCurrent: {}, isFastPrev: {}", isFastCurrent, isFastPrev);
-			boolean isFast = isFastCurrent;
+			boolean isFast = fastMarkerIndices.contains(markerAttempts);
 			for (int i = 0; i < 2; i++) {
 				if (isFast) {
 					this.world.addParticle(
@@ -344,7 +332,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				} else {
 					this.world.addParticle(
 						new net.minecraft.particle.DustParticleEffect(
-							new Vector3f(1.0f, 0.65f, 0.0f), // Yellow color (R=1, G=1, B=0)
+							new Vector3f(1.0f, 1.0f, 0.0f), // Yellow color
 							0.27f
 						),
 						worldX, worldY, worldZ,
@@ -416,11 +404,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				}
 				if (markerPositions.isEmpty() && markerCooldown <= 0 && markerAttempts < TOTAL_MARKERS) {
 					if (markerSpawnDelay > 0) {
-						LOGGER.info("[SmithingAnvil] Marker spawn delay: {} ticks remaining", markerSpawnDelay);
 						markerSpawnDelay--;
 					}
 					if (markerSpawnDelay == 0) {
-						LOGGER.info("[SmithingAnvil] Spawning marker! (attempt {})", markerAttempts);
 						markerPositions.clear();
 						markerHits.clear();
 						float x = 0.35f + random.nextFloat() * 0.3f;
@@ -430,7 +416,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 						// Use markerAttempts as the index for fast marker check
 						if (fastMarkerIndices.contains(markerAttempts)) {
 							markerTimeout = 1; // Fast marker: vanish after 1 tick
-							LOGGER.info("[SmithingAnvil] Fast marker spawned at attempt {} (timeout set to 1 tick)", markerAttempts);
 						} else {
 							markerTimeout = MARKER_LIFETIME_TICKS;
 						}
