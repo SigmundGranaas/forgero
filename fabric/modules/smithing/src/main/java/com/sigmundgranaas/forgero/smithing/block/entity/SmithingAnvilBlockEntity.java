@@ -10,6 +10,8 @@ import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 import com.sigmundgranaas.forgero.smithing.util.ToolPartTypeUtils;
 import lombok.Getter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
@@ -50,6 +52,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	private int markerTicks = 0;
 	private int markerTimeout = 0;
 	private int markerCooldown = 0;
+	private int markerSpawnDelay = 3; // Initial delay for first marker
+	private int nextMarkerDelay = 3;  // Controls delay for next marker (3 for first, 1 for subsequent)
+	private static final int FIRST_MARKER_DELAY_TICKS = 3; // 0.5 seconds
+	private static final int SUBSEQUENT_MARKER_DELAY_TICKS = 1;
 	private static final int MIN_COOLDOWN_TICKS = 40;  // 2 seconds
 	private static final int MAX_COOLDOWN_TICKS = 100; // 5 seconds
 	private static final int MARKER_LIFETIME_TICKS = 30; // 1.5 seconds
@@ -63,6 +69,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 	private static final String HITS_NBT_KEY = "forgero_markerHitsCount";
 	private static final String ATTEMPTS_NBT_KEY = "forgero_markerAttempts";
+
+	private static final Logger LOGGER = LogManager.getLogger(SmithingAnvilBlockEntity.class);
 
 	public SmithingAnvilBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.SMITHING_ANVIL, pos, state);
@@ -183,6 +191,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		markerHits.clear();
 		markerAttempts = 0;
 		markerHitsCount = 0;
+		// Reset delays for new tool or new session
+		markerSpawnDelay = FIRST_MARKER_DELAY_TICKS;
+		nextMarkerDelay = FIRST_MARKER_DELAY_TICKS;
 		markDirty();
 	}
 
@@ -214,7 +225,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		markerPositions.clear();
 		markerHits.clear();
 		if (markerAttempts < 3) {
-			generateSingleMarker();
+			// Set delay for subsequent marker
+			nextMarkerDelay = SUBSEQUENT_MARKER_DELAY_TICKS;
+			markerSpawnDelay = nextMarkerDelay;
+			// Marker will spawn after delay in tick()
 		} else {
 			markDirty();
 		}
@@ -295,7 +309,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 					markDirty();
 				}
 			}
-			// --- Random marker spawning logic ---
+			// --- Marker spawn logic with delay ---
 			int temp = TemperatureUtils.getTemperature(stack);
 			boolean valid = !stack.isEmpty() && ToolPartTypeUtils.isToolPartHeadOrToolPart(
 					StateService.INSTANCE.convert(stack)
@@ -303,17 +317,28 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 							.map(s -> ((Typed) s).type())
 							.orElse(null)
 			);
-			if (valid && temp >= 400 && temp <= 600) {
-				if (markerPositions.isEmpty() && markerCooldown <= 0) {
-					// Spawn a marker
-					markerPositions.clear();
-					markerHits.clear();
-					float x = 0.35f + random.nextFloat() * 0.3f;
-					float y = 0.35f + random.nextFloat() * 0.3f;
-					markerPositions.add(new Vec2f(x, y));
-					markerHits.add(false);
-					markerTimeout = MARKER_LIFETIME_TICKS;
-					markDirty();
+			boolean inTemp = temp >= 0 && temp <= 600;
+			if (valid && inTemp) {
+				if (markerPositions.isEmpty() && markerCooldown <= 0 && markerAttempts < 3) {
+					if (markerSpawnDelay > 0) {
+						LOGGER.info("[SmithingAnvil] Marker spawn delay: {} ticks remaining", markerSpawnDelay);
+						markerSpawnDelay--;
+					}
+					if (markerSpawnDelay == 0) {
+						LOGGER.info("[SmithingAnvil] Spawning marker!");
+						markerPositions.clear();
+						markerHits.clear();
+						float x = 0.35f + random.nextFloat() * 0.3f;
+						float y = 0.35f + random.nextFloat() * 0.3f;
+						markerPositions.add(new Vec2f(x, y));
+						markerHits.add(false);
+						markerTimeout = MARKER_LIFETIME_TICKS;
+						markDirty();
+						// After first marker, set next delay to 1 for subsequent markers
+						nextMarkerDelay = SUBSEQUENT_MARKER_DELAY_TICKS;
+						// Prevent immediate respawn
+						markerSpawnDelay = -1;
+					}
 				} else if (!markerPositions.isEmpty()) {
 					// Marker is active, count down its lifetime
 					markerTimeout--;
@@ -328,12 +353,15 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 					markerCooldown--;
 				}
 			} else {
-				// Not in valid temp range or not a tool part: clear markers and timers
-				if (!markerPositions.isEmpty() || markerCooldown > 0) {
+				// Not in valid temp range or not a tool part: clear markers, timers, and delay
+				if (!markerPositions.isEmpty() || markerCooldown > 0 || markerSpawnDelay > 0) {
+					LOGGER.info("[SmithingAnvil] Resetting marker/cooldown/delay due to invalid state");
 					markerPositions.clear();
 					markerHits.clear();
 					markerCooldown = 0;
 					markerTimeout = 0;
+					markerSpawnDelay = FIRST_MARKER_DELAY_TICKS;
+					nextMarkerDelay = FIRST_MARKER_DELAY_TICKS;
 					markDirty();
 				}
 			}

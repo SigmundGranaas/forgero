@@ -256,7 +256,6 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
         // Generate new marker sequence when a toolpart is placed
         if (!stackInHand.isEmpty() && anvilItem.isEmpty()) {
             smithingAnvilBlockEntity.resetMarkerProgress();
-            smithingAnvilBlockEntity.generateSingleMarker();
         }
 
         // Hammer logic: apply random condition to toolpart after 3 correct hits on markers
@@ -394,7 +393,6 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
                 stackInHand.decrement(1);
                 smithingAnvilBlockEntity.markDirty();
                 LOGGER.info("onUse: Called markDirty after placing item");
-                smithingAnvilBlockEntity.generateSingleMarker();
             }
         }
         return ActionResult.SUCCESS;
