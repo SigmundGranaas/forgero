@@ -54,8 +54,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	private int markerCooldown = 0;
 	private int markerSpawnDelay = 3; // Initial delay for first marker
 	private int nextMarkerDelay = 3;  // Controls delay for next marker (3 for first, 1 for subsequent)
-	private static final int FIRST_MARKER_DELAY_TICKS = 3; // 0.5 seconds
-	private static final int SUBSEQUENT_MARKER_DELAY_TICKS = 2; // Increased delay for subsequent markers
+	private static final int FIRST_MARKER_DELAY_TICKS = 2; // 0.5 seconds
+	private static final int SUBSEQUENT_MARKER_DELAY_TICKS = 2; // 0 ticks for instant spawn after first
 	private static final int MIN_COOLDOWN_TICKS = 40;  // 2 seconds
 	private static final int MAX_COOLDOWN_TICKS = 100; // 5 seconds
 	private static final int MARKER_LIFETIME_TICKS = 30; // 1.5 seconds
@@ -73,7 +73,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	private static final Logger LOGGER = LogManager.getLogger(SmithingAnvilBlockEntity.class);
 
 	private static final int TOTAL_MARKERS = 10;
-	private static final int FAST_MARKERS = 3; // Number of fast/red markers
+	private static final int FAST_MARKERS = 4; // Number of fast/red markers (was 3, now 5)
 
 	// Track which marker indices are "fast" (red)
 	private final List<Integer> fastMarkerIndices = new ArrayList<>();
@@ -336,19 +336,19 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 					this.world.addParticle(
 							new net.minecraft.particle.DustParticleEffect(
 									new Vector3f(1.0f, 0.0f, 0.0f),
-									0.2f
+									0.27f
 							),
 							worldX, worldY, worldZ,
-							0.0, 0.02, 0.0
+							0.02, 0.02, 0.02
 					);
 				} else {
 					this.world.addParticle(
 						new net.minecraft.particle.DustParticleEffect(
-							new Vector3f(1.0f, 0.5f, 0.0f),
-							0.2f
+							new Vector3f(1.0f, 0.65f, 0.0f), // Yellow color (R=1, G=1, B=0)
+							0.27f
 						),
 						worldX, worldY, worldZ,
-						0.0, 0.02, 0.0
+						0.02, 0.02, 0.02
 					);
 				}
 			}
@@ -454,7 +454,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			} else {
 				// Not in valid temp range or not a tool part or already has condition: clear markers, timers, and delay
 				if (!markerPositions.isEmpty() || markerCooldown > 0 || markerSpawnDelay > 0) {
-					LOGGER.info("[SmithingAnvil] Resetting marker/cooldown/delay due to invalid state or completed process");
 					markerPositions.clear();
 					markerHits.clear();
 					markerCooldown = 0;

@@ -358,7 +358,14 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
                                 });
                                 // --- Play anvil fall sound for completion ---
                                 if (world != null) {
-                                    world.playSound(null, blockPosition, net.minecraft.sound.SoundEvents.BLOCK_ANVIL_FALL, net.minecraft.sound.SoundCategory.BLOCKS, 1.0f, 1.0f);
+                                    world.playSound(
+                                        null,
+                                        blockPosition,
+                                        net.minecraft.sound.SoundEvents.BLOCK_SMITHING_TABLE_USE, // Changed to a more satisfying sound
+                                        net.minecraft.sound.SoundCategory.BLOCKS,
+                                        1.0f,
+                                        1.0f
+                                    );
                                 }
                             }
                         }
