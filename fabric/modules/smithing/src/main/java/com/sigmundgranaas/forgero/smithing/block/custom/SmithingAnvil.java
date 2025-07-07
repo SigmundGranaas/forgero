@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.smithing.block.custom;
 
+import static com.sigmundgranaas.forgero.smithing.util.ToolPartTypeUtils.isToolPartType;
+
 import java.util.stream.Collectors;
 
 import com.sigmundgranaas.forgero.core.condition.NamedCondition;
@@ -217,21 +219,6 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
         return BlockRenderType.MODEL;
     }
 
-    private boolean isToolPartHeadOrToolPart(com.sigmundgranaas.forgero.core.type.Type type) {
-        if (type == null) {
-            return false;
-        }
-        if (type.equals(com.sigmundgranaas.forgero.core.type.Type.PART)
-            || type.typeName().equals("TOOL_PART")) {
-            return true;
-        }
-        for (com.sigmundgranaas.forgero.core.type.Type parent : type.parent()) {
-            if (isToolPartHeadOrToolPart(parent)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     @SuppressWarnings("deprecation")
     @Override
@@ -255,7 +242,7 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
                 .filter(s -> s instanceof com.sigmundgranaas.forgero.core.state.Typed)
                 .map(s -> ((com.sigmundgranaas.forgero.core.state.Typed) s).type())
                 .orElse(null);
-            if (!isToolPartHeadOrToolPart(type)) {
+            if (!isToolPartType(type)) {
                 // Reject non-PART items, do not consume from hand
                 return ActionResult.FAIL;
             }
