@@ -318,7 +318,17 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 							.orElse(null)
 			);
 			boolean inTemp = temp >= 0 && temp <= 600;
-			if (valid && inTemp) {
+
+			// --- Prevent marker spawning if tool already has a condition ---
+			boolean hasCondition = false;
+			if (!stack.isEmpty()) {
+				var stateOpt = StateService.INSTANCE.convert(stack);
+				if (stateOpt.isPresent() && stateOpt.get() instanceof com.sigmundgranaas.forgero.core.condition.Conditional<?> conditional) {
+					hasCondition = !conditional.localConditions().isEmpty();
+				}
+			}
+
+			if (valid && inTemp && !hasCondition) {
 				if (markerPositions.isEmpty() && markerCooldown <= 0 && markerAttempts < 3) {
 					if (markerSpawnDelay > 0) {
 						LOGGER.info("[SmithingAnvil] Marker spawn delay: {} ticks remaining", markerSpawnDelay);
@@ -353,9 +363,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 					markerCooldown--;
 				}
 			} else {
-				// Not in valid temp range or not a tool part: clear markers, timers, and delay
+				// Not in valid temp range or not a tool part or already has condition: clear markers, timers, and delay
 				if (!markerPositions.isEmpty() || markerCooldown > 0 || markerSpawnDelay > 0) {
-					LOGGER.info("[SmithingAnvil] Resetting marker/cooldown/delay due to invalid state");
+					LOGGER.info("[SmithingAnvil] Resetting marker/cooldown/delay due to invalid state or completed process");
 					markerPositions.clear();
 					markerHits.clear();
 					markerCooldown = 0;
