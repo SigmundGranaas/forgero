@@ -72,7 +72,11 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 	private static final Logger LOGGER = LogManager.getLogger(SmithingAnvilBlockEntity.class);
 
-	private static final int TOTAL_MARKERS = 10; // Add this constant for 10 markers
+	private static final int TOTAL_MARKERS = 10;
+	private static final int FAST_MARKERS = 3; // Number of fast/red markers
+
+	// Track which marker indices are "fast" (red)
+	private final List<Integer> fastMarkerIndices = new ArrayList<>();
 
 	public SmithingAnvilBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.SMITHING_ANVIL, pos, state);
@@ -134,7 +138,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			markerNbt.putBoolean("hit", markerHits.size() > i && markerHits.get(i));
 			nbt.put("marker_" + i, markerNbt);
 		}
-		// Store progress in item NBT if present
+		// Save fast marker indices
+		nbt.putIntArray("fastMarkerIndices", fastMarkerIndices);
 		ItemStack stack = inventory.getStack(0);
 		if (!stack.isEmpty()) {
 			NbtCompound itemNbt = stack.getOrCreateNbt();
@@ -156,6 +161,13 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				NbtCompound markerNbt = nbt.getCompound("marker_" + i);
 				markerPositions.add(new Vec2f(markerNbt.getFloat("x"), markerNbt.getFloat("y")));
 				markerHits.add(markerNbt.getBoolean("hit"));
+			}
+		}
+		// Restore fast marker indices
+		fastMarkerIndices.clear();
+		if (nbt.contains("fastMarkerIndices")) {
+			for (int idx : nbt.getIntArray("fastMarkerIndices")) {
+				fastMarkerIndices.add(idx);
 			}
 		}
 		// Restore progress from item NBT if present
@@ -193,9 +205,17 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		markerHits.clear();
 		markerAttempts = 0;
 		markerHitsCount = 0;
-		// Reset delays for new tool or new session
 		markerSpawnDelay = FIRST_MARKER_DELAY_TICKS;
 		nextMarkerDelay = FIRST_MARKER_DELAY_TICKS;
+		fastMarkerIndices.clear();
+		// Pick 3 unique random indices for fast markers (values 0-9, corresponding to markerAttempts)
+		while (fastMarkerIndices.size() < FAST_MARKERS) {
+			int idx = random.nextInt(TOTAL_MARKERS);
+			if (!fastMarkerIndices.contains(idx)) {
+				fastMarkerIndices.add(idx);
+			}
+		}
+		LOGGER.info("[SmithingAnvil] Fast marker indices: {}", fastMarkerIndices); // Debug log
 		markDirty();
 	}
 
@@ -212,7 +232,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	}
 
 	public void processMarkerAttempt(boolean hit) {
-		if (markerAttempts >= TOTAL_MARKERS) return; // Changed from 3 to 10
+		if (markerAttempts >= TOTAL_MARKERS) return;
 		markerAttempts++;
 		ItemStack stack = inventory.getStack(0);
 		int temp = TemperatureUtils.getTemperature(stack);
@@ -226,11 +246,12 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		markDirty();
 		markerPositions.clear();
 		markerHits.clear();
-		if (markerAttempts < TOTAL_MARKERS) { // Changed from 3 to 10
-			// Set delay for subsequent marker
+		// Always set up for next marker if not done, regardless of hit or miss
+		if (markerAttempts < TOTAL_MARKERS) {
 			nextMarkerDelay = SUBSEQUENT_MARKER_DELAY_TICKS;
 			markerSpawnDelay = nextMarkerDelay;
-			// Marker will spawn after delay in tick()
+			// Ensure markerCooldown is reset so cooldown doesn't block next marker
+			markerCooldown = 0;
 		} else {
 			markDirty();
 		}
@@ -277,18 +298,24 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	public void clientTick() {
 		if (this.world == null || !this.world.isClient) return;
 		if (inventory.getStack(0).isEmpty()) return;
-		// Removed tick interval check to spawn particle every tick for longer effect
-		if (markerPositions.size() == 1 && markerAttempts < TOTAL_MARKERS) { // Changed from 3 to 10
+		// Show marker for current attempt (markerAttempts is the index of the marker about to be hit)
+		if (markerPositions.size() == 1 && markerAttempts < TOTAL_MARKERS) {
 			Vec2f marker = markerPositions.get(0);
 			double worldX = this.getPos().getX() + marker.x;
 			double worldY = this.getPos().getY() + 1.05;
 			double worldZ = this.getPos().getZ() + marker.y;
+			// Use markerAttempts as the current marker index
+			boolean isFast = fastMarkerIndices.contains(markerAttempts);
 			for (int i = 0; i < 2; i++) {
+				if (isFast) {
+					LOGGER.info("[SmithingAnvil] Spawning FAST marker at attempt {} (marker index: {}) at position ({}, {}, {})", markerAttempts, i, worldX, worldY, worldZ);
+				}
 				this.world.addParticle(
-						new net.minecraft.particle.DustParticleEffect(
-								new Vector3f(1.0f, 0.5f, 0.0f), 0.2f),
-						worldX, worldY, worldZ,
-						0.0, 0.02, 0.0
+					new net.minecraft.particle.DustParticleEffect(
+						isFast ? new Vector3f(1.0f, 0.0f, 0.0f) : new Vector3f(1.0f, 0.5f, 0.0f),
+						isFast ? 0.5f : 0.2f), // Larger size for fast markers
+					worldX, worldY, worldZ,
+					0.0, 0.02, 0.0
 				);
 			}
 		}
@@ -333,24 +360,37 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			}
 
 			if (valid && inTemp && !hasCondition) {
-				if (markerPositions.isEmpty() && markerCooldown <= 0 && markerAttempts < TOTAL_MARKERS) { // Changed from 3 to 10
+				// --- If a marker timed out (missed), automatically advance to next marker ---
+				if (markerPositions.isEmpty() && markerCooldown > 0 && markerAttempts < TOTAL_MARKERS) {
+					// Marker was missed, so prepare to spawn the next marker after the delay
+					markerCooldown--;
+					if (markerCooldown <= 0) {
+						nextMarkerDelay = SUBSEQUENT_MARKER_DELAY_TICKS;
+						markerSpawnDelay = nextMarkerDelay;
+					}
+				}
+				if (markerPositions.isEmpty() && markerCooldown <= 0 && markerAttempts < TOTAL_MARKERS) {
 					if (markerSpawnDelay > 0) {
 						LOGGER.info("[SmithingAnvil] Marker spawn delay: {} ticks remaining", markerSpawnDelay);
 						markerSpawnDelay--;
 					}
 					if (markerSpawnDelay == 0) {
-						LOGGER.info("[SmithingAnvil] Spawning marker!");
+						LOGGER.info("[SmithingAnvil] Spawning marker! (attempt {})", markerAttempts);
 						markerPositions.clear();
 						markerHits.clear();
 						float x = 0.35f + random.nextFloat() * 0.3f;
 						float y = 0.35f + random.nextFloat() * 0.3f;
 						markerPositions.add(new Vec2f(x, y));
 						markerHits.add(false);
-						markerTimeout = MARKER_LIFETIME_TICKS;
+						// Use markerAttempts as the index for fast marker check
+						if (fastMarkerIndices.contains(markerAttempts)) {
+							markerTimeout = 2; // Fast marker: vanish after 1 tick
+							LOGGER.info("[SmithingAnvil] Fast marker spawned at attempt {} (timeout set to 1 tick)", markerAttempts);
+						} else {
+							markerTimeout = MARKER_LIFETIME_TICKS;
+						}
 						markDirty();
-						// After first marker, set next delay to 1 for subsequent markers
 						nextMarkerDelay = SUBSEQUENT_MARKER_DELAY_TICKS;
-						// Prevent immediate respawn
 						markerSpawnDelay = -1;
 					}
 				} else if (!markerPositions.isEmpty()) {
@@ -359,8 +399,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 					if (markerTimeout <= 0) {
 						markerPositions.clear();
 						markerHits.clear();
-						// Set a random cooldown before next marker
-						markerCooldown = MIN_COOLDOWN_TICKS + random.nextInt(MAX_COOLDOWN_TICKS - MIN_COOLDOWN_TICKS + 1);
+						// Instead of setting a random cooldown, always set markerCooldown to 1 to trigger auto-advance
+						markerCooldown = 1;
 						markDirty();
 					}
 				} else if (markerCooldown > 0) {
