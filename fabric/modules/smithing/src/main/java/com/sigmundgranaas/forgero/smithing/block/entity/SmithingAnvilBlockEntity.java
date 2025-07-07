@@ -161,7 +161,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		// Load marker positions
 		markerPositions.clear();
 		markerHits.clear();
-		for (int i = 0; i < TOTAL_MARKERS; i++) { // Changed from 3 to 10
+		for (int i = 0; i < TOTAL_MARKERS; i++) {
 			if (nbt.contains("marker_" + i)) {
 				NbtCompound markerNbt = nbt.getCompound("marker_" + i);
 				markerPositions.add(new Vec2f(markerNbt.getFloat("x"), markerNbt.getFloat("y")));
@@ -371,7 +371,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 							.map(s -> ((Typed) s).type())
 							.orElse(null)
 			);
-			boolean inTemp = temp >= 0 && temp <= 600;
+			int maxTemp = TemperatureUtils.getMaxTemp(stack);
+			boolean inTemp = com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isOrangeGroupStage(temp, maxTemp);
 
 			// --- Prevent marker spawning if tool already has a condition ---
 			boolean hasCondition = false;

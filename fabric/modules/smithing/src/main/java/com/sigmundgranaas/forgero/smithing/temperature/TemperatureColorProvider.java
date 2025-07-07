@@ -50,6 +50,8 @@ public class TemperatureColorProvider {
             {0,    0xCCCCCC}  // Default cold (grey)
         };
 
+
+
         // If maxTemp >= 2000, use the original scale
         if (maxTemp >= 2000) {
             for (int i = 0; i < baseScale.length - 1; i++) {
@@ -98,5 +100,34 @@ public class TemperatureColorProvider {
         int g = (int)(aG + (bG - aG) * t);
         int b = (int)(aB + (bB - aB) * t);
         return (r << 16) | (g << 8) | b;
+    }
+
+    // --- Stage checkers for color groups ---
+    public static boolean isOrangeRedStage(int temperature, int maxTemp) {
+        return isInStage(temperature, maxTemp, 1600, 1700);
+    }
+
+    public static boolean isOrangeStage(int temperature, int maxTemp) {
+        return isInStage(temperature, maxTemp, 1700, 1800);
+    }
+
+    public static boolean isOrangeYellowStage(int temperature, int maxTemp) {
+        return isInStage(temperature, maxTemp, 1800, 1900);
+    }
+
+    // --- Stage checker for orange-red, orange, and orange-yellow combined ---
+    public static boolean isOrangeGroupStage(int temperature, int maxTemp) {
+        return isInStage(temperature, maxTemp, 1600, 1900);
+    }
+
+    // Helper to check if temperature is in a scaled stage
+    private static boolean isInStage(int temperature, int maxTemp, int min, int max) {
+        if (maxTemp >= 2000) {
+            return temperature >= min && temperature < max;
+        } else {
+            int scaledMin = (int)(min / 2000.0 * maxTemp);
+            int scaledMax = (int)(max / 2000.0 * maxTemp);
+            return temperature >= scaledMin && temperature < scaledMax;
+        }
     }
 }
