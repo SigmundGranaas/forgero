@@ -88,11 +88,27 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
             try {
                 MinecraftClient client = MinecraftClient.getInstance();
                 BakedModel model = client.getItemRenderer().getModel(itemStack, null, null, 0);
-                Sprite sprite = model.getParticleSprite();
-                Identifier textureId = sprite.getAtlasId();
-                // Try to get the actual texture resource for the sprite
-                Identifier spriteId = sprite.getContents().getId(); // or sprite.getName() if getContents() is not available
+                var quads = model.getQuads(null, null, client.world.getRandom());
+                java.util.Set<Identifier> loggedTextures = new java.util.HashSet<>();
+                Sprite textureSprite = null;
+                for (var quad : quads) {
+                    Sprite quadSprite = quad.getSprite();
+                    Identifier quadSpriteId = quadSprite.getContents().getId();
+                    Identifier quadResourceId = new Identifier(quadSpriteId.getNamespace(), "textures/" + quadSpriteId.getPath() + ".png");
+                    if (loggedTextures.add(quadResourceId)) {
+                        System.out.println("SmithingAnvilBlockEntityRenderer: Quad PNG resource: " + quadResourceId);
+                    }
+                    if (textureSprite == null) {
+                        textureSprite = quadSprite;
+                    }
+                }
+                if (textureSprite == null) {
+                    // Fallback to particle sprite
+                    textureSprite = model.getParticleSprite();
+                }
+                Identifier spriteId = textureSprite.getContents().getId();
                 Identifier resourceId = new Identifier(spriteId.getNamespace(), "textures/" + spriteId.getPath() + ".png");
+                System.out.println("SmithingAnvilBlockEntityRenderer: Using PNG resource: " + resourceId);
                 BufferedImage image;
                 try (InputStream stream = client.getResourceManager().getResource(resourceId).get().getInputStream()) {
                     image = ImageIO.read(stream);
