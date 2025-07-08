@@ -13,7 +13,7 @@ public class IdentifierFactory {
 	 * Creates a canonical OpenIdentifier from a string.
 	 * If the string contains a ':', it is treated as "namespace:path".
 	 * Otherwise, the configured default namespace is used.
-	 * The path part is always normalized to a single-level name (stripping directories and file extension).
+	 * The path part is always normalized to a single-group name (stripping directories and file extension).
 	 *
 	 * @param identifier The string to parse (e.g., "forgero:materials/iron.json" or "iron_pickaxe_head").
 	 * @return A new OpenIdentifier instance representing the canonical ID (e.g., "forgero:iron" or "forgero:iron_pickaxe_head").
@@ -31,7 +31,7 @@ public class IdentifierFactory {
 
 	/**
 	 * Creates a canonical OpenIdentifier from an explicit namespace and path.
-	 * The path is normalized to a single-level name (stripping directories and file extension).
+	 * The path is normalized to a single-group name (stripping directories and file extension).
 	 *
 	 * @param namespace The namespace for the identifier.
 	 * @param path      The raw path for the identifier (e.g., "materials/iron.json" or "iron_pickaxe_head").

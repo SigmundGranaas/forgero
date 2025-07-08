@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.state;
+package com.sigmundgranaas.forgero.core.component.mutation.impl;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;

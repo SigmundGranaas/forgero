@@ -2,20 +2,21 @@ package com.sigmundgranaas.forgero.data.processor;
 
 import com.sigmundgranaas.forgero.core.ForgeroTest;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.data.v3.dto.IdentifiedTopLevelData;
+import com.sigmundgranaas.forgero.data.v3.dto.StaticPartData;
 import com.sigmundgranaas.forgero.data.v3.dto.TopLevelData;
 import com.sigmundgranaas.forgero.data.v3.dto.attribute.AttributeData;
+import com.sigmundgranaas.forgero.data.v3.dto.attribute.AttributeDataImpl;
 import com.sigmundgranaas.forgero.data.v3.dto.attribute.ComputationData;
-import com.sigmundgranaas.forgero.data.v3.dto.condition.ConditionData;
 import com.sigmundgranaas.forgero.data.v3.dto.feature.FeatureData;
-import com.sigmundgranaas.forgero.data.v3.dto.feature.VeinMiningSelectorData;
-import org.jetbrains.annotations.NotNull;
+import com.sigmundgranaas.forgero.data.v3.dto.feature.VeinMiningFeatureData;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,64 +24,18 @@ class DataProcessorTest extends ForgeroTest {
 
 	private DataProcessor processor;
 
-	// --- Mock DTOs for testing the processor logic ---
-	// These are simplified records implementing the interfaces needed by the processor.
-
-	// MockAttributeData now correctly implements the AttributeData interface
-	record MockAttributeData(OpenIdentifier id, OpenIdentifier type, ComputationData computation,
-							 @Nullable ConditionData condition, @Nullable OpenIdentifier composite) implements AttributeData {
-		// Constructor for simplicity
-		MockAttributeData(String idPath, String typePath, float value) {
-			this(idFactory.of(idPath), idFactory.of(typePath), new ComputationData(value, "forgero:addition", "forgero:base"), null, null);
-		}
-		MockAttributeData(String idPath, String typePath, float value, String operator) {
-			this(idFactory.of(idPath), idFactory.of(typePath), new ComputationData(value, operator, "forgero:base"), null, null);
-		}
+	// Helper to create test data using real DTOs, which is more robust than mocks.
+	private TopLevelData createTestData(String idPath, String name, @Nullable List<OpenIdentifier> include, @Nullable List<OpenIdentifier> tags, @Nullable List<AttributeData> attributes, @Nullable List<FeatureData> features) {
+		StaticPartData dto = new StaticPartData(
+				idFactory.of("forgero:static_part"), // A consistent type for the DTO
+				name,
+				include,
+				tags,
+				attributes,
+				features
+		);
+		return new IdentifiedTopLevelData(idFactory.of(idPath), dto);
 	}
-
-	record MockFeatureData(OpenIdentifier type, String title, String description,
-						   VeinMiningSelectorData selector, @Nullable ConditionData condition) implements FeatureData {
-		MockFeatureData(String typePath, String title, String description) {
-			this(idFactory.of(typePath), title, description, null, null);
-		}
-	}
-
-	// A generic mock for any TopLevelData type for the processor to operate on
-	record MockTopLevelData(
-			OpenIdentifier id,
-			OpenIdentifier type,
-			String name,
-			@Nullable List<OpenIdentifier> include,
-			@Nullable Set<OpenIdentifier> tags,
-			@Nullable List<AttributeData> attributes,
-			@Nullable List<FeatureData> features
-	) implements TopLevelData {
-		// Helper constructor for simpler test data setup
-		MockTopLevelData(String idPath, String name, @Nullable List<OpenIdentifier> include, @Nullable Set<OpenIdentifier> tags,
-						 @Nullable List<AttributeData> attributes, @Nullable List<FeatureData> features) {
-			this(idFactory.of(idPath), idFactory.of("forgero:test_type"), name, include, tags, attributes, features);
-		}
-
-		// Override equals and hashCode for reliable map behavior in tests, focusing on `id`
-		@Override
-		public boolean equals(Object o) {
-			if (this == o) return true;
-			if (o == null || getClass() != o.getClass()) return false;
-			MockTopLevelData that = (MockTopLevelData) o;
-			return id.equals(that.id);
-		}
-
-		@Override
-		public int hashCode() {
-			return id.hashCode();
-		}
-
-		@Override
-		public <T> T unwrapAs(@NotNull Class<T> type) {
-			return null;
-		}
-	}
-	// --- End Mock DTOs ---
 
 	@BeforeEach
 	void setUp() {
@@ -89,11 +44,14 @@ class DataProcessorTest extends ForgeroTest {
 
 	@Test
 	void testProcess_NoIncludes() {
-		MockTopLevelData data1 = new MockTopLevelData(
+		AttributeData attr = new AttributeDataImpl(idFactory.of("attr1"), idFactory.of("damage"), new ComputationData(10f, "forgero:addition", "forgero:base"), null, null);
+		FeatureData feature = new VeinMiningFeatureData(idFactory.of("feature1"), "F1", "Desc1", null, null);
+
+		TopLevelData data1 = createTestData(
 				"test:data1", "Data 1",
-				null, Set.of(idFactory.of("tag1")),
-				List.of(new MockAttributeData("attr1", "damage", 10f)),
-				List.of(new MockFeatureData("feature1", "F1", "Desc1"))
+				null, List.of(idFactory.of("tag1")),
+				List.of(attr),
+				List.of(feature)
 		);
 		Map<OpenIdentifier, TopLevelData> rawData = Map.of(data1.id(), data1);
 
@@ -113,19 +71,18 @@ class DataProcessorTest extends ForgeroTest {
 
 	@Test
 	void testProcess_SingleInclude_NoConflict() {
-		MockTopLevelData includedData = new MockTopLevelData(
+		AttributeData includedAttr = new AttributeDataImpl(idFactory.of("inc_attr1"), idFactory.of("durability"), new ComputationData(50f, "forgero:addition", "forgero:base"), null, null);
+		FeatureData includedFeature = new VeinMiningFeatureData(idFactory.of("inc_feature1"), "IncF1", "IncDesc1", null, null);
+		TopLevelData includedData = createTestData(
 				"test:included", "Included",
-				null, Set.of(idFactory.of("inc_tag")),
-				List.of(new MockAttributeData("inc_attr1", "durability", 50f)),
-				List.of(new MockFeatureData("inc_feature1", "IncF1", "IncDesc1"))
+				null, List.of(idFactory.of("inc_tag")), List.of(includedAttr), List.of(includedFeature)
 		);
 
-		MockTopLevelData baseData = new MockTopLevelData(
+		AttributeData baseAttr = new AttributeDataImpl(idFactory.of("base_attr1"), idFactory.of("speed"), new ComputationData(5f, "forgero:addition", "forgero:base"), null, null);
+		FeatureData baseFeature = new VeinMiningFeatureData(idFactory.of("base_feature1"), "BaseF1", "BaseDesc1", null, null);
+		TopLevelData baseData = createTestData(
 				"test:base", "Base",
-				List.of(includedData.id()),
-				Set.of(idFactory.of("base_tag")),
-				List.of(new MockAttributeData("base_attr1", "speed", 5f)),
-				List.of(new MockFeatureData("base_feature1", "BaseF1", "BaseDesc1"))
+				List.of(includedData.id()), List.of(idFactory.of("base_tag")), List.of(baseAttr), List.of(baseFeature)
 		);
 
 		Map<OpenIdentifier, TopLevelData> rawData = Map.of(
@@ -160,16 +117,11 @@ class DataProcessorTest extends ForgeroTest {
 
 	@Test
 	void testProcess_SingleInclude_AttributeConflict() {
-		MockAttributeData includedAttr = new MockAttributeData("shared_attr", "damage", 100f);
-		MockTopLevelData includedData = new MockTopLevelData(
-				"test:included", "Included", null, null, List.of(includedAttr), null
-		);
+		AttributeData includedAttr = new AttributeDataImpl(idFactory.of("shared_attr"), idFactory.of("damage"), new ComputationData(100f, "forgero:addition", "forgero:base"), null, null);
+		TopLevelData includedData = createTestData("test:included", "Included", null, null, List.of(includedAttr), null);
 
-		MockAttributeData baseAttr = new MockAttributeData("shared_attr", "damage", 200f); // Higher value
-		MockTopLevelData baseData = new MockTopLevelData(
-				"test:base", "Base",
-				List.of(includedData.id()), null, List.of(baseAttr), null
-		);
+		AttributeData baseAttr = new AttributeDataImpl(idFactory.of("shared_attr"), idFactory.of("damage"), new ComputationData(200f, "forgero:addition", "forgero:base"), null, null);
+		TopLevelData baseData = createTestData("test:base", "Base", List.of(includedData.id()), null, List.of(baseAttr), null);
 
 		Map<OpenIdentifier, TopLevelData> rawData = Map.of(
 				includedData.id(), includedData,
@@ -188,16 +140,11 @@ class DataProcessorTest extends ForgeroTest {
 
 	@Test
 	void testProcess_SingleInclude_FeatureConflict() {
-		MockFeatureData includedFeature = new MockFeatureData("shared_feature_type", "IncF", "IncDesc");
-		MockTopLevelData includedData = new MockTopLevelData(
-				"test:included", "Included", null, null, null, List.of(includedFeature)
-		);
+		FeatureData includedFeature = new VeinMiningFeatureData(idFactory.of("shared_feature_type"), "IncF", "IncDesc", null, null);
+		TopLevelData includedData = createTestData("test:included", "Included", null, null, null, List.of(includedFeature));
 
-		MockFeatureData baseFeature = new MockFeatureData("shared_feature_type", "BaseF", "BaseDesc"); // Base overrides
-		MockTopLevelData baseData = new MockTopLevelData(
-				"test:base", "Base",
-				List.of(includedData.id()), null, null, List.of(baseFeature)
-		);
+		FeatureData baseFeature = new VeinMiningFeatureData(idFactory.of("shared_feature_type"), "BaseF", "BaseDesc", null, null);
+		TopLevelData baseData = createTestData("test:base", "Base", List.of(includedData.id()), null, null, List.of(baseFeature));
 
 		Map<OpenIdentifier, TopLevelData> rawData = Map.of(
 				includedData.id(), includedData,
@@ -211,16 +158,14 @@ class DataProcessorTest extends ForgeroTest {
 		assertEquals(1, result.features().size());
 		FeatureData finalFeature = result.features().get(0);
 		assertEquals(idFactory.of("shared_feature_type"), finalFeature.type());
+		assertEquals("BaseF", ((VeinMiningFeatureData) finalFeature).title(), "Base feature should override included one.");
 	}
 
 	@Test
 	void testProcess_MultipleIncludes_OrderPrecedence() {
-		// inc1 declares attr: value 10
-		MockTopLevelData inc1 = new MockTopLevelData("test:inc1", "inc1", null, null, List.of(new MockAttributeData("attr_a", "type", 10f)), null);
-		// inc2 declares attr: value 20 (should override inc1)
-		MockTopLevelData inc2 = new MockTopLevelData("test:inc2", "inc2", null, null, List.of(new MockAttributeData("attr_a", "type", 20f)), null);
-		// base declares attr: value 30 (should override inc2)
-		MockTopLevelData base = new MockTopLevelData("test:base", "base", List.of(inc1.id(), inc2.id()), null, List.of(new MockAttributeData("attr_a", "type", 30f)), null);
+		TopLevelData inc1 = createTestData("test:inc1", "inc1", null, null, List.of(new AttributeDataImpl(idFactory.of("attr_a"), idFactory.of("type"), new ComputationData(10f, "forgero:addition", "forgero:base"), null, null)), null);
+		TopLevelData inc2 = createTestData("test:inc2", "inc2", null, null, List.of(new AttributeDataImpl(idFactory.of("attr_a"), idFactory.of("type"), new ComputationData(20f, "forgero:addition", "forgero:base"), null, null)), null);
+		TopLevelData base = createTestData("test:base", "base", List.of(inc1.id(), inc2.id()), null, List.of(new AttributeDataImpl(idFactory.of("attr_a"), idFactory.of("type"), new ComputationData(30f, "forgero:addition", "forgero:base"), null, null)), null);
 
 		Map<OpenIdentifier, TopLevelData> rawData = Map.of(
 				inc1.id(), inc1,
@@ -238,12 +183,9 @@ class DataProcessorTest extends ForgeroTest {
 
 	@Test
 	void testProcess_NestedIncludes() {
-		// C includes nothing, provides attr: c_attr
-		MockTopLevelData C = new MockTopLevelData("test:c", "C", null, Set.of(idFactory.of("tag_c")), List.of(new MockAttributeData("attr_c", "type", 30f)), null);
-		// B includes C, provides attr: b_attr
-		MockTopLevelData B = new MockTopLevelData("test:b", "B", List.of(C.id()), Set.of(idFactory.of("tag_b")), List.of(new MockAttributeData("attr_b", "type", 20f)), null);
-		// A includes B, provides attr: a_attr
-		MockTopLevelData A = new MockTopLevelData("test:a", "A", List.of(B.id()), Set.of(idFactory.of("tag_a")), List.of(new MockAttributeData("attr_a", "type", 10f)), null);
+		TopLevelData C = createTestData("test:c", "C", null, List.of(idFactory.of("tag_c")), List.of(new AttributeDataImpl(idFactory.of("attr_c"), idFactory.of("type"), new ComputationData(30f, "forgero:addition", "forgero:base"), null, null)), null);
+		TopLevelData B = createTestData("test:b", "B", List.of(C.id()), List.of(idFactory.of("tag_b")), List.of(new AttributeDataImpl(idFactory.of("attr_b"), idFactory.of("type"), new ComputationData(20f, "forgero:addition", "forgero:base"), null, null)), null);
+		TopLevelData A = createTestData("test:a", "A", List.of(B.id()), List.of(idFactory.of("tag_a")), List.of(new AttributeDataImpl(idFactory.of("attr_a"), idFactory.of("type"), new ComputationData(10f, "forgero:addition", "forgero:base"), null, null)), null);
 
 		Map<OpenIdentifier, TopLevelData> rawData = Map.of(A.id(), A, B.id(), B, C.id(), C);
 		Map<OpenIdentifier, TopLevelData> processed = processor.process(rawData);
@@ -251,9 +193,8 @@ class DataProcessorTest extends ForgeroTest {
 
 		assertNull(resultA.include(), "Include list should be null after processing");
 
-		// Verify A contains properties from A, B, and C
 		assertEquals(3, resultA.tags().size());
-		assertTrue(resultA.tags().containsAll(List.of(idFactory.of("tag_a"), idFactory.of("tag_b"), idFactory.of("tag_c"))));
+		assertTrue(Objects.requireNonNull(resultA.tags()).containsAll(List.of(idFactory.of("tag_a"), idFactory.of("tag_b"), idFactory.of("tag_c"))));
 
 		assertEquals(3, resultA.attributes().size());
 		Map<OpenIdentifier, AttributeData> attrs = resultA.getAttributesMap();
@@ -267,7 +208,7 @@ class DataProcessorTest extends ForgeroTest {
 
 	@Test
 	void testProcess_NonExistentInclude() {
-		MockTopLevelData baseData = new MockTopLevelData("test:base", "Base", List.of(idFactory.of("test:non_existent_id")), null, null, null);
+		TopLevelData baseData = createTestData("test:base", "Base", List.of(idFactory.of("test:non_existent_id")), null, null, null);
 		Map<OpenIdentifier, TopLevelData> rawData = Map.of(baseData.id(), baseData);
 
 		IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> processor.process(rawData));
@@ -276,8 +217,8 @@ class DataProcessorTest extends ForgeroTest {
 
 	@Test
 	void testProcess_CyclicInclude_Direct() {
-		MockTopLevelData A = new MockTopLevelData("test:a", "A", List.of(idFactory.of("test:b")), null, null, null);
-		MockTopLevelData B = new MockTopLevelData("test:b", "B", List.of(idFactory.of("test:a")), null, null, null);
+		TopLevelData A = createTestData("test:a", "A", List.of(idFactory.of("test:b")), null, null, null);
+		TopLevelData B = createTestData("test:b", "B", List.of(idFactory.of("test:a")), null, null, null);
 
 		Map<OpenIdentifier, TopLevelData> rawData = Map.of(A.id(), A, B.id(), B);
 
@@ -288,9 +229,9 @@ class DataProcessorTest extends ForgeroTest {
 
 	@Test
 	void testProcess_CyclicInclude_Transitive() {
-		MockTopLevelData A = new MockTopLevelData("test:a", "A", List.of(idFactory.of("test:b")), null, null, null);
-		MockTopLevelData B = new MockTopLevelData("test:b", "B", List.of(idFactory.of("test:c")), null, null, null);
-		MockTopLevelData C = new MockTopLevelData("test:c", "C", List.of(idFactory.of("test:a")), null, null, null);
+		TopLevelData A = createTestData("test:a", "A", List.of(idFactory.of("test:b")), null, null, null);
+		TopLevelData B = createTestData("test:b", "B", List.of(idFactory.of("test:c")), null, null, null);
+		TopLevelData C = createTestData("test:c", "C", List.of(idFactory.of("test:a")), null, null, null);
 
 		Map<OpenIdentifier, TopLevelData> rawData = Map.of(A.id(), A, B.id(), B, C.id(), C);
 
@@ -300,18 +241,9 @@ class DataProcessorTest extends ForgeroTest {
 
 	@Test
 	void testProcess_IncludesDoNotInheritIncludesList() {
-		MockTopLevelData includedData = new MockTopLevelData(
-				"test:included", "Included",
-				List.of(idFactory.of("test:another_included")), null, null, null
-		);
-		MockTopLevelData anotherIncludedData = new MockTopLevelData(
-				"test:another_included", "Another Included", null, null, null, null
-		);
-
-		MockTopLevelData baseData = new MockTopLevelData(
-				"test:base", "Base",
-				List.of(includedData.id()), null, null, null
-		);
+		TopLevelData anotherIncludedData = createTestData("test:another_included", "Another Included", null, List.of(idFactory.of("another_tag")), null, null);
+		TopLevelData includedData = createTestData("test:included", "Included", List.of(anotherIncludedData.id()), null, null, null);
+		TopLevelData baseData = createTestData("test:base", "Base", List.of(includedData.id()), null, null, null);
 
 		Map<OpenIdentifier, TopLevelData> rawData = Map.of(
 				includedData.id(), includedData,
@@ -322,25 +254,8 @@ class DataProcessorTest extends ForgeroTest {
 		Map<OpenIdentifier, TopLevelData> processed = processor.process(rawData);
 		TopLevelData result = processed.get(baseData.id());
 
-		// The 'include' list of the *result* object should be null, as includes are a processing instruction, not an inherent property.
 		assertNull(result.include(), "The include list of the result should be null as it's been processed.");
-
-		// To verify that the includes were correctly processed, we need to check the attributes/tags/features
-		// For this mock, we can add a simple property to another_included
-		MockTopLevelData anotherIncludedDataWithTag = new MockTopLevelData(
-				"test:another_included", "Another Included", null, Set.of(idFactory.of("another_tag")), null, null
-		);
-		rawData = Map.of(
-				includedData.id(), new MockTopLevelData("test:included", "Included", List.of(anotherIncludedDataWithTag.id()), null, null, null),
-				anotherIncludedDataWithTag.id(), anotherIncludedDataWithTag,
-				baseData.id(), new MockTopLevelData("test:base", "Base", List.of(includedData.id()), null, null, null)
-		);
-		processed = processor.process(rawData);
-		result = processed.get(baseData.id());
-
-		// The base data should now contain the tag from `another_included` via `includedData`
 		assertNotNull(result.tags());
 		assertTrue(result.tags().contains(idFactory.of("another_tag")), "Tag from nested include should be present");
-		assertNull(result.include(), "After processing, the include list should be cleared as it's no longer needed for merge state.");
 	}
 }

@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * A high-level service for loading a TagGraph from a resource directory.
+ * A high-group service for loading a TagGraph from a resource directory.
  */
 public class TagLoadingService {
 
@@ -56,7 +56,7 @@ public class TagLoadingService {
 				}
 
 				// Create the canonical OpenIdentifier for the tag.
-				// The factory.of() method will now handle the final normalization to a single-level name.
+				// The factory.of() method will now handle the final normalization to a single-group name.
 				// So, "materials/material" becomes "material" here.
 				OpenIdentifier tagId = factory.of(id.namespace(), tagRelativePath);
 

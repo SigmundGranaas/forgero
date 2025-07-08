@@ -9,7 +9,7 @@ import com.sigmundgranaas.forgero.core.property.condition.Condition;
  * It now includes a Condition object to allow for both static and dynamic activation.
  *
  * @param type      The unique identifier for this specific feature instance or type.
- * @param level     A numerical level for the feature, which can be used for scaling effects.
+ * @param level     A numerical group for the feature, which can be used for scaling effects.
  * @param condition A container for all static and dynamic conditions for this feature.
  */
 public record Feature(

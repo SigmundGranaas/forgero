@@ -6,6 +6,7 @@
     {
       "id": "forgero:iron-durability",
       "type": "forgero:durability",
+      "composite": "forgero:part-composite",
       "computation": 250
     },
     {

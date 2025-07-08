@@ -60,6 +60,8 @@ public record IdentifiedTopLevelData(
 		if (data instanceof ToolTemplateData t) return t.type();
 		if (data instanceof SchematicData s) return s.type();
 		if (data instanceof StaticPartData sp) return sp.type();
+		if (data instanceof GeneratedEquipmentData ge) return ge.type();
+		if (data instanceof GeneratedPartData gp) return gp.type();
 		// Fallback for unexpected or generic data objects, or throw an error.
 		throw new IllegalStateException("Unsupported data type wrapped in IdentifiedTopLevelData for type(): " + data.getClass().getName());
 	}
@@ -71,6 +73,8 @@ public record IdentifiedTopLevelData(
 		if (data instanceof ToolTemplateData t) return t.name();
 		if (data instanceof SchematicData s) return s.name();
 		if (data instanceof StaticPartData sp) return sp.name();
+		if (data instanceof GeneratedEquipmentData ge) return ge.name();
+		if (data instanceof GeneratedPartData gp) return gp.name();
 		throw new IllegalStateException("Unsupported data type wrapped in IdentifiedTopLevelData for name(): " + data.getClass().getName());
 	}
 
@@ -88,13 +92,17 @@ public record IdentifiedTopLevelData(
 	public @Nullable Set<OpenIdentifier> tags() {
 		// After DataProcessor, this 'tags()' method on the IdentifiedTopLevelData will contain
 		// all merged tags from includes and the current DTO.
-		if (data instanceof MaterialData m) return new HashSet<>(m.tags());
-		if (data instanceof PartTemplateData p) return new HashSet<>(p.tags());
-		if (data instanceof ToolTemplateData t) return new HashSet<>(t.tags());
-		if (data instanceof SchematicData s) return new HashSet<>(s.tags());
-		if (data instanceof StaticPartData sp) return new HashSet<>(sp.tags());
+		if (data instanceof MaterialData m && m.tags() != null) return new HashSet<>(m.tags());
+		if (data instanceof PartTemplateData p && p.tags() != null) return new HashSet<>(p.tags());
+		if (data instanceof ToolTemplateData t && t.tags() != null) return new HashSet<>(t.tags());
+		if (data instanceof SchematicData s && s.tags() != null) return new HashSet<>(s.tags());
+		if (data instanceof StaticPartData sp && sp.tags() != null) return new HashSet<>(sp.tags());
+		if (data instanceof GeneratedPartData gp && gp.tags() != null) return new HashSet<>(gp.tags());
+		if (data instanceof GeneratedEquipmentData ge && ge.tags() != null) return new HashSet<>(ge.tags());
+
 		return null;
 	}
+
 
 	// Implementation for Taggable interface
 	@Override
@@ -110,6 +118,8 @@ public record IdentifiedTopLevelData(
 		if (data instanceof PartTemplateData p) return p.attributes();
 		if (data instanceof ToolTemplateData t) return t.attributes();
 		if (data instanceof StaticPartData sp) return sp.attributes();
+		if (data instanceof GeneratedPartData gp) return gp.attributes();
+		if (data instanceof GeneratedEquipmentData ge) return ge.attributes();
 		return null;
 	}
 
@@ -119,6 +129,8 @@ public record IdentifiedTopLevelData(
 		if (data instanceof PartTemplateData p) return p.features();
 		if (data instanceof ToolTemplateData t) return t.features();
 		if (data instanceof StaticPartData sp) return sp.features();
+		if (data instanceof GeneratedPartData gp) return gp.features();
+		if (data instanceof GeneratedEquipmentData ge) return ge.features();
 		return null;
 	}
 
@@ -128,6 +140,8 @@ public record IdentifiedTopLevelData(
 		if (data instanceof PartTemplateData p) return p.getAttributesMap();
 		if (data instanceof ToolTemplateData t) return t.getAttributesMap();
 		if (data instanceof StaticPartData sp) return sp.getAttributesMap();
+		if (data instanceof GeneratedPartData gp) return gp.getAttributesMap();
+		if (data instanceof GeneratedEquipmentData ge) return ge.getAttributesMap();
 		return Collections.emptyMap();
 	}
 
@@ -137,6 +151,8 @@ public record IdentifiedTopLevelData(
 		if (data instanceof PartTemplateData p) return p.getFeaturesMap();
 		if (data instanceof ToolTemplateData t) return t.getFeaturesMap();
 		if (data instanceof StaticPartData sp) return sp.getFeaturesMap();
+		if (data instanceof GeneratedPartData gp) return gp.getFeaturesMap();
+		if (data instanceof GeneratedEquipmentData ge) return ge.getFeaturesMap();
 		return Collections.emptyMap();
 	}
 

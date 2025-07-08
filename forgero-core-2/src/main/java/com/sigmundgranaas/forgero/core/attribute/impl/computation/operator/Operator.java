@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.attribute.computation.operator;
+package com.sigmundgranaas.forgero.core.attribute.impl.computation.operator;
 
 /**
  * A strategy interface for a mathematical operation.
@@ -7,4 +7,8 @@ package com.sigmundgranaas.forgero.core.attribute.computation.operator;
 @FunctionalInterface
 public interface Operator {
 	float apply(float base, float addition);
+
+	default int order(){
+		return 1;
+	}
 }

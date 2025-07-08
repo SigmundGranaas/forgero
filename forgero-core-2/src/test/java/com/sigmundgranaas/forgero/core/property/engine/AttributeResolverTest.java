@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.sigmundgranaas.forgero.core.ForgeroTest;
-import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
+import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.structure.ComponentStructure;
@@ -45,10 +45,10 @@ class AttributeResolverTest extends ForgeroTest {
 	 */
 	@Test
 	void resolvesAndCalculatesCorrectly() {
-		var head = part(PICKAXE_HEAD_ID, METAL_TAG, List.of(new Attribute(ATTACK_DAMAGE, 10f)));
-		var handle = part(HANDLE_ID, WOOD_TAG, List.of(new Attribute(MINING_SPEED, 5f)));
+		var head = part(PICKAXE_HEAD_ID, METAL_TAG, List.of(new SimpleAttribute(ATTACK_DAMAGE, 10f)));
+		var handle = part(HANDLE_ID, WOOD_TAG, List.of(new SimpleAttribute(MINING_SPEED, 5f)));
 		var structure = new ComponentStructure(List.of(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head), slot(HANDLE_SLOT_ID, HANDLE_TAG, handle)));
-		var pickaxe = new StructuredPart(PICKAXE_ID, Set.of(idFactory.of("tool")), List.of(new Attribute(ATTACK_DAMAGE, 1f)), structure);
+		var pickaxe = new StructuredPart(PICKAXE_ID, Set.of(idFactory.of("tool")), List.of(new SimpleAttribute(ATTACK_DAMAGE, 1f)), structure);
 
 		Optional<AttributeQueryResult> resultOpt = resolver.resolve(pickaxe, AttributeEngine.KEY);
 		assertTrue(resultOpt.isPresent());
@@ -72,14 +72,14 @@ class AttributeResolverTest extends ForgeroTest {
 				.map(tags -> tags.contains(idFactory.of("stone")))
 				.orElse(false);
 		var diamondCondition = new Condition(Collections.emptyList(), List.of(onStone));
-		var diamond = material(DIAMOND_ID, GEM_TAG, List.of(new Attribute(MINING_SPEED, 10f, diamondCondition)));
+		var diamond = material(DIAMOND_ID, GEM_TAG, List.of(new SimpleAttribute(MINING_SPEED, 10f, diamondCondition)));
 
 		// STATIC CONDITION: Active only if the root item is a 'pickaxe'.
-		var iron = material(IRON_ID, METAL_TAG, List.of(new Attribute(MINING_SPEED, 5f, new Condition(List.of(StaticConditions.rootHasTag("pickaxe")), Collections.emptyList()))));
+		var iron = material(IRON_ID, METAL_TAG, List.of(new SimpleAttribute(MINING_SPEED, 5f, new Condition(List.of(StaticConditions.rootHasTag("pickaxe")), Collections.emptyList()))));
 
 		var head = new StructuredPart(PICKAXE_HEAD_ID, Set.of(), List.of(), new ComponentStructure(List.of(slot(idFactory.of("material_slot"), MATERIAL_ID, iron), slot(GEM_SLOT_ID, GEM_SLOT_TYPE_TAG, diamond))));
-		var pickaxe = new StructuredPart(PICKAXE_ID, Set.of(idFactory.of("pickaxe"), idFactory.of("tool")), List.of(new Attribute(MINING_SPEED, 1f)), new ComponentStructure(List.of(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head))));
-		var sword = new StructuredPart(SWORD_ID, Set.of(idFactory.of("sword"), idFactory.of("tool")), List.of(new Attribute(MINING_SPEED, 1f)), new ComponentStructure(List.of(slot(idFactory.of("blade_slot"), BLADE_TAG, head))));
+		var pickaxe = new StructuredPart(PICKAXE_ID, Set.of(idFactory.of("pickaxe"), idFactory.of("tool")), List.of(new SimpleAttribute(MINING_SPEED, 1f)), new ComponentStructure(List.of(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head))));
+		var sword = new StructuredPart(SWORD_ID, Set.of(idFactory.of("sword"), idFactory.of("tool")), List.of(new SimpleAttribute(MINING_SPEED, 1f)), new ComponentStructure(List.of(slot(idFactory.of("blade_slot"), BLADE_TAG, head))));
 
 		DynamicContext stoneTarget = new DynamicContext.Builder().put(ContextKeys.TARGET_TAGS, Set.of(idFactory.of("stone"))).build();
 		DynamicContext woodTarget = new DynamicContext.Builder().put(ContextKeys.TARGET_TAGS, Set.of(idFactory.of("wood"))).build();
@@ -105,13 +105,13 @@ class AttributeResolverTest extends ForgeroTest {
 	@Test
 	void appliesComplexStructuralConditions() {
 		// Condition: bonus is active if the slot of type HANDLE_TAG contains a component with the "wood" tag.
-		var headBonus = new Attribute(ATTACK_DAMAGE, 5, new Condition(List.of(StaticConditions.slotContains(HANDLE_TAG, "wood")), Collections.emptyList()));
+		var headBonus = new SimpleAttribute(ATTACK_DAMAGE, 5, new Condition(List.of(StaticConditions.slotContains(HANDLE_TAG, "wood")), Collections.emptyList()));
 		var head = part(PICKAXE_HEAD_ID, METAL_TAG, List.of(headBonus));
 		var oakHandle = part(HANDLE_ID, WOOD_TAG);
 		var ironHandle = part(HANDLE_ID, METAL_TAG);
 
-		var woodPickaxe = new StructuredPart(PICKAXE_ID, Set.of(), List.of(new Attribute(ATTACK_DAMAGE, 1f)), new ComponentStructure(List.of(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head), slot(HANDLE_SLOT_ID, HANDLE_TAG, oakHandle))));
-		var ironPickaxe = new StructuredPart(PICKAXE_ID, Set.of(), List.of(new Attribute(ATTACK_DAMAGE, 1f)), new ComponentStructure(List.of(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head), slot(HANDLE_SLOT_ID, HANDLE_TAG, ironHandle))));
+		var woodPickaxe = new StructuredPart(PICKAXE_ID, Set.of(), List.of(new SimpleAttribute(ATTACK_DAMAGE, 1f)), new ComponentStructure(List.of(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head), slot(HANDLE_SLOT_ID, HANDLE_TAG, oakHandle))));
+		var ironPickaxe = new StructuredPart(PICKAXE_ID, Set.of(), List.of(new SimpleAttribute(ATTACK_DAMAGE, 1f)), new ComponentStructure(List.of(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head), slot(HANDLE_SLOT_ID, HANDLE_TAG, ironHandle))));
 
 		float woodDamage = resolver.resolve(woodPickaxe, AttributeEngine.KEY).map(res -> res.getValue(ATTACK_DAMAGE)).orElse(0f);
 		assertEquals(6f, woodDamage, "Base damage (1) + head bonus (5, because handle is wood) = 6");

@@ -6,12 +6,12 @@ import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.mapper.ComponentMapper;
 import com.sigmundgranaas.forgero.core.tags.engine.TagGraph;
 import com.sigmundgranaas.forgero.core.tags.engine.TagLoadingService;
 import com.sigmundgranaas.forgero.core.tags.engine.TaggedRegistry;
 import com.sigmundgranaas.forgero.data.generator.ComponentGenerator; // New import
 import com.sigmundgranaas.forgero.data.generator.ComponentGeneratorImpl; // New import
+import com.sigmundgranaas.forgero.data.generator.ComponentMapper;
 import com.sigmundgranaas.forgero.data.processor.DataProcessor; // New import
 import com.sigmundgranaas.forgero.data.processor.DataProcessorImpl;
 import com.sigmundgranaas.forgero.data.v3.codec.*; // Import all codecs
@@ -67,9 +67,23 @@ public class ForgeroDataInitializer {
 		Map<OpenIdentifier, TopLevelData> generatedComponentsData = componentGenerator.generate(normalizedData, this.tagGraph);
 
 		// Combine normalized original data with newly generated data for the mapping stage.
-		// Priority: Generated > Normalized (if IDs clash, which they shouldn't if naming is unique)
-		Map<OpenIdentifier, TopLevelData> allComponentsDataForMapping = new HashMap<>(normalizedData);
+		// IMPORTANT: Only MaterialData, StaticPartData, and SchematicData are kept from original `normalizedData`
+		// as these represent concrete components. Templates are blueprints and are NOT mapped directly.
+		Map<OpenIdentifier, TopLevelData> allComponentsDataForMapping = normalizedData.values().stream()
+				.filter(data -> {
+					Object unwrapped = data.unwrapAs(Object.class);
+					return unwrapped instanceof MaterialData ||
+							unwrapped instanceof StaticPartData ||
+							unwrapped instanceof SchematicData;
+				})
+				.collect(Collectors.toMap(TopLevelData::id, Function.identity()));
+
+		// Add all generated parts and tools. These have unique IDs (e.g. iron-pickaxe_head) and will not clash.
 		allComponentsDataForMapping.putAll(generatedComponentsData);
+
+		// Debugging output to see what's being mapped
+		System.out.println("Components selected for mapping:");
+		allComponentsDataForMapping.forEach((id, data) -> System.out.println("- " + id.toString() + " (" + data.unwrapAs(Object.class).getClass().getSimpleName() + ")"));
 
 
 		// --- Stage 4: Component Mapping (DTOs to actual Forgero Component objects) ---
@@ -131,7 +145,7 @@ public class ForgeroDataInitializer {
 							.getOrThrow(false, msg -> System.err.println("Error parsing static part " + id + ": " + msg));
 				} else {
 					// If a file is in a component directory but has an unknown type, log and skip.
-					System.err.println("Unknown top-level data type for " + id + ": " + type);
+					System.err.println("Unknown top-group data type for " + id + ": " + type);
 					return Optional.empty();
 				}
 
@@ -153,7 +167,7 @@ public class ForgeroDataInitializer {
 		ResourceLoader<TopLevelData> dataLoader = new ResourceLoader<>(dataProvider, componentDataConverter);
 
 		// Load data explicitly from known component directories, *excluding* the 'tags' directory.
-		// The `idFactory.of("forgero", "materials")` here creates an OpenIdentifier
+		// The `new OpenIdentifier("forgero", "materials")` here creates an OpenIdentifier
 		// whose path is "materials". This is passed to the ResourceLoader which
 		// correctly expects a path-like OpenIdentifier for discovery.
 		Stream<TopLevelData> materials = dataLoader.load(new OpenIdentifier("forgero", "materials"), true);

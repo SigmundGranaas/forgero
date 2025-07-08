@@ -1,8 +1,6 @@
-// FILE: /home/sigmund/Documents/projects/forgero/1-20/forgero-core-2/src/main/java/com/sigmundgranaas/forgero/core/mapper/ComponentMapper.java
-package com.sigmundgranaas.forgero.core.mapper;
+package com.sigmundgranaas.forgero.data.generator;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.slot.ComponentUpgrades;
 import com.sigmundgranaas.forgero.core.component.slot.UpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.structure.ComponentStructure;
@@ -12,10 +10,11 @@ import com.sigmundgranaas.forgero.core.feature.api.Feature;
 import com.sigmundgranaas.forgero.core.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.property.api.Property;
-import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
-import com.sigmundgranaas.forgero.core.attribute.computation.operator.AdditionOperator;
-import com.sigmundgranaas.forgero.core.attribute.computation.operator.MultiplicationOperator;
-import com.sigmundgranaas.forgero.core.attribute.computation.operator.Operator;
+import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
+import com.sigmundgranaas.forgero.core.attribute.api.CompositeAttributeComponent;
+import com.sigmundgranaas.forgero.core.attribute.impl.computation.operator.AdditionOperator;
+import com.sigmundgranaas.forgero.core.attribute.impl.computation.operator.MultiplicationOperator;
+import com.sigmundgranaas.forgero.core.attribute.impl.computation.operator.Operator;
 import com.sigmundgranaas.forgero.core.property.condition.Condition;
 import com.sigmundgranaas.forgero.core.property.condition.DynamicCondition;
 import com.sigmundgranaas.forgero.core.property.condition.StaticCondition;
@@ -23,22 +22,19 @@ import com.sigmundgranaas.forgero.core.property.condition.StaticConditions;
 import com.sigmundgranaas.forgero.data.v3.codec.AttributeCodecs;
 import com.sigmundgranaas.forgero.data.v3.dto.*;
 import com.sigmundgranaas.forgero.data.v3.dto.attribute.AttributeData;
-import com.sigmundgranaas.forgero.data.v3.dto.attribute.ComputationData;
 import com.sigmundgranaas.forgero.data.v3.dto.condition.*;
 import com.sigmundgranaas.forgero.data.v3.dto.feature.FeatureData;
-import com.sigmundgranaas.forgero.data.v3.dto.feature.VeinMiningFeatureData; // Example feature DTO
-import com.sigmundgranaas.forgero.data.v3.dto.feature.VeinMiningSelectorData; // Example feature DTO sub-data
+import com.sigmundgranaas.forgero.data.v3.dto.feature.VeinMiningFeatureData;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class ComponentMapper {
 
 	private final IdentifierFactory identifierFactory;
 	private final Map<OpenIdentifier, Component> mappedComponentCache = new HashMap<>(); // Cache for mapped components
-	private final Map<OpenIdentifier, TopLevelData> allProcessedData; // All processed DTOs from generator
+	private final Map<OpenIdentifier, TopLevelData> allProcessedData;
 
 	public ComponentMapper(IdentifierFactory identifierFactory, Map<OpenIdentifier, TopLevelData> allProcessedData) {
 		this.identifierFactory = identifierFactory;
@@ -74,11 +70,11 @@ public class ComponentMapper {
 			// Materials, StaticParts, and Schematics are mapped to StaticComponents
 			// Schematics are typically consumed by crafting systems, but can exist as items.
 			component = new StaticComponent(data.id(), tags, properties);
-		} else if (rawDto instanceof PartTemplateData pTemplate) {
-			// PartTemplateData (represents a generated part like iron-pickaxe_head)
+		} else if (rawDto instanceof GeneratedPartData generatedPart) {
+			// GeneratedPartData (represents a generated part like iron-pickaxe_head)
 			// Its structure now contains a concrete material ID.
-			ComponentStructure structure = mapPartStructure(pTemplate.structure());
-			ComponentUpgrades upgrades = mapUpgradeSlots(pTemplate.upgrades());
+			ComponentStructure structure = mapPartStructure(generatedPart.structure());
+			ComponentUpgrades upgrades = mapUpgradeSlots(generatedPart.upgrades());
 
 			// Determine concrete Component type based on presence of structure and upgrades
 			if (!structure.slots().isEmpty() && !upgrades.slots().isEmpty()) {
@@ -90,11 +86,11 @@ public class ComponentMapper {
 			} else {
 				component = new StaticComponent(data.id(), tags, properties); // Fallback, e.g., an empty template
 			}
-		} else if (rawDto instanceof ToolTemplateData tTemplate) {
-			// ToolTemplateData (represents a generated tool like iron-pickaxe-oak-handle)
+		} else if (rawDto instanceof GeneratedEquipmentData generatedEquipment) {
+			// GeneratedEquipmentData (represents a generated tool like iron-pickaxe-oak-handle)
 			// Its structure now contains concrete part IDs.
-			ComponentStructure structure = mapToolStructure(tTemplate.structure());
-			ComponentUpgrades upgrades = mapUpgradeSlots(tTemplate.upgrades());
+			ComponentStructure structure = mapToolStructure(generatedEquipment.structure());
+			ComponentUpgrades upgrades = mapUpgradeSlots(generatedEquipment.upgrades());
 
 			// Determine concrete Component type based on presence of structure and upgrades
 			if (!structure.slots().isEmpty() && !upgrades.slots().isEmpty()) {
@@ -106,6 +102,9 @@ public class ComponentMapper {
 			} else {
 				component = new StaticEquipment(data.id(), tags, properties); // Fallback
 			}
+		} else if (rawDto instanceof PartTemplateData || rawDto instanceof ToolTemplateData) {
+			// Explicitly ignore raw templates, they are not mapped to components directly
+			return Optional.empty();
 		}
 
 		if (component != null) {
@@ -117,7 +116,10 @@ public class ComponentMapper {
 	private List<Property> mapProperties(List<AttributeData> attributes, List<FeatureData> features) {
 		List<Property> properties = new ArrayList<>();
 		if (attributes != null) {
-			attributes.stream().map(this::mapAttribute).flatMap(Optional::stream).forEach(properties::add);
+			attributes.stream()
+					.map(this::mapAttribute)
+					.flatMap(Optional::stream)
+					.forEach(properties::add);
 		}
 		if (features != null) {
 			features.stream().map(this::mapFeature).flatMap(Optional::stream).forEach(properties::add);
@@ -125,7 +127,7 @@ public class ComponentMapper {
 		return properties;
 	}
 
-	private Optional<Attribute> mapAttribute(AttributeData data) {
+	private Optional<Property> mapAttribute(AttributeData data) {
 		// Map computation operator
 		Operator operator = switch (data.computation().operator()) {
 			case AttributeCodecs.ADDITION_OPERATOR -> AdditionOperator.getInstance();
@@ -133,22 +135,34 @@ public class ComponentMapper {
 			default -> AdditionOperator.getInstance(); // Sensible default
 		};
 
-		// Map computation order to a numerical level for sorting in ComputationChain
-		int level = mapOrderToLevel(data.computation().order());
+		// Map computation order to a numerical group for sorting in ComputationChain
+		int group = mapOrderToLevel(data.computation().order());
 
 		// Map condition DTO to core Condition object
 		Condition condition = mapCondition(data.condition());
 
-		return Optional.of(new Attribute(data.type(), data.computation().value(), operator, level, condition));
+		// Check if the attribute has a composite key
+		if (data.composite() != null) {
+			// If it has a composite key, map it to a CompositeAttributeComponent
+			return Optional.of(new CompositeAttributeComponent(
+					data.type(),
+					data.computation().value(),
+					operator,
+					group,
+					data.composite()
+			));
+		} else {
+			// Otherwise, map it to a SimpleAttribute
+			return Optional.of(new SimpleAttribute(data.type(), data.computation().value(), operator, group, condition));
+		}
 	}
 
 	private int mapOrderToLevel(String order) {
 		return switch (order) {
-			case "forgero:base" -> 0;
-			case "forgero:addition" -> 1;
-			case "forgero:multiplication" -> 2;
-			case "forgero:final" -> 3;
-			default -> 0; // Default level
+			case AttributeCodecs.BASE_ORDER -> 0; // Base/Default values
+			case AttributeCodecs.MIDDLE_ORDER -> 1; // Middle
+			case AttributeCodecs.END_ORDER -> 2; // End
+			default -> 1; // Default group if order is not specified or unknown
 		};
 	}
 
@@ -198,12 +212,12 @@ public class ComponentMapper {
 		} else if (data instanceof AndPredicateData andData) {
 			List<StaticCondition> children = andData.predicates().stream()
 					.flatMap(pred -> mapStaticPredicate(pred).stream())
-					.collect(Collectors.toList());
+					.toList();
 			return Optional.of(ctx -> children.stream().allMatch(c -> c.test(ctx)));
 		} else if (data instanceof OrPredicateData orData) {
 			List<StaticCondition> children = orData.predicates().stream()
 					.flatMap(pred -> mapStaticPredicate(pred).stream())
-					.collect(Collectors.toList());
+					.toList();
 			return Optional.of(ctx -> children.stream().anyMatch(c -> c.test(ctx)));
 		} else if (data instanceof NotPredicateData notData) {
 			return mapStaticPredicate(notData.predicate())
@@ -229,15 +243,13 @@ public class ComponentMapper {
 			// `structureData.material().type()` is now the concrete ID of the material component
 			OpenIdentifier materialComponentId = structureData.material().type();
 			Optional<Component> materialComponent = map(materialComponentId); // Recursive call to map the material
-			if (materialComponent.isPresent()) {
-				// Assuming a fixed slot ID and type for the material slot within a part's structure.
-				slots.add(new StructureSlot(
-						identifierFactory.of("material_slot"), // Standard slot ID within a part template
-						identifierFactory.of("forgero:material_slot_type"), // Standard type tag for a material slot
-						structureData.material().description() != null ? structureData.material().description() : "Required material",
-						materialComponent.get()
-				));
-			}
+			// Assuming a fixed slot ID and type for the material slot within a part's structure.
+			materialComponent.ifPresent(component -> slots.add(new StructureSlot(
+					identifierFactory.of("material_slot"), // Standard slot ID within a part template
+					identifierFactory.of("forgero:material_slot_type"), // Standard type tag for a material slot
+					structureData.material().description() != null ? structureData.material().description() : "Required material",
+					component
+			)));
 		}
 		return new ComponentStructure(slots);
 	}

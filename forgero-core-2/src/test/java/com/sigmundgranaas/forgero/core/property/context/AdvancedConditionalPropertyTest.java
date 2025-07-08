@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.sigmundgranaas.forgero.core.ForgeroTest;
-import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
+import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.structure.ComponentStructure;
@@ -64,15 +64,15 @@ public class AdvancedConditionalPropertyTest extends ForgeroTest {
 	void testSelfInSlotConditionForVersatileGem() {
 		var OFFENSIVE_SLOT_TYPE = idFactory.of("offensive_slot_type");
 		var UTILITY_SLOT_TYPE = idFactory.of("utility_slot_type");
-		var damageBonus = new Attribute(ATTACK_DAMAGE, 10f, new Condition(List.of(StaticConditions.selfInSlot(OFFENSIVE_SLOT_TYPE)), List.of()));
-		var speedBonus = new Attribute(MINING_SPEED, 5f, new Condition(List.of(StaticConditions.selfInSlot(UTILITY_SLOT_TYPE)), List.of()));
+		var damageBonus = new SimpleAttribute(ATTACK_DAMAGE, 10f, new Condition(List.of(StaticConditions.selfInSlot(OFFENSIVE_SLOT_TYPE)), List.of()));
+		var speedBonus = new SimpleAttribute(MINING_SPEED, 5f, new Condition(List.of(StaticConditions.selfInSlot(UTILITY_SLOT_TYPE)), List.of()));
 		var powerCrystal = new StaticComponent(idFactory.of("power_crystal"), Set.of(GEM_TAG), List.of(damageBonus, speedBonus));
 
-		var blade = part(BLADE_ID, METAL_TAG, List.of(new Attribute(ATTACK_DAMAGE, 5f)));
+		var blade = part(BLADE_ID, METAL_TAG, List.of(new SimpleAttribute(ATTACK_DAMAGE, 5f)));
 		var swordHilt = new StructuredPart(idFactory.of("hilt"), Set.of(), List.of(), new ComponentStructure(List.of(slot(idFactory.of("offensive_slot"), OFFENSIVE_SLOT_TYPE, powerCrystal))));
 		var sword = new StructuredPart(SWORD_ID, Set.of(), List.of(), new ComponentStructure(List.of(slot(idFactory.of("blade_slot"), BLADE_TAG, blade), slot(idFactory.of("hilt_slot"), idFactory.of("hilt_type"), swordHilt))));
 
-		var pickHead = part(PICKAXE_HEAD_ID, METAL_TAG, List.of(new Attribute(MINING_SPEED, 2f)));
+		var pickHead = part(PICKAXE_HEAD_ID, METAL_TAG, List.of(new SimpleAttribute(MINING_SPEED, 2f)));
 		var pickHandle = new StructuredPart(HANDLE_ID, Set.of(), List.of(), new ComponentStructure(List.of(slot(idFactory.of("utility_slot"), UTILITY_SLOT_TYPE, powerCrystal))));
 		var pickaxe = new StructuredPart(PICKAXE_ID, Set.of(), List.of(), new ComponentStructure(List.of(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, pickHead), slot(HANDLE_SLOT_ID, HANDLE_TAG, pickHandle))));
 
@@ -91,13 +91,13 @@ public class AdvancedConditionalPropertyTest extends ForgeroTest {
 	void testSiblingAndDepthConditionsForSynergyAndMaterials() {
 		var SAPPHIRE_ID = idFactory.of("sapphire_of_ice");
 		var fireDamageType = idFactory.of("fire_damage");
-		var baseFireDamage = new Attribute(fireDamageType, 2f);
-		var synergyFireDamage = new Attribute(fireDamageType, 3f, new Condition(List.of(StaticConditions.hasSibling(SAPPHIRE_ID)), List.of()));
+		var baseFireDamage = new SimpleAttribute(fireDamageType, 2f);
+		var synergyFireDamage = new SimpleAttribute(fireDamageType, 3f, new Condition(List.of(StaticConditions.hasSibling(SAPPHIRE_ID)), List.of()));
 		var ruby = new StaticComponent(idFactory.of("ruby_of_fire"), Set.of(GEM_TAG), List.of(baseFireDamage, synergyFireDamage));
 		var sapphire = new StaticComponent(SAPPHIRE_ID, Set.of(GEM_TAG), List.of());
 
-		var oakDurability = new Attribute(DURABILITY, 50f, new Condition(List.of(StaticConditions.atDepth(2)), List.of()));
-		var oakSpeed = new Attribute(ATTACK_SPEED, 10f, new Condition(List.of(StaticConditions.atDepth(1)), List.of()));
+		var oakDurability = new SimpleAttribute(DURABILITY, 50f, new Condition(List.of(StaticConditions.atDepth(2)), List.of()));
+		var oakSpeed = new SimpleAttribute(ATTACK_SPEED, 10f, new Condition(List.of(StaticConditions.atDepth(1)), List.of()));
 		var enchantedOak = new StaticComponent(OAK_ID, Set.of(WOOD_TAG), List.of(oakDurability, oakSpeed));
 
 		var hiltWithTwoGems = new StructuredPart(idFactory.of("synergy_hilt"), Set.of(), List.of(), new ComponentStructure(List.of(slot(idFactory.of("gem_slot_1"), GEM_SLOT_TYPE_TAG, ruby), slot(idFactory.of("gem_slot_2"), GEM_SLOT_TYPE_TAG, sapphire))));

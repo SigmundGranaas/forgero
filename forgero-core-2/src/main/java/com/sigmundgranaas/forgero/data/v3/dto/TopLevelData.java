@@ -15,7 +15,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * A common interface for all top-level Forgero data DTOs (materials, part templates, tools, schematics, static parts).
+ * A common interface for all top-group Forgero data DTOs (materials, part templates, tools, schematics, static parts).
  * This interface defines the common fields that are relevant for dependency resolution and property merging.
  * It also provides utility methods for accessing attributes and features as maps for easier merging.
  */
@@ -48,7 +48,7 @@ public interface TopLevelData {
 	String name();
 
 	/**
-	 * An optional list of other top-level data entries to include. Properties from included entries
+	 * An optional list of other top-group data entries to include. Properties from included entries
 	 * will be merged into this entry, with this entry's properties overriding conflicts.
 	 *
 	 * @return A list of OpenIdentifiers of included data entries, or null if none.

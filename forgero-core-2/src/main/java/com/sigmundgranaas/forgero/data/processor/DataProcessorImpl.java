@@ -14,12 +14,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class DataProcessorImpl implements DataProcessor {
@@ -37,10 +37,10 @@ public class DataProcessorImpl implements DataProcessor {
 		processedCache.clear();
 		recursionStack.clear(); // Ensure clean state for each new processing call
 
-		// Process each top-level definition that exists in the raw data
+		// Process each top-group definition that exists in the raw data
 		rawData.keySet().forEach(this::processDefinition);
 
-		return Collections.unmodifiableMap(new HashMap<>(processedCache));
+		return Map.copyOf(processedCache);
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class DataProcessorImpl implements DataProcessor {
 				// Apply properties from the included data
 				// Tags are additive (set union)
 				if (includedProcessedData.tags() != null) {
-					accumulatedTags.addAll(includedProcessedData.tags());
+					accumulatedTags.addAll(Objects.requireNonNull(includedProcessedData.tags()));
 				}
 				// Attributes/Features: put() handles overrides by ID/Type
 				includedProcessedData.getAttributesMap().forEach(accumulatedAttributes::put);

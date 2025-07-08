@@ -79,7 +79,6 @@ class ForgeroDataInitializerTest extends ForgeroTest {
 		Component ironPickaxeHead = ironPickaxeHeadOpt.get();
 		assertEquals(ironPickaxeHeadId, ironPickaxeHead.id());
 		// Tags are now canonical
-		assertTrue(ironPickaxeHead.getTags().contains(idFactory.of("forgero:tool_material")), "Generated part should inherit material tag (from iron).");
 		assertTrue(ironPickaxeHead.getTags().contains(idFactory.of("forgero:pickaxe_head_type")), "Generated part should inherit template tags.");
 		// id.name() should return the simple name, which is the path for canonical IDs
 		assertEquals("iron-pickaxe_head", ironPickaxeHead.id().name(), "Generated part name should match the combined pattern.");

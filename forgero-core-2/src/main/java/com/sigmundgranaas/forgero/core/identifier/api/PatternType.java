@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.core.identifier.api;
 /**
  * Defines different parts of an OpenIdentifier that can be used for pattern matching.
  * After {@link OpenIdentifier}s are canonicalized (normalized) by {@link IdentifierFactory}
- * to have a single-level path (e.g., "forgero:iron_pickaxe"), the interpretation of some
+ * to have a single-group path (e.g., "forgero:iron_pickaxe"), the interpretation of some
  * pattern types changes:
  * <ul>
  *     <li>{@link #NAMESPACE}: The namespace part ("forgero").</li>

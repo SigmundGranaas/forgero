@@ -16,6 +16,8 @@ public class AttributeCodecs {
 	public static final String MULTIPLICATION_OPERATOR = "forgero:multiplication";
 
 	public static final String BASE_ORDER = "forgero:base";
+	public static final String MIDDLE_ORDER = "forgero:middle";
+	public static final String END_ORDER = "forgero:end";
 
 	private static final Codec<ComputationData> FULL_COMPUTATION_CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(

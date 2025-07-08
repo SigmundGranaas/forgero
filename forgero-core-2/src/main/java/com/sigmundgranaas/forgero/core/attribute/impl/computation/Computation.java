@@ -1,6 +1,6 @@
-package com.sigmundgranaas.forgero.core.attribute.computation;
+package com.sigmundgranaas.forgero.core.attribute.impl.computation;
 
-import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
+import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 
 /**
  * A functional interface representing a single, stateless computation.
@@ -15,5 +15,5 @@ public interface Computation {
 	 * @param attribute The attribute providing the value and context for this computation.
 	 * @return The new value after the computation.
 	 */
-	float compute(float current, Attribute attribute);
+	float compute(float current, SimpleAttribute attribute);
 }

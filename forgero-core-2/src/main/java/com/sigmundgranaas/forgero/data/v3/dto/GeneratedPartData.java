@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.data.v3.dto;
 
+import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.v3.dto.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.v3.dto.feature.FeatureData;
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -11,35 +11,32 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-
 /**
- * DTO for `forgero:tool_template` type data files.
- * Defines the structure of a complete tool.
- *
- * @param type       The type identifier, always "forgero:tool_template".
- * @param name       The unique name of the tool template.
- * @param include    Optional list of IDs of other definitions to include.
- * @param tags       Optional list of tags associated with the tool template.
- * @param structure  Defines the required parts for tool assembly.
- * @param upgrades   Optional list of tool-group upgrade slots.
- * @param attributes Optional list of attributes inherent to this tool template.
- * @param features   Optional list of features inherent to this tool template.
+ * DTO for a generated, concrete part (e.g., an Iron Pickaxe Head).
+ * This is the result of combining a `MaterialData` with a `PartTemplateData`.
+ * It contains all resolved properties and concrete references to its constituent material.
  */
-public record ToolTemplateData(
-		OpenIdentifier type, // Changed from String
+public record GeneratedPartData(
+		OpenIdentifier type, // The type from the original part template (e.g., "forgero:part_template")
 		String name,
 		@Nullable
-		List<OpenIdentifier> include, // Changed from List<String>
-		@Nullable
-		List<OpenIdentifier> tags, // Changed from List<String>
-		ToolTemplateStructureData structure,
+		List<OpenIdentifier> tags,
+		PartTemplateStructureData structure, // Contains concrete material ID
 		@Nullable
 		List<UpgradeSlotData> upgrades,
 		@Nullable
 		List<AttributeData> attributes,
 		@Nullable
 		List<FeatureData> features
-) {
+){
+
+
+	// Generated components do not have 'include' or 'naming' (as naming is handled during generation)
+	public @Nullable List<OpenIdentifier> include() {
+		return null;
+	}
+
+
 	public Map<OpenIdentifier, AttributeData> getAttributesMap() {
 		if (attributes == null) return Collections.emptyMap();
 		return attributes.stream().collect(Collectors.toMap(AttributeData::id, Function.identity(), (a1, a2) -> a2));

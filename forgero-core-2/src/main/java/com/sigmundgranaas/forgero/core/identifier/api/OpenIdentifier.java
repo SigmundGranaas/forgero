@@ -38,13 +38,13 @@ public record OpenIdentifier(String namespace, String path) {
 
 	/**
 	 * Returns a new OpenIdentifier that is the canonical form of this identifier.
-	 * A canonical identifier has its path normalized to a single-level name
+	 * A canonical identifier has its path normalized to a single-group name
 	 * (stripping any directory structure and file extension).
 	 *
 	 * @return A new OpenIdentifier instance representing the canonical ID.
 	 */
 	public OpenIdentifier toCanonical() {
-		// Use normalizePathSegment to ensure the path is a single-level name.
+		// Use normalizePathSegment to ensure the path is a single-group name.
 		return new OpenIdentifier(this.namespace, normalizePathSegment(this.path));
 	}
 
@@ -59,7 +59,7 @@ public record OpenIdentifier(String namespace, String path) {
 	 * - "long/path/with.dots.in.name.json" -> "with.dots.in.name" (the last segment, without its extension)
 	 *
 	 * @param rawPathSegment The raw path string, which may contain directories and a file extension.
-	 * @return The normalized single-level name.
+	 * @return The normalized single-group name.
 	 */
 	public static String normalizePathSegment(String rawPathSegment) {
 		// First, get the part after the last slash (filename or last segment)

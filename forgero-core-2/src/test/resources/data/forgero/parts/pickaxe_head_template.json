@@ -15,7 +15,7 @@
     {
       "id": "forgero:template-durability-composite",
       "type": "forgero:durability",
-      "composite": "forgero:material-durability",
+      "composite": "forgero:part-composite",
       "computation": { "multiply": 1.5 }
     },
     {
