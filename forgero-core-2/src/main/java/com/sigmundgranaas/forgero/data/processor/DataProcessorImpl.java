@@ -55,7 +55,7 @@ public class DataProcessorImpl implements DataProcessor {
 						mergedProps.attributes(),
 						mergedProps.features()
 				));
-			} else if (originalDto instanceof ShapeData s) { // NEW: Handle ShapeData
+			} else if (originalDto instanceof ShapeData s) {
 				normalizedShapes.put(id, new NormalizedState.NormalizedShape(
 						id,
 						s.name(),
@@ -76,8 +76,7 @@ public class DataProcessorImpl implements DataProcessor {
 						id,
 						p.name(),
 						mergedProps.tags() != null ? mergedProps.tags() : new HashSet<>(),
-						p.structure().material().type(), // materialType becomes concrete ID
-						p.structure().shape().type(), // shapeType becomes concrete ID
+						p.structure(),
 						p.upgrades()
 				));
 			} else if (originalDto instanceof EquipmentTemplateData t) {
@@ -85,7 +84,7 @@ public class DataProcessorImpl implements DataProcessor {
 						id,
 						t.name(),
 						mergedProps.tags() != null ? mergedProps.tags() : new HashSet<>(),
-						t.structure().slots(), // structure is already Map<String, EquipmentTemplateSlot>
+						t.structure(),
 						t.upgrades()
 				));
 			} else if (originalDto instanceof StaticPartData sp) {

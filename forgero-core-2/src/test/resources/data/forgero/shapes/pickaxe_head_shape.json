@@ -1,6 +1,6 @@
 {
   "type": "forgero:shape",
-  "name": "Pickaxe Head Shape",
+  "name": "Pickaxe Head",
   "tags": ["forgero:pickaxe_head_shape"],
   "attributes": [
     {

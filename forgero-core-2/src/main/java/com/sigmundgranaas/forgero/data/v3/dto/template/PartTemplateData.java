@@ -37,8 +37,6 @@ public record PartTemplateData(
 		@Nullable
 		List<UpgradeSlotData> upgrades,
 		@Nullable
-		PartTemplateNamingData naming,
-		@Nullable
 		List<AttributeData> attributes,
 		@Nullable
 		List<FeatureData> features

@@ -4,7 +4,7 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.data.v3.codec.PartTemplateCodecs;
-import com.sigmundgranaas.forgero.data.v3.codec.CodecConstants; // Added import
+import com.sigmundgranaas.forgero.data.v3.codec.CodecConstants;
 import com.sigmundgranaas.forgero.data.v3.dto.template.PartTemplateData;
 import com.sigmundgranaas.forgero.data.v3.dto.template.UpgradeSlotData;
 import com.sigmundgranaas.forgero.data.v3.dto.attribute.AttributeData;
@@ -24,17 +24,20 @@ class PartTemplateDataCodecTest {
 				  "tags": ["forgero:pickaxe_head", "forgero:mandrill_head"],
 				  "include": ["forgero:parts/heads/pickaxe_head_base"],
 				  "structure": {
-				    "material": {
-				      "type": "forgero:tool_material",
-				      "count": 3,
-				      "description": "The primary material of the pickaxe head."
-				    },
-				     "shape": {
-				      "type": "forgero:pickaxe_head_shape",
-				      "count": 1,
-				      "description": "The shape of the pickaxe head."
-				    }
-				  },
+				    "id": "forgero:{material.name}-{shape.name}",
+				    "slots": {
+						 "material": {
+						  "type": "forgero:tool_material",
+						  "count": 3,
+						  "description": "The primary material of the pickaxe head."
+						},
+						 "shape": {
+						  "type": "forgero:pickaxe_head_shape",
+						  "count": 1,
+						  "description": "The shape of the pickaxe head."
+						}
+					}
+				   },
 				  "upgrades": [
 				    {
 				      "id": "forgero:head-smithing-offensive",
@@ -49,9 +52,6 @@ class PartTemplateDataCodecTest {
 				      "tier": 1
 				    }
 				  ],
-				  "naming": {
-				    "pattern": "{material_name} Mandrill Pickaxe Head"
-				  },
 				  "attributes": [
 				    {
 				      "id": "forgero:schematic-rarity-local",
@@ -84,52 +84,49 @@ class PartTemplateDataCodecTest {
 		assertTrue(result.result().isPresent(), "Parsing full PartTemplateData should succeed. " + result.error().map(DataResult.PartialResult::message).orElse(""));
 
 		PartTemplateData data = result.result().get();
-		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:part_template"), data.type()); // Changed to OpenIdentifier
+		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:part_template"), data.type());
 		assertEquals("mandrill-pickaxe-head", data.name());
 
 		// Test includes
 		assertNotNull(data.include());
 		assertEquals(1, data.include().size());
-		assertTrue(data.include().contains(CodecConstants.IDENTIFIER_FACTORY.of("forgero:parts/heads/pickaxe_head_base"))); // Changed to OpenIdentifier
+		assertTrue(data.include().contains(CodecConstants.IDENTIFIER_FACTORY.of("forgero:parts/heads/pickaxe_head_base")));
 
 		// Test tags
 		assertNotNull(data.tags());
 		assertEquals(2, data.tags().size());
-		assertTrue(data.tags().contains(CodecConstants.IDENTIFIER_FACTORY.of("forgero:pickaxe_head"))); // Changed to OpenIdentifier
-		assertTrue(data.tags().contains(CodecConstants.IDENTIFIER_FACTORY.of("forgero:mandrill_head"))); // Changed to OpenIdentifier
+		assertTrue(data.tags().contains(CodecConstants.IDENTIFIER_FACTORY.of("forgero:pickaxe_head")));
+		assertTrue(data.tags().contains(CodecConstants.IDENTIFIER_FACTORY.of("forgero:mandrill_head")));
 
 		// Test structure
 		assertNotNull(data.structure());
-		assertNotNull(data.structure().material());
-		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:tool_material"), data.structure().material().type()); // Changed to OpenIdentifier
-		assertEquals(3, data.structure().material().count());
-		assertEquals("The primary material of the pickaxe head.", data.structure().material().description());
+		assertEquals("forgero:{material.name}-{shape.name}", data.structure().id());
+		assertNotNull(data.structure().slots().get("material"));
+		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:tool_material"), data.structure().slots().get("material").type());
+		assertEquals(3, data.structure().slots().get("material").count());
+		assertEquals("The primary material of the pickaxe head.", data.structure().slots().get("material").description());
 
 		// Test upgrades
 		assertNotNull(data.upgrades());
 		assertEquals(2, data.upgrades().size());
 		UpgradeSlotData offensiveUpgrade = data.upgrades().get(0);
-		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:head-smithing-offensive"), offensiveUpgrade.id()); // Changed to OpenIdentifier
-		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:upgrade_material"), offensiveUpgrade.type()); // Changed to OpenIdentifier
+		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:head-smithing-offensive"), offensiveUpgrade.id());
+		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:upgrade_material"), offensiveUpgrade.type());
 		assertEquals(1, offensiveUpgrade.tags().size());
-		assertTrue(offensiveUpgrade.tags().contains(CodecConstants.IDENTIFIER_FACTORY.of("forgero:offensive"))); // Changed to OpenIdentifier
+		assertTrue(offensiveUpgrade.tags().contains(CodecConstants.IDENTIFIER_FACTORY.of("forgero:offensive")));
 		assertEquals(1, offensiveUpgrade.tier());
-
-		// Test naming
-		assertNotNull(data.naming());
-		assertEquals("{material_name} Mandrill Pickaxe Head", data.naming().pattern());
 
 		// Test attributes
 		assertNotNull(data.attributes());
 		assertEquals(2, data.attributes().size());
 		AttributeData rarity = data.attributes().get(0);
-		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:schematic-rarity-local"), rarity.id()); // Changed to OpenIdentifier
-		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:rarity"), rarity.type()); // Changed to OpenIdentifier
+		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:schematic-rarity-local"), rarity.id());
+		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:rarity"), rarity.type());
 		assertEquals(75f, rarity.computation().value());
 		AttributeData miningSpeed = data.attributes().get(1);
-		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:variant-schematic-mining_speed-composite"), miningSpeed.id()); // Changed to OpenIdentifier
-		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:mining_speed"), miningSpeed.type()); // Changed to OpenIdentifier
-		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:material-mining-speed"), miningSpeed.composite()); // Changed to OpenIdentifier
+		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:variant-schematic-mining_speed-composite"), miningSpeed.id());
+		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:mining_speed"), miningSpeed.type());
+		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:material-mining-speed"), miningSpeed.composite());
 
 
 		// Test features
@@ -137,7 +134,7 @@ class PartTemplateDataCodecTest {
 		assertEquals(1, data.features().size());
 		assertTrue(data.features().get(0) instanceof VeinMiningFeatureData);
 		VeinMiningFeatureData veinMining = (VeinMiningFeatureData) data.features().get(0);
-		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:vein_mining"), veinMining.type()); // Changed to OpenIdentifier
+		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:vein_mining"), veinMining.type());
 	}
 
 	@Test
@@ -147,14 +144,17 @@ class PartTemplateDataCodecTest {
 				  "type": "forgero:part_template",
 				  "name": "minimal-part",
 				  "structure": {
-				    "material": {
-				      "type": "forgero:material",
-				      "count": 1
-				    },
-				    "shape": {
-					 "type": "forgero:shape",
-					 "count": 1
-				  	}
+				    "id": "forgero:minimal-part",
+				    "slots": {
+						"material": {
+						  "type": "forgero:material",
+						  "count": 1
+						},
+						"shape": {
+						 "type": "forgero:shape",
+						 "count": 1
+						}
+				    }
 				  }
 				}
 				""";
@@ -163,20 +163,20 @@ class PartTemplateDataCodecTest {
 		assertTrue(result.result().isPresent(), "Parsing minimal PartTemplateData should succeed. " + result.error().map(DataResult.PartialResult::message).orElse(""));
 
 		PartTemplateData data = result.result().get();
-		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:part_template"), data.type()); // Changed to OpenIdentifier
+		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:part_template"), data.type());
 		assertEquals("minimal-part", data.name());
 		assertNull(data.include());
 		assertNull(data.tags());
 		assertNull(data.upgrades());
-		assertNull(data.naming());
 		assertNull(data.attributes());
 		assertNull(data.features());
 
 		assertNotNull(data.structure());
-		assertNotNull(data.structure().material());
-		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:material"), data.structure().material().type()); // Changed to OpenIdentifier
-		assertEquals(1, data.structure().material().count());
-		assertNull(data.structure().material().description());
+		assertEquals("forgero:minimal-part", data.structure().id()); // ADDED ASSERTION
+		assertNotNull(data.structure().slots().get("material"));
+		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:material"), data.structure().slots().get("material").type());
+		assertEquals(1, data.structure().slots().get("material").count());
+		assertNull(data.structure().slots().get("material").description());
 	}
 
 	@Test

@@ -108,7 +108,7 @@ public class ForgeroDataInitializer {
 							.getOrThrow(false, msg -> System.err.println("Error parsing shape " + id + ": " + msg));
 					case "part_template" -> PartTemplateCodecs.PART_TEMPLATE_DATA_CODEC.parse(JsonOps.INSTANCE, root)
 							.getOrThrow(false, msg -> System.err.println("Error parsing part template " + id + ": " + msg));
-					case "tool_template" -> EquipmentTemplateCodecs.TOOL_TEMPLATE_DATA_CODEC.parse(JsonOps.INSTANCE, root)
+					case "equipment_template" -> EquipmentTemplateCodecs.TOOL_TEMPLATE_DATA_CODEC.parse(JsonOps.INSTANCE, root)
 							.getOrThrow(false, msg -> System.err.println("Error parsing tool template " + id + ": " + msg));
 					case "schematic" -> SchematicCodecs.SCHEMATIC_DATA_CODEC.parse(JsonOps.INSTANCE, root)
 							.getOrThrow(false, msg -> System.err.println("Error parsing schematic " + id + ": " + msg));
@@ -140,7 +140,7 @@ public class ForgeroDataInitializer {
 		String ns = "forgero";
 
 		// Load data explicitly from known component directories, *excluding* the 'tags' directory.
-		return Stream.of("materials", "shapes", "parts", "tools", "schematics") // NEW: Added "shapes"
+		return Stream.of("materials", "shapes", "parts", "equipment", "schematics")
 				.flatMap(dir -> dataLoader.load(new OpenIdentifier(ns, dir), true))
 				.collect(Collectors.toMap(RawDefinition::id, Function.identity(), (existing, replacement) -> {
 					System.err.println("Duplicate data ID found: " + existing.id() + ". Using existing.");

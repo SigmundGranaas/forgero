@@ -3,7 +3,8 @@ package com.sigmundgranaas.forgero.core.data.definition;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.v3.dto.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.v3.dto.feature.FeatureData;
-import com.sigmundgranaas.forgero.data.v3.dto.template.EquipmentTemplateSlotData;
+import com.sigmundgranaas.forgero.data.v3.dto.template.EquipmentTemplateStructureData;
+import com.sigmundgranaas.forgero.data.v3.dto.template.PartTemplateStructureData;
 import com.sigmundgranaas.forgero.data.v3.dto.template.UpgradeSlotData;
 
 import java.util.List;
@@ -32,8 +33,7 @@ public record NormalizedState(
 
 	public record NormalizedStaticPart(OpenIdentifier id, String name, Set<OpenIdentifier> tags, List<AttributeData> attributes, List<FeatureData> features, List<UpgradeSlotData> upgrades) {}
 
-	// A PartTemplate now defines the "slots" for a material and a shape.
-	public record NormalizedPartTemplate(OpenIdentifier id, String name, Set<OpenIdentifier> tags, OpenIdentifier materialType, OpenIdentifier shapeType, List<UpgradeSlotData> upgrades) {}
+	public record NormalizedPartTemplate(OpenIdentifier id, String name, Set<OpenIdentifier> tags, PartTemplateStructureData structure, List<UpgradeSlotData> upgrades) {}
 
-	public record NormalizedEquipmentTemplate(OpenIdentifier id, String name, Set<OpenIdentifier> tags, Map<String, EquipmentTemplateSlotData> structure, List<UpgradeSlotData> upgrades) {}
+	public record NormalizedEquipmentTemplate(OpenIdentifier id, String name, Set<OpenIdentifier> tags, EquipmentTemplateStructureData structure, List<UpgradeSlotData> upgrades) {}
 }

@@ -23,7 +23,6 @@ public record GeneratedState(
 	 */
 	public record GeneratedPart(
 			OpenIdentifier id,
-			String name,
 			Set<OpenIdentifier> tags,
 			OpenIdentifier materialId,
 			OpenIdentifier shapeId, // Assuming shape is derived from PartTemplate for now
@@ -37,7 +36,6 @@ public record GeneratedState(
 	 */
 	public record GeneratedEquipment(
 			OpenIdentifier id,
-			String name,
 			Set<OpenIdentifier> tags,
 			Map<String, OpenIdentifier> structure,
 			List<UpgradeSlotData> upgrades

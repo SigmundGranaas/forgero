@@ -7,6 +7,9 @@ import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.v3.dto.MaterialData;
 import com.sigmundgranaas.forgero.data.v3.dto.ShapeData;
 import com.sigmundgranaas.forgero.data.v3.dto.StaticPartData;
+import com.sigmundgranaas.forgero.data.v3.dto.template.EquipmentTemplateData;
+import com.sigmundgranaas.forgero.data.v3.dto.template.EquipmentTemplateStructureData;
+import com.sigmundgranaas.forgero.data.v3.dto.template.EquipmentTemplateSlotData;
 import com.sigmundgranaas.forgero.data.v3.dto.template.PartTemplateData;
 import com.sigmundgranaas.forgero.data.v3.dto.template.PartTemplateStructureData;
 import com.sigmundgranaas.forgero.data.v3.dto.template.PartTemplateStructureSlotData;
@@ -48,19 +51,31 @@ class DataProcessorTest extends ForgeroTest {
 		return new RawDefinition(idFactory.of(idPath), dto);
 	}
 
-	private RawDefinition createRawPartTemplate(String idPath, String name, @Nullable List<String> include, @Nullable List<String> tags, String materialType, String shapeType, @Nullable List<AttributeData> attributes) {
+	private RawDefinition createRawPartTemplate(String idPath, String name, @Nullable List<String> include, @Nullable List<String> tags, String idPattern, Map<String, PartTemplateStructureSlotData> slots) {
 		PartTemplateData dto = new PartTemplateData(
 				idFactory.of("forgero:part_template"), name,
 				include == null ? null : include.stream().map(idFactory::of).toList(),
 				tags == null ? null : tags.stream().map(idFactory::of).toList(),
 				new PartTemplateStructureData(
-						new PartTemplateStructureSlotData(idFactory.of(materialType), 1, null),
-						new PartTemplateStructureSlotData(idFactory.of(shapeType), 0, null)
+						idPattern,
+						slots
 				),
-				null, null, attributes, null
+				null, null, null
 		);
 		return new RawDefinition(idFactory.of(idPath), dto);
 	}
+
+	private RawDefinition createRawEquipmentTemplate(String idPath, String name, @Nullable List<String> include, @Nullable List<String> tags, String idPattern, Map<String, EquipmentTemplateSlotData> slots) {
+		EquipmentTemplateData dto = new EquipmentTemplateData(
+				idFactory.of("forgero:tool_template"), name,
+				include == null ? null : include.stream().map(idFactory::of).toList(),
+				tags == null ? null : tags.stream().map(idFactory::of).toList(),
+				new EquipmentTemplateStructureData(idPattern, slots),
+				null, null, null
+		);
+		return new RawDefinition(idFactory.of(idPath), dto);
+	}
+
 
 	private RawDefinition createRawStaticPart(String idPath, String name, @Nullable List<String> include, @Nullable List<String> tags, @Nullable List<AttributeData> attributes, @Nullable List<FeatureData> features) {
 		StaticPartData dto = new StaticPartData(idFactory.of("forgero:static_part"), name,
@@ -282,9 +297,8 @@ class DataProcessorTest extends ForgeroTest {
 
 		RawDefinition pickaxeHeadTemplateRaw = createRawPartTemplate(
 				"test:pickaxe_head_template", "Pickaxe Head",
-				null, List.of("pickaxe_head_type"),
-				"forgero:tool_material", "forgero:default_shape",
-				null
+				null, List.of("pickaxe_head_type"), "forgero:{material.name}-{shape.name}_head", Map.of("material", new PartTemplateStructureSlotData(new OpenIdentifier("forgero","tool_material"), 1, null), "shape", new PartTemplateStructureSlotData(new OpenIdentifier("forgero","default_shape"), 1, null))
+
 		);
 
 		Map<OpenIdentifier, RawDefinition> rawData = Map.of(
@@ -299,8 +313,36 @@ class DataProcessorTest extends ForgeroTest {
 		assertNotNull(normalizedTemplate);
 		assertEquals("Pickaxe Head", normalizedTemplate.name());
 		assertTrue(normalizedTemplate.tags().contains(idFactory.of("pickaxe_head_type")));
-		assertEquals(idFactory.of("forgero:tool_material"), normalizedTemplate.materialType());
-		assertEquals(idFactory.of("forgero:default_shape"), normalizedTemplate.shapeType());
+		assertEquals(idFactory.of("forgero:tool_material"), normalizedTemplate.structure().slots().get("material").type());
+		assertEquals(idFactory.of("forgero:default_shape"),  normalizedTemplate.structure().slots().get("shape").type());
+		assertEquals("forgero:{material.name}-{shape.name}_head",  normalizedTemplate.structure().id());
+	}
+
+	@Test
+	void testNormalize_EquipmentTemplateWithIdPatternAndSlots() {
+		RawDefinition pickaxeTemplateRaw = createRawEquipmentTemplate(
+				"test:pickaxe_template", "Pickaxe",
+				null, List.of("tool", "pickaxe"),
+				"forgero:{head.material.name}-pickaxe",
+				Map.of(
+						"head", new EquipmentTemplateSlotData(idFactory.of("forgero:pickaxe_head_type"), null),
+						"handle", new EquipmentTemplateSlotData(idFactory.of("forgero:handle_type"), idFactory.of("forgero:static_oak_handle"))
+				)
+		);
+
+		Map<OpenIdentifier, RawDefinition> rawData = Map.of(pickaxeTemplateRaw.id(), pickaxeTemplateRaw);
+		NormalizedState state = processor.normalize(rawData);
+
+		assertEquals(1, state.equipmentTemplates().size());
+		var normalizedTemplate = state.equipmentTemplates().get(pickaxeTemplateRaw.id());
+		assertNotNull(normalizedTemplate);
+		assertEquals("Pickaxe", normalizedTemplate.name());
+		assertTrue(normalizedTemplate.tags().contains(idFactory.of("tool")));
+		assertTrue(normalizedTemplate.tags().contains(idFactory.of("pickaxe")));
+		assertEquals("forgero:{head.material.name}-pickaxe", normalizedTemplate.structure().id());
+		assertNotNull(normalizedTemplate.structure().slots());
+		assertTrue(normalizedTemplate.structure().slots().containsKey("head"));
+		assertTrue(normalizedTemplate.structure().slots().containsKey("handle"));
 	}
 
 	@Test
@@ -313,9 +355,9 @@ class DataProcessorTest extends ForgeroTest {
 		);
 		StaticPartData originalDto = (StaticPartData) rawStaticPart.data();
 		originalDto = new StaticPartData(originalDto.type(), originalDto.name(), originalDto.include(), originalDto.tags(), originalDto.attributes(),
-				List.of(new UpgradeSlotData(idFactory.of("slot1"), idFactory.of("slot_type"), null, null, null)), originalDto.features()); // Add upgrades
+				List.of(new UpgradeSlotData(idFactory.of("slot1"), idFactory.of("slot_type"), null, null, null)), originalDto.features());
 
-		rawStaticPart = new RawDefinition(rawStaticPart.id(), originalDto); // Create new RawDefinition with updated DTO
+		rawStaticPart = new RawDefinition(rawStaticPart.id(), originalDto);
 
 		Map<OpenIdentifier, RawDefinition> rawData = Map.of(rawStaticPart.id(), rawStaticPart);
 		NormalizedState state = processor.normalize(rawData);

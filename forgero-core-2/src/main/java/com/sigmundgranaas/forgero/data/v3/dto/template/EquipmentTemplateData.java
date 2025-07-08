@@ -26,12 +26,13 @@ import java.util.stream.Collectors;
  * @param features   Optional list of features inherent to this tool template.
  */
 public record EquipmentTemplateData(
-		OpenIdentifier type, // Changed from String
+		OpenIdentifier type,
 		String name,
 		@Nullable
-		List<OpenIdentifier> include, // Changed from List<String>
+		List<OpenIdentifier> include,
 		@Nullable
-		List<OpenIdentifier> tags, // Changed from List<String>
+		List<OpenIdentifier> tags,
+
 		EquipmentTemplateStructureData structure,
 		@Nullable
 		List<UpgradeSlotData> upgrades,

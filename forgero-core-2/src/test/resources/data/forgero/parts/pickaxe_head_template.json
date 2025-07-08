@@ -3,15 +3,15 @@
   "name": "Pickaxe Head",
   "tags": ["forgero:parts/pickaxe_head_type"],
   "structure": {
-    "material": {
-      "type": "forgero:tool_material",
-      "count": 1
-    },
-    "shape": {
-      "type": "forgero:pickaxe_head_shape"
+    "id": "forgero:{material.name}-{shape.name}",
+    "slots": {
+      "material": {
+        "type": "forgero:tool_material",
+        "count": 1
+      },
+      "shape": {
+        "type": "forgero:pickaxe_head_shape"
+      }
     }
-  },
-  "naming": {
-    "pattern": "{material_name} {shape_name} {part_template_name}"
   }
 }

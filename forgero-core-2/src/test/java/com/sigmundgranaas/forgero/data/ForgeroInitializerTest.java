@@ -38,13 +38,14 @@ class ForgeroDataInitializerTest extends ForgeroTest {
 		TagGraph tagGraph = initializer.getTagGraph();
 		assertNotNull(tagGraph);
 
-		OpenIdentifier materialTag = idFactory.of("forgero:material");
-		OpenIdentifier metalTag = idFactory.of("forgero:metal");
-		OpenIdentifier toolMaterialTag = idFactory.of("forgero:tool_material");
-		OpenIdentifier pickaxeHeadTypeTag = idFactory.of("forgero:pickaxe_head_type");
-		OpenIdentifier handleTypeTag = idFactory.of("forgero:handle_type");
-		OpenIdentifier toolTag = idFactory.of("forgero:tool");
-		OpenIdentifier pickaxeTag = idFactory.of("forgero:pickaxe");
+		OpenIdentifier materialTag = idFactory.of("forgero:materials/material");
+		OpenIdentifier metalTag = idFactory.of("forgero:materials/metal");
+		OpenIdentifier toolMaterialTag = idFactory.of("forgero:materials/tool_material");
+		OpenIdentifier pickaxeHeadTypeTag = idFactory.of("forgero:parts/pickaxe_head_type");
+		OpenIdentifier handleTypeTag = idFactory.of("forgero:parts/handle_type");
+		OpenIdentifier toolTag = idFactory.of("forgero:tools/tool");
+		OpenIdentifier pickaxeTag = idFactory.of("forgero:tools/pickaxe");
+		OpenIdentifier pickaxeHeadShapeTag = idFactory.of("forgero:pickaxe_head_shape");
 
 		// Check parent relationships directly (tag graph stores canonical IDs)
 		assertTrue(tagGraph.getParents(toolMaterialTag).contains(materialTag), "tool_material should have material as a direct parent.");
@@ -77,31 +78,25 @@ class ForgeroDataInitializerTest extends ForgeroTest {
 		// For this test, I will assume a default shape is added in Stage 2 normalization for templates without one.
 		// For the provided JSON, pickaxe_head_template has no shape explicitly, so we must assume a 'default_shape' exists.
 		// I'll add a dummy shape.json for this to work in `src/test/resources/data/forgero/shapes/pickaxe_head_shape.json`
-		// and use `default_shape` as the type in pickaxe_head_template.json's structure.
-		OpenIdentifier ironPickaxeHeadId = idFactory.of("forgero:iron_pickaxe_head_shape_pickaxe_head");
+		// and use `pickaxe_head_shape` as the type in pickaxe_head_template.json's structure.
+		OpenIdentifier ironPickaxeHeadId = idFactory.of("forgero:iron-pickaxe_head"); // New ID format
 
 		Optional<Component> ironPickaxeHeadOpt = registry.find(ironPickaxeHeadId);
-		assertTrue(ironPickaxeHeadOpt.isPresent(), "Iron Default Shape Pickaxe Head should be generated and present in registry. Available components: " + registry.all().stream().map(Component::id).map(OpenIdentifier::toString).collect(Collectors.joining(", ")));
+		assertTrue(ironPickaxeHeadOpt.isPresent(), "Iron Pickaxe Head should be generated and present in registry. Available components: " + registry.all().stream().map(Component::id).map(OpenIdentifier::toString).collect(Collectors.joining(", ")));
 
 		Component ironPickaxeHead = ironPickaxeHeadOpt.get();
 		assertEquals(ironPickaxeHeadId, ironPickaxeHead.id());
 		// Tags are now canonical
 		assertTrue(ironPickaxeHead.getTags().contains(idFactory.of("forgero:parts/pickaxe_head_type")), "Generated part should inherit template tags.");
 		assertTrue(ironPickaxeHead.getTags().contains(idFactory.of("forgero:materials/metal")), "Generated part should inherit material tags.");
-		// Default shape tag, assuming a pickaxe_head_shape.json and the template pointing to it.
+		assertTrue(ironPickaxeHead.getTags().contains(idFactory.of("forgero:pickaxe_head_shape")), "Generated part should inherit shape tags."); // From pickaxe_head_shape.json
 
 		// Verify composite attribute resolution
 		Resolver resolver = new ResolverEngine(List.of(new AttributeEngine()));
 		AttributeQueryResult attributes = resolver.resolve(ironPickaxeHead, AttributeEngine.KEY).orElseThrow();
 
 		// Calculations based on the dummy JSONs:
-		// Material(dur: 250, ms_comp: +5) and Template (dur: *1.5, ms_comp: *1.2) - these values are on the *shape* in the new model.
-		// So the pickaxe_head_shape.json needs these attributes:
-		// pickaxe_head_shape.json:
-		// { "type": "forgero:shape", "name": "Default Shape", "tags": ["forgero:default_shape"], "attributes": [
-		//   {"id": "shape-durability", "type": "forgero:durability", "computation": {"multiply": 1.5}},
-		//   {"id": "shape-mining_speed", "type": "forgero:mining_speed", "composite": "forgero:material-mining-speed", "computation": {"multiply": 1.2}}
-		// ]}
+		// Material(dur: 250, ms_comp: +5) and Shape (dur: *1.5, ms_comp: *1.2)
 		// Expected durability: (0 + 250) * 1.5 = 375
 		// Expected mining_speed: (0 + 5) * 1.2 = 6
 		assertEquals(375f, attributes.getValue(DefaultAttributes.DURABILITY), 0.001f, "Durability should be resolved correctly from composite (250 * 1.5).");
@@ -126,18 +121,18 @@ class ForgeroDataInitializerTest extends ForgeroTest {
 				.findFirst();
 		assertTrue(shapeSlotOpt.isPresent(), "Shape slot should exist.");
 		assertTrue(shapeSlotOpt.get().get().isPresent(), "Shape slot should be filled.");
-		assertEquals(idFactory.of("forgero:pickaxe_head_shape"), shapeSlotOpt.get().get().get().id(), "Shape slot should contain concrete default_shape component (canonical ID).");
+		assertEquals(idFactory.of("forgero:pickaxe_head_shape"), shapeSlotOpt.get().get().get().id(), "Shape slot should contain concrete pickaxe_head_shape component (canonical ID).");
 	}
 
 	@Test
 	void testGeneratedToolExistsAndHasCorrectStructure() {
 		TaggedRegistry<Component> registry = initializer.getComponentRegistry();
-		// The ID of the generated tool combines the tool template name and the parts' names
-		OpenIdentifier ironPickaxeOakHandleId = idFactory.of("forgero:pickaxe-oak_handle-iron_pickaxe_head_shape_pickaxe_head");
-		OpenIdentifier ironPickaxeHeadId = idFactory.of("forgero:iron_pickaxe_head_shape_pickaxe_head");
+		// The ID of the generated tool now uses the template: forgero:{head.material.name}-pickaxe
+		OpenIdentifier ironPickaxeId = idFactory.of("forgero:iron-pickaxe");
+		OpenIdentifier ironPickaxeHeadId = idFactory.of("forgero:iron-pickaxe_head"); // ID of the generated head
 
-		Optional<Component> ironPickaxeOpt = registry.find(ironPickaxeOakHandleId);
-		assertTrue(ironPickaxeOpt.isPresent(), "Iron Pickaxe with Oak Handle should be generated and present. Available components: " + registry.all().stream().map(Component::id).map(OpenIdentifier::toString).collect(Collectors.joining(", ")));
+		Optional<Component> ironPickaxeOpt = registry.find(ironPickaxeId);
+		assertTrue(ironPickaxeOpt.isPresent(), "Iron Pickaxe should be generated and present. Available components: " + registry.all().stream().map(Component::id).map(OpenIdentifier::toString).collect(Collectors.joining(", ")));
 
 		Component ironPickaxe = ironPickaxeOpt.get();
 		assertInstanceOf(StructuredComponent.class, ironPickaxe, "Generated tool should be a StructuredComponent.");
@@ -168,13 +163,13 @@ class ForgeroDataInitializerTest extends ForgeroTest {
 
 		// Based on the provided test resources and the new architecture:
 		// - ToolTemplate: pickaxe_template (combinatorial head, default static_oak_handle)
-		// - Available Heads matching "forgero:parts/pickaxe_head_type": only "forgero:iron_default_shape_pickaxe_head" (generated from iron + default_shape + pickaxe_head_template)
+		// - Available Heads matching "forgero:parts/pickaxe_head_type": only "forgero:iron-pickaxe_head_shape" (generated from iron + pickaxe_head_shape + pickaxe_head_template)
 		// - Available Handles matching "forgero:parts/handle_type": only "forgero:static_oak_handle" (and it's explicitly defaulted)
 
-		// This means only one combination should be generated: iron_default_shape_pickaxe_head with static_oak_handle.
-		List<Component> pickaxes = registry.query(idFactory.of("forgero:pickaxe"));
-		assertEquals(1, pickaxes.size(), "Only one pickaxe variant (iron_default_shape_pickaxe_head-static_oak_handle) should be generated based on available parts and defaults. Found: " + pickaxes.stream().map(Component::id).map(OpenIdentifier::toString).collect(Collectors.joining(", ")));
-		assertEquals(idFactory.of("forgero:pickaxe-oak_handle-iron_pickaxe_head_shape_pickaxe_head"), pickaxes.get(0).id(), "The generated pickaxe ID should be as expected.");
+		// This means only one combination should be generated: iron-pickaxe_head_shape with static_oak_handle.
+		List<Component> pickaxes = registry.query(idFactory.of("forgero:tools/pickaxe"));
+		assertEquals(1, pickaxes.size(), "Only one pickaxe variant (iron-pickaxe) should be generated based on available parts and defaults. Found: " + pickaxes.stream().map(Component::id).map(OpenIdentifier::toString).collect(Collectors.joining(", ")));
+		assertEquals(idFactory.of("forgero:iron-pickaxe"), pickaxes.get(0).id(), "The generated pickaxe ID should be as expected.");
 	}
 
 	@Test
@@ -230,9 +225,9 @@ class ForgeroDataInitializerTest extends ForgeroTest {
 		OpenIdentifier defaultShapeId = idFactory.of("forgero:pickaxe_head_shape");
 
 		Optional<Component> shapeOpt = registry.find(defaultShapeId);
-		assertTrue(shapeOpt.isPresent(), "Default Shape should be registered.");
+		assertTrue(shapeOpt.isPresent(), "Pickaxe Head Shape should be registered.");
 		assertEquals(defaultShapeId, shapeOpt.get().id());
-		assertTrue(shapeOpt.get().getTags().contains(idFactory.of("forgero:pickaxe_head_shape")), registry.all().stream().map(Component::id).map(OpenIdentifier::toString).collect(Collectors.joining(", ")));
+		assertTrue(shapeOpt.get().getTags().contains(idFactory.of("forgero:pickaxe_head_shape")));
 
 		// Verify attributes from pickaxe_head_shape.json (which should contain the multipliers)
 		Resolver resolver = new ResolverEngine(List.of(new AttributeEngine()));
