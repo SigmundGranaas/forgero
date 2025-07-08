@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.sigmundgranaas.forgero.core.ForgeroTest;
-import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
+import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.core.component.slot.ComponentUpgrades;
@@ -33,7 +33,7 @@ class ComponentConstructionTest extends ForgeroTest {
 		var part = new StaticComponent(IRON_ID, Set.of(METAL_TAG), List.of(attribute(ATTACK_DAMAGE, 10)));
 		assertEquals(IRON_ID, part.id());
 		assertTrue(part.getTags().contains(METAL_TAG));
-		assertEquals(10, part.getProperties().stream().filter(Attribute.class::isInstance).map(Attribute.class::cast).findFirst().get().value());
+		assertEquals(10, part.getProperties().stream().filter(SimpleAttribute.class::isInstance).map(SimpleAttribute.class::cast).findFirst().get().value());
 	}
 
 	@Test
@@ -71,7 +71,7 @@ class ComponentConstructionTest extends ForgeroTest {
 	@Test
 	void testStaticEquipment() {
 		var equipment = new StaticEquipment(PICKAXE_ID, Set.of(), List.of(attribute(ATTACK_DAMAGE, 5)));
-		assertEquals(5, equipment.getProperties().stream().filter(Attribute.class::isInstance).map(Attribute.class::cast).findFirst().get().value());
+		assertEquals(5, equipment.getProperties().stream().filter(SimpleAttribute.class::isInstance).map(SimpleAttribute.class::cast).findFirst().get().value());
 	}
 
 	@Test

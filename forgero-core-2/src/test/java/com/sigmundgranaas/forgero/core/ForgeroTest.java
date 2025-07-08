@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core;
 
-import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
+import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.structure.StructureSlot;
 import com.sigmundgranaas.forgero.core.component.variant.StaticComponent;
@@ -87,7 +87,7 @@ public class ForgeroTest {
 		return new StructureSlot(id, type, "A slot", component);
 	}
 
-	public Attribute attribute(OpenIdentifier type, float value) {
-		return new Attribute(type, value);
+	public SimpleAttribute attribute(OpenIdentifier type, float value) {
+		return new SimpleAttribute(type, value);
 	}
 }

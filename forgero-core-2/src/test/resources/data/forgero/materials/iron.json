@@ -1,0 +1,19 @@
+{
+  "type": "forgero:material",
+  "name": "Iron",
+  "tags": ["forgero:materials/tool_material", "forgero:materials/metal"],
+  "attributes": [
+    {
+      "id": "forgero:iron-durability",
+      "type": "forgero:durability",
+      "composite": "forgero:part-composite",
+      "computation": 250
+    },
+    {
+      "id": "forgero:iron-mining_speed",
+      "type": "forgero:mining_speed",
+      "composite": "forgero:part-composite",
+      "computation": 5
+    }
+  ]
+}

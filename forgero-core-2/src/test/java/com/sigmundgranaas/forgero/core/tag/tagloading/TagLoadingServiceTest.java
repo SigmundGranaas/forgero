@@ -4,6 +4,7 @@ import com.sigmundgranaas.forgero.core.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.tags.api.Taggable;
 import com.sigmundgranaas.forgero.core.tags.engine.TagGraph;
+import com.sigmundgranaas.forgero.core.tags.engine.TagLoadingService;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -19,21 +20,23 @@ class TagLoadingServiceTest {
 		var factory = new IdentifierFactory.Builder().defaultNamespace("test-tags").build();
 		TagLoadingService service = new TagLoadingService(factory);
 
-		// The root path within 'data' from which to load tags
-		OpenIdentifier tagsRootPath = factory.of("tags");
+		// The root path within 'data' from which to load tags.
+		// The service will strip the "tags/" prefix from the generated OpenIdentifier.
+		OpenIdentifier tagsRootPath = factory.of("tags"); // This is the root for finding tag *files*
 
 		// Act: Load the graph from the test resources
 		TagGraph graph = service.loadTags(tagsRootPath);
 
-		// Assert: Test the loaded graph for correctness using canonical identifiers (no .json)
-		var oakId = factory.of("tags/oak");
-		var woodId = factory.of("tags/wood");
-		var materialId = factory.of("tags/material");
-		var metalId = factory.of("tags/metal");
-		var flammableId = factory.of("tags/flammable");
-		var metalToolMaterialId = factory.of("tags/metal-tool-material");
+		// Assert: Test the loaded graph for correctness using canonical identifiers (NO 'tags/' prefix).
+		// These IDs now represent the "clean" tags stored in the graph.
+		var oakId = factory.of("oak");
+		var woodId = factory.of("wood");
+		var materialId = factory.of("material");
+		var metalId = factory.of("metal");
+		var flammableId = factory.of("flammable");
+		var metalToolMaterialId = factory.of("metal-tool-material");
 
-		// Create Taggable test objects
+		// Create Taggable test objects (their internal tags must match the canonical IDs)
 		Taggable oakItem = () -> Set.of(oakId);
 		Taggable metalItem = () -> Set.of(metalId);
 

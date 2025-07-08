@@ -1,8 +1,10 @@
 package com.sigmundgranaas.forgero.core.property.context;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.Slot;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
+import com.sigmundgranaas.forgero.core.component.slot.UpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.structure.StructureSlot;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.property.condition.StaticCondition;
@@ -45,9 +47,16 @@ public class ResolutionContext {
 
 		if (current instanceof StructuredComponent structured) {
 			for (StructureSlot slot : structured.structure().slots()) {
-				Component child = slot.content();
-				slotMap.put(child, slot);
-				buildContextMaps(child, current, depth + 1);
+				slotMap.put(slot.content(), slot);
+				buildContextMaps(slot.content(), current, depth + 1);
+			}
+		}
+		if (current instanceof CustomizableComponent customizable) {
+			for (UpgradeSlot slot : customizable.upgrades().slots()) {
+				slot.content().ifPresent(child -> {
+					slotMap.put(child, slot);
+					buildContextMaps(child, current, depth + 1);
+				});
 			}
 		}
 	}
@@ -55,7 +64,7 @@ public class ResolutionContext {
 	/** @return The component that owns the property being checked. */
 	public Component self() { return self; }
 
-	/** @return The top-level component in the resolution tree. */
+	/** @return The top-group component in the resolution tree. */
 	public Component root() { return root; }
 
 	/** @return An Optional containing the Slot the 'self' component is contained within. Empty if 'self' is the root. */

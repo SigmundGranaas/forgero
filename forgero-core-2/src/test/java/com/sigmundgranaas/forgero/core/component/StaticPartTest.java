@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.core.component;
 
 import com.sigmundgranaas.forgero.core.component.variant.StaticComponent;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
+import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.property.api.Property;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +19,7 @@ class StaticPartTest {
 		// ARRANGE
 		OpenIdentifier id = new OpenIdentifier("forgero", "iron_ingot");
 		Set<OpenIdentifier> tags = Set.of(new OpenIdentifier("forgero", "metal"));
-		List<Property> properties = List.of(new Attribute(DURABILITY, 250f));
+		List<Property> properties = List.of(new SimpleAttribute(DURABILITY, 250f));
 
 		// ACT
 		StaticComponent part = new StaticComponent(id, tags, properties);

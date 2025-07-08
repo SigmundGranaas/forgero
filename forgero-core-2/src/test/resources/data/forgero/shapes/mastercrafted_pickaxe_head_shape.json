@@ -1,0 +1,19 @@
+{
+  "type": "forgero:shape",
+  "name": "Mastercrafted Pickaxe Head",
+  "tags": ["forgero:pickaxe_head_shape"],
+  "attributes": [
+    {
+      "id": "forgero:shape-durability-mult-master",
+      "type": "forgero:durability",
+      "composite": "forgero:part-composite",
+      "computation": { "multiply": 2.0 }
+    },
+    {
+      "id": "forgero:shape-mining_speed-mult-master",
+      "type": "forgero:mining_speed",
+      "composite": "forgero:part-composite",
+      "computation": { "multiply": 1.5 }
+    }
+  ]
+}

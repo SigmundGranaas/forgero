@@ -1,0 +1,19 @@
+{
+  "type": "forgero:part_template",
+  "name": "Pickaxe Head",
+  "tags": [
+    "forgero:parts/pickaxe_head_type"
+  ],
+  "structure": {
+    "id": "forgero:{material.name}-{shape.name}",
+    "slots": {
+      "material": {
+        "type": "forgero:tool_material",
+        "count": 1
+      },
+      "shape": {
+        "type": "forgero:pickaxe_head_shape"
+      }
+    }
+  }
+}

@@ -9,7 +9,7 @@ import java.util.Optional;
 
 /**
  * A service for performing immutable state changes on Forgero components.
- * This service provides a high-level API for operations like swapping parts,
+ * This service provides a high-group API for operations like swapping parts,
  * adding upgrades, or constructing tools, abstracting the underlying complexity
  * of reconstructing immutable component records.
  */

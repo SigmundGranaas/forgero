@@ -10,6 +10,7 @@ import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 import java.util.Map;
@@ -61,8 +62,8 @@ public class ResolverEngine implements Resolver {
 		// 2. Get the intermediate baked result, computing it only if not in the cache.
 		CacheKey cacheKey = new CacheKey(component, key.id());
 		Object bakedResult = bakedCache.get(cacheKey, k -> {
-			Stream<Component> componentStream = traverse(component);
-			return engine.bake(componentStream);
+			List<Component> componentStream = traverse(component);
+			return engine.bake(componentStream.stream());
 		});
 
 		// 3. Apply the context to the baked result to get the final result.
@@ -76,20 +77,20 @@ public class ResolverEngine implements Resolver {
 	 * @param component The root component to start traversal from.
 	 * @return A stream of all components in the tree.
 	 */
-	private Stream<Component> traverse(Component component) {
-		Stream.Builder<Component> builder = Stream.builder();
+	private List<Component> traverse(Component component) {
+		List<Component> allComponents = new ArrayList<>();
 		Deque<Component> stack = new ArrayDeque<>();
 		stack.push(component);
 
 		while (!stack.isEmpty()) {
 			Component current = stack.pop();
-			builder.add(current);
+			allComponents.add(current);
 			// Add children to the stack. Reverse them to maintain pre-order traversal.
 			List<Component> children = current.getChildren();
 			for (int i = children.size() - 1; i >= 0; i--) {
 				stack.push(children.get(i));
 			}
 		}
-		return builder.build();
+		return allComponents;
 	}
 }

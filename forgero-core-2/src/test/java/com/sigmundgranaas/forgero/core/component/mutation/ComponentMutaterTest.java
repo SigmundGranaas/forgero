@@ -1,9 +1,10 @@
-package com.sigmundgranaas.forgero.core.state;
+package com.sigmundgranaas.forgero.core.component.mutation;
 
 import com.sigmundgranaas.forgero.core.ForgeroTest;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.Slot;
 import com.sigmundgranaas.forgero.core.component.mutation.api.ComponentMutater;
+import com.sigmundgranaas.forgero.core.component.mutation.impl.ComponentMutaterImpl;
 import com.sigmundgranaas.forgero.core.component.slot.ComponentUpgrades;
 import com.sigmundgranaas.forgero.core.component.slot.UpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.structure.ComponentStructure;

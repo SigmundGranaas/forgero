@@ -98,7 +98,7 @@ public class TaggedRegistry<T extends Identifiable & Taggable> {
 
 			for (OpenIdentifier tag : resource.getTags()) {
 				if (!knownTags.contains(tag)) {
-					throw new IllegalArgumentException("Resource " + resource.id() + " contains tag " + tag + " which does not exist in the TagGraph.");
+					throw new IllegalArgumentException("Resource " + resource.id() + " contains tag " + tag + " which does not exist in the TagGraph. \n Available tags: " + knownTags);
 				}
 				tagIndex.computeIfAbsent(tag, k -> new HashSet<>()).add(resource.id());
 			}
