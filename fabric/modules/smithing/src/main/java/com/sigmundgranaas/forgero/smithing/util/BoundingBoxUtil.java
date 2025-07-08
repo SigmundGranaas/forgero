@@ -10,6 +10,11 @@ import org.apache.logging.log4j.Logger;
 public class BoundingBoxUtil {
 	private static final Logger LOGGER = LogManager.getLogger("ForgeroBoundingBoxUtil");
 
+	/**
+	 * Calculates the bounding box of non-transparent pixels in the image.
+	 * @param image the image to analyze
+	 * @return BoundingBox, or null if the image is fully transparent
+	 */
 	public BoundingBox calculateBoundingBox(BufferedImage image) {
 		if (image == null) {
 			throw new IllegalArgumentException("Image cannot be null.");
@@ -19,7 +24,7 @@ public class BoundingBoxUtil {
 		int minY = Integer.MAX_VALUE;
 		int maxX = Integer.MIN_VALUE;
 		int maxY = Integer.MIN_VALUE;
-		List<Point> validPixels = new ArrayList<>();
+		boolean found = false;
 
 		int width = image.getWidth();
 		int height = image.getHeight();
@@ -37,55 +42,66 @@ public class BoundingBoxUtil {
 					minY = Math.min(minY, y);
 					maxX = Math.max(maxX, x);
 					maxY = Math.max(maxY, y);
-
-					// Save the pixel position
-					validPixels.add(new Point(x, y));
+					found = true;
 				}
 			}
 		}
 
-		// If no non-transparent pixels were found, reset min/max to indicate an empty box
-		if (validPixels.isEmpty()) {
-			minX = 0; // Conventionally, 0 or any other consistent value
-			minY = 0;
-			maxX = -1; // Max X < Min X indicates no width
-			maxY = -1; // Max Y < Min Y indicates no height
+		// Early exit if no non-transparent pixels were found
+		if (!found) {
+			return null;
 		}
 
-		LOGGER.info("[BoundingBoxUtil] Calculated bounding box: minX={}, minY={}, maxX={}, maxY={}, validPixels={}", minX, minY, maxX, maxY, validPixels.size());
-		return new BoundingBox(minX, minY, maxX, maxY, validPixels);
+		return new BoundingBox(minX, minY, maxX, maxY);
 	}
 
-	public record BoundingBox(int minX, int minY, int maxX, int maxY, List<Point> validPixels) {
+	/**
+	 * Collects all non-transparent pixel positions in the image.
+	 * @param image the image to analyze
+	 * @return List of Points for all non-transparent pixels
+	 */
+	public List<Point> collectValidPixels(BufferedImage image) {
+		List<Point> validPixels = new ArrayList<>();
+		int width = image.getWidth();
+		int height = image.getHeight();
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				int pixel = image.getRGB(x, y);
+				int alpha = (pixel >> 24) & 0xFF;
+				if (alpha > 0) {
+					validPixels.add(new Point(x, y));
+				}
+			}
+		}
+		return validPixels;
+	}
 
+	public record BoundingBox(int minX, int minY, int maxX, int maxY) {
 		public int getWidth() {
-			if (validPixels.isEmpty()) {
+			if (maxX < minX) {
 				return 0;
 			}
 			return maxX - minX + 1;
 		}
 
-
 		public int getHeight() {
-			if (validPixels.isEmpty()) {
+			if (maxY < minY) {
 				return 0;
 			}
 			return maxY - minY + 1;
 		}
 
 		public int getVisualCenterX() {
-			if (validPixels.isEmpty()) {
+			if (maxX < minX) {
 				return 0;
 			}
-			// Improved: For even widths, center is (minX + maxX + 1) / 2
 			return (minX + maxX + 1) / 2;
 		}
 
 		public int getVisualCenterY() {
-			if (validPixels.isEmpty()) {
+			if (maxY < minY) {
 				return 0;
 			}
-			// Improved: For even heights, center is (minY + maxY + 1) / 2
 			return (minY + maxY + 1) / 2;
 		}
 
@@ -93,25 +109,16 @@ public class BoundingBoxUtil {
 			if (targetWidth <= 0 || targetHeight <= 0) {
 				throw new IllegalArgumentException("Target width and height must be positive.");
 			}
-
-			if (validPixels.isEmpty()) {
+			if (maxX < minX || maxY < minY) {
 				// If the image is entirely transparent, center the conceptual 'origin'
 				// within the target area.
 				return new Point(targetWidth / 2, targetHeight / 2);
 			}
-
-			// Calculate the target center relative to its own (0,0)
 			int targetCenterX = targetWidth / 2;
 			int targetCenterY = targetHeight / 2;
-
-			// The offset needed is the difference between the target center and
-			// the current visual center.
 			int offsetX = targetCenterX - getVisualCenterX();
 			int offsetY = targetCenterY - getVisualCenterY();
-
-			Point offset = new Point(offsetX, offsetY);
-			LOGGER.info("[BoundingBoxUtil] Centering offset for target {}x{}: {}", targetWidth, targetHeight, offset);
-			return offset;
+			return new Point(offsetX, offsetY);
 		}
 
 		public Point getCenteringOffset16x16() {
@@ -123,8 +130,10 @@ public class BoundingBoxUtil {
 	public static int[] getItemTextureOffsetFromImage(BufferedImage image) {
 		BoundingBoxUtil util = new BoundingBoxUtil();
 		BoundingBoxUtil.BoundingBox box = util.calculateBoundingBox(image);
+		if (box == null) {
+			return new int[] { 8, 8 };
+		}
 		Point offset = box.getCenteringOffset16x16();
-		LOGGER.info("[BoundingBoxUtil] getItemTextureOffsetFromImage: offset=({}, {})", offset.x, offset.y);
-		return new int[] { offset.x, 0};
+		return new int[] { offset.x, offset.y };
 	}
 }

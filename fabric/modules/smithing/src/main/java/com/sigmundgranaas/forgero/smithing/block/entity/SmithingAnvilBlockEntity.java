@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.smithing.block.entity;
 
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,10 +39,10 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.util.math.Direction;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -257,8 +256,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			}
 			BoundingBoxUtil util = new BoundingBoxUtil();
 			BoundingBoxUtil.BoundingBox box = util.calculateBoundingBox(image);
-			LOGGER.info("[SmithingAnvil] BoundingBox for {}: minX={}, minY={}, maxX={}, maxY={}, validPixels={}", resourceId, box.minX(), box.minY(), box.maxX(), box.maxY(), box.validPixels().size());
-			if (!box.validPixels().isEmpty()) {
+			int validPixelCount = util.collectValidPixels(image).size();
+			LOGGER.info("[SmithingAnvil] BoundingBox for {}: minX={}, minY={}, maxX={}, maxY={}, validPixels={}", resourceId, box.minX(), box.minY(), box.maxX(), box.maxY(), validPixelCount);
+			if (validPixelCount > 0) {
 				java.awt.Point offset = box.getCenteringOffset16x16();
 				LOGGER.info("[SmithingAnvil] Centering offset for {}: x={}, y={}", resourceId, offset.x, offset.y);
 
@@ -269,7 +269,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 				// Try up to 32 times to find a marker inside the anvil top layer
 				for (int attempt = 0; attempt < 32; attempt++) {
-					Point p = box.validPixels().get(random.nextInt(box.validPixels().size()));
+					java.util.List<java.awt.Point> validPixels = util.collectValidPixels(image);
+					java.awt.Point p = validPixels.get(random.nextInt(validPixels.size()));
 					int centeredX = p.x + offset.x;
 					int centeredY = p.y + offset.y;
 					centeredX = Math.max(0, Math.min(15, centeredX));
