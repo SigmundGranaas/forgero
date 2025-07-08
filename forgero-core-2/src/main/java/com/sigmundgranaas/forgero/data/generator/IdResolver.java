@@ -45,9 +45,9 @@ public class IdResolver {
 			return "";
 		}
 
-		Pattern pattern = Pattern.compile("\\{([^}]+)\\}"); // Matches {path.to.value}
+		Pattern pattern = Pattern.compile("\\{([^}]+)}"); // Matches {path.to.value}
 		Matcher matcher = pattern.matcher(idPattern);
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 
 		while (matcher.find()) {
 			String fullPath = matcher.group(1); // e.g., "material.name" or "head.material.name"

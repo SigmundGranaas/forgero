@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.data.v3.dto.condition;
 
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier; // Import OpenIdentifier
+import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 
 /**
  * DTO for predicates that check for the presence of a tag.
@@ -9,5 +9,5 @@ import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier; // Import 
  * @param type The type of predicate.
  * @param tag  The tag to check for.
  */
-public record TagMatchPredicateData(OpenIdentifier type, OpenIdentifier tag) implements PredicateData { // Changed type and tag from String
+public record TagMatchPredicateData(OpenIdentifier type, OpenIdentifier tag) implements PredicateData {
 }

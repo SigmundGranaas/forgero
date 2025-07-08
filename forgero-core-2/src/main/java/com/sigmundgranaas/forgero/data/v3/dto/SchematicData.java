@@ -1,13 +1,8 @@
 package com.sigmundgranaas.forgero.data.v3.dto;
 
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier; // Import OpenIdentifier
-import com.sigmundgranaas.forgero.data.v3.dto.attribute.AttributeData; // Added for map getters
-import com.sigmundgranaas.forgero.data.v3.dto.feature.FeatureData; // Added for map getters
+import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -22,21 +17,13 @@ import java.util.Map;
  * @param craftingMaterial The item ID consumed to make the craft (e.g., "minecraft:paper").
  */
 public record SchematicData(
-		OpenIdentifier type, // Changed from String
+		OpenIdentifier type,
 		String name,
 		@Nullable
-		List<OpenIdentifier> include, // Changed from List<String>
+		List<OpenIdentifier> include,
 		@Nullable
-		List<OpenIdentifier> tags, // Changed from List<String>
-		OpenIdentifier target, // Changed from String
-		String craftingMaterial // Remains String (Minecraft ID)
+		List<OpenIdentifier> tags,
+		OpenIdentifier target,
+		String craftingMaterial
 ) {
-	// Schematics typically don't contribute attributes/features for item resolution, so return empty maps.
-	public Map<OpenIdentifier, AttributeData> getAttributesMap() {
-		return Collections.emptyMap();
-	}
-
-	public Map<OpenIdentifier, FeatureData> getFeaturesMap() {
-		return Collections.emptyMap();
-	}
 }

@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.data.v3.dto.condition;
 
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier; // Import OpenIdentifier
+import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 
 /**
  * DTO for the "forgero:slot_contains" predicate.
@@ -10,6 +10,5 @@ import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier; // Import 
  * @param slot    The name of the slot to check (e.g., "handle", "gem").
  * @param tag     The tag that the component in the slot must possess.
  */
-// 'slot' remains String as it's a map key in ToolTemplateStructureData, not a Forgero ID.
 public record SlotContainsPredicateData(OpenIdentifier type, String slot, OpenIdentifier tag) implements PredicateData { // Changed type and tag from String
 }

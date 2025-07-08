@@ -10,7 +10,7 @@ public class StaticPartCodecs {
 
 	public static final Codec<StaticPartData> STATIC_PART_DATA_CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(
-					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(StaticPartData::type), // Changed to OpenIdentifierCodec
+					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(StaticPartData::type),
 					Codec.STRING.fieldOf("name").forGetter(StaticPartData::name),
 					Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("include").forGetter(data -> Optional.ofNullable(data.include())), // Changed to list of OpenIdentifierCodec
 					Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("tags").forGetter(data -> Optional.ofNullable(data.tags())), // Changed to list of OpenIdentifierCodec

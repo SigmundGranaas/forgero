@@ -11,7 +11,6 @@ import com.sigmundgranaas.forgero.data.v3.dto.template.EquipmentTemplateData;
 import com.sigmundgranaas.forgero.data.v3.dto.template.PartTemplateData;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;

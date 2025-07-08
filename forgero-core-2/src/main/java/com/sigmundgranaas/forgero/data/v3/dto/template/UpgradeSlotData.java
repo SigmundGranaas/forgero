@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.data.v3.dto.template;
 
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier; // Import OpenIdentifier
+import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -15,10 +15,10 @@ import java.util.List;
  * @param description Optional translatable description key for the slot.
  */
 public record UpgradeSlotData(
-		OpenIdentifier id, // Changed from String
-		OpenIdentifier type, // Changed from String
+		OpenIdentifier id,
+		OpenIdentifier type,
 		@Nullable
-		List<OpenIdentifier> tags, // Changed from List<String>
+		List<OpenIdentifier> tags,
 		@Nullable
 		Integer tier,
 		@Nullable

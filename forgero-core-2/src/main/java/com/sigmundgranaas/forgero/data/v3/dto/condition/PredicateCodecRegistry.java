@@ -2,8 +2,8 @@ package com.sigmundgranaas.forgero.data.v3.dto.condition;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
-import com.sigmundgranaas.forgero.data.v3.codec.CodecConstants; // Import CodecConstants
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier; // Import OpenIdentifier
+import com.sigmundgranaas.forgero.data.v3.codec.CodecConstants;
+import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,7 +16,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class PredicateCodecRegistry {
 	private static final Logger LOGGER = LogManager.getLogger(PredicateCodecRegistry.class);
-	// Changed map key from String to OpenIdentifier
 	private static final Map<OpenIdentifier, Codec<? extends PredicateData>> REGISTRY = new ConcurrentHashMap<>();
 
 	/**
@@ -25,8 +24,8 @@ public class PredicateCodecRegistry {
 	 * @param type  The unique identifier for the predicate type (e.g., "forgero:self_has_tag").
 	 * @param codec The codec responsible for parsing this predicate type.
 	 */
-	public static void register(String typeStr, Codec<? extends PredicateData> codec) { // Keep String for external registration
-		OpenIdentifier type = CodecConstants.IDENTIFIER_FACTORY.of(typeStr); // Convert to OpenIdentifier internally
+	public static void register(String typeStr, Codec<? extends PredicateData> codec) {
+		OpenIdentifier type = CodecConstants.IDENTIFIER_FACTORY.of(typeStr);
 		if (REGISTRY.containsKey(type)) {
 			LOGGER.warn("Overwriting predicate codec for type: {}", type);
 		}
@@ -39,8 +38,8 @@ public class PredicateCodecRegistry {
 	 * @param typeStr The type identifier of the codec to retrieve (as String).
 	 * @return A DataResult containing the codec if found, or an error if not.
 	 */
-	public static DataResult<Codec<? extends PredicateData>> get(String typeStr) { // Keep String for external lookup
-		OpenIdentifier type = CodecConstants.IDENTIFIER_FACTORY.of(typeStr); // Convert to OpenIdentifier internally
+	public static DataResult<Codec<? extends PredicateData>> get(String typeStr) {
+		OpenIdentifier type = CodecConstants.IDENTIFIER_FACTORY.of(typeStr);
 		Codec<? extends PredicateData> codec = REGISTRY.get(type);
 		if (codec == null) {
 			return DataResult.error(() -> "Unknown predicate type: " + type);

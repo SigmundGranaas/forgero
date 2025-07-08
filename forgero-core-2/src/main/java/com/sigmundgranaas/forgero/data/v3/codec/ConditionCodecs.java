@@ -51,8 +51,6 @@ public class ConditionCodecs {
 	public static final Codec<ConditionData> CONDITION_DATA_CODEC;
 
 	static {
-		// Register core predicate types.
-		// These codecs are private helpers within this class, so they can be defined here.
 
 		// TagMatchPredicateData (for self_has_tag, root_has_tag)
 		var tagMatchCodec = RecordCodecBuilder.<TagMatchPredicateData>create(instance ->

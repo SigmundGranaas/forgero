@@ -5,11 +5,7 @@ import com.sigmundgranaas.forgero.data.v3.dto.feature.FeatureData;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 
 /**
@@ -41,13 +37,4 @@ public record EquipmentTemplateData(
 		@Nullable
 		List<FeatureData> features
 ) {
-	public Map<OpenIdentifier, AttributeData> getAttributesMap() {
-		if (attributes == null) return Collections.emptyMap();
-		return attributes.stream().collect(Collectors.toMap(AttributeData::id, Function.identity(), (a1, a2) -> a2));
-	}
-
-	public Map<OpenIdentifier, FeatureData> getFeaturesMap() {
-		if (features == null) return Collections.emptyMap();
-		return features.stream().collect(Collectors.toMap(FeatureData::type, Function.identity(), (f1, f2) -> f2));
-	}
 }

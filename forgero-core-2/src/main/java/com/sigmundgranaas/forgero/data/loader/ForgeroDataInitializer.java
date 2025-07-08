@@ -18,7 +18,6 @@ import com.sigmundgranaas.forgero.data.mapper.ComponentMapper;
 import com.sigmundgranaas.forgero.data.processor.DataProcessor;
 import com.sigmundgranaas.forgero.data.processor.DataProcessorImpl;
 import com.sigmundgranaas.forgero.data.v3.codec.*;
-import com.sigmundgranaas.forgero.data.v3.dto.*;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceConverter;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceProvider;
 import com.sigmundgranaas.forgero.utility.resource.loader.implementation.ClassPathResourceProvider;
@@ -27,7 +26,6 @@ import com.sigmundgranaas.forgero.utility.resource.loader.implementation.Resourc
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;

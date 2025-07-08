@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.data.v3.dto.template;
 
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier; // Import OpenIdentifier
+import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -10,8 +10,8 @@ import org.jetbrains.annotations.Nullable;
  * @param defaultComponent The ID of a default component to use for this slot during combinatorial generation.
  */
 public record EquipmentTemplateSlotData(
-		OpenIdentifier type, // Changed from String
+		OpenIdentifier type,
 		@Nullable
-		OpenIdentifier defaultComponent // Changed from String
+		OpenIdentifier defaultComponent
 ) {
 }

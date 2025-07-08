@@ -22,8 +22,8 @@ import java.util.Set;
  */
 class DefinitionBuilder {
 	Set<OpenIdentifier> tags = new LinkedHashSet<>();
-	Map<OpenIdentifier, AttributeData> attributes = new HashMap<>(); // Keyed by attribute ID
-	Map<OpenIdentifier, FeatureData> features = new HashMap<>();     // Keyed by feature type
+	Map<OpenIdentifier, AttributeData> attributes = new HashMap<>();
+	Map<OpenIdentifier, FeatureData> features = new HashMap<>();
 
 	public DefinitionBuilder mergeTags(@Nullable List<OpenIdentifier> otherTags) {
 		if (otherTags != null) {
@@ -40,14 +40,14 @@ class DefinitionBuilder {
 
 	public DefinitionBuilder mergeAttributes(@Nullable List<AttributeData> otherAttributes) {
 		if (otherAttributes != null) {
-			otherAttributes.forEach(attr -> this.attributes.put(attr.id(), attr)); // Last one wins by ID
+			otherAttributes.forEach(attr -> this.attributes.put(attr.id(), attr));
 		}
 		return this;
 	}
 
 	public DefinitionBuilder mergeFeatures(@Nullable List<FeatureData> otherFeatures) {
 		if (otherFeatures != null) {
-			otherFeatures.forEach(feature -> this.features.put(feature.type(), feature)); // Last one wins by Type
+			otherFeatures.forEach(feature -> this.features.put(feature.type(), feature));
 		}
 		return this;
 	}

@@ -187,7 +187,7 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 			if (slotData.defaultComponent() != null) {
 				// If a default is specified, try to use it
 				PartWrapper defaultPart = allAvailableParts.get(slotData.defaultComponent());
-				if (defaultPart != null && tagGraph.isTagged(() -> defaultPart.tags(), slotData.type())) {
+				if (defaultPart != null && tagGraph.isTagged(defaultPart::tags, slotData.type())) {
 					potentialParts.add(defaultPart);
 				} else {
 					// Default component is invalid or missing, no combinations possible for this template
@@ -196,7 +196,7 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 			} else {
 				// If no default, find all parts matching the required slot type tag
 				potentialParts = allAvailableParts.values().stream()
-						.filter(part -> tagGraph.isTagged(() -> part.tags(), slotData.type()))
+						.filter(part -> tagGraph.isTagged(part::tags, slotData.type()))
 						.toList();
 				if (potentialParts.isEmpty()) {
 					// No compatible parts found for this combinatorial slot, no combinations possible

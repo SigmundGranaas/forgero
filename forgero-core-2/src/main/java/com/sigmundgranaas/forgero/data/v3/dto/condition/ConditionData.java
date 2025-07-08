@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.data.v3.dto.condition;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -11,5 +10,4 @@ import java.util.List;
  *                   or an array of objects.
  */
 public record ConditionData(List<PredicateData> predicates) {
-	public static final ConditionData EMPTY = new ConditionData(Collections.emptyList());
 }

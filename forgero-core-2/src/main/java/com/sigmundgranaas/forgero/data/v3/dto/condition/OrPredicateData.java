@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.data.v3.dto.condition;
 
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier; // Import OpenIdentifier
+import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import java.util.List;
 
 /**
@@ -10,5 +10,5 @@ import java.util.List;
  * @param type       The type of predicate, always "forgero:or".
  * @param predicates The list of predicates to logically OR.
  */
-public record OrPredicateData(OpenIdentifier type, List<PredicateData> predicates) implements PredicateData { // Changed type from String
+public record OrPredicateData(OpenIdentifier type, List<PredicateData> predicates) implements PredicateData {
 }
