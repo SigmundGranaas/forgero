@@ -5,9 +5,9 @@ import com.sigmundgranaas.forgero.core.data.definition.NormalizedState;
 import com.sigmundgranaas.forgero.core.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.tags.engine.TagGraph;
-import com.sigmundgranaas.forgero.data.v3.dto.attribute.AttributeData;
-import com.sigmundgranaas.forgero.data.v3.dto.feature.FeatureData;
-import com.sigmundgranaas.forgero.data.v3.dto.template.EquipmentTemplateSlotData;
+import com.sigmundgranaas.forgero.data.dto.attribute.AttributeData;
+import com.sigmundgranaas.forgero.data.dto.feature.FeatureData;
+import com.sigmundgranaas.forgero.data.dto.template.EquipmentTemplateSlotData;
 
 import java.util.*;
 import java.util.function.Function;

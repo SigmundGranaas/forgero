@@ -5,11 +5,11 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.data.v3.codec.MaterialCodecs;
-import com.sigmundgranaas.forgero.data.v3.codec.CodecConstants;
-import com.sigmundgranaas.forgero.data.v3.dto.MaterialData;
-import com.sigmundgranaas.forgero.data.v3.dto.attribute.AttributeData;
-import com.sigmundgranaas.forgero.data.v3.dto.feature.VeinMiningFeatureData;
+import com.sigmundgranaas.forgero.data.codec.MaterialCodecs;
+import com.sigmundgranaas.forgero.data.codec.CodecConstants;
+import com.sigmundgranaas.forgero.data.dto.MaterialData;
+import com.sigmundgranaas.forgero.data.dto.attribute.AttributeData;
+import com.sigmundgranaas.forgero.data.dto.feature.VeinMiningFeatureData;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

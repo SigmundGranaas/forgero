@@ -5,9 +5,15 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.data.v3.codec.ConditionCodecs;
-import com.sigmundgranaas.forgero.data.v3.codec.CodecConstants;
-import com.sigmundgranaas.forgero.data.v3.dto.condition.*;
+import com.sigmundgranaas.forgero.data.codec.ConditionCodecs;
+import com.sigmundgranaas.forgero.data.codec.CodecConstants;
+import com.sigmundgranaas.forgero.data.dto.condition.AndPredicateData;
+import com.sigmundgranaas.forgero.data.dto.condition.ConditionData;
+import com.sigmundgranaas.forgero.data.dto.condition.InSlotTypePredicateData;
+import com.sigmundgranaas.forgero.data.dto.condition.NotPredicateData;
+import com.sigmundgranaas.forgero.data.dto.condition.OrPredicateData;
+import com.sigmundgranaas.forgero.data.dto.condition.SlotContainsPredicateData;
+import com.sigmundgranaas.forgero.data.dto.condition.TagMatchPredicateData;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

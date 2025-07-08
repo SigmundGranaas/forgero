@@ -4,8 +4,8 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
-import com.sigmundgranaas.forgero.data.v3.codec.AttributeCodecs;
-import com.sigmundgranaas.forgero.data.v3.dto.attribute.ComputationData;
+import com.sigmundgranaas.forgero.data.codec.AttributeCodecs;
+import com.sigmundgranaas.forgero.data.dto.attribute.ComputationData;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

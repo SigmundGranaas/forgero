@@ -3,12 +3,12 @@ package com.sigmundgranaas.forgero.data.processor;
 import com.sigmundgranaas.forgero.core.data.definition.NormalizedState;
 import com.sigmundgranaas.forgero.core.data.definition.RawDefinition;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.data.v3.dto.MaterialData;
-import com.sigmundgranaas.forgero.data.v3.dto.SchematicData;
-import com.sigmundgranaas.forgero.data.v3.dto.ShapeData;
-import com.sigmundgranaas.forgero.data.v3.dto.StaticPartData;
-import com.sigmundgranaas.forgero.data.v3.dto.template.EquipmentTemplateData;
-import com.sigmundgranaas.forgero.data.v3.dto.template.PartTemplateData;
+import com.sigmundgranaas.forgero.data.dto.MaterialData;
+import com.sigmundgranaas.forgero.data.dto.SchematicData;
+import com.sigmundgranaas.forgero.data.dto.ShapeData;
+import com.sigmundgranaas.forgero.data.dto.StaticPartData;
+import com.sigmundgranaas.forgero.data.dto.template.EquipmentTemplateData;
+import com.sigmundgranaas.forgero.data.dto.template.PartTemplateData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;

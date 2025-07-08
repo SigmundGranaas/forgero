@@ -6,14 +6,14 @@ import com.sigmundgranaas.forgero.core.data.definition.NormalizedState;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.tags.engine.TagGraph;
 import com.sigmundgranaas.forgero.core.tags.engine.TagGraphBuilder;
-import com.sigmundgranaas.forgero.data.v3.codec.CodecConstants;
-import com.sigmundgranaas.forgero.data.v3.dto.attribute.AttributeData;
-import com.sigmundgranaas.forgero.data.v3.dto.attribute.AttributeDataImpl;
-import com.sigmundgranaas.forgero.data.v3.dto.attribute.ComputationData;
-import com.sigmundgranaas.forgero.data.v3.dto.template.EquipmentTemplateSlotData;
-import com.sigmundgranaas.forgero.data.v3.dto.template.EquipmentTemplateStructureData;
-import com.sigmundgranaas.forgero.data.v3.dto.template.PartTemplateStructureData;
-import com.sigmundgranaas.forgero.data.v3.dto.template.PartTemplateStructureSlotData;
+import com.sigmundgranaas.forgero.data.codec.CodecConstants;
+import com.sigmundgranaas.forgero.data.dto.attribute.AttributeData;
+import com.sigmundgranaas.forgero.data.dto.attribute.AttributeDataImpl;
+import com.sigmundgranaas.forgero.data.dto.attribute.ComputationData;
+import com.sigmundgranaas.forgero.data.dto.template.EquipmentTemplateSlotData;
+import com.sigmundgranaas.forgero.data.dto.template.EquipmentTemplateStructureData;
+import com.sigmundgranaas.forgero.data.dto.template.PartTemplateStructureData;
+import com.sigmundgranaas.forgero.data.dto.template.PartTemplateStructureSlotData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,8 +24,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.sigmundgranaas.forgero.data.v3.codec.AttributeCodecs.ADDITION_OPERATOR;
-import static com.sigmundgranaas.forgero.data.v3.codec.AttributeCodecs.MULTIPLICATION_OPERATOR;
+import static com.sigmundgranaas.forgero.data.codec.AttributeCodecs.ADDITION_OPERATOR;
+import static com.sigmundgranaas.forgero.data.codec.AttributeCodecs.MULTIPLICATION_OPERATOR;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ComponentGeneratorTest extends ForgeroTest {

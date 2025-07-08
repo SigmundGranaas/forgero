@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.data.processor;
 
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.data.v3.dto.attribute.AttributeData;
-import com.sigmundgranaas.forgero.data.v3.dto.feature.FeatureData;
+import com.sigmundgranaas.forgero.data.dto.attribute.AttributeData;
+import com.sigmundgranaas.forgero.data.dto.feature.FeatureData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

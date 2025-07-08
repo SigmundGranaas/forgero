@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.core.data.definition;
 
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.data.v3.dto.attribute.AttributeData;
-import com.sigmundgranaas.forgero.data.v3.dto.feature.FeatureData;
-import com.sigmundgranaas.forgero.data.v3.dto.template.UpgradeSlotData;
+import com.sigmundgranaas.forgero.data.dto.attribute.AttributeData;
+import com.sigmundgranaas.forgero.data.dto.feature.FeatureData;
+import com.sigmundgranaas.forgero.data.dto.template.UpgradeSlotData;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
