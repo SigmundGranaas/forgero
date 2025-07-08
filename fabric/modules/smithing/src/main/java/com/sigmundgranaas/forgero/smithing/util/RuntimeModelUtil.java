@@ -42,6 +42,7 @@ public class RuntimeModelUtil {
             }
             Identifier spriteId = textureSprite.getContents().getId();
             Identifier resourceId = new Identifier(spriteId.getNamespace(), "textures/" + spriteId.getPath() + ".png");
+            LOGGER.debug("[RuntimeModelUtil] Using texture resource: {} for itemStack: {}", resourceId, itemStack);
             try (InputStream stream = client.getResourceManager().getResource(resourceId).get().getInputStream()) {
                 return ImageIO.read(stream);
             }

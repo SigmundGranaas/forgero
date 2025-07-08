@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.imageio.ImageIO;
-
 import com.sigmundgranaas.forgero.core.state.Typed;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
@@ -23,8 +21,6 @@ import org.joml.Vector3f;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.texture.Sprite;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -37,7 +33,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec2f;
@@ -55,6 +50,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 	private @NotNull SimpleInventory inventory = new SimpleInventory(1);
 
+
+	// TODO: Items on anvil are vanishing after relogging into the world
 	private int hammerHits = 0;
 	private List<Vec2f> markerPositions = new ArrayList<>();
 	private List<Boolean> markerHits = new ArrayList<>();
@@ -228,72 +225,42 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	private Vec2f getRandomMarkerPosition(ItemStack stack) {
 		try {
 			MinecraftClient client = MinecraftClient.getInstance();
-			BakedModel model = client.getItemRenderer().getModel(stack, null, null, 0);
-			var quads = model.getQuads(null, null, client.world.getRandom());
-			java.util.Set<Identifier> loggedTextures = new java.util.HashSet<>();
-			Sprite textureSprite = null;
-			for (var quad : quads) {
-				Sprite quadSprite = quad.getSprite();
-				Identifier quadSpriteId = quadSprite.getContents().getId();
-				Identifier quadResourceId = new Identifier(quadSpriteId.getNamespace(), "textures/" + quadSpriteId.getPath() + ".png");
-				if (loggedTextures.add(quadResourceId)) {
-					LOGGER.info("[SmithingAnvil] Quad PNG resource: {}", quadResourceId);
-				}
-				if (textureSprite == null) {
-					textureSprite = quadSprite;
-				}
-			}
-			if (textureSprite == null) {
-				// Fallback to particle sprite
-				textureSprite = model.getParticleSprite();
-			}
-			Identifier spriteId = textureSprite.getContents().getId();
-			Identifier resourceId = new Identifier(spriteId.getNamespace(), "textures/" + spriteId.getPath() + ".png");
-			LOGGER.info("[SmithingAnvil] Using PNG resource for marker: {}", resourceId);
-			BufferedImage image;
-			try (java.io.InputStream stream = client.getResourceManager().getResource(resourceId).get().getInputStream()) {
-				image = ImageIO.read(stream);
+			BufferedImage image = com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil.getFirstQuadTextureImage(stack, client);
+			if (image == null) {
+				LOGGER.debug("[SmithingAnvil] getFirstQuadTextureImage returned null for stack: {}", stack);
+			} else {
+				LOGGER.debug("[SmithingAnvil] getFirstQuadTextureImage returned image: {}x{} for stack: {}", image.getWidth(), image.getHeight(), stack);
 			}
 			BoundingBoxUtil util = new BoundingBoxUtil();
-			BoundingBoxUtil.BoundingBox box = util.calculateBoundingBox(image);
-			int validPixelCount = util.collectValidPixels(image).size();
-			LOGGER.info("[SmithingAnvil] BoundingBox for {}: minX={}, minY={}, maxX={}, maxY={}, validPixels={}", resourceId, box.minX(), box.minY(), box.maxX(), box.maxY(), validPixelCount);
-			if (validPixelCount > 0) {
-				java.awt.Point offset = box.getCenteringOffset16x16();
-				LOGGER.info("[SmithingAnvil] Centering offset for {}: x={}, y={}", resourceId, offset.x, offset.y);
-
-				// Calculate the same offset as the renderer
-				int[] textureOffset = BoundingBoxUtil.getItemTextureOffsetFromImage(image);
-				float dx = textureOffset[0] / 16.0f;
-				float dz = textureOffset[1] / 16.0f;
-
-				// Try up to 32 times to find a marker inside the anvil top layer
-				for (int attempt = 0; attempt < 32; attempt++) {
-					java.util.List<java.awt.Point> validPixels = util.collectValidPixels(image);
-					java.awt.Point p = validPixels.get(random.nextInt(validPixels.size()));
-					int centeredX = p.x + offset.x;
-					int centeredY = p.y + offset.y;
-					centeredX = Math.max(0, Math.min(15, centeredX));
-					centeredY = Math.max(0, Math.min(15, centeredY));
-					float markerX = (centeredX + 0.5f) / 16.0f + dx;
-					float markerY = (centeredY + 0.5f) / 16.0f + dz;
-					// markerX = x, markerY = z (since marker is on top face)
-					if (isInsideAnvilTopLayer(markerX, markerY)) {
-						LOGGER.info("[SmithingAnvil] Marker pixel: ({}, {}), Centered: ({}, {}), Normalized: ({}, {}) [INSIDE]", p.x, p.y, centeredX, centeredY, markerX, markerY);
-						return new Vec2f(markerX, markerY);
-					} else {
-						LOGGER.info("[SmithingAnvil] Marker pixel: ({}, {}), Centered: ({}, {}), Normalized: ({}, {}) [OUTSIDE]", p.x, p.y, centeredX, centeredY, markerX, markerY);
-					}
-				}
-				// If none found, fallback to center with offset
-				return new Vec2f(0.5f + dx, 0.5f + dz);
-			} else {
-				LOGGER.warn("[SmithingAnvil] No valid pixels found in bounding box for {}", resourceId);
+			List<java.awt.Point> validPixels = util.collectValidPixels(image);
+			if (validPixels.isEmpty()) {
+				LOGGER.warn("[SmithingAnvil] No valid pixels found in image");
 				return new Vec2f(0.5f, 0.5f);
 			}
+
+			int[] textureOffset = BoundingBoxUtil.getItemTextureOffsetFromImage(image);
+			float dx = textureOffset[0] / 16.0f;
+			float dz = textureOffset[1] / 16.0f;
+			dx = Math.max(-3f/16f, Math.min(3f/16f, dx));
+			dz = Math.max(-3f/16f, Math.min(3f/16f, dz));
+
+			for (int attempt = 0; attempt < 32; attempt++) {
+				java.awt.Point p = validPixels.get(random.nextInt(validPixels.size()));
+				float normalizedX = (p.x + 0.5f) / 16.0f;
+				float normalizedY = (p.y + 0.5f) / 16.0f;
+				float markerX = normalizedX + dx;
+				float markerY = normalizedY + dz;
+				LOGGER.info("[SmithingAnvil][DEBUG] Attempt {}: Pixel=({}, {}), Normalized=({}, {}), Offset=({}, {}), Marker=({}, {})", attempt, p.x, p.y, normalizedX, normalizedY, dx, dz, markerX, markerY);
+				if (isInsideAnvilTopLayer(markerX, markerY)) {
+					LOGGER.info("[SmithingAnvil] Marker pixel: ({}, {}), Normalized: ({}, {}) [INSIDE]", p.x, p.y, markerX, markerY);
+					LOGGER.info("[SmithingAnvil] (tick) Generated marker at: ({}, {})", markerX, markerY);
+					return new Vec2f(markerX, markerY);
+				}
+			}
+			LOGGER.warn("[SmithingAnvil][DEBUG] No valid marker found after 32 attempts. Falling back to center with offset: ({}, {})", 0.5f + dx, 0.5f + dz);
+			return new Vec2f(0.5f + dx, 0.5f + dz);
 		} catch (Exception e) {
 			LOGGER.error("[SmithingAnvil] Error generating marker position: ", e);
-			// fallback: center
 			return new Vec2f(0.5f, 0.5f);
 		}
 	}
