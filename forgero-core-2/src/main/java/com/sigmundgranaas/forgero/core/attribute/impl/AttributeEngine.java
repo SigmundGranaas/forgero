@@ -32,6 +32,15 @@ public class AttributeEngine implements DataTypeEngine<List<Attribute>, Attribut
 	private final AttributeBakingStrategy defaultBakingStrategy = new DefaultBakingStrategyImpl();
 	private final AttributeBakingStrategy compositeBakingStrategy = new CompositeAttributeBakingStrategy();
 
+	private final boolean ignoreComponents;
+
+	public AttributeEngine() {
+		ignoreComponents = true;
+	}
+
+	public AttributeEngine(boolean ignoreComponents) {
+		this.ignoreComponents = ignoreComponents;
+	}
 
 	@Override
 	public ResolutionKey<AttributeQueryResult> key() {

@@ -1,0 +1,19 @@
+{
+  "type": "forgero:shape",
+  "name": "Pickaxe Head Shape",
+  "tags": ["forgero:pickaxe_head_shape"],
+  "attributes": [
+    {
+      "id": "forgero:shape-durability-mult",
+      "type": "forgero:durability",
+      "composite": "forgero:part-composite",
+      "computation": { "multiply": 1.5 }
+    },
+    {
+      "id": "forgero:shape-mining_speed-mult",
+      "type": "forgero:mining_speed",
+      "composite": "forgero:part-composite",
+      "computation": { "multiply": 1.2 }
+    }
+  ]
+}

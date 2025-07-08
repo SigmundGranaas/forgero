@@ -6,8 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.sigmundgranaas.forgero.data.v3.dto.condition.*; // Import all new DTOs
-// Removed unused import: import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.data.v3.dto.condition.*;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.data.v3.dto;
+package com.sigmundgranaas.forgero.data.v3.dto.template;
 
 /**
  * DTO for the 'naming' block within a PartTemplateData.

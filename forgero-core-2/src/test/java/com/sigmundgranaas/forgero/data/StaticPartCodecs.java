@@ -7,7 +7,6 @@ import com.sigmundgranaas.forgero.data.v3.codec.StaticPartCodecs;
 import com.sigmundgranaas.forgero.data.v3.codec.CodecConstants; // Added import
 import com.sigmundgranaas.forgero.data.v3.dto.StaticPartData;
 import com.sigmundgranaas.forgero.data.v3.dto.attribute.AttributeData;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

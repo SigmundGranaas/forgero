@@ -4,6 +4,8 @@ package com.sigmundgranaas.forgero.data.v3.dto;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.v3.dto.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.v3.dto.feature.FeatureData;
+import com.sigmundgranaas.forgero.data.v3.dto.template.EquipmentTemplateStructureData;
+import com.sigmundgranaas.forgero.data.v3.dto.template.UpgradeSlotData;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -22,7 +24,7 @@ public record GeneratedEquipmentData(
 		String name,
 		@Nullable
 		List<OpenIdentifier> tags,
-		ToolTemplateStructureData structure, // Contains concrete part IDs
+		EquipmentTemplateStructureData structure, // Contains concrete part IDs
 		@Nullable
 		List<UpgradeSlotData> upgrades,
 		@Nullable

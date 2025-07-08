@@ -6,23 +6,12 @@
     "material": {
       "type": "forgero:tool_material",
       "count": 1
+    },
+    "shape": {
+      "type": "forgero:pickaxe_head_shape"
     }
   },
   "naming": {
-    "pattern": "{material_name} {part_template_name}"
-  },
-  "attributes": [
-    {
-      "id": "forgero:template-durability-composite",
-      "type": "forgero:durability",
-      "composite": "forgero:part-composite",
-      "computation": { "multiply": 1.5 }
-    },
-    {
-      "id": "forgero:template-mining_speed-composite",
-      "type": "forgero:mining_speed",
-      "composite": "forgero:material-mining_speed",
-      "computation": { "multiply": 1.2 }
-    }
-  ]
+    "pattern": "{material_name} {shape_name} {part_template_name}"
+  }
 }

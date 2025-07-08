@@ -5,6 +5,8 @@ import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.tags.api.Taggable; // Import Taggable
 import com.sigmundgranaas.forgero.data.v3.dto.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.v3.dto.feature.FeatureData;
+import com.sigmundgranaas.forgero.data.v3.dto.template.PartTemplateData;
+import com.sigmundgranaas.forgero.data.v3.dto.template.EquipmentTemplateData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set; // Import Set
-import java.util.stream.Collectors;
 
 
 /**
@@ -57,7 +58,7 @@ public record IdentifiedTopLevelData(
 	public OpenIdentifier type() {
 		if (data instanceof MaterialData m) return m.type();
 		if (data instanceof PartTemplateData p) return p.type();
-		if (data instanceof ToolTemplateData t) return t.type();
+		if (data instanceof EquipmentTemplateData t) return t.type();
 		if (data instanceof SchematicData s) return s.type();
 		if (data instanceof StaticPartData sp) return sp.type();
 		if (data instanceof GeneratedEquipmentData ge) return ge.type();
@@ -70,7 +71,7 @@ public record IdentifiedTopLevelData(
 	public String name() {
 		if (data instanceof MaterialData m) return m.name();
 		if (data instanceof PartTemplateData p) return p.name();
-		if (data instanceof ToolTemplateData t) return t.name();
+		if (data instanceof EquipmentTemplateData t) return t.name();
 		if (data instanceof SchematicData s) return s.name();
 		if (data instanceof StaticPartData sp) return sp.name();
 		if (data instanceof GeneratedEquipmentData ge) return ge.name();
@@ -82,7 +83,7 @@ public record IdentifiedTopLevelData(
 	public @Nullable List<OpenIdentifier> include() {
 		if (data instanceof MaterialData m) return m.include();
 		if (data instanceof PartTemplateData p) return p.include();
-		if (data instanceof ToolTemplateData t) return t.include();
+		if (data instanceof EquipmentTemplateData t) return t.include();
 		if (data instanceof SchematicData s) return s.include();
 		if (data instanceof StaticPartData sp) return sp.include();
 		return null;
@@ -94,7 +95,7 @@ public record IdentifiedTopLevelData(
 		// all merged tags from includes and the current DTO.
 		if (data instanceof MaterialData m && m.tags() != null) return new HashSet<>(m.tags());
 		if (data instanceof PartTemplateData p && p.tags() != null) return new HashSet<>(p.tags());
-		if (data instanceof ToolTemplateData t && t.tags() != null) return new HashSet<>(t.tags());
+		if (data instanceof EquipmentTemplateData t && t.tags() != null) return new HashSet<>(t.tags());
 		if (data instanceof SchematicData s && s.tags() != null) return new HashSet<>(s.tags());
 		if (data instanceof StaticPartData sp && sp.tags() != null) return new HashSet<>(sp.tags());
 		if (data instanceof GeneratedPartData gp && gp.tags() != null) return new HashSet<>(gp.tags());
@@ -116,7 +117,7 @@ public record IdentifiedTopLevelData(
 	public @Nullable List<AttributeData> attributes() {
 		if (data instanceof MaterialData m) return m.attributes();
 		if (data instanceof PartTemplateData p) return p.attributes();
-		if (data instanceof ToolTemplateData t) return t.attributes();
+		if (data instanceof EquipmentTemplateData t) return t.attributes();
 		if (data instanceof StaticPartData sp) return sp.attributes();
 		if (data instanceof GeneratedPartData gp) return gp.attributes();
 		if (data instanceof GeneratedEquipmentData ge) return ge.attributes();
@@ -127,7 +128,7 @@ public record IdentifiedTopLevelData(
 	public @Nullable List<FeatureData> features() {
 		if (data instanceof MaterialData m) return m.features();
 		if (data instanceof PartTemplateData p) return p.features();
-		if (data instanceof ToolTemplateData t) return t.features();
+		if (data instanceof EquipmentTemplateData t) return t.features();
 		if (data instanceof StaticPartData sp) return sp.features();
 		if (data instanceof GeneratedPartData gp) return gp.features();
 		if (data instanceof GeneratedEquipmentData ge) return ge.features();
@@ -138,7 +139,7 @@ public record IdentifiedTopLevelData(
 	public Map<OpenIdentifier, AttributeData> getAttributesMap() {
 		if (data instanceof MaterialData m) return m.getAttributesMap();
 		if (data instanceof PartTemplateData p) return p.getAttributesMap();
-		if (data instanceof ToolTemplateData t) return t.getAttributesMap();
+		if (data instanceof EquipmentTemplateData t) return t.getAttributesMap();
 		if (data instanceof StaticPartData sp) return sp.getAttributesMap();
 		if (data instanceof GeneratedPartData gp) return gp.getAttributesMap();
 		if (data instanceof GeneratedEquipmentData ge) return ge.getAttributesMap();
@@ -149,7 +150,7 @@ public record IdentifiedTopLevelData(
 	public Map<OpenIdentifier, FeatureData> getFeaturesMap() {
 		if (data instanceof MaterialData m) return m.getFeaturesMap();
 		if (data instanceof PartTemplateData p) return p.getFeaturesMap();
-		if (data instanceof ToolTemplateData t) return t.getFeaturesMap();
+		if (data instanceof EquipmentTemplateData t) return t.getFeaturesMap();
 		if (data instanceof StaticPartData sp) return sp.getFeaturesMap();
 		if (data instanceof GeneratedPartData gp) return gp.getFeaturesMap();
 		if (data instanceof GeneratedEquipmentData ge) return ge.getFeaturesMap();

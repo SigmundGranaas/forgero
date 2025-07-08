@@ -2,14 +2,13 @@ package com.sigmundgranaas.forgero.data.v3.codec;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.sigmundgranaas.forgero.data.v3.dto.PartTemplateData;
-import com.sigmundgranaas.forgero.data.v3.dto.PartTemplateNamingData;
-import com.sigmundgranaas.forgero.data.v3.dto.PartTemplateStructureData;
-import com.sigmundgranaas.forgero.data.v3.dto.PartTemplateStructureMaterialData;
-import com.sigmundgranaas.forgero.data.v3.dto.UpgradeSlotData;
+import com.sigmundgranaas.forgero.data.v3.dto.template.PartTemplateData;
+import com.sigmundgranaas.forgero.data.v3.dto.template.PartTemplateNamingData;
+import com.sigmundgranaas.forgero.data.v3.dto.template.PartTemplateStructureData;
+import com.sigmundgranaas.forgero.data.v3.dto.template.PartTemplateStructureSlotData;
+import com.sigmundgranaas.forgero.data.v3.dto.template.UpgradeSlotData;
 // Removed unused import: import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 
-import java.util.List;
 import java.util.Optional;
 
 public class PartTemplateCodecs {
@@ -24,17 +23,18 @@ public class PartTemplateCodecs {
 			).apply(instance, (id, type, tags, tier, description) ->
 					new UpgradeSlotData(id, type, tags.orElse(null), tier.orElse(null), description.orElse(null))));
 
-	public static final Codec<PartTemplateStructureMaterialData> PART_TEMPLATE_STRUCTURE_MATERIAL_DATA_CODEC = RecordCodecBuilder.create(instance ->
+	public static final Codec<PartTemplateStructureSlotData> PART_TEMPLATE_STRUCTURE_MATERIAL_DATA_CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(
-					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(PartTemplateStructureMaterialData::type), // Changed to OpenIdentifierCodec
-					Codec.INT.fieldOf("count").forGetter(PartTemplateStructureMaterialData::count),
+					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(PartTemplateStructureSlotData::type), // Changed to OpenIdentifierCodec
+					Codec.INT.optionalFieldOf("count").forGetter(data -> Optional.of(data.count())),
 					Codec.STRING.optionalFieldOf("description").forGetter(data -> Optional.ofNullable(data.description()))
 			).apply(instance, (type, count, description) ->
-					new PartTemplateStructureMaterialData(type, count, description.orElse(null))));
+					new PartTemplateStructureSlotData(type, count.orElse(0), description.orElse(null))));
 
 	public static final Codec<PartTemplateStructureData> PART_TEMPLATE_STRUCTURE_DATA_CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(
-					PART_TEMPLATE_STRUCTURE_MATERIAL_DATA_CODEC.fieldOf("material").forGetter(PartTemplateStructureData::material)
+					PART_TEMPLATE_STRUCTURE_MATERIAL_DATA_CODEC.fieldOf("material").forGetter(PartTemplateStructureData::material),
+					PART_TEMPLATE_STRUCTURE_MATERIAL_DATA_CODEC.fieldOf("shape").forGetter(PartTemplateStructureData::shape)
 			).apply(instance, PartTemplateStructureData::new));
 
 	public static final Codec<PartTemplateNamingData> PART_TEMPLATE_NAMING_DATA_CODEC = RecordCodecBuilder.create(instance ->

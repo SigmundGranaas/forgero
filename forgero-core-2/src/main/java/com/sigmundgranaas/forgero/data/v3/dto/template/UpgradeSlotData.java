@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.data.v3.dto;
+package com.sigmundgranaas.forgero.data.v3.dto.template;
 
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier; // Import OpenIdentifier
 import org.jetbrains.annotations.Nullable;

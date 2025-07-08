@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.data.v3.dto;
+package com.sigmundgranaas.forgero.data.v3.dto.template;
 
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier; // Import OpenIdentifier
 import org.jetbrains.annotations.Nullable;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
  * @param type    The type tag of component accepted by this slot (e.g., "forgero:pickaxe_head").
  * @param defaultComponent The ID of a default component to use for this slot during combinatorial generation.
  */
-public record ToolTemplateSlotData(
+public record EquipmentTemplateSlotData(
 		OpenIdentifier type, // Changed from String
 		@Nullable
 		OpenIdentifier defaultComponent // Changed from String

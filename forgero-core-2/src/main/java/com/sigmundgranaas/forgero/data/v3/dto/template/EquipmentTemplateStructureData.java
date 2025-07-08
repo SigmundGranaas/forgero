@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.data.v3.dto;
+package com.sigmundgranaas.forgero.data.v3.dto.template;
 
 import java.util.Map;
 
@@ -9,7 +9,7 @@ import java.util.Map;
  *
  * @param slots A map where keys are slot names and values are ToolTemplateSlotData.
  */
-public record ToolTemplateStructureData(
-		Map<String, ToolTemplateSlotData> slots
+public record EquipmentTemplateStructureData(
+		Map<String, EquipmentTemplateSlotData> slots
 ) {
 }

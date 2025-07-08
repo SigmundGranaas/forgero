@@ -5,8 +5,8 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.data.v3.codec.PartTemplateCodecs;
 import com.sigmundgranaas.forgero.data.v3.codec.CodecConstants; // Added import
-import com.sigmundgranaas.forgero.data.v3.dto.PartTemplateData;
-import com.sigmundgranaas.forgero.data.v3.dto.UpgradeSlotData;
+import com.sigmundgranaas.forgero.data.v3.dto.template.PartTemplateData;
+import com.sigmundgranaas.forgero.data.v3.dto.template.UpgradeSlotData;
 import com.sigmundgranaas.forgero.data.v3.dto.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.v3.dto.feature.VeinMiningFeatureData;
 import org.junit.jupiter.api.Test;
@@ -28,6 +28,11 @@ class PartTemplateDataCodecTest {
 				      "type": "forgero:tool_material",
 				      "count": 3,
 				      "description": "The primary material of the pickaxe head."
+				    },
+				     "shape": {
+				      "type": "forgero:pickaxe_head_shape",
+				      "count": 1,
+				      "description": "The shape of the pickaxe head."
 				    }
 				  },
 				  "upgrades": [
@@ -145,7 +150,11 @@ class PartTemplateDataCodecTest {
 				    "material": {
 				      "type": "forgero:material",
 				      "count": 1
-				    }
+				    },
+				    "shape": {
+					 "type": "forgero:shape",
+					 "count": 1
+				  	}
 				  }
 				}
 				""";

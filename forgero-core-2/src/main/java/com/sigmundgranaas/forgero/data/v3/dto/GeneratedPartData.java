@@ -3,6 +3,8 @@ package com.sigmundgranaas.forgero.data.v3.dto;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.v3.dto.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.v3.dto.feature.FeatureData;
+import com.sigmundgranaas.forgero.data.v3.dto.template.PartTemplateStructureData;
+import com.sigmundgranaas.forgero.data.v3.dto.template.UpgradeSlotData;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;

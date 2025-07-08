@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.data.v3.dto;
+package com.sigmundgranaas.forgero.data.v3.dto.template;
 
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier; // Import OpenIdentifier
 import org.jetbrains.annotations.Nullable;
@@ -10,8 +10,8 @@ import org.jetbrains.annotations.Nullable;
  * @param count       The quantity of the material required.
  * @param description Optional description for this material requirement.
  */
-public record PartTemplateStructureMaterialData(
-		OpenIdentifier type, // Changed from String
+public record PartTemplateStructureSlotData(
+		OpenIdentifier type,
 		int count,
 		@Nullable
 		String description

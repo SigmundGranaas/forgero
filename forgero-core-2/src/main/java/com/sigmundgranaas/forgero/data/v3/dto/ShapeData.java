@@ -1,8 +1,9 @@
+// src/main/java/com/sigmundgranaas/forgero/data/v3/dto/ShapeData.java
 package com.sigmundgranaas.forgero.data.v3.dto;
 
+import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.v3.dto.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.v3.dto.feature.FeatureData;
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -11,30 +12,24 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-
 /**
- * DTO for `forgero:tool_template` type data files.
- * Defines the structure of a complete tool.
+ * DTO for `forgero:shape` type data files.
+ * Defines a geometric shape that can be combined with a material to form a part.
  *
- * @param type       The type identifier, always "forgero:tool_template".
- * @param name       The unique name of the tool template.
+ * @param type       The type identifier, always "forgero:shape".
+ * @param name       The unique name of the shape.
  * @param include    Optional list of IDs of other definitions to include.
- * @param tags       Optional list of tags associated with the tool template.
- * @param structure  Defines the required parts for tool assembly.
- * @param upgrades   Optional list of tool-group upgrade slots.
- * @param attributes Optional list of attributes inherent to this tool template.
- * @param features   Optional list of features inherent to this tool template.
+ * @param tags       Optional list of tags associated with the shape.
+ * @param attributes Optional list of attributes provided by this shape.
+ * @param features   Optional list of features provided by this shape.
  */
-public record ToolTemplateData(
-		OpenIdentifier type, // Changed from String
+public record ShapeData(
+		OpenIdentifier type,
 		String name,
 		@Nullable
-		List<OpenIdentifier> include, // Changed from List<String>
+		List<OpenIdentifier> include,
 		@Nullable
-		List<OpenIdentifier> tags, // Changed from List<String>
-		ToolTemplateStructureData structure,
-		@Nullable
-		List<UpgradeSlotData> upgrades,
+		List<OpenIdentifier> tags,
 		@Nullable
 		List<AttributeData> attributes,
 		@Nullable

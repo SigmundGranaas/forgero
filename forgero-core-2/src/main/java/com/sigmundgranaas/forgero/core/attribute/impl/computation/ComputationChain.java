@@ -16,7 +16,7 @@ import java.util.function.Predicate;
  * <p>
  * The sorting logic is applied upon construction to optimize computation.
  */
-public record ComputationChain(List<? extends Attribute> orderedAttributes) {
+public record ComputationChain(List<? extends Attribute> orderedAttributes, boolean ignoreComponent) {
 
 	/**
 	 * Constructs a computation chain from a list of attributes that are already
@@ -26,15 +26,24 @@ public record ComputationChain(List<? extends Attribute> orderedAttributes) {
 	 * @param orderedAttributes The list of contextually-active attributes to be computed.
 	 */
 	public ComputationChain(List<? extends Attribute> orderedAttributes) {
+		this(orderedAttributes, true);
+	}
+
+	public ComputationChain(List<? extends Attribute> orderedAttributes, boolean ignoreComponent) {
 		this.orderedAttributes = orderedAttributes.stream()
 				.filter(notComponent())
 				.sorted(Comparator.comparingInt(Attribute::group)
 						.thenComparingInt(attr -> attr.operator().order()))
 				.toList();
+		this.ignoreComponent = ignoreComponent;
 	}
 
-	public static Predicate<Attribute> notComponent(){
-		return (attribute) -> !(attribute instanceof AttributeComponent);
+	private Predicate<Attribute> notComponent(){
+		if(ignoreComponent){
+			return (attribute) -> !(attribute instanceof AttributeComponent);
+		} else {
+			return   (attribute) -> true;
+		}
 	}
 
 	/**

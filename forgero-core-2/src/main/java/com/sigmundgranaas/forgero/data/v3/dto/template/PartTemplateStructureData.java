@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.data.v3.dto;
+package com.sigmundgranaas.forgero.data.v3.dto.template;
 
 /**
  * DTO for the 'structure' block within a PartTemplateData.
@@ -7,6 +7,7 @@ package com.sigmundgranaas.forgero.data.v3.dto;
  * @param material The primary material requirement for the part.
  */
 public record PartTemplateStructureData(
-		PartTemplateStructureMaterialData material
+		PartTemplateStructureSlotData material,
+		PartTemplateStructureSlotData shape
 ) {
 }

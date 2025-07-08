@@ -1,58 +1,127 @@
 package com.sigmundgranaas.forgero.data.processor;
 
+import com.sigmundgranaas.forgero.core.data.definition.NormalizedState;
+import com.sigmundgranaas.forgero.core.data.definition.RawDefinition;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.data.v3.dto.IdentifiedTopLevelData; // NEW: Use the wrapper
 import com.sigmundgranaas.forgero.data.v3.dto.MaterialData;
-import com.sigmundgranaas.forgero.data.v3.dto.PartTemplateData;
 import com.sigmundgranaas.forgero.data.v3.dto.SchematicData;
+import com.sigmundgranaas.forgero.data.v3.dto.ShapeData;
 import com.sigmundgranaas.forgero.data.v3.dto.StaticPartData;
-import com.sigmundgranaas.forgero.data.v3.dto.ToolTemplateData;
-import com.sigmundgranaas.forgero.data.v3.dto.TopLevelData;
-import com.sigmundgranaas.forgero.data.v3.dto.attribute.AttributeData;
-import com.sigmundgranaas.forgero.data.v3.dto.feature.FeatureData;
+import com.sigmundgranaas.forgero.data.v3.dto.template.EquipmentTemplateData;
+import com.sigmundgranaas.forgero.data.v3.dto.template.PartTemplateData;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 public class DataProcessorImpl implements DataProcessor {
 
-	// Cache for already processed definitions to prevent redundant work and detect cycles
-	private final Map<OpenIdentifier, TopLevelData> processedCache = new HashMap<>();
-	// The raw data provided as input
-	private Map<OpenIdentifier, TopLevelData> rawSourceData; // Now expects IdentifiedTopLevelData wrapped DTOs
+	// Cache for already processed DefinitionBuilders to prevent redundant work and detect cycles
+	private final Map<OpenIdentifier, DefinitionBuilder.MergedProperties> processedCache = new HashMap<>();
 	// Stack to detect cyclic dependencies during processing
 	private final Set<OpenIdentifier> recursionStack = new HashSet<>();
+	// The raw data provided as input for the current processing run
+	private Map<OpenIdentifier, RawDefinition> rawSourceData;
 
 	@Override
-	public Map<OpenIdentifier, TopLevelData> process(@NotNull Map<OpenIdentifier, TopLevelData> rawData) {
-		this.rawSourceData = rawData; // Input is already wrapped in IdentifiedTopLevelData
+	public NormalizedState normalize(@NotNull Map<OpenIdentifier, RawDefinition> rawDefinitions) {
+		this.rawSourceData = rawDefinitions;
 		processedCache.clear();
 		recursionStack.clear(); // Ensure clean state for each new processing call
 
-		// Process each top-group definition that exists in the raw data
-		rawData.keySet().forEach(this::processDefinition);
+		Map<OpenIdentifier, NormalizedState.NormalizedMaterial> normalizedMaterials = new HashMap<>();
+		Map<OpenIdentifier, NormalizedState.NormalizedShape> normalizedShapes = new HashMap<>();
+		Map<OpenIdentifier, NormalizedState.NormalizedSchematic> normalizedSchematics = new HashMap<>();
+		Map<OpenIdentifier, NormalizedState.NormalizedPartTemplate> normalizedPartTemplates = new HashMap<>();
+		Map<OpenIdentifier, NormalizedState.NormalizedEquipmentTemplate> normalizedEquipmentTemplates = new HashMap<>();
+		Map<OpenIdentifier, NormalizedState.NormalizedStaticPart> normalizedStaticParts = new HashMap<>();
 
-		return Map.copyOf(processedCache);
+
+		for (RawDefinition rawDef : rawDefinitions.values()) {
+			OpenIdentifier id = rawDef.id();
+			DefinitionBuilder.MergedProperties mergedProps = resolveAndMergePropertiesRecursive(id);
+
+			// Now, create the specific NormalizedX record based on the original DTO type
+			Object originalDto = rawDef.data();
+			if (originalDto instanceof MaterialData m) {
+				normalizedMaterials.put(id, new NormalizedState.NormalizedMaterial(
+						id,
+						m.name(),
+						mergedProps.tags() != null ? mergedProps.tags() : new HashSet<>(),
+						mergedProps.attributes(),
+						mergedProps.features()
+				));
+			} else if (originalDto instanceof ShapeData s) { // NEW: Handle ShapeData
+				normalizedShapes.put(id, new NormalizedState.NormalizedShape(
+						id,
+						s.name(),
+						mergedProps.tags() != null ? mergedProps.tags() : new HashSet<>(),
+						mergedProps.attributes(),
+						mergedProps.features()
+				));
+			} else if (originalDto instanceof SchematicData s) {
+				normalizedSchematics.put(id, new NormalizedState.NormalizedSchematic(
+						id,
+						s.name(),
+						s.target(),
+						s.craftingMaterial(),
+						mergedProps.tags() != null ? mergedProps.tags() : new HashSet<>()
+				));
+			} else if (originalDto instanceof PartTemplateData p) {
+				normalizedPartTemplates.put(id, new NormalizedState.NormalizedPartTemplate(
+						id,
+						p.name(),
+						mergedProps.tags() != null ? mergedProps.tags() : new HashSet<>(),
+						p.structure().material().type(), // materialType becomes concrete ID
+						p.structure().shape().type(), // shapeType becomes concrete ID
+						p.upgrades()
+				));
+			} else if (originalDto instanceof EquipmentTemplateData t) {
+				normalizedEquipmentTemplates.put(id, new NormalizedState.NormalizedEquipmentTemplate(
+						id,
+						t.name(),
+						mergedProps.tags() != null ? mergedProps.tags() : new HashSet<>(),
+						t.structure().slots(), // structure is already Map<String, EquipmentTemplateSlot>
+						t.upgrades()
+				));
+			} else if (originalDto instanceof StaticPartData sp) {
+				normalizedStaticParts.put(id, new NormalizedState.NormalizedStaticPart(
+						id,
+						sp.name(),
+						mergedProps.tags() != null ? mergedProps.tags() : new HashSet<>(),
+						mergedProps.attributes(),
+						mergedProps.features(),
+						sp.upgrades()
+				));
+			} else {
+				System.err.println("Warning: Unrecognized DTO type encountered during normalization: " + originalDto.getClass().getName());
+			}
+		}
+
+		return new NormalizedState(
+				Map.copyOf(normalizedMaterials),
+				Map.copyOf(normalizedShapes),
+				Map.copyOf(normalizedSchematics),
+				Map.copyOf(normalizedPartTemplates),
+				Map.copyOf(normalizedEquipmentTemplates),
+				Map.copyOf(normalizedStaticParts)
+		);
 	}
 
 	/**
-	 * Recursively processes a single definition, resolving its includes.
-	 * This method is memoized using `processedCache`.
+	 * Recursively resolves includes and merges properties for a given definition.
+	 * The result is cached to prevent redundant work and detect cycles.
 	 *
 	 * @param id The OpenIdentifier of the definition to process.
-	 * @return The fully processed and merged TopLevelData.
+	 * @return A MergedProperties record containing all resolved and merged properties.
 	 * @throws IllegalArgumentException if an included ID refers to a non-existent definition.
-	 * @throws IllegalStateException if a cyclic include dependency is detected.
+	 * @throws IllegalStateException    if a cyclic include dependency is detected.
 	 */
-	private TopLevelData processDefinition(OpenIdentifier id) {
+	private DefinitionBuilder.MergedProperties resolveAndMergePropertiesRecursive(OpenIdentifier id) {
 		if (processedCache.containsKey(id)) {
 			return processedCache.get(id); // Already processed, return from cache
 		}
@@ -63,108 +132,77 @@ public class DataProcessorImpl implements DataProcessor {
 
 		recursionStack.add(id);
 
-		TopLevelData currentIdentifiedData = rawSourceData.get(id);
-		if (currentIdentifiedData == null) {
+		RawDefinition currentRawDef = rawSourceData.get(id);
+		if (currentRawDef == null) {
 			recursionStack.remove(id); // Clean up stack before throwing
 			throw new IllegalArgumentException("Included definition not found: " + id);
 		}
 
-		// Initialize with empty mutable collections for accumulation.
-		// These will be populated by merging includes and then the current data.
-		Set<OpenIdentifier> accumulatedTags = new LinkedHashSet<>();
-		Map<OpenIdentifier, AttributeData> accumulatedAttributes = new HashMap<>();
-		Map<OpenIdentifier, FeatureData> accumulatedFeatures = new HashMap<>();
+		DefinitionBuilder builder = new DefinitionBuilder();
 
-		// 1. Process and apply properties from includes (later includes override earlier ones)
-		List<OpenIdentifier> includes = currentIdentifiedData.include();
-		if (includes != null && !includes.isEmpty()) {
+		// 1. Recursively process and apply properties from includes (later includes override earlier ones)
+		List<OpenIdentifier> includes = extractIncludes(currentRawDef.data());
+		if (includes != null) {
 			for (OpenIdentifier includedId : includes) {
-				TopLevelData includedProcessedData = processDefinition(includedId); // Recursive call for included DTOs
-
-				// Apply properties from the included data
-				// Tags are additive (set union)
-				if (includedProcessedData.tags() != null) {
-					accumulatedTags.addAll(Objects.requireNonNull(includedProcessedData.tags()));
-				}
-				// Attributes/Features: put() handles overrides by ID/Type
-				includedProcessedData.getAttributesMap().forEach(accumulatedAttributes::put);
-				includedProcessedData.getFeaturesMap().forEach(accumulatedFeatures::put);
+				DefinitionBuilder.MergedProperties includedProps = resolveAndMergePropertiesRecursive(includedId); // Recursive call
+				builder.mergeTags(includedProps.tags());
+				builder.mergeAttributes(includedProps.attributes());
+				builder.mergeFeatures(includedProps.features());
 			}
 		}
 
-		// 2. Apply properties from the current raw data (these override all previously accumulated properties from includes)
-		// Access data from the raw DTO, not the wrapper's `tags()` method
-		Object rawDto = currentIdentifiedData. unwrapAs(Object.class); // Get the raw DTO for direct field access
-		if (rawDto instanceof MaterialData m) {
-			if (m.tags() != null) accumulatedTags.addAll(m.tags());
-			m.getAttributesMap().forEach(accumulatedAttributes::put);
-			m.getFeaturesMap().forEach(accumulatedFeatures::put);
-		} else if (rawDto instanceof PartTemplateData p) {
-			if (p.tags() != null) accumulatedTags.addAll(p.tags());
-			p.getAttributesMap().forEach(accumulatedAttributes::put);
-			p.getFeaturesMap().forEach(accumulatedFeatures::put);
-		} else if (rawDto instanceof ToolTemplateData t) {
-			if (t.tags() != null) accumulatedTags.addAll(t.tags());
-			t.getAttributesMap().forEach(accumulatedAttributes::put);
-			t.getFeaturesMap().forEach(accumulatedFeatures::put);
-		} else if (rawDto instanceof SchematicData s) {
-			if (s.tags() != null) accumulatedTags.addAll(s.tags());
-			// Schematics don't have attributes/features for merging in this context, maps are empty.
-		} else if (rawDto instanceof StaticPartData sp) {
-			if (sp.tags() != null) accumulatedTags.addAll(sp.tags());
-			sp.getAttributesMap().forEach(accumulatedAttributes::put);
-			sp.getFeaturesMap().forEach(accumulatedFeatures::put);
-		} else {
-			throw new IllegalStateException("Unsupported raw DTO type for property extraction: " + rawDto.getClass().getName());
-		}
+		// 2. Apply properties from the current raw data (these override all previously accumulated properties)
+		mergeRawDtoPropertiesIntoBuilder(currentRawDef.data(), builder);
 
 		recursionStack.remove(id);
 
-		// Reconstruct a new DTO of the original type with merged properties, then wrap it in IdentifiedTopLevelData.
-		Object mergedRawDto = createMergedDto(
-				rawDto, // The original DTO (MaterialData, PartTemplateData etc.)
-				null, // Include list is always null in the merged DTO
-				accumulatedTags.isEmpty() ? null : new ArrayList<>(accumulatedTags), // Convert Set to List
-				accumulatedAttributes.isEmpty() ? null : new ArrayList<>(accumulatedAttributes.values()),
-				accumulatedFeatures.isEmpty() ? null : new ArrayList<>(accumulatedFeatures.values())
-		);
-
-		IdentifiedTopLevelData finalProcessedData = new IdentifiedTopLevelData(id, mergedRawDto);
-		processedCache.put(id, finalProcessedData);
-		return finalProcessedData;
+		DefinitionBuilder.MergedProperties finalMergedProps = builder.buildMergedProperties();
+		processedCache.put(id, finalMergedProps);
+		return finalMergedProps;
 	}
 
-	/**
-	 * Helper to create a new DTO instance (e.g., MaterialData, PartTemplateData) with merged properties.
-	 * This method acts as a factory, reconstructing the original DTO type with updated lists.
-	 *
-	 * @param originalDto The original raw DTO object to derive type and non-merged fields from.
-	 * @param newIncludes The (null) list of includes for the new DTO.
-	 * @param newTags The merged list of tags.
-	 * @param newAttributes The merged list of attributes.
-	 * @param newFeatures The merged list of features.
-	 * @return A new instance of the original DTO's type, with merged property lists.
-	 * @throws IllegalArgumentException if an unsupported DTO type is provided.
-	 */
-	private Object createMergedDto(
-			Object originalDto,
-			@Nullable List<OpenIdentifier> newIncludes,
-			@Nullable List<OpenIdentifier> newTags,
-			@Nullable List<AttributeData> newAttributes,
-			@Nullable List<FeatureData> newFeatures
-	) {
-		if (originalDto instanceof MaterialData m) {
-			return new MaterialData(m.type(), m.name(), newIncludes, newTags, newAttributes, newFeatures);
-		} else if (originalDto instanceof PartTemplateData p) {
-			return new PartTemplateData(p.type(), p.name(), newIncludes, newTags, p.structure(), p.upgrades(), p.naming(), newAttributes, newFeatures);
-		} else if (originalDto instanceof ToolTemplateData t) {
-			return new ToolTemplateData(t.type(), t.name(), newIncludes, newTags, t.structure(), t.upgrades(), newAttributes, newFeatures);
-		} else if (originalDto instanceof SchematicData s) {
-			return new SchematicData(s.type(), s.name(), newIncludes, newTags, s.target(), s.craftingMaterial());
-		} else if (originalDto instanceof StaticPartData sp) {
-			return new StaticPartData(sp.type(), sp.name(), newIncludes, newTags, newAttributes, newFeatures);
+	private List<OpenIdentifier> extractIncludes(Object dto) {
+		if (dto instanceof MaterialData m) return m.include();
+		if (dto instanceof ShapeData s) return s.include();
+		if (dto instanceof SchematicData s) return s.include();
+		if (dto instanceof PartTemplateData p) return p.include();
+		if (dto instanceof EquipmentTemplateData t) return t.include();
+		if (dto instanceof StaticPartData sp) return sp.include();
+		return null;
+	}
+
+	private void mergeRawDtoPropertiesIntoBuilder(Object dto, DefinitionBuilder builder) {
+		if (dto instanceof MaterialData m) {
+			builder.mergeTags(m.tags());
+			builder.mergeAttributes(m.attributes());
+			builder.mergeFeatures(m.features());
+		} else if (dto instanceof ShapeData s) {
+			builder.mergeTags(s.tags());
+			builder.mergeAttributes(s.attributes());
+			builder.mergeFeatures(s.features());
+		} else if (dto instanceof SchematicData s) {
+			builder.mergeTags(s.tags());
+			// Schematics typically don't have attributes/features for merging
+		} else if (dto instanceof PartTemplateData p) {
+			builder.mergeTags(p.tags());
+			builder.mergeAttributes(p.attributes());
+			builder.mergeFeatures(p.features());
+		} else if (dto instanceof EquipmentTemplateData t) {
+			builder.mergeTags(t.tags());
+			builder.mergeAttributes(t.attributes());
+			builder.mergeFeatures(t.features());
+		} else if (dto instanceof StaticPartData sp) {
+			builder.mergeTags(sp.tags());
+			builder.mergeAttributes(sp.attributes());
+			builder.mergeFeatures(sp.features());
 		} else {
-			throw new IllegalArgumentException("Unsupported DTO type for merging in createMergedDto: " + originalDto.getClass().getName());
+			// This case should ideally not be reached if all DTO types correctly implement the `include` and property access patterns.
+			// Or if the initial loading (Stage 1) filters out unknown types.
+			// If it's a generated DTO type, it won't have includes, so it's skipped for merge.
+			// Currently, RawDefinition can wrap `Generated...Data` if the file structure implies it (e.g. pre-generated data files).
+			// But for *this* process, we assume RawDefinition wraps original JSON DTOs only.
+			// We can log a warning or throw for truly unexpected types.
+			System.err.println("Warning: DTO type " + dto.getClass().getName() + " does not contribute mergeable properties or is not expected in raw data processing.");
 		}
 	}
 }

@@ -3,10 +3,10 @@ package com.sigmundgranaas.forgero.data;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
-import com.sigmundgranaas.forgero.data.v3.codec.ToolTemplateCodecs;
+import com.sigmundgranaas.forgero.data.v3.codec.EquipmentTemplateCodecs;
 import com.sigmundgranaas.forgero.data.v3.codec.CodecConstants; // Added import
-import com.sigmundgranaas.forgero.data.v3.dto.ToolTemplateData;
-import com.sigmundgranaas.forgero.data.v3.dto.UpgradeSlotData;
+import com.sigmundgranaas.forgero.data.v3.dto.template.EquipmentTemplateData;
+import com.sigmundgranaas.forgero.data.v3.dto.template.UpgradeSlotData;
 import com.sigmundgranaas.forgero.data.v3.dto.attribute.AttributeData;
 import org.junit.jupiter.api.Test;
 
@@ -49,10 +49,10 @@ class ToolTemplateDataCodecTest {
 				}
 				""";
 
-		DataResult<ToolTemplateData> result = ToolTemplateCodecs.TOOL_TEMPLATE_DATA_CODEC.parse(JsonOps.INSTANCE, JsonParser.parseString(json));
+		DataResult<EquipmentTemplateData> result = EquipmentTemplateCodecs.TOOL_TEMPLATE_DATA_CODEC.parse(JsonOps.INSTANCE, JsonParser.parseString(json));
 		assertTrue(result.result().isPresent(), "Parsing full ToolTemplateData should succeed. " + result.error().map(DataResult.PartialResult::message).orElse(""));
 
-		ToolTemplateData data = result.result().get();
+		EquipmentTemplateData data = result.result().get();
 		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:tool_template"), data.type()); // Changed to OpenIdentifier
 		assertEquals("pickaxe", data.name());
 
@@ -113,10 +113,10 @@ class ToolTemplateDataCodecTest {
 				}
 				""";
 
-		DataResult<ToolTemplateData> result = ToolTemplateCodecs.TOOL_TEMPLATE_DATA_CODEC.parse(JsonOps.INSTANCE, JsonParser.parseString(json));
+		DataResult<EquipmentTemplateData> result = EquipmentTemplateCodecs.TOOL_TEMPLATE_DATA_CODEC.parse(JsonOps.INSTANCE, JsonParser.parseString(json));
 		assertTrue(result.result().isPresent(), "Parsing minimal ToolTemplateData should succeed. " + result.error().map(DataResult.PartialResult::message).orElse(""));
 
-		ToolTemplateData data = result.result().get();
+		EquipmentTemplateData data = result.result().get();
 		assertEquals(CodecConstants.IDENTIFIER_FACTORY.of("forgero:tool_template"), data.type()); // Changed to OpenIdentifier
 		assertEquals("minimal_tool", data.name());
 		assertNull(data.include());
@@ -142,7 +142,7 @@ class ToolTemplateDataCodecTest {
 				}
 				""";
 
-		DataResult<ToolTemplateData> result = ToolTemplateCodecs.TOOL_TEMPLATE_DATA_CODEC.parse(JsonOps.INSTANCE, JsonParser.parseString(json));
+		DataResult<EquipmentTemplateData> result = EquipmentTemplateCodecs.TOOL_TEMPLATE_DATA_CODEC.parse(JsonOps.INSTANCE, JsonParser.parseString(json));
 		assertTrue(result.result().isEmpty(), "Parsing ToolTemplateData missing 'structure' should fail.");
 		assertTrue(result.error().isPresent());
 		assertTrue(result.error().get().message().contains("No key structure"));
