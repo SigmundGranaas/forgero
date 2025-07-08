@@ -21,10 +21,10 @@ import org.joml.Vector3f;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
@@ -33,6 +33,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec2f;
@@ -48,7 +49,19 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	private static final Logger LOGGER = LogManager.getLogger("ForgeroSmithingAnvil");
 	private static final @NotNull String INVENTORY_NBT_KEY = "inventory";
 
-	private @NotNull SimpleInventory inventory = new SimpleInventory(1);
+	// Use DefaultedList for proper NBT serialization
+	private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1, ItemStack.EMPTY);
+	private final SimpleInventory simpleInventory = new SimpleInventory(inventory.size()) {
+		@Override
+		public ItemStack getStack(int slot) {
+			return inventory.get(slot);
+		}
+		@Override
+		public void setStack(int slot, ItemStack stack) {
+			inventory.set(slot, stack);
+			super.setStack(slot, stack);
+		}
+	};
 
 
 	// TODO: Items on anvil are vanishing after relogging into the world
@@ -143,7 +156,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	@Override
 	public void writeNbt(@NotNull NbtCompound nbt) {
 		super.writeNbt(nbt);
-		nbt.put(INVENTORY_NBT_KEY, this.getInventory().toNbtList());
+		Inventories.writeNbt(nbt, this.inventory);
 		nbt.putInt("hammerHits", hammerHits);
 		// Store marker positions
 		for (int i = 0; i < markerPositions.size(); i++) {
@@ -156,7 +169,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		}
 		// Save fast marker indices
 		nbt.putIntArray("fastMarkerIndices", fastMarkerIndices);
-		ItemStack stack = inventory.getStack(0);
+		ItemStack stack = simpleInventory.getStack(0);
 		if (!stack.isEmpty()) {
 			NbtCompound itemNbt = stack.getOrCreateNbt();
 			itemNbt.putInt(HITS_NBT_KEY, markerHitsCount);
@@ -167,7 +180,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	@Override
 	public void readNbt(@NotNull NbtCompound nbt) {
 		super.readNbt(nbt);
-		this.getInventory().readNbtList(nbt.getList(INVENTORY_NBT_KEY, NbtElement.LIST_TYPE));
+		Inventories.readNbt(nbt, this.inventory);
 		this.hammerHits = nbt.getInt("hammerHits");
 		// Load marker positions
 		markerPositions.clear();
@@ -187,7 +200,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			}
 		}
 		// Restore progress from item NBT if present
-		ItemStack stack = inventory.getStack(0);
+		ItemStack stack = simpleInventory.getStack(0);
 		if (!stack.isEmpty()) {
 			NbtCompound itemNbt = stack.getOrCreateNbt();
 			this.markerHitsCount = itemNbt.getInt(HITS_NBT_KEY);
@@ -266,7 +279,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	}
 
 	public void generateSingleMarker() {
-		ItemStack stack = inventory.getStack(0);
+		ItemStack stack = simpleInventory.getStack(0);
 		int temp = TemperatureUtils.getTemperature(stack);
 		LOGGER.info("[SmithingAnvil] generateSingleMarker called. Stack: {}, Temp: {}", stack, temp);
 		if (stack.isEmpty() || temp < 400 || temp > 600) {
@@ -333,7 +346,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		// Fast markers should always count as an attempt, even if missed
 		boolean isFast = fastMarkerIndices.contains(markerAttempts);
 		markerAttempts++;
-		ItemStack stack = inventory.getStack(0);
+		ItemStack stack = simpleInventory.getStack(0);
 		int temp = TemperatureUtils.getTemperature(stack);
 		int depletion = hit ? 40 : 10; // 40 for hit, 10 for miss
 		if (hit) {
@@ -395,7 +408,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	// Client-side tick for spawning firework particles at unhit marker positions
 	public void clientTick() {
 		if (this.world == null || !this.world.isClient) return;
-		if (inventory.getStack(0).isEmpty()) return;
+		if (simpleInventory.getStack(0).isEmpty()) return;
 		if (markerPositions.size() == 1 && markerAttempts < TOTAL_MARKERS) {
 			Vec2f marker = markerPositions.get(0);
 			double worldX = this.getPos().getX() + marker.x;
@@ -436,7 +449,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		anvilInventoryCoolTickCounter++;
 		if (anvilInventoryCoolTickCounter >= ANVIL_INVENTORY_COOL_TICK_INTERVAL) {
 			anvilInventoryCoolTickCounter = 0;
-			ItemStack stack = inventory.getStack(0);
+			ItemStack stack = simpleInventory.getStack(0);
 			if (!stack.isEmpty()) {
 				int temp = TemperatureUtils.getTemperature(stack);
 				if (temp > 20) {
@@ -537,7 +550,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 	// Persist marker progress to the item NBT
 	public void saveProgressToItem() {
-		ItemStack stack = inventory.getStack(0);
+		ItemStack stack = simpleInventory.getStack(0);
 		if (!stack.isEmpty()) {
 			NbtCompound itemNbt = stack.getOrCreateNbt();
 			itemNbt.putInt(HITS_NBT_KEY, markerHitsCount);
@@ -549,7 +562,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 	// Restore marker progress from the item NBT
 	public void loadProgressFromItem() {
-		ItemStack stack = inventory.getStack(0);
+		ItemStack stack = simpleInventory.getStack(0);
 		if (!stack.isEmpty()) {
 			NbtCompound itemNbt = stack.getOrCreateNbt();
 			this.markerHitsCount = itemNbt.getInt(HITS_NBT_KEY);
@@ -579,5 +592,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	// Setter for markerHitsCount (needed for client sync)
 	public void setMarkerHitsCount(int markerHitsCount) {
 		this.markerHitsCount = markerHitsCount;
+	}
+
+	public SimpleInventory getInventory() {
+		return simpleInventory;
 	}
 }

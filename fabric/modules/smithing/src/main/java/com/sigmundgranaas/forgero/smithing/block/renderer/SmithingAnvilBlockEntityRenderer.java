@@ -87,6 +87,9 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
             // Get local hit coordinates
             float localX = (float) ForgeroClientSmithingInitializer.hoveredLocalX - 0.5f;
             float localZ = (float) ForgeroClientSmithingInitializer.hoveredLocalZ - 0.5f;
+            // Check if hovering over the rendered item (within 0.25 block units of center)
+            boolean hoveringItem = Math.abs(localX) < 0.125f && Math.abs(localZ) < 0.125f;
+            float markerY = hoveringItem ? 0.15f : 0.01f; // Raise marker if hovering over item
             // Rotate localX/localZ according to anvil facing using rotation matrix
             Direction facing = entity.getCachedState().get(SmithingAnvil.FACING);
             float angle = 0.0f;
@@ -99,14 +102,14 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
             float cos = (float) Math.cos(angle);
             float sin = (float) Math.sin(angle);
             // Apply marker offset in local space before rotation
-            float markerOffsetX = 0.05f;
-            float markerOffsetZ = -0.03f;
+            float markerOffsetX = 0f;
+            float markerOffsetZ = 0f;
             float localXWithOffset = localX + markerOffsetX;
             float localZWithOffset = localZ + markerOffsetZ;
             float rotatedX = localXWithOffset * cos - localZWithOffset * sin;
             float rotatedZ = localXWithOffset * sin + localZWithOffset * cos;
             matrices.push();
-            matrices.translate(rotatedX, 0.01f, rotatedZ); // Centered above the anvil top for all facings
+            matrices.translate(rotatedX, markerY, rotatedZ); // Raise marker if hovering item
             net.minecraft.client.render.WorldRenderer.drawBox(
                 matrices,
                 vertexConsumers.getBuffer(net.minecraft.client.render.RenderLayer.getLines()),
