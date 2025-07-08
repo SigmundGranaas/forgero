@@ -23,8 +23,8 @@ public class TemperatureColorProvider {
         });
     }
 
-    // Map temperature to color according to the provided scale, scaled to maxTemp
-    private static int getHeatColor(int temperature, int maxTemp) {
+    // Change getHeatColor to public so it can be accessed from other classes
+    public static int getHeatColor(int temperature, int maxTemp) {
         // Colors are in 0xRRGGBB format
         final int[][] baseScale = {
             {2000, 0xFFFF00}, // Bright Yellow

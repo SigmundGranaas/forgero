@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.smithing.mixins;
 import java.util.List;
 
 import com.sigmundgranaas.forgero.minecraft.common.item.DefaultStateItem;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,21 +13,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
 import net.minecraft.world.World;
 
 @Mixin(DefaultStateItem.class)
 public class TemperatureTooltipMixin {
 	@Inject(method = "appendTooltip", at = @At("TAIL"))
-	private void forgero$addTemperatureTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context, CallbackInfo ci) {
-		int temp = TemperatureUtils.getTemperature(stack);
-		String color;
-		if (temp > 100) {
-			color = "§c"; // red for dangerous/hot
-		} else if (temp > TemperatureUtils.DEFAULT_TEMPERATURE) {
-			color = "§e"; // yellow for warm
-		} else {
-			color = "§f"; // white for safe/room temp
-		}
-		tooltip.add(Text.literal(color + "Temperature: " + temp + "°C"));
+	private void forgero$addTemperatureTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext, CallbackInfo ci) {
+		int temp = TemperatureUtils.getTemperature(itemStack);
+		int maxTemp = TemperatureUtils.getMaxTemp(itemStack);
+		int rgb = TemperatureColorProvider.getHeatColor(temp, maxTemp);
+		TextColor textColor = TextColor.fromRgb(rgb);
+		tooltip.add(Text.literal("Temperature: " + temp + "°C").styled(style -> style.withColor(textColor)));
 	}
 }
