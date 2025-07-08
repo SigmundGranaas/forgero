@@ -6,6 +6,8 @@ import com.sigmundgranaas.forgero.core.data.definition.NormalizedState;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.tags.engine.TagGraph;
 import com.sigmundgranaas.forgero.core.tags.engine.TagGraphBuilder;
+import com.sigmundgranaas.forgero.data.v3.codec.CodecConstants;
+import com.sigmundgranaas.forgero.data.v3.dto.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.v3.dto.attribute.AttributeDataImpl;
 import com.sigmundgranaas.forgero.data.v3.dto.attribute.ComputationData;
 import com.sigmundgranaas.forgero.data.v3.dto.template.EquipmentTemplateSlotData;
@@ -15,9 +17,12 @@ import com.sigmundgranaas.forgero.data.v3.dto.template.PartTemplateStructureSlot
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.sigmundgranaas.forgero.data.v3.codec.AttributeCodecs.ADDITION_OPERATOR;
 import static com.sigmundgranaas.forgero.data.v3.codec.AttributeCodecs.MULTIPLICATION_OPERATOR;
@@ -31,234 +36,177 @@ class ComponentGeneratorTest extends ForgeroTest {
 	@BeforeEach
 	void setUp() {
 		generator = new ComponentGeneratorImpl(idFactory);
-
-		TagGraphBuilder tagBuilder = new TagGraphBuilder();
-		tagBuilder.add(idFactory.of("forgero:material"), Set.of());
-		tagBuilder.add(idFactory.of("forgero:shape"), Set.of());
-		tagBuilder.add(idFactory.of("forgero:tool_material"), Set.of(idFactory.of("forgero:material")));
-		tagBuilder.add(idFactory.of("forgero:pickaxe_head_shape"), Set.of(idFactory.of("forgero:shape")));
-		tagBuilder.add(idFactory.of("forgero:metal"), Set.of(idFactory.of("forgero:tool_material")));
-		tagBuilder.add(idFactory.of("forgero:wood"), Set.of(idFactory.of("forgero:material")));
-
-		// Add default tags to the graph
-		tagBuilder.add(idFactory.of("forgero:default_pickaxe_head"), Set.of());
-		tagBuilder.add(idFactory.of("forgero:default_handle"), Set.of());
-
-
-		tagBuilder.add(idFactory.of("forgero:parts/pickaxe_head_type"), Set.of());
-		tagBuilder.add(idFactory.of("forgero:parts/handle_type"), Set.of());
-		tagBuilder.add(idFactory.of("forgero:tool"), Set.of());
-		tagBuilder.add(idFactory.of("forgero:pickaxe"), Set.of(idFactory.of("forgero:tool")));
-
-		tagGraph = tagBuilder.build();
+		tagGraph = buildTestTagGraph();
 	}
 
-	@Test
-	void testGenerate_SimplePartCombination() {
-		var iron = new NormalizedState.NormalizedMaterial(
-				idFactory.of("forgero:iron"), "iron", Set.of(idFactory.of("forgero:metal")), List.of(), List.of()
-		);
-		var headShape = new NormalizedState.NormalizedShape(
-				idFactory.of("forgero:pickaxe_head"), "pickaxe_head", Set.of(idFactory.of("forgero:pickaxe_head_shape")), List.of(), List.of()
-		);
-		var headTemplate = new NormalizedState.NormalizedPartTemplate(
-				idFactory.of("forgero:pickaxe_head_template"), "Pickaxe Head", Set.of(idFactory.of("forgero:parts/pickaxe_head_type")),
+	private TagGraph buildTestTagGraph() {
+		TagGraphBuilder tagBuilder = new TagGraphBuilder();
+		Stream.of(
+				"forgero:material", "forgero:shape", "forgero:default_pickaxe_head",
+				"forgero:default_handle", "forgero:parts/pickaxe_head_type",
+				"forgero:parts/handle_type", "forgero:tool"
+		).forEach(tag -> tagBuilder.add(id(tag), Set.of()));
+
+		tagBuilder.add(id("forgero:tool_material"), Set.of(id("forgero:material")));
+		tagBuilder.add(id("forgero:pickaxe_head_shape"), Set.of(id("forgero:shape")));
+		tagBuilder.add(id("forgero:metal"), Set.of(id("forgero:tool_material")));
+		tagBuilder.add(id("forgero:wood"), Set.of(id("forgero:material")));
+		tagBuilder.add(id("forgero:pickaxe"), Set.of(id("forgero:tool")));
+
+		return tagBuilder.build();
+	}
+
+	// region Test Data Factories
+	private NormalizedState.NormalizedMaterial material(String name, String... tags) {
+		Set<OpenIdentifier> tagSet = Arrays.stream(tags).map(this::id).collect(Collectors.toSet());
+		return new NormalizedState.NormalizedMaterial(id("forgero:" + name), name, tagSet, List.of(), List.of());
+	}
+
+	private NormalizedState.NormalizedMaterial materialWithAttributes(String name, List<AttributeData> attributes, String... tags) {
+		Set<OpenIdentifier> tagSet = Arrays.stream(tags).map(this::id).collect(Collectors.toSet());
+		return new NormalizedState.NormalizedMaterial(id("forgero:" + name), name, tagSet, attributes, List.of());
+	}
+
+	private NormalizedState.NormalizedShape shape(String name, String... tags) {
+		Set<OpenIdentifier> tagSet = Arrays.stream(tags).map(this::id).collect(Collectors.toSet());
+		return new NormalizedState.NormalizedShape(id("forgero:" + name), name, tagSet, List.of(), List.of());
+	}
+
+	private NormalizedState.NormalizedShape shapeWithAttributes(String name, List<AttributeData> attributes, String... tags) {
+		Set<OpenIdentifier> tagSet = Arrays.stream(tags).map(this::id).collect(Collectors.toSet());
+		return new NormalizedState.NormalizedShape(id("forgero:" + name), name, tagSet, attributes, List.of());
+	}
+
+	private NormalizedState.NormalizedPartTemplate partTemplate(String name, String typeTag, String materialSlotType, String shapeSlotType) {
+		return new NormalizedState.NormalizedPartTemplate(
+				id("forgero:" + name), name, Set.of(id(typeTag)),
 				new PartTemplateStructureData("forgero:{material.name}-{shape.name}",
 						Map.of(
-								"material", new PartTemplateStructureSlotData(idFactory.of("forgero:tool_material"), 1, null),
-								"shape", new PartTemplateStructureSlotData(idFactory.of("forgero:pickaxe_head_shape"), 1, null)
+								"material", new PartTemplateStructureSlotData(id(materialSlotType), 1, null),
+								"shape", new PartTemplateStructureSlotData(id(shapeSlotType), 1, null)
 						)),
 				List.of()
 		);
+	}
 
-		NormalizedState state = new NormalizedState(
-				Map.of(iron.id(), iron),
-				Map.of(headShape.id(), headShape),
-				Map.of(),
-				Map.of(headTemplate.id(), headTemplate),
-				Map.of(),
-				Map.of()
+	private NormalizedState.NormalizedStaticPart staticPart(String name, String... tags) {
+		Set<OpenIdentifier> tagSet = Arrays.stream(tags).map(this::id).collect(Collectors.toSet());
+		return new NormalizedState.NormalizedStaticPart(id("forgero:" + name), name, tagSet, List.of(), List.of(), List.of());
+	}
+
+	private NormalizedState.NormalizedEquipmentTemplate equipmentTemplate(String name, Map<String, EquipmentTemplateSlotData> slots, String... tags) {
+		Set<OpenIdentifier> tagSet = Arrays.stream(tags).map(this::id).collect(Collectors.toSet());
+		return new NormalizedState.NormalizedEquipmentTemplate(
+				id("forgero:" + name), name, tagSet,
+				new EquipmentTemplateStructureData("forgero:{head.material.name}-pickaxe", slots),
+				List.of()
 		);
+	}
+	// endregion
 
+	@Test
+	void testGenerate_SimplePartCombination() {
+		var iron = material("iron", "forgero:metal");
+		var headShape = shape("pickaxe_head", "forgero:pickaxe_head_shape");
+		var headTemplate = partTemplate("pickaxe_head_template", "forgero:parts/pickaxe_head_type", "forgero:tool_material", "forgero:pickaxe_head_shape");
+
+		var state = new NormalizedState(Map.of(iron.id(), iron), Map.of(headShape.id(), headShape), Map.of(), Map.of(headTemplate.id(), headTemplate), Map.of(), Map.of());
 		GeneratedState generated = generator.generate(state, tagGraph);
 
 		assertEquals(1, generated.parts().size());
-		OpenIdentifier expectedId = idFactory.of("forgero:iron-pickaxe_head");
+		OpenIdentifier expectedId = id("forgero:iron-pickaxe_head");
 		assertTrue(generated.parts().containsKey(expectedId), "Generated part ID should be " + expectedId + " but was " + generated.parts().keySet());
+
 		var generatedPart = generated.parts().get(expectedId);
 		assertNotNull(generatedPart);
-		assertTrue(generatedPart.tags().contains(idFactory.of("forgero:metal")));
-		assertTrue(generatedPart.tags().contains(idFactory.of("forgero:pickaxe_head_shape")));
-		assertTrue(generatedPart.tags().contains(idFactory.of("forgero:parts/pickaxe_head_type")));
+		assertTrue(generatedPart.tags().containsAll(Set.of(id("forgero:metal"), id("forgero:pickaxe_head_shape"), id("forgero:parts/pickaxe_head_type"))));
 		assertEquals(iron.id(), generatedPart.materialId());
 		assertEquals(headShape.id(), generatedPart.shapeId());
 	}
 
 	@Test
 	void testGenerate_PartWithCompositeAttributes() {
-		var iron = new NormalizedState.NormalizedMaterial(
-				idFactory.of("forgero:iron"), "Iron", Set.of(idFactory.of("forgero:metal")),
-				List.of(new AttributeDataImpl(idFactory.of("iron-durability"), idFactory.of("forgero:durability"), new ComputationData(250f, ADDITION_OPERATOR, "forgero:base"), null, idFactory.of("forgero:part-composite"))), null
-		);
-		var headShape = new NormalizedState.NormalizedShape(
-				idFactory.of("forgero:pickaxe_head"), "pickaxe_head", Set.of(idFactory.of("forgero:pickaxe_head_shape")),
-				List.of(new AttributeDataImpl(idFactory.of("shape-durability-mult"), idFactory.of("forgero:durability"), new ComputationData(1.5f, MULTIPLICATION_OPERATOR, "forgero:middle"), null, idFactory.of("forgero:part-composite"))), null
-		);
-		var headTemplate = new NormalizedState.NormalizedPartTemplate(
-				idFactory.of("forgero:pickaxe_head_template"), "Pickaxe Head Template", Set.of(idFactory.of("forgero:parts/pickaxe_head_type")),
-				new PartTemplateStructureData("forgero:{material.name}-{shape.name}",
-						Map.of(
-								"material", new PartTemplateStructureSlotData(idFactory.of("forgero:tool_material"), 1, null),
-								"shape", new PartTemplateStructureSlotData(idFactory.of("forgero:pickaxe_head_shape"), 1, null)
-						)),
-				List.of()
-		);
+		var iron = materialWithAttributes("iron",
+				List.of(new AttributeDataImpl(id("iron-durability"), id("forgero:durability"), new ComputationData(250f, ADDITION_OPERATOR, "forgero:base"), null, id("forgero:part-composite"))),
+				"forgero:metal");
+		var headShape = shapeWithAttributes("pickaxe_head",
+				List.of(new AttributeDataImpl(id("shape-durability-mult"), id("forgero:durability"), new ComputationData(1.5f, MULTIPLICATION_OPERATOR, "forgero:middle"), null, id("forgero:part-composite"))),
+				"forgero:pickaxe_head_shape");
+		var headTemplate = partTemplate("pickaxe_head_template", "forgero:parts/pickaxe_head_type", "forgero:tool_material", "forgero:pickaxe_head_shape");
 
-		NormalizedState state = new NormalizedState(
-				Map.of(iron.id(), iron),
-				Map.of(headShape.id(), headShape),
-				Map.of(),
-				Map.of(headTemplate.id(), headTemplate),
-				Map.of(),
-				Map.of()
-		);
+		var state = new NormalizedState(Map.of(iron.id(), iron), Map.of(headShape.id(), headShape), Map.of(), Map.of(headTemplate.id(), headTemplate), Map.of(), Map.of());
 		GeneratedState generated = generator.generate(state, tagGraph);
 
-		OpenIdentifier generatedPartId = idFactory.of("forgero:iron-pickaxe_head");
+		OpenIdentifier generatedPartId = id("forgero:iron-pickaxe_head");
 		assertTrue(generated.parts().containsKey(generatedPartId));
 		var generatedPart = generated.parts().get(generatedPartId);
 		assertNotNull(generatedPart.attributes());
 		assertEquals(2, generatedPart.attributes().size());
 	}
 
-
 	@Test
 	void testGenerate_ToolWithDeclarativeDefaults() {
-		var iron = new NormalizedState.NormalizedMaterial(idFactory.of("forgero:iron"), "iron", Set.of(idFactory.of("forgero:metal")), List.of(), List.of());
-		var diamond = new NormalizedState.NormalizedMaterial(idFactory.of("forgero:diamond"), "diamond", Set.of(idFactory.of("forgero:metal")), List.of(), List.of());
+		var iron = material("iron", "forgero:metal");
+		var diamond = material("diamond", "forgero:metal");
+		var headShape = shape("pickaxe_head", "forgero:pickaxe_head_shape", "forgero:default_pickaxe_head");
+		var headTemplate = partTemplate("pickaxe_head_template", "forgero:parts/pickaxe_head_type", "forgero:tool_material", "forgero:pickaxe_head_shape");
+		var oakHandle = staticPart("static_oak_handle", "forgero:parts/handle_type", "forgero:default_handle");
 
-		// The default head shape must have the default tag
-		var headShape = new NormalizedState.NormalizedShape(
-				idFactory.of("forgero:pickaxe_head"), "pickaxe_head",
-				Set.of(idFactory.of("forgero:pickaxe_head_shape"), idFactory.of("forgero:default_pickaxe_head")), // ADDED default tag
-				List.of(), List.of()
-		);
+		var pickaxeTemplate = equipmentTemplate("pickaxe_template", Map.of(
+				"head", new EquipmentTemplateSlotData(id("forgero:parts/pickaxe_head_type"), id("forgero:default_pickaxe_head"), null),
+				"handle", new EquipmentTemplateSlotData(id("forgero:parts/handle_type"), null, id("forgero:static_oak_handle"))
+		), "forgero:pickaxe");
 
-		// The template itself should not have the default tag
-		var headTemplate = new NormalizedState.NormalizedPartTemplate(
-				idFactory.of("forgero:pickaxe_head_template"), "Pickaxe Head", Set.of(idFactory.of("forgero:parts/pickaxe_head_type")),
-				new PartTemplateStructureData("forgero:{material.name}-{shape.name}",
-						Map.of(
-								"material", new PartTemplateStructureSlotData(idFactory.of("forgero:tool_material"), 1, null),
-								"shape", new PartTemplateStructureSlotData(idFactory.of("forgero:pickaxe_head_shape"), 1, null)
-						)),
-				List.of()
-		);
-
-		// The default handle must have the default tag
-		var oakHandle = new NormalizedState.NormalizedStaticPart(
-				idFactory.of("forgero:static_oak_handle"), "Oak Handle",
-				Set.of(idFactory.of("forgero:parts/handle_type"), idFactory.of("forgero:default_handle")), // ADDED default tag
-				List.of(), List.of(), List.of()
-		);
-
-		var pickaxeTemplate = new NormalizedState.NormalizedEquipmentTemplate(
-				idFactory.of("forgero:pickaxe_template"), "Pickaxe", Set.of(idFactory.of("forgero:pickaxe")),
-				new EquipmentTemplateStructureData("forgero:{head.material.name}-pickaxe",
-						Map.of(
-								"head", new EquipmentTemplateSlotData(idFactory.of("forgero:parts/pickaxe_head_type"), idFactory.of("forgero:default_pickaxe_head"), null),
-								"handle", new EquipmentTemplateSlotData(idFactory.of("forgero:parts/handle_type"), null, idFactory.of("forgero:static_oak_handle"))
-						)), List.of()
-		);
-
-		NormalizedState state = new NormalizedState(
-				Map.of(iron.id(), iron, diamond.id(), diamond),
-				Map.of(headShape.id(), headShape),
-				Map.of(),
-				Map.of(headTemplate.id(), headTemplate),
-				Map.of(pickaxeTemplate.id(), pickaxeTemplate),
-				Map.of(oakHandle.id(), oakHandle)
+		var state = new NormalizedState(
+				Map.of(iron.id(), iron, diamond.id(), diamond), Map.of(headShape.id(), headShape), Map.of(),
+				Map.of(headTemplate.id(), headTemplate), Map.of(pickaxeTemplate.id(), pickaxeTemplate), Map.of(oakHandle.id(), oakHandle)
 		);
 
 		GeneratedState generated = generator.generate(state, tagGraph);
 
 		assertEquals(2, generated.equipment().size(), "Should generate one default pickaxe for each material (iron, diamond).");
-		OpenIdentifier expectedIronId = idFactory.of("forgero:iron-pickaxe");
-		OpenIdentifier expectedDiamondId = idFactory.of("forgero:diamond-pickaxe");
-		assertTrue(generated.equipment().containsKey(expectedIronId), "Iron Pickaxe should be generated.");
-		assertTrue(generated.equipment().containsKey(expectedDiamondId), "Diamond Pickaxe should be generated.");
+		assertTrue(generated.equipment().containsKey(id("forgero:iron-pickaxe")), "Iron Pickaxe should be generated.");
+		assertTrue(generated.equipment().containsKey(id("forgero:diamond-pickaxe")), "Diamond Pickaxe should be generated.");
 
-		var ironPickaxe = generated.equipment().get(expectedIronId);
-		assertEquals(idFactory.of("forgero:iron-pickaxe_head"), ironPickaxe.structure().get("head"));
-		assertEquals(idFactory.of("forgero:static_oak_handle"), ironPickaxe.structure().get("handle"));
+		var ironPickaxe = generated.equipment().get(id("forgero:iron-pickaxe"));
+		assertEquals(id("forgero:iron-pickaxe_head"), ironPickaxe.structure().get("head"));
+		assertEquals(id("forgero:static_oak_handle"), ironPickaxe.structure().get("handle"));
 
-		var diamondPickaxe = generated.equipment().get(expectedDiamondId);
-		assertEquals(idFactory.of("forgero:diamond-pickaxe_head"), diamondPickaxe.structure().get("head"));
-		assertEquals(idFactory.of("forgero:static_oak_handle"), diamondPickaxe.structure().get("handle"));
+		var diamondPickaxe = generated.equipment().get(id("forgero:diamond-pickaxe"));
+		assertEquals(id("forgero:diamond-pickaxe_head"), diamondPickaxe.structure().get("head"));
+		assertEquals(id("forgero:static_oak_handle"), diamondPickaxe.structure().get("handle"));
 	}
 
 	@Test
 	void testGenerate_PartVariantsAreCreatedButNotUsedInDefaultTools() {
-		var iron = new NormalizedState.NormalizedMaterial(idFactory.of("forgero:iron"), "iron", Set.of(idFactory.of("forgero:metal")), List.of(), List.of());
+		var iron = material("iron", "forgero:metal");
+		var headShape = shape("pickaxe_head", "forgero:pickaxe_head_shape", "forgero:default_pickaxe_head");
+		var castHeadShape = shape("pickaxe_head_cast", "forgero:pickaxe_head_shape");
+		var headTemplate = partTemplate("pickaxe_head_template", "forgero:parts/pickaxe_head_type", "forgero:tool_material", "forgero:pickaxe_head_shape");
+		var oakHandle = staticPart("static_oak_handle", "forgero:parts/handle_type", "forgero:default_handle");
 
-		// The default head shape must have the default tag
-		var headShape = new NormalizedState.NormalizedShape(
-				idFactory.of("forgero:pickaxe_head"), "pickaxe_head",
-				Set.of(idFactory.of("forgero:pickaxe_head_shape"), idFactory.of("forgero:default_pickaxe_head")), // ADDED default tag
-				List.of(), List.of()
-		);
-		// The variant shape does not
-		var castHeadShape = new NormalizedState.NormalizedShape(
-				idFactory.of("forgero:pickaxe_head_cast"), "pickaxe_head_cast",
-				Set.of(idFactory.of("forgero:pickaxe_head_shape")),
-				List.of(), List.of()
-		);
+		var pickaxeTemplate = equipmentTemplate("pickaxe_template", Map.of(
+				"head", new EquipmentTemplateSlotData(id("forgero:parts/pickaxe_head_type"), id("forgero:default_pickaxe_head"), null),
+				"handle", new EquipmentTemplateSlotData(id("forgero:parts/handle_type"), null, id("forgero:static_oak_handle"))
+		), "forgero:pickaxe");
 
-		var headTemplate = new NormalizedState.NormalizedPartTemplate(
-				idFactory.of("forgero:pickaxe_head_template"), "Pickaxe Head",
-				Set.of(idFactory.of("forgero:parts/pickaxe_head_type")),
-				new PartTemplateStructureData("forgero:{material.name}-{shape.name}",
-						Map.of(
-								"material", new PartTemplateStructureSlotData(idFactory.of("forgero:tool_material"), 1, null),
-								"shape", new PartTemplateStructureSlotData(idFactory.of("forgero:pickaxe_head_shape"), 1, null)
-						)),
-				List.of()
-		);
-
-		var oakHandle = new NormalizedState.NormalizedStaticPart(
-				idFactory.of("forgero:static_oak_handle"), "Oak Handle",
-				Set.of(idFactory.of("forgero:parts/handle_type"), idFactory.of("forgero:default_handle")), // ADDED default tag
-				List.of(), List.of(), List.of()
-		);
-
-		var pickaxeTemplate = new NormalizedState.NormalizedEquipmentTemplate(
-				idFactory.of("forgero:pickaxe_template"), "Pickaxe", Set.of(idFactory.of("forgero:pickaxe")),
-				new EquipmentTemplateStructureData("forgero:{head.material.name}-pickaxe",
-						Map.of(
-								"head", new EquipmentTemplateSlotData(idFactory.of("forgero:parts/pickaxe_head_type"), idFactory.of("forgero:default_pickaxe_head"), null),
-								"handle", new EquipmentTemplateSlotData(idFactory.of("forgero:parts/handle_type"), null, idFactory.of("forgero:static_oak_handle"))
-						)), List.of()
-		);
-
-		NormalizedState state = new NormalizedState(
-				Map.of(iron.id(), iron),
-				Map.of(headShape.id(), headShape, castHeadShape.id(), castHeadShape),
-				Map.of(),
-				Map.of(headTemplate.id(), headTemplate),
-				Map.of(pickaxeTemplate.id(), pickaxeTemplate),
-				Map.of(oakHandle.id(), oakHandle)
+		var state = new NormalizedState(
+				Map.of(iron.id(), iron), Map.of(headShape.id(), headShape, castHeadShape.id(), castHeadShape), Map.of(),
+				Map.of(headTemplate.id(), headTemplate), Map.of(pickaxeTemplate.id(), pickaxeTemplate), Map.of(oakHandle.id(), oakHandle)
 		);
 
 		GeneratedState generated = generator.generate(state, tagGraph);
 
-		// All part variants should be generated
-		assertEquals(2, generated.parts().size());
-		assertTrue(generated.parts().containsKey(idFactory.of("forgero:iron-pickaxe_head")));
-		assertTrue(generated.parts().containsKey(idFactory.of("forgero:iron-pickaxe_head_cast")));
+		assertEquals(2, generated.parts().size(), "All part variants should be generated.");
+		assertTrue(generated.parts().containsKey(id("forgero:iron-pickaxe_head")));
+		assertTrue(generated.parts().containsKey(id("forgero:iron-pickaxe_head_cast")));
 
-		// Only the default tool should be generated
-		assertEquals(1, generated.equipment().size());
-		assertTrue(generated.equipment().containsKey(idFactory.of("forgero:iron-pickaxe")));
-		assertFalse(generated.equipment().containsKey(idFactory.of("forgero:iron-cast-pickaxe"))); // Assuming ID would be this, which it isn't
+		assertEquals(1, generated.equipment().size(), "Only the default tool should be generated.");
+		assertTrue(generated.equipment().containsKey(id("forgero:iron-pickaxe")));
+		assertFalse(generated.equipment().containsKey(id("forgero:iron-cast-pickaxe")), "A tool using a non-default part should not be generated.");
+	}
+
+	private OpenIdentifier id(String id) {
+		return CodecConstants.IDENTIFIER_FACTORY.of(id);
 	}
 }
