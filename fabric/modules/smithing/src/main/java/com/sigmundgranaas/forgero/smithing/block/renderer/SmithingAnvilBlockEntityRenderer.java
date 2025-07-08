@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.sigmundgranaas.forgero.smithing.ForgeroClientSmithingInitializer;
 import com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil;
 import com.sigmundgranaas.forgero.smithing.block.entity.SmithingAnvilBlockEntity;
 import com.sigmundgranaas.forgero.smithing.util.BoundingBoxUtil;
@@ -21,6 +22,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
@@ -77,6 +79,42 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
         dz = Math.max(-1f/16f, Math.min(1f/16f, dz));
         matrices.translate(dx, 0, dz);
         // --- Centering logic end ---
+
+        // Render highlight overlay if this is the hovered anvil
+        if (ForgeroClientSmithingInitializer.hoveredAnvilPos != null && entity.getPos().equals(ForgeroClientSmithingInitializer.hoveredAnvilPos)) {
+            float size = 1.0f / 64.0f; // 1/4 pixel in block units
+            float half = size / 2.0f;
+            // Get local hit coordinates
+            float localX = (float) ForgeroClientSmithingInitializer.hoveredLocalX - 0.5f;
+            float localZ = (float) ForgeroClientSmithingInitializer.hoveredLocalZ - 0.5f;
+            // Rotate localX/localZ according to anvil facing using rotation matrix
+            Direction facing = entity.getCachedState().get(SmithingAnvil.FACING);
+            float angle = 0.0f;
+            switch (facing) {
+                case NORTH -> angle = 0.0f;
+                case EAST  -> angle = (float) (Math.PI / 2.0);
+                case SOUTH -> angle = (float) Math.PI;
+                case WEST  -> angle = (float) (-Math.PI / 2.0);
+            }
+            float cos = (float) Math.cos(angle);
+            float sin = (float) Math.sin(angle);
+            // Apply marker offset in local space before rotation
+            float markerOffsetX = 0.05f;
+            float markerOffsetZ = -0.03f;
+            float localXWithOffset = localX + markerOffsetX;
+            float localZWithOffset = localZ + markerOffsetZ;
+            float rotatedX = localXWithOffset * cos - localZWithOffset * sin;
+            float rotatedZ = localXWithOffset * sin + localZWithOffset * cos;
+            matrices.push();
+            matrices.translate(rotatedX, 0.01f, rotatedZ); // Centered above the anvil top for all facings
+            net.minecraft.client.render.WorldRenderer.drawBox(
+                matrices,
+                vertexConsumers.getBuffer(net.minecraft.client.render.RenderLayer.getLines()),
+                -half, 0, -half, half, 0, half,
+                1.0f, 0.0f, 0.0f, 1.0f // RGBA color
+            );
+            matrices.pop();
+        }
 
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
 
