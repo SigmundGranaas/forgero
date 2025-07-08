@@ -1,18 +1,20 @@
 package com.sigmundgranaas.forgero.data.v3.dto.template;
 
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier; // Import OpenIdentifier
+import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * DTO for the 'material' block within a PartTemplateData's 'structure'.
+ * DTO for a slot within a PartTemplate's structure.
+ * Defines a requirement like a material or a sub-component.
  *
- * @param type        The type of material required (e.g., "forgero:tool_material").
- * @param count       The quantity of the material required.
- * @param description Optional description for this material requirement.
+ * @param type        The type of component required (e.g., "forgero:tool_material").
+ * @param count       The optional quantity required.
+ * @param description Optional description for this requirement.
  */
 public record PartTemplateStructureSlotData(
 		OpenIdentifier type,
-		int count,
+		@Nullable
+		Integer count,
 		@Nullable
 		String description
 ) {

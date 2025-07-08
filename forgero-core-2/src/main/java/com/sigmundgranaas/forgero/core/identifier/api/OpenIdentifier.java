@@ -1,4 +1,3 @@
-// File: /home/sigmund/Documents/projects/forgero/1-20/forgero-core-2/src/main/java/com/sigmundgranaas/forgero/core/identifier/api/OpenIdentifier.java
 package com.sigmundgranaas.forgero.core.identifier.api;
 
 import java.util.Objects;

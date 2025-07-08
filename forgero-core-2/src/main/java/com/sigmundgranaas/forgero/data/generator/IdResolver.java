@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.core.data.definition.NormalizedState;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,6 +29,13 @@ public class IdResolver {
 	public IdResolver(NormalizedState normalizedState, Map<OpenIdentifier, GeneratedState.GeneratedPart> generatedParts) {
 		this.normalizedState = normalizedState;
 		this.generatedParts = generatedParts;
+	}
+
+	/**
+	 * Returns an unmodifiable view of the generated parts this resolver knows about.
+	 */
+	public Map<OpenIdentifier, GeneratedState.GeneratedPart> getGeneratedParts() {
+		return Collections.unmodifiableMap(generatedParts);
 	}
 
 	/**
@@ -155,9 +163,8 @@ public class IdResolver {
 				default -> null;
 			};
 		}
-		// If the current object is already a string (e.g., from a previous `name` resolution)
 		if (obj instanceof String) {
-			return obj; // Treat the string as the final value for any subsequent property access on it.
+			return obj;
 		}
 
 		return null;
@@ -167,7 +174,7 @@ public class IdResolver {
 	 * Resolves an OpenIdentifier to its corresponding NormalizedState or GeneratedState DTO.
 	 * This is crucial for traversing object graphs that contain IDs instead of direct DTOs.
 	 */
-	private @Nullable Object resolveComponentFromId(OpenIdentifier id) {
+	public @Nullable Object resolveComponentFromId(OpenIdentifier id) {
 		if (id == null) return null;
 
 		if (generatedParts.containsKey(id)) {

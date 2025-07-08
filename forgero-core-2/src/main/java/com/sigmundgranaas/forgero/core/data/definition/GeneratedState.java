@@ -4,6 +4,7 @@ import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.v3.dto.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.v3.dto.feature.FeatureData;
 import com.sigmundgranaas.forgero.data.v3.dto.template.UpgradeSlotData;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -16,28 +17,22 @@ public record GeneratedState(
 		Map<OpenIdentifier, GeneratedPart> parts,
 		Map<OpenIdentifier, GeneratedEquipment> equipment
 ) {
-	// Individual generated records are defined below for clarity and encapsulation.
-
-	/**
-	 * A GeneratedPart is a concrete combination of one Material and one Shape (via a PartTemplate).
-	 */
 	public record GeneratedPart(
 			OpenIdentifier id,
 			Set<OpenIdentifier> tags,
 			OpenIdentifier materialId,
-			OpenIdentifier shapeId, // Assuming shape is derived from PartTemplate for now
-			List<UpgradeSlotData> upgrades,
-			List<AttributeData> attributes,
-			List<FeatureData> features
-	) {}
+			OpenIdentifier shapeId,
+			@Nullable List<UpgradeSlotData> upgrades,
+			@Nullable List<AttributeData> attributes,
+			@Nullable List<FeatureData> features
+	) {
+	}
 
-	/**
-	 * A GeneratedEquipment is a concrete combination of one EquipmentTemplate and specific Parts.
-	 */
 	public record GeneratedEquipment(
 			OpenIdentifier id,
 			Set<OpenIdentifier> tags,
 			Map<String, OpenIdentifier> structure,
-			List<UpgradeSlotData> upgrades
-	) {}
+			@Nullable List<UpgradeSlotData> upgrades
+	) {
+	}
 }

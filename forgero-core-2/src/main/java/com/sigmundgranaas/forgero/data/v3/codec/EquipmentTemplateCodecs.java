@@ -13,15 +13,16 @@ public class EquipmentTemplateCodecs {
 	public static final Codec<EquipmentTemplateSlotData> EQUIPMENT_TEMPLATE_SLOT_DATA_CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(
 					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(EquipmentTemplateSlotData::type),
+					CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("default_tag").forGetter(data -> Optional.ofNullable(data.defaultTag())),
 					CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("default").forGetter(data -> Optional.ofNullable(data.defaultComponent()))
-			).apply(instance, (type, defaultComponent) ->
-					new EquipmentTemplateSlotData(type, defaultComponent.orElse(null))));
+			).apply(instance, (type, defaultTag, defaultId) ->
+					new EquipmentTemplateSlotData(type, defaultTag.orElse(null), defaultId.orElse(null))));
 
 	public static final Codec<EquipmentTemplateStructureData> EQUIPMENT_TEMPLATE_STRUCTURE_DATA_CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(
-					Codec.STRING.optionalFieldOf("id").forGetter(data -> Optional.ofNullable(data.id())), // ADDED
-					Codec.unboundedMap(Codec.STRING, EQUIPMENT_TEMPLATE_SLOT_DATA_CODEC).fieldOf("slots").forGetter(EquipmentTemplateStructureData::slots) // Wrapped slots in a field
-			).apply(instance, (id, slots) -> new EquipmentTemplateStructureData(id.orElse(null), slots))); // Modified apply
+					Codec.STRING.optionalFieldOf("id").forGetter(data -> Optional.ofNullable(data.id())),
+					Codec.unboundedMap(Codec.STRING, EQUIPMENT_TEMPLATE_SLOT_DATA_CODEC).fieldOf("slots").forGetter(EquipmentTemplateStructureData::slots)
+			).apply(instance, (id, slots) -> new EquipmentTemplateStructureData(id.orElse(null), slots)));
 
 
 	public static final Codec<EquipmentTemplateData> TOOL_TEMPLATE_DATA_CODEC = RecordCodecBuilder.create(instance ->
@@ -30,7 +31,7 @@ public class EquipmentTemplateCodecs {
 					Codec.STRING.fieldOf("name").forGetter(EquipmentTemplateData::name),
 					Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("include").forGetter(data -> Optional.ofNullable(data.include())),
 					Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("tags").forGetter(data -> Optional.ofNullable(data.tags())),
-					EQUIPMENT_TEMPLATE_STRUCTURE_DATA_CODEC.fieldOf("structure").forGetter(EquipmentTemplateData::structure), // Type is now EquipmentTemplateStructureData
+					EQUIPMENT_TEMPLATE_STRUCTURE_DATA_CODEC.fieldOf("structure").forGetter(EquipmentTemplateData::structure),
 					Codec.list(PartTemplateCodecs.UPGRADE_SLOT_DATA_CODEC).optionalFieldOf("upgrades").forGetter(data -> Optional.ofNullable(data.upgrades())),
 					Codec.list(AttributeCodecs.ATTRIBUTE_DATA_CODEC).optionalFieldOf("attributes").forGetter(data -> Optional.ofNullable(data.attributes())),
 					Codec.list(FeatureCodecs.FEATURE_DATA_CODEC).optionalFieldOf("features").forGetter(data -> Optional.ofNullable(data.features()))

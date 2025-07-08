@@ -6,7 +6,8 @@
     "id": "forgero:{head.material.name}-pickaxe",
     "slots": {
       "head": {
-        "type": "forgero:parts/pickaxe_head_type"
+        "type": "forgero:parts/pickaxe_head_type",
+        "default_tag": "forgero:default_pickaxe_head"
       },
       "handle": {
         "type": "forgero:parts/handle_type",

@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.data.v3.codec;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.sigmundgranaas.forgero.data.v3.dto.template.EquipmentTemplateStructureData;
 import com.sigmundgranaas.forgero.data.v3.dto.template.PartTemplateData;
 import com.sigmundgranaas.forgero.data.v3.dto.template.PartTemplateStructureData;
 import com.sigmundgranaas.forgero.data.v3.dto.template.PartTemplateStructureSlotData;
@@ -25,10 +24,10 @@ public class PartTemplateCodecs {
 	public static final Codec<PartTemplateStructureSlotData> PART_TEMPLATE_STRUCTURE_MATERIAL_DATA_CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(
 					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(PartTemplateStructureSlotData::type),
-					Codec.INT.optionalFieldOf("count").forGetter(data -> Optional.of(data.count())),
+					Codec.INT.optionalFieldOf("count").forGetter(data -> Optional.ofNullable(data.count())),
 					Codec.STRING.optionalFieldOf("description").forGetter(data -> Optional.ofNullable(data.description()))
 			).apply(instance, (type, count, description) ->
-					new PartTemplateStructureSlotData(type, count.orElse(0), description.orElse(null))));
+					new PartTemplateStructureSlotData(type, count.orElse(null), description.orElse(null))));
 
 	public static final Codec<PartTemplateStructureData> PART_TEMPLATE_STRUCTURE_DATA_CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(

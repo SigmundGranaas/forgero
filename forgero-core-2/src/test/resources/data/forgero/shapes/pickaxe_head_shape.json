@@ -1,7 +1,10 @@
 {
   "type": "forgero:shape",
   "name": "Pickaxe Head",
-  "tags": ["forgero:pickaxe_head_shape"],
+  "tags": [
+    "forgero:pickaxe_head_shape",
+    "forgero:default_pickaxe_head"
+  ],
   "attributes": [
     {
       "id": "forgero:shape-durability-mult",
