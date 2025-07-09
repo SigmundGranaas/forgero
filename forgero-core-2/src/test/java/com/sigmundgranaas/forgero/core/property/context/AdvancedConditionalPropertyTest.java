@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -45,9 +46,11 @@ public class AdvancedConditionalPropertyTest extends ForgeroTest {
 		var recipeFeature = new Feature(idFactory.of("custom_recipe"), new Condition(List.of(StaticConditions.isRoot()), List.of()));
 		var schematic = new StaticComponent(idFactory.of("pickaxe_head_schematic"), Set.of(), List.of(recipeFeature));
 		var iron = material(IRON_ID, METAL_TAG);
-		var head = new StructuredPart(PICKAXE_HEAD_ID, Set.of(), List.of(), new ComponentStructure(List.of(slot(idFactory.of("material_slot"), MATERIAL_ID, iron), slot(idFactory.of("schematic_slot"), SCHEMATIC_ID, schematic))));
+		// Update ComponentStructure to use Map.of
+		var head = new StructuredPart(PICKAXE_HEAD_ID, Set.of(), List.of(), new ComponentStructure(slotsMap(slot(idFactory.of("material_slot"), MATERIAL_ID, iron), slot(idFactory.of("schematic_slot"), SCHEMATIC_ID, schematic))));
 		var handle = part(HANDLE_ID, WOOD_TAG);
-		var pickaxe = new StructuredPart(PICKAXE_ID, Set.of(), List.of(), new ComponentStructure(List.of(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head), slot(HANDLE_SLOT_ID, HANDLE_TAG, handle))));
+		// Update ComponentStructure to use Map.of
+		var pickaxe = new StructuredPart(PICKAXE_ID, Set.of(), List.of(), new ComponentStructure(slotsMap(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head), slot(HANDLE_SLOT_ID, HANDLE_TAG, handle))));
 
 		// When the schematic is part of a tool, the 'isRoot' condition is false for it.
 		List<Feature> pickaxeFeatures = resolver.resolve(pickaxe, FeatureEngine.KEY).orElse(Collections.emptyList());
@@ -68,12 +71,16 @@ public class AdvancedConditionalPropertyTest extends ForgeroTest {
 		var powerCrystal = new StaticComponent(idFactory.of("power_crystal"), Set.of(GEM_TAG), List.of(damageBonus, speedBonus));
 
 		var blade = part(BLADE_ID, METAL_TAG, List.of(new SimpleAttribute(ATTACK_DAMAGE, 5f)));
-		var swordHilt = new StructuredPart(idFactory.of("hilt"), Set.of(), List.of(), new ComponentStructure(List.of(slot(idFactory.of("offensive_slot"), OFFENSIVE_SLOT_TYPE, powerCrystal))));
-		var sword = new StructuredPart(SWORD_ID, Set.of(), List.of(), new ComponentStructure(List.of(slot(idFactory.of("blade_slot"), BLADE_TAG, blade), slot(idFactory.of("hilt_slot"), idFactory.of("hilt_type"), swordHilt))));
+		// Update ComponentStructure to use Map.of
+		var swordHilt = new StructuredPart(idFactory.of("hilt"), Set.of(), List.of(), new ComponentStructure(slotsMap(slot(idFactory.of("offensive_slot"), OFFENSIVE_SLOT_TYPE, powerCrystal))));
+		// Update ComponentStructure to use Map.of
+		var sword = new StructuredPart(SWORD_ID, Set.of(), List.of(), new ComponentStructure(slotsMap(slot(idFactory.of("blade_slot"), BLADE_TAG, blade), slot(idFactory.of("hilt_slot"), idFactory.of("hilt_type"), swordHilt))));
 
 		var pickHead = part(PICKAXE_HEAD_ID, METAL_TAG, List.of(new SimpleAttribute(MINING_SPEED, 2f)));
-		var pickHandle = new StructuredPart(HANDLE_ID, Set.of(), List.of(), new ComponentStructure(List.of(slot(idFactory.of("utility_slot"), UTILITY_SLOT_TYPE, powerCrystal))));
-		var pickaxe = new StructuredPart(PICKAXE_ID, Set.of(), List.of(), new ComponentStructure(List.of(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, pickHead), slot(HANDLE_SLOT_ID, HANDLE_TAG, pickHandle))));
+		// Update ComponentStructure to use Map.of
+		var pickHandle = new StructuredPart(HANDLE_ID, Set.of(), List.of(), new ComponentStructure(slotsMap(slot(idFactory.of("utility_slot"), UTILITY_SLOT_TYPE, powerCrystal))));
+		// Update ComponentStructure to use Map.of
+		var pickaxe = new StructuredPart(PICKAXE_ID, Set.of(), List.of(), new ComponentStructure(slotsMap(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, pickHead), slot(HANDLE_SLOT_ID, HANDLE_TAG, pickHandle))));
 
 		Optional<AttributeQueryResult> swordAttributes = resolver.resolve(sword, AttributeEngine.KEY);
 		assertTrue(swordAttributes.isPresent());
@@ -99,14 +106,21 @@ public class AdvancedConditionalPropertyTest extends ForgeroTest {
 		var oakSpeed = new SimpleAttribute(ATTACK_SPEED, 10f, new Condition(List.of(StaticConditions.atDepth(1)), List.of()));
 		var enchantedOak = new StaticComponent(OAK_ID, Set.of(WOOD_TAG), List.of(oakDurability, oakSpeed));
 
-		var hiltWithTwoGems = new StructuredPart(idFactory.of("synergy_hilt"), Set.of(), List.of(), new ComponentStructure(List.of(slot(idFactory.of("gem_slot_1"), GEM_SLOT_TYPE_TAG, ruby), slot(idFactory.of("gem_slot_2"), GEM_SLOT_TYPE_TAG, sapphire))));
-		var swordWithSynergy = new StructuredPart(SWORD_ID, Set.of(), List.of(), new ComponentStructure(List.of(slot(idFactory.of("blade_slot"), BLADE_TAG, part(BLADE_ID, METAL_TAG)), slot(idFactory.of("hilt_slot"), idFactory.of("hilt_type"), hiltWithTwoGems))));
-		var hiltWithOneGem = new StructuredPart(idFactory.of("lonely_hilt"), Set.of(), List.of(), new ComponentStructure(List.of(slot(idFactory.of("gem_slot_1"), GEM_SLOT_TYPE_TAG, ruby))));
-		var swordWithoutSynergy = new StructuredPart(idFactory.of("lonely_sword"), Set.of(), List.of(), new ComponentStructure(List.of(slot(idFactory.of("blade_slot"), BLADE_TAG, part(BLADE_ID, METAL_TAG)), slot(idFactory.of("hilt_slot"), idFactory.of("hilt_type"), hiltWithOneGem))));
+		// Update ComponentStructure to use Map.of
+		var hiltWithTwoGems = new StructuredPart(idFactory.of("synergy_hilt"), Set.of(), List.of(), new ComponentStructure(slotsMap(slot(idFactory.of("gem_slot_1"), GEM_SLOT_TYPE_TAG, ruby), slot(idFactory.of("gem_slot_2"), GEM_SLOT_TYPE_TAG, sapphire))));
+		// Update ComponentStructure to use Map.of
+		var swordWithSynergy = new StructuredPart(SWORD_ID, Set.of(), List.of(), new ComponentStructure(slotsMap(slot(idFactory.of("blade_slot"), BLADE_TAG, part(BLADE_ID, METAL_TAG)), slot(idFactory.of("hilt_slot"), idFactory.of("hilt_type"), hiltWithTwoGems))));
+		// Update ComponentStructure to use Map.of
+		var hiltWithOneGem = new StructuredPart(idFactory.of("lonely_hilt"), Set.of(), List.of(), new ComponentStructure(slotsMap(slot(idFactory.of("gem_slot_1"), GEM_SLOT_TYPE_TAG, ruby))));
+		// Update ComponentStructure to use Map.of
+		var swordWithoutSynergy = new StructuredPart(idFactory.of("lonely_sword"), Set.of(), List.of(), new ComponentStructure(slotsMap(slot(idFactory.of("blade_slot"), BLADE_TAG, part(BLADE_ID, METAL_TAG)), slot(idFactory.of("hilt_slot"), idFactory.of("hilt_type"), hiltWithOneGem))));
 
-		var handleMadeOfOak = new StructuredPart(HANDLE_ID, Set.of(), List.of(), new ComponentStructure(List.of(slot(idFactory.of("material_slot"), MATERIAL_ID, enchantedOak))));
-		var pickaxeWithOakMaterial = new StructuredPart(PICKAXE_ID, Set.of(), List.of(), new ComponentStructure(List.of(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, part(PICKAXE_HEAD_ID, METAL_TAG)), slot(HANDLE_SLOT_ID, HANDLE_TAG, handleMadeOfOak))));
-		var wand = new StructuredPart(idFactory.of("wand"), Set.of(), List.of(), new ComponentStructure(List.of(slot(idFactory.of("core_slot"), idFactory.of("core_type"), enchantedOak))));
+		// Update ComponentStructure to use Map.of
+		var handleMadeOfOak = new StructuredPart(HANDLE_ID, Set.of(), List.of(), new ComponentStructure(slotsMap(slot(idFactory.of("material_slot"), MATERIAL_ID, enchantedOak))));
+		// Update ComponentStructure to use Map.of
+		var pickaxeWithOakMaterial = new StructuredPart(PICKAXE_ID, Set.of(), List.of(), new ComponentStructure(slotsMap(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, part(PICKAXE_HEAD_ID, METAL_TAG)), slot(HANDLE_SLOT_ID, HANDLE_TAG, handleMadeOfOak))));
+		// Update ComponentStructure to use Map.of
+		var wand = new StructuredPart(idFactory.of("wand"), Set.of(), List.of(), new ComponentStructure(slotsMap(slot(idFactory.of("core_slot"), idFactory.of("core_type"), enchantedOak))));
 
 		float synergyDamage = resolver.resolve(swordWithSynergy, AttributeEngine.KEY).map(res -> res.getValue(fireDamageType)).orElse(0f);
 		assertEquals(5f, synergyDamage, "Ruby with Sapphire sibling should have 2+3=5 fire damage.");

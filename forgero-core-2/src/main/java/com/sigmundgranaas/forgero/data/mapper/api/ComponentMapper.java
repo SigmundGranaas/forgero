@@ -109,9 +109,9 @@ public class ComponentMapper {
 				.orElseThrow(() -> new IllegalStateException("Shape " + generatedPart.shapeId() + " not found for generated part " + generatedPart.id()));
 
 		// Construct the structure for the part
-		List<StructureSlot> structureSlots = List.of(
-				new StructureSlot(identifierFactory.of("material"), identifierFactory.of("forgero:material_slot_type"), "Material slot", materialComponent),
-				new StructureSlot(identifierFactory.of("shape"), identifierFactory.of("forgero:shape_slot_type"), "Shape slot", shapeComponent)
+		Map<OpenIdentifier, StructureSlot> structureSlots = Map.of(
+				identifierFactory.of("material"), new StructureSlot(identifierFactory.of("material"), identifierFactory.of("forgero:material_slot_type"), "Material slot", materialComponent),
+				identifierFactory.of("shape"), new StructureSlot(identifierFactory.of("shape"), identifierFactory.of("forgero:shape_slot_type"), "Shape slot", shapeComponent)
 		);
 		ComponentStructure structure = new ComponentStructure(structureSlots);
 
@@ -131,7 +131,7 @@ public class ComponentMapper {
 		List<Property> properties = mapProperties(generatedEquipment.properties());
 		ComponentUpgrades upgrades = mapUpgradeSlots(generatedEquipment.upgrades());
 
-		List<StructureSlot> structureSlots = new ArrayList<>();
+		Map<OpenIdentifier, StructureSlot> structureSlots = new HashMap<>();
 		for (Map.Entry<String, OpenIdentifier> slotEntry : generatedEquipment.structure().entrySet()) {
 			OpenIdentifier partId = slotEntry.getValue();
 			Component partComponent = componentCache.get(partId);
@@ -139,7 +139,7 @@ public class ComponentMapper {
 				throw new IllegalStateException("Part " + partId + " not found in component cache for equipment " + generatedEquipment.id() + ". Ensure all parts are mapped before equipment.");
 			}
 			OpenIdentifier slotTypeTag = partComponent.getTags().stream().findFirst().orElse(identifierFactory.of("forgero:equipment_slot_type"));
-			structureSlots.add(new StructureSlot(identifierFactory.of(slotEntry.getKey()), slotTypeTag, "Slot for " + slotEntry.getKey(), partComponent));
+			structureSlots.put(identifierFactory.of(slotEntry.getKey()), new StructureSlot(identifierFactory.of(slotEntry.getKey()), slotTypeTag, "Slot for " + slotEntry.getKey(), partComponent));
 		}
 		ComponentStructure structure = new ComponentStructure(structureSlots);
 

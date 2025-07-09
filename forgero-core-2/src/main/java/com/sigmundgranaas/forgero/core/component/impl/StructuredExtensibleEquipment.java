@@ -29,7 +29,8 @@ public record StructuredExtensibleEquipment(
 ) implements StructuredComponent, CustomizableComponent {
 	public StructuredExtensibleEquipment {
 		// Validate that slot IDs are unique across both structure and upgrades.
-		var ids = structure.slots().stream().map(Slot::id).collect(Collectors.toCollection(HashSet::new));
+		// Use keySet() for structure slots as it's now a Map.
+		var ids = new HashSet<>(structure.slots().keySet()); // Get all IDs from the structure map's keys
 		for (Slot upgradeSlot : upgrades.slots()) {
 			if (!ids.add(upgradeSlot.id())) {
 				throw new IllegalArgumentException("Duplicate slot ID found between structure and upgrades: " + upgradeSlot.id());

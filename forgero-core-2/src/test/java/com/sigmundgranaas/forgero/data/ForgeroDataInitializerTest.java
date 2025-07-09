@@ -101,11 +101,11 @@ class ForgeroDataInitializerTest extends ForgeroTest {
 
 		assertEquals(2, structuredTool.structure().slots().size(), "Tool structure should have 2 slots (head and handle).");
 
-		Component head = structuredTool.structure().slots().stream().map(StructureSlot::get).flatMap(Optional::stream).filter(s -> s.id().equals(id("forgero:iron-pickaxe_head"))).findFirst()
+		Component head = structuredTool.structure().slots().values().stream().map(StructureSlot::get).flatMap(Optional::stream).filter(s -> s.id().equals(id("forgero:iron-pickaxe_head"))).findFirst()
 				.orElseThrow(() -> new AssertionError("Head slot should be filled."));
 		assertEquals(id("forgero:iron-pickaxe_head"), head.id());
 
-		Component handle = structuredTool.structure().slots().stream().map(StructureSlot::get).flatMap(Optional::stream).filter(s -> s.id().equals(id("forgero:static_oak_handle"))).findFirst()
+		Component handle = structuredTool.structure().slots().values().stream().map(StructureSlot::get).flatMap(Optional::stream).filter(s -> s.id().equals(id("forgero:static_oak_handle"))).findFirst()
 				.orElseThrow(() -> new AssertionError("Handle slot should be filled."));
 		assertEquals(id("forgero:static_oak_handle"), handle.id());
 	}
@@ -200,7 +200,7 @@ class ForgeroDataInitializerTest extends ForgeroTest {
 
 		assertEquals(1, structuredArmor.structure().slots().size(), "Armor structure should have 1 slot (body).");
 
-		Component body = structuredArmor.structure().slots().stream().map(StructureSlot::get).flatMap(Optional::stream).filter(s -> s.id().equals(id("forgero:iron-armor_plate_shape_plate"))).findFirst()
+		Component body = structuredArmor.structure().slots().values().stream().map(StructureSlot::get).flatMap(Optional::stream).filter(s -> s.id().equals(id("forgero:iron-armor_plate_shape_plate"))).findFirst()
 				.orElseThrow(() -> new AssertionError("Body slot should be filled with iron-armor_plate_shape_plate."));
 		assertEquals(id("forgero:iron-armor_plate_shape_plate"), body.id());
 

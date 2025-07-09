@@ -17,8 +17,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -54,8 +56,8 @@ class ComponentMutaterTest extends ForgeroTest {
 		newHandle = part(idFactory.of("new_oak_handle"), Set.of(HANDLE_TAG));
 		invalidHandle = part(idFactory.of("invalid_handle"), Set.of(WOOD_TAG)); // Does not have HANDLE_TAG
 
-		// Setup Structure with unique slot IDs
-		ComponentStructure structure = new ComponentStructure(List.of(
+		// Setup Structure with unique slot IDs (now using a Map)
+		ComponentStructure structure = new ComponentStructure(slotsMap(
 				new StructureSlot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, "Head slot", originalHead),
 				new StructureSlot(HANDLE_SLOT_ID, HANDLE_TAG, "Handle slot", originalHandle)
 		));
@@ -135,11 +137,14 @@ class ComponentMutaterTest extends ForgeroTest {
 
 	@Test
 	void testCreatingComponentWithDuplicateSlotIdsThrows() {
-		ComponentStructure structure = new ComponentStructure(List.of(
+		// New map for structure, with a duplicate ID for a slot
+		ComponentStructure structure = new ComponentStructure(slotsMap(
 				new StructureSlot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, "Head slot", originalHead)
 		));
 
+
 		ComponentUpgrades upgradesWithDuplicate = new ComponentUpgrades(List.of(
+				// This upgrade slot uses the same ID as a structure slot
 				new UpgradeSlot(HEAD_SLOT_ID, BINDING_TAG, "Binding slot", c -> true, Optional.empty())
 		));
 
@@ -147,5 +152,15 @@ class ComponentMutaterTest extends ForgeroTest {
 						PICKAXE_ID, Set.of(), Collections.emptyList(), structure, upgradesWithDuplicate),
 				"Should throw when a slot ID is duplicated between structure and upgrades."
 		);
+	}
+
+	@Test
+	void testComponentStructureConstructorThrowsOnIdMismatch() {
+		// Attempt to create a ComponentStructure where map key and slot ID don't match
+		Map<OpenIdentifier, StructureSlot> invalidStructureSlots = Map.of(
+				idFactory.of("wrong_id"), new StructureSlot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, "Head slot", originalHead)
+		);
+		assertThrows(IllegalArgumentException.class, () -> new ComponentStructure(invalidStructureSlots),
+				"ComponentStructure constructor should throw if map key and slot's internal ID do not match.");
 	}
 }
