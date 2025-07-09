@@ -5,12 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.sigmundgranaas.forgero.core.state.Typed;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 import com.sigmundgranaas.forgero.smithing.util.BoundingBoxUtil;
-import com.sigmundgranaas.forgero.smithing.util.ToolPartTypeUtils;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -63,8 +61,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		}
 	};
 
-
-	// TODO: Items on anvil are vanishing after relogging into the world
 	private int hammerHits = 0;
 	private List<Vec2f> markerPositions = new ArrayList<>();
 	private List<Boolean> markerHits = new ArrayList<>();
@@ -210,7 +206,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			this.markerAttempts = 0;
 		}
 	}
-
 	// Helper: check if a normalized (x, z) is inside the top face of the anvil's voxel shape
 	private boolean isInsideAnvilTopLayer(float x, float z) {
 		// Get the anvil's facing direction
@@ -459,15 +454,15 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				}
 			}
 			// --- Marker spawn logic with delay ---
-			int temp = TemperatureUtils.getTemperature(stack);
-			boolean valid = !stack.isEmpty() && ToolPartTypeUtils.isToolPartType(
-					StateService.INSTANCE.convert(stack)
-							.filter(s -> s instanceof Typed)
-							.map(s -> ((Typed) s).type())
-							.orElse(null)
-			);
-			int maxTemp = TemperatureUtils.getMaxTemp(stack);
-			boolean inTemp = com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isOrangeGroupStage(temp, maxTemp);
+			//int temp = TemperatureUtils.getTemperature(stack);
+			//boolean valid = !stack.isEmpty() && ToolPartTypeUtils.isToolPartType(
+			//		StateService.INSTANCE.convert(stack)
+			//				.filter(s -> s instanceof Typed)
+			//				.map(s -> ((Typed) s).type())
+			//				.orElse(null)
+			//);
+			//int maxTemp = TemperatureUtils.getMaxTemp(stack);
+			//boolean inTemp = com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isOrangeGroupStage(temp, maxTemp);
 
 			// --- Prevent marker spawning if tool already has a condition ---
 			boolean hasCondition = false;
@@ -478,7 +473,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				}
 			}
 
-			if (valid && inTemp && !hasCondition) {
+			if (!hasCondition) {
 				// --- If a marker timed out (missed), automatically advance to next marker ---
 				if (markerPositions.isEmpty() && markerCooldown > 0 && markerAttempts < TOTAL_MARKERS) {
 					// Marker was missed, so prepare to spawn the next marker after the delay

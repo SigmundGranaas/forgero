@@ -87,14 +87,29 @@ public class MoldBlockEntity extends BlockEntity {
 		this.coolingTime = coolingTime;
 		this.currentCoolingTime = 0;
 		this.isSolidified = false;
-		this.result = result.copy();
 
+		// Apply the 'unfinished' condition to the result if possible
+		ItemStack unfinishedResult = result.copy();
+		var stateOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert(unfinishedResult);
+		if (stateOpt.isPresent() && stateOpt.get() instanceof com.sigmundgranaas.forgero.core.condition.Conditional<?> conditional) {
+			var unfinishedCondition = new com.sigmundgranaas.forgero.core.condition.NamedCondition(
+				"unfinished",
+				com.sigmundgranaas.forgero.core.Forgero.NAMESPACE,
+				java.util.List.of()
+			);
+			var conditioned = conditional.applyCondition(unfinishedCondition);
+			var newStackOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert((com.sigmundgranaas.forgero.core.state.State)conditioned);
+			if (newStackOpt.isPresent()) {
+				unfinishedResult = newStackOpt.get();
+			}
+		}
+		this.result = unfinishedResult;
 
 		World world = getWorld();
 		if (world != null) {
 			world.setBlockState(getPos(), getCachedState()
-					.with(MoldBlock.FILLED, true)
-					.with(MoldBlock.PROGRESS, 0), 3);
+				.with(MoldBlock.FILLED, true)
+				.with(MoldBlock.PROGRESS, 0), 3);
 		}
 		markDirty();
 	}
