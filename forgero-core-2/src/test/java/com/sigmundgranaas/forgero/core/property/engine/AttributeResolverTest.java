@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -46,7 +47,8 @@ class AttributeResolverTest extends ForgeroTest {
 	void resolvesAndCalculatesCorrectly() {
 		var head = part(PICKAXE_HEAD_ID, METAL_TAG, List.of(new SimpleAttribute(ATTACK_DAMAGE, 10f)));
 		var handle = part(HANDLE_ID, WOOD_TAG, List.of(new SimpleAttribute(MINING_SPEED, 5f)));
-		var structure = new ComponentStructure(List.of(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head), slot(HANDLE_SLOT_ID, HANDLE_TAG, handle)));
+		// Update ComponentStructure to use Map.of
+		var structure = new ComponentStructure(slotsMap(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head), slot(HANDLE_SLOT_ID, HANDLE_TAG, handle)));
 		var pickaxe = new StructuredPart(PICKAXE_ID, Set.of(idFactory.of("tool")), List.of(new SimpleAttribute(ATTACK_DAMAGE, 1f)), structure);
 
 		Optional<AttributeQueryResult> resultOpt = resolver.resolve(pickaxe, AttributeEngine.KEY);
@@ -76,9 +78,12 @@ class AttributeResolverTest extends ForgeroTest {
 		// STATIC CONDITION: Active only if the root item is a 'pickaxe'.
 		var iron = material(IRON_ID, METAL_TAG, List.of(new SimpleAttribute(MINING_SPEED, 5f, new Condition(List.of(StaticConditions.rootHasTag("pickaxe")), Collections.emptyList()))));
 
-		var head = new StructuredPart(PICKAXE_HEAD_ID, Set.of(), List.of(), new ComponentStructure(List.of(slot(idFactory.of("material_slot"), MATERIAL_ID, iron), slot(GEM_SLOT_ID, GEM_SLOT_TYPE_TAG, diamond))));
-		var pickaxe = new StructuredPart(PICKAXE_ID, Set.of(idFactory.of("pickaxe"), idFactory.of("tool")), List.of(new SimpleAttribute(MINING_SPEED, 1f)), new ComponentStructure(List.of(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head))));
-		var sword = new StructuredPart(SWORD_ID, Set.of(idFactory.of("sword"), idFactory.of("tool")), List.of(new SimpleAttribute(MINING_SPEED, 1f)), new ComponentStructure(List.of(slot(idFactory.of("blade_slot"), BLADE_TAG, head))));
+		// Update ComponentStructure to use Map.of
+		var head = new StructuredPart(PICKAXE_HEAD_ID, Set.of(), List.of(), new ComponentStructure(slotsMap(slot(idFactory.of("material_slot"), MATERIAL_ID, iron), slot(GEM_SLOT_ID, GEM_SLOT_TYPE_TAG, diamond))));
+		// Update ComponentStructure to use Map.of
+		var pickaxe = new StructuredPart(PICKAXE_ID, Set.of(idFactory.of("pickaxe"), idFactory.of("tool")), List.of(new SimpleAttribute(MINING_SPEED, 1f)), new ComponentStructure(slotsMap(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head))));
+		// Update ComponentStructure to use Map.of
+		var sword = new StructuredPart(SWORD_ID, Set.of(idFactory.of("sword"), idFactory.of("tool")), List.of(new SimpleAttribute(MINING_SPEED, 1f)), new ComponentStructure(slotsMap(slot(idFactory.of("blade_slot"), BLADE_TAG, head))));
 
 		DynamicContext stoneTarget = new DynamicContext.Builder().put(ContextKeys.TARGET_TAGS, Set.of(idFactory.of("stone"))).build();
 		DynamicContext woodTarget = new DynamicContext.Builder().put(ContextKeys.TARGET_TAGS, Set.of(idFactory.of("wood"))).build();
@@ -109,8 +114,10 @@ class AttributeResolverTest extends ForgeroTest {
 		var oakHandle = part(HANDLE_ID, WOOD_TAG);
 		var ironHandle = part(HANDLE_ID, METAL_TAG);
 
-		var woodPickaxe = new StructuredPart(PICKAXE_ID, Set.of(), List.of(new SimpleAttribute(ATTACK_DAMAGE, 1f)), new ComponentStructure(List.of(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head), slot(HANDLE_SLOT_ID, HANDLE_TAG, oakHandle))));
-		var ironPickaxe = new StructuredPart(PICKAXE_ID, Set.of(), List.of(new SimpleAttribute(ATTACK_DAMAGE, 1f)), new ComponentStructure(List.of(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head), slot(HANDLE_SLOT_ID, HANDLE_TAG, ironHandle))));
+		// Update ComponentStructure to use Map.of
+		var woodPickaxe = new StructuredPart(PICKAXE_ID, Set.of(), List.of(new SimpleAttribute(ATTACK_DAMAGE, 1f)), new ComponentStructure(slotsMap(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head), slot(HANDLE_SLOT_ID, HANDLE_TAG, oakHandle))));
+		// Update ComponentStructure to use Map.of
+		var ironPickaxe = new StructuredPart(PICKAXE_ID, Set.of(), List.of(new SimpleAttribute(ATTACK_DAMAGE, 1f)), new ComponentStructure(slotsMap(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head), slot(HANDLE_SLOT_ID, HANDLE_TAG, ironHandle))));
 
 		float woodDamage = resolver.resolve(woodPickaxe, AttributeEngine.KEY).map(res -> res.getValue(ATTACK_DAMAGE)).orElse(0f);
 		assertEquals(6f, woodDamage, "Base damage (1) + head bonus (5, because handle is wood) = 6");

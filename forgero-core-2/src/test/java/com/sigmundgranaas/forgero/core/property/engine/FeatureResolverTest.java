@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 class FeatureResolverTest extends ForgeroTest {
@@ -34,7 +35,8 @@ class FeatureResolverTest extends ForgeroTest {
 	void resolvesAndAggregatesFeatures() {
 		var part1 = part(idFactory.of("part1"), METAL_TAG, List.of(new Feature(idFactory.of("fire_aspect"))));
 		var part2 = part(idFactory.of("part2"), WOOD_TAG, List.of(new Feature(idFactory.of("splintering"))));
-		var structure = new ComponentStructure(List.of(slot(idFactory.of("slot1"), idFactory.of("p1_type"), part1), slot(idFactory.of("slot2"), idFactory.of("p2_type"), part2)));
+		// Update ComponentStructure to use Map.of
+		var structure = new ComponentStructure(slotsMap(slot(idFactory.of("slot1"), idFactory.of("p1_type"), part1), slot(idFactory.of("slot2"), idFactory.of("p2_type"), part2)));
 		var assembly = new StructuredPart(idFactory.of("assembly"), Set.of(), List.of(), structure);
 
 		List<Feature> features = resolver.resolve(assembly, FeatureEngine.KEY).orElse(Collections.emptyList());
@@ -57,7 +59,8 @@ class FeatureResolverTest extends ForgeroTest {
 
 		var part1 = part(idFactory.of("part1"), METAL_TAG, List.of(staticFeature));
 		var part2 = part(idFactory.of("part2"), GEM_TAG, List.of(dynamicFeature));
-		var structure = new ComponentStructure(List.of(slot(idFactory.of("slot1"), idFactory.of("p1_type"), part1), slot(idFactory.of("slot2"), idFactory.of("p2_type"), part2)));
+		// Update ComponentStructure to use Map.of
+		var structure = new ComponentStructure(slotsMap(slot(idFactory.of("slot1"), idFactory.of("p1_type"), part1), slot(idFactory.of("slot2"), idFactory.of("p2_type"), part2)));
 		var pickaxe = new StructuredPart(PICKAXE_ID, Set.of(idFactory.of("pickaxe")), List.of(), structure);
 
 		DynamicContext undeadContext = new DynamicContext.Builder().put(ContextKeys.TARGET_TAGS, Set.of(UNDEAD_TAG)).build();

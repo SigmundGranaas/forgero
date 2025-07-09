@@ -8,9 +8,12 @@ import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.property.api.Property;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * A central test fixture providing common objects and builders for Forgero core tests.
@@ -85,6 +88,12 @@ public class ForgeroTest {
 
 	public StructureSlot slot(OpenIdentifier id, OpenIdentifier type, Component component) {
 		return new StructureSlot(id, type, "A slot", component);
+	}
+
+	// New helper method to create a Map<OpenIdentifier, StructureSlot> from varargs of StructureSlot
+	public Map<OpenIdentifier, StructureSlot> slotsMap(StructureSlot... slots) {
+		return Arrays.stream(slots)
+				.collect(Collectors.toMap(StructureSlot::id, s -> s));
 	}
 
 	public SimpleAttribute attribute(OpenIdentifier type, float value) {

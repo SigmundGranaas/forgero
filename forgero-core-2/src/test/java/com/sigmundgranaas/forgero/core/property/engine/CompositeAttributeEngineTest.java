@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -90,7 +91,7 @@ class CompositeAttributeEngineTest extends ForgeroTest {
 				PICKAXE_ID,
 				Set.of(idFactory.of("pickaxe")),
 				List.of(new SimpleAttribute(DefaultAttributes.ATTACK_DAMAGE, 3f)), // Base attribute
-				new ComponentStructure(List.of(
+				new ComponentStructure(slotsMap( // Update to Map.of
 						slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head),
 						slot(HANDLE_SLOT_ID, HANDLE_TAG, handle)
 				))
@@ -122,7 +123,7 @@ class CompositeAttributeEngineTest extends ForgeroTest {
 				PICKAXE_ID,
 				Set.of(idFactory.of("pickaxe")),
 				List.of(baseDamage),
-				new ComponentStructure(List.of(
+				new ComponentStructure(slotsMap( // Update to Map.of
 						slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head),
 						slot(HANDLE_SLOT_ID, HANDLE_TAG, handle)
 				))
@@ -155,7 +156,7 @@ class CompositeAttributeEngineTest extends ForgeroTest {
 				PICKAXE_ID,
 				Set.of(idFactory.of("pickaxe")),
 				Collections.emptyList(), // No base attributes to keep test focused
-				new ComponentStructure(List.of(
+				new ComponentStructure(slotsMap( // Update to Map.of
 						slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head),
 						slot(HANDLE_SLOT_ID, HANDLE_TAG, handle)
 				))
@@ -190,7 +191,7 @@ class CompositeAttributeEngineTest extends ForgeroTest {
 				PICKAXE_ID,
 				Set.of(idFactory.of("pickaxe")),
 				Collections.emptyList(),
-				new ComponentStructure(List.of(
+				new ComponentStructure(slotsMap( // Update to Map.of
 						slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head),
 						slot(HANDLE_SLOT_ID, HANDLE_TAG, handle)
 				))
@@ -235,7 +236,7 @@ class CompositeAttributeEngineTest extends ForgeroTest {
 				PICKAXE_ID,
 				Set.of(idFactory.of("tool")),
 				List.of(baseMiningSpeed),
-				new ComponentStructure(List.of(
+				new ComponentStructure(slotsMap( // Update to Map.of
 						slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head),
 						slot(HANDLE_SLOT_ID, HANDLE_TAG, handle)
 				))
@@ -269,7 +270,7 @@ class CompositeAttributeEngineTest extends ForgeroTest {
 				PICKAXE_ID,
 				Set.of(idFactory.of("tool")),
 				Collections.emptyList(),
-				new ComponentStructure(List.of(
+				new ComponentStructure(slotsMap( // Update to Map.of
 						slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head)
 				))
 		);
@@ -309,7 +310,7 @@ class CompositeAttributeEngineTest extends ForgeroTest {
 				PICKAXE_ID,
 				Set.of(idFactory.of("tool")),
 				Collections.emptyList(),
-				new ComponentStructure(List.of(
+				new ComponentStructure(slotsMap( // Update to Map.of
 						slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head)
 				))
 		);

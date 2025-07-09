@@ -23,6 +23,7 @@ import com.sigmundgranaas.forgero.core.component.impl.StructuredPart;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -49,7 +50,8 @@ class ComponentConstructionTest extends ForgeroTest {
 	void testStructuredPart() {
 		var material = material(IRON_ID, METAL_TAG);
 		var schematic = schematic(PICKAXE_HEAD_ID);
-		var structure = new ComponentStructure(List.of(slot(idFactory.of("material_slot"), MATERIAL_ID, material), slot(idFactory.of("schematic_slot"), SCHEMATIC_ID, schematic)));
+		// Update ComponentStructure to use Map.of
+		var structure = new ComponentStructure(slotsMap(slot(idFactory.of("material_slot"), MATERIAL_ID, material), slot(idFactory.of("schematic_slot"), SCHEMATIC_ID, schematic)));
 		var part = new StructuredPart(PICKAXE_HEAD_ID, Set.of(), List.of(), structure);
 		assertEquals(2, part.getChildren().size());
 		assertInstanceOf(StructuredComponent.class, part);
@@ -58,7 +60,8 @@ class ComponentConstructionTest extends ForgeroTest {
 	@Test
 	void testStructuredExtensiblePart() {
 		var material = material(IRON_ID, METAL_TAG);
-		var structure = new ComponentStructure(List.of(slot(idFactory.of("material_slot"), MATERIAL_ID, material)));
+		// Update ComponentStructure to use Map.of
+		var structure = new ComponentStructure(slotsMap(slot(idFactory.of("material_slot"), MATERIAL_ID, material)));
 		var slot = new UpgradeSlot(GEM_SLOT_ID, GEM_SLOT_TYPE_TAG, "Gem slot", (comp) -> true, Optional.empty());
 		var upgrades = new ComponentUpgrades(List.of(slot));
 		var part = new StructuredExtensiblePart(PICKAXE_HEAD_ID, Set.of(), List.of(), structure, upgrades);
@@ -86,7 +89,8 @@ class ComponentConstructionTest extends ForgeroTest {
 	void testStructuredEquipment() {
 		var head = new StaticComponent(PICKAXE_HEAD_ID, Set.of(PICKAXE_HEAD_TAG), List.of());
 		var handle = new StaticComponent(HANDLE_ID, Set.of(HANDLE_TAG), List.of());
-		var structure = new ComponentStructure(List.of(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head), slot(HANDLE_SLOT_ID, HANDLE_TAG, handle)));
+		// Update ComponentStructure to use Map.of
+		var structure = new ComponentStructure(slotsMap(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head), slot(HANDLE_SLOT_ID, HANDLE_TAG, handle)));
 		var equipment = new StructuredEquipment(PICKAXE_ID, Set.of(), List.of(), structure);
 		assertEquals(2, equipment.getChildren().size());
 	}
@@ -95,7 +99,8 @@ class ComponentConstructionTest extends ForgeroTest {
 	void testStructuredExtensibleEquipment() {
 		var head = new StaticComponent(PICKAXE_HEAD_ID, Set.of(PICKAXE_HEAD_TAG), List.of());
 		var handle = new StaticComponent(HANDLE_ID, Set.of(HANDLE_TAG), List.of());
-		var structure = new ComponentStructure(List.of(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head), slot(HANDLE_SLOT_ID, HANDLE_TAG, handle)));
+		// Update ComponentStructure to use Map.of
+		var structure = new ComponentStructure(slotsMap(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head), slot(HANDLE_SLOT_ID, HANDLE_TAG, handle)));
 		var upgradeSlot = new UpgradeSlot(BINDING_SLOT_ID, BINDING_TAG, "Binding slot", (comp) -> true, Optional.empty());
 		var upgrades = new ComponentUpgrades(List.of(upgradeSlot));
 		var equipment = new StructuredExtensibleEquipment(PICKAXE_ID, Set.of(), List.of(), structure, upgrades);
