@@ -1,0 +1,25 @@
+{
+  "type": "forgero:shape",
+  "name": "Heavy Armor Plate Shape",
+  "tags": ["forgero:armor_plate_shape"],
+  "attributes": [
+    {
+      "id": "forgero:shape-heavy-armor-mult",
+      "type": "forgero:armor",
+      "composite": "forgero:part-composite",
+      "computation": { "multiply": 1.5 }
+    },
+    {
+      "id": "forgero:shape-heavy-toughness-mult",
+      "type": "forgero:armor_toughness",
+      "composite": "forgero:part-composite",
+      "computation": { "multiply": 1.2 }
+    },
+    {
+      "id": "forgero:shape-heavy-durability-mult",
+      "type": "forgero:durability",
+      "composite": "forgero:part-composite",
+      "computation": { "multiply": 1.2 }
+    }
+  ]
+}

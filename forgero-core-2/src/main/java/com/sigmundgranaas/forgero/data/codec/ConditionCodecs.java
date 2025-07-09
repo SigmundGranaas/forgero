@@ -7,7 +7,6 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.data.dto.condition.*;
-import com.sigmundgranaas.forgero.data.v3.dto.condition.*;
 
 import java.util.List;
 

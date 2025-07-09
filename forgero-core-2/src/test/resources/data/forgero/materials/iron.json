@@ -1,19 +1,39 @@
 {
   "type": "forgero:material",
   "name": "Iron",
-  "tags": ["forgero:materials/tool_material", "forgero:materials/metal"],
+  "tags": ["forgero:materials/tool_material", "forgero:materials/metal", "forgero:materials/armor_material"],
   "attributes": [
     {
       "id": "forgero:iron-durability",
       "type": "forgero:durability",
       "composite": "forgero:part-composite",
-      "computation": 250
+      "computation": {
+          "value": 250
+        }
     },
     {
       "id": "forgero:iron-mining_speed",
       "type": "forgero:mining_speed",
       "composite": "forgero:part-composite",
-      "computation": 5
+      "computation": {
+        "value": 5
+      }
+    },
+    {
+      "id": "forgero:iron-armor",
+      "type": "forgero:armor",
+      "composite": "forgero:part-composite",
+      "computation": {
+        "value": 2
+      }
+    },
+    {
+      "id": "forgero:iron-armor_toughness",
+      "type": "forgero:armor_toughness",
+      "composite": "forgero:part-composite",
+      "computation": {
+        "value": 0.5
+      }
     }
   ]
 }

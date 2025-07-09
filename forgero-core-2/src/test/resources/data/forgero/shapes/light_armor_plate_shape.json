@@ -1,0 +1,25 @@
+{
+  "type": "forgero:shape",
+  "name": "Light Armor Plate Shape",
+  "tags": ["forgero:armor_plate_shape"],
+  "attributes": [
+    {
+      "id": "forgero:shape-light-armor-mult",
+      "type": "forgero:armor",
+      "composite": "forgero:part-composite",
+      "computation": { "multiply": 0.75 }
+    },
+    {
+      "id": "forgero:shape-light-toughness-mult",
+      "type": "forgero:armor_toughness",
+      "composite": "forgero:part-composite",
+      "computation": { "multiply": 0.5 }
+    },
+    {
+      "id": "forgero:shape-light-durability-mult",
+      "type": "forgero:durability",
+      "composite": "forgero:part-composite",
+      "computation": { "multiply": 0.8 }
+    }
+  ]
+}

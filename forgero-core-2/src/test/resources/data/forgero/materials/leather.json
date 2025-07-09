@@ -1,0 +1,25 @@
+{
+  "type": "forgero:material",
+  "name": "Leather",
+  "tags": ["forgero:materials/armor_material"],
+  "attributes": [
+    {
+      "id": "forgero:leather-durability",
+      "type": "forgero:durability",
+      "composite": "forgero:part-composite",
+      "computation": 75
+    },
+    {
+      "id": "forgero:leather-armor",
+      "type": "forgero:armor",
+      "composite": "forgero:part-composite",
+      "computation": 1
+    },
+    {
+      "id": "forgero:leather-armor_toughness",
+      "type": "forgero:armor_toughness",
+      "composite": "forgero:part-composite",
+      "computation": 0
+    }
+  ]
+}
