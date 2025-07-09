@@ -4,12 +4,12 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.data.codec.FeatureCodecs;
-import com.sigmundgranaas.forgero.data.codec.CodecConstants;
-import com.sigmundgranaas.forgero.data.dto.condition.TagMatchPredicateData;
-import com.sigmundgranaas.forgero.data.dto.feature.FeatureData;
-import com.sigmundgranaas.forgero.data.dto.feature.VeinMiningFeatureData;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.FeatureCodecs;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
+import com.sigmundgranaas.forgero.data.loading.api.data.condition.TagMatchPredicateData;
+import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
+import com.sigmundgranaas.forgero.data.loading.api.data.feature.VeinMiningFeatureData;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

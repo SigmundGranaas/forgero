@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.resource.loader;
 
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.utility.resource.loader.implementation.ClassPathResourceProvider;
 import org.junit.jupiter.api.Test;
 

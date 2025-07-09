@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.attribute.api;
 
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 
 public class DefaultAttributes {
 	public static final OpenIdentifier DURABILITY = new OpenIdentifier("forgero", "durability");

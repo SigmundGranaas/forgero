@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.property.context;
 
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 
 /**
  * A typed token used for storing and retrieving values from a DynamicContext.

@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.component.api;
 
-import com.sigmundgranaas.forgero.core.component.structure.ComponentStructure;
+import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
 import java.util.List;
 
 /**
