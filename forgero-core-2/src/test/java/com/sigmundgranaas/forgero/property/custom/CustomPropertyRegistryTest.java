@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.data;
+package com.sigmundgranaas.forgero.property.custom;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
