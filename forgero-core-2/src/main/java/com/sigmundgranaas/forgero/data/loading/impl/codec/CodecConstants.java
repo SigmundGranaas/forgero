@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.data.loading.impl.codec;
 
+import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
@@ -20,4 +21,9 @@ public class CodecConstants {
 	 * and OpenIdentifier's toString method to serialize OpenIdentifiers into strings.
 	 */
 	public static final Codec<OpenIdentifier> OPEN_IDENTIFIER_CODEC = Codec.STRING.xmap(IDENTIFIER_FACTORY::of, OpenIdentifier::toString);
+
+	/**
+	 * A custom codec instance for handling raw {@link JsonElement} objects within the serialization system.
+	 */
+	public static final Codec<JsonElement> JSON_ELEMENT_CODEC = JsonElementCodec.INSTANCE;
 }

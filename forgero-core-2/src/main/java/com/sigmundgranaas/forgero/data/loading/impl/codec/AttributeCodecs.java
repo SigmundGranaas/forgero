@@ -9,6 +9,7 @@ import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeDataImpl;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.ComputationData;
 
+import java.util.List;
 import java.util.Optional;
 
 public class AttributeCodecs {
@@ -70,10 +71,12 @@ public class AttributeCodecs {
 
 	public static final Codec<AttributeData> ATTRIBUTE_DATA_CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(
-					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("id").forGetter(AttributeData::id), // Changed to OpenIdentifierCodec
-					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(AttributeData::type), // Changed to OpenIdentifierCodec
+					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("id").forGetter(AttributeData::id),
+					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(AttributeData::type),
 					COMPUTATION_CODEC.fieldOf("computation").forGetter(AttributeData::computation),
 					ConditionCodecs.CONDITION_DATA_CODEC.optionalFieldOf("condition").forGetter(data -> Optional.ofNullable(data.condition())),
-					CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("composite").forGetter(data -> Optional.ofNullable(data.composite())) // Changed to OpenIdentifierCodec
+					CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("composite").forGetter(data -> Optional.ofNullable(data.composite()))
 			).apply(instance, (id, type, comp, cond, composite) -> new AttributeDataImpl(id, type, comp, cond.orElse(null), composite.orElse(null))));
+
+	public static final Codec<List<AttributeData>> ATTRIBUTE_DATA_LIST_CODEC = Codec.list(ATTRIBUTE_DATA_CODEC);
 }

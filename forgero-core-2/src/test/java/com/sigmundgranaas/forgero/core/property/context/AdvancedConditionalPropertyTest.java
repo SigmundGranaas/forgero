@@ -37,8 +37,7 @@ public class AdvancedConditionalPropertyTest extends ForgeroTest {
 	@BeforeEach
 	void setUp() {
 		// The resolver is configured with all available data type engines.
-		List<DataTypeEngine<?, ?>> engines = List.of(new AttributeEngine(), new FeatureEngine());
-		resolver = new ResolverEngine(engines);
+		resolver = new ResolverEngine();
 	}
 
 	@Test

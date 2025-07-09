@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.data.generation.impl;
 
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.generation.api.GeneratedState;
 import com.sigmundgranaas.forgero.data.processing.api.NormalizedState;
-import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;

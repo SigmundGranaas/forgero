@@ -10,7 +10,7 @@ import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.feature.VeinMiningFeatureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.feature.VeinMiningSelectorData;
 
-
+import java.util.List;
 import java.util.Optional;
 
 public class FeatureCodecs {
@@ -52,6 +52,8 @@ public class FeatureCodecs {
 					.flatMap(codec -> ((Codec) codec).encode(input, ops, prefix));
 		}
 	};
+
+	public static final Codec<List<FeatureData>> FEATURE_DATA_LIST_CODEC = Codec.list(FEATURE_DATA_CODEC);
 
 	static {
 		FeatureCodecRegistry.register("forgero:vein_mining", VEIN_MINING_FEATURE_CODEC);

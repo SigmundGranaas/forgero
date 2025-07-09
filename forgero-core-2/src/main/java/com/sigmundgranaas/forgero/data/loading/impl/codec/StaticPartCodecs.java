@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.data.loading.impl.codec;
 
+import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.data.loading.api.data.StaticPartData;
@@ -12,11 +13,12 @@ public class StaticPartCodecs {
 			instance.group(
 					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(StaticPartData::type),
 					Codec.STRING.fieldOf("name").forGetter(StaticPartData::name),
-					Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("include").forGetter(data -> Optional.ofNullable(data.include())), // Changed to list of OpenIdentifierCodec
-					Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("tags").forGetter(data -> Optional.ofNullable(data.tags())), // Changed to list of OpenIdentifierCodec
+					Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("include").forGetter(data -> Optional.ofNullable(data.include())),
+					Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("tags").forGetter(data -> Optional.ofNullable(data.tags())),
 					Codec.list(AttributeCodecs.ATTRIBUTE_DATA_CODEC).optionalFieldOf("attributes").forGetter(data -> Optional.ofNullable(data.attributes())),
-					Codec.list(PartTemplateCodecs.UPGRADE_SLOT_DATA_CODEC).optionalFieldOf("upgrades").forGetter(data -> Optional.ofNullable(data.upgrades())), // Reuse UpgradeSlotData codec
-					Codec.list(FeatureCodecs.FEATURE_DATA_CODEC).optionalFieldOf("features").forGetter(data -> Optional.ofNullable(data.features()))
-			).apply(instance, (type, name, include, tags, attributes, upgrades, features) ->
-					new StaticPartData(type, name, include.orElse(null), tags.orElse(null), attributes.orElse(null), upgrades.orElse(null) , features.orElse(null))));
+					Codec.list(PartTemplateCodecs.UPGRADE_SLOT_DATA_CODEC).optionalFieldOf("upgrades").forGetter(data -> Optional.ofNullable(data.upgrades())),
+					Codec.list(FeatureCodecs.FEATURE_DATA_CODEC).optionalFieldOf("features").forGetter(data -> Optional.ofNullable(data.features())),
+					Codec.unboundedMap(Codec.STRING, CodecConstants.JSON_ELEMENT_CODEC).optionalFieldOf("properties").forGetter(data -> Optional.ofNullable(data.properties()))
+			).apply(instance, (type, name, include, tags, attributes, upgrades, features, properties) ->
+					new StaticPartData(type, name, include.orElse(null), tags.orElse(null), attributes.orElse(null), upgrades.orElse(null) , features.orElse(null), properties.orElse(null))));
 }
