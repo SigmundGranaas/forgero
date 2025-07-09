@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.data.processing.impl;
 
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
 import org.jetbrains.annotations.NotNull;

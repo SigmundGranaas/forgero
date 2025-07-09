@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.tags.engine;
+package com.sigmundgranaas.forgero.common.tags.engine;
 
 import java.util.Collections;
 import java.util.Set;

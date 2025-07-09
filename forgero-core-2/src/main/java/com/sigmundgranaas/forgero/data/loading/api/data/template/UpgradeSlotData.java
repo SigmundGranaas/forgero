@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.data.loading.api.data.template;
 
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;

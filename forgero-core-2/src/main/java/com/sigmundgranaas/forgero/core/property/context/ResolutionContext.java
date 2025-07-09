@@ -6,7 +6,7 @@ import com.sigmundgranaas.forgero.core.component.api.Slot;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.property.condition.StaticCondition;
 
 import java.util.*;

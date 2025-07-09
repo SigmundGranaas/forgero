@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.component.api;
 
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 
 import java.util.Optional;
 

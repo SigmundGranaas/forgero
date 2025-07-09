@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.property.api;
 
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 
 /**
  * A type-safe key used to request a specific kind of data from the {@link Resolver}.

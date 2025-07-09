@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.core.tag.engine;
 
-import com.sigmundgranaas.forgero.core.tags.engine.TagDefinition;
-import com.sigmundgranaas.forgero.core.tags.engine.TagParser;
+import com.sigmundgranaas.forgero.common.tags.engine.TagDefinition;
+import com.sigmundgranaas.forgero.common.tags.engine.TagParser;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;

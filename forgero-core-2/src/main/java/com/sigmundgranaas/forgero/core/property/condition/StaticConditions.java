@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.property.condition;
 
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.property.context.ResolutionContext;
 
 /**

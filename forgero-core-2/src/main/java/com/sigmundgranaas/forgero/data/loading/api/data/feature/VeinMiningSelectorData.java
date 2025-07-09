@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.data.loading.api.data.feature;
 
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier; // Import OpenIdentifier
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier; // Import OpenIdentifier
 
 /**
  * DTO for the selector block within a vein mining feature.

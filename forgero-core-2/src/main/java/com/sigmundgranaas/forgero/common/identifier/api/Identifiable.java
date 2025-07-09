@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.identifier.api;
+package com.sigmundgranaas.forgero.common.identifier.api;
 
 @FunctionalInterface
 public interface Identifiable {

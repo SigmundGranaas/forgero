@@ -9,11 +9,11 @@ import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent; // N
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot; // NEW
 import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.engine.ResolverEngine;
-import com.sigmundgranaas.forgero.core.tags.engine.TagGraph;
-import com.sigmundgranaas.forgero.core.tags.engine.TaggedRegistry;
+import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
+import com.sigmundgranaas.forgero.common.tags.engine.TaggedRegistry;
 import com.sigmundgranaas.forgero.data.pipeline.api.ForgeroDataInitializer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;

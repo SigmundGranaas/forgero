@@ -1,11 +1,11 @@
 package com.sigmundgranaas.forgero.core.tag.engine;
 
-import com.sigmundgranaas.forgero.core.identifier.api.IdentifierFactory;
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.tags.engine.TagGraph;
-import com.sigmundgranaas.forgero.core.tags.engine.TagLoader;
-import com.sigmundgranaas.forgero.core.tags.engine.TagParser;
-import com.sigmundgranaas.forgero.core.tags.engine.TagSource;
+import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
+import com.sigmundgranaas.forgero.common.tags.engine.TagLoader;
+import com.sigmundgranaas.forgero.common.tags.engine.TagParser;
+import com.sigmundgranaas.forgero.common.tags.engine.TagSource;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

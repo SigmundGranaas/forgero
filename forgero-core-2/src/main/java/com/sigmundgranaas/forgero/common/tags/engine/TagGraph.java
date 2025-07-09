@@ -1,7 +1,7 @@
-package com.sigmundgranaas.forgero.core.tags.engine;
+package com.sigmundgranaas.forgero.common.tags.engine;
 
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.tags.api.Taggable;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.tags.api.Taggable;
 
 import java.util.*;
 import java.util.stream.Collectors;

@@ -1,6 +1,6 @@
-package com.sigmundgranaas.forgero.core.tags.api;
+package com.sigmundgranaas.forgero.common.tags.api;
 
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 
 import java.util.Set;
 

@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.data.loading.api.data.condition;
 
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 
 /**
  * DTO for predicates that check for the presence of a tag.

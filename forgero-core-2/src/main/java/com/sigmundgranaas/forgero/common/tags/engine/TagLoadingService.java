@@ -1,9 +1,9 @@
 // File: /home/sigmund/Documents/projects/forgero/1-20/forgero-core-2/src/main/java/com/sigmundgranaas/forgero/core/tags/engine/TagLoadingService.java
-package com.sigmundgranaas.forgero.core.tags.engine;
+package com.sigmundgranaas.forgero.common.tags.engine;
 
-import com.sigmundgranaas.forgero.core.identifier.api.Identifiable;
-import com.sigmundgranaas.forgero.core.identifier.api.IdentifierFactory;
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.identifier.api.Identifiable;
+import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceConverter;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceProvider;
 import com.sigmundgranaas.forgero.utility.resource.loader.implementation.ClassPathResourceProvider;

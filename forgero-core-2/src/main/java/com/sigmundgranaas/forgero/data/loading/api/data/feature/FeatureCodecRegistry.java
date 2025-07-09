@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.data.loading.api.data.feature;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants; // Import CodecConstants
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier; // Import OpenIdentifier
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier; // Import OpenIdentifier
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

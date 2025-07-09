@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.core.component.api.slot;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.Slot;
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import java.util.Optional;
 import java.util.function.Predicate;
 

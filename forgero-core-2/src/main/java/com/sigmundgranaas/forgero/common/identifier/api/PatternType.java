@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.identifier.api;
+package com.sigmundgranaas.forgero.common.identifier.api;
 
 /**
  * Defines different parts of an OpenIdentifier that can be used for pattern matching.

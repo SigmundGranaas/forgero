@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.core.tag.engine;
 
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.tags.api.Taggable;
-import com.sigmundgranaas.forgero.core.tags.engine.TagGraph;
-import com.sigmundgranaas.forgero.core.tags.engine.TagGraphBuilder;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.tags.api.Taggable;
+import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
+import com.sigmundgranaas.forgero.common.tags.engine.TagGraphBuilder;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

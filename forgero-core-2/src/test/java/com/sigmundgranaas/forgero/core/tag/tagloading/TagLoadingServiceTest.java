@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.core.tag.tagloading;
 
-import com.sigmundgranaas.forgero.core.identifier.api.IdentifierFactory;
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.tags.api.Taggable;
-import com.sigmundgranaas.forgero.core.tags.engine.TagGraph;
-import com.sigmundgranaas.forgero.core.tags.engine.TagLoadingService;
+import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.tags.api.Taggable;
+import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
+import com.sigmundgranaas.forgero.common.tags.engine.TagLoadingService;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;

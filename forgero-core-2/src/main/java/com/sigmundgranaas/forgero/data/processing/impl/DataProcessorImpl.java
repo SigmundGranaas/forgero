@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.data.processing.impl;
 
 import com.sigmundgranaas.forgero.data.processing.api.NormalizedState;
 import com.sigmundgranaas.forgero.data.processing.api.RawDefinition;
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.loading.api.data.MaterialData;
 import com.sigmundgranaas.forgero.data.loading.api.data.SchematicData;
 import com.sigmundgranaas.forgero.data.loading.api.data.ShapeData;

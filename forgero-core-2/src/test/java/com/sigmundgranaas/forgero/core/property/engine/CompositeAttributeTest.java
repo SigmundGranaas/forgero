@@ -6,7 +6,7 @@ import com.sigmundgranaas.forgero.core.attribute.api.operator.AdditionOperator;
 import com.sigmundgranaas.forgero.core.attribute.api.operator.DivisionOperator;
 import com.sigmundgranaas.forgero.core.attribute.api.operator.MultiplicationOperator;
 import com.sigmundgranaas.forgero.core.attribute.api.operator.SubtractionOperator;
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;

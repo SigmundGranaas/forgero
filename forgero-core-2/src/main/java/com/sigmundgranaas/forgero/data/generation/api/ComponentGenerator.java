@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.data.generation.api;
 
 import com.sigmundgranaas.forgero.data.processing.api.NormalizedState;
-import com.sigmundgranaas.forgero.core.tags.engine.TagGraph;
+import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
 
 /**
  * The ComponentGenerator is responsible for Stage 3 of the data pipeline.

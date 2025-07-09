@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.data.processing.api;
 
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 
 /**
  * Stage 1 Output: A raw, unprocessed definition from a single file,

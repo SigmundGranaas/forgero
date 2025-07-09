@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.core.component;
 
 import com.sigmundgranaas.forgero.core.component.impl.StaticComponent;
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.property.api.Property;
 import org.junit.jupiter.api.Test;

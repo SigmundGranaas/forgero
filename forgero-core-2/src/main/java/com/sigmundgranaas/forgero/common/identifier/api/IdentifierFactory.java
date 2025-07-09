@@ -1,5 +1,5 @@
 // File: /home/sigmund/Documents/projects/forgero/1-20/forgero-core-2/src/main/java/com/sigmundgranaas/forgero/core/identifier/api/IdentifierFactory.java
-package com.sigmundgranaas.forgero.core.identifier.api;
+package com.sigmundgranaas.forgero.common.identifier.api;
 
 public class IdentifierFactory {
 

@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.data.loading.impl.codec;
 
 import com.mojang.serialization.Codec;
-import com.sigmundgranaas.forgero.core.identifier.api.IdentifierFactory;
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 
 /**
  * Provides common codecs and utilities for Forgero data serialization.

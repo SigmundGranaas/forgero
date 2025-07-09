@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.data.loading.api.data.feature;
 
 import com.sigmundgranaas.forgero.data.loading.api.data.condition.ConditionData;
-import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier; // Import OpenIdentifier
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier; // Import OpenIdentifier
 import org.jetbrains.annotations.Nullable;
 
 /**
