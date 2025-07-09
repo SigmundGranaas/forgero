@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.data;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -61,7 +62,11 @@ class PartTemplateDataCodecTest {
 			  ],
 			  "features": [
 			    { "type": "forgero:vein_mining", "selector": { "type": "forgero:radius", "radius": 1, "tag": "forgero:vein_mining_ores" }, "title": "feature.forgero.vein_mining.title", "description": "feature.forgero.ore_vein_mining.description" }
-			  ]
+			  ],
+			  "properties": {
+			    "forgero:crafting_difficulty": 5,
+			    "forgero:visual_blueprint": { "blueprint_type": "HEAD" }
+			  }
 			}
 			""";
 
@@ -101,6 +106,15 @@ class PartTemplateDataCodecTest {
 		assertNotNull(data.features());
 		assertEquals(1, data.features().size());
 		assertInstanceOf(VeinMiningFeatureData.class, data.features().get(0));
+
+		assertNotNull(data.properties());
+		assertEquals(2, data.properties().size());
+		assertTrue(data.properties().containsKey("forgero:crafting_difficulty"));
+		assertEquals(5, data.properties().get("forgero:crafting_difficulty").getAsInt());
+		assertTrue(data.properties().containsKey("forgero:visual_blueprint"));
+		JsonElement visualBlueprint = data.properties().get("forgero:visual_blueprint");
+		assertTrue(visualBlueprint.isJsonObject());
+		assertEquals("HEAD", visualBlueprint.getAsJsonObject().get("blueprint_type").getAsString());
 	}
 
 	@Test
@@ -126,6 +140,7 @@ class PartTemplateDataCodecTest {
 		assertNull(data.upgrades());
 		assertNull(data.attributes());
 		assertNull(data.features());
+		assertNull(data.properties());
 
 		assertNotNull(data.structure());
 		assertEquals("forgero:minimal-part-id", data.structure().id());

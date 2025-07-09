@@ -27,8 +27,7 @@ class FeatureResolverTest extends ForgeroTest {
 
 	@BeforeEach
 	void setUp() {
-		List<DataTypeEngine<?, ?>> engines = List.of(new FeatureEngine());
-		resolver = new ResolverEngine(engines);
+		resolver = new ResolverEngine();
 	}
 
 	@Test

@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.data;
+package com.sigmundgranaas.forgero.data.codec;
 
 import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;

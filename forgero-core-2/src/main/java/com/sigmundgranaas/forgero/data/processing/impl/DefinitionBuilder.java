@@ -1,92 +1,135 @@
 package com.sigmundgranaas.forgero.data.processing.impl;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
-import org.jetbrains.annotations.NotNull;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.AttributeCodecs;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.FeatureCodecs;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * An internal, mutable builder used by the {@link DataProcessorImpl} during dependency resolution.
- * It accumulates tags, attributes, and features from included definitions and the current definition,
- * handling overrides based on ID for attributes and by type for features.
- * This is *not* part of the public API between pipeline stages.
+ * It accumulates tags and a generic properties map. It also handles the one-time consolidation
+ * of dedicated 'attributes' and 'features' fields into the generic map.
  */
 class DefinitionBuilder {
-	Set<OpenIdentifier> tags = new LinkedHashSet<>();
-	Map<OpenIdentifier, AttributeData> attributes = new HashMap<>();
-	Map<OpenIdentifier, FeatureData> features = new HashMap<>();
+	private final Set<OpenIdentifier> tags = new LinkedHashSet<>();
+	private final Map<String, JsonElement> properties = new HashMap<>();
 
-	public DefinitionBuilder mergeTags(@Nullable List<OpenIdentifier> otherTags) {
+	public void mergeTags(@Nullable Collection<OpenIdentifier> otherTags) {
 		if (otherTags != null) {
 			this.tags.addAll(otherTags);
 		}
-		return this;
 	}
-	public DefinitionBuilder mergeTags(@Nullable Set<OpenIdentifier> otherTags) {
-		if (otherTags != null) {
-			this.tags.addAll(otherTags);
+
+	public void mergeProperties(@Nullable Map<String, JsonElement> otherProperties) {
+		if (otherProperties != null) {
+			// Don't merge attributes/features directly, they need special handling
+			otherProperties.forEach((key, value) -> {
+				if (!key.equals("forgero:attributes") && !key.equals("forgero:features")) {
+					this.properties.put(key, value);
+				}
+			});
 		}
-		return this;
 	}
 
-	public DefinitionBuilder mergeAttributes(@Nullable List<AttributeData> otherAttributes) {
-		if (otherAttributes != null) {
-			otherAttributes.forEach(attr -> this.attributes.put(attr.id(), attr));
+	public void consolidateAttributes(@Nullable List<AttributeData> localAttributes) {
+		// This method will now merge attributes from local and existing properties
+		Map<OpenIdentifier, AttributeData> mergedAttributes = new LinkedHashMap<>();
+
+		// 1. Get inherited attributes from properties map
+		if (this.properties.containsKey("forgero:attributes")) {
+			JsonElement existingJson = this.properties.get("forgero:attributes");
+			var existingList = AttributeCodecs.ATTRIBUTE_DATA_LIST_CODEC.parse(JsonOps.INSTANCE, existingJson).result().orElse(List.of());
+			existingList.forEach(attr -> mergedAttributes.put(attr.id(), attr));
 		}
-		return this;
-	}
 
-	public DefinitionBuilder mergeFeatures(@Nullable List<FeatureData> otherFeatures) {
-		if (otherFeatures != null) {
-			otherFeatures.forEach(feature -> this.features.put(feature.type(), feature));
+		// 2. Add/overwrite with local attributes
+		if (localAttributes != null) {
+			localAttributes.forEach(attr -> mergedAttributes.put(attr.id(), attr));
 		}
-		return this;
+
+		// 3. Re-encode back into the properties map
+		if (!mergedAttributes.isEmpty()) {
+			JsonArray array = new JsonArray();
+			mergedAttributes.values().forEach(attr ->
+					AttributeCodecs.ATTRIBUTE_DATA_CODEC.encodeStart(JsonOps.INSTANCE, attr).result().ifPresent(array::add)
+			);
+			this.properties.put("forgero:attributes", array);
+		} else {
+			this.properties.remove("forgero:attributes");
+		}
 	}
 
-	/**
-	 * Merges properties from another DefinitionBuilder into this one.
-	 *
-	 * @param other The other builder to merge from.
-	 * @return This builder for chaining.
-	 */
-	public DefinitionBuilder merge(@NotNull DefinitionBuilder other) {
-		// Converting sets/maps to lists of values ensures that the mergeX methods' logic is consistently applied
-		// (i.e., last one wins for attributes/features by ID/Type, tags are additive).
-		mergeTags(new ArrayList<>(other.tags)); // Convert set to list for merging
-		mergeAttributes(new ArrayList<>(other.attributes.values()));
-		mergeFeatures(new ArrayList<>(other.features.values()));
-		return this;
+	public void consolidateFeatures(@Nullable List<FeatureData> localFeatures) {
+		// This method will now merge features from local and existing properties
+		List<FeatureData> combinedFeatures = new ArrayList<>();
+
+		// 1. Get inherited features
+		if (this.properties.containsKey("forgero:features")) {
+			JsonElement existingJson = this.properties.get("forgero:features");
+			var existingList = FeatureCodecs.FEATURE_DATA_LIST_CODEC.parse(JsonOps.INSTANCE, existingJson).result().orElse(List.of());
+			combinedFeatures.addAll(existingList);
+		}
+
+		// 2. Add local features
+		if (localFeatures != null) {
+			combinedFeatures.addAll(localFeatures);
+		}
+
+
+		// 3. Re-encode back into the properties map
+		if (!combinedFeatures.isEmpty()) {
+			JsonArray array = new JsonArray();
+			combinedFeatures.forEach(feat ->
+					FeatureCodecs.FEATURE_DATA_CODEC.encodeStart(JsonOps.INSTANCE, feat).result().ifPresent(array::add)
+			);
+			this.properties.put("forgero:features", array);
+		} else {
+			this.properties.remove("forgero:features");
+		}
 	}
 
-	/**
-	 * Converts the accumulated properties into immutable lists/sets.
-	 *
-	 * @return A DTO containing the finalized properties.
-	 */
+
+	public void merge(MergedProperties other) {
+		mergeTags(other.tags);
+
+		// Handle merging properties, including special logic for attributes/features
+		if (other.properties != null) {
+			// Merge general properties
+			other.properties.forEach((key, value) -> {
+				if (!key.equals("forgero:attributes") && !key.equals("forgero:features")) {
+					this.properties.put(key, value);
+				}
+			});
+			// Merge attributes
+			if (other.properties.containsKey("forgero:attributes")) {
+				var otherAttrs = AttributeCodecs.ATTRIBUTE_DATA_LIST_CODEC.parse(JsonOps.INSTANCE, other.properties.get("forgero:attributes")).result().orElse(List.of());
+				consolidateAttributes(otherAttrs);
+			}
+			// Merge features
+			if (other.properties.containsKey("forgero:features")) {
+				var otherFeatures = FeatureCodecs.FEATURE_DATA_LIST_CODEC.parse(JsonOps.INSTANCE, other.properties.get("forgero:features")).result().orElse(List.of());
+				consolidateFeatures(otherFeatures);
+			}
+		}
+	}
+
 	public MergedProperties buildMergedProperties() {
 		return new MergedProperties(
 				tags.isEmpty() ? null : Collections.unmodifiableSet(tags),
-				attributes.isEmpty() ? null : List.copyOf(attributes.values()),
-				features.isEmpty() ? null : List.copyOf(features.values())
+				properties.isEmpty() ? null : Collections.unmodifiableMap(properties)
 		);
 	}
 
-	/**
-	 * A temporary record to hold the results of merging for internal use before
-	 * creating the final Normalized... DTO.
-	 */
 	record MergedProperties(
 			@Nullable Set<OpenIdentifier> tags,
-			@Nullable List<AttributeData> attributes,
-			@Nullable List<FeatureData> features
-	) {}
+			@Nullable Map<String, JsonElement> properties
+	) {
+	}
 }

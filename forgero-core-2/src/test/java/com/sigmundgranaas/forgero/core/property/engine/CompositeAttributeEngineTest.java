@@ -38,8 +38,7 @@ class CompositeAttributeEngineTest extends ForgeroTest {
 
 	@BeforeEach
 	void setUp() {
-		List<DataTypeEngine<?, ?>> engines = List.of(new AttributeEngine());
-		resolver = new ResolverEngine(engines);
+		resolver = new ResolverEngine();
 	}
 
 	// Helper method to flatten component hierarchy for bake tests

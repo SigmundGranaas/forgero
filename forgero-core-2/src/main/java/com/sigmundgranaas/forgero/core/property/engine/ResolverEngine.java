@@ -5,6 +5,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.property.api.DataTypeEngine;
+import com.sigmundgranaas.forgero.core.property.api.PropertyRegistry;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
@@ -37,12 +38,11 @@ public class ResolverEngine implements Resolver {
 	}
 
 	/**
-	 * Constructs a ResolverEngine with a list of expert engines.
-	 *
-	 * @param engines A list of all available {@link DataTypeEngine}s that the system can use.
+	 * Constructs a ResolverEngine. It automatically retrieves all registered DataTypeEngines
+	 * from the {@link PropertyRegistry}.
 	 */
-	public ResolverEngine(List<DataTypeEngine<?, ?>> engines) {
-		this.engines = engines.stream()
+	public ResolverEngine() {
+		this.engines = PropertyRegistry.getInstance().getDataTypeEngines().stream()
 				.collect(Collectors.toMap(engine -> engine.key().id(), Function.identity()));
 		this.bakedCache = Caffeine.newBuilder().maximumSize(1000).build();
 	}

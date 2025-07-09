@@ -1,14 +1,19 @@
 package com.sigmundgranaas.forgero.data.generation.impl;
 
-import com.sigmundgranaas.forgero.data.generation.api.ComponentGenerator;
-import com.sigmundgranaas.forgero.data.generation.api.GeneratedState;
-import com.sigmundgranaas.forgero.data.processing.api.NormalizedState;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
+import com.sigmundgranaas.forgero.data.generation.api.ComponentGenerator;
+import com.sigmundgranaas.forgero.data.generation.api.GeneratedState;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.EquipmentTemplateSlotData;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.AttributeCodecs;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.FeatureCodecs;
+import com.sigmundgranaas.forgero.data.processing.api.NormalizedState;
 
 import java.util.*;
 import java.util.function.Function;
@@ -29,12 +34,14 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 		IdResolver idResolver = new IdResolver(normalizedState, generatedPartsMutable);
 
 		for (NormalizedState.NormalizedPartTemplate template : normalizedState.partTemplates().values()) {
+			var materialSlotType = template.structure().slots().get("material").type();
 			List<NormalizedState.NormalizedMaterial> compatibleMaterials = normalizedState.materials().values().stream()
-					.filter(material -> tagGraph.isTagged(material::tags, template.structure().slots().get("material").type()))
+					.filter(material -> tagGraph.isTagged(material::tags, materialSlotType))
 					.toList();
 
+			var shapeSlotType = template.structure().slots().get("shape").type();
 			List<NormalizedState.NormalizedShape> compatibleShapes = normalizedState.shapes().values().stream()
-					.filter(shape -> tagGraph.isTagged(shape::tags, template.structure().slots().get("shape").type()))
+					.filter(shape -> tagGraph.isTagged(shape::tags, shapeSlotType))
 					.toList();
 
 			for (NormalizedState.NormalizedMaterial material : compatibleMaterials) {
@@ -72,34 +79,63 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 				.flatMap(Set::stream)
 				.collect(Collectors.toSet());
 
-		Map<OpenIdentifier, AttributeData> mergedAttributesMap = new HashMap<>();
-		Optional.ofNullable(material.attributes()).orElse(Collections.emptyList()).forEach(attr -> mergedAttributesMap.put(attr.id(), attr));
-		Optional.ofNullable(shape.attributes()).orElse(Collections.emptyList()).forEach(attr -> mergedAttributesMap.put(attr.id(), attr));
-		List<AttributeData> combinedAttributes = mergedAttributesMap.isEmpty() ? null : new ArrayList<>(mergedAttributesMap.values());
+		Map<String, JsonElement> combinedProperties = new HashMap<>();
 
-		Map<OpenIdentifier, FeatureData> mergedFeaturesMap = new HashMap<>();
-		Optional.ofNullable(material.features()).orElse(Collections.emptyList()).forEach(feat -> mergedFeaturesMap.put(feat.type(), feat));
-		Optional.ofNullable(shape.features()).orElse(Collections.emptyList()).forEach(feat -> mergedFeaturesMap.put(feat.type(), feat));
-		List<FeatureData> combinedFeatures = mergedFeaturesMap.isEmpty() ? null : new ArrayList<>(mergedFeaturesMap.values());
+		var materialProps = Optional.ofNullable(material.properties()).orElse(Collections.emptyMap());
+		var shapeProps = Optional.ofNullable(shape.properties()).orElse(Collections.emptyMap());
+		var templateProps = Optional.ofNullable(template.properties()).orElse(Collections.emptyMap());
+
+		// Merge general properties. Precedence: template > shape > material
+		combinedProperties.putAll(materialProps);
+		combinedProperties.putAll(shapeProps);
+		combinedProperties.putAll(templateProps);
+
+		// Special handling for attributes to merge them correctly.
+		// Precedence is handled by LinkedHashMap: last one seen for a given ID wins.
+		Map<OpenIdentifier, AttributeData> mergedAttributesMap = new LinkedHashMap<>();
+		Stream.of(materialProps, shapeProps, templateProps)
+				.map(p -> p.get("forgero:attributes"))
+				.filter(Objects::nonNull)
+				.flatMap(json -> AttributeCodecs.ATTRIBUTE_DATA_LIST_CODEC.parse(JsonOps.INSTANCE, json).result().orElse(List.of()).stream())
+				.forEach(attr -> mergedAttributesMap.put(attr.id(), attr));
+
+		if (!mergedAttributesMap.isEmpty()) {
+			JsonArray finalAttributesArray = new JsonArray();
+			mergedAttributesMap.values().forEach(attr ->
+					AttributeCodecs.ATTRIBUTE_DATA_CODEC.encodeStart(JsonOps.INSTANCE, attr).result().ifPresent(finalAttributesArray::add)
+			);
+			combinedProperties.put("forgero:attributes", finalAttributesArray);
+		}
+
+
+		// Special handling for features: simply append all lists together.
+		List<FeatureData> allFeatures = Stream.of(materialProps, shapeProps, templateProps)
+				.map(p -> p.get("forgero:features"))
+				.filter(Objects::nonNull)
+				.flatMap(json -> FeatureCodecs.FEATURE_DATA_LIST_CODEC.parse(JsonOps.INSTANCE, json).result().orElse(List.of()).stream())
+				.toList();
+
+		if (!allFeatures.isEmpty()) {
+			JsonArray finalFeaturesArray = new JsonArray();
+			allFeatures.forEach(feature ->
+					FeatureCodecs.FEATURE_DATA_CODEC.encodeStart(JsonOps.INSTANCE, feature).result().ifPresent(finalFeaturesArray::add)
+			);
+			combinedProperties.put("forgero:features", finalFeaturesArray);
+		}
+
 
 		String idPattern = template.structure().id();
-		Map<String, Object> idContext = new HashMap<>();
-		idContext.put("material", material);
-		idContext.put("shape", shape);
-		idContext.put("part_template", template);
-
+		Map<String, Object> idContext = Map.of("material", material, "shape", shape);
 		String resolvedIdPath = idResolver.resolveId(idPattern, idContext);
 		OpenIdentifier partId = idFactory.of(resolvedIdPath);
 
 		return new GeneratedState.GeneratedPart(
 				partId,
 				combinedTags,
-
 				material.id(),
 				shape.id(),
 				template.upgrades(),
-				combinedAttributes,
-				combinedFeatures
+				combinedProperties.isEmpty() ? null : combinedProperties
 		);
 	}
 
@@ -128,10 +164,23 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 		String idPattern = template.structure().id();
 		String resolvedIdPath = idResolver.resolveId(idPattern, new HashMap<>(partCombination));
 		OpenIdentifier equipmentId = idFactory.of(resolvedIdPath);
-		return new GeneratedState.GeneratedEquipment(equipmentId, template.tags(), partCombination, template.upgrades());
+
+		// Per the architectural plan, properties for equipment come ONLY from the template.
+		// Properties from constituent parts are NOT merged into the equipment DTO.
+		// They are resolved at runtime by traversing the component tree.
+		Map<String, JsonElement> equipmentProperties = template.properties();
+
+		return new GeneratedState.GeneratedEquipment(
+				equipmentId,
+				template.tags(),
+				partCombination,
+				template.upgrades(),
+				equipmentProperties
+		);
 	}
 
-	private record PartWrapper(OpenIdentifier id, Set<OpenIdentifier> tags) {}
+	private record PartWrapper(OpenIdentifier id, Set<OpenIdentifier> tags) {
+	}
 
 	private List<Map<String, OpenIdentifier>> findEquipmentPartCombinations(
 			NormalizedState.NormalizedEquipmentTemplate template,
@@ -144,25 +193,24 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 		// Use sorted list of slot names to ensure deterministic order
 		for (String slotName : template.structure().slots().keySet().stream().sorted().toList()) {
 			EquipmentTemplateSlotData slotData = template.structure().slots().get(slotName);
-			List<PartWrapper> potentialParts = new ArrayList<>();
+			List<PartWrapper> potentialParts;
 
 			if (slotData.defaultComponent() != null) {
-				// Case 1: A single, concrete component ID is specified
 				PartWrapper part = allAvailableParts.get(slotData.defaultComponent());
-				if (part != null && tagGraph.isTagged(part::tags, slotData.type())) {
-					potentialParts.add(part);
-				}
+				potentialParts = (part != null && tagGraph.isTagged(part::tags, slotData.type()))
+						? List.of(part)
+						: Collections.emptyList();
 			} else if (slotData.defaultTag() != null) {
-				// Case 2: A tag is specified, creating a pool of default parts
 				potentialParts = allAvailableParts.values().stream()
 						.filter(part -> part.tags() != null)
 						.filter(part -> tagGraph.isTagged(part::tags, slotData.type()))
 						.filter(part -> tagGraph.isTagged(part::tags, slotData.defaultTag()))
 						.toList();
+			} else {
+				potentialParts = Collections.emptyList();
 			}
 
 			if (potentialParts.isEmpty()) {
-				// If any slot cannot be filled with a default part, no default tools can be generated for this template.
 				return Collections.emptyList();
 			}
 
@@ -185,9 +233,5 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 			}
 		}
 		return newCombinations;
-	}
-
-	private String capitalize(String str) {
-		return (str == null || str.isEmpty()) ? str : str.substring(0, 1).toUpperCase() + str.substring(1);
 	}
 }

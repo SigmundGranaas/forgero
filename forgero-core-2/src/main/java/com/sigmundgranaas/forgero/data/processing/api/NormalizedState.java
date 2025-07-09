@@ -1,11 +1,11 @@
 package com.sigmundgranaas.forgero.data.processing.api;
 
+import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
-import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.EquipmentTemplateStructureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.PartTemplateStructureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.UpgradeSlotData;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -13,7 +13,8 @@ import java.util.Set;
 
 /**
  * Stage 2 Output: A container for all fully self-contained, normalized definitions.
- * All 'include' directives have been resolved.
+ * All 'include' directives have been resolved and all property sources have been
+ * consolidated into a single properties map. These DTOs do not implement PropertyContainer.
  */
 public record NormalizedState(
 		Map<OpenIdentifier, NormalizedMaterial> materials,
@@ -23,17 +24,34 @@ public record NormalizedState(
 		Map<OpenIdentifier, NormalizedEquipmentTemplate> equipmentTemplates,
 		Map<OpenIdentifier, NormalizedStaticPart> staticParts
 ) {
-	// Individual normalized records are defined below for clarity and encapsulation.
 
-	public record NormalizedMaterial(OpenIdentifier id, String name, Set<OpenIdentifier> tags, List<AttributeData> attributes, List<FeatureData> features) {}
+	public record NormalizedMaterial(OpenIdentifier id, String name, Set<OpenIdentifier> tags,
+									 @Nullable Map<String, JsonElement> properties) {
+	}
 
-	public record NormalizedShape(OpenIdentifier id, String name, Set<OpenIdentifier> tags, List<AttributeData> attributes, List<FeatureData> features) {}
+	public record NormalizedShape(OpenIdentifier id, String name, Set<OpenIdentifier> tags,
+								  @Nullable Map<String, JsonElement> properties) {
+	}
 
-	public record NormalizedSchematic(OpenIdentifier id, String name, OpenIdentifier targetShape, String craftingMaterial, Set<OpenIdentifier> tags) {}
+	public record NormalizedSchematic(OpenIdentifier id, String name, OpenIdentifier target,
+									  String craftingMaterial, Set<OpenIdentifier> tags,
+									  @Nullable Map<String, JsonElement> properties) {
+	}
 
-	public record NormalizedStaticPart(OpenIdentifier id, String name, Set<OpenIdentifier> tags, List<AttributeData> attributes, List<FeatureData> features, List<UpgradeSlotData> upgrades) {}
+	public record NormalizedStaticPart(OpenIdentifier id, String name, Set<OpenIdentifier> tags,
+									   @Nullable List<UpgradeSlotData> upgrades,
+									   @Nullable Map<String, JsonElement> properties) {
+	}
 
-	public record NormalizedPartTemplate(OpenIdentifier id, String name, Set<OpenIdentifier> tags, PartTemplateStructureData structure, List<UpgradeSlotData> upgrades) {}
+	public record NormalizedPartTemplate(OpenIdentifier id, String name, Set<OpenIdentifier> tags,
+										 PartTemplateStructureData structure,
+										 @Nullable List<UpgradeSlotData> upgrades,
+										 @Nullable Map<String, JsonElement> properties) {
+	}
 
-	public record NormalizedEquipmentTemplate(OpenIdentifier id, String name, Set<OpenIdentifier> tags, EquipmentTemplateStructureData structure, List<UpgradeSlotData> upgrades) {}
+	public record NormalizedEquipmentTemplate(OpenIdentifier id, String name, Set<OpenIdentifier> tags,
+											  EquipmentTemplateStructureData structure,
+											  @Nullable List<UpgradeSlotData> upgrades,
+											  @Nullable Map<String, JsonElement> properties) {
+	}
 }

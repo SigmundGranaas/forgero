@@ -5,9 +5,9 @@ import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent; // NEW
+import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
-import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot; // NEW
+import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
@@ -31,17 +31,11 @@ class ForgeroDataInitializerTest extends ForgeroTest {
 	private static TaggedRegistry<Component> componentRegistry;
 	private static Resolver resolver;
 
-	// Conceptual addition to DefaultAttributes for testing purposes
-	// In a real project, these would be proper constants in DefaultAttributes.java
-	public static final String ARMOR = "forgero:armor";
-	public static final String ARMOR_TOUGHNESS = "forgero:armor_toughness";
-	public static final String KNOCKBACK_RESISTANCE = "forgero:knockback_resistance"; // Included from previous as it was there
-
 	@BeforeAll
 	static void setUpAll() {
 		initializer = new ForgeroDataInitializer("forgero");
 		componentRegistry = initializer.getComponentRegistry();
-		resolver = new ResolverEngine(List.of(new AttributeEngine()));
+		resolver = new ResolverEngine();
 	}
 
 	private OpenIdentifier id(String id) {
@@ -55,7 +49,6 @@ class ForgeroDataInitializerTest extends ForgeroTest {
 		assertNotNull(tagGraph, "TagGraph should not be null after initialization.");
 		assertTrue(tagGraph.getParents(id("forgero:materials/metal")).contains(id("forgero:materials/material")),
 				"The 'metal' tag should have 'material' as a parent.");
-		// New tag graph assertions for armor
 		assertTrue(tagGraph.getParents(id("forgero:materials/armor_material")).contains(id("forgero:materials/material")),
 				"The 'armor_material' tag should have 'material' as a parent.");
 		assertTrue(tagGraph.getParents(id("forgero:materials/metal")).contains(id("forgero:materials/armor_material")),
@@ -146,7 +139,7 @@ class ForgeroDataInitializerTest extends ForgeroTest {
 	@Test
 	@DisplayName("Test Generated Armor Part: Iron Armor Plate")
 	void testGeneratedArmorPartExistsAndHasCorrectProperties() {
-		OpenIdentifier partId = id("forgero:iron-armor_plate_shape_plate"); // ID pattern for armor plate is material-shape_plate
+		OpenIdentifier partId = id("forgero:iron-armor_plate_shape_plate");
 		Component part = componentRegistry.find(partId)
 				.orElseThrow(() -> new AssertionError("Part not found in registry: " + partId));
 
@@ -161,7 +154,6 @@ class ForgeroDataInitializerTest extends ForgeroTest {
 		AttributeQueryResult attributes = resolver.resolve(part, AttributeEngine.KEY)
 				.orElseThrow(() -> new AssertionError("Could not resolve attributes for " + partId));
 
-		// Assuming default armor_plate_shape applies 1.0x multipliers to material's armor/toughness
 		assertEquals(250f, attributes.getValue(DefaultAttributes.DURABILITY), 0.001f, "Durability should be resolved correctly from composite (250 * 1.0).");
 		assertEquals(2f, attributes.getValue(DefaultAttributes.ARMOR), 0.001f, "Armor should be resolved correctly from composite (2 * 1.0).");
 		assertEquals(0.5f, attributes.getValue(DefaultAttributes.ARMOR_TOUGHNESS), 0.001f, "Armor Toughness should be resolved correctly from composite (0.5 * 1.0).");
@@ -200,23 +192,18 @@ class ForgeroDataInitializerTest extends ForgeroTest {
 		Component armor = componentRegistry.find(armorId)
 				.orElseThrow(() -> new AssertionError("Armor not found in registry: " + armorId));
 
-		// It should be both structured (for 'body' part) and customizable (for 'trim' upgrade)
 		assertInstanceOf(StructuredComponent.class, armor, "Armor must be a structured component.");
 		assertInstanceOf(CustomizableComponent.class, armor, "Armor must be a customizable component.");
 
 		StructuredComponent structuredArmor = (StructuredComponent) armor;
 		CustomizableComponent customizableArmor = (CustomizableComponent) armor;
 
-
-		// Verify structural slots
 		assertEquals(1, structuredArmor.structure().slots().size(), "Armor structure should have 1 slot (body).");
 
-		// The "body" slot should contain the generated Iron Armor Plate
 		Component body = structuredArmor.structure().slots().stream().map(StructureSlot::get).flatMap(Optional::stream).filter(s -> s.id().equals(id("forgero:iron-armor_plate_shape_plate"))).findFirst()
 				.orElseThrow(() -> new AssertionError("Body slot should be filled with iron-armor_plate_shape_plate."));
 		assertEquals(id("forgero:iron-armor_plate_shape_plate"), body.id());
 
-		// Verify upgrade slots
 		List<UpgradeSlot> upgradeSlots = customizableArmor.getUpgradeSlots();
 		assertEquals(1, upgradeSlots.size(), "Armor should have 1 upgrade slot (trim).");
 
@@ -230,7 +217,6 @@ class ForgeroDataInitializerTest extends ForgeroTest {
 	@Test
 	@DisplayName("Test Armor Variants")
 	void testVariantArmorPartsAreGeneratedButVariantArmorPiecesAreNot() {
-		// Check that all armor part variants are generated
 		assertExists(id("forgero:iron-armor_plate_shape_plate"), "Default iron armor plate part");
 		assertExists(id("forgero:iron-heavy_armor_plate_shape_plate"), "Heavy iron armor plate part");
 		assertExists(id("forgero:iron-light_armor_plate_shape_plate"), "Light iron armor plate part");
@@ -239,18 +225,16 @@ class ForgeroDataInitializerTest extends ForgeroTest {
 		assertExists(id("forgero:leather-light_armor_plate_shape_plate"), "Light leather armor plate part");
 
 
-		// Check that only the default armor pieces are generated (for each material that can make armor)
 		List<Component> chestPlates = componentRegistry.query(id("forgero:armor/chest_plate"));
 		assertEquals(2, chestPlates.size(), "Two default chest plates (iron, leather) should be generated.");
 		assertTrue(chestPlates.stream().anyMatch(c -> c.id().equals(id("forgero:iron-chest_plate"))), "Iron chest plate should be present.");
 		assertTrue(chestPlates.stream().anyMatch(c -> c.id().equals(id("forgero:leather-chest_plate"))), "Leather chest plate should be present.");
 
 
-		// Explicitly check that an armor piece with a non-default part was NOT generated
 		assertNotExists(id("forgero:iron-heavy_chest_plate"), "A chest plate with a non-default part (heavy)");
 		assertNotExists(id("forgero:iron-light_chest_plate"), "A chest plate with a non-default part (light)");
 		assertNotExists(id("forgero:leather-heavy_chest_plate"), "A chest plate with a non-default part (heavy)");
-		assertNotExists(id("forgero:leather-light_chest_plate"), "A chest plate with a non-default part (light)"); // Corrected ID string
+		assertNotExists(id("forgero:leather-light_chest_plate"), "A chest plate with a non-default part (light)");
 	}
 
 	private Component assertExists(OpenIdentifier id, String name) {

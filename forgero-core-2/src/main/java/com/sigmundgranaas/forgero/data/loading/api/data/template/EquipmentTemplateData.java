@@ -1,25 +1,29 @@
 package com.sigmundgranaas.forgero.data.loading.api.data.template;
 
+import com.google.gson.JsonElement;
+import com.sigmundgranaas.forgero.data.loading.api.data.PropertyContainer;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
- * DTO for `forgero:tool_template` type data files.
+ * DTO for `forgero:equipment_template` type data files.
  * Defines the structure of a complete tool.
  *
- * @param type       The type identifier, always "forgero:tool_template".
- * @param name       The unique name of the tool template.
+ * @param type       The type identifier, always "forgero:equipment_template".
+ * @param name       The unique name of the equipment template.
  * @param include    Optional list of IDs of other definitions to include.
- * @param tags       Optional list of tags associated with the tool template.
- * @param structure  Defines the required parts for tool assembly.
- * @param upgrades   Optional list of tool-group upgrade slots.
- * @param attributes Optional list of attributes inherent to this tool template.
- * @param features   Optional list of features inherent to this tool template.
+ * @param tags       Optional list of tags associated with the equipment template.
+ * @param structure  Defines the required parts for equipment assembly.
+ * @param upgrades   Optional list of equipment-group upgrade slots.
+ * @param attributes Optional list of attributes inherent to this equipment template.
+ * @param features   Optional list of features inherent to this equipment template.
+ * @param properties Optional map for custom, extensible properties.
  */
 public record EquipmentTemplateData(
 		OpenIdentifier type,
@@ -35,6 +39,8 @@ public record EquipmentTemplateData(
 		@Nullable
 		List<AttributeData> attributes,
 		@Nullable
-		List<FeatureData> features
-) {
+		List<FeatureData> features,
+		@Nullable
+		Map<String, JsonElement> properties
+) implements PropertyContainer {
 }

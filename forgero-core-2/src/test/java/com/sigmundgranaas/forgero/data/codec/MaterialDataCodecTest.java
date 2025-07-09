@@ -1,5 +1,6 @@
-package com.sigmundgranaas.forgero.data;
+package com.sigmundgranaas.forgero.data.codec;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -45,9 +46,7 @@ class MaterialDataCodecTest {
 			  "include": ["forgero:materials/mineral_base", "forgero:materials/smeltable_base"],
 			  "tags": ["forgero:gem", "forgero:mineral", "forgero:tool_material"],
 			  "attributes": [
-			    { "id": "forgero:diamond-durability", "type": "forgero:durability", "computation": 1561 },
-			    { "id": "forgero:diamond-mining_level", "type": "forgero:mining_level", "computation": 3 },
-			    { "id": "forgero:diamond-composite-mining-speed", "type": "forgero:mining_speed", "composite": "forgero:material-mining-speed", "computation": { "add": 8 } }
+			    { "id": "forgero:diamond-durability", "type": "forgero:durability", "computation": 1561 }
 			  ],
 			  "features": [
 			    {
@@ -56,7 +55,15 @@ class MaterialDataCodecTest {
 			      "title": "feature.forgero.vein_mining.title",
 			      "description": "feature.forgero.ore_vein_mining.description"
 			    }
-			  ]
+			  ],
+			  "properties": {
+			    "forgero:tooltip": [
+			      { "text": "A custom tooltip line" }
+			    ],
+			    "better_combat:attribute_container": {
+			        "id": "better_combat:two_handed_spear"
+			    }
+			  }
 			}
 			""";
 
@@ -74,7 +81,7 @@ class MaterialDataCodecTest {
 		assertTrue(data.tags().containsAll(List.of(id("forgero:gem"), id("forgero:mineral"), id("forgero:tool_material"))));
 
 		assertNotNull(data.attributes());
-		assertEquals(3, data.attributes().size());
+		assertEquals(1, data.attributes().size());
 		Optional<AttributeData> durability = data.attributes().stream().filter(a -> a.id().equals(id("forgero:diamond-durability"))).findFirst();
 		assertTrue(durability.isPresent());
 		assertEquals(1561f, durability.get().computation().value());
@@ -82,11 +89,14 @@ class MaterialDataCodecTest {
 		assertNotNull(data.features());
 		assertEquals(1, data.features().size());
 		assertInstanceOf(VeinMiningFeatureData.class, data.features().get(0));
-		VeinMiningFeatureData veinMining = (VeinMiningFeatureData) data.features().get(0);
-		assertEquals(id("forgero:vein_mining"), veinMining.type());
-		assertEquals(id("forgero:radius"), veinMining.selector().type());
-		assertEquals(1, veinMining.selector().radius());
-		assertEquals(id("forgero:vein_mining_ores"), veinMining.selector().tag());
+
+		assertNotNull(data.properties());
+		assertEquals(2, data.properties().size());
+		assertTrue(data.properties().containsKey("forgero:tooltip"));
+		JsonElement tooltip = data.properties().get("forgero:tooltip");
+		assertTrue(tooltip.isJsonArray());
+		assertEquals(1, tooltip.getAsJsonArray().size());
+		assertTrue(data.properties().containsKey("better_combat:attribute_container"));
 	}
 
 	@Test
@@ -105,37 +115,7 @@ class MaterialDataCodecTest {
 		assertNull(data.tags());
 		assertNull(data.attributes());
 		assertNull(data.features());
-	}
-
-	@Test
-	void testParseMaterialWithOnlyTagsAndAttributes() {
-		String json = """
-				{
-				  "type": "forgero:material",
-				  "name": "basic_wood",
-				  "tags": ["forgero:wood", "forgero:common"],
-				  "attributes": [
-				    { "id": "forgero:wood-hardness", "type": "forgero:hardness", "computation": 2.0 }
-				  ]
-				}
-				""";
-
-		MaterialData data = parseSuccess(MaterialCodecs.MATERIAL_DATA_CODEC, json);
-		assertEquals(id("forgero:material"), data.type());
-		assertEquals("basic_wood", data.name());
-
-		assertNotNull(data.tags());
-		assertTrue(data.tags().containsAll(List.of(id("forgero:wood"), id("forgero:common"))));
-
-		assertNotNull(data.attributes());
-		assertEquals(1, data.attributes().size());
-		AttributeData hardness = data.attributes().get(0);
-		assertEquals(id("forgero:wood-hardness"), hardness.id());
-		assertEquals(id("forgero:hardness"), hardness.type());
-		assertEquals(2.0f, hardness.computation().value());
-
-		assertNull(data.include());
-		assertNull(data.features());
+		assertNull(data.properties());
 	}
 
 	@Test

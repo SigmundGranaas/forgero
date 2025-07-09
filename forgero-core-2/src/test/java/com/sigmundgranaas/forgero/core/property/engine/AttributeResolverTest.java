@@ -35,8 +35,7 @@ class AttributeResolverTest extends ForgeroTest {
 
 	@BeforeEach
 	void setUp() {
-		List<DataTypeEngine<?, ?>> engines = List.of(new AttributeEngine());
-		resolver = new ResolverEngine(engines);
+		resolver = new ResolverEngine();
 	}
 
 	/**

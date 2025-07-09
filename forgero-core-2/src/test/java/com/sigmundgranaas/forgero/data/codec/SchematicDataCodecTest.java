@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.data;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -42,7 +43,11 @@ class SchematicDataCodecTest {
 				  "include": ["forgero:schematics/base_schematic"],
 				  "tags": ["forgero:common_schematic"],
 				  "target": "forgero:mandrill-pickaxe-head",
-				  "crafting_material": "minecraft:paper"
+				  "crafting_material": "minecraft:paper",
+				  "properties": {
+				    "forgero:rarity": "LEGENDARY",
+				    "forgero:craft_experience": 100
+				  }
 				}
 				""";
 
@@ -55,6 +60,13 @@ class SchematicDataCodecTest {
 		assertTrue(data.tags().contains(id("forgero:common_schematic")));
 		assertEquals(id("forgero:mandrill-pickaxe-head"), data.target());
 		assertEquals("minecraft:paper", data.craftingMaterial());
+
+		assertNotNull(data.properties());
+		assertEquals(2, data.properties().size());
+		assertTrue(data.properties().containsKey("forgero:rarity"));
+		assertEquals("LEGENDARY", data.properties().get("forgero:rarity").getAsString());
+		assertTrue(data.properties().containsKey("forgero:craft_experience"));
+		assertEquals(100, data.properties().get("forgero:craft_experience").getAsInt());
 	}
 
 	@Test
@@ -75,6 +87,7 @@ class SchematicDataCodecTest {
 		assertNull(data.tags());
 		assertEquals(id("forgero:wooden-handle"), data.target());
 		assertEquals("minecraft:stick", data.craftingMaterial());
+		assertNull(data.properties());
 	}
 
 	@Test

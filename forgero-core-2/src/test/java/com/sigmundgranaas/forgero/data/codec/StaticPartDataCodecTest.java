@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.data;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -47,7 +48,10 @@ class StaticPartDataCodecTest {
 				  "attributes": [
 				    { "id": "forgero:custom-hardness", "type": "forgero:hardness", "computation": 5.0 }
 				  ],
-				  "features": []
+				  "features": [],
+				  "properties": {
+				    "forgero:weight": 2.5
+				  }
 				}
 				""";
 
@@ -70,6 +74,11 @@ class StaticPartDataCodecTest {
 
 		assertNotNull(data.features());
 		assertTrue(data.features().isEmpty());
+
+		assertNotNull(data.properties());
+		assertEquals(1, data.properties().size());
+		assertTrue(data.properties().containsKey("forgero:weight"));
+		assertEquals(2.5, data.properties().get("forgero:weight").getAsDouble(), 0.001);
 	}
 
 	@Test
@@ -88,6 +97,7 @@ class StaticPartDataCodecTest {
 		assertNull(data.tags());
 		assertNull(data.attributes());
 		assertNull(data.features());
+		assertNull(data.properties());
 	}
 
 	@Test

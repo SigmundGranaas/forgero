@@ -1,5 +1,6 @@
-package com.sigmundgranaas.forgero.data;
+package com.sigmundgranaas.forgero.data.codec;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -45,7 +46,11 @@ class EquipmentTemplateDataCodecTest {
 				  ],
 				  "attributes": [
 				    { "id": "forgero:tool-attack_speed", "type": "forgero:attack_speed", "computation": -2.8 }
-				  ]
+				  ],
+				  "properties": {
+				    "forgero:tool_model_override": { "path": "pickaxe_model" },
+				    "forgero:icon_replacement": { "from": "pickaxe", "to": "custom_pickaxe" }
+				  }
 				}
 				""";
 		EquipmentTemplateData data = parseSuccess(EquipmentTemplateCodecs.TOOL_TEMPLATE_DATA_CODEC, json);
@@ -69,6 +74,14 @@ class EquipmentTemplateDataCodecTest {
 		assertNotNull(handleSlot);
 		assertEquals(id("forgero:handle"), handleSlot.type());
 		assertEquals("forgero:oak-handle", handleSlot.defaultComponent().toString());
+
+		assertNotNull(data.properties());
+		assertEquals(2, data.properties().size());
+		assertTrue(data.properties().containsKey("forgero:tool_model_override"));
+		JsonElement modelOverride = data.properties().get("forgero:tool_model_override");
+		assertTrue(modelOverride.isJsonObject());
+		assertEquals("pickaxe_model", modelOverride.getAsJsonObject().get("path").getAsString());
+		assertTrue(data.properties().containsKey("forgero:icon_replacement"));
 	}
 
 	@Test
@@ -96,5 +109,6 @@ class EquipmentTemplateDataCodecTest {
 		assertEquals(id("forgero:some_part"), mainSlot.type());
 		assertNull(mainSlot.defaultComponent());
 		assertNull(mainSlot.defaultTag());
+		assertNull(data.properties());
 	}
 }
