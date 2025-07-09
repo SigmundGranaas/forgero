@@ -30,16 +30,16 @@ public record ComputationChain(List<? extends Attribute> orderedAttributes, bool
 	}
 
 	public ComputationChain(List<? extends Attribute> orderedAttributes, boolean ignoreComponent) {
+		this.ignoreComponent = ignoreComponent;
 		this.orderedAttributes = orderedAttributes.stream()
 				.filter(notComponent())
 				.sorted(Comparator.comparingInt(Attribute::group)
 						.thenComparingInt(attr -> attr.operator().order()))
 				.toList();
-		this.ignoreComponent = ignoreComponent;
 	}
 
 	private Predicate<Attribute> notComponent(){
-		if(ignoreComponent){
+		if( ignoreComponent ){
 			return (attribute) -> !(attribute instanceof AttributeComponent);
 		} else {
 			return   (attribute) -> true;
