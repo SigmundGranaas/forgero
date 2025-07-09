@@ -1,24 +1,24 @@
 package com.sigmundgranaas.forgero.core.property.api;
 
-import com.sigmundgranaas.forgero.data.mapper.api.PropertyBuilder;
+import com.sigmundgranaas.forgero.data.mapper.api.PropertyCodec;
 
 import java.util.List;
 
 /**
- * A central registry for all property-related components (PropertyBuilders and DataTypeEngines).
+ * A central registry for all property-related components (PropertyCodecs and DataTypeEngines).
  * This allows different modules to register their custom property types without
  * the core application needing direct knowledge of their concrete implementations.
  * It follows the singleton pattern to ensure a single point of truth for registered properties.
  */
 public interface PropertyRegistry {
 	/**
-	 * Registers a PropertyBuilder for a specific custom property type.
+	 * Registers a PropertyCodec for a specific custom property type.
 	 * This method is intended to be called by modules during their initialization phase
 	 * to make their property parsing capabilities known to the system.
 	 *
-	 * @param builder The PropertyBuilder to register.
+	 * @param codec The PropertyCodec to register.
 	 */
-	void registerPropertyBuilder(PropertyBuilder builder);
+	void registerPropertyCodec(PropertyCodec<?> codec);
 
 	/**
 	 * Registers a DataTypeEngine for a specific custom property type.
@@ -30,12 +30,12 @@ public interface PropertyRegistry {
 	void registerDataTypeEngine(DataTypeEngine<?, ?> engine);
 
 	/**
-	 * Retrieves an immutable list of all registered PropertyBuilders.
+	 * Retrieves an immutable list of all registered PropertyCodecs.
 	 * This list is typically used by the ComponentMapper to parse all known property types.
 	 *
-	 * @return An unmodifiable list of all registered PropertyBuilders.
+	 * @return An unmodifiable list of all registered PropertyCodecs.
 	 */
-	List<PropertyBuilder> getPropertyBuilders();
+	List<PropertyCodec<?>> getPropertyCodecs();
 
 	/**
 	 * Retrieves an immutable list of all registered DataTypeEngines.

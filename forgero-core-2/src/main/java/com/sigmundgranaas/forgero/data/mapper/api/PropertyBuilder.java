@@ -2,8 +2,8 @@ package com.sigmundgranaas.forgero.data.mapper.api;
 
 import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.core.property.api.Property;
-import com.sigmundgranaas.forgero.data.loading.api.data.loader.ConditionMapper;
-import com.sigmundgranaas.forgero.data.loading.api.data.loader.OperatorMapper;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.ConditionMapper;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.OperatorMapper;
 
 import java.util.List;
 import java.util.Map;

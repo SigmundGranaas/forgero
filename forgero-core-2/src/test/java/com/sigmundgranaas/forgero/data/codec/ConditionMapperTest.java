@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.data.codec;
 import com.sigmundgranaas.forgero.core.ForgeroTest;
 import com.sigmundgranaas.forgero.core.property.condition.Condition;
 import com.sigmundgranaas.forgero.data.loading.api.data.condition.*;
-import com.sigmundgranaas.forgero.data.loading.api.data.loader.ConditionMapper;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.ConditionMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

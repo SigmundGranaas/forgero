@@ -1,13 +1,11 @@
 package com.sigmundgranaas.forgero.data.processing;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import com.sigmundgranaas.forgero.core.ForgeroTest;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.core.ForgeroTest;
 import com.sigmundgranaas.forgero.data.Utils;
 import com.sigmundgranaas.forgero.data.loading.api.data.MaterialData;
+import com.sigmundgranaas.forgero.data.loading.api.data.PropertyData;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeDataImpl;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.ComputationData;
@@ -37,6 +35,9 @@ class DataProcessorTest extends ForgeroTest {
 
 	@BeforeEach
 	void setUp() {
+		// Ensure property codecs are registered for the test environment
+		com.sigmundgranaas.forgero.core.property.api.PropertyRegistry.getInstance().reset();
+		com.sigmundgranaas.forgero.data.loading.impl.codec.FeatureCodecs.VEIN_MINING_FEATURE_CODEC.toString(); // Initialize static block
 		processor = new DataProcessorImpl();
 	}
 
@@ -44,70 +45,59 @@ class DataProcessorTest extends ForgeroTest {
 	void testConsolidatesAllPropertiesIntoSingleMap() {
 		AttributeData attr = createAttribute("attr1", "forgero:damage", 10f);
 		FeatureData feature = createVeinMiningFeature("forgero:vein_mining");
-		Map<String, JsonElement> customProps = Map.of("custom:prop", new JsonPrimitive(true));
 
-		RawDefinition raw = createRawMaterial("test:data1", "Data 1", null, null, List.of(attr), List.of(feature), customProps);
+		RawDefinition raw = createRawMaterial("test:data1", "Data 1", null, null, List.of(attr), List.of(feature), null);
 		Map<OpenIdentifier, RawDefinition> rawData = Map.of(raw.id(), raw);
 
 		NormalizedState state = processor.normalize(rawData);
 		var result = state.materials().get(raw.id());
 
 		assertNotNull(result.properties(), "Properties map should not be null.");
-		assertEquals(3, result.properties().size(), "Should have 3 entries: attributes, features, and custom prop.");
+		assertEquals(2, result.properties().size(), "Should have 2 entries: attributes and features.");
 
 		assertTrue(result.properties().containsKey(ATTRIBUTES_KEY), "Should contain consolidated attributes.");
-		assertTrue(result.properties().get(ATTRIBUTES_KEY).isJsonArray(), "Attributes should be a JSON array.");
-		assertEquals(1, result.properties().get(ATTRIBUTES_KEY).getAsJsonArray().size());
+		List<PropertyData> attributes = result.properties().get(ATTRIBUTES_KEY);
+		assertEquals(1, attributes.size());
 
 		assertTrue(result.properties().containsKey(FEATURES_KEY), "Should contain consolidated features.");
-		assertTrue(result.properties().get(FEATURES_KEY).isJsonArray(), "Features should be a JSON array.");
-		assertEquals(1, result.properties().get(FEATURES_KEY).getAsJsonArray().size());
-
-		assertTrue(result.properties().containsKey("custom:prop"), "Custom property should be present.");
-		assertTrue(result.properties().get("custom:prop").getAsBoolean());
+		List<PropertyData> features = result.properties().get(FEATURES_KEY);
+		assertEquals(1, features.size());
 	}
 
 	@Test
 	void testIncludeMergesAndOverwritesPropertiesCorrectly() {
 		// Included definition
 		AttributeData includedAttr = createAttribute("included_attr", "forgero:durability", 50f);
-		Map<String, JsonElement> includedProps = Map.of("custom:shared_prop", new JsonPrimitive("from_include"));
-		RawDefinition included = createRawMaterial("test:included", "Included", null, null, List.of(includedAttr), null, includedProps);
+		RawDefinition included = createRawMaterial("test:included", "Included", null, null, List.of(includedAttr), null, null);
 
 		// Base definition
 		AttributeData baseAttr1 = createAttribute("base_attr", "forgero:speed", 5f);
 		AttributeData baseAttr2 = createAttribute("included_attr", "forgero:durability", 100f); // Overrides included
-		Map<String, JsonElement> baseProps = Map.of("custom:shared_prop", new JsonPrimitive("from_base"));
-		RawDefinition base = createRawMaterial("test:base", "Base", List.of("test:included"), null, List.of(baseAttr1, baseAttr2), null, baseProps);
+		RawDefinition base = createRawMaterial("test:base", "Base", List.of("test:included"), null, List.of(baseAttr1, baseAttr2), null, null);
 
 		Map<OpenIdentifier, RawDefinition> rawData = Map.of(included.id(), included, base.id(), base);
 		NormalizedState state = processor.normalize(rawData);
 		var result = state.materials().get(base.id());
 
 		assertNotNull(result.properties());
-
-		// Assert custom property was overridden
-		assertTrue(result.properties().containsKey("custom:shared_prop"));
-		assertEquals("from_base", result.properties().get("custom:shared_prop").getAsString());
-
-		// Assert attributes were merged and overridden
 		assertTrue(result.properties().containsKey(ATTRIBUTES_KEY));
-		JsonArray attributesJson = result.properties().get(ATTRIBUTES_KEY).getAsJsonArray();
-		assertEquals(2, attributesJson.size(), "Should have two unique attributes after merging.");
+
+		List<AttributeData> attributes = result.properties().get(ATTRIBUTES_KEY).stream()
+				.map(AttributeData.class::cast)
+				.toList();
+		assertEquals(2, attributes.size(), "Should have two unique attributes after merging.");
+
 
 		// Verify the overridden attribute has the correct value
-		long matchingDurabilityCount = attributesJson.asList().stream()
-				.map(JsonElement::getAsJsonObject)
-				.filter(obj -> obj.get("id").getAsString().equals("forgero:included_attr"))
-				// Access the nested 'value' inside the 'computation' object
-				.filter(obj -> obj.get("computation").getAsJsonObject().get("value").getAsFloat() == 100f)
+		long matchingDurabilityCount = attributes.stream()
+				.filter(attr -> attr.id().toString().equals("forgero:included_attr"))
+				.filter(attr -> attr.computation().value() == 100f)
 				.count();
 		assertEquals(1, matchingDurabilityCount, "The overridden durability attribute should have the value from the base definition.");
 
 		// Verify the unique base attribute is present
-		boolean hasSpeedAttribute = attributesJson.asList().stream()
-				.map(JsonElement::getAsJsonObject)
-				.anyMatch(obj -> obj.get("id").getAsString().equals("forgero:base_attr"));
+		boolean hasSpeedAttribute = attributes.stream()
+				.anyMatch(attr -> attr.id().toString().equals("forgero:base_attr"));
 		assertTrue(hasSpeedAttribute, "The unique attribute from the base definition should be present.");
 	}
 

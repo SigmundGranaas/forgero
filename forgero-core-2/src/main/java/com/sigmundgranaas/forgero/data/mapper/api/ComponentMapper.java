@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.data.mapper.api;
 
-import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
@@ -12,8 +11,7 @@ import com.sigmundgranaas.forgero.core.component.impl.*;
 import com.sigmundgranaas.forgero.core.property.api.Property;
 import com.sigmundgranaas.forgero.core.property.api.PropertyRegistry;
 import com.sigmundgranaas.forgero.data.generation.api.GeneratedState;
-import com.sigmundgranaas.forgero.data.loading.api.data.loader.ConditionMapper;
-import com.sigmundgranaas.forgero.data.loading.api.data.loader.OperatorMapper;
+import com.sigmundgranaas.forgero.data.loading.api.data.PropertyData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.UpgradeSlotData;
 import com.sigmundgranaas.forgero.data.processing.api.NormalizedState;
 import org.jetbrains.annotations.Nullable;
@@ -25,33 +23,34 @@ public class ComponentMapper {
 
 	private final IdentifierFactory identifierFactory;
 	private final Map<OpenIdentifier, Component> componentCache = new HashMap<>();
-	private final List<PropertyBuilder> propertyBuilders;
-	private final ConditionMapper conditionMapper;
-	private final OperatorMapper operatorMapper;
+	private final List<PropertyCodec<?>> propertyCodecs;
 
 	/**
 	 * Constructs a new ComponentMapper. It now automatically retrieves all registered
-	 * PropertyBuilders from the {@link PropertyRegistry}.
+	 * PropertyCodecs from the {@link PropertyRegistry}.
 	 *
 	 * @param identifierFactory The factory for creating OpenIdentifier instances.
 	 */
 	public ComponentMapper(IdentifierFactory identifierFactory) {
 		this.identifierFactory = identifierFactory;
-		// Fetch property builders from the central registry
-		this.propertyBuilders = PropertyRegistry.getInstance().getPropertyBuilders();
-		this.conditionMapper = new ConditionMapper(identifierFactory);
-		this.operatorMapper = new OperatorMapper();
+		// Fetch property codecs from the central registry
+		this.propertyCodecs = PropertyRegistry.getInstance().getPropertyCodecs();
 	}
 
 	// Maps a DTO's consolidated properties into a list of runtime Property objects.
-	private List<Property> mapProperties(@Nullable Map<String, JsonElement> propertiesMap) {
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	private List<Property> mapProperties(@Nullable Map<String, List<PropertyData>> propertiesMap) {
 		if (propertiesMap == null || propertiesMap.isEmpty()) {
 			return Collections.emptyList();
 		}
 
 		List<Property> properties = new ArrayList<>();
-		for (PropertyBuilder builder : propertyBuilders) {
-			properties.addAll(builder.build(propertiesMap, conditionMapper, operatorMapper));
+		for (PropertyCodec codec : propertyCodecs) {
+			List<PropertyData> dataList = propertiesMap.get(codec.getPropertyType());
+			if (dataList != null && !dataList.isEmpty()) {
+				// We trust that the key corresponds to the correct data type.
+				properties.addAll(codec.build(dataList));
+			}
 		}
 		return properties;
 	}

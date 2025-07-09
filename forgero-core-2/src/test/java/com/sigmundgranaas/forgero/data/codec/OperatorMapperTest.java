@@ -3,8 +3,8 @@ package com.sigmundgranaas.forgero.data.codec;
 import com.sigmundgranaas.forgero.core.attribute.api.operator.AdditionOperator;
 import com.sigmundgranaas.forgero.core.attribute.api.operator.MultiplicationOperator;
 import com.sigmundgranaas.forgero.core.attribute.api.operator.Operator;
-import com.sigmundgranaas.forgero.data.loading.api.data.loader.OperatorMapper;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.AttributeCodecs;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.OperatorMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

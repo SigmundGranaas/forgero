@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.data.processing.api;
 
-import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.data.loading.api.data.PropertyData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.EquipmentTemplateStructureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.PartTemplateStructureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.UpgradeSlotData;
@@ -26,32 +26,32 @@ public record NormalizedState(
 ) {
 
 	public record NormalizedMaterial(OpenIdentifier id, String name, Set<OpenIdentifier> tags,
-									 @Nullable Map<String, JsonElement> properties) {
+									 @Nullable Map<String, List<PropertyData>> properties) {
 	}
 
 	public record NormalizedShape(OpenIdentifier id, String name, Set<OpenIdentifier> tags,
-								  @Nullable Map<String, JsonElement> properties) {
+								  @Nullable Map<String, List<PropertyData>> properties) {
 	}
 
 	public record NormalizedSchematic(OpenIdentifier id, String name, OpenIdentifier target,
 									  String craftingMaterial, Set<OpenIdentifier> tags,
-									  @Nullable Map<String, JsonElement> properties) {
+									  @Nullable Map<String, List<PropertyData>> properties) {
 	}
 
 	public record NormalizedStaticPart(OpenIdentifier id, String name, Set<OpenIdentifier> tags,
 									   @Nullable List<UpgradeSlotData> upgrades,
-									   @Nullable Map<String, JsonElement> properties) {
+									   @Nullable Map<String, List<PropertyData>> properties) {
 	}
 
 	public record NormalizedPartTemplate(OpenIdentifier id, String name, Set<OpenIdentifier> tags,
 										 PartTemplateStructureData structure,
 										 @Nullable List<UpgradeSlotData> upgrades,
-										 @Nullable Map<String, JsonElement> properties) {
+										 @Nullable Map<String, List<PropertyData>> properties) {
 	}
 
 	public record NormalizedEquipmentTemplate(OpenIdentifier id, String name, Set<OpenIdentifier> tags,
 											  EquipmentTemplateStructureData structure,
 											  @Nullable List<UpgradeSlotData> upgrades,
-											  @Nullable Map<String, JsonElement> properties) {
+											  @Nullable Map<String, List<PropertyData>> properties) {
 	}
 }

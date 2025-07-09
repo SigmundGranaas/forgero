@@ -1,18 +1,13 @@
 package com.sigmundgranaas.forgero.data.generation.impl;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
 import com.sigmundgranaas.forgero.data.generation.api.ComponentGenerator;
 import com.sigmundgranaas.forgero.data.generation.api.GeneratedState;
+import com.sigmundgranaas.forgero.data.loading.api.data.PropertyData;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
-import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.EquipmentTemplateSlotData;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.AttributeCodecs;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.FeatureCodecs;
 import com.sigmundgranaas.forgero.data.processing.api.NormalizedState;
 
 import java.util.*;
@@ -68,6 +63,34 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 		return new GeneratedState(Map.copyOf(generatedPartsMutable), Map.copyOf(generatedEquipment));
 	}
 
+	private void mergeProperties(Map<String, List<PropertyData>> target, Map<String, List<PropertyData>> source) {
+		if (source == null) {
+			return;
+		}
+		source.forEach((key, sourceList) -> {
+			List<PropertyData> targetList = target.computeIfAbsent(key, k -> new ArrayList<>());
+
+			if (key.equals("forgero:attributes")) {
+				// Special handling for attributes: merge by ID
+				Map<OpenIdentifier, AttributeData> mergedAttributes = new LinkedHashMap<>();
+				// Add existing attributes from target
+				targetList.stream()
+						.map(AttributeData.class::cast)
+						.forEach(attr -> mergedAttributes.put(attr.id(), attr));
+				// Add/overwrite with new attributes from source
+				sourceList.stream()
+						.map(AttributeData.class::cast)
+						.forEach(attr -> mergedAttributes.put(attr.id(), attr));
+
+				targetList.clear();
+				targetList.addAll(mergedAttributes.values());
+			} else {
+				// Default behavior: just append
+				targetList.addAll(sourceList);
+			}
+		});
+	}
+
 	private GeneratedState.GeneratedPart createGeneratedPart(
 			NormalizedState.NormalizedMaterial material,
 			NormalizedState.NormalizedShape shape,
@@ -79,49 +102,12 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 				.flatMap(Set::stream)
 				.collect(Collectors.toSet());
 
-		Map<String, JsonElement> combinedProperties = new HashMap<>();
+		Map<String, List<PropertyData>> combinedProperties = new HashMap<>();
 
-		var materialProps = Optional.ofNullable(material.properties()).orElse(Collections.emptyMap());
-		var shapeProps = Optional.ofNullable(shape.properties()).orElse(Collections.emptyMap());
-		var templateProps = Optional.ofNullable(template.properties()).orElse(Collections.emptyMap());
-
-		// Merge general properties. Precedence: template > shape > material
-		combinedProperties.putAll(materialProps);
-		combinedProperties.putAll(shapeProps);
-		combinedProperties.putAll(templateProps);
-
-		// Special handling for attributes to merge them correctly.
-		// Precedence is handled by LinkedHashMap: last one seen for a given ID wins.
-		Map<OpenIdentifier, AttributeData> mergedAttributesMap = new LinkedHashMap<>();
-		Stream.of(materialProps, shapeProps, templateProps)
-				.map(p -> p.get("forgero:attributes"))
-				.filter(Objects::nonNull)
-				.flatMap(json -> AttributeCodecs.ATTRIBUTE_DATA_LIST_CODEC.parse(JsonOps.INSTANCE, json).result().orElse(List.of()).stream())
-				.forEach(attr -> mergedAttributesMap.put(attr.id(), attr));
-
-		if (!mergedAttributesMap.isEmpty()) {
-			JsonArray finalAttributesArray = new JsonArray();
-			mergedAttributesMap.values().forEach(attr ->
-					AttributeCodecs.ATTRIBUTE_DATA_CODEC.encodeStart(JsonOps.INSTANCE, attr).result().ifPresent(finalAttributesArray::add)
-			);
-			combinedProperties.put("forgero:attributes", finalAttributesArray);
-		}
-
-
-		// Special handling for features: simply append all lists together.
-		List<FeatureData> allFeatures = Stream.of(materialProps, shapeProps, templateProps)
-				.map(p -> p.get("forgero:features"))
-				.filter(Objects::nonNull)
-				.flatMap(json -> FeatureCodecs.FEATURE_DATA_LIST_CODEC.parse(JsonOps.INSTANCE, json).result().orElse(List.of()).stream())
-				.toList();
-
-		if (!allFeatures.isEmpty()) {
-			JsonArray finalFeaturesArray = new JsonArray();
-			allFeatures.forEach(feature ->
-					FeatureCodecs.FEATURE_DATA_CODEC.encodeStart(JsonOps.INSTANCE, feature).result().ifPresent(finalFeaturesArray::add)
-			);
-			combinedProperties.put("forgero:features", finalFeaturesArray);
-		}
+		// Merge properties: material -> shape -> template (template has highest precedence)
+		mergeProperties(combinedProperties, material.properties());
+		mergeProperties(combinedProperties, shape.properties());
+		mergeProperties(combinedProperties, template.properties());
 
 
 		String idPattern = template.structure().id();
@@ -168,7 +154,7 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 		// Per the architectural plan, properties for equipment come ONLY from the template.
 		// Properties from constituent parts are NOT merged into the equipment DTO.
 		// They are resolved at runtime by traversing the component tree.
-		Map<String, JsonElement> equipmentProperties = template.properties();
+		Map<String, List<PropertyData>> equipmentProperties = template.properties();
 
 		return new GeneratedState.GeneratedEquipment(
 				equipmentId,

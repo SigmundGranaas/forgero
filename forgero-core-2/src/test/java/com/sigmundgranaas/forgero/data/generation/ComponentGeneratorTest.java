@@ -1,22 +1,26 @@
 package com.sigmundgranaas.forgero.data.generation;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import com.sigmundgranaas.forgero.core.ForgeroTest;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
 import com.sigmundgranaas.forgero.common.tags.engine.TagGraphBuilder;
+import com.sigmundgranaas.forgero.core.ForgeroTest;
 import com.sigmundgranaas.forgero.data.Utils;
 import com.sigmundgranaas.forgero.data.generation.api.ComponentGenerator;
 import com.sigmundgranaas.forgero.data.generation.api.GeneratedState;
 import com.sigmundgranaas.forgero.data.generation.impl.ComponentGeneratorImpl;
+import com.sigmundgranaas.forgero.data.loading.api.data.PropertyData;
+import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
+import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeDataImpl;
+import com.sigmundgranaas.forgero.data.loading.api.data.attribute.ComputationData;
+import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
+import com.sigmundgranaas.forgero.data.loading.api.data.feature.VeinMiningFeatureData;
+import com.sigmundgranaas.forgero.data.loading.api.data.feature.VeinMiningSelectorData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.EquipmentTemplateSlotData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.EquipmentTemplateStructureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.PartTemplateStructureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.PartTemplateStructureSlotData;
 import com.sigmundgranaas.forgero.data.processing.api.NormalizedState;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -40,61 +44,48 @@ class ComponentGeneratorTest extends ForgeroTest {
 
 	@BeforeEach
 	void setUp() {
+		// Ensure property codecs are registered for the test environment
+		com.sigmundgranaas.forgero.core.property.api.PropertyRegistry.getInstance().reset();
+		com.sigmundgranaas.forgero.data.loading.impl.codec.FeatureCodecs.VEIN_MINING_FEATURE_CODEC.toString(); // Initialize static block
+
 		generator = new ComponentGeneratorImpl(idFactory);
 		tagGraph = buildTestTagGraph();
 	}
 
-	// Helper to create a JSON representation of an attribute
-	private JsonObject attributeJson(String id, String type, float value) {
-		JsonObject attr = new JsonObject();
-		attr.addProperty("id", "forgero:" + id);
-		attr.addProperty("type", "forgero:" + type);
-		// Changed to reflect how ComputationData is encoded (as an object)
-		JsonObject computationObj = new JsonObject();
-		computationObj.addProperty("value", value);
-		computationObj.addProperty("operator", "forgero:addition");
-		computationObj.addProperty("order", "forgero:base");
-		attr.add("computation", computationObj);
-		return attr;
+	// Helper to create an AttributeData object
+	private AttributeData createAttributeData(String id, String type, float value) {
+		return new AttributeDataImpl(
+				id("forgero:" + id),
+				id("forgero:" + type),
+				new ComputationData(value, "forgero:addition", "forgero:base"),
+				null, null
+		);
 	}
 
-	// Helper to create a JSON representation of a feature
-	private JsonObject featureJson(String type, String title) {
-		JsonObject feature = new JsonObject();
-		feature.addProperty("type", "forgero:" + type);
-		feature.addProperty("title", title);
-		feature.addProperty("description", "desc");
-		// Simplified selector for testing
-		JsonObject selector = new JsonObject();
-		selector.addProperty("type", "forgero:radius");
-		selector.addProperty("radius", 1);
-		selector.addProperty("tag", "forgero:tag");
-		feature.add("selector", selector);
-		return feature;
+	// Helper to create a FeatureData object
+	private FeatureData createFeatureData(String type, String title) {
+		return new VeinMiningFeatureData(
+				id("forgero:" + type),
+				title,
+				"desc",
+				new VeinMiningSelectorData(id("forgero:radius"), 1, id("forgero:tag")),
+				null
+		);
 	}
 
 	@Test
 	void generatedPartMergesPropertiesFromAllSources() {
 		// Setup
-		JsonArray matAttrs = new JsonArray();
-		matAttrs.add(attributeJson("mat_attr", "durability", 100));
-		var materialProps = Map.of(
-				ATTRIBUTES_KEY, (JsonElement) matAttrs,
-				"custom:material_prop", new JsonPrimitive("mat_val")
+		Map<String, List<PropertyData>> materialProps = Map.of(
+				ATTRIBUTES_KEY,  List.of(createAttributeData("mat_attr", "durability", 100))
 		);
 
-		JsonArray shapeAttrs = new JsonArray();
-		shapeAttrs.add(attributeJson("shape_attr", "mining_speed", 5));
-		var shapeProps = Map.of(
-				ATTRIBUTES_KEY, (JsonElement) shapeAttrs,
-				"custom:shape_prop", new JsonPrimitive("shape_val")
+		Map<String, List<PropertyData>> shapeProps = Map.of(
+				ATTRIBUTES_KEY, List.of(createAttributeData("shape_attr", "mining_speed", 5))
 		);
 
-		JsonArray templateFeatures = new JsonArray();
-		templateFeatures.add(featureJson("vein_mining", "Vein Miner"));
-		var templateProps = Map.of(
-				FEATURES_KEY, (JsonElement) templateFeatures,
-				"custom:template_prop", new JsonPrimitive("template_val")
+		Map<String, List<PropertyData>> templateProps = Map.of(
+				FEATURES_KEY, List.of(createFeatureData("vein_mining", "Vein Miner"))
 		);
 
 		var iron = materialWithProperties("iron", materialProps, "forgero:metal");
@@ -112,32 +103,27 @@ class ComponentGeneratorTest extends ForgeroTest {
 		var finalProps = generatedPart.properties();
 		assertNotNull(finalProps);
 
-		// Assert custom props are merged (template overrides)
-		assertEquals("mat_val", finalProps.get("custom:material_prop").getAsString());
-		assertEquals("shape_val", finalProps.get("custom:shape_prop").getAsString());
-		assertEquals("template_val", finalProps.get("custom:template_prop").getAsString());
-
 		// Assert attributes are merged
 		assertTrue(finalProps.containsKey(ATTRIBUTES_KEY));
-		JsonArray finalAttrs = finalProps.get(ATTRIBUTES_KEY).getAsJsonArray();
+		List<PropertyData> finalAttrs = finalProps.get(ATTRIBUTES_KEY);
 		assertEquals(2, finalAttrs.size(), "Should have one attribute from material and one from shape.");
 
 		// Assert features are present
 		assertTrue(finalProps.containsKey(FEATURES_KEY));
-		JsonArray finalFeatures = finalProps.get(FEATURES_KEY).getAsJsonArray();
+		List<PropertyData> finalFeatures = finalProps.get(FEATURES_KEY);
 		assertEquals(1, finalFeatures.size());
 	}
 
 	@Test
 	void generatedPartAttributeOverride() {
 		// Setup: Material and Shape both define the same attribute ID. Shape should win.
-		JsonArray matAttrs = new JsonArray();
-		matAttrs.add(attributeJson("shared_attr", "durability", 100));
-		var materialProps = Map.of(ATTRIBUTES_KEY, (JsonElement) matAttrs);
+		Map<String, List<PropertyData>> materialProps = Map.of(
+				ATTRIBUTES_KEY, List.of(createAttributeData("shared_attr", "durability", 100))
+		);
 
-		JsonArray shapeAttrs = new JsonArray();
-		shapeAttrs.add(attributeJson("shared_attr", "durability", 200));
-		var shapeProps = Map.of(ATTRIBUTES_KEY, (JsonElement) shapeAttrs);
+		Map<String, List<PropertyData>> shapeProps = Map.of(
+				ATTRIBUTES_KEY, List.of(createAttributeData("shared_attr", "durability", 200))
+		);
 
 		var iron = materialWithProperties("iron", materialProps, "forgero:metal");
 		var headShape = shapeWithProperties("pickaxe_head", shapeProps, "forgero:pickaxe_head_shape");
@@ -150,19 +136,21 @@ class ComponentGeneratorTest extends ForgeroTest {
 
 		// Assert
 		var finalProps = generated.parts().get(id("forgero:iron-pickaxe_head")).properties();
-		JsonArray finalAttrs = finalProps.get(ATTRIBUTES_KEY).getAsJsonArray();
+		assertNotNull(finalProps);
+		List<AttributeData> finalAttrs = finalProps.get(ATTRIBUTES_KEY).stream().map(AttributeData.class::cast).toList();
 		assertEquals(1, finalAttrs.size(), "Attributes with the same ID should be overridden, not duplicated.");
-		// Access the nested 'value' inside the 'computation' object
-		assertEquals(200f, finalAttrs.get(0).getAsJsonObject().get("computation").getAsJsonObject().get("value").getAsFloat(), "The shape's attribute value should override the material's.");
+		assertEquals(200f, finalAttrs.get(0).computation().value(), "The shape's attribute value should override the material's.");
 	}
 
 	@Test
 	void generatedEquipmentHasPropertiesOnlyFromTemplate() {
 		// Setup
-		Map<String, JsonElement> partProps = Map.of("custom:part_prop", new JsonPrimitive("part_val"));
-		var oakHandle = staticPartWithProperties("static_oak_handle", partProps, "forgero:parts/handle_type", "forgero:default_handle");
+		var oakHandle = staticPartWithProperties("static_oak_handle", null, "forgero:parts/handle_type", "forgero:default_handle");
 
-		Map<String, JsonElement> templateProps = Map.of("custom:template_prop", new JsonPrimitive("template_val"));
+		Map<String, List<PropertyData>> templateProps = Map.of(
+				FEATURES_KEY, List.of(createFeatureData("template_feature", "Template Feature"))
+		);
+
 		var pickaxeTemplate = equipmentTemplateWithProperties("pickaxe_template", Map.of(
 				"handle", new EquipmentTemplateSlotData(id("forgero:parts/handle_type"), null, oakHandle.id())
 		), templateProps, "forgero:pickaxe");
@@ -178,8 +166,8 @@ class ComponentGeneratorTest extends ForgeroTest {
 
 		assertNotNull(finalProps);
 		assertEquals(1, finalProps.size(), "Should only contain properties from the template.");
-		assertTrue(finalProps.containsKey("custom:template_prop"), "Template property should be present.");
-		assertFalse(finalProps.containsKey("custom:part_prop"), "Property from the part should NOT be merged into the equipment DTO.");
+		assertTrue(finalProps.containsKey(FEATURES_KEY), "Template feature should be present.");
+		assertEquals(1, finalProps.get(FEATURES_KEY).size());
 	}
 
 
@@ -201,12 +189,12 @@ class ComponentGeneratorTest extends ForgeroTest {
 	}
 
 
-	private NormalizedState.NormalizedMaterial materialWithProperties(String name, Map<String, JsonElement> properties, String... tags) {
+	private NormalizedState.NormalizedMaterial materialWithProperties(String name, Map<String, List<PropertyData>> properties, String... tags) {
 		Set<OpenIdentifier> tagSet = Arrays.stream(tags).map(Utils::id).collect(Collectors.toSet());
 		return new NormalizedState.NormalizedMaterial(id("forgero:" + name), name, tagSet, properties);
 	}
 
-	private NormalizedState.NormalizedShape shapeWithProperties(String name, Map<String, JsonElement> properties, String... tags) {
+	private NormalizedState.NormalizedShape shapeWithProperties(String name, Map<String, List<PropertyData>> properties, String... tags) {
 		Set<OpenIdentifier> tagSet = Arrays.stream(tags).map(Utils::id).collect(Collectors.toSet());
 		return new NormalizedState.NormalizedShape(id("forgero:" + name), name, tagSet, properties);
 	}
@@ -215,7 +203,7 @@ class ComponentGeneratorTest extends ForgeroTest {
 		return partTemplateWithProperties(name, typeTag, materialSlotType, shapeSlotType, null);
 	}
 
-	private NormalizedState.NormalizedPartTemplate partTemplateWithProperties(String name, String typeTag, String materialSlotType, String shapeSlotType, Map<String, JsonElement> properties) {
+	private NormalizedState.NormalizedPartTemplate partTemplateWithProperties(String name, String typeTag, String materialSlotType, String shapeSlotType, @Nullable Map<String, List<PropertyData>> properties) {
 		return new NormalizedState.NormalizedPartTemplate(
 				id("forgero:" + name), name, Set.of(id(typeTag)),
 				new PartTemplateStructureData("forgero:{material.name}-{shape.name}",
@@ -227,12 +215,12 @@ class ComponentGeneratorTest extends ForgeroTest {
 		);
 	}
 
-	private NormalizedState.NormalizedStaticPart staticPartWithProperties(String name, Map<String, JsonElement> properties, String... tags) {
+	private NormalizedState.NormalizedStaticPart staticPartWithProperties(String name, @Nullable Map<String, List<PropertyData>> properties, String... tags) {
 		Set<OpenIdentifier> tagSet = Arrays.stream(tags).map(Utils::id).collect(Collectors.toSet());
 		return new NormalizedState.NormalizedStaticPart(id("forgero:" + name), name, tagSet, List.of(), properties);
 	}
 
-	private NormalizedState.NormalizedEquipmentTemplate equipmentTemplateWithProperties(String name, Map<String, EquipmentTemplateSlotData> slots, Map<String, JsonElement> properties, String... tags) {
+	private NormalizedState.NormalizedEquipmentTemplate equipmentTemplateWithProperties(String name, Map<String, EquipmentTemplateSlotData> slots, @Nullable Map<String, List<PropertyData>> properties, String... tags) {
 		Set<OpenIdentifier> tagSet = Arrays.stream(tags).map(Utils::id).collect(Collectors.toSet());
 		return new NormalizedState.NormalizedEquipmentTemplate(
 				id("forgero:" + name), name, tagSet,

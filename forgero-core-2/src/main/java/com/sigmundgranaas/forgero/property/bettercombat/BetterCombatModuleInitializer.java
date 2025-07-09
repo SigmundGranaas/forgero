@@ -2,6 +2,8 @@ package com.sigmundgranaas.forgero.property.bettercombat;
 
 
 import com.sigmundgranaas.forgero.core.property.api.PropertyRegistry;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.ConditionMapper;
 
 /**
  * Initializes the Better Combat Identifier property module by registering its components with the core registry.
@@ -12,7 +14,9 @@ public class BetterCombatModuleInitializer {
 
 	public static void initialize() {
 		PropertyRegistry registry = PropertyRegistry.getInstance();
-		registry.registerPropertyBuilder(new BetterCombatIdentifierPropertyBuilder());
+		// Dependencies can be fetched from a central DI container or created here
+		ConditionMapper conditionMapper = new ConditionMapper(CodecConstants.IDENTIFIER_FACTORY);
+		registry.registerPropertyCodec(new BetterCombatIdentifierCodec(conditionMapper));
 		registry.registerDataTypeEngine(new BetterCombatIdentifierEngine());
 	}
 }

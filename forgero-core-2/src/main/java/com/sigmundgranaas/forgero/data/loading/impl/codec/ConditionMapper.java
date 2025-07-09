@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.data.loading.api.data.loader;
+package com.sigmundgranaas.forgero.data.loading.impl.codec;
 
 import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.core.property.condition.Condition;
@@ -34,7 +34,17 @@ public class ConditionMapper {
 			mapStaticPredicate(predicateData).ifPresent(staticConditions::add);
 			mapDynamicPredicate(predicateData).ifPresent(dynamicConditions::add);
 		}
-		return new Condition(staticConditions, dynamicConditions);
+		return new Condition(staticConditions, dynamicConditions, conditionData);
+	}
+
+	@Nullable
+	public ConditionData toData(Condition condition) {
+		// If the condition is ALWAYS_TRUE, it represents an empty/null condition in data.
+		if (condition == Condition.ALWAYS_TRUE) {
+			return null;
+		}
+		// Otherwise, return the source data it was created from.
+		return condition.sourceData();
 	}
 
 	private Optional<StaticCondition> mapStaticPredicate(PredicateData data) {

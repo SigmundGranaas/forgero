@@ -21,7 +21,4 @@ public record NameReplacementProperty(
 		return localCondition;
 	}
 
-	public NameReplacementProperty(String from, String to) {
-		this(from, to, Condition.ALWAYS_TRUE);
-	}
 }

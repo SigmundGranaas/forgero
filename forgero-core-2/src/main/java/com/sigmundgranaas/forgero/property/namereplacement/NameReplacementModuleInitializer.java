@@ -1,6 +1,8 @@
 package com.sigmundgranaas.forgero.property.namereplacement;
 
 import com.sigmundgranaas.forgero.core.property.api.PropertyRegistry;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.ConditionMapper;
 
 /**
  * Initializes the Name Replacement property module by registering its components with the core registry.
@@ -11,7 +13,8 @@ public class NameReplacementModuleInitializer {
 
 	public static void initialize() {
 		PropertyRegistry registry = PropertyRegistry.getInstance();
-		registry.registerPropertyBuilder(new NameReplacementPropertyBuilder());
+		ConditionMapper conditionMapper = new ConditionMapper(CodecConstants.IDENTIFIER_FACTORY);
+		registry.registerPropertyCodec(new NameReplacementCodec(conditionMapper));
 		registry.registerDataTypeEngine(new NameReplacementEngine());
 	}
 }

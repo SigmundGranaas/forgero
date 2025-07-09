@@ -11,7 +11,4 @@ public record BetterCombatIdentifierProperty(
 		@Nullable Condition condition
 ) implements ConditionalProperty {
 
-	public BetterCombatIdentifierProperty(OpenIdentifier identifier) {
-		this(identifier, Condition.ALWAYS_TRUE);
-	}
 }
