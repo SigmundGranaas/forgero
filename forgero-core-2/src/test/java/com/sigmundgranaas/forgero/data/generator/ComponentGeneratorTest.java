@@ -14,6 +14,7 @@ import com.sigmundgranaas.forgero.data.dto.template.EquipmentTemplateSlotData;
 import com.sigmundgranaas.forgero.data.dto.template.EquipmentTemplateStructureData;
 import com.sigmundgranaas.forgero.data.dto.template.PartTemplateStructureData;
 import com.sigmundgranaas.forgero.data.dto.template.PartTemplateStructureSlotData;
+import com.sigmundgranaas.forgero.data.dto.template.UpgradeSlotData; // NEW
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -44,14 +45,19 @@ class ComponentGeneratorTest extends ForgeroTest {
 		Stream.of(
 				"forgero:material", "forgero:shape", "forgero:default_pickaxe_head",
 				"forgero:default_handle", "forgero:parts/pickaxe_head_type",
-				"forgero:parts/handle_type", "forgero:tool"
+				"forgero:parts/handle_type", "forgero:tool",
+				"forgero:armor", "forgero:parts/armor_plate_type", "forgero:default_armor_plate",
+				"forgero:armor_plate_shape", // NEW
+				"forgero:upgrade_material" // NEW - for the trim slot type
 		).forEach(tag -> tagBuilder.add(id(tag), Set.of()));
 
 		tagBuilder.add(id("forgero:tool_material"), Set.of(id("forgero:material")));
 		tagBuilder.add(id("forgero:pickaxe_head_shape"), Set.of(id("forgero:shape")));
-		tagBuilder.add(id("forgero:metal"), Set.of(id("forgero:tool_material")));
+		tagBuilder.add(id("forgero:metal"), Set.of(id("forgero:tool_material"), id("forgero:armor_material")));
 		tagBuilder.add(id("forgero:wood"), Set.of(id("forgero:material")));
 		tagBuilder.add(id("forgero:pickaxe"), Set.of(id("forgero:tool")));
+		tagBuilder.add(id("forgero:armor_material"), Set.of(id("forgero:material")));
+		tagBuilder.add(id("forgero:chest_plate"), Set.of(id("forgero:armor")));
 
 		return tagBuilder.build();
 	}
@@ -89,6 +95,20 @@ class ComponentGeneratorTest extends ForgeroTest {
 		);
 	}
 
+	// Overload for armor plate template (which has different ID pattern)
+	private NormalizedState.NormalizedPartTemplate armorPlatePartTemplate(String name, String typeTag, String materialSlotType, String shapeSlotType) {
+		return new NormalizedState.NormalizedPartTemplate(
+				id("forgero:" + name), name, Set.of(id(typeTag)),
+				new PartTemplateStructureData("forgero:{material.name}-{shape.name}_plate", // Changed ID pattern for armor plates
+						Map.of(
+								"material", new PartTemplateStructureSlotData(id(materialSlotType), 1, null),
+								"shape", new PartTemplateStructureSlotData(id(shapeSlotType), 1, null)
+						)),
+				List.of()
+		);
+	}
+
+
 	private NormalizedState.NormalizedStaticPart staticPart(String name, String... tags) {
 		Set<OpenIdentifier> tagSet = Arrays.stream(tags).map(this::id).collect(Collectors.toSet());
 		return new NormalizedState.NormalizedStaticPart(id("forgero:" + name), name, tagSet, List.of(), List.of(), List.of());
@@ -100,6 +120,16 @@ class ComponentGeneratorTest extends ForgeroTest {
 				id("forgero:" + name), name, tagSet,
 				new EquipmentTemplateStructureData("forgero:{head.material.name}-pickaxe", slots),
 				List.of()
+		);
+	}
+
+	// New factory method for armor, allowing upgrades
+	private NormalizedState.NormalizedEquipmentTemplate armorEquipmentTemplate(String name, String idPattern, Map<String, EquipmentTemplateSlotData> structureSlots, List<UpgradeSlotData> upgradeSlots, String... tags) {
+		Set<OpenIdentifier> tagSet = Arrays.stream(tags).map(this::id).collect(Collectors.toSet());
+		return new NormalizedState.NormalizedEquipmentTemplate(
+				id("forgero:" + name), name, tagSet,
+				new EquipmentTemplateStructureData(idPattern, structureSlots),
+				upgradeSlots // Pass the upgrade slots here
 		);
 	}
 	// endregion
@@ -204,6 +234,74 @@ class ComponentGeneratorTest extends ForgeroTest {
 		assertEquals(1, generated.equipment().size(), "Only the default tool should be generated.");
 		assertTrue(generated.equipment().containsKey(id("forgero:iron-pickaxe")));
 		assertFalse(generated.equipment().containsKey(id("forgero:iron-cast-pickaxe")), "A tool using a non-default part should not be generated.");
+	}
+
+	@Test
+	void testGenerate_ArmorPieceWithDefaults() {
+		var iron = material("iron", "forgero:materials/metal", "forgero:materials/armor_material");
+		var leather = material("leather", "forgero:materials/armor_material");
+		var armorPlateShape = shape("armor_plate_shape", "forgero:armor_plate_shape", "forgero:default_armor_plate");
+		var heavyArmorPlateShape = shape("heavy_armor_plate_shape", "forgero:armor_plate_shape");
+		var armorPlateTemplate = armorPlatePartTemplate("armor_plate_template", "forgero:parts/armor_plate_type", "forgero:materials/armor_material", "forgero:armor_plate_shape");
+
+		// Define the structure slots for the chest plate
+		Map<String, EquipmentTemplateSlotData> chestPlateStructureSlots = Map.of(
+				"body", new EquipmentTemplateSlotData(id("forgero:parts/armor_plate_type"), id("forgero:default_armor_plate"), null)
+		);
+
+		// Define the upgrade slots for the chest plate
+		List<UpgradeSlotData> chestPlateUpgradeSlots = List.of(
+				new UpgradeSlotData(id("forgero:chest_plate-trim_slot"), id("forgero:upgrade_material"), List.of(id("forgero:materials/armor_material")), null, "An optional trim for the chest plate.")
+		);
+
+
+		var chestPlateTemplate = armorEquipmentTemplate(
+				"chest_plate_template",
+				"forgero:{body.material.name}-chest_plate",
+				chestPlateStructureSlots,
+				chestPlateUpgradeSlots,
+				"forgero:chest_plate"
+		);
+
+		var state = new NormalizedState(
+				Map.of(iron.id(), iron, leather.id(), leather),
+				Map.of(armorPlateShape.id(), armorPlateShape, heavyArmorPlateShape.id(), heavyArmorPlateShape),
+				Map.of(),
+				Map.of(armorPlateTemplate.id(), armorPlateTemplate),
+				Map.of(chestPlateTemplate.id(), chestPlateTemplate),
+				Map.of()
+		);
+
+		GeneratedState generated = generator.generate(state, tagGraph);
+
+		// Expect generated armor parts: (iron,leather)-(armor_plate_shape,heavy_armor_plate_shape) = 4 parts
+		assertEquals(4, generated.parts().size());
+		assertTrue(generated.parts().containsKey(id("forgero:iron-armor_plate_shape_plate"))); // Note: ID pattern ends with _plate
+		assertTrue(generated.parts().containsKey(id("forgero:leather-armor_plate_shape_plate")));
+		assertTrue(generated.parts().containsKey(id("forgero:iron-heavy_armor_plate_shape_plate")));
+		assertTrue(generated.parts().containsKey(id("forgero:leather-heavy_armor_plate_shape_plate")));
+
+		// Expect 2 generated chest plates (iron-chest_plate, leather-chest_plate) from default parts
+		assertEquals(2, generated.equipment().size());
+		assertTrue(generated.equipment().containsKey(id("forgero:iron-chest_plate")));
+		assertTrue(generated.equipment().containsKey(id("forgero:leather-chest_plate")));
+
+		var ironChestPlate = generated.equipment().get(id("forgero:iron-chest_plate"));
+		assertEquals(id("forgero:iron-armor_plate_shape_plate"), ironChestPlate.structure().get("body"));
+		// Assert that upgrade slots are present and trim is empty
+		assertNotNull(ironChestPlate.upgrades());
+		assertEquals(1, ironChestPlate.upgrades().size());
+		assertEquals(id("forgero:chest_plate-trim_slot"), ironChestPlate.upgrades().get(0).id());
+
+		var leatherChestPlate = generated.equipment().get(id("forgero:leather-chest_plate"));
+		assertEquals(id("forgero:leather-armor_plate_shape_plate"), leatherChestPlate.structure().get("body"));
+		assertNotNull(leatherChestPlate.upgrades());
+		assertEquals(1, leatherChestPlate.upgrades().size());
+		assertEquals(id("forgero:chest_plate-trim_slot"), leatherChestPlate.upgrades().get(0).id());
+
+		// Verify that armor pieces with non-default shapes are NOT generated by default
+		assertFalse(generated.equipment().containsKey(id("forgero:iron-heavy_chest_plate")), "Iron Heavy Chest Plate should not be generated by default");
+		assertFalse(generated.equipment().containsKey(id("forgero:leather-heavy_chest_plate")), "Leather Heavy Chest Plate should not be generated by default");
 	}
 
 	private OpenIdentifier id(String id) {

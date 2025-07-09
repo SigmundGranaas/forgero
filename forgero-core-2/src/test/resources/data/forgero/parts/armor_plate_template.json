@@ -1,0 +1,18 @@
+{
+  "type": "forgero:part_template",
+  "name": "Armor Plate",
+  "tags": [
+    "forgero:parts/armor_plate_type"
+  ],
+  "structure": {
+    "id": "forgero:{material.name}-{shape.name}_plate",
+    "slots": {
+      "material": {
+        "type": "forgero:materials/armor_material"
+      },
+      "shape": {
+        "type": "forgero:armor_plate_shape"
+      }
+    }
+  }
+}

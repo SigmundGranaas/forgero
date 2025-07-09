@@ -1,0 +1,22 @@
+{
+  "type": "forgero:equipment_template",
+  "name": "Chest Plate",
+  "tags": ["forgero:armor/chest_plate"],
+  "structure": {
+    "id": "forgero:{body.material.name}-chest_plate",
+    "slots": {
+      "body": {
+        "type": "forgero:parts/armor_plate_type",
+        "default_tag": "forgero:default_armor_plate"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:chest_plate-trim_slot",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:materials/armor_material"],
+      "description": "An optional trim for the chest plate."
+    }
+  ]
+}
