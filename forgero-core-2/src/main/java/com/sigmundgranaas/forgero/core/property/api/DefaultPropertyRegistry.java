@@ -2,9 +2,12 @@ package com.sigmundgranaas.forgero.core.property.api;
 
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.feature.impl.FeatureEngine;
-import com.sigmundgranaas.forgero.data.mapper.api.PropertyBuilder;
-import com.sigmundgranaas.forgero.data.mapper.impl.AttributePropertyBuilder;
-import com.sigmundgranaas.forgero.data.mapper.impl.FeaturePropertyBuilder;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.ConditionMapper;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.OperatorMapper;
+import com.sigmundgranaas.forgero.data.mapper.api.PropertyCodec;
+import com.sigmundgranaas.forgero.data.mapper.impl.AttributeCodec;
+import com.sigmundgranaas.forgero.data.mapper.impl.FeatureCodec;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,34 +24,37 @@ import java.util.List;
 public class DefaultPropertyRegistry implements PropertyRegistry {
 	static final DefaultPropertyRegistry INSTANCE = new DefaultPropertyRegistry();
 
-	private final List<PropertyBuilder> propertyBuilders = new ArrayList<>();
+	private final List<PropertyCodec<?>> propertyCodecs = new ArrayList<>();
 	private final List<DataTypeEngine<?, ?>> dataTypeEngines = new ArrayList<>();
 
+	private final ConditionMapper conditionMapper;
+	private final OperatorMapper operatorMapper;
+
+
 	public DefaultPropertyRegistry() {
-		// Register core Forgero builders and engines here upon first instantiation.
-		// This ensures they are always available.
-		reset(); // Call reset to populate initial core components
+		// Initialize shared dependencies
+		this.conditionMapper = new ConditionMapper(CodecConstants.IDENTIFIER_FACTORY);
+		this.operatorMapper = new OperatorMapper();
+		reset();
 	}
 
 	@Override
-	public void registerPropertyBuilder(PropertyBuilder builder) {
-		// Simple check to prevent immediate duplicates by type, but more robust checks can be added
-		if (propertyBuilders.stream().noneMatch(b -> b.getPropertyType().equals(builder.getPropertyType()))) {
-			this.propertyBuilders.add(builder);
+	public void registerPropertyCodec(PropertyCodec<?> codec) {
+		if (propertyCodecs.stream().noneMatch(c -> c.getPropertyType().equals(codec.getPropertyType()))) {
+			this.propertyCodecs.add(codec);
 		}
 	}
 
 	@Override
 	public void registerDataTypeEngine(DataTypeEngine<?, ?> engine) {
-		// Simple check to prevent immediate duplicates by key, but more robust checks can be added
 		if (dataTypeEngines.stream().noneMatch(e -> e.key().equals(engine.key()))) {
 			this.dataTypeEngines.add(engine);
 		}
 	}
 
 	@Override
-	public List<PropertyBuilder> getPropertyBuilders() {
-		return Collections.unmodifiableList(propertyBuilders);
+	public List<PropertyCodec<?>> getPropertyCodecs() {
+		return Collections.unmodifiableList(propertyCodecs);
 	}
 
 	@Override
@@ -58,11 +64,13 @@ public class DefaultPropertyRegistry implements PropertyRegistry {
 
 	@Override
 	public void reset() {
-		propertyBuilders.clear();
+		propertyCodecs.clear();
 		dataTypeEngines.clear();
-		
-		propertyBuilders.add(new AttributePropertyBuilder());
-		propertyBuilders.add(new FeaturePropertyBuilder());
+
+		// Register core Forgero codecs and engines here, injecting dependencies.
+		registerPropertyCodec(new AttributeCodec(conditionMapper, operatorMapper));
+		registerPropertyCodec(new FeatureCodec(conditionMapper));
+
 		dataTypeEngines.add(new AttributeEngine());
 		dataTypeEngines.add(new FeatureEngine());
 	}

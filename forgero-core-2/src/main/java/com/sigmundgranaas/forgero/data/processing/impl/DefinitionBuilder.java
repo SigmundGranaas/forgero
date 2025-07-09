@@ -1,13 +1,12 @@
 package com.sigmundgranaas.forgero.data.processing.impl;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.core.property.api.PropertyRegistry;
+import com.sigmundgranaas.forgero.data.loading.api.data.PropertyData;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.AttributeCodecs;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.FeatureCodecs;
+import com.sigmundgranaas.forgero.data.mapper.api.PropertyCodec;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -19,7 +18,12 @@ import java.util.*;
  */
 class DefinitionBuilder {
 	private final Set<OpenIdentifier> tags = new LinkedHashSet<>();
-	private final Map<String, JsonElement> properties = new HashMap<>();
+	private final Map<String, List<PropertyData>> properties = new HashMap<>();
+	private final List<PropertyCodec<?>> codecs;
+
+	public DefinitionBuilder() {
+		this.codecs = PropertyRegistry.getInstance().getPropertyCodecs();
+	}
 
 	public void mergeTags(@Nullable Collection<OpenIdentifier> otherTags) {
 		if (otherTags != null) {
@@ -28,95 +32,76 @@ class DefinitionBuilder {
 	}
 
 	public void mergeProperties(@Nullable Map<String, JsonElement> otherProperties) {
-		if (otherProperties != null) {
-			// Don't merge attributes/features directly, they need special handling
-			otherProperties.forEach((key, value) -> {
-				if (!key.equals("forgero:attributes") && !key.equals("forgero:features")) {
-					this.properties.put(key, value);
-				}
-			});
+		if (otherProperties == null) {
+			return;
+		}
+		for (PropertyCodec<?> codec : codecs) {
+			String key = codec.getPropertyType();
+			if (otherProperties.containsKey(key)) {
+				JsonElement element = otherProperties.get(key);
+				codec.getCodec().parse(com.mojang.serialization.JsonOps.INSTANCE, element)
+						.resultOrPartial(System.err::println)
+						.ifPresent(list -> {
+							List<PropertyData> existing = this.properties.computeIfAbsent(key, k -> new ArrayList<>());
+							// Special merging for attributes
+							if (codec.getPropertyDataType().equals(AttributeData.class)) {
+								Map<OpenIdentifier, PropertyData> mergedAttributes = new LinkedHashMap<>();
+								existing.forEach(pd -> mergedAttributes.put(((AttributeData) pd).id(), pd));
+								list.forEach(pd -> mergedAttributes.put(((AttributeData) pd).id(), pd));
+								existing.clear();
+								existing.addAll(mergedAttributes.values());
+							} else {
+								existing.addAll(list);
+							}
+						});
+			}
 		}
 	}
 
 	public void consolidateAttributes(@Nullable List<AttributeData> localAttributes) {
-		// This method will now merge attributes from local and existing properties
-		Map<OpenIdentifier, AttributeData> mergedAttributes = new LinkedHashMap<>();
-
-		// 1. Get inherited attributes from properties map
-		if (this.properties.containsKey("forgero:attributes")) {
-			JsonElement existingJson = this.properties.get("forgero:attributes");
-			var existingList = AttributeCodecs.ATTRIBUTE_DATA_LIST_CODEC.parse(JsonOps.INSTANCE, existingJson).result().orElse(List.of());
-			existingList.forEach(attr -> mergedAttributes.put(attr.id(), attr));
+		if (localAttributes == null || localAttributes.isEmpty()) {
+			return;
 		}
-
-		// 2. Add/overwrite with local attributes
-		if (localAttributes != null) {
-			localAttributes.forEach(attr -> mergedAttributes.put(attr.id(), attr));
-		}
-
-		// 3. Re-encode back into the properties map
-		if (!mergedAttributes.isEmpty()) {
-			JsonArray array = new JsonArray();
-			mergedAttributes.values().forEach(attr ->
-					AttributeCodecs.ATTRIBUTE_DATA_CODEC.encodeStart(JsonOps.INSTANCE, attr).result().ifPresent(array::add)
-			);
-			this.properties.put("forgero:attributes", array);
-		} else {
-			this.properties.remove("forgero:attributes");
-		}
+		List<PropertyData> existing = this.properties.computeIfAbsent("forgero:attributes", k -> new ArrayList<>());
+		Map<OpenIdentifier, PropertyData> mergedAttributes = new LinkedHashMap<>();
+		existing.forEach(pd -> mergedAttributes.put(((AttributeData) pd).id(), pd));
+		localAttributes.forEach(attr -> mergedAttributes.put(attr.id(), attr));
+		existing.clear();
+		existing.addAll(mergedAttributes.values());
 	}
 
 	public void consolidateFeatures(@Nullable List<FeatureData> localFeatures) {
-		// This method will now merge features from local and existing properties
-		List<FeatureData> combinedFeatures = new ArrayList<>();
-
-		// 1. Get inherited features
-		if (this.properties.containsKey("forgero:features")) {
-			JsonElement existingJson = this.properties.get("forgero:features");
-			var existingList = FeatureCodecs.FEATURE_DATA_LIST_CODEC.parse(JsonOps.INSTANCE, existingJson).result().orElse(List.of());
-			combinedFeatures.addAll(existingList);
+		if (localFeatures == null || localFeatures.isEmpty()) {
+			return;
 		}
-
-		// 2. Add local features
-		if (localFeatures != null) {
-			combinedFeatures.addAll(localFeatures);
-		}
-
-
-		// 3. Re-encode back into the properties map
-		if (!combinedFeatures.isEmpty()) {
-			JsonArray array = new JsonArray();
-			combinedFeatures.forEach(feat ->
-					FeatureCodecs.FEATURE_DATA_CODEC.encodeStart(JsonOps.INSTANCE, feat).result().ifPresent(array::add)
-			);
-			this.properties.put("forgero:features", array);
-		} else {
-			this.properties.remove("forgero:features");
-		}
+		List<PropertyData> existing = this.properties.computeIfAbsent("forgero:features", k -> new ArrayList<>());
+		existing.addAll(localFeatures);
 	}
 
 
 	public void merge(MergedProperties other) {
 		mergeTags(other.tags);
 
-		// Handle merging properties, including special logic for attributes/features
 		if (other.properties != null) {
-			// Merge general properties
 			other.properties.forEach((key, value) -> {
-				if (!key.equals("forgero:attributes") && !key.equals("forgero:features")) {
-					this.properties.put(key, value);
-				}
+				List<PropertyData> existing = this.properties.computeIfAbsent(key, k -> new ArrayList<>());
+				// Find codec for this property type
+				codecs.stream()
+						.filter(c -> c.getPropertyType().equals(key))
+						.findFirst()
+						.ifPresent(codec -> {
+							if (codec.getPropertyDataType().equals(AttributeData.class)) {
+								Map<OpenIdentifier, PropertyData> mergedAttributes = new LinkedHashMap<>();
+								existing.forEach(pd -> mergedAttributes.put(((AttributeData) pd).id(), pd));
+								value.forEach(pd -> mergedAttributes.put(((AttributeData) pd).id(), pd));
+								existing.clear();
+								existing.addAll(mergedAttributes.values());
+							} else {
+								// Default behavior: append
+								existing.addAll(value);
+							}
+						});
 			});
-			// Merge attributes
-			if (other.properties.containsKey("forgero:attributes")) {
-				var otherAttrs = AttributeCodecs.ATTRIBUTE_DATA_LIST_CODEC.parse(JsonOps.INSTANCE, other.properties.get("forgero:attributes")).result().orElse(List.of());
-				consolidateAttributes(otherAttrs);
-			}
-			// Merge features
-			if (other.properties.containsKey("forgero:features")) {
-				var otherFeatures = FeatureCodecs.FEATURE_DATA_LIST_CODEC.parse(JsonOps.INSTANCE, other.properties.get("forgero:features")).result().orElse(List.of());
-				consolidateFeatures(otherFeatures);
-			}
 		}
 	}
 
@@ -129,7 +114,7 @@ class DefinitionBuilder {
 
 	record MergedProperties(
 			@Nullable Set<OpenIdentifier> tags,
-			@Nullable Map<String, JsonElement> properties
+			@Nullable Map<String, List<PropertyData>> properties
 	) {
 	}
 }

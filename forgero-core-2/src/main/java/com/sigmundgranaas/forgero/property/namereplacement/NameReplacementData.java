@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.property.namereplacement;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.sigmundgranaas.forgero.core.property.api.custom.CustomPropertyData;
+import com.sigmundgranaas.forgero.data.loading.api.data.PropertyData;
 import com.sigmundgranaas.forgero.data.loading.api.data.condition.ConditionData;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,7 +14,7 @@ public record NameReplacementData(
 		String from,
 		String to,
 		@Nullable ConditionData condition
-) implements CustomPropertyData {
+) implements PropertyData {
 	public static final Codec<NameReplacementData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.STRING.fieldOf("from").forGetter(NameReplacementData::from),
 			Codec.STRING.fieldOf("to").forGetter(NameReplacementData::to),

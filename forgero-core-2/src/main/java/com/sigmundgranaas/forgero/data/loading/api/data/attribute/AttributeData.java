@@ -1,14 +1,15 @@
 package com.sigmundgranaas.forgero.data.loading.api.data.attribute;
 
-import com.sigmundgranaas.forgero.data.loading.api.data.condition.ConditionData;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.data.loading.api.data.PropertyData;
+import com.sigmundgranaas.forgero.data.loading.api.data.condition.ConditionData;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * An interface representing an intermediate representation of an Attribute property from a JSON file.
  * This contract defines the common fields for all attribute data DTOs.
  */
-public interface AttributeData {
+public interface AttributeData extends PropertyData {
 	/**
 	 * @return A unique identifier for this attribute instance, used for overriding.
 	 */
