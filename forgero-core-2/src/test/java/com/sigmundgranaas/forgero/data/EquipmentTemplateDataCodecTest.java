@@ -5,9 +5,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.data.codec.EquipmentTemplateCodecs;
-import com.sigmundgranaas.forgero.data.codec.CodecConstants;
-import com.sigmundgranaas.forgero.data.dto.template.EquipmentTemplateData;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.EquipmentTemplateCodecs;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
+import com.sigmundgranaas.forgero.data.loading.api.data.template.EquipmentTemplateData;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

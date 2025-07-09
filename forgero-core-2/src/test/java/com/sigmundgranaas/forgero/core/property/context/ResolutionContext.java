@@ -6,9 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.sigmundgranaas.forgero.core.ForgeroTest;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.component.structure.ComponentStructure;
-import com.sigmundgranaas.forgero.core.component.variant.StaticComponent;
-import com.sigmundgranaas.forgero.core.component.variant.StructuredPart;
+import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
+import com.sigmundgranaas.forgero.core.component.impl.StaticComponent;
+import com.sigmundgranaas.forgero.core.component.impl.StructuredPart;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

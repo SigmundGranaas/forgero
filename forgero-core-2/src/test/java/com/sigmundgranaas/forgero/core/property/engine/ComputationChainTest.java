@@ -8,12 +8,12 @@ import com.sigmundgranaas.forgero.core.attribute.impl.computation.CalculationVis
 import com.sigmundgranaas.forgero.core.attribute.impl.computation.ComputationChain;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.property.condition.Condition;
-import com.sigmundgranaas.forgero.core.attribute.impl.computation.operator.AdditionOperator;
-import com.sigmundgranaas.forgero.core.attribute.impl.computation.operator.MultiplicationOperator;
-import com.sigmundgranaas.forgero.core.attribute.impl.computation.operator.DivisionOperator;
-import com.sigmundgranaas.forgero.core.attribute.impl.computation.operator.SubtractionOperator;
-import com.sigmundgranaas.forgero.core.attribute.impl.computation.operator.MinOperator;
-import com.sigmundgranaas.forgero.core.attribute.impl.computation.operator.MaxOperator;
+import com.sigmundgranaas.forgero.core.attribute.api.operator.AdditionOperator;
+import com.sigmundgranaas.forgero.core.attribute.api.operator.MultiplicationOperator;
+import com.sigmundgranaas.forgero.core.attribute.api.operator.DivisionOperator;
+import com.sigmundgranaas.forgero.core.attribute.api.operator.SubtractionOperator;
+import com.sigmundgranaas.forgero.core.attribute.api.operator.MinOperator;
+import com.sigmundgranaas.forgero.core.attribute.api.operator.MaxOperator;
 import java.util.List;
 import java.util.Optional;
 

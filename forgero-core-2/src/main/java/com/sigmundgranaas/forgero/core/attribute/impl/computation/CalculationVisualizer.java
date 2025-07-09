@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.core.attribute.impl.computation;
 
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
-import com.sigmundgranaas.forgero.core.attribute.impl.computation.operator.Operator;
+import com.sigmundgranaas.forgero.core.attribute.api.operator.Operator;
 
 import java.util.List;
 import java.util.Locale;

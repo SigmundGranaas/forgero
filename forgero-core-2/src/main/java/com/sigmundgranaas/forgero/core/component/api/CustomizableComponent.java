@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.core.component.api;
 
-import com.sigmundgranaas.forgero.core.component.slot.ComponentUpgrades;
-import com.sigmundgranaas.forgero.core.component.slot.UpgradeSlot;
+import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgrades;
+import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
 import java.util.List;
 
 /**

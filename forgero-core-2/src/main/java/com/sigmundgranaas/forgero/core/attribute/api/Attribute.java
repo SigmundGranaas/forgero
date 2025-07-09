@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.attribute.api;
 
-import com.sigmundgranaas.forgero.core.attribute.impl.computation.operator.Operator;
+import com.sigmundgranaas.forgero.core.attribute.api.operator.Operator;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.property.condition.Condition;
 

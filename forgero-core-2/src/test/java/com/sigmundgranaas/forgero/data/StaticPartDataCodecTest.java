@@ -5,10 +5,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.data.codec.StaticPartCodecs;
-import com.sigmundgranaas.forgero.data.codec.CodecConstants;
-import com.sigmundgranaas.forgero.data.dto.StaticPartData;
-import com.sigmundgranaas.forgero.data.dto.attribute.AttributeData;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.StaticPartCodecs;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
+import com.sigmundgranaas.forgero.data.loading.api.data.StaticPartData;
+import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

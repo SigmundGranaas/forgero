@@ -1,0 +1,312 @@
+package com.sigmundgranaas.forgero.data.generation;
+
+import com.sigmundgranaas.forgero.core.ForgeroTest;
+import com.sigmundgranaas.forgero.data.generation.api.ComponentGenerator;
+import com.sigmundgranaas.forgero.data.generation.api.GeneratedState;
+import com.sigmundgranaas.forgero.data.generation.impl.ComponentGeneratorImpl;
+import com.sigmundgranaas.forgero.data.processing.api.NormalizedState;
+import com.sigmundgranaas.forgero.core.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.core.tags.engine.TagGraph;
+import com.sigmundgranaas.forgero.core.tags.engine.TagGraphBuilder;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
+import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
+import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeDataImpl;
+import com.sigmundgranaas.forgero.data.loading.api.data.attribute.ComputationData;
+import com.sigmundgranaas.forgero.data.loading.api.data.template.EquipmentTemplateSlotData;
+import com.sigmundgranaas.forgero.data.loading.api.data.template.EquipmentTemplateStructureData;
+import com.sigmundgranaas.forgero.data.loading.api.data.template.PartTemplateStructureData;
+import com.sigmundgranaas.forgero.data.loading.api.data.template.PartTemplateStructureSlotData;
+import com.sigmundgranaas.forgero.data.loading.api.data.template.UpgradeSlotData; // NEW
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static com.sigmundgranaas.forgero.data.loading.impl.codec.AttributeCodecs.ADDITION_OPERATOR;
+import static com.sigmundgranaas.forgero.data.loading.impl.codec.AttributeCodecs.MULTIPLICATION_OPERATOR;
+import static org.junit.jupiter.api.Assertions.*;
+
+class ComponentGeneratorTest extends ForgeroTest {
+
+	private ComponentGenerator generator;
+	private TagGraph tagGraph;
+
+	@BeforeEach
+	void setUp() {
+		generator = new ComponentGeneratorImpl(idFactory);
+		tagGraph = buildTestTagGraph();
+	}
+
+	private TagGraph buildTestTagGraph() {
+		TagGraphBuilder tagBuilder = new TagGraphBuilder();
+		Stream.of(
+				"forgero:material", "forgero:shape", "forgero:default_pickaxe_head",
+				"forgero:default_handle", "forgero:parts/pickaxe_head_type",
+				"forgero:parts/handle_type", "forgero:tool",
+				"forgero:armor", "forgero:parts/armor_plate_type", "forgero:default_armor_plate",
+				"forgero:armor_plate_shape", // NEW
+				"forgero:upgrade_material" // NEW - for the trim slot type
+		).forEach(tag -> tagBuilder.add(id(tag), Set.of()));
+
+		tagBuilder.add(id("forgero:tool_material"), Set.of(id("forgero:material")));
+		tagBuilder.add(id("forgero:pickaxe_head_shape"), Set.of(id("forgero:shape")));
+		tagBuilder.add(id("forgero:metal"), Set.of(id("forgero:tool_material"), id("forgero:armor_material")));
+		tagBuilder.add(id("forgero:wood"), Set.of(id("forgero:material")));
+		tagBuilder.add(id("forgero:pickaxe"), Set.of(id("forgero:tool")));
+		tagBuilder.add(id("forgero:armor_material"), Set.of(id("forgero:material")));
+		tagBuilder.add(id("forgero:chest_plate"), Set.of(id("forgero:armor")));
+
+		return tagBuilder.build();
+	}
+
+	// region Test Data Factories
+	private NormalizedState.NormalizedMaterial material(String name, String... tags) {
+		Set<OpenIdentifier> tagSet = Arrays.stream(tags).map(this::id).collect(Collectors.toSet());
+		return new NormalizedState.NormalizedMaterial(id("forgero:" + name), name, tagSet, List.of(), List.of());
+	}
+
+	private NormalizedState.NormalizedMaterial materialWithAttributes(String name, List<AttributeData> attributes, String... tags) {
+		Set<OpenIdentifier> tagSet = Arrays.stream(tags).map(this::id).collect(Collectors.toSet());
+		return new NormalizedState.NormalizedMaterial(id("forgero:" + name), name, tagSet, attributes, List.of());
+	}
+
+	private NormalizedState.NormalizedShape shape(String name, String... tags) {
+		Set<OpenIdentifier> tagSet = Arrays.stream(tags).map(this::id).collect(Collectors.toSet());
+		return new NormalizedState.NormalizedShape(id("forgero:" + name), name, tagSet, List.of(), List.of());
+	}
+
+	private NormalizedState.NormalizedShape shapeWithAttributes(String name, List<AttributeData> attributes, String... tags) {
+		Set<OpenIdentifier> tagSet = Arrays.stream(tags).map(this::id).collect(Collectors.toSet());
+		return new NormalizedState.NormalizedShape(id("forgero:" + name), name, tagSet, attributes, List.of());
+	}
+
+	private NormalizedState.NormalizedPartTemplate partTemplate(String name, String typeTag, String materialSlotType, String shapeSlotType) {
+		return new NormalizedState.NormalizedPartTemplate(
+				id("forgero:" + name), name, Set.of(id(typeTag)),
+				new PartTemplateStructureData("forgero:{material.name}-{shape.name}",
+						Map.of(
+								"material", new PartTemplateStructureSlotData(id(materialSlotType), 1, null),
+								"shape", new PartTemplateStructureSlotData(id(shapeSlotType), 1, null)
+						)),
+				List.of()
+		);
+	}
+
+	// Overload for armor plate template (which has different ID pattern)
+	private NormalizedState.NormalizedPartTemplate armorPlatePartTemplate(String name, String typeTag, String materialSlotType, String shapeSlotType) {
+		return new NormalizedState.NormalizedPartTemplate(
+				id("forgero:" + name), name, Set.of(id(typeTag)),
+				new PartTemplateStructureData("forgero:{material.name}-{shape.name}_plate", // Changed ID pattern for armor plates
+						Map.of(
+								"material", new PartTemplateStructureSlotData(id(materialSlotType), 1, null),
+								"shape", new PartTemplateStructureSlotData(id(shapeSlotType), 1, null)
+						)),
+				List.of()
+		);
+	}
+
+
+	private NormalizedState.NormalizedStaticPart staticPart(String name, String... tags) {
+		Set<OpenIdentifier> tagSet = Arrays.stream(tags).map(this::id).collect(Collectors.toSet());
+		return new NormalizedState.NormalizedStaticPart(id("forgero:" + name), name, tagSet, List.of(), List.of(), List.of());
+	}
+
+	private NormalizedState.NormalizedEquipmentTemplate equipmentTemplate(String name, Map<String, EquipmentTemplateSlotData> slots, String... tags) {
+		Set<OpenIdentifier> tagSet = Arrays.stream(tags).map(this::id).collect(Collectors.toSet());
+		return new NormalizedState.NormalizedEquipmentTemplate(
+				id("forgero:" + name), name, tagSet,
+				new EquipmentTemplateStructureData("forgero:{head.material.name}-pickaxe", slots),
+				List.of()
+		);
+	}
+
+	// New factory method for armor, allowing upgrades
+	private NormalizedState.NormalizedEquipmentTemplate armorEquipmentTemplate(String name, String idPattern, Map<String, EquipmentTemplateSlotData> structureSlots, List<UpgradeSlotData> upgradeSlots, String... tags) {
+		Set<OpenIdentifier> tagSet = Arrays.stream(tags).map(this::id).collect(Collectors.toSet());
+		return new NormalizedState.NormalizedEquipmentTemplate(
+				id("forgero:" + name), name, tagSet,
+				new EquipmentTemplateStructureData(idPattern, structureSlots),
+				upgradeSlots // Pass the upgrade slots here
+		);
+	}
+	// endregion
+
+	@Test
+	void testGenerate_SimplePartCombination() {
+		var iron = material("iron", "forgero:metal");
+		var headShape = shape("pickaxe_head", "forgero:pickaxe_head_shape");
+		var headTemplate = partTemplate("pickaxe_head_template", "forgero:parts/pickaxe_head_type", "forgero:tool_material", "forgero:pickaxe_head_shape");
+
+		var state = new NormalizedState(Map.of(iron.id(), iron), Map.of(headShape.id(), headShape), Map.of(), Map.of(headTemplate.id(), headTemplate), Map.of(), Map.of());
+		GeneratedState generated = generator.generate(state, tagGraph);
+
+		assertEquals(1, generated.parts().size());
+		OpenIdentifier expectedId = id("forgero:iron-pickaxe_head");
+		assertTrue(generated.parts().containsKey(expectedId), "Generated part ID should be " + expectedId + " but was " + generated.parts().keySet());
+
+		var generatedPart = generated.parts().get(expectedId);
+		assertNotNull(generatedPart);
+		assertTrue(generatedPart.tags().containsAll(Set.of(id("forgero:metal"), id("forgero:pickaxe_head_shape"), id("forgero:parts/pickaxe_head_type"))));
+		assertEquals(iron.id(), generatedPart.materialId());
+		assertEquals(headShape.id(), generatedPart.shapeId());
+	}
+
+	@Test
+	void testGenerate_PartWithCompositeAttributes() {
+		var iron = materialWithAttributes("iron",
+				List.of(new AttributeDataImpl(id("iron-durability"), id("forgero:durability"), new ComputationData(250f, ADDITION_OPERATOR, "forgero:base"), null, id("forgero:part-composite"))),
+				"forgero:metal");
+		var headShape = shapeWithAttributes("pickaxe_head",
+				List.of(new AttributeDataImpl(id("shape-durability-mult"), id("forgero:durability"), new ComputationData(1.5f, MULTIPLICATION_OPERATOR, "forgero:middle"), null, id("forgero:part-composite"))),
+				"forgero:pickaxe_head_shape");
+		var headTemplate = partTemplate("pickaxe_head_template", "forgero:parts/pickaxe_head_type", "forgero:tool_material", "forgero:pickaxe_head_shape");
+
+		var state = new NormalizedState(Map.of(iron.id(), iron), Map.of(headShape.id(), headShape), Map.of(), Map.of(headTemplate.id(), headTemplate), Map.of(), Map.of());
+		GeneratedState generated = generator.generate(state, tagGraph);
+
+		OpenIdentifier generatedPartId = id("forgero:iron-pickaxe_head");
+		assertTrue(generated.parts().containsKey(generatedPartId));
+		var generatedPart = generated.parts().get(generatedPartId);
+		assertNotNull(generatedPart.attributes());
+		assertEquals(2, generatedPart.attributes().size());
+	}
+
+	@Test
+	void testGenerate_ToolWithDeclarativeDefaults() {
+		var iron = material("iron", "forgero:metal");
+		var diamond = material("diamond", "forgero:metal");
+		var headShape = shape("pickaxe_head", "forgero:pickaxe_head_shape", "forgero:default_pickaxe_head");
+		var headTemplate = partTemplate("pickaxe_head_template", "forgero:parts/pickaxe_head_type", "forgero:tool_material", "forgero:pickaxe_head_shape");
+		var oakHandle = staticPart("static_oak_handle", "forgero:parts/handle_type", "forgero:default_handle");
+
+		var pickaxeTemplate = equipmentTemplate("pickaxe_template", Map.of(
+				"head", new EquipmentTemplateSlotData(id("forgero:parts/pickaxe_head_type"), id("forgero:default_pickaxe_head"), null),
+				"handle", new EquipmentTemplateSlotData(id("forgero:parts/handle_type"), null, id("forgero:static_oak_handle"))
+		), "forgero:pickaxe");
+
+		var state = new NormalizedState(
+				Map.of(iron.id(), iron, diamond.id(), diamond), Map.of(headShape.id(), headShape), Map.of(),
+				Map.of(headTemplate.id(), headTemplate), Map.of(pickaxeTemplate.id(), pickaxeTemplate), Map.of(oakHandle.id(), oakHandle)
+		);
+
+		GeneratedState generated = generator.generate(state, tagGraph);
+
+		assertEquals(2, generated.equipment().size(), "Should generate one default pickaxe for each material (iron, diamond).");
+		assertTrue(generated.equipment().containsKey(id("forgero:iron-pickaxe")), "Iron Pickaxe should be generated.");
+		assertTrue(generated.equipment().containsKey(id("forgero:diamond-pickaxe")), "Diamond Pickaxe should be generated.");
+
+		var ironPickaxe = generated.equipment().get(id("forgero:iron-pickaxe"));
+		assertEquals(id("forgero:iron-pickaxe_head"), ironPickaxe.structure().get("head"));
+		assertEquals(id("forgero:static_oak_handle"), ironPickaxe.structure().get("handle"));
+
+		var diamondPickaxe = generated.equipment().get(id("forgero:diamond-pickaxe"));
+		assertEquals(id("forgero:diamond-pickaxe_head"), diamondPickaxe.structure().get("head"));
+		assertEquals(id("forgero:static_oak_handle"), diamondPickaxe.structure().get("handle"));
+	}
+
+	@Test
+	void testGenerate_PartVariantsAreCreatedButNotUsedInDefaultTools() {
+		var iron = material("iron", "forgero:metal");
+		var headShape = shape("pickaxe_head", "forgero:pickaxe_head_shape", "forgero:default_pickaxe_head");
+		var castHeadShape = shape("pickaxe_head_cast", "forgero:pickaxe_head_shape");
+		var headTemplate = partTemplate("pickaxe_head_template", "forgero:parts/pickaxe_head_type", "forgero:tool_material", "forgero:pickaxe_head_shape");
+		var oakHandle = staticPart("static_oak_handle", "forgero:parts/handle_type", "forgero:default_handle");
+
+		var pickaxeTemplate = equipmentTemplate("pickaxe_template", Map.of(
+				"head", new EquipmentTemplateSlotData(id("forgero:parts/pickaxe_head_type"), id("forgero:default_pickaxe_head"), null),
+				"handle", new EquipmentTemplateSlotData(id("forgero:parts/handle_type"), null, id("forgero:static_oak_handle"))
+		), "forgero:pickaxe");
+
+		var state = new NormalizedState(
+				Map.of(iron.id(), iron), Map.of(headShape.id(), headShape, castHeadShape.id(), castHeadShape), Map.of(),
+				Map.of(headTemplate.id(), headTemplate), Map.of(pickaxeTemplate.id(), pickaxeTemplate), Map.of(oakHandle.id(), oakHandle)
+		);
+
+		GeneratedState generated = generator.generate(state, tagGraph);
+
+		assertEquals(2, generated.parts().size(), "All part variants should be generated.");
+		assertTrue(generated.parts().containsKey(id("forgero:iron-pickaxe_head")));
+		assertTrue(generated.parts().containsKey(id("forgero:iron-pickaxe_head_cast")));
+
+		assertEquals(1, generated.equipment().size(), "Only the default tool should be generated.");
+		assertTrue(generated.equipment().containsKey(id("forgero:iron-pickaxe")));
+		assertFalse(generated.equipment().containsKey(id("forgero:iron-cast-pickaxe")), "A tool using a non-default part should not be generated.");
+	}
+
+	@Test
+	void testGenerate_ArmorPieceWithDefaults() {
+		var iron = material("iron", "forgero:materials/metal", "forgero:materials/armor_material");
+		var leather = material("leather", "forgero:materials/armor_material");
+		var armorPlateShape = shape("armor_plate_shape", "forgero:armor_plate_shape", "forgero:default_armor_plate");
+		var heavyArmorPlateShape = shape("heavy_armor_plate_shape", "forgero:armor_plate_shape");
+		var armorPlateTemplate = armorPlatePartTemplate("armor_plate_template", "forgero:parts/armor_plate_type", "forgero:materials/armor_material", "forgero:armor_plate_shape");
+
+		// Define the structure slots for the chest plate
+		Map<String, EquipmentTemplateSlotData> chestPlateStructureSlots = Map.of(
+				"body", new EquipmentTemplateSlotData(id("forgero:parts/armor_plate_type"), id("forgero:default_armor_plate"), null)
+		);
+
+		// Define the upgrade slots for the chest plate
+		List<UpgradeSlotData> chestPlateUpgradeSlots = List.of(
+				new UpgradeSlotData(id("forgero:chest_plate-trim_slot"), id("forgero:upgrade_material"), List.of(id("forgero:materials/armor_material")), null, "An optional trim for the chest plate.")
+		);
+
+
+		var chestPlateTemplate = armorEquipmentTemplate(
+				"chest_plate_template",
+				"forgero:{body.material.name}-chest_plate",
+				chestPlateStructureSlots,
+				chestPlateUpgradeSlots,
+				"forgero:chest_plate"
+		);
+
+		var state = new NormalizedState(
+				Map.of(iron.id(), iron, leather.id(), leather),
+				Map.of(armorPlateShape.id(), armorPlateShape, heavyArmorPlateShape.id(), heavyArmorPlateShape),
+				Map.of(),
+				Map.of(armorPlateTemplate.id(), armorPlateTemplate),
+				Map.of(chestPlateTemplate.id(), chestPlateTemplate),
+				Map.of()
+		);
+
+		GeneratedState generated = generator.generate(state, tagGraph);
+
+		// Expect generated armor parts: (iron,leather)-(armor_plate_shape,heavy_armor_plate_shape) = 4 parts
+		assertEquals(4, generated.parts().size());
+		assertTrue(generated.parts().containsKey(id("forgero:iron-armor_plate_shape_plate"))); // Note: ID pattern ends with _plate
+		assertTrue(generated.parts().containsKey(id("forgero:leather-armor_plate_shape_plate")));
+		assertTrue(generated.parts().containsKey(id("forgero:iron-heavy_armor_plate_shape_plate")));
+		assertTrue(generated.parts().containsKey(id("forgero:leather-heavy_armor_plate_shape_plate")));
+
+		// Expect 2 generated chest plates (iron-chest_plate, leather-chest_plate) from default parts
+		assertEquals(2, generated.equipment().size());
+		assertTrue(generated.equipment().containsKey(id("forgero:iron-chest_plate")));
+		assertTrue(generated.equipment().containsKey(id("forgero:leather-chest_plate")));
+
+		var ironChestPlate = generated.equipment().get(id("forgero:iron-chest_plate"));
+		assertEquals(id("forgero:iron-armor_plate_shape_plate"), ironChestPlate.structure().get("body"));
+		// Assert that upgrade slots are present and trim is empty
+		assertNotNull(ironChestPlate.upgrades());
+		assertEquals(1, ironChestPlate.upgrades().size());
+		assertEquals(id("forgero:chest_plate-trim_slot"), ironChestPlate.upgrades().get(0).id());
+
+		var leatherChestPlate = generated.equipment().get(id("forgero:leather-chest_plate"));
+		assertEquals(id("forgero:leather-armor_plate_shape_plate"), leatherChestPlate.structure().get("body"));
+		assertNotNull(leatherChestPlate.upgrades());
+		assertEquals(1, leatherChestPlate.upgrades().size());
+		assertEquals(id("forgero:chest_plate-trim_slot"), leatherChestPlate.upgrades().get(0).id());
+
+		// Verify that armor pieces with non-default shapes are NOT generated by default
+		assertFalse(generated.equipment().containsKey(id("forgero:iron-heavy_chest_plate")), "Iron Heavy Chest Plate should not be generated by default");
+		assertFalse(generated.equipment().containsKey(id("forgero:leather-heavy_chest_plate")), "Leather Heavy Chest Plate should not be generated by default");
+	}
+
+	private OpenIdentifier id(String id) {
+		return CodecConstants.IDENTIFIER_FACTORY.of(id);
+	}
+}
