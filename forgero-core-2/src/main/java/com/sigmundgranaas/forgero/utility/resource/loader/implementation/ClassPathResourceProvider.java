@@ -58,7 +58,7 @@ public class ClassPathResourceProvider implements ResourceProvider {
 					})
 					// This collect is necessary to avoid issues with the stream being closed by the try-with-resources block
 					// before the caller has a chance to process it.
-					.collect(Collectors.toList()).stream();
+					.toList().stream();
 		}
 	}
 
@@ -78,7 +78,7 @@ public class ClassPathResourceProvider implements ResourceProvider {
 							String relativePath = startPath.relativize(filePath).toString(); // Slashes are already '/' in JARs
 							return new OpenIdentifier(rootIdentifier.namespace(), rootIdentifier.path() + "/" + relativePath);
 						})
-						.collect(Collectors.toList()).stream();
+						.toList().stream();
 			}
 		}
 	}
