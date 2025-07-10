@@ -1,29 +1,36 @@
 package com.sigmundgranaas.forgero.smithing.block.renderer;
 
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.WeakHashMap;
 
-import com.sigmundgranaas.forgero.smithing.ForgeroClientSmithingInitializer;
 import com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil;
 import com.sigmundgranaas.forgero.smithing.block.entity.SmithingAnvilBlockEntity;
 import com.sigmundgranaas.forgero.smithing.util.BoundingBoxUtil;
+import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.LightmapTextureManager;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
+import net.minecraft.util.math.Vec2f;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 
@@ -32,128 +39,192 @@ import net.fabricmc.api.Environment;
 
 @Environment(EnvType.CLIENT)
 public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<SmithingAnvilBlockEntity> {
-    private static final Logger LOGGER = LogManager.getLogger("ForgeroSmithingAnvilRenderer");
-    private final Map<Identifier, int[]> offsetCache = new ConcurrentHashMap<>();
-    private final BoundingBoxUtil boundingBoxUtil = new BoundingBoxUtil();
+	private static final Logger LOGGER = LogManager.getLogger("ForgeroSmithingAnvilRenderer");
+	private final BoundingBoxUtil boundingBoxUtil = new BoundingBoxUtil();
+	// Use WeakHashMap for caches to prevent memory leaks if itemstacks are frequently recreated/discarded
+	private final Map<ItemStack, int[]> itemTextureOffsetCache = new WeakHashMap<>();
+	private final Map<ItemStack, List<java.awt.Point>> validPixelsCache = new WeakHashMap<>();
 
-    public SmithingAnvilBlockEntityRenderer(BlockEntityRendererFactory.Context context) {
-    }
+	// Global scale factor for the item and all associated overlays
+	public static final float RENDER_SCALE_FACTOR = 0.5f;
 
-    @Override
-    public void render(SmithingAnvilBlockEntity entity, float tickDelta, MatrixStack matrices,
-                       VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
-        ItemStack itemStack = entity.getInventory().getStack(0);
+	// Anvil specific constants for positioning
+	private static final float ANVIL_TOP_Y = 1;
+	private static final float Y_FIGHTING_OFFSET = 0.001f; // Small offset to prevent z-fighting
+	private static final float MARKER_RENDER_OFFSET_Y = 0.04f; // Offset for marker/debug visuals above item surface
 
-        // Don't render if there's no item
-        if (itemStack.isEmpty()) {
-            return;
-        }
 
-        matrices.push();
+	public SmithingAnvilBlockEntityRenderer(BlockEntityRendererFactory.Context context) {
+	}
 
-        // First, translate to the center of the block (0.5, 1.025, 0.5)
-        matrices.translate(0.5f, 1.025f, 0.5f);
+	@Override
+	public void render(SmithingAnvilBlockEntity entity, float tickDelta, MatrixStack matrices,
+					   VertexConsumerProvider vertexConsumers, int light, int overlay) {
+		ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
+		ItemStack itemStack = entity.getInventory().getStack(0);
 
-        // Then, rotate based on anvil facing direction (Y axis)
-        switch (entity.getCachedState().get(SmithingAnvil.FACING)) {
-            case NORTH -> matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(0));
-            case EAST -> matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-90));
-            case SOUTH -> matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
-            case WEST -> matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90));
-        }
+		if (itemStack.isEmpty()) {
+			return;
+		}
 
-        // Rotate the tool 180 degrees around Y to turn it around
-        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+		matrices.push();
 
-        // Now, translate forward to the "anvil top" (relative to facing)
+		// All transformations are applied in reverse order to how they are called.
+		// The common transformations (translate, anvil rotation, item 180 rot, texture offset, overall scale)
+		// establish a coordinate system where (0,0,0) is the visual center of the *scaled* item on the anvil,
+		// and the XZ plane is horizontal (flat on the anvil surface).
+		// The +Y axis at this point points "upwards" from the anvil surface.
 
-        matrices.scale(1f, 1f, 1f);
+		float itemRenderY = ANVIL_TOP_Y + Y_FIGHTING_OFFSET + 0.01f;
 
-        // --- Centering logic start ---
-        int[] offset = getItemTextureOffset(itemStack);
-        float dx = offset[0] / 16.0f;
-        float dz = offset[1] / 16.0f;
-        // Cap the offsets to a maximum of 3/16 in either direction
-        dx = Math.max(-1f/16f, Math.min(1f/16f, dx));
-        dz = Math.max(-1f/16f, Math.min(1f/16f, dz));
-        matrices.translate(dx, 0, dz);
-        // --- Centering logic end ---
+		matrices.translate(0.5f, itemRenderY, 0.5f);
 
-        // Render highlight overlay if this is the hovered anvil
-        if (ForgeroClientSmithingInitializer.hoveredAnvilPos != null && entity.getPos().equals(ForgeroClientSmithingInitializer.hoveredAnvilPos)) {
-            float size = 1.0f / 64.0f; // 1/4 pixel in block units
-            float half = size / 2.0f;
-            // Get local hit coordinates
-            float localX = (float) ForgeroClientSmithingInitializer.hoveredLocalX - 0.5f;
-            float localZ = (float) ForgeroClientSmithingInitializer.hoveredLocalZ - 0.5f;
-            // Check if hovering over the rendered item (within 0.25 block units of center)
-            boolean hoveringItem = Math.abs(localX) < 0.125f && Math.abs(localZ) < 0.125f;
-            float markerY = hoveringItem ? 0.15f : 0.01f; // Raise marker if hovering over item
-            // Rotate localX/localZ according to anvil facing using rotation matrix
-            Direction facing = entity.getCachedState().get(SmithingAnvil.FACING);
-            float angle = 0.0f;
-            switch (facing) {
-                case NORTH -> angle = 0.0f;
-                case EAST  -> angle = (float) (Math.PI / 2.0);
-                case SOUTH -> angle = (float) Math.PI;
-                case WEST  -> angle = (float) (-Math.PI / 2.0);
-            }
-            float cos = (float) Math.cos(angle);
-            float sin = (float) Math.sin(angle);
-            // Apply marker offset in local space before rotation
-            float markerOffsetX = 0f;
-            float markerOffsetZ = 0f;
-            float localXWithOffset = localX + markerOffsetX;
-            float localZWithOffset = localZ + markerOffsetZ;
-            float rotatedX = localXWithOffset * cos - localZWithOffset * sin;
-            float rotatedZ = localXWithOffset * sin + localZWithOffset * cos;
-            matrices.push();
-            matrices.translate(rotatedX, markerY, rotatedZ); // Raise marker if hovering item
-            net.minecraft.client.render.WorldRenderer.drawBox(
-                matrices,
-                vertexConsumers.getBuffer(net.minecraft.client.render.RenderLayer.getLines()),
-                -half, 0, -half, half, 0, half,
-                1.0f, 0.0f, 0.0f, 1.0f // RGBA color
-            );
-            matrices.pop();
-        }
+		// Step 2: Rotate the entire visual setup (item + overlays) by the anvil's facing direction.
+		Direction facing = entity.getCachedState().get(SmithingAnvil.FACING);
+		float anvilAngleDegrees = 0.0f;
+		switch (facing) {
+			case EAST -> anvilAngleDegrees = -90.0f;
+			case SOUTH -> anvilAngleDegrees = 180.0f;
+			case WEST -> anvilAngleDegrees = 90.0f;
+			case NORTH -> anvilAngleDegrees = 0.0f; // Default for NORTH
+		}
+		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(anvilAngleDegrees));
 
-        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
+		// Step 3: Rotate the item 180 degrees around Y to make it face the player consistently.
+		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
 
-		matrices.translate(0, -0.1f, 0f);
+		// Step 4: Apply centering offset from item's texture (dx, dz).
+		int[] offset = itemTextureOffsetCache.computeIfAbsent(itemStack, SmithingAnvilBlockEntity.Positioning::getItemTextureOffset);
+		float dx = offset[0] / 16.0f;
+		float dz = offset[1] / 16.0f;
+		dx = Math.max(-0.2f, Math.min(0.2f, dx));
+		dz = Math.max(-0.2f, Math.min(0.2f, dz));
+		matrices.translate(dx, 0, dz);
 
-        // Use proper lighting from the block position
-        int lightLevel = getLightLevel(entity.getWorld(), entity.getPos());
+		// Step 5: Apply the uniform scaling factor. This affects everything after this point.
+		matrices.scale(RENDER_SCALE_FACTOR, RENDER_SCALE_FACTOR, RENDER_SCALE_FACTOR);
 
-        itemRenderer.renderItem(itemStack, ModelTransformationMode.GROUND, lightLevel, overlay,
-                matrices, vertexConsumers, entity.getWorld(), (int) entity.getPos().asLong());
+		renderMarker(matrices, vertexConsumers, entity);
+		if (MinecraftClient.getInstance().options.debugEnabled) {
+			renderDebugElements(entity, matrices, vertexConsumers, itemStack);
+		}
 
-        matrices.pop();
-    }
+		// Step 6: Rotate the item to lay flat on the anvil.
+		// This rotation makes the item's internal "up" axis (-Y in its model space) align with the anvil's Y.
+		// If ModelTransformationMode.NONE is used, the item model is typically rendered standing upright.
+		// A -90 degree rotation around the X-axis will lay it flat on the XZ plane.
+		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
 
-    private int[] getItemTextureOffset(ItemStack itemStack) {
-        Identifier itemId = itemStack.getItem().getRegistryEntry().getKey().get().getValue();
-        return offsetCache.computeIfAbsent(itemId, id -> {
-            try {
-                MinecraftClient client = MinecraftClient.getInstance();
-                BufferedImage image = com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil.getFirstQuadTextureImage(itemStack, client);
-                int[] offset = BoundingBoxUtil.getItemTextureOffsetFromImage(image);
-                LOGGER.info("[Renderer] Calculated offset for {}: ({}, {})", itemId, offset[0], offset[1]);
-                return offset;
-            } catch (Exception e) {
-                LOGGER.error("[Renderer] Error calculating texture offset: ", e);
-                return new int[] {0, 0};
-            }
-        });
-    }
+		// Render the actual 3D item model
+		int lightLevel = getLightLevel(entity.getWorld(), entity.getPos());
+		itemRenderer.renderItem(itemStack, ModelTransformationMode.NONE, lightLevel, overlay,
+				matrices, vertexConsumers, entity.getWorld(), (int) entity.getPos().asLong());
 
-    private int getLightLevel(World world, BlockPos pos) {
-        if (world == null) {
-            return 15728880; // Full brightness fallback
-        }
-        int blockLight = world.getLightLevel(LightType.BLOCK, pos);
-        int skyLight = world.getLightLevel(LightType.SKY, pos);
-        return LightmapTextureManager.pack(blockLight, skyLight);
-    }
+
+		matrices.pop();
+	}
+
+	private void renderMarker(MatrixStack matrices, VertexConsumerProvider vertexConsumers, SmithingAnvilBlockEntity entity) {
+		// This square marker is now debug-only
+		if (!entity.getMarkerPositions().isEmpty()) {
+			matrices.push();
+			// The current matrix stack is set up such that XZ is the horizontal plane, and Y points up.
+			// Markers are defined in item-local space (-0.5 to 0.5), matching this setup.
+
+			Vec2f markerPos = entity.getMarkerPositions().get(0);
+
+			// Translate to the marker's position within the item's local space
+			matrices.translate(markerPos.x, MARKER_RENDER_OFFSET_Y, markerPos.y); // Use MARKER_RENDER_OFFSET_Y
+
+			// Draw the marker
+			boolean isFast = entity.getFastMarkerIndices().contains(entity.getMarkerAttempts());
+			float r = isFast ? 1.0f : 1.0f;
+			float g = isFast ? 0.2f : 1.0f;
+			float b = isFast ? 0.2f : 0.0f;
+			float size = 0.05f; // This is half the side length of the marker box (0.1 block total size)
+
+			VertexConsumer lineConsumer = vertexConsumers.getBuffer(RenderLayer.getLines());
+			// Draw a wireframe box at the marker position
+			WorldRenderer.drawBox(matrices, lineConsumer, -size, 0, -size, size, 0, size, r, g, b, 1.0f);
+
+			matrices.pop();
+		}
+	}
+
+	private void renderDebugElements(SmithingAnvilBlockEntity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, ItemStack itemStack) {
+		matrices.push();
+		// The current matrix stack is set up such that XZ is the horizontal plane, and Y points up.
+
+		// Render mouse hover position
+		renderMouseHoverMarker(entity, matrices, vertexConsumers);
+
+		// Render valid pixels of the texture
+		List<java.awt.Point> validPixels = validPixelsCache.computeIfAbsent(itemStack, stack -> {
+			BufferedImage image = RuntimeModelUtil.getFirstQuadTextureImage(stack, MinecraftClient.getInstance());
+			return image != null ? boundingBoxUtil.collectValidPixels(image) : List.of();
+		});
+
+		if (!validPixels.isEmpty()) {
+			VertexConsumer quadConsumer = vertexConsumers.getBuffer(RenderLayer.getDebugQuads());
+			float pixelSize = 1f / 16f; // Each pixel represents a 1/16th block unit square
+			float pixelYOffset = MARKER_RENDER_OFFSET_Y; // Use the consistent offset for filled pixels
+
+			for (java.awt.Point p : validPixels) {
+				// Convert pixel coordinates (0-15) to item local coordinates (-0.5 to 0.5)
+				float px_local = (float) p.x / 16.0f - 0.5f;
+				float pz_local = (float) p.y / 16.0f - 0.5f; // Image Y is block Z
+
+				// Draw a small quad for each pixel
+				WorldRenderer.drawBox(
+						matrices, quadConsumer,
+						px_local, pixelYOffset, pz_local, px_local + pixelSize, pixelYOffset, pz_local + pixelSize,
+						0.0f, 0.8f, 0.0f, 0.5f // Green color for filled pixels (with transparency)
+				);
+			}
+		}
+
+		matrices.pop();
+	}
+
+	private void renderMouseHoverMarker(SmithingAnvilBlockEntity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
+		HitResult crosshairTarget = MinecraftClient.getInstance().crosshairTarget;
+		// Ensure it's a block hit and on *this* anvil block
+		if (crosshairTarget == null || crosshairTarget.getType() != HitResult.Type.BLOCK || !entity.getPos().equals(((BlockHitResult) crosshairTarget).getBlockPos())) {
+			return;
+		}
+		BlockHitResult blockHit = (BlockHitResult) crosshairTarget;
+
+		// Get item's texture offset
+		int[] offset = itemTextureOffsetCache.computeIfAbsent(entity.getInventory().getStack(0), SmithingAnvilBlockEntity.Positioning::getItemTextureOffset);
+		Vec2f itemTextureOffset = new Vec2f(offset[0] / 16.0f, offset[1] / 16.0f);
+
+		// Convert world hit position to the item's local coordinate system (-0.5 to 0.5 range)
+		// This is the core transformation.
+		Vec2f localHit = SmithingAnvilBlockEntity.Positioning.worldHitToItemLocal(blockHit, entity.getCachedState(), itemTextureOffset);
+
+		matrices.push();
+		// Translate to the calculated local hit position.
+		matrices.translate(localHit.x, MARKER_RENDER_OFFSET_Y, localHit.y); // Use the consistent offset.
+
+		// Draw a small red box at the mouse position
+		float markerBoxSize = 1.0f / 32.0f; // Half a pixel in the unscaled 16x16 texture, which then gets scaled down
+		float markerBoxHalf = markerBoxSize / 2.0f;
+		WorldRenderer.drawBox(
+				matrices, vertexConsumers.getBuffer(RenderLayer.getLines()),
+				-markerBoxHalf, 0, -markerBoxHalf, markerBoxHalf, 0, markerBoxHalf,
+				1.0f, 0.0f, 0.0f, 1.0f // Red color for mouse hover marker
+		);
+		matrices.pop();
+	}
+
+
+	private int getLightLevel(World world, BlockPos pos) {
+		if (world == null) {
+			return 15728880; // Full brightness fallback
+		}
+		// Get light level from the block position *above* the anvil, where the item is rendered
+		int blockLight = world.getLightLevel(LightType.BLOCK, pos.up());
+		int skyLight = world.getLightLevel(LightType.SKY, pos.up());
+		return LightmapTextureManager.pack(blockLight, skyLight);
+	}
 }

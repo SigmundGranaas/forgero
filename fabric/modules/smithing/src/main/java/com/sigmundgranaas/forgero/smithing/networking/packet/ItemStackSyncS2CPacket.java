@@ -1,62 +1,78 @@
 package com.sigmundgranaas.forgero.smithing.networking.packet;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.SmithingAnvilBlockEntity;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec2f;
+import net.minecraft.world.World;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 
+import org.jetbrains.annotations.NotNull;
+
 public class ItemStackSyncS2CPacket {
-	@SuppressWarnings("unused")
+
 	public static void receive(@NotNull MinecraftClient client, ClientPlayNetworkHandler handler, @NotNull PacketByteBuf buf, PacketSender responseSender) {
+		// Read data in the same order it was written by the server
+		BlockPos position = buf.readBlockPos();
 		int inventorySize = buf.readInt();
-		@NotNull ItemStack[] itemStacks = new ItemStack[inventorySize];
+		ItemStack[] itemStacks = new ItemStack[inventorySize];
 		for (int i = 0; i < inventorySize; i++) {
 			itemStacks[i] = buf.readItemStack();
 		}
-		@NotNull SimpleInventory inventory = new SimpleInventory(itemStacks);
 
-		@NotNull BlockPos position = buf.readBlockPos();
-
-		@Nullable var clientWorld = client.world;
-		if (clientWorld == null || !(clientWorld.getBlockEntity(position) instanceof SmithingAnvilBlockEntity smithingAnvilBlockEntity)) {
-			return;
-		}
-
-		smithingAnvilBlockEntity.getInventory().clear();
-		for (int i = 0; i < inventory.size(); i++) {
-			smithingAnvilBlockEntity.getInventory().setStack(i, inventory.getStack(i));
-		}
-
-		// --- Read marker positions and hits from packet ---
 		int markerCount = buf.readInt();
-		smithingAnvilBlockEntity.getMarkerPositions().clear();
-		smithingAnvilBlockEntity.getMarkerHits().clear();
+		Vec2f[] markerPositions = new Vec2f[markerCount];
+		boolean[] markerHits = new boolean[markerCount];
 		for (int i = 0; i < markerCount; i++) {
-			float x = buf.readFloat();
-			float y = buf.readFloat();
-			boolean hit = buf.readBoolean();
-			smithingAnvilBlockEntity.getMarkerPositions().add(new net.minecraft.util.math.Vec2f(x, y));
-			smithingAnvilBlockEntity.getMarkerHits().add(hit);
+			markerPositions[i] = new Vec2f(buf.readFloat(), buf.readFloat());
+			markerHits[i] = buf.readBoolean();
 		}
 
-		// --- Read fast marker indices from packet ---
-		smithingAnvilBlockEntity.getFastMarkerIndices().clear();
 		int fastMarkerCount = buf.readInt();
+		int[] fastMarkerIndices = new int[fastMarkerCount];
 		for (int i = 0; i < fastMarkerCount; i++) {
-			int idx = buf.readInt();
-			smithingAnvilBlockEntity.getFastMarkerIndices().add(idx);
+			fastMarkerIndices[i] = buf.readInt();
 		}
 
-		// --- Read markerAttempts and markerHitsCount from packet ---
-		smithingAnvilBlockEntity.setMarkerAttempts(buf.readInt());
-		smithingAnvilBlockEntity.setMarkerHitsCount(buf.readInt());
+		int markerAttempts = buf.readInt();
+		int markerHitsCount = buf.readInt();
+
+
+		client.execute(() -> {
+			// All logic that interacts with the world must be executed on the client thread
+			World world = client.world;
+			if (world == null || !(world.getBlockEntity(position) instanceof SmithingAnvilBlockEntity anvilEntity)) {
+				return;
+			}
+
+			// Update inventory
+			anvilEntity.getInventory().clear();
+			for (int i = 0; i < itemStacks.length; i++) {
+				anvilEntity.getInventory().setStack(i, itemStacks[i]);
+			}
+
+			// Update marker state
+			anvilEntity.getMarkerPositions().clear();
+			anvilEntity.getMarkerHits().clear();
+			for (int i = 0; i < markerCount; i++) {
+				anvilEntity.getMarkerPositions().add(markerPositions[i]);
+				anvilEntity.getMarkerHits().add(markerHits[i]);
+			}
+
+			// Update fast marker indices
+			anvilEntity.getFastMarkerIndices().clear();
+			for (int index : fastMarkerIndices) {
+				anvilEntity.getFastMarkerIndices().add(index);
+			}
+
+			// Update progress
+			anvilEntity.setMarkerAttempts(markerAttempts);
+			anvilEntity.setMarkerHitsCount(markerHitsCount);
+		});
 	}
 }
