@@ -4,9 +4,9 @@ import java.util.Objects;
 
 public record OpenIdentifier(String namespace, String path) {
 
-	public OpenIdentifier {
-		Objects.requireNonNull(namespace);
-		Objects.requireNonNull(path);
+	public OpenIdentifier(String namespace, String path) {
+		this.namespace = Objects.requireNonNull(namespace);
+		this.path = Objects.requireNonNull(path);
 
 		if (!isValidNamespace(namespace)) {
 			throw new IllegalArgumentException("Invalid namespace: '" + namespace + "'. Must be lowercase alphanumeric, '_', or '-'.");
@@ -15,6 +15,10 @@ public record OpenIdentifier(String namespace, String path) {
 		if (!isValidPath(path)) {
 			throw new IllegalArgumentException("Invalid path: '" + path + "'. Must be lowercase alphanumeric, '_', '-', '/', or '.'.");
 		}
+	}
+
+	public OpenIdentifier(String id) {
+		this(id.split(":")[0], id.split(":")[1]);
 	}
 
 	@Override
