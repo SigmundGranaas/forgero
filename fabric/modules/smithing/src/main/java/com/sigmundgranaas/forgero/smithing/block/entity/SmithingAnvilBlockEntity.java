@@ -4,31 +4,25 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import com.sigmundgranaas.forgero.core.condition.Conditional;
 import com.sigmundgranaas.forgero.core.condition.NamedCondition;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.state.Typed;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
-import com.sigmundgranaas.forgero.smithing.block.renderer.SmithingAnvilBlockEntityRenderer; // Import for RENDER_SCALE_FACTOR
+import com.sigmundgranaas.forgero.smithing.block.renderer.SmithingAnvilBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.condition.ConditionLootTables;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 import com.sigmundgranaas.forgero.smithing.util.BoundingBoxUtil;
 import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
 import com.sigmundgranaas.forgero.smithing.util.ToolPartTypeUtils;
-
 import lombok.Getter;
 import lombok.Setter;
-
-import net.minecraft.util.math.Vec3d;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -55,6 +49,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 
@@ -644,41 +639,45 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		 * @return Vec2f representing the hit position in the item's local texture space (-0.5 to 0.5 for X,Y).
 		 */
 		public static Vec2f worldHitToItemLocal(BlockHitResult hit, BlockState anvilState, Vec2f itemTextureOffset) {
-			// Step 1: Convert world hit position to coordinates relative to the block's center (0,0,0 is block center, range -0.5 to 0.5)
+			// Step 1: Convert world hit position to coordinates relative to the block's center
+			// (0,0,0 is block center, range -0.5 to 0.5)
 			double localX_block_center = hit.getPos().x - hit.getBlockPos().getX() - 0.5;
 			double localZ_block_center = hit.getPos().z - hit.getBlockPos().getZ() - 0.5;
 
 			// Step 2: Inverse of Anvil's Rotation (undo the anvilAngleDegrees rotation)
 			Direction facing = anvilState.get(com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.FACING);
-			float anvilAngleDegrees = 0.0f; // This angle must match the renderer's `anvilAngleDegrees`
+			float anvilAngleDegrees = 0.0f;
 			switch (facing) {
 				case EAST -> anvilAngleDegrees = -90.0f;
 				case SOUTH -> anvilAngleDegrees = 180.0f;
 				case WEST -> anvilAngleDegrees = 90.0f;
 				case NORTH -> anvilAngleDegrees = 0.0f;
 			}
-			float invAnvilAngleRadians = (float) Math.toRadians(-anvilAngleDegrees); // Negative for inverse
+
+			// Apply inverse anvil rotation
+			float invAnvilAngleRadians = (float) Math.toRadians(-anvilAngleDegrees);
 			double cosInv = Math.cos(invAnvilAngleRadians);
 			double sinInv = Math.sin(invAnvilAngleRadians);
 
 			double hitX_afterAnvilRot = localX_block_center * cosInv - localZ_block_center * sinInv;
 			double hitZ_afterAnvilRot = localX_block_center * sinInv + localZ_block_center * cosInv;
 
-			// Step 3: Inverse of Item's 180-degree rotation (undoes the `multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180))` from renderer)
+			// Step 3: Inverse of Item's 180-degree rotation
+			// (undoes the `multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180))` from renderer)
 			float hitX_beforeItemRot = (float) -hitX_afterAnvilRot;
 			float hitZ_beforeItemRot = (float) -hitZ_afterAnvilRot;
 
-			// Step 4: Inverse of the RENDER_SCALE_FACTOR.
+			// Step 4: Inverse of the RENDER_SCALE_FACTOR
 			float hitX_scaled = hitX_beforeItemRot / SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
 			float hitZ_scaled = hitZ_beforeItemRot / SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
 
-			// Step 5: Inverse of the texture centering offset.
-			float hitX_itemLocal = hitX_scaled + itemTextureOffset.x;
-			float hitZ_itemLocal = hitZ_scaled + itemTextureOffset.y;
+			// Step 5: Inverse of the texture centering offset (subtract instead of add)
+			float hitX_itemLocal = hitX_scaled - itemTextureOffset.x;
+			float hitZ_itemLocal = hitZ_scaled - itemTextureOffset.y;
 
-			return new Vec2f(-hitX_itemLocal, -hitZ_itemLocal);
+			// Return without additional negation - the coordinate system should match
+			return new Vec2f(hitX_itemLocal, hitZ_itemLocal);
 		}
-
 		/**
 		 * Converts an item's local texture space coordinate (-0.5 to 0.5) to a world-space position for rendering particles.
 		 * This function applies the transformations in the same order as the renderer, but for a single point.
