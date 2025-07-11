@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.model.rendering.impl;
 
-import com.sigmundgranaas.forgero.model.api.RenderableTexture; // Changed to RenderableTexture
+import com.sigmundgranaas.forgero.model.api.RenderableTexture;
 import com.sigmundgranaas.forgero.model.rendering.api.TextureCompositor;
 import com.sigmundgranaas.forgero.model.rendering.api.TextureProvider;
 import java.awt.*;
@@ -16,7 +16,7 @@ public class AwtTextureCompositor implements TextureCompositor {
 	public AwtTextureCompositor(TextureProvider textureProvider) { this.textureProvider = textureProvider; }
 
 	@Override
-	public BufferedImage render(List<RenderableTexture> texturesToRender) { // Changed input to List<RenderableTexture>
+	public BufferedImage render(List<RenderableTexture> texturesToRender) {
 		List<BufferedImage> images = new ArrayList<>();
 		int width = 0, height = 0;
 
@@ -32,7 +32,7 @@ public class AwtTextureCompositor implements TextureCompositor {
 				height = Math.max(height, image.getHeight());
 			}
 		}
-		if (width == 0 || height == 0) { return new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB); } // Default empty image
+		if (width == 0 || height == 0) { return new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB); }
 		BufferedImage canvas = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = canvas.createGraphics();
 

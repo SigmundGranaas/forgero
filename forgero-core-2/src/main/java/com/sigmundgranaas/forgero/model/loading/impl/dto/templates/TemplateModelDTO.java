@@ -13,10 +13,11 @@ import java.util.Optional;
  * This is the template counterpart to the final ModelDTO.
  */
 public record TemplateModelDTO(
+		@Nullable String id,
 		String type,
 		@Nullable List<TemplateLayerDTO> layers,
-		@Nullable List<SlotDTO> slots,      // Slots can be reused as they don't contain generation logic
-		@Nullable TemplateTexturesDTO textures, // For simple texture models
+		@Nullable List<SlotDTO> slots,
+		@Nullable TemplateTexturesDTO textures,
 		@Nullable String target,
 		@Nullable String context
 ) {
@@ -26,12 +27,13 @@ public record TemplateModelDTO(
 	).apply(instance, TemplateLayerDTO::new));
 
 	public static final Codec<TemplateModelDTO> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			Codec.STRING.optionalFieldOf("id").forGetter(dto -> Optional.ofNullable(dto.id)),
 			Codec.STRING.fieldOf("type").forGetter(TemplateModelDTO::type),
 			Codec.list(LAYER_CODEC).optionalFieldOf("layers").forGetter(dto -> Optional.ofNullable(dto.layers)),
 			Codec.list(SlotDTO.CODEC).optionalFieldOf("slots").forGetter(dto -> Optional.ofNullable(dto.slots)),
 			TemplateTexturesDTO.CODEC.optionalFieldOf("textures").forGetter(dto -> Optional.ofNullable(dto.textures)),
 			Codec.STRING.optionalFieldOf("target").forGetter(dto -> Optional.ofNullable(dto.target)),
 			Codec.STRING.optionalFieldOf("context").forGetter(dto -> Optional.ofNullable(dto.context))
-	).apply(instance, (type, layers, slots, textures, target, context) -> new TemplateModelDTO(type, layers.orElse(null), slots.orElse(null), textures.orElse(null), target.orElse(null), context.orElse(null))));
+	).apply(instance, (id, type, layers, slots, textures, target, context) -> new TemplateModelDTO(id.orElse(null), type, layers.orElse(null), slots.orElse(null), textures.orElse(null), target.orElse(null), context.orElse(null))));
 
 }

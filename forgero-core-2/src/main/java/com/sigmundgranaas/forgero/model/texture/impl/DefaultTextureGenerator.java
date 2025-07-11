@@ -29,7 +29,6 @@ public class DefaultTextureGenerator implements TextureGenerator {
 	public void generate(List<TextureGenerationTask> tasks) {
 		for (TextureGenerationTask task : tasks) {
 			try {
-				// System.out.println("INFO: Starting texture generation for: " + task.output());
 
 				// 1. Load template image
 				Optional<BufferedImage> templateOpt = loadImage(task.template());

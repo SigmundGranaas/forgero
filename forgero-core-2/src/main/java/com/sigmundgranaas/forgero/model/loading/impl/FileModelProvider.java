@@ -26,7 +26,7 @@ public class FileModelProvider implements ModelProvider, ResourceConverter<Model
 	}
 
 	@Override
-	public Optional<Model> convert(InputStream stream, OpenIdentifier resourceId) { // resourceId is the raw resource path, e.g., "forgero:models/tools/iron-pickaxe.json"
+	public Optional<Model> convert(InputStream stream, OpenIdentifier resourceId) {
 		try (InputStreamReader reader = new InputStreamReader(stream)) {
 			JsonElement modelJson = JsonParser.parseReader(reader);
 
@@ -41,13 +41,12 @@ public class FileModelProvider implements ModelProvider, ResourceConverter<Model
 				return Optional.empty();
 			}
 
-			// Normalize the ID before passing it to the translator and creating the Model instance
 			String idPath = resourceId.path();
 			String normalizedPath = idPath.substring(idPath.indexOf("models/") + "models/".length());
 			normalizedPath = normalizedPath.replace(".json", "");
-			OpenIdentifier normalizedModelId = new OpenIdentifier(resourceId.namespace(), normalizedPath);
+			OpenIdentifier fileDerivedId = new OpenIdentifier(resourceId.namespace(), normalizedPath);
 
-			return result.result().map(dto -> translator.toDomain(normalizedModelId, dto)); // Pass the normalized ID
+			return result.result().map(dto -> translator.toDomain(fileDerivedId, dto));
 		} catch (JsonSyntaxException e) {
 			System.err.println("Failed to parse model " + resourceId + " due to a JSON syntax error: " + e.getMessage());
 			return Optional.empty();
@@ -58,11 +57,9 @@ public class FileModelProvider implements ModelProvider, ResourceConverter<Model
 		}
 	}
 
-	// This implements ModelProvider, allowing direct fetching of a model by ID (uses ResourceProvider and then converts)
 	@Override
-	public Optional<Model> get(OpenIdentifier id) { // id here is already normalized, e.g., "forgero:tools/iron-pickaxe"
-		// We need to reconstruct the file path from the normalized ID
+	public Optional<Model> get(OpenIdentifier id) {
 		OpenIdentifier modelFilePath = new OpenIdentifier(id.namespace(), "models/" + id.path() + ".json");
-		return resourceProvider.read(modelFilePath).flatMap(stream -> convert(stream, modelFilePath)); // Pass the full file path ID to convert
+		return resourceProvider.read(modelFilePath).flatMap(stream -> convert(stream, modelFilePath));
 	}
 }

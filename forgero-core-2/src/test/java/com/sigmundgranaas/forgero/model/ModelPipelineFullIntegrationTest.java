@@ -117,7 +117,7 @@ public class ModelPipelineFullIntegrationTest {
 		ModelInitializationResult initResult = modelInitializer.initialize(components, tagGraph, modelRegistry);
 
 		// Manually write the generated assets to a specific directory for inspection
-		writeGeneratedAssets(initResult.generationResult(), OUTPUT_DIRECTORY, resourceProvider);
+		writeGeneratedAssets(initResult.generationResult(), resourceProvider);
 
 		// Assertions
 		ModelGenerationResult result = initResult.generationResult();
@@ -144,23 +144,20 @@ public class ModelPipelineFullIntegrationTest {
 		System.out.println("Generated files written to: " + new File(OUTPUT_DIRECTORY).getAbsolutePath());
 	}
 
-	private void writeGeneratedAssets(ModelGenerationResult result, String outputDir, ResourceProvider resourceProvider) {
+	private void writeGeneratedAssets(ModelGenerationResult result, ResourceProvider resourceProvider) {
 		TextureGenerator textureGenerator = new DefaultTextureGenerator(
 				resourceProvider,
 				new AwtPalettizedTextureGenerator(),
-				new FileTextureWriter(outputDir)
+				new FileTextureWriter(ModelPipelineFullIntegrationTest.OUTPUT_DIRECTORY)
 		);
 		textureGenerator.generate(result.textureGenerationTasks());
 
-		// Model writing
-		result.generatedModels().entrySet().stream()
-				.filter(entry -> !entry.getKey().path().startsWith("contextual-"))
-				.forEach(entry -> writeModelToFile(entry.getKey(), entry.getValue(), outputDir));
+		result.generatedModels().forEach(this::writeModelToFile);
 	}
 
-	private void writeModelToFile(OpenIdentifier id, ModelDTO dto, String baseDir) {
+	private void writeModelToFile(OpenIdentifier id, ModelDTO dto) {
 		try {
-			Path modelPath = Path.of(baseDir, "assets", id.namespace(), "models", id.path() + ".json");
+			Path modelPath = Path.of(ModelPipelineFullIntegrationTest.OUTPUT_DIRECTORY, "assets", id.namespace(), "models", id.path() + ".json");
 			File modelFile = modelPath.toFile();
 			//noinspection ResultOfMethodCallIgnored
 			modelFile.getParentFile().mkdirs();

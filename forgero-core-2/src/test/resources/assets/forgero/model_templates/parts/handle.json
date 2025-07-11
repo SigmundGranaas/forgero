@@ -4,6 +4,7 @@
     "tag": "forgero:wood"
   },
   "model": {
+    "id": "forgero:parts/{target.id.name}-handle",
     "type": "forgero:texture_model",
     "textures": {
       "generation": {

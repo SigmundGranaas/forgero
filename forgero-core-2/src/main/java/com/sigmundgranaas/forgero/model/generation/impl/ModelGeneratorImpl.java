@@ -35,12 +35,9 @@ public class ModelGeneratorImpl implements ModelGenerator {
 		Map<OpenIdentifier, ModelDTO> generatedModels = new HashMap<>();
 		List<TextureGenerationTask> textureTasks = new ArrayList<>();
 
-		// Handle Part templates with new ID generation logic
 		templateProvider.getPartTemplates().forEach((partName, template) -> {
 			List<Component> compatibleComponents = tagGraph.findTagged(template.target().tag(), components.values())
 					.stream()
-					// Only apply part templates to base materials/parts, not existing composite parts.
-					// This heuristic checks if a component has a complex structure.
 					.filter(c -> !(c instanceof StructuredComponent sc) || sc.structure().slots().isEmpty())
 					.toList();
 
@@ -48,15 +45,10 @@ public class ModelGeneratorImpl implements ModelGenerator {
 				Map<String, Object> context = Map.of("target", component);
 				ModelDTO resolvedModel = mapTemplateToModel(template.model(), context, textureTasks);
 
-				// Generate the new ID from material name and part name (from the template filename)
-				String newPath = component.id().path() + "-" + partName;
-				OpenIdentifier newModelId = new OpenIdentifier(component.id().namespace(), newPath);
-
-				generatedModels.put(newModelId, resolvedModel);
+				generatedModels.put(resolvedModel.id(), resolvedModel);
 			}
 		});
 
-		// Handle Contextual and Equipment templates as before
 		processTemplates(templateProvider.getContextualTemplates(), components, generatedModels, textureTasks);
 		processTemplates(templateProvider.getEquipmentTemplates(), components, generatedModels, textureTasks);
 
@@ -73,19 +65,23 @@ public class ModelGeneratorImpl implements ModelGenerator {
 				Map<String, Object> context = Map.of("target", component);
 				ModelDTO resolvedModel = mapTemplateToModel(template.model(), context, tasks);
 
-				// Use the resolved model's target and context for registration for contextual models,
-				// or the component's ID for equipment models.
-				if (resolvedModel.getTarget().isPresent() && resolvedModel.getContext().isPresent()) {
-					String uniqueKey = "contextual-" + component.id().toString() + "-" + resolvedModel.getContext().get();
-					models.put(new OpenIdentifier(uniqueKey), resolvedModel);
-				} else {
-					models.put(component.id(), resolvedModel);
-				}
+
+				models.put(resolvedModel.id(), resolvedModel);
 			}
 		}
 	}
 
 	private ModelDTO mapTemplateToModel(TemplateModelDTO template, Map<String, Object> context, List<TextureGenerationTask> tasks) {
+		String rawId = template.id() != null ? placeholderResolver.resolve(template.id(), context) : null;
+		OpenIdentifier resolvedId = null;
+		if (rawId != null && !rawId.isEmpty()) {
+			resolvedId = new OpenIdentifier(rawId);
+		}
+
+		if (resolvedId == null) {
+			throw new IllegalStateException("Generated model template missing explicit 'id' field after resolution. Template: " + template.type());
+		}
+
 		List<LayerDTO> finalLayers = null;
 		if (template.layers() != null) {
 			finalLayers = template.layers().stream()
@@ -106,7 +102,7 @@ public class ModelGeneratorImpl implements ModelGenerator {
 		String target = template.target() != null ? placeholderResolver.resolve(template.target(), context) : null;
 		String modelContext = template.context() != null ? placeholderResolver.resolve(template.context(), context) : null;
 
-		return new ModelDTO(template.type(), finalLayers, template.slots(), null, finalTextures, target, modelContext);
+		return new ModelDTO(resolvedId, template.type(), finalLayers, template.slots(), null, finalTextures, target, modelContext);
 	}
 
 	private String processGenerationBlock(GenerationDTO generation, Map<String, Object> context, List<TextureGenerationTask> tasks) {

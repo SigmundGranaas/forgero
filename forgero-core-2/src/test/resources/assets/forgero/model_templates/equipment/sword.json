@@ -4,6 +4,7 @@
     "tag": "forgero:sword"
   },
   "model": {
+    "id": "forgero:equipment/{target.id.name}",
     "type": "forgero:composite_model",
     "slots": [
       {
@@ -17,12 +18,12 @@
         "renderer": { "type": "forgero:component" }
       },
       {
-          "id": "guard_slot",
-          "order": 15,
-          "renderer": {
-            "type": "forgero:component",
-            "context": "sword_guard"
-          }
+        "id": "guard_slot",
+        "order": 15,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "sword_guard"
+        }
       }
     ]
   }

@@ -11,6 +11,6 @@ public record ContextualModelTemplateDTO(
 		OpenIdentifier type,
 		String context,
 		TargetDTO target,
-		TemplateModelDTO model // Changed from ModelDTO
+		TemplateModelDTO model
 ) implements ModelTemplateDTO, ModelGeneratorImpl.TemplateModelDataProvider {
 }

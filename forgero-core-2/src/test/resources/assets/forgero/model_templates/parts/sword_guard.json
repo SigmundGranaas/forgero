@@ -4,6 +4,7 @@
     "tag": "forgero:metal"
   },
   "model": {
+    "id": "forgero:parts/{target.id.name}-sword_guard",
     "type": "forgero:composite_model",
     "layers": [
       {

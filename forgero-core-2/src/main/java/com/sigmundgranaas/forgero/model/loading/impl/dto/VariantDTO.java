@@ -6,7 +6,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public record VariantDTO(
 		List<PredicateDTO> predicate,
@@ -20,10 +19,6 @@ public record VariantDTO(
 
 	public Optional<String> getModel() {
 		return Optional.ofNullable(model);
-	}
-
-	public Optional<int[]> getOffsetAsOptional() {
-		return Optional.ofNullable(offset);
 	}
 
 	public static final Codec<VariantDTO> CODEC = RecordCodecBuilder.create(instance -> instance.group(

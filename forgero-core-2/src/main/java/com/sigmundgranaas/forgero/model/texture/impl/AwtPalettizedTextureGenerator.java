@@ -4,26 +4,12 @@ import com.sigmundgranaas.forgero.model.texture.api.PalettizedTextureGenerator;
 
 import java.awt.image.BufferedImage;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public class AwtPalettizedTextureGenerator implements PalettizedTextureGenerator {
-
-	// These are the *expected* greyscale values in the template, ordered from darkest to lightest.
-	// This list defines the 7 "slots" for colors in the palette.
-	private static final List<Integer> EXPECTED_TEMPLATE_GREYS = List.of(
-			36,  // Darkest
-			72,
-			108,
-			144, // Mid-point
-			180,
-			216,
-			252  // Lightest
-	);
 
 	private static final int PALETTE_COLOR_COUNT = 7; // The palette is 7 pixels wide.
 
@@ -35,7 +21,7 @@ public class AwtPalettizedTextureGenerator implements PalettizedTextureGenerator
 					"Texture generation failed: Palette must be exactly %d pixels wide, but was %d pixels. Palette: %s",
 					PALETTE_COLOR_COUNT,
 					palette.getWidth(),
-					palette.toString() // Include palette info for debugging
+					palette // Include palette info for debugging
 			));
 		}
 		// Rule: Palette must have a height of 1
@@ -43,7 +29,7 @@ public class AwtPalettizedTextureGenerator implements PalettizedTextureGenerator
 			throw new IllegalArgumentException(String.format(
 					"Texture generation failed: Palette must be 1 pixel high, but was %d pixels. Palette: %s",
 					palette.getHeight(),
-					palette.toString()
+					palette
 			));
 		}
 

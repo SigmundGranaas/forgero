@@ -1,4 +1,3 @@
-// FILE: /home/sigmund/Documents/projects/forgero/1-20/forgero-core-2/src/main/java/com/sigmundgranaas/forgero/model/loading/impl/ModelTranslator.java
 package com.sigmundgranaas.forgero.model.loading.impl;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
@@ -9,11 +8,12 @@ import com.sigmundgranaas.forgero.model.api.ModelLayer;
 import com.sigmundgranaas.forgero.model.api.ModelSlot;
 import com.sigmundgranaas.forgero.model.api.ModelVariant;
 import com.sigmundgranaas.forgero.model.api.Offset;
-import com.sigmundgranaas.forgero.model.api.TextureModel; // Changed from StaticModel to TextureModel
+import com.sigmundgranaas.forgero.model.api.TextureModel;
 import com.sigmundgranaas.forgero.model.match.Predicate;
 import com.sigmundgranaas.forgero.model.match.predicate.BowPullPredicate;
+import com.sigmundgranaas.forgero.model.match.predicate.ChildTagPredicate;
 import com.sigmundgranaas.forgero.model.match.predicate.RootTagPredicate;
-import com.sigmundgranaas.forgero.model.loading.impl.dto.*; // Import all new DTOs
+import com.sigmundgranaas.forgero.model.loading.impl.dto.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -26,11 +26,13 @@ import java.util.stream.Collectors;
  */
 public class ModelTranslator {
 
-	public Model toDomain(OpenIdentifier id, ModelDTO dto) {
+	public Model toDomain(OpenIdentifier fileDerivedId, ModelDTO dto) {
+		OpenIdentifier finalId = dto.getOpenIdentifierId().orElse(fileDerivedId);
+
 		return switch (dto.type()) {
-			case "forgero:composite_model" -> toCompositeModel(id, dto);
-			case "forgero:texture_model" -> toTextureModel(id, dto); // Changed to toTextureModel
-			case "forgero:empty_model" -> EmptyModel.INSTANCE; // Use the singleton instance
+			case "forgero:composite_model" -> toCompositeModel(finalId, dto);
+			case "forgero:texture_model" -> toTextureModel(finalId, dto);
+			case "forgero:empty_model" -> EmptyModel.INSTANCE;
 			default -> throw new IllegalArgumentException("Unknown model type: " + dto.type());
 		};
 	}
@@ -74,7 +76,7 @@ public class ModelTranslator {
 		return new ModelSlot(dto.id(), dto.order(), context);
 	}
 
-	private TextureModel toTextureModel(OpenIdentifier id, ModelDTO dto) { // Changed to TextureModel
+	private TextureModel toTextureModel(OpenIdentifier id, ModelDTO dto) {
 		Optional<OpenIdentifier> target = dto.getTarget().map(OpenIdentifier::new);
 		Optional<String> context = dto.getContext();
 
@@ -87,7 +89,6 @@ public class ModelTranslator {
 					.toList();
 			return new TextureModel(id, textures.defaultTexture(), variants, Optional.empty(), target, context);
 		} else {
-			// Fallback for direct "texture" field on root (if used, though spec shows it under "textures")
 			return new TextureModel(id, dto.texture(), Collections.emptyList(), Optional.empty(), target, context);
 		}
 	}
@@ -95,7 +96,7 @@ public class ModelTranslator {
 	private ModelVariant toModelVariant(VariantDTO dto) {
 		List<Predicate> predicates = dto.predicate().stream().map(this::toPredicate).collect(Collectors.toList());
 		Optional<String> texture = Optional.ofNullable(dto.texture());
-		Optional<Object> model; // Object type to hold either EmptyModel.INSTANCE or String ID
+		Optional<Object> model;
 		if (dto.model() != null && dto.model().equals("forgero:common/empty")) {
 			model = Optional.of(EmptyModel.INSTANCE);
 		} else {
@@ -110,6 +111,7 @@ public class ModelTranslator {
 		return switch (dto.type()) {
 			case "forgero:root_tag" -> new RootTagPredicate(new OpenIdentifier(dto.tag()));
 			case "forgero:bow_pull" -> new BowPullPredicate(dto.pull(), dto.pulling());
+			case "forgero:child_tag" -> new ChildTagPredicate(new OpenIdentifier(dto.tag()));
 			default -> throw new IllegalArgumentException("Unknown predicate type: " + dto.type());
 		};
 	}
