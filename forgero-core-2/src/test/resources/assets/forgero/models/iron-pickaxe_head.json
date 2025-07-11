@@ -1,1 +1,0 @@
-{ "model_type": "forgero:composite_model", "self": [ { "texture": "forgero:item/iron-pickaxe_head", "order": 20 } ], "model_selectors": [ { "target_slot": "handle", "model": "forgero:special_pickaxe_handle" } ] }

@@ -1,0 +1,23 @@
+{
+  "type": "forgero:composite_model",
+  "slots": [
+    {
+      "id": "limb",
+      "order": 10,
+      "renderer": { "type": "forgero:component" }
+    },
+    {
+      "id": "handle",
+      "order": 20,
+      "renderer": {
+        "type": "forgero:component",
+        "context": "bow_handle"
+      }
+    },
+    {
+      "id": "string",
+      "order": 30,
+      "renderer": { "type": "forgero:component" }
+    }
+  ]
+}

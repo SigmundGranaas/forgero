@@ -1,0 +1,6 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:diamond",
+  "context": "pickaxe_head_reinforcement",
+  "texture": "forgero:item/diamond-pickaxe_head_reinforcement"
+}

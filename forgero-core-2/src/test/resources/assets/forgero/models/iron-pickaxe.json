@@ -1,1 +1,0 @@
-{ "model_type": "forgero:composite_model", "parts": [ { "slot": "head", "order": 1 }, { "slot": "handle", "order": 0 } ] }

@@ -1,12 +1,12 @@
 package com.sigmundgranaas.forgero.model.rendering.impl;
 
-import com.sigmundgranaas.forgero.model.resolution.api.LayeredTexture;
+import com.sigmundgranaas.forgero.model.api.RenderableTexture; // Changed to RenderableTexture
 import com.sigmundgranaas.forgero.model.rendering.api.TextureCompositor;
-import com.sigmundgranaas.forgero.model.resolution.api.TextureLayer;
 import com.sigmundgranaas.forgero.model.rendering.api.TextureProvider;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,11 +16,15 @@ public class AwtTextureCompositor implements TextureCompositor {
 	public AwtTextureCompositor(TextureProvider textureProvider) { this.textureProvider = textureProvider; }
 
 	@Override
-	public BufferedImage render(LayeredTexture model) {
+	public BufferedImage render(List<RenderableTexture> texturesToRender) { // Changed input to List<RenderableTexture>
 		List<BufferedImage> images = new ArrayList<>();
 		int width = 0, height = 0;
-		for (TextureLayer layer : model.layers()) {
-			Optional<BufferedImage> imageOpt = textureProvider.getTexture(layer.texture());
+
+		// Sort textures by their order before rendering (RenderableTexture implements Comparable)
+		texturesToRender.sort(Comparator.naturalOrder());
+
+		for (RenderableTexture renderableTexture : texturesToRender) {
+			Optional<BufferedImage> imageOpt = textureProvider.getTexture(renderableTexture.texture());
 			if (imageOpt.isPresent()) {
 				BufferedImage image = imageOpt.get();
 				images.add(image);
@@ -28,10 +32,16 @@ public class AwtTextureCompositor implements TextureCompositor {
 				height = Math.max(height, image.getHeight());
 			}
 		}
-		if (width == 0 || height == 0) { return new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB); }
+		if (width == 0 || height == 0) { return new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB); } // Default empty image
 		BufferedImage canvas = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = canvas.createGraphics();
-		for (BufferedImage image : images) { g.drawImage(image, 0, 0, null); }
+
+		// Draw images with their respective offsets
+		for (RenderableTexture renderableTexture : texturesToRender) {
+			Optional<BufferedImage> imageOpt = textureProvider.getTexture(renderableTexture.texture());
+			imageOpt.ifPresent(image -> g.drawImage(image, renderableTexture.offset().x(), renderableTexture.offset().y(), null));
+		}
+
 		g.dispose();
 		return canvas;
 	}

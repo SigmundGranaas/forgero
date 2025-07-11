@@ -1,0 +1,16 @@
+{
+  "type": "forgero:composite_model",
+  "layers": [
+    { "order": 20, "textures": { "default": "forgero:item/iron-pickaxe_head" } }
+  ],
+  "slots": [
+    {
+      "id": "reinforcement_slot",
+      "order": 25,
+      "renderer": {
+        "type": "forgero:component",
+        "context": "pickaxe_head_reinforcement"
+      }
+    }
+  ]
+}
