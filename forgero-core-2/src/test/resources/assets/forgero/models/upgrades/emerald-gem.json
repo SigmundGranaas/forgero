@@ -1,0 +1,6 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:emerald",
+  "context": "gem",
+  "texture": "forgero:item/emerald-gem"
+}

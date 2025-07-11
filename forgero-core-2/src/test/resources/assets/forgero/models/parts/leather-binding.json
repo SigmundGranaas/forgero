@@ -1,0 +1,19 @@
+{
+  "type": "forgero:composite_model",
+  "layers": [
+    {
+      "order": 30,
+      "textures": { "default": "forgero:item/leather-pickaxe_binding" }
+    }
+  ],
+  "slots": [
+    {
+      "id": "gem_slot",
+      "order": 35,
+      "renderer": {
+        "type": "forgero:component",
+        "context": "gem"
+      }
+    }
+  ]
+}

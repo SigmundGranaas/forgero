@@ -1,0 +1,6 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:leather",
+  "context": "grip",
+  "texture": "forgero:item/leather-grip"
+}
