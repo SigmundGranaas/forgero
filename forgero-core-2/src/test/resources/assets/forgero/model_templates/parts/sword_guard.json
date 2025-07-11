@@ -1,0 +1,22 @@
+{
+  "type": "forgero:part_model_template",
+  "target": {
+    "tag": "forgero:metal"
+  },
+  "model": {
+    "type": "forgero:composite_model",
+    "layers": [
+      {
+        "order": 20,
+        "textures": {
+          "generation": {
+            "type": "forgero:palette_retexture",
+            "template": "forgero:texture_templates/parts/sword_guard",
+            "palette": "forgero:palettes/{target.id.name}",
+            "output": "forgero:item/{target.id.name}-sword_guard"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "type": "forgero:equipment_model_template",
+  "target": {
+    "tag": "forgero:sword"
+  },
+  "model": {
+    "type": "forgero:composite_model",
+    "slots": [
+      {
+        "id": "blade",
+        "order": 20,
+        "renderer": { "type": "forgero:component" }
+      },
+      {
+        "id": "handle",
+        "order": 10,
+        "renderer": { "type": "forgero:component" }
+      },
+      {
+          "id": "guard_slot",
+          "order": 15,
+          "renderer": {
+            "type": "forgero:component",
+            "context": "sword_guard"
+          }
+      }
+    ]
+  }
+}

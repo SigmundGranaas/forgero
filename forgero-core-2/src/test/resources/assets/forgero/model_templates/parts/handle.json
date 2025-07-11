@@ -1,0 +1,17 @@
+{
+  "type": "forgero:part_model_template",
+  "target": {
+    "tag": "forgero:wood"
+  },
+  "model": {
+    "type": "forgero:texture_model",
+    "textures": {
+      "generation": {
+        "type": "forgero:palette_retexture",
+        "template": "forgero:texture_templates/parts/handle",
+        "palette": "forgero:palettes/{target.id.name}",
+        "output": "forgero:item/{target.id.name}-handle"
+      }
+    }
+  }
+}
