@@ -15,11 +15,12 @@ public class BlockSelectionUtils {
 
 	/**
 	 * @param blockPos the root position to find blocks around
-	 * @return A set of all the blocks around the given block position
+	 * @return A set of all the blocks that are adjacent to the given block position, including diagonals
 	 */
 	public static Set<BlockPos> getBlockPositionsAround(BlockPos blockPos) {
 		Set<BlockPos> offsetBlockPositions = new HashSet<>();
 
+		// Get all 26 blocks surrounding the center block (3x3x3 cube excluding center)
 		for (int x = -1; x <= 1; x++) {
 			for (int y = -1; y <= 1; y++) {
 				for (int z = -1; z <= 1; z++) {
@@ -31,6 +32,7 @@ public class BlockSelectionUtils {
 				}
 			}
 		}
+
 		return offsetBlockPositions;
 	}
 
