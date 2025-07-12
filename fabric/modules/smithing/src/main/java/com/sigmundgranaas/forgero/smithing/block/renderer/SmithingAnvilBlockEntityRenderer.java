@@ -21,7 +21,6 @@ import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
@@ -141,7 +140,7 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 			float r = isFast ? 1.0f : 1.0f;
 			float g = isFast ? 0.2f : 1.0f;
 			float b = isFast ? 0.2f : 0.0f;
-			float size = 0.05f; // This is half the side length of the marker box (0.1 block total size)
+			float size = 0.0375f; // This is half the side length of the marker box (0.075 block total size) - 25% smaller
 
 			VertexConsumer lineConsumer = vertexConsumers.getBuffer(RenderLayer.getLines());
 			// Draw a wireframe box at the marker position
