@@ -38,31 +38,31 @@ public class DataProcessorImpl implements DataProcessor {
 			Object originalDto = rawDef.data();
 			if (originalDto instanceof MaterialData m) {
 				normalizedMaterials.put(id, new NormalizedState.NormalizedMaterial(
-						id, m.name(), mergedProps.tags() != null ? mergedProps.tags() : new HashSet<>(), mergedProps.properties()
+						id, m.name(), mergedProps.tags() != null ? mergedProps.tags() : new HashSet<>(), m.host(), mergedProps.properties()
 				));
 			} else if (originalDto instanceof ShapeData s) {
 				normalizedShapes.put(id, new NormalizedState.NormalizedShape(
-						id, s.name(), mergedProps.tags() != null ? mergedProps.tags() : new HashSet<>(), mergedProps.properties()
+						id, s.name(), mergedProps.tags() != null ? mergedProps.tags() : new HashSet<>(), s.host(), mergedProps.properties()
 				));
 			} else if (originalDto instanceof SchematicData s) {
 				normalizedSchematics.put(id, new NormalizedState.NormalizedSchematic(
 						id, s.name(), s.target(), s.craftingMaterial(),
-						mergedProps.tags() != null ? mergedProps.tags() : new HashSet<>(), mergedProps.properties()
+						mergedProps.tags() != null ? mergedProps.tags() : new HashSet<>(), s.host(), mergedProps.properties()
 				));
 			} else if (originalDto instanceof PartTemplateData p) {
 				normalizedPartTemplates.put(id, new NormalizedState.NormalizedPartTemplate(
 						id, p.name(), mergedProps.tags() != null ? mergedProps.tags() : new HashSet<>(),
-						p.structure(), p.upgrades(), mergedProps.properties()
+						p.structure(), p.host_template(), p.upgrades(), mergedProps.properties()
 				));
 			} else if (originalDto instanceof EquipmentTemplateData t) {
 				normalizedEquipmentTemplates.put(id, new NormalizedState.NormalizedEquipmentTemplate(
 						id, t.name(), mergedProps.tags() != null ? mergedProps.tags() : new HashSet<>(),
-						t.structure(), t.upgrades(), mergedProps.properties()
+						t.structure(), t.host_template(), t.upgrades(), mergedProps.properties()
 				));
 			} else if (originalDto instanceof StaticPartData sp) {
 				normalizedStaticParts.put(id, new NormalizedState.NormalizedStaticPart(
 						id, sp.name(), mergedProps.tags() != null ? mergedProps.tags() : new HashSet<>(),
-						sp.upgrades(), mergedProps.properties()
+						sp.host(), sp.upgrades(), mergedProps.properties()
 				));
 			} else {
 				System.err.println("Warning: Unrecognized DTO type encountered during normalization: " + originalDto.getClass().getName());

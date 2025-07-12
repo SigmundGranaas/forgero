@@ -44,11 +44,12 @@ public class PartTemplateCodecs {
 					Codec.STRING.fieldOf("name").forGetter(PartTemplateData::name),
 					Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("include").forGetter(data -> Optional.ofNullable(data.include())),
 					Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("tags").forGetter(data -> Optional.ofNullable(data.tags())),
+					HostCodecs.HOST_TEMPLATE_DATA_CODEC.optionalFieldOf("host_template").forGetter(data -> Optional.ofNullable(data.host_template())),
 					PART_TEMPLATE_STRUCTURE_DATA_CODEC.fieldOf("structure").forGetter(PartTemplateData::structure),
 					Codec.list(UPGRADE_SLOT_DATA_CODEC).optionalFieldOf("upgrades").forGetter(data -> Optional.ofNullable(data.upgrades())),
 					Codec.list(AttributeCodecs.ATTRIBUTE_DATA_CODEC).optionalFieldOf("attributes").forGetter(data -> Optional.ofNullable(data.attributes())),
 					Codec.list(FeatureCodecs.FEATURE_DATA_CODEC).optionalFieldOf("features").forGetter(data -> Optional.ofNullable(data.features())),
 					Codec.unboundedMap(Codec.STRING, CodecConstants.JSON_ELEMENT_CODEC).optionalFieldOf("properties").forGetter(data -> Optional.ofNullable(data.properties()))
-			).apply(instance, (type, name, include, tags, structure, upgrades, attributes, features, properties) ->
-					new PartTemplateData(type, name, include.orElse(null), tags.orElse(null), structure, upgrades.orElse(null), attributes.orElse(null), features.orElse(null), properties.orElse(null))));
+			).apply(instance, (type, name, include, tags, host, structure, upgrades, attributes, features, properties) ->
+					new PartTemplateData(type, name, include.orElse(null), tags.orElse(null), host.orElse(null), structure, upgrades.orElse(null), attributes.orElse(null), features.orElse(null), properties.orElse(null))));
 }

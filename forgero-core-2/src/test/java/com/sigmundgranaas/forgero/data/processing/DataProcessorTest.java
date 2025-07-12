@@ -12,6 +12,8 @@ import com.sigmundgranaas.forgero.data.loading.api.data.attribute.ComputationDat
 import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.feature.VeinMiningFeatureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.feature.VeinMiningSelectorData;
+import com.sigmundgranaas.forgero.data.loading.api.data.host.HostData;
+import com.sigmundgranaas.forgero.data.loading.api.data.host.IdentifierEntry;
 import com.sigmundgranaas.forgero.data.processing.api.DataProcessor;
 import com.sigmundgranaas.forgero.data.processing.api.NormalizedState;
 import com.sigmundgranaas.forgero.data.processing.api.RawDefinition;
@@ -116,6 +118,7 @@ class DataProcessorTest extends ForgeroTest {
 		MaterialData dto = new MaterialData(id("forgero:material"), name,
 				include == null ? null : include.stream().map(Utils::id).toList(),
 				tags == null ? null : tags.stream().map(Utils::id).toList(),
+				new HostData(List.of(new IdentifierEntry("id",id("forgero:material"))),null),
 				attributes, features, properties);
 		return new RawDefinition(id(idPath), dto);
 	}

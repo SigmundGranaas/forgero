@@ -7,8 +7,15 @@ import com.sigmundgranaas.forgero.data.generation.api.ComponentGenerator;
 import com.sigmundgranaas.forgero.data.generation.api.GeneratedState;
 import com.sigmundgranaas.forgero.data.loading.api.data.PropertyData;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
+import com.sigmundgranaas.forgero.data.loading.api.data.host.CreateData;
+import com.sigmundgranaas.forgero.data.loading.api.data.host.HostData;
+import com.sigmundgranaas.forgero.data.loading.api.data.host.IdentifierEntry;
+import com.sigmundgranaas.forgero.data.loading.api.data.host.template.CreateTemplateData;
+import com.sigmundgranaas.forgero.data.loading.api.data.host.template.HostTemplateData;
+import com.sigmundgranaas.forgero.data.loading.api.data.host.template.IdentifierTemplateEntry;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.EquipmentTemplateSlotData;
 import com.sigmundgranaas.forgero.data.processing.api.NormalizedState;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
@@ -36,6 +43,7 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 
 			var shapeSlotType = template.structure().slots().get("shape").type();
 			List<NormalizedState.NormalizedShape> compatibleShapes = normalizedState.shapes().values().stream()
+					// Shapes now also need to be checked for tags
 					.filter(shape -> tagGraph.isTagged(shape::tags, shapeSlotType))
 					.toList();
 
@@ -97,29 +105,29 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 			NormalizedState.NormalizedPartTemplate template,
 			IdResolver idResolver
 	) {
+		Map<String, Object> idContext = Map.of("material", material, "shape", shape);
+		String idPattern = template.structure().id();
+		String resolvedIdPath = idResolver.resolveId(idPattern, idContext);
+		OpenIdentifier partId = idFactory.of(resolvedIdPath);
+
 		Set<OpenIdentifier> combinedTags = Stream.of(material.tags(), shape.tags(), template.tags())
 				.filter(Objects::nonNull)
 				.flatMap(Set::stream)
 				.collect(Collectors.toSet());
 
 		Map<String, List<PropertyData>> combinedProperties = new HashMap<>();
-
-		// Merge properties: material -> shape -> template (template has highest precedence)
 		mergeProperties(combinedProperties, material.properties());
 		mergeProperties(combinedProperties, shape.properties());
 		mergeProperties(combinedProperties, template.properties());
 
-
-		String idPattern = template.structure().id();
-		Map<String, Object> idContext = Map.of("material", material, "shape", shape);
-		String resolvedIdPath = idResolver.resolveId(idPattern, idContext);
-		OpenIdentifier partId = idFactory.of(resolvedIdPath);
+		HostData hostData = createHostData(template.host_template(), idContext, partId, "forgero:part_item", idResolver);
 
 		return new GeneratedState.GeneratedPart(
 				partId,
 				combinedTags,
 				material.id(),
 				shape.id(),
+				hostData,
 				template.upgrades(),
 				combinedProperties.isEmpty() ? null : combinedProperties
 		);
@@ -147,22 +155,56 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 			Map<String, OpenIdentifier> partCombination,
 			IdResolver idResolver
 	) {
+		Map<String, Object> idContext = new HashMap<>(partCombination);
+
 		String idPattern = template.structure().id();
-		String resolvedIdPath = idResolver.resolveId(idPattern, new HashMap<>(partCombination));
+		String resolvedIdPath = idResolver.resolveId(idPattern, idContext);
 		OpenIdentifier equipmentId = idFactory.of(resolvedIdPath);
 
-		// Per the architectural plan, properties for equipment come ONLY from the template.
-		// Properties from constituent parts are NOT merged into the equipment DTO.
-		// They are resolved at runtime by traversing the component tree.
 		Map<String, List<PropertyData>> equipmentProperties = template.properties();
+		HostData hostData = createHostData(template.host_template(), idContext, equipmentId, "forgero:tool_item", idResolver);
+
 
 		return new GeneratedState.GeneratedEquipment(
 				equipmentId,
 				template.tags(),
 				partCombination,
+				hostData,
 				template.upgrades(),
 				equipmentProperties
 		);
+	}
+
+	private HostData createHostData(@Nullable HostTemplateData template, Map<String, Object> context, OpenIdentifier defaultId, String defaultClass, IdResolver idResolver) {
+		if (template == null) {
+			// Default behavior: create a new item with the component's ID
+			return new HostData(null, new CreateData(defaultId, defaultClass, null));
+		}
+
+		List<IdentifierEntry> identifiers = null;
+		if (template.identifiers() != null) {
+			identifiers = template.identifiers().stream()
+					.map(entryTemplate -> {
+						String resolvedIdStr = idResolver.resolveId(entryTemplate.id(), context);
+						return new IdentifierEntry(entryTemplate.type(), idFactory.of(resolvedIdStr));
+					})
+					.toList();
+		}
+
+		CreateData create = null;
+		if (template.create() != null) {
+			CreateTemplateData createTemplate = template.create();
+			String resolvedIdStr = idResolver.resolveId(createTemplate.id(), context);
+			// ClassName is not resolved by IdResolver, it's a direct string.
+			create = new CreateData(idFactory.of(resolvedIdStr), createTemplate.className(), createTemplate.item_group());
+		}
+
+		// Fallback to default creation if template exists but doesn't specify creation.
+		if (identifiers == null && create == null) {
+			return new HostData(null, new CreateData(defaultId, defaultClass, null));
+		}
+
+		return new HostData(identifiers, create);
 	}
 
 	private record PartWrapper(OpenIdentifier id, Set<OpenIdentifier> tags) {
