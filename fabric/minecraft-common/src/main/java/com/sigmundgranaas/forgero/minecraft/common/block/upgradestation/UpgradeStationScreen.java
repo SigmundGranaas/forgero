@@ -40,14 +40,17 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 
 
 	public void renderCustomTooltip(DrawContext context, List<Text> lines, int mouseX, int mouseY) {
-		for (UpgradeStationScreenHandler.PositionedSlot slot : this.handler.slotPool.stream().filter(Objects::nonNull).map(UpgradeStationScreenHandler.PositionedSlot.class::cast).toList()) {
+		for (UpgradeStationScreenHandler.PositionedSlot slot : this.handler.getSlotPool().stream().filter(Objects::nonNull).map(UpgradeStationScreenHandler.PositionedSlot.class::cast).toList()) {
 			if (isPointWithinBounds(slot.xPosition, slot.yPosition, 16, 16, mouseX, mouseY) && !slot.hasStack() && slot.slot != null) {
 				lines.addAll(new SlotSectionWriter.SlotWriter(slot.slot, TooltipConfiguration.builder().build()).entries());
 				context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
 				renderCycledSlot(slot, lines, mouseX, mouseY, context);
 			}
 		}
-		if (isPointWithinBounds(handler.compositeSlot.x, handler.compositeSlot.y, 16, 16, mouseX, mouseY) && !handler.compositeSlot.hasStack()) {
+
+		var compositeSlot = this.handler.getCompositeSlot();
+		if (isPointWithinBounds(compositeSlot.x, compositeSlot.y, 16, 16, mouseX, mouseY) && !compositeSlot.hasStack()) {
+			// TODO: Replace literal text with translatable text
 			lines.add(Text.literal("Place you Forgero tool or weapon here"));
 			context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
 			renderCycledTag(new Identifier("forgero:holdable"), mouseX, mouseY, context);
@@ -57,10 +60,7 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 
 	public void renderCycledSlot(UpgradeStationScreenHandler.PositionedSlot slot, List<Text> tooltip, int mouseX, int mouseY, DrawContext context) {
 		if (slot.getSlot() != null) {
-			com.sigmundgranaas.forgero.core.state.Slot slot1 = slot.getSlot();
-
-			Identifier id = new Identifier("forgero", slot1.typeName().toLowerCase(Locale.ENGLISH));
-
+			Identifier id = new Identifier("forgero", slot.getSlot().typeName().toLowerCase(Locale.ENGLISH));
 			renderCycledTag(id, mouseX, mouseY, context);
 		}
 	}
@@ -98,7 +98,7 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 
 		// Force refresh slot visuals
 		for (Slot slot : this.handler.slots) {
-			if (slot instanceof UpgradeStationScreenHandler.PositionedSlot positioned && slot.isEnabled()) {
+			if (slot instanceof UpgradeStationScreenHandler.PositionedSlot && slot.isEnabled()) {
 				// This ensures the slot's item is drawn even if it wasn't initially visible
 				if (slot.hasStack()) {
 					ItemStack stack = slot.getStack();
@@ -113,7 +113,7 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 		}
 
 		drawMouseoverTooltip(matrices, mouseX, mouseY);
-		if (this.handler.compositeSlot.hasStack()) {
+		if (this.handler.getCompositeSlot().hasStack()) {
 			renderCustomTooltip(matrices, new ArrayList<>(), mouseX, mouseY);
 		}
 	}
@@ -126,9 +126,9 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 		int centerY = (this.height - this.backgroundHeight) / 2;
 		context.drawTexture(TEXTURE, centerX, centerY, 0, 0, backgroundWidth, backgroundHeight);
 
-		if (this.handler.compositeSlot.hasStack()) {
+		if (this.handler.getCompositeSlot().hasStack()) {
 			this.renderLinesBetweenSlots(context);
-			for (Slot slot : handler.slotPool) {
+			for (Slot slot : handler.getSlotPool()) {
 				if (slot instanceof UpgradeStationScreenHandler.PositionedSlot positioned && slot.isEnabled() && positioned.slot != null) {
 					this.drawDynamicSlot(context, slot);
 
@@ -142,7 +142,7 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 				}
 			}
 		}
-		this.drawDynamicSlot(context, handler.compositeSlot);
+		this.drawDynamicSlot(context, this.handler.getCompositeSlot());
 	}
 
 
@@ -175,7 +175,7 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 
 	// Call these functions in renderLinesBetweenSlots
 	public void renderLinesBetweenSlots(DrawContext context) {
-		for (Slot slot : this.handler.slotPool) {
+		for (Slot slot : this.handler.getSlotPool()) {
 			if (!(slot instanceof UpgradeStationScreenHandler.PositionedSlot positionedSlot) || !slot.isEnabled()) {
 				continue;
 			}
@@ -224,7 +224,7 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 				int currentLineY = (int) (startLineY + ratio * deltaY);
 
 				// Draw a dot on the line, offset by the thickness
-				context.fill( currentLineX + t, currentLineY, currentLineX + t + 1, currentLineY + 1, rgbaColor);
+				context.fill(currentLineX + t, currentLineY, currentLineX + t + 1, currentLineY + 1, rgbaColor);
 			}
 		}
 	}
