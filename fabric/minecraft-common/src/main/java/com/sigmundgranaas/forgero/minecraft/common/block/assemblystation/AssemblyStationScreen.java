@@ -2,29 +2,25 @@ package com.sigmundgranaas.forgero.minecraft.common.block.assemblystation;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeStationScreenHandler;
-import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipConfiguration;
-import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.section.SlotSectionWriter;
+import com.sigmundgranaas.forgero.core.Forgero;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 public class AssemblyStationScreen extends HandledScreen<AssemblyStationScreenHandler> {
-	private static final Identifier TEXTURE = new Identifier("forgero", "textures/gui/container/assembly_table_ui.png");
+	private static final @NotNull Identifier TEXTURE = new Identifier(Forgero.NAMESPACE, "textures/gui/container/assembly_table_ui.png");
 
+	@SuppressWarnings("unused")
 	public AssemblyStationScreen(AssemblyStationScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(handler, inventory, Text.translatable("block.forgero.assembly_station"));
 	}
+
 
 	@Override
 	protected void init() {
@@ -33,9 +29,8 @@ public class AssemblyStationScreen extends HandledScreen<AssemblyStationScreenHa
 		titleX = (backgroundWidth - textRenderer.getWidth(title)) / 2;
 	}
 
-
 	@Override
-	protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
+	protected void drawBackground(@NotNull DrawContext context, float delta, int mouseX, int mouseY) {
 		RenderSystem.setShader(GameRenderer::getPositionTexProgram);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.setShaderTexture(0, TEXTURE);
@@ -45,22 +40,9 @@ public class AssemblyStationScreen extends HandledScreen<AssemblyStationScreenHa
 	}
 
 	@Override
-	public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+	public void render(@NotNull DrawContext context, int mouseX, int mouseY, float delta) {
 		renderBackground(context);
 		super.render(context, mouseX, mouseY, delta);
 		drawMouseoverTooltip(context, mouseX, mouseY);
-		renderCustomTooltip(context, new ArrayList<>(), mouseX, mouseY);
-
-	}
-
-	public void renderCustomTooltip(DrawContext context, List<Text> lines, int mouseX, int mouseY) {
-		if (isPointWithinBounds(handler.getSlot(0).x, handler.getSlot(0).y, 16, 16, mouseX, mouseY) && handler.getSlot(0).getStack().isEmpty()) {
-			if(this.handler.getCursorStack().isDamaged()){
-				lines.add(Text.literal("Damaged tools cannot be disassembled."));
-			}else{
-				lines.add(Text.literal("Disassemble tools and parts here."));
-			}
-			context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
-		}
 	}
 }

@@ -26,7 +26,7 @@ import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.fabric.api.entrypoint.ForgeroPreInitializationEntryPoint;
 import com.sigmundgranaas.forgero.fabric.item.ItemGroupRegisters;
 import com.sigmundgranaas.forgero.fabric.item.ItemSettingRegistrars;
-import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
+import com.sigmundgranaas.forgero.minecraft.common.entity.EntityRegistry;
 import com.sigmundgranaas.forgero.minecraft.common.feature.BlockBreakFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.BlockEfficiencyFeature;
 import com.sigmundgranaas.forgero.minecraft.common.feature.tick.EntityTickFeature;
@@ -96,12 +96,15 @@ import com.sigmundgranaas.forgero.minecraft.common.predicate.flag.FlagGroupPredi
 import com.sigmundgranaas.forgero.minecraft.common.predicate.world.DimensionPredicate;
 import com.sigmundgranaas.forgero.minecraft.common.predicate.world.WorldPredicate;
 
+import com.sigmundgranaas.forgero.minecraft.common.registry.entity.block.BlockEntityRegistry;
+
 import net.minecraft.item.ItemGroups;
 
 public class ForgeroPreInit implements ForgeroPreInitializationEntryPoint {
 	@Override
 	public void onPreInitialization() {
-		Entities.register();
+		EntityRegistry.register();
+		BlockEntityRegistry.register();
 		registerPredicateBuilders();
 		registerFeatureBuilder();
 		registerHandlerBuilders();

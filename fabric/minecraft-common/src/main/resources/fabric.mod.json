@@ -27,8 +27,6 @@
   "icon": "assets/forgero/icon.png",
   "environment": "*",
   "accessWidener": "minecraft-common.accesswidener",
-  "entrypoints": {
-  },
   "mixins": [
     "common.mixins.json"
   ],
