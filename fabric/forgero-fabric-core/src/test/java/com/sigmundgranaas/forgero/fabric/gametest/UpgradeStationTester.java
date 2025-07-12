@@ -75,7 +75,7 @@ public class UpgradeStationTester {
 
 			// A diamond pickaxe should have slots for its parts and a binding.
 			// We check if any of the pooled slots have been enabled and configured.
-			long enabledSlots = handler.getPositionedSlots().stream().filter(Slot::isEnabled).count();
+			long enabledSlots = handler.getSlotPool().stream().filter(Slot::isEnabled).count();
 			context.assertTrue(enabledSlots > 0, "Placing a tool should enable the upgrade slots.");
 
 			context.complete();
@@ -93,7 +93,7 @@ public class UpgradeStationTester {
 			handler.getSlot(0).setStack(pickaxe.copy());
 
 			// Find the binding slot and place the binding
-			var bindingSlotOpt = handler.getPositionedSlots().stream()
+			var bindingSlotOpt = handler.getSlotPool().stream()
 					.filter(s -> s instanceof UpgradeStationScreenHandler.PositionedSlot)
 					.filter(s -> s.isEnabled() && s.getSlot() != null && "TOOL_BINDING".equals(s.getSlot().typeName()))
 					.findFirst();
@@ -132,7 +132,7 @@ public class UpgradeStationTester {
 			var handler = new UpgradeStationScreenHandler(1, player.getInventory(), ScreenHandlerContext.create(context.getWorld(), stationPos.absolute()));
 			handler.getSlot(0).setStack(pickaxe.copy());
 
-			var bindingSlotOpt = handler.getPositionedSlots().stream()
+			var bindingSlotOpt = handler.getSlotPool().stream()
 					.filter(s -> s instanceof UpgradeStationScreenHandler.PositionedSlot)
 					.filter(s -> s.isEnabled() && s.getSlot() != null && "TOOL_BINDING".equals(s.getSlot().typeName()))
 					.findFirst();
@@ -161,7 +161,7 @@ public class UpgradeStationTester {
 
 			handler.get().getSlot(0).setStack(pickaxe.copy());
 
-			var bindingSlotOpt = handler.get().getPositionedSlots().stream()
+			var bindingSlotOpt = handler.get().getSlotPool().stream()
 					.filter(s -> s instanceof UpgradeStationScreenHandler.PositionedSlot)
 					.filter(s -> s.isEnabled() && s.getSlot() != null && "TOOL_BINDING".equals(s.getSlot().typeName()))
 					.findFirst();
@@ -178,7 +178,7 @@ public class UpgradeStationTester {
 
 			// Now, remove the upgrade by taking the stack
 			// The tree has been reconstructed with new slots, so we need to fetch the new slot.
-			handler.get().getPositionedSlots().stream()
+			handler.get().getSlotPool().stream()
 					.filter(s -> s instanceof UpgradeStationScreenHandler.PositionedSlot)
 					.filter(s -> s.isEnabled() && s.getSlot() != null && "TOOL_BINDING".equals(s.getSlot().typeName()))
 					.findFirst().get().takeStack(1);
@@ -291,7 +291,7 @@ public class UpgradeStationTester {
 			handler.quickMove(player, playerSlotInHandler.id);
 
 			// Verify binding moved to an upgrade slot
-			var bindingSlotInStation = handler.getPositionedSlots().stream()
+			var bindingSlotInStation = handler.getSlotPool().stream()
 					.filter(s -> s.hasStack() && s.getStack().isOf(binding.getItem()))
 					.findFirst()
 					.orElse(null);
