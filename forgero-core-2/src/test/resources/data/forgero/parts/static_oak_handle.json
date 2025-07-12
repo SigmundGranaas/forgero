@@ -2,6 +2,11 @@
   "type": "forgero:static_part",
   "name": "Oak Handle",
   "tags": ["forgero:parts/handle_type"],
+  "host": {
+    "identifiers": [
+      { "type": "item", "id": "minecraft:stick" }
+    ]
+  },
   "attributes": [
     {
       "id": "forgero:oak-handle-durability",

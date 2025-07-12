@@ -4,6 +4,12 @@
   "tags": [
     "forgero:parts/pickaxe_head_type"
   ],
+  "host_template": {
+    "create": {
+      "id": "forgero:item/{material.name}-{shape.name}",
+      "className": "forgero:part_item"
+    }
+  },
   "structure": {
     "id": "forgero:{material.name}-{shape.name}",
     "slots": {

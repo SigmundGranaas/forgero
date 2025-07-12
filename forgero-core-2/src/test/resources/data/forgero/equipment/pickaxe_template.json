@@ -2,6 +2,13 @@
   "type": "forgero:equipment_template",
   "name": "Pickaxe",
   "tags": ["forgero:tools/pickaxe"],
+  "host_template": {
+    "create": {
+      "id": "forgero:item/{head.material.name}-pickaxe",
+      "className": "forgero:tool_item",
+      "item_group": "forgero:tools"
+    }
+  },
   "structure": {
     "id": "forgero:{head.material.name}-pickaxe",
     "slots": {

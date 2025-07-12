@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.data.generation.api;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.loading.api.data.PropertyData;
+import com.sigmundgranaas.forgero.data.loading.api.data.host.HostData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.UpgradeSlotData;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,6 +23,7 @@ public record GeneratedState(
 			Set<OpenIdentifier> tags,
 			OpenIdentifier materialId,
 			OpenIdentifier shapeId,
+			@Nullable HostData host,
 			@Nullable List<UpgradeSlotData> upgrades,
 			@Nullable Map<String, List<PropertyData>> properties
 	) {
@@ -31,6 +33,7 @@ public record GeneratedState(
 			OpenIdentifier id,
 			Set<OpenIdentifier> tags,
 			Map<String, OpenIdentifier> structure,
+			@Nullable HostData host,
 			@Nullable List<UpgradeSlotData> upgrades,
 			@Nullable Map<String, List<PropertyData>> properties
 	) {

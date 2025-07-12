@@ -16,6 +16,8 @@ import com.sigmundgranaas.forgero.core.property.engine.ResolverEngine;
 import com.sigmundgranaas.forgero.data.loading.api.data.PropertyData;
 import com.sigmundgranaas.forgero.data.loading.api.data.condition.ConditionData;
 import com.sigmundgranaas.forgero.data.loading.api.data.condition.TagMatchPredicateData;
+import com.sigmundgranaas.forgero.data.loading.api.data.host.HostData;
+import com.sigmundgranaas.forgero.data.loading.api.data.host.IdentifierEntry;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.ConditionCodecs;
 import com.sigmundgranaas.forgero.data.mapper.api.ComponentMapper;
 import com.sigmundgranaas.forgero.data.mapper.api.PropertyCodec;
@@ -77,6 +79,7 @@ class CustomPropertyRegistryTest {
 				id("forgero:" + name),
 				name,
 				Set.of(id("forgero:test_component")),
+				new HostData(List.of(new IdentifierEntry("id", id("forgero:" + name))), null),
 				List.of(),
 				properties
 		);

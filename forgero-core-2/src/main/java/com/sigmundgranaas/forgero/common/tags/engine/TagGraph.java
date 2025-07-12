@@ -12,7 +12,10 @@ public class TagGraph {
 	private final Map<OpenIdentifier, Set<OpenIdentifier>> childRelationships; // New for efficient queries
 
 	public TagGraph(Map<OpenIdentifier, Set<OpenIdentifier>> parentRelationships) {
-		this.parentRelationships = Map.copyOf(parentRelationships);
+		var immutableRelationShips = parentRelationships.entrySet().stream()
+				.collect(Collectors.toMap(Map.Entry::getKey, e -> Set.copyOf(e.getValue())));
+		this.parentRelationships = Map.copyOf(immutableRelationShips);
+
 		// Pre-calculate the reverse mapping for fast descendant lookups
 		this.childRelationships = buildChildRelationships(this.parentRelationships);
 	}

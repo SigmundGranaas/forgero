@@ -2,14 +2,20 @@
   "type": "forgero:material",
   "name": "Iron",
   "tags": ["forgero:materials/tool_material", "forgero:materials/metal", "forgero:materials/armor_material"],
+  "host": {
+    "identifiers": [
+      { "type": "item", "id": "minecraft:iron_ingot" },
+      { "type": "tag", "id": "c:iron_ingots" }
+    ]
+  },
   "attributes": [
     {
       "id": "forgero:iron-durability",
       "type": "forgero:durability",
       "composite": "forgero:part-composite",
       "computation": {
-          "value": 250
-        }
+        "value": 250
+      }
     },
     {
       "id": "forgero:iron-mining_speed",

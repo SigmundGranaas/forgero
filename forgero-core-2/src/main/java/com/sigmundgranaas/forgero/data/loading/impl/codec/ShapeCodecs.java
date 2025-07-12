@@ -15,9 +15,10 @@ public class ShapeCodecs {
 					Codec.STRING.fieldOf("name").forGetter(ShapeData::name),
 					Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("include").forGetter(data -> Optional.ofNullable(data.include())),
 					Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("tags").forGetter(data -> Optional.ofNullable(data.tags())),
+					HostCodecs.HOST_DATA_CODEC.optionalFieldOf("host").forGetter(data -> Optional.ofNullable(data.host())),
 					Codec.list(AttributeCodecs.ATTRIBUTE_DATA_CODEC).optionalFieldOf("attributes").forGetter(data -> Optional.ofNullable(data.attributes())),
 					Codec.list(FeatureCodecs.FEATURE_DATA_CODEC).optionalFieldOf("features").forGetter(data -> Optional.ofNullable(data.features())),
 					Codec.unboundedMap(Codec.STRING, CodecConstants.JSON_ELEMENT_CODEC).optionalFieldOf("properties").forGetter(data -> Optional.ofNullable(data.properties()))
-			).apply(instance, (type, name, include, tags, attributes, features, properties) ->
-					new ShapeData(type, name, include.orElse(null), tags.orElse(null), attributes.orElse(null), features.orElse(null), properties.orElse(null))));
+			).apply(instance, (type, name, include, tags, host, attributes, features, properties) ->
+					new ShapeData(type, name, include.orElse(null), tags.orElse(null), host.orElse(null), attributes.orElse(null), features.orElse(null), properties.orElse(null))));
 }

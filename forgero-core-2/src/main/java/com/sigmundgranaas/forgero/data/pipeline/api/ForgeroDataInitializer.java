@@ -12,6 +12,7 @@ import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.data.generation.api.ComponentGenerator;
 import com.sigmundgranaas.forgero.data.generation.api.GeneratedState;
 import com.sigmundgranaas.forgero.data.generation.impl.ComponentGeneratorImpl;
+import com.sigmundgranaas.forgero.data.loading.api.data.host.HostData;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.*;
 import com.sigmundgranaas.forgero.data.mapper.api.ComponentMapper;
 import com.sigmundgranaas.forgero.data.processing.api.DataProcessor;
@@ -26,6 +27,7 @@ import com.sigmundgranaas.forgero.utility.resource.loader.implementation.Resourc
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -39,15 +41,14 @@ import java.util.stream.Stream;
  */
 public class ForgeroDataInitializer {
 
-	private final TagGraph tagGraph;
-	private final TaggedRegistry<Component> componentRegistry;
+	private final ForgeroDataBundle dataBundle;
 
 	public ForgeroDataInitializer(String defaultNamespace) {
 		IdentifierFactory identifierFactory = new IdentifierFactory.Builder().defaultNamespace(defaultNamespace).build();
 
 		// --- Prerequisite: Tag Loading ---
 		TagLoadingService tagLoadingService = new TagLoadingService(identifierFactory);
-		this.tagGraph = tagLoadingService.loadTags(new OpenIdentifier(defaultNamespace, "tags"));
+		TagGraph tagGraph = tagLoadingService.loadTags(new OpenIdentifier(defaultNamespace, "tags"));
 
 		// --- Stage 1: Raw Data Loading ---
 		Map<OpenIdentifier, RawDefinition> rawDefinitions = loadRawDefinitions(identifierFactory);
@@ -58,29 +59,66 @@ public class ForgeroDataInitializer {
 
 		// --- Stage 3: Combinatorial Generation ---
 		ComponentGenerator componentGenerator = new ComponentGeneratorImpl(identifierFactory);
-		GeneratedState generatedState = componentGenerator.generate(normalizedState, this.tagGraph);
+		GeneratedState generatedState = componentGenerator.generate(normalizedState, tagGraph);
+
+		// --- NEW: Host Item Data Collection ---
+		Map<OpenIdentifier, HostData> hostItemMap = collectHostData(normalizedState, generatedState);
 
 		// --- Stage 4: Component Mapping ---
 		ComponentMapper componentMapper = new ComponentMapper(identifierFactory);
 		List<Component> components = new ArrayList<>();
+		mapAllComponents(normalizedState, generatedState, componentMapper, components);
 
+		// --- Stage 5: Registration ---
+		TaggedRegistry.Builder<Component> registryBuilder = new TaggedRegistry.Builder<>(tagGraph);
+		components.forEach(registryBuilder::add);
+		TaggedRegistry<Component> componentRegistry = registryBuilder.build();
+
+		this.dataBundle = new ForgeroDataBundle(componentRegistry, tagGraph, hostItemMap);
+	}
+
+	private void mapAllComponents(NormalizedState normalizedState, GeneratedState generatedState, ComponentMapper componentMapper, List<Component> components) {
 		// Map basic components
 		normalizedState.materials().values().forEach(dto -> components.add(componentMapper.map(dto)));
 		normalizedState.shapes().values().forEach(dto -> components.add(componentMapper.map(dto)));
 		normalizedState.staticParts().values().forEach(dto -> components.add(componentMapper.map(dto)));
-		normalizedState.schematics().values().forEach(dto -> components.add(componentMapper.map(dto))); // Schematics are self-contained
+		normalizedState.schematics().values().forEach(dto -> components.add(componentMapper.map(dto)));
 
-		// Map generated parts (these depend on materials and shapes, which should now be in cache)
+		// Map generated parts (depend on materials and shapes, now in cache)
 		generatedState.parts().values().forEach(dto -> components.add(componentMapper.map(dto, normalizedState)));
 
-		// Map generated equipment (these depend on static parts and generated parts, which should now be in cache)
+		// Map generated equipment (depend on static/generated parts, now in cache)
 		generatedState.equipment().values().forEach(dto -> components.add(componentMapper.map(dto)));
+	}
 
+	private Map<OpenIdentifier, HostData> collectHostData(NormalizedState normalizedState, GeneratedState generatedState) {
+		Map<OpenIdentifier, HostData> hostItemMap = new HashMap<>();
 
-		// --- Stage 5: Registration ---
-		TaggedRegistry.Builder<Component> registryBuilder = new TaggedRegistry.Builder<>(this.tagGraph);
-		components.forEach(registryBuilder::add);
-		this.componentRegistry = registryBuilder.build();
+		normalizedState.materials().values().stream()
+				.filter(dto -> dto.host() != null)
+				.forEach(dto -> hostItemMap.put(dto.id(), dto.host()));
+
+		normalizedState.shapes().values().stream()
+				.filter(dto -> dto.host() != null)
+				.forEach(dto -> hostItemMap.put(dto.id(), dto.host()));
+
+		normalizedState.staticParts().values().stream()
+				.filter(dto -> dto.host() != null)
+				.forEach(dto -> hostItemMap.put(dto.id(), dto.host()));
+
+		normalizedState.schematics().values().stream()
+				.filter(dto -> dto.host() != null)
+				.forEach(dto -> hostItemMap.put(dto.id(), dto.host()));
+
+		generatedState.parts().values().stream()
+				.filter(dto -> dto.host() != null)
+				.forEach(dto -> hostItemMap.put(dto.id(), dto.host()));
+
+		generatedState.equipment().values().stream()
+				.filter(dto -> dto.host() != null)
+				.forEach(dto -> hostItemMap.put(dto.id(), dto.host()));
+
+		return Map.copyOf(hostItemMap);
 	}
 
 	private Map<OpenIdentifier, RawDefinition> loadRawDefinitions(IdentifierFactory idFactory) {
@@ -130,11 +168,7 @@ public class ForgeroDataInitializer {
 				.collect(Collectors.toMap(RawDefinition::id, Function.identity(), (existing, replacement) -> existing));
 	}
 
-	public TaggedRegistry<Component> getComponentRegistry() {
-		return componentRegistry;
-	}
-
-	public TagGraph getTagGraph() {
-		return tagGraph;
+	public ForgeroDataBundle getDataBundle() {
+		return dataBundle;
 	}
 }
