@@ -89,21 +89,21 @@ public class UpgradeStationBlockEntityRenderer implements BlockEntityRenderer<Up
 
         // Position item in the middle of the upgrade station
         matrices.push();
-        matrices.translate(0, 1.01, 0.30);
+        matrices.translate(0, 1.025, 0.45);
 
         // Rotate to lay flat on the table
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
 
         // Scale the item with separate x, y, z scale factors
-        float scaleX = 1.15f;  // Width (appears as width when flat)
-        float scaleY = 1.25f;  // Length (appears as height when flat)
-        float scaleZ = 1.15f;  // Thickness (depth when flat on table)
+        float scaleX = 0.75f;  // Width (appears as width when flat)
+        float scaleY = 0.75f;  // Length (appears as height when flat)
+        float scaleZ = 0.75f;  // Thickness (depth when flat on table)
         matrices.scale(scaleX, scaleY, scaleZ);
 
         // Render in 3D lying flat
         itemRenderer.renderItem(
                 inventory,
-                ModelTransformationMode.GROUND,
+                ModelTransformationMode.GUI,
                 getLightLevel(world, entity.getPos()),
                 OverlayTexture.DEFAULT_UV,
                 matrices,
