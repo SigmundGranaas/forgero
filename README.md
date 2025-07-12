@@ -21,7 +21,7 @@
 <br />
 <div align="center">
   <a href="https://www.curseforge.com/minecraft/mc-mods/forgero">
-    <img src="assets/logo/logo.png" alt="Logo" width="80" height="80">
+    <img src="assets/logo/logo_christmas.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">Forgero [Fabric]</h3>
