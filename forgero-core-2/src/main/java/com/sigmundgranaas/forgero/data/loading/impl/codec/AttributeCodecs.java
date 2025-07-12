@@ -14,7 +14,9 @@ import java.util.Optional;
 
 public class AttributeCodecs {
 	public static final String ADDITION_OPERATOR = "forgero:addition";
+	public static final String SUBTRACTION_OPERATOR = "forgero:subtraction";
 	public static final String MULTIPLICATION_OPERATOR = "forgero:multiplication";
+	public static final String DIVISION_OPERATOR = "forgero:division";
 
 	public static final String BASE_ORDER = "forgero:base";
 	public static final String MIDDLE_ORDER = "forgero:middle";
@@ -42,19 +44,28 @@ public class AttributeCodecs {
 			// If not a number, try to decode as a map (object).
 			return ops.getMap(input).flatMap(map -> {
 				var addKey = ops.createString("add");
+				var subtractKey = ops.createString("subtract");
 				var multiplyKey = ops.createString("multiply");
+				var divideKey = ops.createString("divide");
 
-				// Check for "add" shortcut.
 				if (map.get(addKey) != null) {
 					return ops.getNumberValue(map.get(addKey))
 							.map(num -> new ComputationData(num.floatValue(), ADDITION_OPERATOR, BASE_ORDER))
 							.map(data -> Pair.of(data, ops.empty()));
 				}
-
-				// Check for "multiply" shortcut.
+				if (map.get(subtractKey) != null) {
+					return ops.getNumberValue(map.get(subtractKey))
+							.map(num -> new ComputationData(num.floatValue(), SUBTRACTION_OPERATOR, BASE_ORDER))
+							.map(data -> Pair.of(data, ops.empty()));
+				}
 				if (map.get(multiplyKey) != null) {
 					return ops.getNumberValue(map.get(multiplyKey))
 							.map(num -> new ComputationData(num.floatValue(), MULTIPLICATION_OPERATOR, BASE_ORDER))
+							.map(data -> Pair.of(data, ops.empty()));
+				}
+				if (map.get(divideKey) != null) {
+					return ops.getNumberValue(map.get(divideKey))
+							.map(num -> new ComputationData(num.floatValue(), DIVISION_OPERATOR, BASE_ORDER))
 							.map(data -> Pair.of(data, ops.empty()));
 				}
 
@@ -71,12 +82,15 @@ public class AttributeCodecs {
 
 	public static final Codec<AttributeData> ATTRIBUTE_DATA_CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(
-					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("id").forGetter(AttributeData::id),
+					CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("id").forGetter(data -> Optional.ofNullable(data.id())),
 					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(AttributeData::type),
 					COMPUTATION_CODEC.fieldOf("computation").forGetter(AttributeData::computation),
 					ConditionCodecs.CONDITION_DATA_CODEC.optionalFieldOf("condition").forGetter(data -> Optional.ofNullable(data.condition())),
 					CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("composite").forGetter(data -> Optional.ofNullable(data.composite()))
-			).apply(instance, (id, type, comp, cond, composite) -> new AttributeDataImpl(id, type, comp, cond.orElse(null), composite.orElse(null))));
+			).apply(instance, (idOpt, type, comp, condOpt, compositeOpt) ->
+					new AttributeDataImpl(idOpt.orElse(null), type, comp, condOpt.orElse(null), compositeOpt.orElse(null)))
+	);
+
 
 	public static final Codec<List<AttributeData>> ATTRIBUTE_DATA_LIST_CODEC = Codec.list(ATTRIBUTE_DATA_CODEC);
 }
