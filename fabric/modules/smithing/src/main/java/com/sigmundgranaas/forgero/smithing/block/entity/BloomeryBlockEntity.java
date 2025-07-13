@@ -103,6 +103,10 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
         if (wasLit != isLit) {
             state = state.with(BloomeryBlock.LIT, isLit);
             world.setBlockState(pos, state, Block.NOTIFY_ALL);
+
+            // Sync lit state with adjacent bloomery extension blocks
+            blockEntity.syncLitStateWithExtensions(world, pos, isLit);
+
             dirty = true;
         }
         
@@ -523,4 +527,24 @@ public class BloomeryBlockEntity extends BlockEntity implements ImplementedInven
 	public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
         return new BloomeryScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
+
+	/**
+	 * Synchronizes the lit state with all adjacent bloomery extension blocks
+	 */
+	private void syncLitStateWithExtensions(World world, BlockPos bloomeryPos, boolean isLit) {
+		// Check all horizontal directions for bloomery extension blocks
+		for (Direction direction : Direction.Type.HORIZONTAL) {
+			BlockPos adjacentPos = bloomeryPos.offset(direction);
+			BlockState adjacentState = world.getBlockState(adjacentPos);
+
+			// If we find a bloomery extension block, update its lit state
+			if (adjacentState.getBlock() instanceof com.sigmundgranaas.forgero.smithing.block.custom.BloomeryExtensionBlock) {
+				// Only update if the lit state is different
+				if (adjacentState.get(com.sigmundgranaas.forgero.smithing.block.custom.BloomeryExtensionBlock.LIT) != isLit) {
+					BlockState newState = adjacentState.with(com.sigmundgranaas.forgero.smithing.block.custom.BloomeryExtensionBlock.LIT, isLit);
+					world.setBlockState(adjacentPos, newState, Block.NOTIFY_ALL);
+				}
+			}
+		}
+	}
 }

@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.smithing.block;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.smithing.block.custom.BloomeryBlock;
+import com.sigmundgranaas.forgero.smithing.block.custom.BloomeryExtensionBlock;
 import com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil;
 
 import net.minecraft.block.Block;
@@ -21,6 +22,9 @@ public class ModBlocks {
 
 	public static final Block BLOOMERY = registerBlock("bloomery",
 			new BloomeryBlock(FabricBlockSettings.copyOf(Blocks.FURNACE)));
+
+	public static final Block BLOOMERY_EXTENSION = registerBlock("bloomery_extension",
+			new BloomeryExtensionBlock(FabricBlockSettings.copyOf(Blocks.FURNACE)));
 
 
 

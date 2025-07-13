@@ -1,0 +1,240 @@
+package com.sigmundgranaas.forgero.smithing.block.custom;
+
+import com.sigmundgranaas.forgero.smithing.block.entity.BloomeryExtensionBlockEntity;
+import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
+import com.sigmundgranaas.forgero.smithing.item.custom.LiquidMetalCrucibleItem;
+import org.jetbrains.annotations.Nullable;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.BlockWithEntity;
+import net.minecraft.block.ShapeContext;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.state.property.Properties;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldView;
+
+public class BloomeryExtensionBlock extends BlockWithEntity {
+	public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
+	public static final BooleanProperty LIT = Properties.LIT;
+
+	// Custom shape: 14 pixels height (0-14), full width (0-16) - matching bloomery height
+	private static final VoxelShape SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 7.0, 16.0);
+
+	public BloomeryExtensionBlock(Settings settings) {
+		super(settings);
+		this.setDefaultState(this.stateManager.getDefaultState()
+				.with(FACING, Direction.NORTH)
+				.with(LIT, false));
+	}
+
+	@Nullable
+	@Override
+	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+		return new BloomeryExtensionBlockEntity(pos, state);
+	}
+
+	@Override
+	public BlockRenderType getRenderType(BlockState state) {
+		return BlockRenderType.MODEL;
+	}
+
+	@Nullable
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+		return checkType(type, ModBlockEntities.BLOOMERY_EXTENSION, world.isClient ? null : BloomeryExtensionBlockEntity::serverTick);
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+		if (world.isClient) {
+			return ActionResult.SUCCESS;
+		}
+
+		BlockEntity blockEntity = world.getBlockEntity(pos);
+		if (blockEntity instanceof BloomeryExtensionBlockEntity extensionEntity) {
+			ItemStack heldItem = player.getStackInHand(hand);
+
+			// If player has empty hand OR is sneaking, try to remove an item
+			if (heldItem.isEmpty() || player.isSneaking()) {
+				ItemStack removed = extensionEntity.removeFirstItem();
+				if (!removed.isEmpty()) {
+					player.giveItemStack(removed);
+					return ActionResult.SUCCESS;
+				}
+			}
+			// If player has an item, try to place it in the appropriate slot
+			else if (!heldItem.isEmpty()) {
+				ItemStack remaining = addItemToAppropriateSlot(extensionEntity, heldItem);
+				if (remaining.getCount() < heldItem.getCount()) {
+					heldItem.setCount(remaining.getCount());
+					return ActionResult.SUCCESS;
+				}
+			}
+		}
+
+		return ActionResult.PASS;
+	}
+
+	/**
+	 * Intelligently places items in appropriate slots based on item type
+	 * Enforces: If a tool is present, do not accept crucible/ore.
+	 *           If crucible or ore is present, do not accept a tool.
+	 */
+	private ItemStack addItemToAppropriateSlot(BloomeryExtensionBlockEntity entity, ItemStack stack) {
+		boolean hasTool = !entity.getStack(BloomeryExtensionBlockEntity.TOOL_SLOT).isEmpty();
+		boolean hasCrucibleOrOre = !entity.getStack(BloomeryExtensionBlockEntity.CRUCIBLE_SLOT).isEmpty()
+				|| !entity.getStack(BloomeryExtensionBlockEntity.ORE_SLOT).isEmpty();
+
+		// If a tool is present, do not accept crucible or ore
+		if (hasTool) {
+			if (isValidTool(stack) && entity.getStack(BloomeryExtensionBlockEntity.TOOL_SLOT).isEmpty()) {
+				entity.setStack(BloomeryExtensionBlockEntity.TOOL_SLOT, stack.copyWithCount(1));
+				return stack.copyWithCount(stack.getCount() - 1);
+			}
+			// Do not accept crucible or ore if tool is present
+			return stack;
+		}
+
+		// If crucible or ore is present, do not accept a tool
+		if (hasCrucibleOrOre) {
+			// Accept stacking for ore, but only add one at a time
+			if (isOre(stack)) {
+				ItemStack oreSlot = entity.getStack(BloomeryExtensionBlockEntity.ORE_SLOT);
+				if (oreSlot.isEmpty()) {
+					entity.setStack(BloomeryExtensionBlockEntity.ORE_SLOT, stack.copyWithCount(1));
+					return stack.copyWithCount(stack.getCount() - 1);
+				} else if (ItemStack.canCombine(stack, oreSlot)) {
+					int space = oreSlot.getMaxCount() - oreSlot.getCount();
+					if (space > 0) {
+						oreSlot.increment(1);
+						entity.setStack(BloomeryExtensionBlockEntity.ORE_SLOT, oreSlot);
+						return stack.copyWithCount(stack.getCount() - 1);
+					}
+				}
+			}
+			if ((stack.getItem() instanceof LiquidMetalCrucibleItem) && entity.getStack(BloomeryExtensionBlockEntity.CRUCIBLE_SLOT).isEmpty()) {
+				// Use custom crucible stack with CustomModelData = 1
+				entity.setStack(BloomeryExtensionBlockEntity.CRUCIBLE_SLOT, entity.createCustomCrucibleStack());
+				return stack.copyWithCount(stack.getCount() - 1);
+			}
+			// Do not accept tool if crucible or ore is present
+			return stack;
+		}
+
+		// If all slots are empty, allow any valid item, but only add one at a time
+		if (stack.getItem() instanceof LiquidMetalCrucibleItem && entity.getStack(BloomeryExtensionBlockEntity.CRUCIBLE_SLOT).isEmpty()) {
+			// Use custom crucible stack with CustomModelData = 1
+			entity.setStack(BloomeryExtensionBlockEntity.CRUCIBLE_SLOT, entity.createCustomCrucibleStack());
+			return stack.copyWithCount(stack.getCount() - 1);
+		}
+		else if (isOre(stack)) {
+			ItemStack oreSlot = entity.getStack(BloomeryExtensionBlockEntity.ORE_SLOT);
+			if (oreSlot.isEmpty()) {
+				entity.setStack(BloomeryExtensionBlockEntity.ORE_SLOT, stack.copyWithCount(1));
+				return stack.copyWithCount(stack.getCount() - 1);
+			} else if (ItemStack.canCombine(stack, oreSlot)) {
+				int space = oreSlot.getMaxCount() - oreSlot.getCount();
+				if (space > 0) {
+					oreSlot.increment(1);
+					entity.setStack(BloomeryExtensionBlockEntity.ORE_SLOT, oreSlot);
+					return stack.copyWithCount(stack.getCount() - 1);
+				}
+			}
+		}
+		else if (isValidTool(stack) && entity.getStack(BloomeryExtensionBlockEntity.TOOL_SLOT).isEmpty()) {
+			entity.setStack(BloomeryExtensionBlockEntity.TOOL_SLOT, stack.copyWithCount(1));
+			return stack.copyWithCount(stack.getCount() - 1);
+		}
+
+		// If all appropriate slots are full, return the original stack
+		return stack;
+	}
+
+	/**
+	 * Checks if an item is ore that can be smelted
+	 */
+	private boolean isOre(ItemStack stack) {
+		// Check if the item is in conventional ore tags
+		return stack.isIn(net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags.ORES) ||
+			   stack.getItem().toString().contains("ore") ||
+			   stack.getItem().toString().contains("ingot") ||
+			   stack.getItem().toString().contains("raw_");
+	}
+
+	/**
+	 * Checks if an item is a valid tool for the tool slot
+	 */
+	private boolean isValidTool(ItemStack stack) {
+		// Accept StateItem as a valid tool (adjust logic for your mod as needed)
+		return stack.getItem() instanceof com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+		if (!state.isOf(newState.getBlock())) {
+			BlockEntity blockEntity = world.getBlockEntity(pos);
+			if (blockEntity instanceof BloomeryExtensionBlockEntity extensionEntity) {
+				// Drop all items in the inventory
+				ItemScatterer.spawn(world, pos, extensionEntity.getInventory());
+				world.updateComparators(pos, this);
+			}
+		}
+		super.onStateReplaced(state, world, pos, newState, moved);
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+		return SHAPE;
+	}
+
+	@Override
+	public BlockState getPlacementState(ItemPlacementContext ctx) {
+		return this.getDefaultState()
+				.with(FACING, ctx.getHorizontalPlayerFacing().getOpposite())
+				.with(LIT, false);
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+		if (!super.canPlaceAt(state, world, pos)) {
+			return false;
+		}
+
+		// Only allow placement if there is a bloomery block to the WEST
+		BlockPos westPos = pos.offset(Direction.SOUTH);
+		BlockState westState = world.getBlockState(westPos);
+		if (westState.getBlock() instanceof BloomeryBlock) {
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
+	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+		builder.add(FACING, LIT);
+	}
+}

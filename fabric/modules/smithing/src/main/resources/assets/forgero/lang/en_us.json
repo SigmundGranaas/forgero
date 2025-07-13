@@ -2,6 +2,7 @@
   "itemgroup.smithing": "Smithing",
   "block.forgero.smithing_anvil": "Smithing Anvil",
   "block.forgero.bloomery": "Bloomery",
+  "block.forgero.bloomery_extension": "Bloomery Extension",
   "block.forgero.mold": "Mold",
   "container.forgero.bloomery": "Bloomery",
   "item.forgero.crucible": "Crucible",

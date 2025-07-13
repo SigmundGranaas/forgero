@@ -2,5 +2,11 @@
   "parent": "item/generated",
   "textures": {
     "layer0": "forgero:item/crucible"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": { "custom_model_data": 1 },
+      "model": "forgero:block/crucible"
+    }
+  ]
 }

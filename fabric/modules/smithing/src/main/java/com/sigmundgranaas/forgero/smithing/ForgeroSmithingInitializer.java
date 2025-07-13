@@ -25,10 +25,10 @@ public class ForgeroSmithingInitializer implements ForgeroPreInitializationEntry
 
 	@Override
 	public void onPreInitialization() {
+		ModBlocks.registerModBlocks();
 		ModBlockEntities.registerBlockEntities();
 		ModItemGroups.registerItemGroups();
 		ModItems.registerModItems();
-		ModBlocks.registerModBlocks();
 		ModRecipes.registerRecipes();
 		ModScreenHandlers.registerAllScreenHandlers();
 
