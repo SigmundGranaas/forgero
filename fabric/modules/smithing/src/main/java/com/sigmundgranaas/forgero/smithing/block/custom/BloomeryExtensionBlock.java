@@ -23,7 +23,6 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -84,7 +83,13 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 			}
 			// If player has an item, try to place it in the appropriate slot
 			else if (!heldItem.isEmpty()) {
-				ItemStack remaining = addItemToAppropriateSlot(extensionEntity, heldItem);
+				ItemStack remaining;
+				// If sneaking and holding ore, add the whole stack at once
+				if (player.isSneaking() && isOre(heldItem)) {
+					remaining = addWholeOreStack(extensionEntity, heldItem);
+				} else {
+					remaining = addItemToAppropriateSlot(extensionEntity, heldItem);
+				}
 				if (remaining.getCount() < heldItem.getCount()) {
 					heldItem.setCount(remaining.getCount());
 					return ActionResult.SUCCESS;
@@ -93,6 +98,27 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 		}
 
 		return ActionResult.PASS;
+	}
+
+	/**
+	 * Adds the whole ore stack to the ore slot if possible.
+	 */
+	private ItemStack addWholeOreStack(BloomeryExtensionBlockEntity entity, ItemStack stack) {
+		ItemStack oreSlot = entity.getStack(BloomeryExtensionBlockEntity.ORE_SLOT);
+		if (oreSlot.isEmpty()) {
+			int toInsert = Math.min(stack.getCount(), stack.getMaxCount());
+			entity.setStack(BloomeryExtensionBlockEntity.ORE_SLOT, stack.copyWithCount(toInsert));
+			return stack.copyWithCount(stack.getCount() - toInsert);
+		} else if (ItemStack.canCombine(stack, oreSlot)) {
+			int space = oreSlot.getMaxCount() - oreSlot.getCount();
+			if (space > 0) {
+				int toInsert = Math.min(stack.getCount(), space);
+				oreSlot.increment(toInsert);
+				entity.setStack(BloomeryExtensionBlockEntity.ORE_SLOT, oreSlot);
+				return stack.copyWithCount(stack.getCount() - toInsert);
+			}
+		}
+		return stack;
 	}
 
 	/**

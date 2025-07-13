@@ -193,8 +193,8 @@ public class BloomeryExtensionBlockEntity extends BlockEntity {
 			return;
 		}
 
-		// Check if the bloomery extension block is lit (synced from adjacent bloomery)
-		boolean isLit = state.get(BloomeryExtensionBlock.LIT);
+		// Check if there's an adjacent lit bloomery block instead of relying on synced state
+		boolean isLit = entity.isAdjacentBloomeryLit(world, pos);
 		boolean inventoryChanged = false;
 
 		// Process tool heating/cooling
@@ -311,5 +311,24 @@ public class BloomeryExtensionBlockEntity extends BlockEntity {
 		ItemStack crucible = new ItemStack(ModItems.CRUCIBLE);
 		crucible.getOrCreateNbt().putInt("CustomModelData", 1);
 		return crucible;
+	}
+
+	/**
+	 * Checks if there's an adjacent lit bloomery block
+	 */
+	private boolean isAdjacentBloomeryLit(World world, BlockPos pos) {
+		// Check all 6 directions for a lit bloomery block
+		for (net.minecraft.util.math.Direction direction : net.minecraft.util.math.Direction.values()) {
+			BlockPos adjacentPos = pos.offset(direction);
+			BlockState adjacentState = world.getBlockState(adjacentPos);
+
+			// Check if it's a BloomeryBlock and if it's lit
+			if (adjacentState.getBlock() instanceof com.sigmundgranaas.forgero.smithing.block.custom.BloomeryBlock) {
+				if (adjacentState.get(com.sigmundgranaas.forgero.smithing.block.custom.BloomeryBlock.LIT)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

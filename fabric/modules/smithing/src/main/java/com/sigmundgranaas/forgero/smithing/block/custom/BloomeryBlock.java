@@ -13,6 +13,8 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.sound.SoundCategory;
@@ -28,7 +30,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
@@ -64,17 +65,59 @@ public class BloomeryBlock extends BlockWithEntity {
 	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		if (!world.isClient) {
+			ItemStack heldItem = player.getStackInHand(hand);
 			BlockEntity blockEntity = world.getBlockEntity(pos);
-			if (blockEntity instanceof BloomeryBlockEntity) {
-				player.openHandledScreen((NamedScreenHandlerFactory) blockEntity);
+
+			if (!(blockEntity instanceof BloomeryBlockEntity bloomery)) {
+				return ActionResult.PASS;
+			}
+
+			// Insert coal/charcoal into inventory
+			if (isFuel(heldItem)) {
+				if (bloomery.insertFuel(heldItem)) {
+					if (!player.getAbilities().creativeMode) {
+						heldItem.decrement(1);
+					}
+					return ActionResult.SUCCESS;
+				}
+				return ActionResult.PASS;
+			}
+
+			// Use flint & steel to light if fuel is present and not already lit
+			if (heldItem.isOf(Items.FLINT_AND_STEEL) && !state.get(LIT)) {
+				int fuelTime = bloomery.consumeFuelForLighting();
+				if (fuelTime > 0) {
+					// Damage flint & steel
+					if (!player.getAbilities().creativeMode) {
+						heldItem.damage(1, player, p -> p.sendToolBreakStatus(hand));
+					}
+					bloomery.lightWithFuel(fuelTime);
+					world.setBlockState(pos, state.with(LIT, true), Block.NOTIFY_ALL);
+					bloomery.syncLitStateWithExtensions(world, pos, true);
+					world.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0f, 1.0f);
+					return ActionResult.SUCCESS;
+				}
+				return ActionResult.PASS;
 			}
 		}
-		return ActionResult.SUCCESS;
+		return ActionResult.PASS;
+	}
+
+	private boolean isFuel(ItemStack stack) {
+		return stack.isOf(Items.COAL) || stack.isOf(Items.CHARCOAL);
+	}
+
+	private int getFuelTime(ItemStack stack) {
+		if (stack.isOf(Items.COAL) || stack.isOf(Items.CHARCOAL)) {
+			return 1600;
+		}
+		return 0;
 	}
 
 	@Override
 	public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
-		return world.getBlockEntity(pos) instanceof BloomeryBlockEntity ? (BloomeryBlockEntity)world.getBlockEntity(pos) : null;
+		// Optionally implement GUI here if needed
+		return null;
 	}
 
 	@Override
@@ -182,12 +225,7 @@ public class BloomeryBlock extends BlockWithEntity {
 
 	@Override
 	public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
-		if (!state.isOf(newState.getBlock())) {
-			BlockEntity blockEntity = world.getBlockEntity(pos);
-			if (blockEntity instanceof BloomeryBlockEntity bloomery) {
-				bloomery.dropContents(world, pos);
-			}
-		}
+		// No inventory to drop since we removed inventory functionality
 		super.onStateReplaced(state, world, pos, newState, moved);
 	}
 
@@ -205,4 +243,5 @@ public class BloomeryBlock extends BlockWithEntity {
 	public BlockRenderType getRenderType(BlockState state) {
 		return BlockRenderType.MODEL;
 	}
+
 }

@@ -52,7 +52,7 @@ public class BloomeryExtensionBlockEntityRenderer implements BlockEntityRenderer
 
 		matrices.push();
 
-		matrices.translate(0.5, 0, 0.5);
+		matrices.translate(0.5, 0.5, 0.5);
 
 		float rotation = switch (facing) {
 			case SOUTH -> 180f;
@@ -66,13 +66,13 @@ public class BloomeryExtensionBlockEntityRenderer implements BlockEntityRenderer
 
 		switch (slot) {
 			case BloomeryExtensionBlockEntity.TOOL_SLOT -> {
-				matrices.translate(0.0, 1.0, -0.2);
+				matrices.translate(0.0, 0.6, -0.2);
 				matrices.scale(0.75f, 0.75f, 0.75f);
 				matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
 				mode = ModelTransformationMode.FIXED;
 			}
 			case BloomeryExtensionBlockEntity.CRUCIBLE_SLOT -> {
-				matrices.translate(-0.25, 0.85, 0.0);
+				matrices.translate(0.5, 0.75, 0.5);
 				matrices.scale(0.6f, 0.6f, 0.6f);
 				mode = ModelTransformationMode.FIXED;
 			}
