@@ -140,7 +140,7 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 			float r = isFast ? 1.0f : 1.0f;
 			float g = isFast ? 0.2f : 1.0f;
 			float b = isFast ? 0.2f : 0.0f;
-			float size = 0.0375f; // This is half the side length of the marker box (0.075 block total size) - 25% smaller
+			float size = 0.0350f; // This is half the side length of the marker box (0.075 block total size) - 25% smaller
 
 			VertexConsumer lineConsumer = vertexConsumers.getBuffer(RenderLayer.getLines());
 			// Draw a wireframe box at the marker position

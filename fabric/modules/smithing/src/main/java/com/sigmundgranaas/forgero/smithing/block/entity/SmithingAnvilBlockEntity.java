@@ -88,10 +88,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	private int markerSpawnDelay = 0;
 
 	// Minigame Timing Constants - Made configurable
-	public static final int INITIAL_MARKER_DELAY_TICKS = 10; // 0.5 seconds
-	public static final int SUBSEQUENT_MARKER_DELAY_TICKS = 15; // 0.75 seconds
-	public static final int MARKER_LIFETIME_TICKS_NORMAL = 30; // 1.5 seconds for normal markers
-	public static final int MARKER_LIFETIME_TICKS_FAST = 15; // 0.75 seconds for fast markers
+	public static final int INITIAL_MARKER_DELAY_TICKS = 20; // 0.5 seconds
+	public static final int SUBSEQUENT_MARKER_DELAY_TICKS = 20; // 0.75 seconds
+	public static final int MARKER_LIFETIME_TICKS_NORMAL = 45; // 1.5 seconds for normal markers
+	public static final int MARKER_LIFETIME_TICKS_FAST = 25; // 0.75 seconds for fast markers
 
 	private final Random random = new Random();
 
@@ -159,9 +159,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		boolean hit = false;
 		if (markerPositions.size() == 1) { // Only check if a marker is active
 			Vec2f marker = markerPositions.get(0);
-			// Adjusted hit detection radius. (0.05)^2 = 0.0025
+			// The visual marker has a half-width of 0.035. The squared distance to the corner is 2 * (0.035^2) = 0.00245.
+			// We use a slightly larger radius to be more forgiving.
 			double distSq = marker.distanceSquared(itemLocalHit);
-			if (distSq < 0.025) {
+			if (distSq < 0.0085f) {
 				setMarkerHit(0); // This calls playHitEffect and handles particle/sound
 				hit = true;
 			}
@@ -397,7 +398,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		markerAttempts++;
 		ItemStack stack = simpleInventory.getStack(0);
 		int temp = TemperatureUtils.getTemperature(stack);
-		int depletion = hit ? 40 : 10;
+		int depletion = hit ? 0 : 10;
 		if (hit) {
 			markerHitsCount++;
 		}
@@ -442,7 +443,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 					getInventory().setStack(0, newStack);
 					markDirty();
 				});
-				world.playSound(null, pos, SoundEvents.BLOCK_SMITHING_TABLE_USE, SoundCategory.BLOCKS, 1.0f, 1.0f);
+				world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 1.0f, 1.0f);
 			}
 		}
 	}
@@ -470,16 +471,17 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			);
 
 			// Distinct particle for hit
-			serverWorld.spawnParticles(ParticleTypes.LAVA, worldParticlePos.x, worldParticlePos.y, worldParticlePos.z, 15, 0.05, 0.05, 0.05, 0.1);
+			// Reduced spread and speed for smaller particles
+			serverWorld.spawnParticles(ParticleTypes.LAVA, worldParticlePos.x, worldParticlePos.y, worldParticlePos.z, 2, 0.01, 0.01, 0.01, 0.02);
 			// Distinct sound for hit
-			serverWorld.playSound(null, getPos(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.BLOCKS, 0.5f, 1.5f);
+			serverWorld.playSound(null, getPos(), SoundEvents.BLOCK_ANVIL_PLACE, SoundCategory.BLOCKS, 1f, 1f);
 		}
 	}
 
 	private void playMissEffect() {
 		if (world instanceof ServerWorld serverWorld) {
 			// Distinct sound for miss
-			serverWorld.playSound(null, getPos(), SoundEvents.BLOCK_ANVIL_PLACE, SoundCategory.BLOCKS, 1.0f, 1.0f);
+			serverWorld.playSound(null, getPos(), SoundEvents.ITEM_AXE_SCRAPE, SoundCategory.BLOCKS, 1f, 1.0f);
 			// Distinct particle for miss (e.g., smoke)
 			serverWorld.spawnParticles(ParticleTypes.SMOKE, getPos().getX() + 0.5, getPos().getY() + 1.0, getPos().getZ() + 0.5, 10, 0.3, 0.1, 0.3, 0.05);
 		}
@@ -497,7 +499,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 					markerLocalPos, getPos(), getCachedState(), offsetVec, particleY
 			);
 
-			serverWorld.spawnParticles(ParticleTypes.END_ROD, worldParticlePos.x, worldParticlePos.y, worldParticlePos.z, 5, 0.02, 0.02, 0.02, 0.02);
+			// Reduced spread and speed for smaller particles
+			serverWorld.spawnParticles(ParticleTypes.END_ROD, worldParticlePos.x, worldParticlePos.y, worldParticlePos.z, 1, 0.005, 0.005, 0.005, 0.01);
 			serverWorld.playSound(null, getPos(), SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.BLOCKS, 0.5f, 1.0f);
 		}
 	}
@@ -640,11 +643,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		 */
 		public static Vec2f worldHitToItemLocal(BlockHitResult hit, BlockState anvilState, Vec2f itemTextureOffset) {
 			// Step 1: Convert world hit position to coordinates relative to the block's center
-			// (0,0,0 is block center, range -0.5 to 0.5)
 			double localX_block_center = hit.getPos().x - hit.getBlockPos().getX() - 0.5;
 			double localZ_block_center = hit.getPos().z - hit.getBlockPos().getZ() - 0.5;
 
-			// Step 2: Inverse of Anvil's Rotation (undo the anvilAngleDegrees rotation)
+			// Step 2: Inverse of Anvil's Rotation
 			Direction facing = anvilState.get(com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.FACING);
 			float anvilAngleDegrees = 0.0f;
 			switch (facing) {
@@ -653,29 +655,25 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				case WEST -> anvilAngleDegrees = 90.0f;
 				case NORTH -> anvilAngleDegrees = 0.0f;
 			}
-
-			// Apply inverse anvil rotation
 			float invAnvilAngleRadians = (float) Math.toRadians(-anvilAngleDegrees);
 			double cosInv = Math.cos(invAnvilAngleRadians);
 			double sinInv = Math.sin(invAnvilAngleRadians);
-
 			double hitX_afterAnvilRot = localX_block_center * cosInv - localZ_block_center * sinInv;
 			double hitZ_afterAnvilRot = localX_block_center * sinInv + localZ_block_center * cosInv;
 
 			// Step 3: Inverse of Item's 180-degree rotation
-			// (undoes the `multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180))` from renderer)
-			float hitX_beforeItemRot = (float) -hitX_afterAnvilRot;
-			float hitZ_beforeItemRot = (float) -hitZ_afterAnvilRot;
+			double hitX_beforeItemRot = -hitX_afterAnvilRot;
+			double hitZ_beforeItemRot = -hitZ_afterAnvilRot;
 
 			// Step 4: Inverse of the RENDER_SCALE_FACTOR
-			float hitX_scaled = hitX_beforeItemRot / SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
-			float hitZ_scaled = hitZ_beforeItemRot / SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
+			double hitX_unscaled = hitX_beforeItemRot / SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
+			double hitZ_unscaled = hitZ_beforeItemRot / SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
 
 			// Step 5: Inverse of the texture centering offset (subtract instead of add)
-			float hitX_itemLocal = hitX_scaled - itemTextureOffset.x;
-			float hitZ_itemLocal = hitZ_scaled - itemTextureOffset.y;
+			// This must be done in the unscaled, pre-rotation item space.
+			float hitX_itemLocal = (float) (hitX_unscaled - itemTextureOffset.x);
+			float hitZ_itemLocal = (float) (hitZ_unscaled - itemTextureOffset.y);
 
-			// Return without additional negation - the coordinate system should match
 			return new Vec2f(hitX_itemLocal, hitZ_itemLocal);
 		}
 		/**

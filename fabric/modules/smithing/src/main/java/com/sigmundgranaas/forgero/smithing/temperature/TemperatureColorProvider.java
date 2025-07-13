@@ -117,7 +117,7 @@ public class TemperatureColorProvider {
 
     // --- Stage checker for orange-red, orange, and orange-yellow combined ---
     public static boolean isOrangeGroupStage(int temperature, int maxTemp) {
-        return isInStage(temperature, maxTemp, 1600, 1900);
+        return isInStage(temperature, maxTemp, 1, 1900);
     }
 
     // Helper to check if temperature is in a scaled stage
