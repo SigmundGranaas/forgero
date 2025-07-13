@@ -153,9 +153,9 @@ public class CampfireBlockEntityMixin {
                         world.addParticle(net.minecraft.particle.ParticleTypes.LAVA, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 0, 0.05, 0);
                     }
                     // Play a special sound when reaching the orange stage
-                    boolean isNowOrange = TemperatureColorProvider.isOrangeGroupStage(temp, TemperatureUtils.getMaxTemp(stack));
+                    boolean isNowOrange = TemperatureColorProvider.inFirstStageSmithing(temp, TemperatureUtils.getMaxTemp(stack));
                     if (isNowOrange && !lastOrangeState[i]) {
-                        world.playSound(null, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, SoundEvents.BLOCK_ANVIL_LAND, net.minecraft.sound.SoundCategory.BLOCKS, 5.0F, 1.2F);
+                        world.playSound(null, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, net.minecraft.sound.SoundCategory.BLOCKS, 5.0F, 1.2F);
                     }
                     lastOrangeState[i] = isNowOrange;
                     lastToolPartTemps[i] = temp;

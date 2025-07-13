@@ -13,6 +13,7 @@ import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.smithing.block.renderer.SmithingAnvilBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.condition.ConditionLootTables;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 import com.sigmundgranaas.forgero.smithing.util.BoundingBoxUtil;
 import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
@@ -88,10 +89,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	private int markerSpawnDelay = 0;
 
 	// Minigame Timing Constants - Made configurable
-	public static final int INITIAL_MARKER_DELAY_TICKS = 20; // 0.5 seconds
+	public static final int INITIAL_MARKER_DELAY_TICKS = 25; // 0.5 seconds
 	public static final int SUBSEQUENT_MARKER_DELAY_TICKS = 20; // 0.75 seconds
-	public static final int MARKER_LIFETIME_TICKS_NORMAL = 45; // 1.5 seconds for normal markers
-	public static final int MARKER_LIFETIME_TICKS_FAST = 25; // 0.75 seconds for fast markers
+	public static final int MARKER_LIFETIME_TICKS_NORMAL = 35; // 1.5 seconds for normal markers
+	public static final int MARKER_LIFETIME_TICKS_FAST = 20; // 0.75 seconds for fast markers
 
 	private final Random random = new Random();
 
@@ -542,13 +543,18 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 		int temp = TemperatureUtils.getTemperature(stackForMarker);
 		int maxTemp = TemperatureUtils.getMaxTemp(stackForMarker);
-		boolean inTemp = com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isOrangeGroupStage(temp, maxTemp);
+		boolean inStage;
+		if (markerAttempts < 5) {
+			inStage = TemperatureColorProvider.inFirstStageSmithing(temp, maxTemp);
+		} else {
+			inStage = TemperatureColorProvider.inSecondStageSmithing(temp, maxTemp);
+		}
 		boolean hasCondition = StateService.INSTANCE.convert(stackForMarker)
 				.filter(s -> s instanceof Conditional)
 				.map(s -> !((Conditional<?>) s).localConditions().isEmpty())
 				.orElse(false);
 
-		if (inTemp && !hasCondition) {
+		if (inStage && !hasCondition) {
 			if (markerPositions.isEmpty()) {
 				if (markerSpawnDelay > 0) {
 					markerSpawnDelay--;
@@ -669,8 +675,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			double hitX_unscaled = hitX_beforeItemRot / SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
 			double hitZ_unscaled = hitZ_beforeItemRot / SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
 
-			// Step 5: Inverse of the texture centering offset (subtract instead of add)
-			// This must be done in the unscaled, pre-rotation item space.
+			// Step 5: Inverse of the texture centering offset
 			float hitX_itemLocal = (float) (hitX_unscaled - itemTextureOffset.x);
 			float hitZ_itemLocal = (float) (hitZ_unscaled - itemTextureOffset.y);
 

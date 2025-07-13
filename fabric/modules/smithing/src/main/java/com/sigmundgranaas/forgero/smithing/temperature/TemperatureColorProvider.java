@@ -102,23 +102,16 @@ public class TemperatureColorProvider {
         return (r << 16) | (g << 8) | b;
     }
 
-    // --- Stage checkers for color groups ---
-    public static boolean isOrangeRedStage(int temperature, int maxTemp) {
-        return isInStage(temperature, maxTemp, 1600, 1700);
-    }
 
-    public static boolean isOrangeStage(int temperature, int maxTemp) {
-        return isInStage(temperature, maxTemp, 1700, 1800);
-    }
-
-    public static boolean isOrangeYellowStage(int temperature, int maxTemp) {
-        return isInStage(temperature, maxTemp, 1800, 1900);
-    }
 
     // --- Stage checker for orange-red, orange, and orange-yellow combined ---
-    public static boolean isOrangeGroupStage(int temperature, int maxTemp) {
-        return isInStage(temperature, maxTemp, 1, 1900);
+    public static boolean inFirstStageSmithing(int temperature, int maxTemp) {
+        return isInStage(temperature, maxTemp, 1500, 1800);
     }
+
+	public static boolean inSecondStageSmithing(int temperature, int maxTemp) {
+		return isInStage(temperature, maxTemp, 1100, 1300);
+	}
 
     // Helper to check if temperature is in a scaled stage
     private static boolean isInStage(int temperature, int maxTemp, int min, int max) {
