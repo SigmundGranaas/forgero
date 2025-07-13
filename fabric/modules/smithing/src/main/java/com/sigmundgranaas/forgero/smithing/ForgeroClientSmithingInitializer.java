@@ -16,11 +16,7 @@ import com.sigmundgranaas.forgero.smithing.block.renderer.BloomeryExtensionBlock
 import com.sigmundgranaas.forgero.smithing.block.renderer.MoldBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.block.renderer.SmithingAnvilBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
-import com.sigmundgranaas.forgero.smithing.screen.BloomeryScreen;
-import com.sigmundgranaas.forgero.smithing.screen.ModScreenHandlers;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider;
-
-import net.minecraft.client.gui.screen.ingame.HandledScreens;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
@@ -59,9 +55,7 @@ public class ForgeroClientSmithingInitializer implements ClientModInitializer {
 		if (ModBlockEntities.MOLD != null) {
 		    BlockEntityRendererRegistry.register(ModBlockEntities.MOLD, MoldBlockEntityRenderer::new);
 		}
-        // Register screens
-        HandledScreens.register(ModScreenHandlers.BLOOMERY_SCREEN_HANDLER, BloomeryScreen::new);
-        
+
         // Register network messages
         ModMessages.registerS2CPackets();
         
