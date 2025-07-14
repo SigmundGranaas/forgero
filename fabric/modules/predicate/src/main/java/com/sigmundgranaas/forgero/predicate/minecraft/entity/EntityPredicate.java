@@ -6,7 +6,6 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.property.condition.DynamicCondition;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.predicate.minecraft.MinecraftContextKeys;
-import com.sigmundgranaas.forgero.predicate.minecraft.entity.sub.EntityFlagPredicate;
 import com.sigmundgranaas.forgero.predicate.minecraft.util.LocationPredicate;
 
 import net.minecraft.entity.Entity;
