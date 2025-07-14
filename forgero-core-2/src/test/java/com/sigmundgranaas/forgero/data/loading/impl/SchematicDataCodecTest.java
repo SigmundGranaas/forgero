@@ -5,16 +5,23 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.SchematicCodecs;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
 import com.sigmundgranaas.forgero.data.loading.api.data.SchematicData;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.SchematicCodecs;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class SchematicDataCodecTest {
 
-	// region Helpers
+	private Codec<SchematicData> schematicDataCodec;
+
+	@BeforeEach
+	void setUp() {
+		this.schematicDataCodec = SchematicCodecs.create();
+	}
+
 	private <T> T parseSuccess(Codec<T> codec, String json) {
 		DataResult<T> result = codec.parse(JsonOps.INSTANCE, JsonParser.parseString(json));
 		assertTrue(result.result().isPresent(), "Parsing should succeed. Error: " + result.error().map(DataResult.PartialResult::message).orElse("No error message"));
@@ -31,7 +38,6 @@ class SchematicDataCodecTest {
 	private OpenIdentifier id(String id) {
 		return CodecConstants.IDENTIFIER_FACTORY.of(id);
 	}
-	// endregion
 
 	@Test
 	void testParseFullSchematic() {
@@ -50,7 +56,7 @@ class SchematicDataCodecTest {
 				}
 				""";
 
-		SchematicData data = parseSuccess(SchematicCodecs.SCHEMATIC_DATA_CODEC, json);
+		SchematicData data = parseSuccess(schematicDataCodec, json);
 		assertEquals(id("forgero:schematic"), data.type());
 		assertEquals("mandrill-head-schematic", data.name());
 		assertNotNull(data.include());
@@ -79,7 +85,7 @@ class SchematicDataCodecTest {
 				}
 				""";
 
-		SchematicData data = parseSuccess(SchematicCodecs.SCHEMATIC_DATA_CODEC, json);
+		SchematicData data = parseSuccess(schematicDataCodec, json);
 		assertEquals(id("forgero:schematic"), data.type());
 		assertEquals("simple-handle-schematic", data.name());
 		assertNull(data.include());
@@ -98,6 +104,6 @@ class SchematicDataCodecTest {
 				  "crafting_material": "minecraft:paper"
 				}
 				"""; // Missing 'target'
-		parseFailure(SchematicCodecs.SCHEMATIC_DATA_CODEC, json, "No key target");
+		parseFailure(schematicDataCodec, json, "No key target");
 	}
 }

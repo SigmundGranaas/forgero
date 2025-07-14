@@ -40,13 +40,15 @@ public class ComponentCofCodec implements Codec<Component> {
 	private final ComponentRegistry componentRegistry;
 	private final List<PropertyCodec<?>> propertyCodecs;
 	private final ComponentConstructorRegistry constructorRegistry;
+	private final Codec<CofComponent> cofComponentCodec;
 
 	private final Cache<Component, JsonElement> serializationCache;
 
-	public ComponentCofCodec(ComponentRegistry componentRegistry, ComponentConstructorRegistry constructorRegistry) {
+	public ComponentCofCodec(ComponentRegistry componentRegistry, ComponentConstructorRegistry constructorRegistry, Codec<CofComponent> cofComponentCodec) {
 		this.componentRegistry = componentRegistry;
 		this.constructorRegistry = constructorRegistry;
 		this.propertyCodecs = PropertyRegistry.getInstance().getPropertyCodecs();
+		this.cofComponentCodec = cofComponentCodec;
 		this.serializationCache = Caffeine.newBuilder()
 				.maximumSize(1000)
 				.expireAfterAccess(5, TimeUnit.MINUTES)
@@ -65,7 +67,7 @@ public class ComponentCofCodec implements Codec<Component> {
 		}
 
 		// If it's not a string, assume it's a full object.
-		return CofCodecs.FULL_COMPONENT_DTO_CODEC.decode(ops, input).flatMap(pair -> {
+		return cofComponentCodec.decode(ops, input).flatMap(pair -> {
 			CofComponent dto = pair.getFirst();
 			return buildComponentFromDto(dto).map(comp -> Pair.of(comp, pair.getSecond()));
 		});
@@ -91,7 +93,7 @@ public class ComponentCofCodec implements Codec<Component> {
 
 		// Otherwise, perform full serialization.
 		CofComponent dto = buildDtoFromComponent(input);
-		DataResult<T> encodedResult = CofCodecs.FULL_COMPONENT_DTO_CODEC.encode(dto, ops, prefix);
+		DataResult<T> encodedResult = cofComponentCodec.encode(dto, ops, prefix);
 
 		// Store in cache if using JsonOps and successful
 		if ((ops == JsonOps.INSTANCE || ops == JsonOps.COMPRESSED) && encodedResult.result().isPresent()) {

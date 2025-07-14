@@ -3,9 +3,11 @@ package com.sigmundgranaas.forgero.core.cof.codec;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.cof.ComponentConstructorRegistry;
+import com.sigmundgranaas.forgero.cof.codec.CofCodecs;
 import com.sigmundgranaas.forgero.cof.codec.ComponentCofCodec;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
@@ -15,13 +17,27 @@ import com.sigmundgranaas.forgero.core.component.mutation.api.ComponentMutater;
 import com.sigmundgranaas.forgero.core.component.mutation.impl.ComponentMutaterImpl;
 import com.sigmundgranaas.forgero.core.property.api.Property;
 import com.sigmundgranaas.forgero.core.property.api.PropertyRegistry;
+import com.sigmundgranaas.forgero.core.property.condition.Condition;
+import com.sigmundgranaas.forgero.core.property.condition.DynamicCondition;
+import com.sigmundgranaas.forgero.core.property.condition.StaticCondition;
+import com.sigmundgranaas.forgero.core.property.predicate.TagMatchCondition;
 import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
+import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
+import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.AttributeCodecs;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.ConditionCodec;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.FeatureCodecs;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.OperatorMapper;
+import com.sigmundgranaas.forgero.data.mapper.impl.AttributeCodec;
+import com.sigmundgranaas.forgero.data.mapper.impl.FeatureCodec;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.*;
@@ -70,7 +86,23 @@ class ComponentCofTest {
 
 	@BeforeEach
 	void setUp() {
+		// Reset PropertyRegistry and set up necessary codecs for property mapping
 		PropertyRegistry.getInstance().reset();
+
+		Map<String, Codec<? extends StaticCondition>> staticConditionCodecs = new HashMap<>();
+		staticConditionCodecs.put("forgero:self_has_tag", TagMatchCondition.CODEC); // Example static predicate
+		Map<String, Codec<? extends DynamicCondition>> dynamicConditionCodecs = new HashMap<>();
+		ConditionCodec conditionCodec = new ConditionCodec(staticConditionCodecs, dynamicConditionCodecs);
+
+		AttributeCodec attributeCodec = new AttributeCodec(new OperatorMapper());
+		attributeCodec.setCodecs(conditionCodec); // Initialize with the ConditionCodec
+		PropertyRegistry.getInstance().registerPropertyCodec(attributeCodec);
+
+		FeatureCodec featureCodec = new FeatureCodec();
+		featureCodec.setCodecs(); // Initialize FeatureCodec
+		PropertyRegistry.getInstance().registerPropertyCodec(featureCodec);
+		FeatureCodecs.registerCodecs(conditionCodec); // Register specific feature codecs
+
 
 		constructorRegistry = ComponentConstructorRegistry.getInstance();
 		constructorRegistry.clear();
@@ -84,7 +116,14 @@ class ComponentCofTest {
 				.add(GOLD_COMPONENT).add(FANCY_HILT_COMPONENT);
 
 		componentRegistry = registryBuilder.build();
-		codec = new ComponentCofCodec(componentRegistry, constructorRegistry);
+
+		// Pass the dynamically created CofComponentCodec to ComponentCofCodec
+		codec = new ComponentCofCodec(componentRegistry, constructorRegistry,
+				CofCodecs.create(
+						Codec.list(AttributeCodecs.create(conditionCodec)), // Pass attribute list codec
+						FeatureCodecs.createFeatureDataListCodec() // Pass feature list codec
+				)
+		);
 	}
 
 	private void testPristineSerialization(Component component) {
@@ -184,7 +223,13 @@ class ComponentCofTest {
 
 		ComponentRegistry customRegistry = componentRegistry.toBuilder().add(pristineCustom).build();
 		Component mutatedCustom = new CustomComponent(customId, Set.of(id("custom:test_tag")), List.of());
-		ComponentCofCodec customCodec = new ComponentCofCodec(customRegistry, constructorRegistry);
+		// Create a new codec instance for the custom registry
+		ComponentCofCodec customCodec = new ComponentCofCodec(customRegistry, constructorRegistry,
+				CofCodecs.create(
+						Codec.list(AttributeCodecs.create(new ConditionCodec(Collections.emptyMap(), Collections.emptyMap()))), // Provide dummy codecs
+						FeatureCodecs.createFeatureDataListCodec()
+				)
+		);
 
 		JsonElement serialized = customCodec.encodeStart(JsonOps.INSTANCE, mutatedCustom).getOrThrow(false, System.err::println);
 		assertTrue(serialized.isJsonObject());

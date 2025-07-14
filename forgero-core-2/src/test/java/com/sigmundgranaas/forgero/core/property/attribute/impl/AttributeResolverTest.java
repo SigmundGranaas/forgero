@@ -1,14 +1,18 @@
 package com.sigmundgranaas.forgero.core.property.attribute.impl;
 
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
+import com.sigmundgranaas.forgero.core.property.api.PropertyRegistry;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.condition.Condition;
 import com.sigmundgranaas.forgero.core.property.condition.DynamicCondition;
-import com.sigmundgranaas.forgero.core.property.condition.StaticConditions;
+import com.sigmundgranaas.forgero.core.property.condition.StaticCondition;
 import com.sigmundgranaas.forgero.core.property.context.ContextKeys;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.core.property.engine.ResolverEngine;
+import com.sigmundgranaas.forgero.core.property.predicate.SlotContainsCondition;
+import com.sigmundgranaas.forgero.core.property.predicate.TagMatchCondition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,6 +36,8 @@ class AttributeResolverTest {
 
 	@BeforeEach
 	void setUp() {
+		// Reset and initialize the PropertyRegistry to ensure all core codecs are available
+		PropertyRegistry.getInstance().reset();
 		resolver = new ResolverEngine();
 	}
 
@@ -66,15 +72,28 @@ class AttributeResolverTest {
 	@Test
 	void appliesStaticAndDynamicConditions() {
 		// DYNAMIC CONDITION: Active only if the target has the 'stone' tag.
-		DynamicCondition onStone = (ctx) -> ctx.get(ContextKeys.TARGET_TAGS)
-				.map(tags -> tags.contains(id("stone")))
-				.orElse(false);
+		DynamicCondition onStone = new DynamicCondition() {
+
+			@Override
+			public boolean test(DynamicContext context) {
+				return context.get(ContextKeys.TARGET_TAGS)
+						.map(tags -> tags.contains(id("stone")))
+						.orElse(false);
+			}
+
+			@Override
+			public OpenIdentifier type() {
+				return new OpenIdentifier("forgero:none");
+			}
+		};
+
 		var diamondCondition = new Condition(Collections.emptyList(), List.of(onStone));
 		var diamondProperty = attribute(MINING_SPEED).withValue(10f).withCondition(diamondCondition).build();
 		var diamond = part(DIAMOND_ID).withTag(GEM_TAG).withProperty(diamondProperty).build();
 
 		// STATIC CONDITION: Active only if the root item is a 'pickaxe'.
-		var ironCondition = new Condition(List.of(StaticConditions.rootHasTag("pickaxe")), Collections.emptyList());
+		StaticCondition rootIsPickaxe = new TagMatchCondition(id("forgero:root_has_tag"), id("pickaxe"));
+		var ironCondition = new Condition(List.of(rootIsPickaxe), Collections.emptyList());
 		var ironProperty = attribute(MINING_SPEED).withValue(5f).withCondition(ironCondition).build();
 		var iron = part(IRON_ID).withTag(METAL_TAG).withProperty(ironProperty).build();
 
@@ -116,7 +135,8 @@ class AttributeResolverTest {
 	@Test
 	void appliesComplexStructuralConditions() {
 		// Condition: bonus is active if the slot of type HANDLE_SLOT_TYPE contains a component with the "wood" tag.
-		var headBonusCondition = new Condition(List.of(StaticConditions.slotContains(HANDLE_SLOT_TYPE, "wood")), Collections.emptyList());
+		StaticCondition handleContainsWood = new SlotContainsCondition(id("forgero:slot_contains"), id("forgero:handle"), id("forgero:wood"));
+		var headBonusCondition = new Condition(List.of(handleContainsWood), Collections.emptyList());
 		var headBonus = attribute(ATTACK_DAMAGE).withValue(5).withCondition(headBonusCondition).build();
 
 		var head = part(PICKAXE_HEAD_ID).withTag(METAL_TAG).withProperty(headBonus).build();

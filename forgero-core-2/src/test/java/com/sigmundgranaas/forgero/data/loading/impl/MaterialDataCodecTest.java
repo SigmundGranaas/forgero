@@ -6,21 +6,45 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.MaterialCodecs;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
+import com.sigmundgranaas.forgero.core.property.condition.DynamicCondition;
+import com.sigmundgranaas.forgero.core.property.condition.StaticCondition;
+import com.sigmundgranaas.forgero.core.property.predicate.TagMatchCondition;
 import com.sigmundgranaas.forgero.data.loading.api.data.MaterialData;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
+import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.feature.VeinMiningFeatureData;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.AttributeCodecs;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.ConditionCodec;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.FeatureCodecs;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.MaterialCodecs;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class MaterialDataCodecTest {
 
-	// region Helpers
+	private Codec<MaterialData> materialDataCodec;
+
+	@BeforeEach
+	void setUp() {
+		Map<String, Codec<? extends StaticCondition>> staticCodecs = new HashMap<>();
+		Map<String, Codec<? extends DynamicCondition>> dynamicCodecs = new HashMap<>();
+		ConditionCodec conditionCodec = new ConditionCodec(staticCodecs, dynamicCodecs);
+
+		Codec<List<AttributeData>> attributeListCodec = Codec.list(AttributeCodecs.create(conditionCodec));
+		FeatureCodecs.registerCodecs(conditionCodec); // Ensure feature codecs are initialized
+		Codec<List<FeatureData>> featureListCodec = FeatureCodecs.createFeatureDataListCodec();
+
+		this.materialDataCodec = MaterialCodecs.create(attributeListCodec, featureListCodec);
+	}
+
 	private <T> T parseSuccess(Codec<T> codec, String json) {
 		DataResult<T> result = codec.parse(JsonOps.INSTANCE, JsonParser.parseString(json));
 		assertTrue(result.result().isPresent(), "Parsing should succeed. Error: " + result.error().map(DataResult.PartialResult::message).orElse("No error message"));
@@ -37,7 +61,6 @@ class MaterialDataCodecTest {
 	private OpenIdentifier id(String id) {
 		return CodecConstants.IDENTIFIER_FACTORY.of(id);
 	}
-	// endregion
 
 	private static final String FULL_MATERIAL_JSON = """
 			{
@@ -60,16 +83,16 @@ class MaterialDataCodecTest {
 			    "forgero:tooltip": [
 			      { "text": "A custom tooltip line" }
 			    ],
-			    "better_combat:attribute_container": {
-			        "id": "better_combat:two_handed_spear"
-			    }
+			    "better_combat:attribute_container": [
+			        { "value": "better_combat:two_handed_spear" }
+			    ]
 			  }
 			}
 			""";
 
 	@Test
 	void testParseFullMaterial() {
-		MaterialData data = parseSuccess(MaterialCodecs.MATERIAL_DATA_CODEC, FULL_MATERIAL_JSON);
+		MaterialData data = parseSuccess(materialDataCodec, FULL_MATERIAL_JSON);
 
 		assertEquals(id("forgero:material"), data.type());
 		assertEquals("diamond", data.name());
@@ -108,7 +131,7 @@ class MaterialDataCodecTest {
 				}
 				""";
 
-		MaterialData data = parseSuccess(MaterialCodecs.MATERIAL_DATA_CODEC, json);
+		MaterialData data = parseSuccess(materialDataCodec, json);
 		assertEquals(id("forgero:material"), data.type());
 		assertEquals("minimal_stone", data.name());
 		assertNull(data.include());
@@ -121,6 +144,6 @@ class MaterialDataCodecTest {
 	@Test
 	void testParseMaterialMissingRequiredFields() {
 		String json = "{ \"type\": \"forgero:material\" }"; // Missing 'name'
-		parseFailure(MaterialCodecs.MATERIAL_DATA_CODEC, json, "No key name");
+		parseFailure(materialDataCodec, json, "No key name");
 	}
 }

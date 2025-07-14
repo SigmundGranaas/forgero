@@ -5,18 +5,41 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.FeatureCodecs;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
-import com.sigmundgranaas.forgero.data.loading.api.data.condition.TagMatchPredicateData;
+import com.sigmundgranaas.forgero.core.property.condition.Condition;
+import com.sigmundgranaas.forgero.core.property.condition.DynamicCondition;
+import com.sigmundgranaas.forgero.core.property.condition.StaticCondition;
+import com.sigmundgranaas.forgero.core.property.predicate.TagMatchCondition;
 import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.feature.VeinMiningFeatureData;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.ConditionCodec;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.FeatureCodecs;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class FeatureCodecTest {
 
-	// region Helpers
+	private Codec<FeatureData> featureDataCodec;
+
+	@BeforeEach
+	void setUp() {
+		// Setup the master condition codec with all known predicate types
+		Map<String, Codec<? extends StaticCondition>> staticCodecs = new HashMap<>();
+		staticCodecs.put("forgero:root_has_tag", TagMatchCondition.CODEC);
+		staticCodecs.put("forgero:self_has_tag", TagMatchCondition.CODEC);
+		ConditionCodec conditionCodec = new ConditionCodec(staticCodecs, new HashMap<>());
+
+		// Register feature codecs that depend on the condition codec
+		FeatureCodecs.registerCodecs(conditionCodec);
+		// Create the main feature codec for testing
+		this.featureDataCodec = FeatureCodecs.createFeatureDataCodec();
+	}
+
 	private <T> T parseSuccess(Codec<T> codec, String json) {
 		DataResult<T> result = codec.parse(JsonOps.INSTANCE, JsonParser.parseString(json));
 		assertTrue(result.result().isPresent(), "Parsing should succeed. Error: " + result.error().map(DataResult.PartialResult::message).orElse("No error message"));
@@ -33,7 +56,6 @@ class FeatureCodecTest {
 	private OpenIdentifier id(String id) {
 		return CodecConstants.IDENTIFIER_FACTORY.of(id);
 	}
-	// endregion
 
 	@Test
 	void testParseVeinMiningFeatureMinimal() {
@@ -50,7 +72,7 @@ class FeatureCodecTest {
 				}
 				""";
 
-		FeatureData data = parseSuccess(FeatureCodecs.FEATURE_DATA_CODEC, json);
+		FeatureData data = parseSuccess(featureDataCodec, json);
 		assertInstanceOf(VeinMiningFeatureData.class, data);
 		VeinMiningFeatureData feature = (VeinMiningFeatureData) data;
 
@@ -77,7 +99,7 @@ class FeatureCodecTest {
 				}
 				""";
 
-		FeatureData data = parseSuccess(FeatureCodecs.FEATURE_DATA_CODEC, json);
+		FeatureData data = parseSuccess(featureDataCodec, json);
 		assertInstanceOf(VeinMiningFeatureData.class, data);
 		VeinMiningFeatureData feature = (VeinMiningFeatureData) data;
 
@@ -86,11 +108,14 @@ class FeatureCodecTest {
 		assertEquals("Another description", feature.description());
 
 		assertNotNull(feature.condition());
-		assertEquals(1, feature.condition().predicates().size());
-		assertInstanceOf(TagMatchPredicateData.class, feature.condition().predicates().get(0));
-		TagMatchPredicateData condition = (TagMatchPredicateData) feature.condition().predicates().get(0);
-		assertEquals(id("forgero:root_has_tag"), condition.type());
-		assertEquals(id("forgero:pickaxe"), condition.tag());
+		assertEquals(1, feature.condition().staticConditions().size());
+		assertTrue(feature.condition().dynamicConditions().isEmpty());
+
+		StaticCondition condition = feature.condition().staticConditions().get(0);
+		assertInstanceOf(TagMatchCondition.class, condition);
+		TagMatchCondition tagMatch = (TagMatchCondition) condition;
+		assertEquals(id("forgero:root_has_tag"), tagMatch.type());
+		assertEquals(id("forgero:pickaxe"), tagMatch.tag());
 
 		assertNotNull(feature.selector());
 		assertEquals(2, feature.selector().radius());
@@ -106,6 +131,6 @@ class FeatureCodecTest {
 				  "description": "This should fail"
 				}
 				""";
-		parseFailure(FeatureCodecs.FEATURE_DATA_CODEC, json, "Unknown feature type: forgero:non_existent_feature");
+		parseFailure(featureDataCodec, json, "Unknown feature type: forgero:non_existent_feature");
 	}
 }

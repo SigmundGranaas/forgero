@@ -5,21 +5,44 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.core.property.condition.DynamicCondition;
+import com.sigmundgranaas.forgero.core.property.condition.StaticCondition;
 import com.sigmundgranaas.forgero.data.loading.api.data.ShapeData;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
+import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.feature.VeinMiningFeatureData;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.AttributeCodecs;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.ConditionCodec;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.FeatureCodecs;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.ShapeCodecs;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ShapeDataCodecTest {
 
-	// region Helpers
+	private Codec<ShapeData> shapeDataCodec;
+
+	@BeforeEach
+	void setUp() {
+		Map<String, Codec<? extends StaticCondition>> staticCodecs = new HashMap<>();
+		Map<String, Codec<? extends DynamicCondition>> dynamicCodecs = new HashMap<>();
+		ConditionCodec conditionCodec = new ConditionCodec(staticCodecs, dynamicCodecs);
+
+		Codec<List<AttributeData>> attributeListCodec = Codec.list(AttributeCodecs.create(conditionCodec));
+		FeatureCodecs.registerCodecs(conditionCodec); // Ensure feature codecs are initialized
+		Codec<List<FeatureData>> featureListCodec = FeatureCodecs.createFeatureDataListCodec();
+
+		this.shapeDataCodec = ShapeCodecs.create(attributeListCodec, featureListCodec);
+	}
+
 	private <T> T parseSuccess(Codec<T> codec, String json) {
 		DataResult<T> result = codec.parse(JsonOps.INSTANCE, JsonParser.parseString(json));
 		assertTrue(result.result().isPresent(), "Parsing should succeed. Error: " + result.error().map(DataResult.PartialResult::message).orElse("No error message"));
@@ -36,7 +59,6 @@ class ShapeDataCodecTest {
 	private OpenIdentifier id(String id) {
 		return CodecConstants.IDENTIFIER_FACTORY.of(id);
 	}
-	// endregion
 
 	private static final String FULL_SHAPE_JSON = """
 			{
@@ -59,7 +81,7 @@ class ShapeDataCodecTest {
 
 	@Test
 	void testParseFullShape() {
-		ShapeData data = parseSuccess(ShapeCodecs.SHAPE_DATA_CODEC, FULL_SHAPE_JSON);
+		ShapeData data = parseSuccess(shapeDataCodec, FULL_SHAPE_JSON);
 
 		assertEquals(id("forgero:shape"), data.type());
 		assertEquals("pickaxe_head", data.name());
@@ -98,7 +120,7 @@ class ShapeDataCodecTest {
 				}
 				""";
 
-		ShapeData data = parseSuccess(ShapeCodecs.SHAPE_DATA_CODEC, json);
+		ShapeData data = parseSuccess(shapeDataCodec, json);
 		assertEquals(id("forgero:shape"), data.type());
 		assertEquals("basic_handle", data.name());
 		assertNull(data.include());
@@ -111,6 +133,6 @@ class ShapeDataCodecTest {
 	@Test
 	void testParseShapeMissingRequiredFields() {
 		String json = "{ \"type\": \"forgero:shape\" }"; // Missing 'name'
-		parseFailure(ShapeCodecs.SHAPE_DATA_CODEC, json, "No key name");
+		parseFailure(shapeDataCodec, json, "No key name");
 	}
 }

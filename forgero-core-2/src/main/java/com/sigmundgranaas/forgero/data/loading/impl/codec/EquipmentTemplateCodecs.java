@@ -1,12 +1,15 @@
 package com.sigmundgranaas.forgero.data.loading.impl.codec;
 
-import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
+import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.EquipmentTemplateData;
-import com.sigmundgranaas.forgero.data.loading.api.data.template.EquipmentTemplateStructureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.EquipmentTemplateSlotData;
+import com.sigmundgranaas.forgero.data.loading.api.data.template.EquipmentTemplateStructureData;
+import com.sigmundgranaas.forgero.data.loading.api.data.template.UpgradeSlotData;
 
+import java.util.List;
 import java.util.Optional;
 
 public class EquipmentTemplateCodecs {
@@ -26,18 +29,20 @@ public class EquipmentTemplateCodecs {
 			).apply(instance, (id, slots) -> new EquipmentTemplateStructureData(id.orElse(null), slots)));
 
 
-	public static final Codec<EquipmentTemplateData> TOOL_TEMPLATE_DATA_CODEC = RecordCodecBuilder.create(instance ->
-			instance.group(
-					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(EquipmentTemplateData::type),
-					Codec.STRING.fieldOf("name").forGetter(EquipmentTemplateData::name),
-					Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("include").forGetter(data -> Optional.ofNullable(data.include())),
-					Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("tags").forGetter(data -> Optional.ofNullable(data.tags())),
-					HostCodecs.HOST_TEMPLATE_DATA_CODEC.optionalFieldOf("host_template").forGetter(data -> Optional.ofNullable(data.host_template())),
-					EQUIPMENT_TEMPLATE_STRUCTURE_DATA_CODEC.fieldOf("structure").forGetter(EquipmentTemplateData::structure),
-					Codec.list(PartTemplateCodecs.UPGRADE_SLOT_DATA_CODEC).optionalFieldOf("upgrades").forGetter(data -> Optional.ofNullable(data.upgrades())),
-					Codec.list(AttributeCodecs.ATTRIBUTE_DATA_CODEC).optionalFieldOf("attributes").forGetter(data -> Optional.ofNullable(data.attributes())),
-					Codec.list(FeatureCodecs.FEATURE_DATA_CODEC).optionalFieldOf("features").forGetter(data -> Optional.ofNullable(data.features())),
-					Codec.unboundedMap(Codec.STRING, CodecConstants.JSON_ELEMENT_CODEC).optionalFieldOf("properties").forGetter(data -> Optional.ofNullable(data.properties()))
-			).apply(instance, (type, name, include, tags, host, structure, upgrades, attributes, features, properties) ->
-					new EquipmentTemplateData(type, name, include.orElse(null), tags.orElse(null), host.orElse(null), structure, upgrades.orElse(null), attributes.orElse(null), features.orElse(null), properties.orElse(null))));
+	public static Codec<EquipmentTemplateData> create(Codec<List<AttributeData>> attributeCodec, Codec<List<FeatureData>> featureCodec, Codec<List<UpgradeSlotData>> upgradeSlotCodec) {
+		return RecordCodecBuilder.create(instance ->
+				instance.group(
+						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(EquipmentTemplateData::type),
+						Codec.STRING.fieldOf("name").forGetter(EquipmentTemplateData::name),
+						Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("include").forGetter(data -> Optional.ofNullable(data.include())),
+						Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("tags").forGetter(data -> Optional.ofNullable(data.tags())),
+						HostCodecs.HOST_TEMPLATE_DATA_CODEC.optionalFieldOf("host_template").forGetter(data -> Optional.ofNullable(data.host_template())),
+						EQUIPMENT_TEMPLATE_STRUCTURE_DATA_CODEC.fieldOf("structure").forGetter(EquipmentTemplateData::structure),
+						upgradeSlotCodec.optionalFieldOf("upgrades").forGetter(data -> Optional.ofNullable(data.upgrades())),
+						attributeCodec.optionalFieldOf("attributes").forGetter(data -> Optional.ofNullable(data.attributes())),
+						featureCodec.optionalFieldOf("features").forGetter(data -> Optional.ofNullable(data.features())),
+						Codec.unboundedMap(Codec.STRING, CodecConstants.JSON_ELEMENT_CODEC).optionalFieldOf("properties").forGetter(data -> Optional.ofNullable(data.properties()))
+				).apply(instance, (type, name, include, tags, host, structure, upgrades, attributes, features, properties) ->
+						new EquipmentTemplateData(type, name, include.orElse(null), tags.orElse(null), host.orElse(null), structure, upgrades.orElse(null), attributes.orElse(null), features.orElse(null), properties.orElse(null))));
+	}
 }

@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.data.loading.api.data.feature;
 
-import com.sigmundgranaas.forgero.data.loading.api.data.condition.ConditionData;
-import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier; // Import OpenIdentifier
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.core.property.condition.Condition;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -14,11 +14,11 @@ import org.jetbrains.annotations.Nullable;
  * @param condition   An optional condition for when this feature is active.
  */
 public record VeinMiningFeatureData(
-		OpenIdentifier type, // Changed from String
+		OpenIdentifier type,
 		String title,
 		String description,
 		VeinMiningSelectorData selector,
 		@Nullable
-		ConditionData condition
+		Condition condition
 ) implements FeatureData {
 }

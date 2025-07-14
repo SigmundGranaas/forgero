@@ -1,8 +1,14 @@
 package com.sigmundgranaas.forgero.data.processing.impl;
 
 import com.google.gson.JsonElement;
+import com.mojang.serialization.Codec;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.ForgeroTest;
+import com.sigmundgranaas.forgero.core.property.api.PropertyRegistry;
+import com.sigmundgranaas.forgero.core.property.condition.Condition;
+import com.sigmundgranaas.forgero.core.property.condition.DynamicCondition;
+import com.sigmundgranaas.forgero.core.property.condition.StaticCondition;
+import com.sigmundgranaas.forgero.core.property.predicate.TagMatchCondition;
 import com.sigmundgranaas.forgero.data.Utils;
 import com.sigmundgranaas.forgero.data.loading.api.data.MaterialData;
 import com.sigmundgranaas.forgero.data.loading.api.data.PropertyData;
@@ -14,6 +20,13 @@ import com.sigmundgranaas.forgero.data.loading.api.data.feature.VeinMiningFeatur
 import com.sigmundgranaas.forgero.data.loading.api.data.feature.VeinMiningSelectorData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.HostData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.IdentifierEntry;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.AttributeCodecs;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.ConditionCodec;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.FeatureCodecs;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.MaterialCodecs;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.OperatorMapper;
+import com.sigmundgranaas.forgero.data.mapper.impl.AttributeCodec;
+import com.sigmundgranaas.forgero.data.mapper.impl.FeatureCodec;
 import com.sigmundgranaas.forgero.data.processing.api.DataProcessor;
 import com.sigmundgranaas.forgero.data.processing.api.NormalizedState;
 import com.sigmundgranaas.forgero.data.processing.api.RawDefinition;
@@ -21,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,15 +44,37 @@ import static org.junit.jupiter.api.Assertions.*;
 class DataProcessorTest extends ForgeroTest {
 
 	private DataProcessor processor;
+	private Codec<Condition> conditionCodec;
+	private Codec<List<AttributeData>> attributeListCodec;
+	private Codec<List<FeatureData>> featureListCodec;
 
 	private static final String ATTRIBUTES_KEY = "forgero:attributes";
 	private static final String FEATURES_KEY = "forgero:features";
 
 	@BeforeEach
 	void setUp() {
-		// Ensure property codecs are registered for the test environment
+		// Setup the master condition codec with all known predicate types
+		Map<String, Codec<? extends StaticCondition>> staticCodecs = new HashMap<>();
+		staticCodecs.put("forgero:root_has_tag", TagMatchCondition.CODEC);
+		staticCodecs.put("forgero:self_has_tag", TagMatchCondition.CODEC);
+		this.conditionCodec = new ConditionCodec(staticCodecs, new HashMap<>());
+
+		// Initialize codec dependencies dynamically
+		this.attributeListCodec = Codec.list(AttributeCodecs.create(this.conditionCodec));
+		FeatureCodecs.registerCodecs(this.conditionCodec); // Ensure feature codecs are initialized
+		this.featureListCodec = FeatureCodecs.createFeatureDataListCodec();
+
+		// Manually initialize the codecs in the registry for data processor's internal use
+		// This simulates the PropertyRegistry setup in ForgeroDataInitializer
 		com.sigmundgranaas.forgero.core.property.api.PropertyRegistry.getInstance().reset();
-		com.sigmundgranaas.forgero.data.loading.impl.codec.FeatureCodecs.VEIN_MINING_FEATURE_CODEC.toString(); // Initialize static block
+		AttributeCodec attrMapper = new AttributeCodec(new OperatorMapper());
+		attrMapper.setCodecs(conditionCodec);
+		PropertyRegistry.getInstance().registerPropertyCodec(attrMapper);
+
+		FeatureCodec featMapper = new FeatureCodec();
+		featMapper.setCodecs();
+		PropertyRegistry.getInstance().registerPropertyCodec(featMapper);
+
 		processor = new DataProcessorImpl();
 	}
 
@@ -123,7 +159,7 @@ class DataProcessorTest extends ForgeroTest {
 	}
 
 	private AttributeData createAttribute(String id, String type, float value) {
-		return new AttributeDataImpl(id(id), id(type), new ComputationData(value, "forgero:addition", "forgero:base"), null, null);
+		return new AttributeDataImpl(id(id), id(type), new ComputationData(value, "forgero:addition", "forgero:base"), Condition.ALWAYS_TRUE, null);
 	}
 
 	private FeatureData createVeinMiningFeature(String type) {

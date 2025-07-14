@@ -2,8 +2,6 @@ package com.sigmundgranaas.forgero.core.property.api;
 
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.feature.impl.FeatureEngine;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.ConditionMapper;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.OperatorMapper;
 import com.sigmundgranaas.forgero.data.mapper.api.PropertyCodec;
 import com.sigmundgranaas.forgero.data.mapper.impl.AttributeCodec;
@@ -27,13 +25,11 @@ public class DefaultPropertyRegistry implements PropertyRegistry {
 	private final List<PropertyCodec<?>> propertyCodecs = new ArrayList<>();
 	private final List<DataTypeEngine<?, ?>> dataTypeEngines = new ArrayList<>();
 
-	private final ConditionMapper conditionMapper;
 	private final OperatorMapper operatorMapper;
 
 
 	public DefaultPropertyRegistry() {
 		// Initialize shared dependencies
-		this.conditionMapper = new ConditionMapper(CodecConstants.IDENTIFIER_FACTORY);
 		this.operatorMapper = new OperatorMapper();
 		reset();
 	}
@@ -68,8 +64,8 @@ public class DefaultPropertyRegistry implements PropertyRegistry {
 		dataTypeEngines.clear();
 
 		// Register core Forgero codecs and engines here, injecting dependencies.
-		registerPropertyCodec(new AttributeCodec(conditionMapper, operatorMapper));
-		registerPropertyCodec(new FeatureCodec(conditionMapper));
+		registerPropertyCodec(new AttributeCodec(operatorMapper));
+		registerPropertyCodec(new FeatureCodec());
 
 		dataTypeEngines.add(new AttributeEngine());
 		dataTypeEngines.add(new FeatureEngine());
