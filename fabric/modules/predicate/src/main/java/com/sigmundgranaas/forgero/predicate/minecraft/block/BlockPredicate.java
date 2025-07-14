@@ -7,7 +7,6 @@ import com.sigmundgranaas.forgero.core.property.condition.DynamicCondition;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.predicate.minecraft.MinecraftContextKeys;
 import com.sigmundgranaas.forgero.predicate.minecraft.util.LocationPredicate;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -16,6 +15,7 @@ import java.util.Optional;
 
 public record BlockPredicate(
 		Optional<BlockTypePredicate> blockType,
+		Optional<BlockStatePropertyPredicate> properties,
 		Optional<LocationPredicate> location
 ) implements DynamicCondition {
 
@@ -24,6 +24,7 @@ public record BlockPredicate(
 	public static final Codec<BlockPredicate> CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(
 					BlockTypePredicate.CODEC.optionalFieldOf("block_type").forGetter(BlockPredicate::blockType),
+					BlockStatePropertyPredicate.CODEC.optionalFieldOf("properties").forGetter(BlockPredicate::properties),
 					LocationPredicate.CODEC.optionalFieldOf("location").forGetter(BlockPredicate::location)
 			).apply(instance, BlockPredicate::new)
 	);
@@ -41,9 +42,10 @@ public record BlockPredicate(
 		BlockState state = world.getBlockState(pos);
 
 		boolean typeMatch = blockType.map(p -> p.test(state)).orElse(true);
+		boolean propertiesMatch = properties.map(p -> p.test(state)).orElse(true);
 		boolean locationMatch = location.map(loc -> loc.test(world, pos)).orElse(true);
 
-		return typeMatch && locationMatch;
+		return typeMatch && propertiesMatch && locationMatch;
 	}
 
 	@Override

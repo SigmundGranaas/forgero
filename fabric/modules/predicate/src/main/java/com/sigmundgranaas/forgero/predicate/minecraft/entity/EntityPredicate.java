@@ -6,10 +6,11 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.property.condition.DynamicCondition;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.predicate.minecraft.MinecraftContextKeys;
+import com.sigmundgranaas.forgero.predicate.minecraft.item.EquipmentPredicate;
 import com.sigmundgranaas.forgero.predicate.minecraft.util.LocationPredicate;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 
@@ -23,6 +24,8 @@ public record EntityPredicate(
 		Optional<EntityType<?>> entityType,
 		Optional<EntityFlagPredicate> flags,
 		Optional<EntityStatsPredicate> stats,
+		Optional<EquipmentPredicate> equipment,
+		Optional<StatusEffectPredicate> effects,
 		Optional<LocationPredicate> location,
 		Optional<RelationalPredicate> relational
 ) implements DynamicCondition {
@@ -41,6 +44,8 @@ public record EntityPredicate(
 					ENTITY_TYPE_CODEC.optionalFieldOf("type").forGetter(EntityPredicate::entityType),
 					EntityFlagPredicate.CODEC.optionalFieldOf("flags").forGetter(EntityPredicate::flags),
 					EntityStatsPredicate.CODEC.optionalFieldOf("stats").forGetter(EntityPredicate::stats),
+					EquipmentPredicate.CODEC.optionalFieldOf("equipment").forGetter(EntityPredicate::equipment),
+					StatusEffectPredicate.CODEC.optionalFieldOf("effects").forGetter(EntityPredicate::effects),
 					LocationPredicate.CODEC.optionalFieldOf("location").forGetter(EntityPredicate::location),
 					RelationalPredicate.CODEC.optionalFieldOf("relational").forGetter(EntityPredicate::relational)
 			).apply(instance, EntityPredicate::new)
@@ -59,9 +64,10 @@ public record EntityPredicate(
 		boolean statsMatch = stats.map(p -> p.test(entity)).orElse(true);
 		boolean locationMatch = location.map(loc -> loc.test(entity.getWorld(), entity.getBlockPos())).orElse(true);
 		boolean relationalMatch = relational.map(p -> p.test(context)).orElse(true);
+		boolean equipmentMatch = equipment.map(p -> entity instanceof LivingEntity living && p.test(living)).orElse(true);
+		boolean effectsMatch = effects.map(p -> entity instanceof LivingEntity living && p.test(living)).orElse(true);
 
-
-		return typeMatch && flagMatch && statsMatch && locationMatch && relationalMatch;
+		return typeMatch && flagMatch && statsMatch && equipmentMatch && effectsMatch && locationMatch && relationalMatch;
 	}
 
 	private Optional<Entity> getEntityToTest(DynamicContext context) {
