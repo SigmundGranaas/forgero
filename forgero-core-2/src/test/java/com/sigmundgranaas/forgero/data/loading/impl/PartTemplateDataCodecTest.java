@@ -6,21 +6,47 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.PartTemplateCodecs;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
+import com.sigmundgranaas.forgero.core.property.condition.DynamicCondition;
+import com.sigmundgranaas.forgero.core.property.condition.StaticCondition;
+import com.sigmundgranaas.forgero.core.property.predicate.TagMatchCondition;
+import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
+import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
+import com.sigmundgranaas.forgero.data.loading.api.data.feature.VeinMiningFeatureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.PartTemplateData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.UpgradeSlotData;
-import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
-import com.sigmundgranaas.forgero.data.loading.api.data.feature.VeinMiningFeatureData;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.AttributeCodecs;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.ConditionCodec;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.FeatureCodecs;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.PartTemplateCodecs;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class PartTemplateDataCodecTest {
 
-	// region Helpers
+	private Codec<PartTemplateData> partTemplateDataCodec;
+
+	@BeforeEach
+	void setUp() {
+		Map<String, Codec<? extends StaticCondition>> staticCodecs = new HashMap<>();
+		Map<String, Codec<? extends DynamicCondition>> dynamicCodecs = new HashMap<>();
+		ConditionCodec conditionCodec = new ConditionCodec(staticCodecs, dynamicCodecs);
+
+		Codec<List<AttributeData>> attributeListCodec = Codec.list(AttributeCodecs.create(conditionCodec));
+		FeatureCodecs.registerCodecs(conditionCodec); // Ensure feature codecs are initialized
+		Codec<List<FeatureData>> featureListCodec = FeatureCodecs.createFeatureDataListCodec();
+		Codec<List<UpgradeSlotData>> upgradeSlotDataListCodec = Codec.list(PartTemplateCodecs.UPGRADE_SLOT_DATA_CODEC);
+
+		this.partTemplateDataCodec = PartTemplateCodecs.create(attributeListCodec, featureListCodec, upgradeSlotDataListCodec);
+	}
+
 	private <T> T parseSuccess(Codec<T> codec, String json) {
 		DataResult<T> result = codec.parse(JsonOps.INSTANCE, JsonParser.parseString(json));
 		assertTrue(result.result().isPresent(), "Parsing should succeed. Error: " + result.error().map(DataResult.PartialResult::message).orElse("No error message"));
@@ -37,7 +63,6 @@ class PartTemplateDataCodecTest {
 	private OpenIdentifier id(String id) {
 		return CodecConstants.IDENTIFIER_FACTORY.of(id);
 	}
-	// endregion
 
 	private static final String FULL_PART_TEMPLATE_JSON = """
 			{
@@ -72,7 +97,7 @@ class PartTemplateDataCodecTest {
 
 	@Test
 	void testParseFullPartTemplate() {
-		PartTemplateData data = parseSuccess(PartTemplateCodecs.PART_TEMPLATE_DATA_CODEC, FULL_PART_TEMPLATE_JSON);
+		PartTemplateData data = parseSuccess(partTemplateDataCodec, FULL_PART_TEMPLATE_JSON);
 
 		assertEquals(id("forgero:part_template"), data.type());
 		assertEquals("mandrill-pickaxe-head", data.name());
@@ -132,7 +157,7 @@ class PartTemplateDataCodecTest {
 				}
 				""";
 
-		PartTemplateData data = parseSuccess(PartTemplateCodecs.PART_TEMPLATE_DATA_CODEC, json);
+		PartTemplateData data = parseSuccess(partTemplateDataCodec, json);
 		assertEquals(id("forgero:part_template"), data.type());
 		assertEquals("minimal-part", data.name());
 		assertNull(data.include());
@@ -158,6 +183,6 @@ class PartTemplateDataCodecTest {
 				  "name": "invalid-part"
 				}
 				""";
-		parseFailure(PartTemplateCodecs.PART_TEMPLATE_DATA_CODEC, json, "No key structure");
+		parseFailure(partTemplateDataCodec, json, "No key structure");
 	}
 }

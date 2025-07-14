@@ -1,13 +1,15 @@
 package com.sigmundgranaas.forgero.data.loading.impl.codec;
 
-import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
+import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.PartTemplateData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.PartTemplateStructureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.PartTemplateStructureSlotData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.UpgradeSlotData;
 
+import java.util.List;
 import java.util.Optional;
 
 public class PartTemplateCodecs {
@@ -38,18 +40,20 @@ public class PartTemplateCodecs {
 					new PartTemplateStructureData(id.orElse(null), slots)));
 
 
-	public static final Codec<PartTemplateData> PART_TEMPLATE_DATA_CODEC = RecordCodecBuilder.create(instance ->
-			instance.group(
-					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(PartTemplateData::type),
-					Codec.STRING.fieldOf("name").forGetter(PartTemplateData::name),
-					Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("include").forGetter(data -> Optional.ofNullable(data.include())),
-					Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("tags").forGetter(data -> Optional.ofNullable(data.tags())),
-					HostCodecs.HOST_TEMPLATE_DATA_CODEC.optionalFieldOf("host_template").forGetter(data -> Optional.ofNullable(data.host_template())),
-					PART_TEMPLATE_STRUCTURE_DATA_CODEC.fieldOf("structure").forGetter(PartTemplateData::structure),
-					Codec.list(UPGRADE_SLOT_DATA_CODEC).optionalFieldOf("upgrades").forGetter(data -> Optional.ofNullable(data.upgrades())),
-					Codec.list(AttributeCodecs.ATTRIBUTE_DATA_CODEC).optionalFieldOf("attributes").forGetter(data -> Optional.ofNullable(data.attributes())),
-					Codec.list(FeatureCodecs.FEATURE_DATA_CODEC).optionalFieldOf("features").forGetter(data -> Optional.ofNullable(data.features())),
-					Codec.unboundedMap(Codec.STRING, CodecConstants.JSON_ELEMENT_CODEC).optionalFieldOf("properties").forGetter(data -> Optional.ofNullable(data.properties()))
-			).apply(instance, (type, name, include, tags, host, structure, upgrades, attributes, features, properties) ->
-					new PartTemplateData(type, name, include.orElse(null), tags.orElse(null), host.orElse(null), structure, upgrades.orElse(null), attributes.orElse(null), features.orElse(null), properties.orElse(null))));
+	public static Codec<PartTemplateData> create(Codec<List<AttributeData>> attributeCodec, Codec<List<FeatureData>> featureCodec, Codec<List<UpgradeSlotData>> upgradeSlotCodec) {
+		return RecordCodecBuilder.create(instance ->
+				instance.group(
+						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(PartTemplateData::type),
+						Codec.STRING.fieldOf("name").forGetter(PartTemplateData::name),
+						Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("include").forGetter(data -> Optional.ofNullable(data.include())),
+						Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("tags").forGetter(data -> Optional.ofNullable(data.tags())),
+						HostCodecs.HOST_TEMPLATE_DATA_CODEC.optionalFieldOf("host_template").forGetter(data -> Optional.ofNullable(data.host_template())),
+						PART_TEMPLATE_STRUCTURE_DATA_CODEC.fieldOf("structure").forGetter(PartTemplateData::structure),
+						upgradeSlotCodec.optionalFieldOf("upgrades").forGetter(data -> Optional.ofNullable(data.upgrades())),
+						attributeCodec.optionalFieldOf("attributes").forGetter(data -> Optional.ofNullable(data.attributes())),
+						featureCodec.optionalFieldOf("features").forGetter(data -> Optional.ofNullable(data.features())),
+						Codec.unboundedMap(Codec.STRING, CodecConstants.JSON_ELEMENT_CODEC).optionalFieldOf("properties").forGetter(data -> Optional.ofNullable(data.properties()))
+				).apply(instance, (type, name, include, tags, host, structure, upgrades, attributes, features, properties) ->
+						new PartTemplateData(type, name, include.orElse(null), tags.orElse(null), host.orElse(null), structure, upgrades.orElse(null), attributes.orElse(null), features.orElse(null), properties.orElse(null))));
+	}
 }

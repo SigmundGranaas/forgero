@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.core.property.api;
 
+import com.sigmundgranaas.forgero.data.loading.api.data.PropertyData;
 import com.sigmundgranaas.forgero.data.mapper.api.PropertyCodec;
 import com.sigmundgranaas.forgero.data.mapper.impl.AttributeCodec;
 import com.sigmundgranaas.forgero.data.mapper.impl.FeatureCodec;
@@ -58,7 +59,7 @@ class PropertyRegistryTest {
 		Assertions.assertEquals(1, initialCount);
 
 		// Attempt to register another codec for the same type
-		registry.registerPropertyCodec(new AttributeCodec(null, null)); // Dependencies are not used for this check
+		registry.registerPropertyCodec(new AttributeCodec(null)); // Dependencies are not used for this check
 
 		long finalCount = registry.getPropertyCodecs().stream()
 				.filter(codec -> codec.getPropertyType().equals("forgero:attributes"))
@@ -80,7 +81,7 @@ class PropertyRegistryTest {
 		}
 
 		@Override
-		public java.util.List<com.sigmundgranaas.forgero.core.property.api.Property> build(java.util.List<com.sigmundgranaas.forgero.data.loading.api.data.PropertyData> dataList) {
+		public java.util.List<com.sigmundgranaas.forgero.core.property.api.Property> build(List<PropertyData> dataList) {
 			return java.util.Collections.emptyList();
 		}
 

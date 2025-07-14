@@ -5,11 +5,11 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.sigmundgranaas.forgero.core.property.condition.Condition;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeDataImpl;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.ComputationData;
 
-import java.util.List;
 import java.util.Optional;
 
 public class AttributeCodecs {
@@ -32,7 +32,6 @@ public class AttributeCodecs {
 	public static final Codec<ComputationData> COMPUTATION_CODEC = new Codec<>() {
 		@Override
 		public <T> DataResult<Pair<ComputationData, T>> decode(DynamicOps<T> ops, T input) {
-			// First, try to decode as a simple number.
 			Optional<Pair<ComputationData, T>> asNumber = ops.getNumberValue(input)
 					.map(num -> Pair.of(new ComputationData(num.floatValue(), ADDITION_OPERATOR, BASE_ORDER), ops.empty()))
 					.result();
@@ -41,7 +40,6 @@ public class AttributeCodecs {
 				return DataResult.success(asNumber.get());
 			}
 
-			// If not a number, try to decode as a map (object).
 			return ops.getMap(input).flatMap(map -> {
 				var addKey = ops.createString("add");
 				var subtractKey = ops.createString("subtract");
@@ -68,8 +66,6 @@ public class AttributeCodecs {
 							.map(num -> new ComputationData(num.floatValue(), DIVISION_OPERATOR, BASE_ORDER))
 							.map(data -> Pair.of(data, ops.empty()));
 				}
-
-				// If no shortcuts, fall back to the full, explicit object codec.
 				return FULL_COMPUTATION_CODEC.decode(ops, input);
 			}).mapError(err -> "Not a valid ComputationData format: " + err);
 		}
@@ -80,17 +76,16 @@ public class AttributeCodecs {
 		}
 	};
 
-	public static final Codec<AttributeData> ATTRIBUTE_DATA_CODEC = RecordCodecBuilder.create(instance ->
-			instance.group(
-					CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("id").forGetter(data -> Optional.ofNullable(data.id())),
-					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(AttributeData::type),
-					COMPUTATION_CODEC.fieldOf("computation").forGetter(AttributeData::computation),
-					ConditionCodecs.CONDITION_DATA_CODEC.optionalFieldOf("condition").forGetter(data -> Optional.ofNullable(data.condition())),
-					CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("composite").forGetter(data -> Optional.ofNullable(data.composite()))
-			).apply(instance, (idOpt, type, comp, condOpt, compositeOpt) ->
-					new AttributeDataImpl(idOpt.orElse(null), type, comp, condOpt.orElse(null), compositeOpt.orElse(null)))
-	);
-
-
-	public static final Codec<List<AttributeData>> ATTRIBUTE_DATA_LIST_CODEC = Codec.list(ATTRIBUTE_DATA_CODEC);
+	public static Codec<AttributeData> create(Codec<Condition> conditionCodec) {
+		return RecordCodecBuilder.create(instance ->
+				instance.group(
+						CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("id").forGetter(data -> Optional.ofNullable(data.id())),
+						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(AttributeData::type),
+						COMPUTATION_CODEC.fieldOf("computation").forGetter(AttributeData::computation),
+						conditionCodec.optionalFieldOf("condition", Condition.ALWAYS_TRUE).forGetter(AttributeData::condition),
+						CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("composite").forGetter(data -> Optional.ofNullable(data.composite()))
+				).apply(instance, (idOpt, type, comp, cond, compositeOpt) ->
+						new AttributeDataImpl(idOpt.orElse(null), type, comp, cond, compositeOpt.orElse(null)))
+		);
+	}
 }

@@ -12,13 +12,7 @@ import javax.annotation.Nullable;
 public record NameReplacementProperty(
 		String from,
 		String to,
-		@Nullable Condition localCondition
+		@Nullable Condition condition
 ) implements ConditionalProperty {
-
-	@Override
-	@Nullable
-	public Condition condition() {
-		return localCondition;
-	}
 
 }

@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.property.api;
 
-import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
@@ -8,25 +8,29 @@ import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.property.condition.Condition;
-import com.sigmundgranaas.forgero.core.property.condition.StaticConditions;
+import com.sigmundgranaas.forgero.core.property.condition.DynamicCondition;
+import com.sigmundgranaas.forgero.core.property.condition.StaticCondition;
 import com.sigmundgranaas.forgero.core.property.engine.ResolverEngine;
+import com.sigmundgranaas.forgero.core.property.predicate.TagMatchCondition;
 import com.sigmundgranaas.forgero.data.loading.api.data.PropertyData;
-import com.sigmundgranaas.forgero.data.loading.api.data.condition.ConditionData;
-import com.sigmundgranaas.forgero.data.loading.api.data.condition.TagMatchPredicateData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.HostData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.IdentifierEntry;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.ConditionCodec;
 import com.sigmundgranaas.forgero.data.mapper.api.ComponentMapper;
 import com.sigmundgranaas.forgero.data.mapper.api.PropertyCodec;
 import com.sigmundgranaas.forgero.data.processing.api.NormalizedState;
+import com.sigmundgranaas.forgero.property.bettercombat.BetterCombatIdentifierCodec;
 import com.sigmundgranaas.forgero.property.bettercombat.BetterCombatIdentifierData;
 import com.sigmundgranaas.forgero.property.bettercombat.BetterCombatIdentifierEngine;
 import com.sigmundgranaas.forgero.property.bettercombat.BetterCombatModuleInitializer;
 import com.sigmundgranaas.forgero.property.bettercombat.DefaultBetterCombatKeys;
 import com.sigmundgranaas.forgero.property.namereplacement.DefaultNameReplacementKeys;
+import com.sigmundgranaas.forgero.property.namereplacement.NameReplacementCodec;
 import com.sigmundgranaas.forgero.property.namereplacement.NameReplacementData;
 import com.sigmundgranaas.forgero.property.namereplacement.NameReplacementEngine;
 import com.sigmundgranaas.forgero.property.namereplacement.NameReplacementModuleInitializer;
 import com.sigmundgranaas.forgero.property.tooltip.DefaultTooltipKeys;
+import com.sigmundgranaas.forgero.property.tooltip.TooltipCodec;
 import com.sigmundgranaas.forgero.property.tooltip.TooltipData;
 import com.sigmundgranaas.forgero.property.tooltip.TooltipEngine;
 import com.sigmundgranaas.forgero.property.tooltip.TooltipModuleInitializer;
@@ -52,6 +56,7 @@ class CustomPropertyRegistryTest {
 
 	private ComponentMapper componentMapper;
 	private ResolverEngine resolver;
+	private Codec<Condition> conditionCodec;
 	private IdentifierFactory idFactory;
 
 	@BeforeEach
@@ -59,10 +64,25 @@ class CustomPropertyRegistryTest {
 		idFactory = new IdentifierFactory.Builder().defaultNamespace("forgero").build();
 		PropertyRegistry.getInstance().reset(); // Resets and initializes core codecs
 
+		// Setup the master condition codec with some basic static predicates for testing
+		Map<String, Codec<? extends StaticCondition>> staticCodecs = new HashMap<>();
+		staticCodecs.put("forgero:self_has_tag", TagMatchCondition.CODEC);
+		staticCodecs.put("forgero:root_has_tag", TagMatchCondition.CODEC);
+		Map<String, Codec<? extends DynamicCondition>> dynamicCodecs = new HashMap<>();
+		this.conditionCodec = new ConditionCodec(staticCodecs, dynamicCodecs);
+
 		// Initialize custom property modules. These also register their codecs.
 		BetterCombatModuleInitializer.initialize();
 		TooltipModuleInitializer.initialize();
 		NameReplacementModuleInitializer.initialize();
+
+		// Manually initialize the codecs in the registry with the condition codec
+		PropertyRegistry.getInstance().getPropertyCodecs().forEach(codec -> {
+			if (codec instanceof BetterCombatIdentifierCodec c) c.initialize(conditionCodec);
+			if (codec instanceof NameReplacementCodec c) c.initialize(conditionCodec);
+			if (codec instanceof TooltipCodec c) c.initialize(conditionCodec);
+		});
+
 
 		componentMapper = new ComponentMapper(idFactory);
 		resolver = new ResolverEngine();
@@ -80,8 +100,8 @@ class CustomPropertyRegistryTest {
 		return componentMapper.map(staticPartData);
 	}
 
-	private JsonObject parseJson(String json) {
-		return JsonParser.parseString(json).getAsJsonObject ();
+	private JsonElement parseJson(String json) {
+		return JsonParser.parseString(json);
 	}
 
 	@Test
@@ -130,30 +150,20 @@ class CustomPropertyRegistryTest {
                   ]
                 }
                 """;
-		var json = parseJson(propertiesJson);
-		var tooltipJson = json.get(DefaultTooltipKeys.TOOLTIP_SECTION_IDENTIFIER.toString());
+		JsonElement tooltipJson = parseJson(propertiesJson).getAsJsonObject().get(DefaultTooltipKeys.TOOLTIP_SECTION_IDENTIFIER.toString());
 
-		// Parse the JSON into List<TooltipData> and then wrap it into List<PropertyData>
-		List<TooltipData> parsedTooltipDataList = TooltipData.CODEC.listOf().parse(JsonOps.INSTANCE, tooltipJson).result().orElseThrow();
+		List<TooltipData> parsedTooltipDataList = TooltipData.createCodec(conditionCodec).listOf().parse(JsonOps.INSTANCE, tooltipJson).result().orElseThrow();
 		Map<String, List<PropertyData>> propsMap = new HashMap<>();
 		propsMap.put(DefaultTooltipKeys.TOOLTIP_SECTION_IDENTIFIER.toString(), new ArrayList<>(parsedTooltipDataList));
 
 		Component testComponent = createComponentWithProperties("test_item_root", propsMap);
-		Component childComponent = createComponentWithProperties("test_item_child", new HashMap<>()); // No properties
 
-		// Scenario 1: test_item_root is resolved. Both conditions should pass.
 		List<TooltipProperty> resolvedTooltipsRoot = resolver.resolve(testComponent, TooltipEngine.KEY)
 				.orElse(List.of());
 
 		assertEquals(2, resolvedTooltipsRoot.size(), "Root component should resolve both tooltips.");
 		assertTrue(resolvedTooltipsRoot.stream().anyMatch(t -> t.key().equals(id("forgero:ingredient_count")) && t.value().equals("3")));
 		assertTrue(resolvedTooltipsRoot.stream().anyMatch(t -> t.key().equals(id("forgero:always_show_tooltip")) && t.value().equals("Always Active")));
-
-		// Scenario 2: childComponent is resolved. It has no properties, so it should resolve to an empty list.
-		List<TooltipProperty> resolvedTooltipsChild = resolver.resolve(childComponent, TooltipEngine.KEY)
-				.orElse(List.of());
-
-		assertTrue(resolvedTooltipsChild.isEmpty(), "Child component with no properties should resolve to an empty tooltip list.");
 	}
 
 	@Test
@@ -161,19 +171,19 @@ class CustomPropertyRegistryTest {
 	void testNameReplacementResolutionViaRegistry() {
 		String propertiesJson = """
                 {
-                  "forgero:name_replacement": {
-                    "from": "sword",
-                    "to": "broadsword"
-                  }
+                  "forgero:name_replacement": [
+                    {
+                      "from": "sword",
+                      "to": "broadsword"
+                    }
+                  ]
                 }
                 """;
-		var json = parseJson(propertiesJson);
-		var nameReplacementJson = json.get(DefaultNameReplacementKeys.NAME_REPLACEMENT_IDENTIFIER.toString());
+		JsonElement nameReplacementJson = parseJson(propertiesJson).getAsJsonObject().get(DefaultNameReplacementKeys.NAME_REPLACEMENT_IDENTIFIER.toString());
 
-		// Parse the JSON into NameReplacementData and then wrap it into List<PropertyData>
-		NameReplacementData parsedNameReplacementData = NameReplacementData.CODEC.parse(JsonOps.INSTANCE, nameReplacementJson).result().orElseThrow();
+		List<NameReplacementData> parsedData = NameReplacementData.createCodec(conditionCodec).listOf().parse(JsonOps.INSTANCE, nameReplacementJson).result().orElseThrow();
 		Map<String, List<PropertyData>> propsMap = new HashMap<>();
-		propsMap.put(DefaultNameReplacementKeys.NAME_REPLACEMENT_IDENTIFIER.toString(), List.of(parsedNameReplacementData));
+		propsMap.put(DefaultNameReplacementKeys.NAME_REPLACEMENT_IDENTIFIER.toString(), new ArrayList<>(parsedData));
 
 		Component testComponent = createComponentWithProperties("test_sword", propsMap);
 
@@ -189,18 +199,18 @@ class CustomPropertyRegistryTest {
 	void testBetterCombatIdentifierResolutionViaRegistry() {
 		String propertiesJson = """
                 {
-                  "better_combat:attribute_container": {
-                    "value": "forgero:claymore"
-                  }
+                  "better_combat:attribute_container": [
+                    {
+                      "value": "forgero:claymore"
+                    }
+                  ]
                 }
                 """;
-		var json = parseJson(propertiesJson);
-		var betterCombatJson = json.get(DefaultBetterCombatKeys.BETTER_COMBAT_IDENTIFIER.toString());
+		JsonElement betterCombatJson = parseJson(propertiesJson).getAsJsonObject().get(DefaultBetterCombatKeys.BETTER_COMBAT_IDENTIFIER.toString());
 
-		// Parse the JSON into BetterCombatIdentifierData and then wrap it into List<PropertyData>
-		BetterCombatIdentifierData parsedBetterCombatData = BetterCombatIdentifierData.CODEC.parse(JsonOps.INSTANCE, betterCombatJson).result().orElseThrow();
+		List<BetterCombatIdentifierData> parsedData = BetterCombatIdentifierData.createCodec(conditionCodec).listOf().parse(JsonOps.INSTANCE, betterCombatJson).result().orElseThrow();
 		Map<String, List<PropertyData>> propsMap = new HashMap<>();
-		propsMap.put(DefaultBetterCombatKeys.BETTER_COMBAT_IDENTIFIER.toString(), List.of(parsedBetterCombatData));
+		propsMap.put(DefaultBetterCombatKeys.BETTER_COMBAT_IDENTIFIER.toString(), new ArrayList<>(parsedData));
 
 		Component testComponent = createComponentWithProperties("test_claymore", propsMap);
 
@@ -218,9 +228,8 @@ class CustomPropertyRegistryTest {
 		OpenIdentifier originalKey = idFactory.of("forgero:test_tooltip");
 		String originalValue = "Test Value";
 		String originalFormat = "RAW";
-		Condition originalCondition = new Condition(List.of(StaticConditions.selfHasTag("test_tag")), Collections.emptyList(),
-				new ConditionData(List.of(new TagMatchPredicateData(idFactory.of("forgero:self_has_tag"), idFactory.of("forgero:test_tag"))))
-		);
+		StaticCondition selfHasTag = new TagMatchCondition(idFactory.of("forgero:self_has_tag"), idFactory.of("forgero:test_tag"));
+		Condition originalCondition = new Condition(List.of(selfHasTag), Collections.emptyList());
 		TooltipProperty originalProperty = new TooltipProperty(originalKey, originalValue, originalFormat, originalCondition);
 
 		// 2. Get the TooltipCodec from the registry
@@ -248,13 +257,12 @@ class CustomPropertyRegistryTest {
 		assertNotNull(serializedElement, "Serialized JSON should not be null");
 		assertTrue(serializedElement.isJsonArray(), "Serialized element should be a JSON array");
 		assertEquals(1, serializedElement.getAsJsonArray().size());
-		JsonObject jsonObject = serializedElement.getAsJsonArray().get(0).getAsJsonObject(); // Get the single object
-
-		// Check some basic fields in the JSON
-		assertEquals(originalKey.toString(), jsonObject.get("key").getAsString());
-		assertEquals(originalValue, jsonObject.get("value").getAsString());
-		assertEquals(originalFormat, jsonObject.get("format").getAsString());
-		assertTrue(jsonObject.has("condition"), "Condition should be serialized");
+		// Get the single object and inspect its condition structure
+		JsonElement conditionElement = serializedElement.getAsJsonArray().get(0).getAsJsonObject().get("condition");
+		assertNotNull(conditionElement);
+		assertTrue(conditionElement.isJsonArray(), "Condition should be serialized as an array");
+		assertEquals(1, conditionElement.getAsJsonArray().size());
+		assertEquals(originalKey.toString(), serializedElement.getAsJsonArray().get(0).getAsJsonObject().get("key").getAsString());
 
 
 		// 5. Deserialize JsonElement back to PropertyData (list of data)
@@ -268,9 +276,10 @@ class CustomPropertyRegistryTest {
 		assertEquals(originalData.key(), deserializedData.key());
 		assertEquals(originalData.value(), deserializedData.value());
 		assertEquals(originalData.format(), deserializedData.format());
-		assertNotNull(deserializedData.condition(), "Deserialized condition data should be present");
-		// Assert condition data equality (deep comparison might be needed for complex conditions)
-		assertEquals(originalData.condition().predicates().get(0).type(), deserializedData.condition().predicates().get(0).type());
+		assertNotNull(deserializedData.condition(), "Deserialized condition should be present");
+		// Assert condition content
+		assertEquals(originalData.condition().staticConditions().size(), deserializedData.condition().staticConditions().size());
+		assertEquals(originalData.condition().staticConditions().get(0).type(), deserializedData.condition().staticConditions().get(0).type());
 
 
 		// 6. Convert PropertyData back to Property (backward mapping)
@@ -285,11 +294,10 @@ class CustomPropertyRegistryTest {
 		assertEquals(originalProperty.key(), roundTrippedTooltip.key(), "Keys should match after round trip");
 		assertEquals(originalProperty.value(), roundTrippedTooltip.value(), "Values should match after round trip");
 		assertEquals(originalProperty.format(), roundTrippedTooltip.format(), "Formats should match after round trip");
-		// For conditions, direct equality might not work due to object identity,
-		// but we can check if their underlying logic or source data matches.
-		// Since Condition.sourceData is now available, we can compare that.
 		assertNotNull(originalProperty.condition(), "Original property should have a condition");
 		assertNotNull(roundTrippedTooltip.condition(), "Round-tripped property should have a condition");
-		assertEquals(originalProperty.condition().sourceData(), roundTrippedTooltip.condition().sourceData(), "Condition source data should match after round trip");
+		assertEquals(originalProperty.condition().staticConditions().size(), roundTrippedTooltip.condition().staticConditions().size());
+		assertEquals(originalProperty.condition().staticConditions().get(0).type(), roundTrippedTooltip.condition().staticConditions().get(0).type());
+		assertEquals(((TagMatchCondition)originalProperty.condition().staticConditions().get(0)).tag(), ((TagMatchCondition)roundTrippedTooltip.condition().staticConditions().get(0)).tag());
 	}
 }

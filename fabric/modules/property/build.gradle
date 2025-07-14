@@ -1,0 +1,22 @@
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection DependencyNotationArgument
+
+dependencies {
+	implementation(project(":forgero-core-2"))
+}
+
+sourceSets {
+	test {
+		compileClasspath += main.compileClasspath
+		runtimeClasspath += main.runtimeClasspath
+	}
+}
+
+test {
+	useJUnitPlatform()
+	maxParallelForks = 32
+	testLogging.events("failed")
+	testLogging.info.events = ["failed", "skipped"]
+}
+

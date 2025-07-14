@@ -1,20 +1,24 @@
 package com.sigmundgranaas.forgero.core.property.feature;
 
+import static com.sigmundgranaas.forgero.data.Utils.id;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.ForgeroTest;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
 import com.sigmundgranaas.forgero.core.component.impl.StructuredPart;
 import com.sigmundgranaas.forgero.core.feature.api.Feature;
 import com.sigmundgranaas.forgero.core.feature.impl.FeatureEngine;
+import com.sigmundgranaas.forgero.core.property.api.PropertyRegistry;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.condition.Condition;
 import com.sigmundgranaas.forgero.core.property.condition.DynamicCondition;
-import com.sigmundgranaas.forgero.core.property.condition.StaticConditions;
+import com.sigmundgranaas.forgero.core.property.condition.StaticCondition;
 import com.sigmundgranaas.forgero.core.property.context.ContextKeys;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.core.property.engine.ResolverEngine;
+import com.sigmundgranaas.forgero.core.property.predicate.TagMatchCondition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,6 +31,8 @@ class FeatureResolverTest extends ForgeroTest {
 
 	@BeforeEach
 	void setUp() {
+		// Reset and initialize the PropertyRegistry to ensure all core codecs are available
+		PropertyRegistry.getInstance().reset();
 		resolver = new ResolverEngine();
 	}
 
@@ -34,7 +40,6 @@ class FeatureResolverTest extends ForgeroTest {
 	void resolvesAndAggregatesFeatures() {
 		var part1 = part(idFactory.of("part1"), METAL_TAG, List.of(new Feature(idFactory.of("fire_aspect"))));
 		var part2 = part(idFactory.of("part2"), WOOD_TAG, List.of(new Feature(idFactory.of("splintering"))));
-		// Update ComponentStructure to use Map.of
 		var structure = new ComponentStructure(slotsMap(slot(idFactory.of("slot1"), idFactory.of("p1_type"), part1), slot(idFactory.of("slot2"), idFactory.of("p2_type"), part2)));
 		var assembly = new StructuredPart(idFactory.of("assembly"), Set.of(), List.of(), structure);
 
@@ -48,17 +53,27 @@ class FeatureResolverTest extends ForgeroTest {
 	@Test
 	void resolvesAndAppliesStaticAndDynamicConditions() {
 		// A static feature that is always active on a pickaxe
-		var staticFeature = new Feature(idFactory.of("vein_miner"), new Condition(List.of(StaticConditions.rootHasTag("pickaxe")), Collections.emptyList()));
+		StaticCondition rootIsPickaxe = new TagMatchCondition(id("forgero:root_has_tag"), id("pickaxe"));
+		var staticFeature = new Feature(idFactory.of("vein_miner"), new Condition(List.of(rootIsPickaxe), Collections.emptyList()));
 
 		// A dynamic feature that is only active against undead
-		DynamicCondition undeadSlayerPredicate = (ctx) -> ctx.get(ContextKeys.TARGET_TAGS)
-				.map(tags -> tags.contains(UNDEAD_TAG))
-				.orElse(false);
+		DynamicCondition undeadSlayerPredicate = new DynamicCondition() {
+			@Override
+			public boolean test(DynamicContext context) {
+				return context.get(ContextKeys.TARGET_TAGS)
+						.map(tags -> tags.contains(UNDEAD_TAG))
+						.orElse(false);
+			}
+
+			@Override
+			public OpenIdentifier type() {
+				return new OpenIdentifier("forgero", "default");
+			}
+		};
 		var dynamicFeature = new Feature(idFactory.of("smite"), new Condition(Collections.emptyList(), List.of(undeadSlayerPredicate)));
 
 		var part1 = part(idFactory.of("part1"), METAL_TAG, List.of(staticFeature));
 		var part2 = part(idFactory.of("part2"), GEM_TAG, List.of(dynamicFeature));
-		// Update ComponentStructure to use Map.of
 		var structure = new ComponentStructure(slotsMap(slot(idFactory.of("slot1"), idFactory.of("p1_type"), part1), slot(idFactory.of("slot2"), idFactory.of("p2_type"), part2)));
 		var pickaxe = new StructuredPart(PICKAXE_ID, Set.of(idFactory.of("pickaxe")), List.of(), structure);
 

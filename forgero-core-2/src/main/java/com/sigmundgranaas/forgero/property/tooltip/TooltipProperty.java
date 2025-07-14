@@ -14,12 +14,7 @@ public record TooltipProperty(
 		OpenIdentifier key,
 		String value,
 		String format,
-		@Nullable Condition localCondition
+		@Nullable Condition condition
 ) implements ConditionalProperty {
 
-	@Override
-	@Nullable
-	public Condition condition() {
-		return localCondition;
-	}
 }
