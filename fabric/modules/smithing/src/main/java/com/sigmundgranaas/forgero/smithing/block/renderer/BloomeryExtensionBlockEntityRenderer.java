@@ -66,14 +66,15 @@ public class BloomeryExtensionBlockEntityRenderer implements BlockEntityRenderer
 
 		switch (slot) {
 			case BloomeryExtensionBlockEntity.TOOL_SLOT -> {
-				matrices.translate(0.0, 0.6, -0.2);
+				matrices.translate(0.0, 0, 0);
 				matrices.scale(0.75f, 0.75f, 0.75f);
 				matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
+				matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
 				mode = ModelTransformationMode.FIXED;
 			}
 			case BloomeryExtensionBlockEntity.CRUCIBLE_SLOT -> {
-				matrices.translate(0.5, 0.75, 0.5);
-				matrices.scale(0.6f, 0.6f, 0.6f);
+				matrices.translate(0, 0.26, 0.0);
+				matrices.scale(0.75f, 0.75f, 0.75f);
 				mode = ModelTransformationMode.FIXED;
 			}
 			case BloomeryExtensionBlockEntity.ORE_SLOT -> {

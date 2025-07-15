@@ -16,6 +16,7 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
@@ -26,6 +27,7 @@ import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
@@ -227,6 +229,36 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 			}
 		}
 		super.onStateReplaced(state, world, pos, newState, moved);
+	}
+
+	@Override
+	public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+		if (state.get(LIT)) {
+			// Crucible slot position (example: center + offset)
+			double crucibleX = pos.getX() + 0.5 - 0.1; // match matrices.translate(-0.1, ...)
+			double crucibleY = pos.getY() + 0.26 + 0.5;      // match matrices.translate(..., 0.26, ...)
+			double crucibleZ = pos.getZ() + 0.5;
+
+			// Tool slot position (example: center)
+			double toolX = pos.getX() + 0.5;
+			double toolY = pos.getY() + 0.26 + 0.5;
+			double toolZ = pos.getZ() + 0.5;
+
+			// Crucible particles
+			if (random.nextFloat() < 0.4f) {
+				world.addParticle(ParticleTypes.SMOKE, crucibleX, crucibleY, crucibleZ, 0.0, 0.05, 0.0);
+			}
+
+			// Tool particles
+			if (random.nextFloat() < 0.4f) {
+				world.addParticle(ParticleTypes.SMALL_FLAME, toolX, toolY, toolZ, 0.0, 0.0, 0.0);
+			}
+
+			// Occasional large smoke puffs at crucible
+			if (random.nextFloat() < 0.1f) {
+				world.addParticle(ParticleTypes.LARGE_SMOKE, crucibleX, crucibleY + 0.2, crucibleZ, 0.0, 0.1, 0.0);
+			}
+		}
 	}
 
 	@SuppressWarnings("deprecation")

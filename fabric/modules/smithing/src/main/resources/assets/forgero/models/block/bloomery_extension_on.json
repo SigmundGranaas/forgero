@@ -3,8 +3,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [128, 128],
 	"textures": {
-		"0": "forgero:block/bloomery_extension",
-		"particle": "forgero:block/bloomery_extension"
+		"0": "forgero:block/bloomery_extension_on",
+		"particle": "forgero:block/bloomery_extension_on"
 	},
 	"elements": [
 		{
