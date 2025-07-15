@@ -244,17 +244,17 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 			double toolY = pos.getY() + 0.26 + 0.5;
 			double toolZ = pos.getZ() + 0.5;
 
-			// Crucible particles
+
 			if (random.nextFloat() < 0.4f) {
 				world.addParticle(ParticleTypes.SMOKE, crucibleX, crucibleY, crucibleZ, 0.0, 0.05, 0.0);
 			}
 
-			// Tool particles
+
 			if (random.nextFloat() < 0.4f) {
 				world.addParticle(ParticleTypes.SMALL_FLAME, toolX, toolY, toolZ, 0.0, 0.0, 0.0);
 			}
 
-			// Occasional large smoke puffs at crucible
+
 			if (random.nextFloat() < 0.1f) {
 				world.addParticle(ParticleTypes.LARGE_SMOKE, crucibleX, crucibleY + 0.2, crucibleZ, 0.0, 0.1, 0.0);
 			}
