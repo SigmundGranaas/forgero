@@ -6,8 +6,8 @@
   ],
   "host_template": {
     "create": {
-      "id": "forgero:item/{material.name}-{shape.name}",
-      "className": "forgero:part_item"
+      "id": "forgero:{material.name}-{shape.name}",
+      "item_class": "forgero:part_item"
     }
   },
   "structure": {
