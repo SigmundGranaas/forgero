@@ -22,7 +22,7 @@ subprojects {
 
 		// Content modules
 		project(":content").subprojects.each { subproject ->
-			dependencies.add("runtimeOnly", project(path: ":content:${subproject.name}"))
+			//dependencies.add("runtimeOnly", project(path: ":content:${subproject.name}"))
 		}
 	}
 }

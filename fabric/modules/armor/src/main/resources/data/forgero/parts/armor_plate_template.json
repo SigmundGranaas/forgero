@@ -1,0 +1,25 @@
+{
+  "type": "forgero:part_template",
+  "name": "Armor Plate",
+  "tags": [
+    "forgero:armor_plate_type", "forgero:default_armor_plate"
+  ],
+  "host_template": {
+    "create": {
+      "id": "forgero:{material.name}-plate",
+      "class_name": "forgero:part_item",
+      "item_group": "forgero:combat"
+    }
+  },
+  "structure": {
+    "id": "forgero:{material.name}-{shape.name}_plate",
+    "slots": {
+      "material": {
+        "type": "forgero:armor_material"
+      },
+      "shape": {
+        "type": "forgero:armor_plate_shape"
+      }
+    }
+  }
+}
