@@ -40,7 +40,6 @@ public class ModBlocks {
 	}
 
 	public static void registerModBlocks() {
-		Forgero.LOGGER.info("Registering ModBlocks for " + Forgero.NAMESPACE);
 	}
 
 }

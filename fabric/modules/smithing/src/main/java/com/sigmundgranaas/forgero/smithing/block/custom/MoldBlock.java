@@ -39,17 +39,11 @@ public class MoldBlock extends BlockWithEntity {
 	public static final IntProperty PROGRESS = IntProperty.of("progress", 0, 100);
 	public static final BooleanProperty FILLED = BooleanProperty.of("filled");
 
-	// Default shape for fallback
 	private static final VoxelShape DEFAULT_SHAPE = Block.createCuboidShape(0, 0, 0, 16, 2, 16);
 
-	// Custom shape for this specific mold type
 	private final VoxelShape customShape;
 
-	/**
-	 * Constructor that allows specifying a custom VoxelShape for the mold
-	 * @param settings Block settings
-	 * @param customVoxelShape The custom VoxelShape to use for this mold
-	 */
+	// Constructor for MoldBlock with custom shape.
 	public MoldBlock(@NotNull Settings settings, VoxelShape customVoxelShape) {
 		super(settings.nonOpaque());
 		setDefaultState(getStateManager().getDefaultState()
@@ -58,27 +52,32 @@ public class MoldBlock extends BlockWithEntity {
 		this.customShape = customVoxelShape != null ? customVoxelShape : DEFAULT_SHAPE;
 	}
 
+	// Returns the outline shape of the mold block.
 	@SuppressWarnings("deprecation")
 	@Override
 	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
 		return customShape;
 	}
 
+	// Adds block properties to the state manager.
 	@Override
 	protected void appendProperties(StateManager.@NotNull Builder<Block, BlockState> builder) {
 		builder.add(PROGRESS, FILLED);
 	}
 
+	// Creates a new mold block entity.
 	@Override
 	public BlockEntity createBlockEntity(BlockPos blockPosition, BlockState blockState) {
 		return new MoldBlockEntity(blockPosition, blockState);
 	}
 
+	// Returns the render type for the mold block.
 	@Override
 	public BlockRenderType getRenderType(BlockState state) {
 		return BlockRenderType.MODEL;
 	}
 
+	// Handles player interaction with the mold block.
 	@SuppressWarnings("deprecation")
 	@Override
 	public ActionResult onUse(BlockState blockState, @NotNull World world, @NotNull BlockPos blockPosition, @Nullable PlayerEntity player, @Nullable Hand hand, @NotNull BlockHitResult hit) {
@@ -141,6 +140,7 @@ public class MoldBlock extends BlockWithEntity {
 		return ActionResult.PASS;
 	}
 
+	// Finds a valid recipe for the given crucible and this mold.
 	private MetalMoldRecipe findRecipe(World world, ItemStack crucible) {
 		// Create a simple inventory for recipe matching
 		SimpleInventory inventory = new SimpleInventory(3);
@@ -152,11 +152,13 @@ public class MoldBlock extends BlockWithEntity {
 				.orElse(null);
 	}
 
+	// Returns the block entity ticker for cooling and state updates.
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
 		return MoldBlock.checkType(type, MOLD, MoldBlockEntity::tick);
 	}
 
+	// Displays particle effects and plays sounds based on cooling progress.
 	@Override
 	public void randomDisplayTick(@NotNull BlockState blockState, @NotNull World world, @NotNull BlockPos blockPosition, @NotNull Random random) {
 		if (blockState.get(FILLED)) {
@@ -240,6 +242,7 @@ public class MoldBlock extends BlockWithEntity {
 		}
 	}
 
+	// Called when the block state is replaced, drops contents from the mold.
 	@Override
 	public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
 		if (!state.isOf(newState.getBlock())) {

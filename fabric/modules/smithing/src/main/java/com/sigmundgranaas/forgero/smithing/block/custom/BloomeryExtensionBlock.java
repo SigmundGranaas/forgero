@@ -37,9 +37,9 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 	public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 	public static final BooleanProperty LIT = Properties.LIT;
 
-	// Custom shape: 14 pixels height (0-14), full width (0-16) - matching bloomery height
 	private static final VoxelShape SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 7.0, 16.0);
 
+	// Constructor for BloomeryExtensionBlock with default state.
 	public BloomeryExtensionBlock(Settings settings) {
 		super(settings);
 		this.setDefaultState(this.stateManager.getDefaultState()
@@ -47,24 +47,27 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 				.with(LIT, false));
 	}
 
+	// Creates a new bloomery extension block entity.
 	@Nullable
 	@Override
 	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
 		return new BloomeryExtensionBlockEntity(pos, state);
 	}
 
+	// Returns the render type for the bloomery extension block.
 	@Override
 	public BlockRenderType getRenderType(BlockState state) {
 		return BlockRenderType.MODEL;
 	}
 
+	// Returns the block entity ticker for server-side processing.
 	@Nullable
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
 		return checkType(type, ModBlockEntities.BLOOMERY_EXTENSION, world.isClient ? null : BloomeryExtensionBlockEntity::serverTick);
 	}
 
-	@SuppressWarnings("deprecation")
+	// Handles player interaction with the bloomery extension block.
 	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		if (world.isClient) {
@@ -102,9 +105,7 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 		return ActionResult.PASS;
 	}
 
-	/**
-	 * Adds the whole ore stack to the ore slot if possible.
-	 */
+	// Adds an entire ore stack to the ore slot if possible.
 	private ItemStack addWholeOreStack(BloomeryExtensionBlockEntity entity, ItemStack stack) {
 		ItemStack oreSlot = entity.getStack(BloomeryExtensionBlockEntity.ORE_SLOT);
 		if (oreSlot.isEmpty()) {
@@ -123,11 +124,7 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 		return stack;
 	}
 
-	/**
-	 * Intelligently places items in appropriate slots based on item type
-	 * Enforces: If a tool is present, do not accept crucible/ore.
-	 *           If crucible or ore is present, do not accept a tool.
-	 */
+	// Places items in appropriate slots based on item type.
 	private ItemStack addItemToAppropriateSlot(BloomeryExtensionBlockEntity entity, ItemStack stack) {
 		boolean hasTool = !entity.getStack(BloomeryExtensionBlockEntity.TOOL_SLOT).isEmpty();
 		boolean hasCrucibleOrOre = !entity.getStack(BloomeryExtensionBlockEntity.CRUCIBLE_SLOT).isEmpty()
@@ -198,9 +195,7 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 		return stack;
 	}
 
-	/**
-	 * Checks if an item is ore that can be smelted
-	 */
+	// Checks if an item is ore that can be smelted in the bloomery.
 	private boolean isOre(ItemStack stack) {
 		// Check if the item is in conventional ore tags
 		return stack.isIn(net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags.ORES) ||
@@ -209,15 +204,13 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 			   stack.getItem().toString().contains("raw_");
 	}
 
-	/**
-	 * Checks if an item is a valid tool for the tool slot
-	 */
+	// Checks if an item is a valid tool for the tool slot.
 	private boolean isValidTool(ItemStack stack) {
 		// Accept StateItem as a valid tool (adjust logic for your mod as needed)
 		return stack.getItem() instanceof com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 	}
 
-	@SuppressWarnings("deprecation")
+	// Called when the block state is replaced. Drops all items from the inventory.
 	@Override
 	public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
 		if (!state.isOf(newState.getBlock())) {
@@ -231,42 +224,44 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 		super.onStateReplaced(state, world, pos, newState, moved);
 	}
 
+	// Displays particle effects when the extension is lit.
 	@Override
 	public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
 		if (state.get(LIT)) {
-			// Crucible slot position (example: center + offset)
-			double crucibleX = pos.getX() + 0.5 - 0.1; // match matrices.translate(-0.1, ...)
-			double crucibleY = pos.getY() + 0.26 + 0.5;      // match matrices.translate(..., 0.26, ...)
+			// Crucible slot position (center with slight offset)
+			double crucibleX = pos.getX() + 0.5 - 0.1;
+			double crucibleY = pos.getY() + 0.26 + 0.5;
 			double crucibleZ = pos.getZ() + 0.5;
 
-			// Tool slot position (example: center)
+			// Tool slot position (center)
 			double toolX = pos.getX() + 0.5;
 			double toolY = pos.getY() + 0.26 + 0.5;
 			double toolZ = pos.getZ() + 0.5;
 
-
+			// Smoke particles from crucible
 			if (random.nextFloat() < 0.4f) {
 				world.addParticle(ParticleTypes.SMOKE, crucibleX, crucibleY, crucibleZ, 0.0, 0.05, 0.0);
 			}
 
-
+			// Flame particles from tool
 			if (random.nextFloat() < 0.4f) {
 				world.addParticle(ParticleTypes.SMALL_FLAME, toolX, toolY, toolZ, 0.0, 0.0, 0.0);
 			}
 
-
+			// Large smoke puffs occasionally
 			if (random.nextFloat() < 0.1f) {
 				world.addParticle(ParticleTypes.LARGE_SMOKE, crucibleX, crucibleY + 0.2, crucibleZ, 0.0, 0.1, 0.0);
 			}
 		}
 	}
 
-	@SuppressWarnings("deprecation")
+	// Returns the outline shape of the bloomery extension block.
 	@Override
 	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
 		return SHAPE;
 	}
 
+	// Gets the placement state for the bloomery extension when placed by a player.
 	@Override
 	public BlockState getPlacementState(ItemPlacementContext ctx) {
 		return this.getDefaultState()
@@ -274,23 +269,20 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 				.with(LIT, false);
 	}
 
-	@SuppressWarnings("deprecation")
+	// Checks if the bloomery extension can be placed at the specified position.
 	@Override
 	public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
 		if (!super.canPlaceAt(state, world, pos)) {
 			return false;
 		}
 
-		// Only allow placement if there is a bloomery block to the WEST
-		BlockPos westPos = pos.offset(Direction.SOUTH);
-		BlockState westState = world.getBlockState(westPos);
-		if (westState.getBlock() instanceof BloomeryBlock) {
-			return true;
-		}
-
-		return false;
+		// Only allow placement if there is a bloomery block to the SOUTH
+		BlockPos southPos = pos.offset(Direction.SOUTH);
+		BlockState southState = world.getBlockState(southPos);
+		return southState.getBlock() instanceof BloomeryBlock;
 	}
 
+	// Adds the block's properties to the state manager.
 	@Override
 	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
 		builder.add(FACING, LIT);

@@ -16,7 +16,6 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
@@ -33,13 +32,25 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
+/**
+ * A bloomery block used for smelting operations in the smithing module.
+ * This block can be lit using flint and steel when fuel is present,
+ * and produces various particle effects and sounds when active.
+ *
+ * <p>The bloomery has a custom shape (14 pixels height) and supports
+ * horizontal facing directions. It can be fueled with coal or charcoal
+ * and displays visual and audio effects when lit.</p>
+ */
 public class BloomeryBlock extends BlockWithEntity {
+	/** The horizontal facing direction of the bloomery */
 	public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
+	/** Whether the bloomery is currently lit/active */
 	public static final BooleanProperty LIT = Properties.LIT;
 	
-	// Custom shape: 14 pixels height (0-14), full width (0-16)
+	/** Custom shape: 14 pixels height (0-14), full width (0-16) */
 	private static final VoxelShape SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 13.0, 16.0);
 
+	// Constructor for BloomeryBlock with default state.
 	public BloomeryBlock(Settings settings) {
 		super(settings);
 		this.setDefaultState(this.stateManager.getDefaultState()
@@ -47,21 +58,25 @@ public class BloomeryBlock extends BlockWithEntity {
 				.with(LIT, false));
 	}
 
+	// Gets the outline shape of the bloomery block.
 	@Override
 	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
 		return SHAPE;
 	}
 
+	// Creates a new bloomery block entity at the specified position.
 	@Override
 	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
 		return new BloomeryBlockEntity(pos, state);
 	}
 
+	// Returns the block entity ticker for server-side processing.
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
 		return world.isClient ? null : checkType(type, ModBlockEntities.BLOOMERY, BloomeryBlockEntity::serverTick);
 	}
 
+	// Handles player interaction with the bloomery block.
 	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		if (!world.isClient) {
@@ -103,23 +118,12 @@ public class BloomeryBlock extends BlockWithEntity {
 		return ActionResult.PASS;
 	}
 
+	// Checks if the given item stack is a valid fuel for the bloomery.
 	private boolean isFuel(ItemStack stack) {
 		return stack.isOf(Items.COAL) || stack.isOf(Items.CHARCOAL);
 	}
 
-	private int getFuelTime(ItemStack stack) {
-		if (stack.isOf(Items.COAL) || stack.isOf(Items.CHARCOAL)) {
-			return 1600;
-		}
-		return 0;
-	}
-
-	@Override
-	public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
-		// Optionally implement GUI here if needed
-		return null;
-	}
-
+	// Displays random particle effects and plays sounds when the bloomery is lit.
 	@Override
 	public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
 		if (state.get(LIT)) {
@@ -223,22 +227,25 @@ public class BloomeryBlock extends BlockWithEntity {
 		}
 	}
 
+	// Called when the block state is replaced.
 	@Override
 	public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
-		// No inventory to drop since we removed inventory functionality
 		super.onStateReplaced(state, world, pos, newState, moved);
 	}
 
+	// Gets the placement state for the bloomery block when placed by a player.
 	@Override
 	public BlockState getPlacementState(ItemPlacementContext ctx) {
 		return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
 	}
 
+	// Adds the block's properties to the state manager.
 	@Override
 	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
 		builder.add(FACING, LIT);
 	}
 
+	// Gets the render type for the bloomery block.
 	@Override
 	public BlockRenderType getRenderType(BlockState state) {
 		return BlockRenderType.MODEL;

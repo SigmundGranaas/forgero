@@ -14,7 +14,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender;
 
 import org.jetbrains.annotations.NotNull;
 
-public class ItemStackSyncS2CPacket {
+public class SmithingAnvilSyncS2CPacket {
 
 	public static void receive(@NotNull MinecraftClient client, ClientPlayNetworkHandler handler, @NotNull PacketByteBuf buf, PacketSender responseSender) {
 		// Read data in the same order it was written by the server
