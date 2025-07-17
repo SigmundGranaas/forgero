@@ -224,33 +224,84 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 		super.onStateReplaced(state, world, pos, newState, moved);
 	}
 
-	// Displays particle effects when the extension is lit.
+	// Displays particle effects when the extension is lit, with special particles for crucible and tools.
 	@Override
 	public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-		if (state.get(LIT)) {
-			// Crucible slot position (center with slight offset)
-			double crucibleX = pos.getX() + 0.5 - 0.1;
-			double crucibleY = pos.getY() + 0.26 + 0.5;
-			double crucibleZ = pos.getZ() + 0.5;
+		boolean isLit = state.get(LIT);
 
-			// Tool slot position (center)
-			double toolX = pos.getX() + 0.5;
-			double toolY = pos.getY() + 0.26 + 0.5;
-			double toolZ = pos.getZ() + 0.5;
+		if (isLit) {
+			BlockEntity blockEntity = world.getBlockEntity(pos);
+			if (blockEntity instanceof BloomeryExtensionBlockEntity extensionEntity) {
+				ItemStack crucible = extensionEntity.getStack(BloomeryExtensionBlockEntity.CRUCIBLE_SLOT);
+				ItemStack tool = extensionEntity.getStack(BloomeryExtensionBlockEntity.TOOL_SLOT);
 
-			// Smoke particles from crucible
-			if (random.nextFloat() < 0.4f) {
-				world.addParticle(ParticleTypes.SMOKE, crucibleX, crucibleY, crucibleZ, 0.0, 0.05, 0.0);
-			}
+				// Crucible slot position (center with slight offset)
+				double crucibleX = pos.getX() + 0.5 - 0.1;
+				double crucibleY = pos.getY() + 0.26 + 0.5;
+				double crucibleZ = pos.getZ() + 0.5;
 
-			// Flame particles from tool
-			if (random.nextFloat() < 0.4f) {
-				world.addParticle(ParticleTypes.SMALL_FLAME, toolX, toolY, toolZ, 0.0, 0.0, 0.0);
-			}
+				// Tool slot position (center)
+				double toolX = pos.getX() + 0.5;
+				double toolY = pos.getY() + 0.35;
+				double toolZ = pos.getZ() + 0.5;
 
-			// Large smoke puffs occasionally
-			if (random.nextFloat() < 0.1f) {
-				world.addParticle(ParticleTypes.LARGE_SMOKE, crucibleX, crucibleY + 0.2, crucibleZ, 0.0, 0.1, 0.0);
+				// Empty inventory position (center, slightly above)
+				boolean isEmpty = crucible.isEmpty() && tool.isEmpty() && extensionEntity.getStack(BloomeryExtensionBlockEntity.ORE_SLOT).isEmpty();
+				double emptyX = pos.getX() + 0.5;
+				double emptyY = pos.getY() + 0.9;
+				double emptyZ = pos.getZ() + 0.5;
+
+				// Increase particle frequency by raising probabilities
+				if (isEmpty) {
+					if (random.nextFloat() < 0.9f) {
+						world.addParticle(ParticleTypes.CLOUD, emptyX, emptyY, emptyZ, 0.0, 0.01, 0.0);
+					}
+				} else {
+					// Special particles for crucible
+					if (!crucible.isEmpty()) {
+						if (random.nextFloat() < 0.9f) {
+							world.addParticle(ParticleTypes.LAVA, crucibleX, crucibleY, crucibleZ, 0.0, 0.07, 0.0);
+						}
+						if (random.nextFloat() < 0.5f) {
+							world.addParticle(ParticleTypes.FLAME, crucibleX, crucibleY + 0.1, crucibleZ, 0.0, 0.02, 0.0);
+						}
+					} else {
+						// Default smoke particles from crucible slot if no crucible
+						if (random.nextFloat() < 0.8f) {
+							world.addParticle(ParticleTypes.SMOKE, crucibleX, crucibleY, crucibleZ, 0.0, 0.05, 0.0);
+						}
+					}
+
+					// Special particles for tool (campfire cooking item style, more frequent)
+					if (!tool.isEmpty()) {
+						if (random.nextFloat() < 0.5f) { // 50% chance to emit particles this tick
+							for (int i = 0; i < 2; i++) {
+								double px = toolX + (random.nextDouble() - 0.5) * 0.2;
+								double py = toolY;
+								double pz = toolZ + (random.nextDouble() - 0.5) * 0.2;
+								world.addParticle(ParticleTypes.FLAME, px, py, pz, 0, 0.015, 0);
+								world.addParticle(ParticleTypes.SMALL_FLAME, px, py, pz, 0, 0.015, 0);
+							}
+						}
+
+						for (int i = 0; i < 2; i++) {
+							double px = toolX + (random.nextDouble() - 0.5) * 0.2;
+							double py = toolY + 0.25;
+							double pz = toolZ + (random.nextDouble() - 0.5) * 0.2;
+							world.addParticle(ParticleTypes.SMOKE, px, py, pz, 0.0, 0.01, 0.0);
+						}
+					} else {
+						// Default flame particles from tool slot if no tool
+						if (random.nextFloat() < 0.2f) {
+							world.addParticle(ParticleTypes.SMALL_FLAME, toolX, toolY, toolZ, 0.0, 0.0, 0.0);
+						}
+					}
+
+					// Large smoke puffs occasionally
+					if (random.nextFloat() < 0.2f) {
+						world.addParticle(ParticleTypes.LARGE_SMOKE, crucibleX, crucibleY + 0.2, crucibleZ, 0.0, 0.1, 0.0);
+					}
+				}
 			}
 		}
 	}

@@ -32,7 +32,6 @@ public class ModItems {
 	}
 
 	public static void registerModItems() {
-		Forgero.LOGGER.info("Registering Mod Items for " + Forgero.NAMESPACE);
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(ModItems::addItemsToIngredientItemGroup);
 	}
 }

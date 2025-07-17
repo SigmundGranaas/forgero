@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.smithing.networking.packet;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.SmithingAnvilBlockEntity;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
@@ -12,10 +13,7 @@ import net.minecraft.world.World;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 
-import org.jetbrains.annotations.NotNull;
-
 public class SmithingAnvilSyncS2CPacket {
-
 	public static void receive(@NotNull MinecraftClient client, ClientPlayNetworkHandler handler, @NotNull PacketByteBuf buf, PacketSender responseSender) {
 		// Read data in the same order it was written by the server
 		BlockPos position = buf.readBlockPos();

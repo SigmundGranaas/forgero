@@ -50,6 +50,9 @@ public class BloomeryBlock extends BlockWithEntity {
 	/** Custom shape: 14 pixels height (0-14), full width (0-16) */
 	private static final VoxelShape SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 13.0, 16.0);
 
+	// Used to track the previous lit state for sizzling sound logic
+	private boolean wasPreviouslyLit = false;
+
 	// Constructor for BloomeryBlock with default state.
 	public BloomeryBlock(Settings settings) {
 		super(settings);
@@ -126,7 +129,10 @@ public class BloomeryBlock extends BlockWithEntity {
 	// Displays random particle effects and plays sounds when the bloomery is lit.
 	@Override
 	public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-		if (state.get(LIT)) {
+		boolean isLit = state.get(LIT);
+
+		if (isLit) {
+			wasPreviouslyLit = true;
 			double x = pos.getX() + 0.5;
 			double y = pos.getY() + 1.4;
 			double z = pos.getZ() + 0.5;
@@ -223,6 +229,12 @@ public class BloomeryBlock extends BlockWithEntity {
 						y + 0.2,
 						z + (random.nextDouble() - 0.5) * 0.2,
 						0.0, 0.1, 0.0);
+			}
+		} else {
+			// Only play the sizzling sound once when transitioning from lit to unlit
+			if (wasPreviouslyLit) {
+				wasPreviouslyLit = false;
+				world.playSound(null, pos, SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			}
 		}
 	}

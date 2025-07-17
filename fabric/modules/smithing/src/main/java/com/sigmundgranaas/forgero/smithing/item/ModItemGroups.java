@@ -33,7 +33,6 @@ public class ModItemGroups {
 					}).build());
 
 	public static void registerItemGroups() {
-		Forgero.LOGGER.info("Registering Item Groups for " + Forgero.NAMESPACE);
 	}
 
 }
