@@ -37,7 +37,7 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 	public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 	public static final BooleanProperty LIT = Properties.LIT;
 
-	private static final VoxelShape SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 7.0, 16.0);
+	private static final VoxelShape SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 8.0, 16.0);
 
 	// Constructor for BloomeryExtensionBlock with default state.
 	public BloomeryExtensionBlock(Settings settings) {
@@ -274,7 +274,7 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 
 					// Special particles for tool (campfire cooking item style, more frequent)
 					if (!tool.isEmpty()) {
-						if (random.nextFloat() < 0.5f) { // 50% chance to emit particles this tick
+						if (random.nextFloat() < 0.3f) { // 50% chance to emit particles this tick
 							for (int i = 0; i < 2; i++) {
 								double px = toolX + (random.nextDouble() - 0.5) * 0.2;
 								double py = toolY;

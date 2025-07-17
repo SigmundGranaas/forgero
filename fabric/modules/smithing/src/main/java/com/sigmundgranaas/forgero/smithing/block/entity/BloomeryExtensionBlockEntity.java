@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.smithing.block.entity;
 
 
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
-import com.sigmundgranaas.forgero.smithing.block.custom.BloomeryExtensionBlock;
 import com.sigmundgranaas.forgero.smithing.block.inventory.BloomeryInventory;
 import com.sigmundgranaas.forgero.smithing.item.ModItems;
 import com.sigmundgranaas.forgero.smithing.item.custom.LiquidMetalCrucibleItem;
@@ -42,9 +41,9 @@ public class BloomeryExtensionBlockEntity extends BlockEntity {
 	public static final int ORE_SLOT = 2;
 
 	// Temperature system constants
-	private static final int HEAT_PER_TICK = 100; // Heating rate when bloomery is lit
+	private static final int HEAT_PER_TICK = 1; // Heating rate when bloomery is lit
 	private static final int COOL_PER_TICK = 1; // Cooling rate when bloomery is not lit
-	private static final int TICK_INTERVAL = 10; // Update every 10 ticks (twice as fast as regular cooling)
+	private static final int TICK_INTERVAL = 2; // Update every 10 ticks (twice as fast as regular cooling)
 	private int tickCounter = 0;
 
 	// Smelting progress
