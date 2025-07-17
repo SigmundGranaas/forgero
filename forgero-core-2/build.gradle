@@ -4,10 +4,13 @@
 dependencies {
 	api group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.2.1'
 
+	// Logging
+	implementation("org.slf4j:slf4j-api:1.7.25")
+
 	// JUnit
 	testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
-
+	testImplementation 'com.github.valfirst:slf4j-test:3.0.1'
 	// DataFixerUpper
 	api("com.mojang:datafixerupper:${project.data_fixer_upper_version}")
 }
