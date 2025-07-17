@@ -15,29 +15,13 @@ public class AwtPalettizedTextureGenerator implements PalettizedTextureGenerator
 
 	@Override
 	public BufferedImage generate(BufferedImage template, BufferedImage palette) {
-		// Rule 1: Enforce that the palette is exactly PALETTE_COLOR_COUNT pixels wide.
-		if (palette.getWidth() != PALETTE_COLOR_COUNT) {
-			throw new IllegalArgumentException(String.format(
-					"Texture generation failed: Palette must be exactly %d pixels wide, but was %d pixels. Palette: %s",
-					PALETTE_COLOR_COUNT,
-					palette.getWidth(),
-					palette // Include palette info for debugging
-			));
-		}
-		// Rule: Palette must have a height of 1
-		if (palette.getHeight() != 1) {
-			throw new IllegalArgumentException(String.format(
-					"Texture generation failed: Palette must be 1 pixel high, but was %d pixels. Palette: %s",
-					palette.getHeight(),
-					palette
-			));
-		}
 
 
 		Set<Integer> distinctTemplateGreys = new TreeSet<>();
 		int width = template.getWidth();
 		int height = template.getHeight();
 
+		int paletteSize = palette.getWidth();
 		// First pass: Collect all distinct greyscale values from the template
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
@@ -68,12 +52,12 @@ public class AwtPalettizedTextureGenerator implements PalettizedTextureGenerator
 		// Validate distinct greyscale values against expected set
 		List<Integer> sortedDistinctTemplateGreys = distinctTemplateGreys.stream().sorted().toList();
 
-		if (sortedDistinctTemplateGreys.size() > PALETTE_COLOR_COUNT) {
+		if (sortedDistinctTemplateGreys.size() > paletteSize) {
 			throw new IllegalArgumentException(String.format(
 					"Texture generation failed: Template contains %d distinct greyscale values, but only %d are supported. " +
 							"Distinct values found: %s",
 					sortedDistinctTemplateGreys.size(),
-					PALETTE_COLOR_COUNT,
+					paletteSize,
 					sortedDistinctTemplateGreys.stream().map(String::valueOf).collect(Collectors.joining(", "))
 			));
 		}
@@ -93,7 +77,7 @@ public class AwtPalettizedTextureGenerator implements PalettizedTextureGenerator
 
 				// Find the closest expected greyscale value for the current pixel's grey value
 				// This is the "snapping" or "mapping" logic
-				int mappedGreyIndex = findPaletteIndexForGrey(grey, sortedDistinctTemplateGreys);
+				int mappedGreyIndex = findPaletteIndexForGrey(grey, sortedDistinctTemplateGreys, paletteSize);
 
 				// Get the color from the palette using the determined index
 				int paletteColor = palette.getRGB(mappedGreyIndex, 0);
@@ -115,7 +99,7 @@ public class AwtPalettizedTextureGenerator implements PalettizedTextureGenerator
 	 * @param distinctGreysInTemplate A sorted list of all distinct greyscale values found in the template.
 	 * @return The 0-indexed column in the palette to pick a color from.
 	 */
-	private int findPaletteIndexForGrey(int pixelGrey, List<Integer> distinctGreysInTemplate) {
+	private int findPaletteIndexForGrey(int pixelGrey, List<Integer> distinctGreysInTemplate, int paletteSize) {
 		if (distinctGreysInTemplate.isEmpty()) {
 			return 0; // Fallback, though validation should prevent this.
 		}
@@ -138,8 +122,8 @@ public class AwtPalettizedTextureGenerator implements PalettizedTextureGenerator
 		// Now, map this index (0 to N-1, where N is distinctGreysInTemplate.size())
 		// to the 0 to 6 range of the palette.
 		float ratio = (float) templateValueIndex / (distinctGreysInTemplate.size() - 1);
-		int paletteIndex = Math.round(ratio * (PALETTE_COLOR_COUNT - 1));
+		int paletteIndex = Math.round(ratio * (paletteSize - 1));
 
-		return Math.max(0, Math.min(paletteIndex, PALETTE_COLOR_COUNT - 1));
+		return Math.max(0, Math.min(paletteIndex, paletteSize - 1));
 	}
 }

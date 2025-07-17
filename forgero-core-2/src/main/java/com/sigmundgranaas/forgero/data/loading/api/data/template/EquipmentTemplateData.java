@@ -36,6 +36,7 @@ public record EquipmentTemplateData(
 		List<OpenIdentifier> tags,
 		@Nullable
 		HostTemplateData host_template,
+
 		EquipmentTemplateStructureData structure,
 		@Nullable
 		List<UpgradeSlotData> upgrades,

@@ -112,7 +112,7 @@ class ComponentGeneratorTest {
 		assertNull(host.identifiers());
 		assertNotNull(host.create());
 		assertEquals(generatedId, host.create().id());
-		assertEquals("forgero:part_item", host.create().itemClass());
+		assertEquals("forgero:part", host.create().itemClass());
 		assertNull(host.create().item_group());
 	}
 
@@ -168,6 +168,6 @@ class ComponentGeneratorTest {
 		assertNotNull(host);
 		assertNotNull(host.create());
 		assertEquals(expectedEquipmentId, host.create().id());
-		assertEquals("forgero:tool_item", host.create().itemClass());
+		assertEquals("forgero:equipment", host.create().itemClass());
 	}
 }

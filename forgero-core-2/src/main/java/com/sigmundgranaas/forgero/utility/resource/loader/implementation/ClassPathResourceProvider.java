@@ -2,64 +2,74 @@ package com.sigmundgranaas.forgero.utility.resource.loader.implementation;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.*;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ClassPathResourceProvider implements ResourceProvider {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ClassPathResourceProvider.class);
 	private String topLevelDirectory; // e.g., "assets"
 	private final ClassLoader classLoader;
 
 	public ClassPathResourceProvider(String topLevelDirectory) {
-		// Ensure topLevelDirectory doesn't start with a slash or end with one for consistency
 		this.topLevelDirectory = topLevelDirectory.startsWith("/") ? topLevelDirectory.substring(1) : topLevelDirectory;
 		this.topLevelDirectory = this.topLevelDirectory.endsWith("/") ? this.topLevelDirectory.substring(0, this.topLevelDirectory.length() - 1) : this.topLevelDirectory;
 		this.classLoader = Thread.currentThread().getContextClassLoader();
 	}
 
-	// This method builds the full classpath path for a resource to be read, e.g., "assets/forgero/item/oak-handle.png"
 	private String buildFullPathForRead(OpenIdentifier identifier) {
 		return topLevelDirectory + "/" + identifier.namespace() + "/" + identifier.path();
 	}
 
 	@Override
 	public Stream<OpenIdentifier> list(OpenIdentifier path, boolean recursive) {
-		// The 'path' here is relative to the namespace, e.g., OpenIdentifier("forgero", "models")
-		String baseClasspathPath = topLevelDirectory + "/" + path.namespace() + "/"; // e.g., "assets/forgero/"
-		String targetDirectoryInNamespace = path.path(); // e.g., "models"
-
-		URL rootUrl = classLoader.getResource(baseClasspathPath);
-		if (rootUrl == null) {
-			// This indicates the base namespace directory itself wasn't found.
-			System.err.println("Base classpath directory not found: " + baseClasspathPath);
-			return Stream.empty();
-		}
-
+		// e.g., "assets/forgero/"
+		String baseClasspathPath = topLevelDirectory + "/" + path.namespace() + "/";
 		try {
-			URI uri = rootUrl.toURI();
-
-			// Handle resources located in JAR files vs. standard file system
-			if ("jar".equals(uri.getScheme())) {
-				return listResourcesFromJar(uri, baseClasspathPath, targetDirectoryInNamespace, path.namespace(), recursive);
-			} else {
-				return listResourcesFromFileSystem(Paths.get(uri), targetDirectoryInNamespace, path.namespace(), recursive);
+			// getResources (plural) finds ALL directories matching the path from ALL jars.
+			Enumeration<URL> urls = classLoader.getResources(baseClasspathPath);
+			if (urls == null || !urls.hasMoreElements()) {
+				return Stream.empty();
 			}
-		} catch (Exception e) {
-			System.err.println("Error listing resources from " + baseClasspathPath + ": " + e.getMessage());
+
+			return Collections.list(urls).stream()
+					.flatMap(url -> {
+						try {
+							// For each URL found, list the resources inside the target sub-directory.
+							return listResourcesFromUrl(url, path.path(), path.namespace(), recursive);
+						} catch (Exception e) {
+							LOGGER.error("Failed to list resources from URL: " + url, e);
+							return Stream.empty(); // Continue with other URLs even if one fails
+						}
+					});
+		} catch (IOException e) {
+			LOGGER.error("Error listing resources from classpath path: " + baseClasspathPath, e);
 			return Stream.empty();
 		}
 	}
 
-	private Stream<OpenIdentifier> listResourcesFromFileSystem(Path rootFsPath, String targetDirectory, String namespace, boolean recursive) throws Exception {
-		Path startPath = rootFsPath.resolve(targetDirectory); // This is the actual directory to walk, e.g., "/path/to/assets/forgero/models"
+	private Stream<OpenIdentifier> listResourcesFromUrl(URL namespaceRootUrl, String targetDirectory, String namespace, boolean recursive) throws Exception {
+		URI uri = namespaceRootUrl.toURI();
+		if ("jar".equals(uri.getScheme())) {
+			return listResourcesFromJar(uri, targetDirectory, namespace, recursive);
+		} else {
+			return listResourcesFromFileSystem(Paths.get(uri), targetDirectory, namespace, recursive);
+		}
+	}
+
+	private Stream<OpenIdentifier> listResourcesFromFileSystem(Path namespaceRootPath, String targetDirectory, String namespace, boolean recursive) throws Exception {
+		Path startPath = namespaceRootPath.resolve(targetDirectory);
 		if (!Files.exists(startPath) || !Files.isDirectory(startPath)) {
-			return Stream.empty(); // Directory doesn't exist or isn't a directory
+			return Stream.empty();
 		}
 
 		int maxDepth = recursive ? Integer.MAX_VALUE : 1;
@@ -67,51 +77,69 @@ public class ClassPathResourceProvider implements ResourceProvider {
 			return walk
 					.filter(Files::isRegularFile)
 					.map(filePath -> {
-						// Relativize the file path against the namespace root to get the resource path
-						Path relativePath = rootFsPath.relativize(filePath);
+						Path relativePath = namespaceRootPath.relativize(filePath);
 						String relativePathString = relativePath.toString().replace('\\', '/');
 						return new OpenIdentifier(namespace, relativePathString);
 					})
-					// Collect toList() to close the stream before returning, avoiding 'stream already operated upon' issues.
-					.collect(Collectors.toList()).stream();
+					.toList().stream(); // .toList() to eagerly close the file walker stream
 		}
 	}
 
-	private Stream<OpenIdentifier> listResourcesFromJar(URI jarUri, String baseClasspathPath, String targetDirectory, String namespace, boolean recursive) throws Exception {
-		// The path inside the JAR is after the '!' separator.
-		// baseClasspathPath is e.g., "assets/forgero/"
-		String pathInJarRoot = jarUri.toString().split("!")[1]; // e.g., "/assets/forgero/" if jarUri is "jar:file:/path/to/jar.jar!/assets/forgero/"
+	private Stream<OpenIdentifier> listResourcesFromJar(URI namespaceRootUri, String targetDirectory, String namespace, boolean recursive) throws Exception {
+		FileSystem fs = getFileSystem(namespaceRootUri);
 
-		// Ensure we create FileSystem only once per JAR if possible, or close it properly.
-		// Using try-with-resources for FileSystem ensures it's closed.
-		try (FileSystem fs = FileSystems.newFileSystem(jarUri, Collections.emptyMap())) {
-			Path startPathInJar = fs.getPath(pathInJarRoot, targetDirectory); // e.g., "/assets/forgero/models" within the JAR FS
-			if (!Files.exists(startPathInJar) || !Files.isDirectory(startPathInJar)) {
-				return Stream.empty();
-			}
+		// ** THE FIX IS HERE **
+		// Use toString() and split at "!" to reliably get the path inside the JAR.
+		// .getPath() returns null for jar: URIs, causing the NullPointerException.
+		String[] uriParts = namespaceRootUri.toString().split("!");
+		if (uriParts.length < 2) {
+			LOGGER.warn("Malformed JAR URI, cannot find internal path: {}", namespaceRootUri);
+			return Stream.empty();
+		}
+		String internalPathStr = uriParts[1];
 
-			Path namespaceRootInJar = fs.getPath(pathInJarRoot);
+		// The internal path often starts with a "/", which must be removed for fs.getPath()
+		if (internalPathStr.startsWith("/")) {
+			internalPathStr = internalPathStr.substring(1);
+		}
 
-			int maxDepth = recursive ? Integer.MAX_VALUE : 1;
-			try (Stream<Path> walk = Files.walk(startPathInJar, maxDepth)) {
-				return walk
-						.filter(Files::isRegularFile)
-						.map(filePath -> {
-							// Relativize against the namespace root inside the JAR
-							Path relativePath = namespaceRootInJar.relativize(filePath);
-							String relativePathString = relativePath.toString().replace('\\', '/');
-							return new OpenIdentifier(namespace, relativePathString);
-						})
-						.toList().stream();
-			}
+		Path namespaceRootInJar = fs.getPath(internalPathStr);
+		Path startPathInJar = namespaceRootInJar.resolve(targetDirectory);
+
+		if (!Files.exists(startPathInJar) || !Files.isDirectory(startPathInJar)) {
+			return Stream.empty();
+		}
+
+		int maxDepth = recursive ? Integer.MAX_VALUE : 1;
+		try (Stream<Path> walk = Files.walk(startPathInJar, maxDepth)) {
+			return walk
+					.filter(Files::isRegularFile)
+					.map(filePath -> {
+						Path relativePath = namespaceRootInJar.relativize(filePath);
+						String relativePathString = relativePath.toString().replace('\\', '/');
+						return new OpenIdentifier(namespace, relativePathString);
+					})
+					.toList().stream(); // .toList() to eagerly close the file walker stream
 		}
 	}
 
+	private static synchronized FileSystem getFileSystem(URI uri) throws IOException {
+		String[] parts = uri.toString().split("!");
+		URI jarUri = URI.create(parts[0]);
+		try {
+			return FileSystems.getFileSystem(jarUri);
+		} catch (FileSystemNotFoundException e) {
+			return FileSystems.newFileSystem(jarUri, Collections.emptyMap());
+		}
+	}
 
 	@Override
 	public Optional<InputStream> read(OpenIdentifier identifier) {
-		String fullPath = buildFullPathForRead(identifier); // Use the correct method for reading
+		String fullPath = buildFullPathForRead(identifier);
 		InputStream stream = classLoader.getResourceAsStream(fullPath);
+		if (stream == null) {
+			LOGGER.trace("Resource not found with path: {}", fullPath);
+		}
 		return Optional.ofNullable(stream);
 	}
 }

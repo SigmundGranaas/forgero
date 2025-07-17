@@ -47,7 +47,7 @@ public class PartTemplateCodecs {
 						Codec.STRING.fieldOf("name").forGetter(PartTemplateData::name),
 						Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("include").forGetter(data -> Optional.ofNullable(data.include())),
 						Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("tags").forGetter(data -> Optional.ofNullable(data.tags())),
-						HostCodecs.HOST_TEMPLATE_DATA_CODEC.optionalFieldOf("host_template").forGetter(data -> Optional.ofNullable(data.host_template())),
+						HostCodecs.HOST_TEMPLATE_DATA_CODEC.optionalFieldOf("host_template").forGetter(host -> Optional.ofNullable(host.host_template())),
 						PART_TEMPLATE_STRUCTURE_DATA_CODEC.fieldOf("structure").forGetter(PartTemplateData::structure),
 						upgradeSlotCodec.optionalFieldOf("upgrades").forGetter(data -> Optional.ofNullable(data.upgrades())),
 						attributeCodec.optionalFieldOf("attributes").forGetter(data -> Optional.ofNullable(data.attributes())),

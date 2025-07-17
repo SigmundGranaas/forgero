@@ -13,6 +13,12 @@ import com.sigmundgranaas.forgero.core.property.api.Resolver;
 @FunctionalInterface
 public interface AttributeQueryResult {
 	/**
+	 * A constant representing an empty result, which always returns 0 for any attribute.
+	 * This is useful for avoiding null checks.
+	 */
+	AttributeQueryResult EMPTY = attributeType -> 0f;
+
+	/**
 	 * Gets the final computed value of a specific attribute.
 	 *
 	 * @param attributeType The ID of the attribute to get (e.g., {@code DefaultAttributes.ATTACK_DAMAGE}).

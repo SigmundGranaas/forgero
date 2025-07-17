@@ -42,7 +42,7 @@ public class ModelDataInitializer {
 
 		// 4. Load and register manual overrides
 		DefaultModelRegistrationService manualModelService = new DefaultModelRegistrationService(modelRegistry, resourceProvider);
-		manualModelService.registerModels(namespace);
+		//manualModelService.registerModels(namespace);
 
 		// 5. Return the populated registry and the generation results for optional processing (like file writing)
 		return new ModelInitializationResult(modelRegistry, generationResult);

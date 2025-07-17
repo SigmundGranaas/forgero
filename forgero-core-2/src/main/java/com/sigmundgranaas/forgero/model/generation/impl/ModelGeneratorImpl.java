@@ -35,6 +35,7 @@ public class ModelGeneratorImpl implements ModelGenerator {
 		Map<OpenIdentifier, ModelDTO> generatedModels = new HashMap<>();
 		List<TextureGenerationTask> textureTasks = new ArrayList<>();
 
+		// This part can be removed if you make PartModelTemplateDTO also use a list
 		templateProvider.getPartTemplates().forEach((partName, template) -> {
 			List<Component> compatibleComponents = tagGraph.findTagged(template.target().tag(), components.values())
 					.stream()
@@ -43,15 +44,21 @@ public class ModelGeneratorImpl implements ModelGenerator {
 
 			for (Component component : compatibleComponents) {
 				Map<String, Object> context = Map.of("target", component);
-				ModelDTO resolvedModel = mapTemplateToModel(template.model(), context, textureTasks);
-
-				generatedModels.put(resolvedModel.id(), resolvedModel);
+				// Assuming PartModelTemplateDTO is also updated to provide a list
+				for (TemplateModelDTO modelTemplate : template.models()) {
+					ModelDTO resolvedModel = mapTemplateToModel(modelTemplate, context, textureTasks);
+					generatedModels.put(resolvedModel.id(), resolvedModel);
+				}
 			}
 		});
 
 		processTemplates(templateProvider.getContextualTemplates(), components, generatedModels, textureTasks);
 		processTemplates(templateProvider.getEquipmentTemplates(), components, generatedModels, textureTasks);
 
+		// This custom loop is no longer needed as the generic one handles it.
+		// We just need to make sure we don't load MultiModelTemplateDTOs anymore.
+		// The loading logic in FileModelTemplateProvider should be adjusted to parse all templates
+		// using their respective codecs, which now all support lists.
 
 		return new ModelGenerationResult(generatedModels, textureTasks);
 	}
@@ -63,10 +70,11 @@ public class ModelGeneratorImpl implements ModelGenerator {
 
 			for (Component component : compatibleComponents) {
 				Map<String, Object> context = Map.of("target", component);
-				ModelDTO resolvedModel = mapTemplateToModel(template.model(), context, tasks);
-
-
-				models.put(resolvedModel.id(), resolvedModel);
+				// CHANGE: Loop over the list of models from the template
+				for(TemplateModelDTO modelTemplate : template.models()) {
+					ModelDTO resolvedModel = mapTemplateToModel(modelTemplate, context, tasks);
+					models.put(resolvedModel.id(), resolvedModel);
+				}
 			}
 		}
 	}
@@ -122,6 +130,6 @@ public class ModelGeneratorImpl implements ModelGenerator {
 	 */
 	public interface TemplateModelDataProvider {
 		TargetDTO target();
-		TemplateModelDTO model();
+		List<TemplateModelDTO> models();
 	}
 }

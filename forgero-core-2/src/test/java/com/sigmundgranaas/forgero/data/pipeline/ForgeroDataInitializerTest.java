@@ -47,7 +47,7 @@ class ForgeroDataInitializerTest {
 		HostData generatedPartHostData = bundle.hostItemMap().get(ironPickaxeHeadId);
 		assertNotNull(generatedPartHostData.create());
 		assertEquals("forgero:iron-pickaxe_head", generatedPartHostData.create().id().toString());
-		assertEquals("forgero:part_item", generatedPartHostData.create().itemClass());
+		assertEquals("forgero:part", generatedPartHostData.create().itemClass());
 
 		// Check for generated equipment mapping from pickaxe_template.json
 		OpenIdentifier ironPickaxeId = idFactory.of("forgero:iron-pickaxe");
@@ -57,6 +57,5 @@ class ForgeroDataInitializerTest {
 		assertEquals("forgero:iron-pickaxe", generatedEquipmentHostData.create().id().toString());
 		assertEquals("forgero:tool_item", generatedEquipmentHostData.create().itemClass());
 		assertEquals("forgero:tools", generatedEquipmentHostData.create().item_group());
-
 	}
 }

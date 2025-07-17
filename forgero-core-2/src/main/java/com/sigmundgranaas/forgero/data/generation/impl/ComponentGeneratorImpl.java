@@ -12,10 +12,11 @@ import com.sigmundgranaas.forgero.data.loading.api.data.host.HostData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.IdentifierEntry;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.template.CreateTemplateData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.template.HostTemplateData;
-import com.sigmundgranaas.forgero.data.loading.api.data.host.template.IdentifierTemplateEntry;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.EquipmentTemplateSlotData;
 import com.sigmundgranaas.forgero.data.processing.api.NormalizedState;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.function.Function;
@@ -23,7 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ComponentGeneratorImpl implements ComponentGenerator {
-
+	public static final Logger LOGGER = LoggerFactory.getLogger(ComponentGeneratorImpl.class);
 	private final IdentifierFactory idFactory;
 
 	public ComponentGeneratorImpl(IdentifierFactory idFactory) {
@@ -43,7 +44,6 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 
 			var shapeSlotType = template.structure().slots().get("shape").type();
 			List<NormalizedState.NormalizedShape> compatibleShapes = normalizedState.shapes().values().stream()
-					// Shapes now also need to be checked for tags
 					.filter(shape -> tagGraph.isTagged(shape::tags, shapeSlotType))
 					.toList();
 
@@ -79,13 +79,10 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 			List<PropertyData> targetList = target.computeIfAbsent(key, k -> new ArrayList<>());
 
 			if (key.equals("forgero:attributes")) {
-				// Special handling for attributes: merge by ID
 				Map<OpenIdentifier, AttributeData> mergedAttributes = new LinkedHashMap<>();
-				// Add existing attributes from target
 				targetList.stream()
 						.map(AttributeData.class::cast)
 						.forEach(attr -> mergedAttributes.put(attr.id(), attr));
-				// Add/overwrite with new attributes from source
 				sourceList.stream()
 						.map(AttributeData.class::cast)
 						.forEach(attr -> mergedAttributes.put(attr.id(), attr));
@@ -93,7 +90,6 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 				targetList.clear();
 				targetList.addAll(mergedAttributes.values());
 			} else {
-				// Default behavior: just append
 				targetList.addAll(sourceList);
 			}
 		});
@@ -110,7 +106,7 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 		String resolvedIdPath = idResolver.resolveId(idPattern, idContext);
 		OpenIdentifier partId = idFactory.of(resolvedIdPath);
 
-		Set<OpenIdentifier> combinedTags = Stream.of(material.tags(), shape.tags(), template.tags())
+		Set<OpenIdentifier> combinedTags = Stream.of(shape.tags(), template.tags())
 				.filter(Objects::nonNull)
 				.flatMap(Set::stream)
 				.collect(Collectors.toSet());
@@ -120,7 +116,7 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 		mergeProperties(combinedProperties, shape.properties());
 		mergeProperties(combinedProperties, template.properties());
 
-		HostData hostData = createHostData(template.host_template(), idContext, partId, "forgero:part_item", idResolver);
+		HostData hostData = createHostData(template.host_template(), idContext, partId, idResolver, "forgero:part");
 
 		return new GeneratedState.GeneratedPart(
 				partId,
@@ -142,6 +138,10 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 		Map<OpenIdentifier, GeneratedState.GeneratedEquipment> generatedEquipmentMap = new HashMap<>();
 		for (NormalizedState.NormalizedEquipmentTemplate template : equipmentTemplates.values()) {
 			List<Map<String, OpenIdentifier>> partCombinations = findEquipmentPartCombinations(template, allAvailableParts, tagGraph);
+			if (partCombinations.isEmpty()) {
+				// This is the new logging block. It's called when no combinations are found for a template.
+				LOGGER.info("Template [{}] was not resolved as no valid part combinations were found.", template.id());
+			}
 			for (Map<String, OpenIdentifier> combination : partCombinations) {
 				GeneratedState.GeneratedEquipment generatedEquipment = createGeneratedEquipment(template, combination, idResolver);
 				generatedEquipmentMap.put(generatedEquipment.id(), generatedEquipment);
@@ -162,7 +162,7 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 		OpenIdentifier equipmentId = idFactory.of(resolvedIdPath);
 
 		Map<String, List<PropertyData>> equipmentProperties = template.properties();
-		HostData hostData = createHostData(template.host_template(), idContext, equipmentId, "forgero:tool_item", idResolver);
+		HostData hostData = createHostData(template.host_template(), idContext, equipmentId, idResolver, "forgero:equipment");
 
 
 		return new GeneratedState.GeneratedEquipment(
@@ -175,9 +175,8 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 		);
 	}
 
-	private HostData createHostData(@Nullable HostTemplateData template, Map<String, Object> context, OpenIdentifier defaultId, String defaultClass, IdResolver idResolver) {
+	private HostData createHostData(@Nullable HostTemplateData template, Map<String, Object> context, OpenIdentifier defaultId, IdResolver idResolver, String defaultClass) {
 		if (template == null) {
-			// Default behavior: create a new item with the component's ID
 			return new HostData(null, new CreateData(defaultId, defaultClass, null));
 		}
 
@@ -186,7 +185,7 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 			identifiers = template.identifiers().stream()
 					.map(entryTemplate -> {
 						String resolvedIdStr = idResolver.resolveId(entryTemplate.id(), context);
-						return new IdentifierEntry(entryTemplate.type(), idFactory.of(resolvedIdStr));
+						return new IdentifierEntry("item" , idFactory.of(resolvedIdStr));
 					})
 					.toList();
 		}
@@ -195,13 +194,11 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 		if (template.create() != null) {
 			CreateTemplateData createTemplate = template.create();
 			String resolvedIdStr = idResolver.resolveId(createTemplate.id(), context);
-			// ClassName is not resolved by IdResolver, it's a direct string.
 			create = new CreateData(idFactory.of(resolvedIdStr), createTemplate.className(), createTemplate.item_group());
 		}
 
-		// Fallback to default creation if template exists but doesn't specify creation.
 		if (identifiers == null && create == null) {
-			return new HostData(null, new CreateData(defaultId, defaultClass, null));
+			return new HostData(null, new CreateData(defaultId, null, null));
 		}
 
 		return new HostData(identifiers, create);
@@ -218,7 +215,6 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 		List<Map<String, OpenIdentifier>> combinations = new ArrayList<>();
 		combinations.add(new HashMap<>());
 
-		// Use sorted list of slot names to ensure deterministic order
 		for (String slotName : template.structure().slots().keySet().stream().sorted().toList()) {
 			EquipmentTemplateSlotData slotData = template.structure().slots().get(slotName);
 			List<PartWrapper> potentialParts;
@@ -239,7 +235,13 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 			}
 
 			if (potentialParts.isEmpty()) {
-				return Collections.emptyList();
+				// This is the new, more detailed logging block.
+				LOGGER.info("Template resolution for [{}] failed at slot [{}]: No valid parts found matching type [{}] and default tag/component [{}].",
+						template.id(),
+						slotName,
+						slotData.type(),
+						slotData.defaultTag() != null ? slotData.defaultTag() : slotData.defaultComponent());
+				return Collections.emptyList(); // This is the crucial change.
 			}
 
 			combinations = expandCombinations(combinations, slotName, potentialParts);
