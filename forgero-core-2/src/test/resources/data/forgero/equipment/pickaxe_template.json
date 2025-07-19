@@ -5,8 +5,8 @@
   "host_template": {
     "create": {
       "id": "forgero:{head.material.name}-pickaxe",
-      "class_name": "forgero:tool_item",
-      "item_group": "forgero:tools"
+      "class_name": "forgero:pickaxe_item",
+      "item_group": "minecraft:tools"
     }
   },
   "structure": {

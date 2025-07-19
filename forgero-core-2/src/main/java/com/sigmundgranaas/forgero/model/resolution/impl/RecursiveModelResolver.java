@@ -23,8 +23,11 @@ public class RecursiveModelResolver implements ModelResolver {
 		if (renderableTextures.isEmpty()) {
 			return Optional.empty();
 		}
-		renderableTextures.sort(Comparator.naturalOrder());
-		return Optional.of(renderableTextures);
+		List<RenderableTexture> sortedTextures = renderableTextures.stream()
+				.sorted()
+				.collect(Collectors.toList());
+
+		return Optional.of(sortedTextures);
 	}
 
 	private List<RenderableTexture> resolveComponent(Component component, ModelResolutionContext context) {

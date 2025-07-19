@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.armor;
 
 import com.sigmundgranaas.forgero.armor.item.ForgeroArmorItem;
 import com.sigmundgranaas.forgero.armor.item.ForgeroArmorMaterial;
-import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
@@ -37,7 +36,6 @@ public class ArmorInitializer implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(ArmorInitializer.class);
 	public static final String ARMOR_ITEM_CLASS = "forgero:armor_item";
 
-	private static final IdentifierFactory idFactory = new IdentifierFactory.Builder().defaultNamespace(MOD_NAMESPACE).build();
 	private static final Map<String, RegistryKey<ItemGroup>> ITEM_GROUP_KEY_MAP = new HashMap<>();
 
 	private record PendingItemGroupRegistration(Item item, @Nullable String groupId) {
@@ -50,11 +48,13 @@ public class ArmorInitializer implements ModInitializer {
 
 		initializeItemGroupKeys();
 
-		LOGGER.info("Loading Forgero data bundle...");
+		// Load the data bundle, which contains component and host item information.
+		// This is needed on both server (for properties) and client (for visuals).
 		ForgeroDataInitializer initializer = new ForgeroDataInitializer(MOD_NAMESPACE);
 		ForgeroDataBundle bundle = initializer.getDataBundle();
 		LOGGER.info("Data bundle loaded with {} component entries.", bundle.componentRegistry().all().size());
 
+		// Register all armor items defined in the data files.
 		List<PendingItemGroupRegistration> pendingRegistrations = registerArmorItems(bundle);
 		addItemsToGroups(pendingRegistrations);
 
@@ -80,7 +80,6 @@ public class ArmorInitializer implements ModInitializer {
 		AtomicInteger successCount = new AtomicInteger(0);
 
 		hostItemMap.forEach((componentId, hostData) -> {
-
 			if (shouldCreateArmorItem(hostData)) {
 				CreateData createData = hostData.create();
 				var componentOpt = componentRegistry.find(componentId);
@@ -107,7 +106,6 @@ public class ArmorInitializer implements ModInitializer {
 				pendingRegistrations.add(new PendingItemGroupRegistration(item, createData.item_group()));
 				successCount.getAndIncrement();
 			} else {
-				// This is the new, helpful logging block.
 				logSkippedItem(componentId, hostData);
 			}
 		});
@@ -117,7 +115,7 @@ public class ArmorInitializer implements ModInitializer {
 		return pendingRegistrations;
 	}
 
-	private void logSkippedItem(com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier componentId, HostData hostData) {
+	private void logSkippedItem(OpenIdentifier componentId, HostData hostData) {
 		if (hostData.create() == null) {
 			LOGGER.trace("Skipping component [{}]: HostData has no 'create' block.", componentId);
 		} else if (!ARMOR_ITEM_CLASS.equals(hostData.create().itemClass())) {
