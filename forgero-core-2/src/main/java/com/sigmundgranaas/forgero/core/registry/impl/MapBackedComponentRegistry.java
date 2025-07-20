@@ -1,4 +1,3 @@
-// FILE: /home/sigmund/Documents/projects/forgero/1-20/forgero-core-2/src/main/java/com/sigmundgranaas/forgero/core/registry/impl/MapBackedComponentRegistry.java
 package com.sigmundgranaas.forgero.core.registry.impl;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
