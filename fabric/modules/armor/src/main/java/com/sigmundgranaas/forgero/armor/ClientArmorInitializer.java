@@ -144,7 +144,7 @@ public class ClientArmorInitializer implements ClientModInitializer {
 					sources.add(entry);
 				});
 
-		if (sources.size() == 0) {
+		if (sources.isEmpty()) {
 			LOGGER.info("No new item textures to add to atlas.");
 			return;
 		}

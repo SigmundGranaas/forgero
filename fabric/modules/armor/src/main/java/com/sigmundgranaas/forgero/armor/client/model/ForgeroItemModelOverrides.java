@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * A highly decoupled, caching model override list.
@@ -24,7 +23,7 @@ import java.util.stream.Collectors;
 public class ForgeroItemModelOverrides extends ModelOverrideList {
 	private final Function<Component, BakedModel> componentBaker;
 	private final Function<ItemStack, Optional<Component>> itemToComponent;
-	private final Map<String, BakedModel> modelCache = new ConcurrentHashMap<>();
+	private final Map<Integer, BakedModel> modelCache = new ConcurrentHashMap<>();
 
 	public ForgeroItemModelOverrides(Function<Component, BakedModel> componentBaker, Function<ItemStack, Optional<Component>> itemToComponent) {
 		super(null, null, Collections.emptyList());
@@ -39,21 +38,16 @@ public class ForgeroItemModelOverrides extends ModelOverrideList {
 		Optional<Component> componentOpt = itemToComponent.apply(stack);
 
 		if (componentOpt.isEmpty()) {
-			return model; // Return the default model if no component is found
+			return model;
 		}
 		Component component = componentOpt.get();
 
-		// Use the component's state to generate a unique cache key.
-		String cacheKey = generateCacheKey(component);
+		int cacheKey = generateCacheKey(component);
 
-		// Compute and cache the baked model if it doesn't exist for this specific state.
-		// The baking logic is now encapsulated entirely within the injected 'componentBaker' function.
 		return modelCache.computeIfAbsent(cacheKey, key -> componentBaker.apply(component));
 	}
 
-	private String generateCacheKey(Component component) {
-		// The cache key includes the root component and all its children,
-		// ensuring that any modification results in a new model bake.
-		return component.id().toString() + component.getChildren().stream().map(child -> child.id().toString()).collect(Collectors.joining());
+	private int generateCacheKey(Component component) {
+		return component.hashCode();
 	}
 }
