@@ -15,9 +15,12 @@ import java.util.Optional;
 import java.util.function.Function;
 
 /**
- * An unbaked model for a single type of Forgero component.
- * It holds the baseline component and a function to resolve components from item stacks,
- * passing these dependencies down to the BakedForgeroModel during the baking process.
+
+ An unbaked model for a single type of Forgero component.
+
+ It holds the baseline component and a function to resolve components from item stacks,
+
+ passing these dependencies down to the BakedForgeroModel during the baking process.
  */
 public class UnbakedForgeroModel implements UnbakedModel {
 
@@ -33,7 +36,12 @@ public class UnbakedForgeroModel implements UnbakedModel {
 
 	@Override
 	public Collection<Identifier> getModelDependencies() {
-		return Collections.emptyList();
+		// Find our own model definition to see if it has a parent.
+		return modelRegistry.find(baselineComponent.id())
+				.flatMap(com.sigmundgranaas.forgero.model.api.Model::getParent)
+				.map(parentId -> new Identifier(parentId.toString()))
+				.map(Collections::singletonList)
+				.orElse(Collections.emptyList());
 	}
 
 	@Override

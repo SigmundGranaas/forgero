@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.model.loading.impl;
 
+import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.model.api.CompositeModel;
 import com.sigmundgranaas.forgero.model.api.EmptyModel;
@@ -21,8 +22,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Translates DTO (Data Transfer Object) representations of models, loaded from JSON,
- * into the main Forgero domain model classes.
+
+ Translates DTO (Data Transfer Object) representations of models, loaded from JSON,
+
+ into the main Forgero domain model classes.
  */
 public class ModelTranslator {
 
@@ -35,6 +38,7 @@ public class ModelTranslator {
 			case "forgero:empty_model" -> EmptyModel.INSTANCE;
 			default -> throw new IllegalArgumentException("Unknown model type: " + dto.type());
 		};
+
 	}
 
 	private CompositeModel toCompositeModel(OpenIdentifier id, ModelDTO dto) {
@@ -52,8 +56,10 @@ public class ModelTranslator {
 
 		Optional<OpenIdentifier> target = dto.getTarget().map(OpenIdentifier::new);
 		Optional<String> context = dto.getContext();
+		Optional<OpenIdentifier> parent = dto.getParent().map(OpenIdentifier::new);
+		Optional<JsonElement> display = dto.getDisplay();
 
-		return new CompositeModel(id, layers, slots, target, context);
+		return new CompositeModel(id, layers, slots, target, context, parent, display);
 	}
 
 	private ModelLayer toModelLayer(LayerDTO dto) {
@@ -79,6 +85,8 @@ public class ModelTranslator {
 	private TextureModel toTextureModel(OpenIdentifier id, ModelDTO dto) {
 		Optional<OpenIdentifier> target = dto.getTarget().map(OpenIdentifier::new);
 		Optional<String> context = dto.getContext();
+		Optional<OpenIdentifier> parent = dto.getParent().map(OpenIdentifier::new);
+		Optional<JsonElement> display = dto.getDisplay();
 
 		TexturesDTO textures = dto.textures();
 		if (textures != null) {
@@ -87,9 +95,9 @@ public class ModelTranslator {
 					.stream()
 					.map(this::toModelVariant)
 					.toList();
-			return new TextureModel(id, textures.defaultTexture(), variants, Optional.empty(), target, context);
+			return new TextureModel(id, textures.defaultTexture(), variants, Optional.empty(), target, context, parent, display);
 		} else {
-			return new TextureModel(id, dto.texture(), Collections.emptyList(), Optional.empty(), target, context);
+			return new TextureModel(id, dto.texture(), Collections.emptyList(), Optional.empty(), target, context, parent, display);
 		}
 	}
 

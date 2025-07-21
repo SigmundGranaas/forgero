@@ -110,7 +110,7 @@ public class ModelGeneratorImpl implements ModelGenerator {
 		String target = template.target() != null ? placeholderResolver.resolve(template.target(), context) : null;
 		String modelContext = template.context() != null ? placeholderResolver.resolve(template.context(), context) : null;
 
-		return new ModelDTO(resolvedId, template.type(), finalLayers, template.slots(), null, finalTextures, target, modelContext);
+		return new ModelDTO(resolvedId, template.type(), finalLayers, template.slots(), null, finalTextures, target, modelContext, template.parent(), template.display());
 	}
 
 	private String processGenerationBlock(GenerationDTO generation, Map<String, Object> context, List<TextureGenerationTask> tasks) {

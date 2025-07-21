@@ -14,8 +14,6 @@ import net.minecraft.client.render.model.json.ModelElementTexture;
 import net.minecraft.client.render.model.json.ModelOverrideList;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.texture.Sprite;
-import net.minecraft.client.texture.SpriteAtlasTexture;
-import net.minecraft.client.texture.SpriteContents;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
@@ -28,11 +26,15 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * A specialized renderer that bakes a Forgero Component into an efficient, non-overlapping BakedModel.
- * <p>
- * This combines multiple texture layers into a single composite view before generating geometry.
- * It creates front-facing quads only for the visible pixels of each layer and side-facing quads only for the
- * final silhouette of the model, eliminating Z-fighting and reducing the polygon count for optimal performance.
+
+ A specialized renderer that bakes a Forgero Component into an efficient, non-overlapping BakedModel.
+ <p>
+
+ This combines multiple texture layers into a single composite view before generating geometry.
+
+ It creates front-facing quads only for the visible pixels of each layer and side-facing quads only for the
+
+ final silhouette of the model, eliminating Z-fighting and reducing the polygon count for optimal performance.
  */
 public class ForgeroModelRenderer {
 	private static final BakedQuadFactory QUAD_FACTORY = new BakedQuadFactory();
@@ -40,31 +42,28 @@ public class ForgeroModelRenderer {
 	private final ModelBakeSettings settings;
 	private final ModelResolver resolver;
 	private final Identifier modelId;
-	private final ModelTransformation generatedTransform;
-	private final ModelTransformation handheldTransform;
+	private final ModelTransformation transformation;
 
-	public ForgeroModelRenderer(Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings settings, ModelResolver resolver, Identifier modelId, ModelTransformation generatedTransform, ModelTransformation handheldTransform) {
+	public ForgeroModelRenderer(Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings settings, ModelResolver resolver, Identifier modelId, ModelTransformation transformation) {
 		this.textureGetter = textureGetter;
 		this.settings = settings;
 		this.resolver = resolver;
 		this.modelId = modelId;
-		this.generatedTransform = generatedTransform;
-		this.handheldTransform = handheldTransform;
+		this.transformation = transformation;
 	}
 
 	@Nullable
-	public BakedModel bake(Component component) {
+	public BakedModel bake(Component component, boolean isSideLit, Sprite particleSprite) {
 		List<RenderableTexture> textures = resolver.resolve(component).orElse(Collections.emptyList());
 		if (textures.isEmpty()) {
 			return null;
 		}
 
-		Sprite particleSprite = textureGetter.apply(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier(textures.get(0).texture())));
 
-		// Step 1: Composite all layers into a single, flattened representation.
+// Step 1: Composite all layers into a single, flattened representation.
 		CompositeModel composite = compositeLayers(textures);
 		if (composite == null) {
-			return new BasicBakedModel(List.of(), Map.of(), true, false, true, particleSprite, generatedTransform, ModelOverrideList.EMPTY);
+			return new BasicBakedModel(List.of(), Map.of(), true, false, true, particleSprite, transformation, ModelOverrideList.EMPTY);
 		}
 
 		// Step 2: Generate the minimal required geometry from the composite model.
@@ -92,19 +91,21 @@ public class ForgeroModelRenderer {
 			faceQuads.put(dir, new ArrayList<>());
 		}
 
-		boolean isSideLit = isSideLit(component);
-		ModelTransformation transform = isSideLit ? generatedTransform : handheldTransform;
+		return new BasicBakedModel(quads, faceQuads, true, isSideLit, true, particleSprite, this.transformation, ModelOverrideList.EMPTY);
 
-		return new BasicBakedModel(quads, faceQuads, true, isSideLit, true, particleSprite, transform, ModelOverrideList.EMPTY);
 	}
 
 	/**
-	 * A record to hold the results of the compositing process.
-	 *
-	 * @param visibleLayerMap A 2D array indicating which texture layer is visible at each pixel.
-	 * @param spriteData      A map from a texture path String to its corresponding Sprite object for easy lookup.
-	 * @param width           The width of the composite model in pixels.
-	 * @param height          The height of the composite model in pixels.
+
+	 A record to hold the results of the compositing process.
+
+	 @param visibleLayerMap A 2D array indicating which texture layer is visible at each pixel.
+
+	 @param spriteData A map from a texture path String to its corresponding Sprite object for easy lookup.
+
+	 @param width The width of the composite model in pixels.
+
+	 @param height The height of the composite model in pixels.
 	 */
 	private record CompositeModel(
 			RenderableTexture[][] visibleLayerMap,
@@ -115,12 +116,16 @@ public class ForgeroModelRenderer {
 	}
 
 	/**
-	 * Composites multiple texture layers into a single 2D representation.
-	 * It iterates through layers from top to bottom, "painting" pixels onto a grid.
-	 * The first opaque pixel found for a coordinate determines the visible layer at that point.
-	 *
-	 * @param textures The list of texture layers to composite.
-	 * @return A CompositeModel containing the flattened view, or null if no valid sprites are found.
+
+	 Composites multiple texture layers into a single 2D representation.
+
+	 It iterates through layers from top to bottom, "painting" pixels onto a grid.
+
+	 The first opaque pixel found for a coordinate determines the visible layer at that point.
+
+	 @param textures The list of texture layers to composite.
+
+	 @return A CompositeModel containing the flattened view, or null if no valid sprites are found.
 	 */
 	@Nullable
 	private CompositeModel compositeLayers(List<RenderableTexture> textures) {
@@ -128,7 +133,7 @@ public class ForgeroModelRenderer {
 		Map<String, Sprite> spriteData = textures.stream()
 				.collect(Collectors.toMap(
 						RenderableTexture::texture, // Use the string path as the key
-						texture -> textureGetter.apply(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier(texture.texture()))),
+						texture -> textureGetter.apply(new SpriteIdentifier(net.minecraft.client.texture.SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier(texture.texture()))),
 						(a, b) -> b, // In case of duplicate texture paths, keep the latter
 						LinkedHashMap::new
 				));
@@ -164,14 +169,17 @@ public class ForgeroModelRenderer {
 		return new CompositeModel(visibleLayerMap, spriteData, width, height);
 	}
 
-
 	/**
-	 * Generates the main front and back faces for the composite model.
-	 * It uses a greedy meshing algorithm to combine adjacent pixels of the same layer into
-	 * the largest possible rectangular quads, minimizing the total polygon count.
-	 *
-	 * @param composite The composite model data.
-	 * @return A list of ModelElements representing the main faces.
+
+	 Generates the main front and back faces for the composite model.
+
+	 It uses a greedy meshing algorithm to combine adjacent pixels of the same layer into
+
+	 the largest possible rectangular quads, minimizing the total polygon count.
+
+	 @param composite The composite model data.
+
+	 @return A list of ModelElements representing the main faces.
 	 */
 	private List<ModelElement> generateMainElements(CompositeModel composite) {
 		List<ModelElement> elements = new ArrayList<>();
@@ -212,7 +220,8 @@ public class ForgeroModelRenderer {
 	}
 
 	/**
-	 * Creates a single front-and-back ModelElement for a given rectangular area.
+
+	 Creates a single front-and-back ModelElement for a given rectangular area.
 	 */
 	private ModelElement createMainElementForRect(int x, int y, int w, int h, RenderableTexture layer, CompositeModel composite) {
 		float zOffset = 0.001f * layer.order();
@@ -240,9 +249,9 @@ public class ForgeroModelRenderer {
 		return new ModelElement(from, to, faces, null, true);
 	}
 
-
 	/**
-	 * Generates side quads for the model's final silhouette.
+
+	 Generates side quads for the model's final silhouette.
 	 */
 	private List<ModelElement> generateSideElements(CompositeModel composite) {
 		List<ModelElement> elements = new ArrayList<>();
@@ -263,6 +272,7 @@ public class ForgeroModelRenderer {
 					}
 				}
 			}
+
 		}
 
 		for (List<Frame> frameList : framesBySide.values()) {
@@ -348,15 +358,11 @@ public class ForgeroModelRenderer {
 		return composite.visibleLayerMap[nY][nX];
 	}
 
-	private boolean isPixelTransparent(SpriteContents contents, int x, int y) {
+	private boolean isPixelTransparent(net.minecraft.client.texture.SpriteContents contents, int x, int y) {
 		if (x < 0 || y < 0 || x >= contents.getWidth() || y >= contents.getHeight()) {
 			return true;
 		}
 		return contents.isPixelTransparent(0, x, y);
-	}
-
-	private boolean isSideLit(Component component) {
-		return false;
 	}
 
 	private enum Side {
@@ -379,6 +385,7 @@ public class ForgeroModelRenderer {
 		public int getOffsetX() { return this.offsetX; }
 		public int getOffsetY() { return this.offsetY; }
 		public boolean isVertical() { return this == DOWN || this == UP; }
+
 	}
 
 	private static class Frame {
@@ -387,6 +394,7 @@ public class ForgeroModelRenderer {
 		private final int level;
 		private int min;
 		private int max;
+
 
 		public Frame(Side side, int value, int level, RenderableTexture layer) {
 			this.side = side;

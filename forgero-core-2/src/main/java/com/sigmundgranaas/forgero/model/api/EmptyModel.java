@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.model.api;
 
+import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 
 import java.util.Optional;
@@ -29,6 +30,16 @@ public non-sealed class EmptyModel implements Model {
 
 	@Override
 	public Optional<String> getContext() {
+		return Optional.empty();
+	}
+
+	@Override
+	public Optional<OpenIdentifier> getParent() {
+		return Optional.empty();
+	}
+
+	@Override
+	public Optional<JsonElement> getDisplay() {
 		return Optional.empty();
 	}
 

@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.model.api;
 
+import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 
 import java.util.Optional;
@@ -20,6 +21,21 @@ public sealed interface Model permits CompositeModel, TextureModel, EmptyModel {
 	 * @return An optional containing the context string.
 	 */
 	Optional<String> getContext();
+
+	/**
+	 * Gets the identifier of a parent model whose display properties should be inherited.
+	 *
+	 * @return An optional containing the parent model's identifier.
+	 */
+	Optional<OpenIdentifier> getParent();
+
+	/**
+	 * Gets the raw JSON display block, which specifies per-viewport transformations.
+	 * This overrides any properties inherited from a parent.
+	 *
+	 * @return An optional containing the display properties as a JsonElement.
+	 */
+	Optional<JsonElement> getDisplay();
 
 	/**
 	 * Applies the given context to the model, resolving any variants or predicates.
