@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.smithing.block.custom;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.BloomeryBlockEntity;
 import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
+import com.sigmundgranaas.forgero.smithing.fuel.FuelType;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -60,6 +61,8 @@ public class BloomeryBlock extends BlockWithEntity {
 				.with(FACING, Direction.NORTH)
 				.with(LIT, false));
 	}
+
+
 
 	// Gets the outline shape of the bloomery block.
 	@Override
@@ -121,9 +124,16 @@ public class BloomeryBlock extends BlockWithEntity {
 		return ActionResult.PASS;
 	}
 
+	// Gets the fuel type from an item stack, or null if not fuel
+	private FuelType getFuelType(ItemStack stack) {
+		if (stack.isOf(Items.COAL)) return FuelType.COAL;
+		if (stack.isOf(Items.CHARCOAL)) return FuelType.CHARCOAL;
+		return null;
+	}
+
 	// Checks if the given item stack is a valid fuel for the bloomery.
 	private boolean isFuel(ItemStack stack) {
-		return stack.isOf(Items.COAL) || stack.isOf(Items.CHARCOAL);
+		return getFuelType(stack) != null;
 	}
 
 	// Displays random particle effects and plays sounds when the bloomery is lit.
@@ -238,6 +248,7 @@ public class BloomeryBlock extends BlockWithEntity {
 			}
 		}
 	}
+
 
 	// Called when the block state is replaced.
 	@Override

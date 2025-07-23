@@ -12,6 +12,7 @@ import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.fabric.client.ForgeroClient;
 import com.sigmundgranaas.forgero.fabric.resources.FileService;
 import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
+import com.sigmundgranaas.forgero.smithing.block.renderer.BloomeryBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.block.renderer.BloomeryExtensionBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.block.renderer.MoldBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.block.renderer.SmithingAnvilBlockEntityRenderer;
@@ -50,6 +51,7 @@ public class ForgeroClientSmithingInitializer implements ClientModInitializer {
 
 		        // Register block entity renderers
 		        BlockEntityRendererRegistry.register(ModBlockEntities.SMITHING_ANVIL, SmithingAnvilBlockEntityRenderer::new);
+		        BlockEntityRendererRegistry.register(ModBlockEntities.BLOOMERY, BloomeryBlockEntityRenderer::new);
 		        BlockEntityRendererRegistry.register(ModBlockEntities.BLOOMERY_EXTENSION, BloomeryExtensionBlockEntityRenderer::new);
 		// Only register MOLD renderer if the BlockEntityType is not null
 		if (ModBlockEntities.MOLD != null) {

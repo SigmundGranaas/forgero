@@ -3,6 +3,8 @@ package com.sigmundgranaas.forgero.smithing.block.custom;
 import com.sigmundgranaas.forgero.smithing.block.entity.BloomeryExtensionBlockEntity;
 import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
 import com.sigmundgranaas.forgero.smithing.item.custom.LiquidMetalCrucibleItem;
+import com.sigmundgranaas.forgero.smithing.fuel.FuelType;
+import com.sigmundgranaas.forgero.smithing.block.entity.BloomeryBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.Block;
@@ -124,8 +126,32 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 		return stack;
 	}
 
+	// Add this method to get fuel type from items
+	private FuelType getFuelType(ItemStack stack) {
+		if (stack.isOf(net.minecraft.item.Items.COAL)) return FuelType.COAL;
+		if (stack.isOf(net.minecraft.item.Items.CHARCOAL)) return FuelType.CHARCOAL;
+		return null;
+	}
+
 	// Places items in appropriate slots based on item type.
 	private ItemStack addItemToAppropriateSlot(BloomeryExtensionBlockEntity entity, ItemStack stack) {
+		// Add fuel handling at the beginning
+		FuelType fuelType = getFuelType(stack);
+		if (fuelType != null) {
+			// Pass fuel to the main bloomery block if connected
+			BlockPos southPos = entity.getPos().offset(Direction.SOUTH);
+			World world = entity.getWorld();
+			if (world != null) {
+				BlockEntity southEntity = world.getBlockEntity(southPos);
+				if (southEntity instanceof BloomeryBlockEntity bloomery) {
+					if (bloomery.insertFuel(stack)) {
+						return stack.copyWithCount(stack.getCount() - 1);
+					}
+				}
+			}
+			return stack;
+		}
+
 		boolean hasTool = !entity.getStack(BloomeryExtensionBlockEntity.TOOL_SLOT).isEmpty();
 		boolean hasCrucibleOrOre = !entity.getStack(BloomeryExtensionBlockEntity.CRUCIBLE_SLOT).isEmpty()
 				|| !entity.getStack(BloomeryExtensionBlockEntity.ORE_SLOT).isEmpty();
@@ -236,8 +262,8 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 				ItemStack tool = extensionEntity.getStack(BloomeryExtensionBlockEntity.TOOL_SLOT);
 
 				// Crucible slot position (center with slight offset)
-				double crucibleX = pos.getX() + 0.5 - 0.1;
-				double crucibleY = pos.getY() + 0.26 + 0.5;
+				double crucibleX = pos.getX() + 0.5;
+				double crucibleY = pos.getY() + 0.35;
 				double crucibleZ = pos.getZ() + 0.5;
 
 				// Tool slot position (center)
@@ -248,13 +274,13 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 				// Empty inventory position (center, slightly above)
 				boolean isEmpty = crucible.isEmpty() && tool.isEmpty() && extensionEntity.getStack(BloomeryExtensionBlockEntity.ORE_SLOT).isEmpty();
 				double emptyX = pos.getX() + 0.5;
-				double emptyY = pos.getY() + 0.9;
+				double emptyY = pos.getY() + 0.7;
 				double emptyZ = pos.getZ() + 0.5;
 
 				// Increase particle frequency by raising probabilities
 				if (isEmpty) {
-					if (random.nextFloat() < 0.9f) {
-						world.addParticle(ParticleTypes.CLOUD, emptyX, emptyY, emptyZ, 0.0, 0.01, 0.0);
+					if (random.nextFloat() < 0.4f) {
+						world.addParticle(ParticleTypes.SMOKE, emptyX, emptyY, emptyZ, 0.0, 0.01, 0.0);
 					}
 				} else {
 					// Special particles for crucible
@@ -262,8 +288,17 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 						if (random.nextFloat() < 0.9f) {
 							world.addParticle(ParticleTypes.LAVA, crucibleX, crucibleY, crucibleZ, 0.0, 0.07, 0.0);
 						}
-						if (random.nextFloat() < 0.5f) {
-							world.addParticle(ParticleTypes.FLAME, crucibleX, crucibleY + 0.1, crucibleZ, 0.0, 0.02, 0.0);
+						if (random.nextFloat() < 0.3f) {
+							for (int i = 0; i < 2; i++) {
+								double px = crucibleX + (random.nextDouble() - 0.5) * 0.5;
+								double py = pos.getY() + 0.5 + (random.nextDouble() - 0.5) * 0.15;
+								double pz = crucibleZ + (random.nextDouble() - 0.5) * 0.5;
+								if (random.nextBoolean()) {
+									world.addParticle(ParticleTypes.FLAME, px, py, pz, 0.0, 0.0, 0.0);
+								} else {
+									world.addParticle(ParticleTypes.SMALL_FLAME, px, py, pz, 0.0, 0.0, 0.0);
+								}
+							}
 						}
 					} else {
 						// Default smoke particles from crucible slot if no crucible
@@ -272,34 +307,27 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 						}
 					}
 
-					// Special particles for tool (campfire cooking item style, more frequent)
+					// Special particles for tool
 					if (!tool.isEmpty()) {
-						if (random.nextFloat() < 0.3f) { // 50% chance to emit particles this tick
+						if (random.nextFloat() < 0.3f) {
 							for (int i = 0; i < 2; i++) {
-								double px = toolX + (random.nextDouble() - 0.5) * 0.2;
-								double py = toolY;
-								double pz = toolZ + (random.nextDouble() - 0.5) * 0.2;
-								world.addParticle(ParticleTypes.FLAME, px, py, pz, 0, 0.015, 0);
-								world.addParticle(ParticleTypes.SMALL_FLAME, px, py, pz, 0, 0.015, 0);
+								double px = toolX + (random.nextDouble() - 0.5) * 0.5;
+								double py = pos.getY() + 0.5 + (random.nextDouble() - 0.5) * 0.15;
+								double pz = toolZ + (random.nextDouble() - 0.5) * 0.5;
+								if (random.nextBoolean()) {
+									world.addParticle(ParticleTypes.FLAME, px, py, pz, 0.0, 0.0, 0.0);
+								} else {
+									world.addParticle(ParticleTypes.SMALL_FLAME, px, py, pz, 0.0, 0.0, 0.0);
+								}
 							}
 						}
 
 						for (int i = 0; i < 2; i++) {
 							double px = toolX + (random.nextDouble() - 0.5) * 0.2;
-							double py = toolY + 0.25;
+							double py = toolY + 0.2;
 							double pz = toolZ + (random.nextDouble() - 0.5) * 0.2;
 							world.addParticle(ParticleTypes.SMOKE, px, py, pz, 0.0, 0.01, 0.0);
 						}
-					} else {
-						// Default flame particles from tool slot if no tool
-						if (random.nextFloat() < 0.2f) {
-							world.addParticle(ParticleTypes.SMALL_FLAME, toolX, toolY, toolZ, 0.0, 0.0, 0.0);
-						}
-					}
-
-					// Large smoke puffs occasionally
-					if (random.nextFloat() < 0.2f) {
-						world.addParticle(ParticleTypes.LARGE_SMOKE, crucibleX, crucibleY + 0.2, crucibleZ, 0.0, 0.1, 0.0);
 					}
 				}
 			}

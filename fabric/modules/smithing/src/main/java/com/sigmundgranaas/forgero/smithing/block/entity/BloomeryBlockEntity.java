@@ -2,6 +2,8 @@ package com.sigmundgranaas.forgero.smithing.block.entity;
 
 import com.sigmundgranaas.forgero.smithing.block.custom.BloomeryBlock;
 import com.sigmundgranaas.forgero.smithing.block.custom.BloomeryExtensionBlock;
+import com.sigmundgranaas.forgero.smithing.fuel.BloomeryFuelSystem;
+import com.sigmundgranaas.forgero.smithing.fuel.FuelType;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -20,6 +22,9 @@ public class BloomeryBlockEntity extends BlockEntity {
 
 	// Single-slot fuel inventory
 	private ItemStack fuelSlot = ItemStack.EMPTY;
+
+	// Fuel temperature system
+	private BloomeryFuelSystem fuelSystem = new BloomeryFuelSystem();
 
 	public BloomeryBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.BLOOMERY, pos, state);
@@ -87,16 +92,29 @@ public class BloomeryBlockEntity extends BlockEntity {
 	}
 
 	/**
+	 * Gets the fuel slot for visual indicator purposes
+	 */
+	public ItemStack getFuelSlot() {
+		return fuelSlot;
+	}
+
+	/**
 	 * Insert coal/charcoal into the fuel slot.
 	 * Returns true if successful.
 	 */
 	public boolean insertFuel(ItemStack stack) {
-		if (!isFuel(stack)) return false;
+		FuelType fuelType = getFuelType(stack);
+		if (fuelType == null) return false;
+
 		if (fuelSlot.isEmpty()) {
 			fuelSlot = new ItemStack(stack.getItem(), 1);
+			fuelSystem.addFuel(fuelType, 1);
+			markDirty();
 			return true;
 		} else if (fuelSlot.isOf(stack.getItem()) && fuelSlot.getCount() < fuelSlot.getMaxCount()) {
 			fuelSlot.increment(1);
+			fuelSystem.addFuel(fuelType, 1);
+			markDirty();
 			return true;
 		}
 		return false;
@@ -111,11 +129,33 @@ public class BloomeryBlockEntity extends BlockEntity {
 		int burnTime = getFuelTime(fuelSlot);
 		fuelSlot.decrement(1);
 		if (fuelSlot.getCount() <= 0) fuelSlot = ItemStack.EMPTY;
+		fuelSystem.consumeFuel();
+		markDirty();
 		return burnTime;
 	}
 
+	/**
+	 * Gets the current temperature of the bloomery based on fuel
+	 */
+	public int getCurrentTemperature() {
+		return fuelSystem.getCurrentTemperature();
+	}
+
+	/**
+	 * Checks if the bloomery can reach the target temperature
+	 */
+	public boolean canReachTemperature(int targetTemp) {
+		return fuelSystem.canReachTemperature(targetTemp);
+	}
+
+	private FuelType getFuelType(ItemStack stack) {
+		if (stack.isOf(Items.COAL)) return FuelType.COAL;
+		if (stack.isOf(Items.CHARCOAL)) return FuelType.CHARCOAL;
+		return null;
+	}
+
 	private boolean isFuel(ItemStack stack) {
-		return stack.isOf(Items.COAL) || stack.isOf(Items.CHARCOAL);
+		return getFuelType(stack) != null;
 	}
 
 	private int getFuelTime(ItemStack stack) {
@@ -145,6 +185,18 @@ public class BloomeryBlockEntity extends BlockEntity {
 		if (!fuelSlot.isEmpty()) {
 			nbt.put("FuelSlot", fuelSlot.writeNbt(new NbtCompound()));
 		}
+	}
+
+	@Override
+	public NbtCompound toInitialChunkDataNbt() {
+		NbtCompound nbt = new NbtCompound();
+		writeNbt(nbt);
+		return nbt;
+	}
+
+	@Override
+	public net.minecraft.network.packet.Packet<net.minecraft.network.listener.ClientPlayPacketListener> toUpdatePacket() {
+		return net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket.create(this);
 	}
 
 	/**

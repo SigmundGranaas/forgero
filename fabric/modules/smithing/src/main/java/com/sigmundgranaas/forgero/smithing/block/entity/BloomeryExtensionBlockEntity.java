@@ -192,7 +192,8 @@ public class BloomeryExtensionBlockEntity extends BlockEntity {
 			return;
 		}
 
-		// Check if there's an adjacent lit bloomery block instead of relying on synced state
+		// Get actual temperature from connected bloomery fuel system
+		int bloomeryTemperature = entity.getCurrentTemperature();
 		boolean isLit = entity.isAdjacentBloomeryLit(world, pos);
 		boolean inventoryChanged = false;
 
@@ -205,8 +206,27 @@ public class BloomeryExtensionBlockEntity extends BlockEntity {
 				int newTemp = currentTemp;
 
 				if (isLit) {
-					// Heat the tool when bloomery is lit
-					newTemp = Math.min(TemperatureUtils.getMaxTemp(toolStack), currentTemp + HEAT_PER_TICK);
+					// When bloomery is lit, determine max temperature based on fuel system
+					int maxAllowedTemp;
+					if (bloomeryTemperature > 0) {
+						// Use actual fuel system temperature if available
+						maxAllowedTemp = bloomeryTemperature;
+					} else {
+						// Fallback: check if connected bloomery can reach high temps (charcoal) or limited (coal)
+						if (entity.canReachTemperature(900)) {
+							maxAllowedTemp = 1000; // Charcoal available
+						} else {
+							maxAllowedTemp = 800;  // Only coal available
+						}
+					}
+
+					int targetTemp = Math.min(maxAllowedTemp, TemperatureUtils.getMaxTemp(toolStack));
+					if (currentTemp < targetTemp) {
+						newTemp = Math.min(targetTemp, currentTemp + HEAT_PER_TICK);
+					} else if (currentTemp > targetTemp) {
+						// Cool down if current temp exceeds what the fuel can provide
+						newTemp = Math.max(targetTemp, currentTemp - COOL_PER_TICK);
+					}
 				} else {
 					// Cool the tool when bloomery is not lit
 					newTemp = Math.max(TemperatureUtils.DEFAULT_TEMPERATURE, currentTemp - COOL_PER_TICK);
@@ -328,6 +348,39 @@ public class BloomeryExtensionBlockEntity extends BlockEntity {
 				}
 			}
 		}
+		return false;
+	}
+
+	/**
+	 * Gets the current temperature from the connected main bloomery
+	 */
+	public int getCurrentTemperature() {
+		if (world == null) return 0;
+
+		// Check south position for main bloomery (where fuel system is located)
+		BlockPos southPos = pos.offset(net.minecraft.util.math.Direction.SOUTH);
+		BlockEntity southEntity = world.getBlockEntity(southPos);
+
+		if (southEntity instanceof BloomeryBlockEntity bloomery) {
+			return bloomery.getCurrentTemperature();
+		}
+
+		return 0; // No connected bloomery or no temperature
+	}
+
+	/**
+	 * Checks if the connected bloomery can reach the target temperature
+	 */
+	public boolean canReachTemperature(int targetTemp) {
+		if (world == null) return false;
+
+		BlockPos southPos = pos.offset(net.minecraft.util.math.Direction.SOUTH);
+		BlockEntity southEntity = world.getBlockEntity(southPos);
+
+		if (southEntity instanceof BloomeryBlockEntity bloomery) {
+			return bloomery.canReachTemperature(targetTemp);
+		}
+
 		return false;
 	}
 }
