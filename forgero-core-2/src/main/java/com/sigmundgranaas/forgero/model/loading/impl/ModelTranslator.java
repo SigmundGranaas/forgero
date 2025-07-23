@@ -2,14 +2,14 @@ package com.sigmundgranaas.forgero.model.loading.impl;
 
 import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.model.api.CompositeModel;
-import com.sigmundgranaas.forgero.model.api.EmptyModel;
-import com.sigmundgranaas.forgero.model.api.Model;
+import com.sigmundgranaas.forgero.model.api.item.CompositeModel;
+import com.sigmundgranaas.forgero.model.api.item.EmptyModel;
+import com.sigmundgranaas.forgero.model.api.item.Model;
 import com.sigmundgranaas.forgero.model.api.ModelLayer;
 import com.sigmundgranaas.forgero.model.api.ModelSlot;
 import com.sigmundgranaas.forgero.model.api.ModelVariant;
 import com.sigmundgranaas.forgero.model.api.Offset;
-import com.sigmundgranaas.forgero.model.api.TextureModel;
+import com.sigmundgranaas.forgero.model.api.item.TextureModel;
 import com.sigmundgranaas.forgero.model.match.Predicate;
 import com.sigmundgranaas.forgero.model.match.predicate.BowPullPredicate;
 import com.sigmundgranaas.forgero.model.match.predicate.ChildTagPredicate;

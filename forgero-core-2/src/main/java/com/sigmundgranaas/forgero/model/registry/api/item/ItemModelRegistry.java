@@ -1,12 +1,12 @@
-package com.sigmundgranaas.forgero.model.registry.api;
+package com.sigmundgranaas.forgero.model.registry.api.item;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.model.api.Model;
+import com.sigmundgranaas.forgero.model.api.item.Model;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface ModelRegistry {
+public interface ItemModelRegistry {
 	/**
 	 * Finds a model in the default context.
 	 *

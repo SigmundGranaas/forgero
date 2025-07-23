@@ -5,9 +5,9 @@ import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.model.generation.api.ModelGenerationResult;
-import com.sigmundgranaas.forgero.model.generation.api.ModelGenerator;
+import com.sigmundgranaas.forgero.model.generation.api.item.ItemModelGenerator;
 import com.sigmundgranaas.forgero.model.generation.api.TextureGenerationTask;
-import com.sigmundgranaas.forgero.model.loading.api.ModelTemplateProvider;
+import com.sigmundgranaas.forgero.model.loading.api.item.ItemModelTemplateProvider;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.LayerDTO;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.ModelDTO;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.TexturesDTO;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class ModelGeneratorImpl implements ModelGenerator {
+public class ModelGeneratorImpl implements ItemModelGenerator {
 
 	private final TagGraph tagGraph;
 	private final PlaceholderResolver placeholderResolver;
@@ -31,7 +31,7 @@ public class ModelGeneratorImpl implements ModelGenerator {
 	}
 
 	@Override
-	public ModelGenerationResult generate(Map<OpenIdentifier, Component> components, ModelTemplateProvider templateProvider) {
+	public ModelGenerationResult generate(Map<OpenIdentifier, Component> components, ItemModelTemplateProvider templateProvider) {
 		Map<OpenIdentifier, ModelDTO> generatedModels = new HashMap<>();
 		List<TextureGenerationTask> textureTasks = new ArrayList<>();
 

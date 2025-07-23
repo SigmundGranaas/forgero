@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.model.resolution.api;
+package com.sigmundgranaas.forgero.model.resolution.api.item;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.model.api.RenderableTexture;
@@ -6,4 +6,4 @@ import com.sigmundgranaas.forgero.model.api.RenderableTexture;
 import java.util.List;
 import java.util.Optional;
 
-public interface ModelResolver { Optional<List<RenderableTexture>> resolve(Component component); }
+public interface ItemModelResolver { Optional<List<RenderableTexture>> resolve(Component component); }

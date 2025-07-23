@@ -9,7 +9,7 @@ import com.sigmundgranaas.forgero.core.component.impl.StaticComponent;
 import com.sigmundgranaas.forgero.core.property.api.Property;
 import com.sigmundgranaas.forgero.model.api.RenderableTexture;
 import com.sigmundgranaas.forgero.model.loading.impl.FileModelProvider;
-import com.sigmundgranaas.forgero.model.registry.api.ModelRegistry;
+import com.sigmundgranaas.forgero.model.registry.api.item.ItemModelRegistry;
 import com.sigmundgranaas.forgero.model.registry.impl.MapBackedModelRegistry;
 import com.sigmundgranaas.forgero.model.rendering.impl.AwtTextureCompositor;
 import com.sigmundgranaas.forgero.model.rendering.impl.ClassPathResourceTextureProvider;
@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FullPickaxeRenderTest {
 
-	private ModelRegistry registry;
+	private ItemModelRegistry registry;
 	private RecursiveModelResolver resolver;
 	private TextureCompositor compositor;
 

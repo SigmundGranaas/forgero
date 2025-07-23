@@ -5,8 +5,8 @@ import com.google.gson.JsonSyntaxException;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.model.api.Model;
-import com.sigmundgranaas.forgero.model.loading.api.ModelProvider;
+import com.sigmundgranaas.forgero.model.api.item.Model;
+import com.sigmundgranaas.forgero.model.loading.api.item.ItemModelProvider;
 import com.sigmundgranaas.forgero.model.loading.impl.codec.ModelCodecs;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.ModelDTO;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceConverter;
@@ -16,7 +16,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Optional;
 
-public class FileModelProvider implements ModelProvider, ResourceConverter<Model> {
+public class FileModelProvider implements ItemModelProvider, ResourceConverter<Model> {
 	private final ResourceProvider resourceProvider;
 	private final ModelTranslator translator;
 

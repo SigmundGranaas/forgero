@@ -1,7 +1,8 @@
 package com.sigmundgranaas.forgero.armor.client.model;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.model.registry.api.ModelRegistry;
+import com.sigmundgranaas.forgero.model.api.item.Model;
+import com.sigmundgranaas.forgero.model.registry.api.item.ItemModelRegistry;
 import net.minecraft.client.render.model.*;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
@@ -26,9 +27,9 @@ public class UnbakedForgeroModel implements UnbakedModel {
 
 	private final Component baselineComponent;
 	private final Function<ItemStack, Optional<Component>> itemToComponentConverter;
-	private final ModelRegistry modelRegistry;
+	private final ItemModelRegistry modelRegistry;
 
-	public UnbakedForgeroModel(Component baselineComponent, Function<ItemStack, Optional<Component>> itemToComponentConverter, ModelRegistry modelRegistry) {
+	public UnbakedForgeroModel(Component baselineComponent, Function<ItemStack, Optional<Component>> itemToComponentConverter, ItemModelRegistry modelRegistry) {
 		this.baselineComponent = baselineComponent;
 		this.itemToComponentConverter = itemToComponentConverter;
 		this.modelRegistry = modelRegistry;
@@ -38,7 +39,7 @@ public class UnbakedForgeroModel implements UnbakedModel {
 	public Collection<Identifier> getModelDependencies() {
 		// Find our own model definition to see if it has a parent.
 		return modelRegistry.find(baselineComponent.id())
-				.flatMap(com.sigmundgranaas.forgero.model.api.Model::getParent)
+				.flatMap(Model::getParent)
 				.map(parentId -> new Identifier(parentId.toString()))
 				.map(Collections::singletonList)
 				.orElse(Collections.emptyList());

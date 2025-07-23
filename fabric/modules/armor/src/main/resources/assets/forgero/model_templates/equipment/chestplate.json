@@ -24,7 +24,7 @@
           "type": "forgero:palette_retexture",
           "template": "forgero:texture_template/armor_layer_1",
           "palette": "forgero:palette/{target.name}",
-          "output": "forgero:models/armor/{target.name}_layer_1"
+          "output": "forgero:armor/{target.name}_layer_1"
         }
       }
     }

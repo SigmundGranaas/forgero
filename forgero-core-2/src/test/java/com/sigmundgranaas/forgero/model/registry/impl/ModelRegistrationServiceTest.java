@@ -2,8 +2,8 @@ package com.sigmundgranaas.forgero.model.registry.impl;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 
-import com.sigmundgranaas.forgero.model.registry.api.ModelRegistrationService;
-import com.sigmundgranaas.forgero.model.registry.api.ModelRegistry;
+import com.sigmundgranaas.forgero.model.registry.api.item.ItemModelRegistrationService;
+import com.sigmundgranaas.forgero.model.registry.api.item.ItemModelRegistry;
 import com.sigmundgranaas.forgero.utility.resource.loader.implementation.ClassPathResourceProvider;
 import org.junit.jupiter.api.Test;
 
@@ -12,10 +12,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class ModelRegistrationServiceTest {
 	@Test
 	void testRegisterModels() {
-		ModelRegistry registry = new MapBackedModelRegistry();
+		ItemModelRegistry registry = new MapBackedModelRegistry();
 		// ClassPathResourceProvider now points to the root asset folder.
 		// DefaultModelRegistrationService expects a ResourceProvider, not a specific loader.
-		ModelRegistrationService service = new DefaultModelRegistrationService(registry, new ClassPathResourceProvider("/assets"));
+		ItemModelRegistrationService service = new DefaultModelRegistrationService(registry, new ClassPathResourceProvider("/assets"));
 
 		// Register models for the 'forgero' namespace.
 		// The service will look for models under /assets/forgero/models/

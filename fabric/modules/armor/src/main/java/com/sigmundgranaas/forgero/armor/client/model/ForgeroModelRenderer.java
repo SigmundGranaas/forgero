@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.armor.client.model;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.model.api.RenderableTexture;
-import com.sigmundgranaas.forgero.model.resolution.api.ModelResolver;
+import com.sigmundgranaas.forgero.model.resolution.api.item.ItemModelResolver;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.client.render.model.BakedQuadFactory;
@@ -40,11 +40,11 @@ public class ForgeroModelRenderer {
 	private static final BakedQuadFactory QUAD_FACTORY = new BakedQuadFactory();
 	private final Function<SpriteIdentifier, Sprite> textureGetter;
 	private final ModelBakeSettings settings;
-	private final ModelResolver resolver;
+	private final ItemModelResolver resolver;
 	private final Identifier modelId;
 	private final ModelTransformation transformation;
 
-	public ForgeroModelRenderer(Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings settings, ModelResolver resolver, Identifier modelId, ModelTransformation transformation) {
+	public ForgeroModelRenderer(Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings settings, ItemModelResolver resolver, Identifier modelId, ModelTransformation transformation) {
 		this.textureGetter = textureGetter;
 		this.settings = settings;
 		this.resolver = resolver;
@@ -60,7 +60,7 @@ public class ForgeroModelRenderer {
 		}
 
 
-// Step 1: Composite all layers into a single, flattened representation.
+		// Step 1: Composite all layers into a single, flattened representation.
 		CompositeModel composite = compositeLayers(textures);
 		if (composite == null) {
 			return new BasicBakedModel(List.of(), Map.of(), true, false, true, particleSprite, transformation, ModelOverrideList.EMPTY);
@@ -77,7 +77,6 @@ public class ForgeroModelRenderer {
 			for (Map.Entry<Direction, ModelElementFace> entry : element.faces.entrySet()) {
 				ModelElementFace face = entry.getValue();
 				// Use the textureId string on the face to look up the correct sprite from our map.
-				// This is how we associate the correct sprite with each quad without modifying vanilla classes.
 				Sprite sprite = composite.spriteData().get(face.textureId);
 
 				BakedQuad quad = QUAD_FACTORY.bake(element.from, element.to, face, sprite, entry.getKey(), settings, element.rotation, element.shade, modelId);

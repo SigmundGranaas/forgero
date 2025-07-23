@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.model.pipeline.api;
 
 import com.sigmundgranaas.forgero.model.generation.api.ModelGenerationResult;
-import com.sigmundgranaas.forgero.model.registry.api.ModelRegistry;
+import com.sigmundgranaas.forgero.model.registry.api.item.ItemModelRegistry;
 
 /**
  * A container for the complete result of the model data initialization process.
@@ -12,7 +12,7 @@ import com.sigmundgranaas.forgero.model.registry.api.ModelRegistry;
  * @param generationResult   The result of the model generation step, containing DTOs and texture tasks.
  */
 public record ModelInitializationResult(
-		ModelRegistry modelRegistry,
+		ItemModelRegistry modelRegistry,
 		ModelGenerationResult generationResult
 ) {
 }

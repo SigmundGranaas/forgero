@@ -1,11 +1,11 @@
 package com.sigmundgranaas.forgero.model.loading.impl;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.model.api.CompositeModel;
-import com.sigmundgranaas.forgero.model.api.EmptyModel;
-import com.sigmundgranaas.forgero.model.api.Model;
-import com.sigmundgranaas.forgero.model.api.TextureModel;
-import com.sigmundgranaas.forgero.model.registry.api.ModelRegistry;
+import com.sigmundgranaas.forgero.model.api.item.CompositeModel;
+import com.sigmundgranaas.forgero.model.api.item.EmptyModel;
+import com.sigmundgranaas.forgero.model.api.item.Model;
+import com.sigmundgranaas.forgero.model.api.item.TextureModel;
+import com.sigmundgranaas.forgero.model.registry.api.item.ItemModelRegistry;
 import com.sigmundgranaas.forgero.model.registry.impl.MapBackedModelRegistry;
 import com.sigmundgranaas.forgero.utility.resource.loader.implementation.ClassPathResourceProvider;
 import com.sigmundgranaas.forgero.utility.resource.loader.implementation.ResourceLoader;
@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FileModelProviderTest {
 
-	private ModelRegistry registry;
+	private ItemModelRegistry registry;
 	private FileModelProvider provider;
 
 	@BeforeEach

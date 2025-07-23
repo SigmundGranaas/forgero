@@ -4,7 +4,7 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.model.loading.api.ModelTemplateProvider;
+import com.sigmundgranaas.forgero.model.loading.api.item.ItemModelTemplateProvider;
 import com.sigmundgranaas.forgero.model.loading.impl.codec.ModelTemplateCodecs;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.ContextualModelTemplateDTO;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.EquipmentModelTemplateDTO;
@@ -19,10 +19,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Implementation of {@link ModelTemplateProvider} that loads model templates from JSON files
+ * Implementation of {@link ItemModelTemplateProvider} that loads model templates from JSON files
  * located in the `resources/assets/{namespace}/model_templates/` directory.
  */
-public class FileModelTemplateProvider implements ModelTemplateProvider {
+public class FileModelTemplateProvider implements ItemModelTemplateProvider {
 
 	private final Map<String, PartModelTemplateDTO> partTemplates;
 	private final List<ContextualModelTemplateDTO> contextualTemplates;

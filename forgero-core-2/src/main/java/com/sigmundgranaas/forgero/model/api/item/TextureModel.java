@@ -1,7 +1,10 @@
-package com.sigmundgranaas.forgero.model.api;
+package com.sigmundgranaas.forgero.model.api.item;
 
 import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.model.api.ModelResolutionContext;
+import com.sigmundgranaas.forgero.model.api.ModelVariant;
+import com.sigmundgranaas.forgero.model.api.Offset;
 
 import java.util.List;
 import java.util.Optional;

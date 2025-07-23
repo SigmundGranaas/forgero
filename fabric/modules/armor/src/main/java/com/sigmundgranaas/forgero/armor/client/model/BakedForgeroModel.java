@@ -5,7 +5,8 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.model.registry.api.ModelRegistry;
+import com.sigmundgranaas.forgero.model.api.item.Model;
+import com.sigmundgranaas.forgero.model.registry.api.item.ItemModelRegistry;
 import com.sigmundgranaas.forgero.model.resolution.impl.RecursiveModelResolver;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.model.BakedModel;
@@ -40,7 +41,7 @@ public class BakedForgeroModel implements BakedModel {
 
 	private record ResolvedBakedProperties(ModelTransformation transformation, boolean sideLit, Sprite particleSprite) {}
 
-	public BakedForgeroModel(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings settings, Identifier modelId, Component baseline, Function<ItemStack, Optional<Component>> itemToComponent, ModelRegistry modelRegistry) {
+	public BakedForgeroModel(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings settings, Identifier modelId, Component baseline, Function<ItemStack, Optional<Component>> itemToComponent, ItemModelRegistry modelRegistry) {
 		// Find the Model definition for the baseline component
 		var forgeroModelOpt = modelRegistry.find(baseline.id());
 		if (forgeroModelOpt.isEmpty()) {
@@ -70,7 +71,7 @@ public class BakedForgeroModel implements BakedModel {
 		this.overrides = new ForgeroItemModelOverrides(componentBaker, itemToComponent);
 	}
 
-	private ResolvedBakedProperties resolveProperties(com.sigmundgranaas.forgero.model.api.Model forgeroModel, Baker baker, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings settings) {
+	private ResolvedBakedProperties resolveProperties(Model forgeroModel, Baker baker, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings settings) {
 		ModelTransformation resolvedTransform = ModelTransformation.NONE;
 		boolean resolvedSideLit = false;
 		BakedModel parentBakedModel = null;

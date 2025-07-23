@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.armor.client.model;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.model.registry.api.ModelRegistry;
+import com.sigmundgranaas.forgero.model.registry.api.item.ItemModelRegistry;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelResolver;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.item.ItemStack;
@@ -29,7 +29,7 @@ public class ForgeroModelProvider implements ModelResolver {
 	 * @param itemToComponentConverter  A function to resolve a Component from an ItemStack.
 	 * @param modelRegistry             The model registry needed for the resolver pipeline.
 	 */
-	public ForgeroModelProvider(Map<Identifier, Component> componentMap, Function<ItemStack, Optional<Component>> itemToComponentConverter, ModelRegistry modelRegistry) {
+	public ForgeroModelProvider(Map<Identifier, Component> componentMap, Function<ItemStack, Optional<Component>> itemToComponentConverter, ItemModelRegistry modelRegistry) {
 		this.unbakedModelMap = componentMap.entrySet().stream()
 				.collect(Collectors.toMap(
 						Map.Entry::getKey,

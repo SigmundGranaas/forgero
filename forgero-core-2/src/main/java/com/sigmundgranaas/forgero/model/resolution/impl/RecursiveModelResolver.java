@@ -4,16 +4,20 @@ import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
 import com.sigmundgranaas.forgero.model.api.*;
-import com.sigmundgranaas.forgero.model.registry.api.ModelRegistry;
-import com.sigmundgranaas.forgero.model.resolution.api.ModelResolver;
+import com.sigmundgranaas.forgero.model.api.item.CompositeModel;
+import com.sigmundgranaas.forgero.model.api.item.EmptyModel;
+import com.sigmundgranaas.forgero.model.api.item.Model;
+import com.sigmundgranaas.forgero.model.api.item.TextureModel;
+import com.sigmundgranaas.forgero.model.registry.api.item.ItemModelRegistry;
+import com.sigmundgranaas.forgero.model.resolution.api.item.ItemModelResolver;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class RecursiveModelResolver implements ModelResolver {
-	private final ModelRegistry modelRegistry;
+public class RecursiveModelResolver implements ItemModelResolver {
+	private final ItemModelRegistry modelRegistry;
 
-	public RecursiveModelResolver(ModelRegistry modelRegistry) {
+	public RecursiveModelResolver(ItemModelRegistry modelRegistry) {
 		this.modelRegistry = modelRegistry;
 	}
 

@@ -13,7 +13,7 @@ import com.sigmundgranaas.forgero.model.generation.api.ModelGenerationResult;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.ModelDTO;
 import com.sigmundgranaas.forgero.model.pipeline.api.ModelDataInitializer;
 import com.sigmundgranaas.forgero.model.pipeline.api.ModelInitializationResult;
-import com.sigmundgranaas.forgero.model.registry.api.ModelRegistry;
+import com.sigmundgranaas.forgero.model.registry.api.item.ItemModelRegistry;
 import com.sigmundgranaas.forgero.model.registry.impl.MapBackedModelRegistry;
 import com.sigmundgranaas.forgero.model.texture.api.TextureGenerator;
 import com.sigmundgranaas.forgero.model.texture.impl.AwtPalettizedTextureGenerator;
@@ -110,7 +110,7 @@ public class ModelPipelineFullIntegrationTest {
 	@Test
 	void testFullPipelineGeneratesFilesCorrectly() {
 		ResourceProvider resourceProvider = new ClassPathResourceProvider("/assets");
-		ModelRegistry modelRegistry = new MapBackedModelRegistry();
+		ItemModelRegistry modelRegistry = new MapBackedModelRegistry();
 
 		// Initialize models without writing files
 		ModelDataInitializer modelInitializer = new ModelDataInitializer(resourceProvider, "forgero");

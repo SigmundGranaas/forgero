@@ -10,11 +10,14 @@ import com.sigmundgranaas.forgero.common.tags.engine.TaggedRegistry;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.data.pipeline.api.ForgeroDataBundle;
 import com.sigmundgranaas.forgero.data.pipeline.api.ForgeroDataInitializer;
-import com.sigmundgranaas.forgero.model.api.Model;
+import com.sigmundgranaas.forgero.model.api.item.Model;
 import com.sigmundgranaas.forgero.model.generation.api.TextureGenerationTask;
 import com.sigmundgranaas.forgero.model.pipeline.api.ModelDataInitializer;
 import com.sigmundgranaas.forgero.model.pipeline.api.ModelInitializationResult;
-import com.sigmundgranaas.forgero.model.registry.api.ModelRegistry;
+import com.sigmundgranaas.forgero.model.registry.api.armor.ArmorModelRegistrationService;
+import com.sigmundgranaas.forgero.model.registry.api.item.ItemModelRegistry;
+import com.sigmundgranaas.forgero.model.registry.impl.DefaultArmorModelRegistrationService;
+import com.sigmundgranaas.forgero.model.registry.impl.MapBackedArmorModelRegistry;
 import com.sigmundgranaas.forgero.model.registry.impl.MapBackedModelRegistry;
 import com.sigmundgranaas.forgero.model.texture.impl.AwtPalettizedTextureGenerator;
 import com.sigmundgranaas.forgero.model.texture.impl.DefaultTextureGenerator;
@@ -26,8 +29,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
+
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,28 +52,62 @@ public class ClientArmorInitializer implements ClientModInitializer {
 		long startTime = System.currentTimeMillis();
 		LOGGER.info("Starting Forgero Armor client initialization.");
 
+		// DATA LOADING
 		ForgeroDataInitializer dataInitializer = new ForgeroDataInitializer(MOD_NAMESPACE);
 		ForgeroDataBundle bundle = dataInitializer.getDataBundle();
 		TaggedRegistry<Component> componentRegistry = bundle.componentRegistry();
 
-		ResourceProvider resourceProvider = new ClassPathResourceProvider("/assets");
-		ModelDataInitializer modelInitializer = new ModelDataInitializer(resourceProvider, MOD_NAMESPACE);
+		// Set up the simple ItemStack to Component converter
+		ForgeroClient.itemToComponent = (stack) -> {
+			if (stack.getItem() instanceof ForgeroHostItem host) {
+				// For now, we only care about the baseline component, not NBT data.
+				return Optional.of(host.getForgeroComponent());
+			}
+			return Optional.empty();
+		};
 
-		ModelRegistry modelRegistry = new MapBackedModelRegistry();
+		// RESOURCE PROVIDER
+		ResourceProvider resourceProvider = new ClassPathResourceProvider("/assets");
+
+		// ITEM MODEL INITIALIZATION
+		ModelDataInitializer modelInitializer = new ModelDataInitializer(resourceProvider, MOD_NAMESPACE);
+		ItemModelRegistry itemModelRegistry = new MapBackedModelRegistry();
 		ModelInitializationResult initResult = modelInitializer.initialize(
 				componentRegistry.all().stream().collect(Collectors.toMap(Component::id, Function.identity())),
 				bundle.tagGraph(),
-				modelRegistry
+				itemModelRegistry
 		);
+		ForgeroClient.modelRegistry = itemModelRegistry;
 
-		// 1. Identify all items that should have a custom layered model.
+		// ARMOR MODEL INITIALIZATION
+		MapBackedArmorModelRegistry armorModelRegistry = new MapBackedArmorModelRegistry();
+		ArmorModelRegistrationService armorModelRegistrationService = new DefaultArmorModelRegistrationService(armorModelRegistry, resourceProvider);
+		armorModelRegistrationService.registerModels(MOD_NAMESPACE);
+		ForgeroClient.armorModelRegistry = armorModelRegistry;
+		LOGGER.info("Loaded {} custom armor models.", armorModelRegistry.findAll().size());
+
+		// ITEM MODEL OVERRIDE SETUP
+		setupItemModelOverrides(itemModelRegistry, componentRegistry);
+
+		// TEXTURE GENERATION
+		List<TextureGenerationTask> tasks = initResult.generationResult().textureGenerationTasks();
+		generateTextures(tasks, resourceProvider);
+		generateAtlasConfig(tasks);
+
+		// REGISTER RUNTIME RESOURCE PACK
+		RRPCallback.BEFORE_VANILLA.register(a -> a.add(RRP));
+
+		long endTime = System.currentTimeMillis();
+		LOGGER.info("Forgero Armor client initialization complete. Took {}ms.", endTime - startTime);
+	}
+
+	private void setupItemModelOverrides(ItemModelRegistry modelRegistry, TaggedRegistry<Component> componentRegistry) {
 		Set<Identifier> itemsToOverride = modelRegistry.models().stream()
 				.filter(model -> model.getContext().isEmpty())
 				.map(Model::getIdentifier)
 				.map(openId -> new Identifier(openId.namespace(), openId.path()))
 				.collect(Collectors.toSet());
 
-		// 2. Create the map of baseline components for the model provider.
 		Map<Identifier, Component> baselineComponentMap = itemsToOverride.stream()
 				.map(id -> new OpenIdentifier(id.getNamespace(), id.getPath()))
 				.flatMap(openId -> componentRegistry.find(openId).stream())
@@ -79,42 +115,13 @@ public class ClientArmorInitializer implements ClientModInitializer {
 						comp -> new Identifier(comp.id().namespace(), comp.id().path()),
 						Function.identity()
 				));
-		LOGGER.info("Found {} items with custom models to override.", baselineComponentMap.size());
 
-
-		// 3. Define the function for converting an ItemStack to a Component for dynamic overrides.
-		Function<ItemStack, Optional<Component>> itemToComponentConverter = (stack) -> {
-			Identifier itemId = Registries.ITEM.getId(stack.getItem());
-			OpenIdentifier componentId = new OpenIdentifier(itemId.toString());
-			Optional<Component> foundComponent = componentRegistry.find(componentId);
-			if (foundComponent.isPresent()) {
-				return foundComponent;
-			}
-			if (stack.getItem() instanceof ForgeroHostItem host) {
-				return Optional.of(host.getForgeroComponent());
-			}
-			return Optional.empty();
-		};
-
-		// 4. Generate textures needed for runtime models.
-		List<TextureGenerationTask> tasks = initResult.generationResult().textureGenerationTasks();
-		generateTextures(tasks, resourceProvider);
-		generateAtlasConfig(tasks);
-
-		// 5. Register our model provider, injecting all necessary dependencies.
-		var modelProvider = new ForgeroModelProvider(baselineComponentMap, itemToComponentConverter, modelRegistry);
+		var modelProvider = new ForgeroModelProvider(baselineComponentMap, ForgeroClient.itemToComponent, modelRegistry);
 		ModelLoadingPlugin.register(pluginContext -> pluginContext.resolveModel().register(modelProvider));
-
-		// 6. Register the runtime resource pack.
-		RRPCallback.BEFORE_VANILLA.register(a -> a.add(RRP));
-
-		long endTime = System.currentTimeMillis();
-		LOGGER.info("Forgero Armor client initialization complete. Took {}ms.", endTime - startTime);
 	}
 
 	private void generateTextures(List<TextureGenerationTask> tasks, ResourceProvider resourceProvider) {
 		if (tasks.isEmpty()) {
-			LOGGER.info("No armor textures to generate.");
 			return;
 		}
 		LOGGER.info("Generating {} armor textures at runtime...", tasks.size());
@@ -124,7 +131,6 @@ public class ClientArmorInitializer implements ClientModInitializer {
 				new RuntimeTextureWriter(RRP)
 		);
 		textureGenerator.generate(tasks);
-		LOGGER.info("Finished generating armor textures.");
 	}
 
 	private void generateAtlasConfig(List<TextureGenerationTask> tasks) {
@@ -136,7 +142,7 @@ public class ClientArmorInitializer implements ClientModInitializer {
 		tasks.stream()
 				.map(TextureGenerationTask::output)
 				.distinct()
-				.filter(textureId -> !textureId.contains("models/armor"))
+				.filter(textureId -> textureId.startsWith("forgero:item/"))
 				.forEach(textureId -> {
 					JsonObject entry = new JsonObject();
 					entry.addProperty("type", "single");
@@ -145,7 +151,6 @@ public class ClientArmorInitializer implements ClientModInitializer {
 				});
 
 		if (sources.isEmpty()) {
-			LOGGER.info("No new item textures to add to atlas.");
 			return;
 		}
 

@@ -1,7 +1,8 @@
-package com.sigmundgranaas.forgero.model.api;
+package com.sigmundgranaas.forgero.model.api.item;
 
 import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.model.api.ModelResolutionContext;
 
 import java.util.Optional;
 
