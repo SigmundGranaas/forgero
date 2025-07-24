@@ -7,14 +7,12 @@
   {
     "id": "forgero:{target.name}-boots",
     "type": "forgero:texture_model",
-    "textures": {
-      "generation": {
-        "type": "forgero:palette_retexture",
-        "template": "forgero:texture_template/boots",
+    "layers":[{
+      "order": 0,
+      "template": "forgero:texture_template/boots",
         "palette": "forgero:palette/{target.name}",
         "output": "forgero:item/{target.name}-boots"
       }
-    }
-  }
+  ]}
   ]
 }

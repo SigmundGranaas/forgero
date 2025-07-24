@@ -7,14 +7,14 @@
   {
     "id": "forgero:{target.name}-helmet",
     "type": "forgero:texture_model",
-    "textures": {
-      "generation": {
-        "type": "forgero:palette_retexture",
-        "template": "forgero:texture_template/helmet",
-        "palette": "forgero:palette/{target.name}",
-        "output": "forgero:item/{target.name}-helmet"
-      }
-    }
+    "layers":[{
+      "order": 0,
+
+      "template": "forgero:texture_template/helmet",
+      "palette": "forgero:palette/{target.name}",
+      "output": "forgero:item/{target.name}-helmet"
+    }]
+
   }
   ]
 }

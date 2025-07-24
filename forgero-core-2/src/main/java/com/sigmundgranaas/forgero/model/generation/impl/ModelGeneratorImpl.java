@@ -5,22 +5,21 @@ import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.model.generation.api.ModelGenerationResult;
-import com.sigmundgranaas.forgero.model.generation.api.item.ItemModelGenerator;
+import com.sigmundgranaas.forgero.model.generation.api.ModelGenerator;
 import com.sigmundgranaas.forgero.model.generation.api.TextureGenerationTask;
-import com.sigmundgranaas.forgero.model.loading.api.item.ItemModelTemplateProvider;
+import com.sigmundgranaas.forgero.model.loading.api.item.ModelTemplateProvider;
+import com.sigmundgranaas.forgero.model.loading.impl.dto.ArmorModelDTO;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.LayerDTO;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.ModelDTO;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.TexturesDTO;
-import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.*;
+import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.TemplateArmorModelDTO;
+import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.TemplateModelDTO;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class ModelGeneratorImpl implements ItemModelGenerator {
+public class ModelGeneratorImpl implements ModelGenerator {
 
 	private final TagGraph tagGraph;
 	private final PlaceholderResolver placeholderResolver;
@@ -31,47 +30,33 @@ public class ModelGeneratorImpl implements ItemModelGenerator {
 	}
 
 	@Override
-	public ModelGenerationResult generate(Map<OpenIdentifier, Component> components, ItemModelTemplateProvider templateProvider) {
-		Map<OpenIdentifier, ModelDTO> generatedModels = new HashMap<>();
+	public ModelGenerationResult generate(Map<OpenIdentifier, Component> components, ModelTemplateProvider templateProvider) {
+		Map<OpenIdentifier, ModelDTO> generatedItemModels = new HashMap<>();
+		Map<OpenIdentifier, ArmorModelDTO> generatedArmorModels = new HashMap<>();
 		List<TextureGenerationTask> textureTasks = new ArrayList<>();
 
-		// This part can be removed if you make PartModelTemplateDTO also use a list
-		templateProvider.getPartTemplates().forEach((partName, template) -> {
+		// Process Item Models
+		Predicate<Component> partFilter = c -> !(c instanceof StructuredComponent sc) || sc.structure().slots().isEmpty();
+		processItemTemplates(templateProvider.getPartTemplates(), components, generatedItemModels, textureTasks, partFilter);
+		processItemTemplates(templateProvider.getContextualTemplates(), components, generatedItemModels, textureTasks, c -> true);
+		processItemTemplates(templateProvider.getEquipmentTemplates(), components, generatedItemModels, textureTasks, c -> true);
+
+		// Process Armor Models
+		processArmorTemplates(templateProvider.getArmorTemplates(), components, generatedArmorModels, textureTasks, c -> true);
+
+		return new ModelGenerationResult(generatedItemModels, generatedArmorModels, textureTasks);
+	}
+
+	private void processItemTemplates(Collection<? extends TemplateDataProvider<TemplateModelDTO>> templates, Map<OpenIdentifier, Component> components, Map<OpenIdentifier, ModelDTO> models, List<TextureGenerationTask> tasks, Predicate<Component> componentFilter) {
+		for (TemplateDataProvider<TemplateModelDTO> template : templates) {
 			List<Component> compatibleComponents = tagGraph.findTagged(template.target().tag(), components.values())
 					.stream()
-					.filter(c -> !(c instanceof StructuredComponent sc) || sc.structure().slots().isEmpty())
+					.filter(componentFilter)
 					.toList();
 
 			for (Component component : compatibleComponents) {
 				Map<String, Object> context = Map.of("target", component);
-				// Assuming PartModelTemplateDTO is also updated to provide a list
 				for (TemplateModelDTO modelTemplate : template.models()) {
-					ModelDTO resolvedModel = mapTemplateToModel(modelTemplate, context, textureTasks);
-					generatedModels.put(resolvedModel.id(), resolvedModel);
-				}
-			}
-		});
-
-		processTemplates(templateProvider.getContextualTemplates(), components, generatedModels, textureTasks);
-		processTemplates(templateProvider.getEquipmentTemplates(), components, generatedModels, textureTasks);
-
-		// This custom loop is no longer needed as the generic one handles it.
-		// We just need to make sure we don't load MultiModelTemplateDTOs anymore.
-		// The loading logic in FileModelTemplateProvider should be adjusted to parse all templates
-		// using their respective codecs, which now all support lists.
-
-		return new ModelGenerationResult(generatedModels, textureTasks);
-	}
-
-	private void processTemplates(Collection<? extends TemplateModelDataProvider> templates, Map<OpenIdentifier, Component> components, Map<OpenIdentifier, ModelDTO> models, List<TextureGenerationTask> tasks) {
-		for (TemplateModelDataProvider template : templates) {
-			// Find all components that match the template's target tag
-			List<Component> compatibleComponents = tagGraph.findTagged(template.target().tag(), components.values());
-
-			for (Component component : compatibleComponents) {
-				Map<String, Object> context = Map.of("target", component);
-				// CHANGE: Loop over the list of models from the template
-				for(TemplateModelDTO modelTemplate : template.models()) {
 					ModelDTO resolvedModel = mapTemplateToModel(modelTemplate, context, tasks);
 					models.put(resolvedModel.id(), resolvedModel);
 				}
@@ -79,57 +64,83 @@ public class ModelGeneratorImpl implements ItemModelGenerator {
 		}
 	}
 
+	private void processArmorTemplates(Collection<? extends TemplateDataProvider<TemplateArmorModelDTO>> templates, Map<OpenIdentifier, Component> components, Map<OpenIdentifier, ArmorModelDTO> models, List<TextureGenerationTask> tasks, Predicate<Component> componentFilter) {
+		for (TemplateDataProvider<TemplateArmorModelDTO> template : templates) {
+			List<Component> compatibleComponents = tagGraph.findTagged(template.target().tag(), components.values())
+					.stream()
+					.filter(componentFilter)
+					.toList();
+
+			for (Component component : compatibleComponents) {
+				Map<String, Object> context = Map.of("target", component);
+				for (TemplateArmorModelDTO modelTemplate : template.models()) {
+					ArmorModelDTO resolvedModel = mapTemplateToArmorModel(modelTemplate, context, tasks);
+					models.put(resolvedModel.id(), resolvedModel);
+				}
+			}
+		}
+	}
+
+	private ArmorModelDTO mapTemplateToArmorModel(TemplateArmorModelDTO template, Map<String, Object> context, List<TextureGenerationTask> tasks) {
+		String rawId = template.id() != null ? placeholderResolver.resolve(template.id(), context) : null;
+		OpenIdentifier resolvedId = (rawId != null && !rawId.isEmpty()) ? new OpenIdentifier(rawId) : null;
+		if (resolvedId == null) {
+			throw new IllegalStateException("Generated armor model template missing 'id' field after resolution.");
+		}
+
+		String modelIdentifier = placeholderResolver.resolve(template.model(), context);
+		List<LayerDTO> finalLayers = processLayerTemplates(template.layers(), context, tasks);
+		String target = template.target() != null ? placeholderResolver.resolve(template.target(), context) : null;
+		String modelContext = template.context() != null ? placeholderResolver.resolve(template.context(), context) : null;
+
+		return new ArmorModelDTO(resolvedId, "forgero:armor_model", modelIdentifier, finalLayers, template.slots(), target, modelContext);
+	}
+
 	private ModelDTO mapTemplateToModel(TemplateModelDTO template, Map<String, Object> context, List<TextureGenerationTask> tasks) {
 		String rawId = template.id() != null ? placeholderResolver.resolve(template.id(), context) : null;
-		OpenIdentifier resolvedId = null;
-		if (rawId != null && !rawId.isEmpty()) {
-			resolvedId = new OpenIdentifier(rawId);
-		}
-
+		OpenIdentifier resolvedId = (rawId != null && !rawId.isEmpty()) ? new OpenIdentifier(rawId) : null;
 		if (resolvedId == null) {
-			throw new IllegalStateException("Generated model template missing explicit 'id' field after resolution. Template: " + template.type());
+			throw new IllegalStateException("Generated model template missing explicit 'id' field after resolution. Template type: " + template.type());
 		}
 
-		List<LayerDTO> finalLayers = null;
-		if (template.layers() != null) {
-			finalLayers = template.layers().stream()
-					.map(layerTemplate -> {
-						var generation = layerTemplate.textures().generation();
-						String texture = processGenerationBlock(generation, context, tasks);
-						return new LayerDTO(layerTemplate.order(), new TexturesDTO(texture, null), null);
-					})
-					.collect(Collectors.toList());
-		}
+		// Process layers, which is now the only source of textures
+		List<LayerDTO> finalLayers = processLayerTemplates(template.layers(), context, tasks);
 
-		TexturesDTO finalTextures = null;
-		if (template.textures() != null && template.textures().generation() != null) {
-			String texture = processGenerationBlock(template.textures().generation(), context, tasks);
-			finalTextures = new TexturesDTO(texture, null);
+		TexturesDTO textures = null;
+		if (template.type().equals("forgero:texture_model") && !finalLayers.isEmpty()) {
+			// Find the layer with the lowest order that has a texture.
+			var texture = finalLayers.stream()
+					.filter(layer -> layer.textures() != null && layer.textures().defaultTexture() != null)
+					.min(Comparator.comparingInt(LayerDTO::order))
+					.stream().findFirst();
+			if (texture.isPresent()) {
+				textures = texture.map(dto -> new TexturesDTO(dto.textures().defaultTexture(), dto.textures().variants())).get();
+			}
 		}
 
 		String target = template.target() != null ? placeholderResolver.resolve(template.target(), context) : null;
 		String modelContext = template.context() != null ? placeholderResolver.resolve(template.context(), context) : null;
 
-		return new ModelDTO(resolvedId, template.type(), finalLayers, template.slots(), null, finalTextures, target, modelContext, template.parent(), template.display());
+		return new ModelDTO(resolvedId, template.type(), finalLayers, template.slots(), null, textures, target, modelContext, template.parent(), template.display());
 	}
 
-	private String processGenerationBlock(GenerationDTO generation, Map<String, Object> context, List<TextureGenerationTask> tasks) {
-		String templatePath = placeholderResolver.resolve(generation.template(), context);
-		String palettePath = placeholderResolver.resolve(generation.palette(), context);
-		String outputPath = placeholderResolver.resolve(generation.output(), context);
-
-		tasks.add(new TextureGenerationTask(templatePath, palettePath, outputPath));
-		return outputPath;
-	}
-
-
-	/**
-	 * A common interface for all template DTOs that provide a model for a target.
-	 * This simplifies the generation logic by providing a uniform way to access
-	 * the essential parts of a template.
-	 */
-	public interface TemplateModelDataProvider {
-		TargetDTO target();
-		List<TemplateModelDTO> models();
+	private List<LayerDTO> processLayerTemplates(List<TemplateModelDTO.TemplateLayerDTO> layerTemplates, Map<String, Object> context, List<TextureGenerationTask> tasks) {
+		if (layerTemplates == null) {
+			return Collections.emptyList();
+		}
+		return layerTemplates.stream()
+				.map(layerTemplate -> {
+					String texture = null;
+					if (layerTemplate.template() != null && layerTemplate.palette() != null && layerTemplate.output() != null) {
+						String templatePath = placeholderResolver.resolve(layerTemplate.template(), context);
+						String palettePath = placeholderResolver.resolve(layerTemplate.palette(), context);
+						texture = placeholderResolver.resolve(layerTemplate.output(), context);
+						tasks.add(new TextureGenerationTask(templatePath, palettePath, texture));
+					}
+					// Even if texture is null, create a TexturesDTO so LayerDTO is valid.
+					// A null texture string in TexturesDTO is handled by the model rendering system.
+					return new LayerDTO(layerTemplate.order(), new TexturesDTO(texture, null), null);
+				})
+				.collect(Collectors.toList());
 	}
 }

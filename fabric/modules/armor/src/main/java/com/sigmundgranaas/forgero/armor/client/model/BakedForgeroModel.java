@@ -48,7 +48,7 @@ public class BakedForgeroModel implements BakedModel {
 			LOGGER.warn("No model definition found for baseline component {}. This item will not render correctly.", baseline.id());
 			this.transformation = ModelTransformation.NONE;
 			this.sideLit = false;
-			this.particleSprite = null; // Or a fallback missing sprite
+			this.particleSprite = null;
 			this.defaultBakedModel = null;
 			this.overrides = new ForgeroItemModelOverrides(c -> null, itemToComponent);
 			return;

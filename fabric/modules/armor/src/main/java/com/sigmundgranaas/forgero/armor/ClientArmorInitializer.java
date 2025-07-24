@@ -15,6 +15,7 @@ import com.sigmundgranaas.forgero.model.generation.api.TextureGenerationTask;
 import com.sigmundgranaas.forgero.model.pipeline.api.ModelDataInitializer;
 import com.sigmundgranaas.forgero.model.pipeline.api.ModelInitializationResult;
 import com.sigmundgranaas.forgero.model.registry.api.armor.ArmorModelRegistrationService;
+import com.sigmundgranaas.forgero.model.registry.api.armor.ArmorModelRegistry;
 import com.sigmundgranaas.forgero.model.registry.api.item.ItemModelRegistry;
 import com.sigmundgranaas.forgero.model.registry.impl.DefaultArmorModelRegistrationService;
 import com.sigmundgranaas.forgero.model.registry.impl.MapBackedArmorModelRegistry;
@@ -29,7 +30,8 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
-
+import net.minecraft.item.ItemStack;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,15 +54,12 @@ public class ClientArmorInitializer implements ClientModInitializer {
 		long startTime = System.currentTimeMillis();
 		LOGGER.info("Starting Forgero Armor client initialization.");
 
-		// DATA LOADING
 		ForgeroDataInitializer dataInitializer = new ForgeroDataInitializer(MOD_NAMESPACE);
 		ForgeroDataBundle bundle = dataInitializer.getDataBundle();
 		TaggedRegistry<Component> componentRegistry = bundle.componentRegistry();
 
-		// Set up the simple ItemStack to Component converter
 		ForgeroClient.itemToComponent = (stack) -> {
 			if (stack.getItem() instanceof ForgeroHostItem host) {
-				// For now, we only care about the baseline component, not NBT data.
 				return Optional.of(host.getForgeroComponent());
 			}
 			return Optional.empty();
@@ -69,25 +68,33 @@ public class ClientArmorInitializer implements ClientModInitializer {
 		// RESOURCE PROVIDER
 		ResourceProvider resourceProvider = new ClassPathResourceProvider("/assets");
 
-		// ITEM MODEL INITIALIZATION
-		ModelDataInitializer modelInitializer = new ModelDataInitializer(resourceProvider, MOD_NAMESPACE);
+		// UNIFIED MODEL INITIALIZATION
 		ItemModelRegistry itemModelRegistry = new MapBackedModelRegistry();
+		ArmorModelRegistry armorModelRegistry = new MapBackedArmorModelRegistry();
+
+		ModelDataInitializer modelInitializer = new ModelDataInitializer(resourceProvider, MOD_NAMESPACE);
 		ModelInitializationResult initResult = modelInitializer.initialize(
 				componentRegistry.all().stream().collect(Collectors.toMap(Component::id, Function.identity())),
 				bundle.tagGraph(),
-				itemModelRegistry
+				itemModelRegistry,
+				armorModelRegistry
 		);
-		ForgeroClient.modelRegistry = itemModelRegistry;
 
-		// ARMOR MODEL INITIALIZATION
-		MapBackedArmorModelRegistry armorModelRegistry = new MapBackedArmorModelRegistry();
-		ArmorModelRegistrationService armorModelRegistrationService = new DefaultArmorModelRegistrationService(armorModelRegistry, resourceProvider);
-		armorModelRegistrationService.registerModels(MOD_NAMESPACE);
-		ForgeroClient.armorModelRegistry = armorModelRegistry;
-		LOGGER.info("Loaded {} custom armor models.", armorModelRegistry.findAll().size());
+		// Populate the static client holders with the now-filled registries
+		ForgeroClient.modelRegistry = initResult.itemModelRegistry();
+		ForgeroClient.armorModelRegistry = initResult.armorModelRegistry();
+		LOGGER.info("Initialized {} item models and {} armor models from templates.", ForgeroClient.modelRegistry.models().size(), ForgeroClient.armorModelRegistry.findAll().size());
+
+
+		// Load any manually defined armor models as overrides.
+		// These will be added to the registry that was already populated by the generator.
+		ArmorModelRegistrationService manualArmorModelService = new DefaultArmorModelRegistrationService(ForgeroClient.armorModelRegistry, resourceProvider);
+		manualArmorModelService.registerModels(MOD_NAMESPACE);
+		LOGGER.info("Loaded manual/override models. Total armor models: {}", ForgeroClient.armorModelRegistry.findAll().size());
+
 
 		// ITEM MODEL OVERRIDE SETUP
-		setupItemModelOverrides(itemModelRegistry, componentRegistry);
+		setupItemModelOverrides(ForgeroClient.modelRegistry, componentRegistry);
 
 		// TEXTURE GENERATION
 		List<TextureGenerationTask> tasks = initResult.generationResult().textureGenerationTasks();
@@ -124,7 +131,7 @@ public class ClientArmorInitializer implements ClientModInitializer {
 		if (tasks.isEmpty()) {
 			return;
 		}
-		LOGGER.info("Generating {} armor textures at runtime...", tasks.size());
+		LOGGER.info("Generating {} textures at runtime...", tasks.size());
 		var textureGenerator = new DefaultTextureGenerator(
 				resourceProvider,
 				new AwtPalettizedTextureGenerator(),
@@ -142,11 +149,13 @@ public class ClientArmorInitializer implements ClientModInitializer {
 		tasks.stream()
 				.map(TextureGenerationTask::output)
 				.distinct()
+				// Only item textures need to be added to the block atlas. Armor textures are loaded directly.
 				.filter(textureId -> textureId.startsWith("forgero:item/"))
 				.forEach(textureId -> {
 					JsonObject entry = new JsonObject();
 					entry.addProperty("type", "single");
-					entry.addProperty("resource", textureId);
+					// The resource path should not have the "item/" prefix when pointing to the actual file.
+					entry.addProperty("resource", "forgero:" + textureId.substring("forgero:".length()));
 					sources.add(entry);
 				});
 
@@ -157,8 +166,9 @@ public class ClientArmorInitializer implements ClientModInitializer {
 		JsonObject atlas = new JsonObject();
 		atlas.add("sources", sources);
 
-		Identifier atlasId = new Identifier("minecraft:atlases/blocks.json");
-		RRP.addAsset(atlasId, atlas.toString().getBytes());
+		// The ID here is the atlas configuration file itself, not the atlas texture.
+		Identifier atlasId = new Identifier("minecraft", "atlases/blocks.json");
+		RRP.addResource(ResourceType.CLIENT_RESOURCES, atlasId, atlas.toString().getBytes());
 		LOGGER.info("Generated and added atlas configuration for {} item textures.", sources.size());
 	}
 }

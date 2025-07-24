@@ -4,19 +4,14 @@
     "tag": "forgero:metal"
   },
   "model": {
-    "id": "forgero:parts/{target.id.name}-sword_guard",
+    "id": "forgero:parts/{target.name}-sword_guard",
     "type": "forgero:composite_model",
     "layers": [
       {
         "order": 20,
-        "textures": {
-          "generation": {
-            "type": "forgero:palette_retexture",
-            "template": "forgero:texture_templates/parts/sword_guard",
-            "palette": "forgero:palettes/{target.id.name}",
-            "output": "forgero:item/{target.id.name}-sword_guard"
-          }
-        }
+        "template": "forgero:texture_templates/parts/sword_guard",
+        "palette": "forgero:palettes/{target.name}",
+        "output": "forgero:item/{target.name}-sword_guard"
       }
     ]
   }

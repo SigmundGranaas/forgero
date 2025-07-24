@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.armor.client.model;
 
+import com.sigmundgranaas.forgero.armor.client.MinecraftResourceTextureProvider;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
@@ -12,6 +13,7 @@ import com.sigmundgranaas.forgero.model.api.item.TextureModel;
 import com.sigmundgranaas.forgero.model.registry.api.item.ItemModelRegistry;
 import com.sigmundgranaas.forgero.model.rendering.api.TextureCompositor;
 import com.sigmundgranaas.forgero.model.rendering.impl.AwtTextureCompositor;
+
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
@@ -36,7 +38,8 @@ public class ForgeroArmorTextureManager {
 
 	public ForgeroArmorTextureManager(ItemModelRegistry itemModelRegistry) {
 		this.itemModelRegistry = itemModelRegistry;
-		this.compositor = new AwtTextureCompositor(new com.sigmundgranaas.forgero.model.rendering.impl.ClassPathResourceTextureProvider());
+		// Use the new provider that loads textures from Minecraft's resource manager
+		this.compositor = new AwtTextureCompositor(new MinecraftResourceTextureProvider());
 	}
 
 	public Identifier getTexture(ArmorModel armorModel, Component component) {

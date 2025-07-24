@@ -7,26 +7,13 @@
     {
       "id": "forgero:{target.name}-leggings",
       "type": "forgero:texture_model",
-      "textures": {
-        "generation": {
-          "type": "forgero:palette_retexture",
-          "template": "forgero:texture_template/leggings",
-          "palette": "forgero:palette/{target.name}",
-          "output": "forgero:item/{target.name}-leggings"
-        }
-      }
-    },
-    {
-      "id": "forgero:{target.name}_armor_layer_2_model",
-      "type": "forgero:texture_model",
-      "textures": {
-        "generation": {
-          "type": "forgero:palette_retexture",
-          "template": "forgero:texture_template/armor_layer_2",
-          "palette": "forgero:palette/{target.name}",
-          "output": "forgero:models/armor/{target.name}_layer_2"
-        }
-      }
+      "layers": [{
+        "order": 0,
+
+        "template": "forgero:texture_template/leggings",
+        "palette": "forgero:palette/{target.name}",
+        "output": "forgero:item/{target.name}-leggings"
+      }]
     }
   ]
 }
