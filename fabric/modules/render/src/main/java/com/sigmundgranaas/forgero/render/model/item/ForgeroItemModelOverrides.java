@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.armor.client.model;
+package com.sigmundgranaas.forgero.render.model.item;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import net.minecraft.client.render.model.BakedModel;

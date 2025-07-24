@@ -1,6 +1,5 @@
-package com.sigmundgranaas.forgero.armor.client.model;
+package com.sigmundgranaas.forgero.render.model.armor;
 
-import com.sigmundgranaas.forgero.armor.item.ForgeroArmorItem;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.model.api.armor.ArmorModel;
 import com.sigmundgranaas.forgero.model.resolution.api.armor.ArmorModelResolver;
@@ -52,7 +51,6 @@ public class ForgeroArmorFeatureRenderer<T extends LivingEntity, M extends Biped
 			return;
 		}
 		ItemStack itemStack = entity.getEquippedStack(slot);
-		if (!(itemStack.getItem() instanceof ForgeroArmorItem)) return;
 
 		Optional<Component> componentOpt = itemToComponent.apply(itemStack);
 		if (componentOpt.isEmpty()) return;

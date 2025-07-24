@@ -6,13 +6,7 @@
 //  Move the Fabric submodules into a common module
 subprojects {
 	dependencies {
-		// Common modules
-		implementation(project(path: ":fabric:minecraft-common", configuration: 'namedElements'))
-
 		// Fabric Loader
 		modCompileOnly "net.fabricmc:fabric-loader:${project.loader_version}"
-
-		// Fabric API
-		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 	}
 }

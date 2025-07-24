@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "forgero-armor",
+  "id": "forgero-renderer",
   "version": "${version}",
-  "name": "Forgero armor",
+  "name": "Forgero renderer",
   "description": "Trade support for Forgero.",
   "authors": [
     "JorisDeBeer"
@@ -18,10 +18,13 @@
   "icon": "assets/forgero/icon.png",
   "environment": "*",
   "entrypoints": {
-    "main": [
-      "com.sigmundgranaas.forgero.armor.ArmorInitializer"
+    "client": [
+      "com.sigmundgranaas.forgero.render.RenderInitializer"
     ]
   },
+  "mixins": [
+    "rendering.mixins.json"
+  ],
   "depends": {
     "fabricloader": ">=0.12.12",
     "minecraft": "1.20.1",

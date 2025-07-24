@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.armor.client;
+package com.sigmundgranaas.forgero.render.texture;
 
 import com.sigmundgranaas.forgero.model.texture.api.TextureWriter;
 import net.devtech.arrp.api.RuntimeResourcePack;

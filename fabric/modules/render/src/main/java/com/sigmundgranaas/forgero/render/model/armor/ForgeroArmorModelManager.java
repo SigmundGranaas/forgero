@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.armor.client.model;
+package com.sigmundgranaas.forgero.render.model.armor;
 
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.entity.model.BipedEntityModel;

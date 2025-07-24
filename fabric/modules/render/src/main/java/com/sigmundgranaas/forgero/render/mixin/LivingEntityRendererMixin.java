@@ -1,9 +1,9 @@
-package com.sigmundgranaas.forgero.armor.client.mixin;
+package com.sigmundgranaas.forgero.render.mixin;
 
-import com.sigmundgranaas.forgero.armor.ForgeroClient;
-import com.sigmundgranaas.forgero.armor.client.model.ForgeroArmorFeatureRenderer;
-import com.sigmundgranaas.forgero.armor.client.model.ForgeroArmorModelManager;
-import com.sigmundgranaas.forgero.armor.client.model.ForgeroArmorTextureManager;
+import com.sigmundgranaas.forgero.render.ForgeroClient;
+import com.sigmundgranaas.forgero.render.model.armor.ForgeroArmorFeatureRenderer;
+import com.sigmundgranaas.forgero.render.model.armor.ForgeroArmorModelManager;
+import com.sigmundgranaas.forgero.render.model.armor.ForgeroArmorTextureManager;
 import com.sigmundgranaas.forgero.model.registry.api.armor.ArmorModelRegistry;
 import com.sigmundgranaas.forgero.model.registry.api.item.ItemModelRegistry;
 import com.sigmundgranaas.forgero.model.resolution.api.armor.ArmorModelResolver;

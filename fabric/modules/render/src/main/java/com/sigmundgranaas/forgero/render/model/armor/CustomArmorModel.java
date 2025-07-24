@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.armor.client.model;
+package com.sigmundgranaas.forgero.render.model.armor;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.model.ModelPart;

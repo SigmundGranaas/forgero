@@ -1,10 +1,9 @@
-package com.sigmundgranaas.forgero.armor;
+package com.sigmundgranaas.forgero.render;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.sigmundgranaas.forgero.armor.client.RuntimeTextureWriter;
-import com.sigmundgranaas.forgero.armor.client.model.ForgeroModelProvider;
-import com.sigmundgranaas.forgero.armor.item.ForgeroHostItem;
+import com.sigmundgranaas.forgero.render.texture.RuntimeTextureWriter;
+import com.sigmundgranaas.forgero.render.model.item.ForgeroModelProvider;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.tags.engine.TaggedRegistry;
 import com.sigmundgranaas.forgero.core.component.api.Component;
@@ -30,7 +29,8 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
-import net.minecraft.item.ItemStack;
+
+import net.minecraft.registry.Registries;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
@@ -38,15 +38,14 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Environment(EnvType.CLIENT)
-public class ClientArmorInitializer implements ClientModInitializer {
+public class RenderInitializer implements ClientModInitializer {
 	public static final String MOD_NAMESPACE = "forgero";
-	public static final Logger LOGGER = LoggerFactory.getLogger(ClientArmorInitializer.class);
+	public static final Logger LOGGER = LoggerFactory.getLogger(RenderInitializer.class);
 	public static final RuntimeResourcePack RRP = RuntimeResourcePack.create(MOD_NAMESPACE + ":armor_resources");
 
 	@Override
@@ -58,12 +57,7 @@ public class ClientArmorInitializer implements ClientModInitializer {
 		ForgeroDataBundle bundle = dataInitializer.getDataBundle();
 		TaggedRegistry<Component> componentRegistry = bundle.componentRegistry();
 
-		ForgeroClient.itemToComponent = (stack) -> {
-			if (stack.getItem() instanceof ForgeroHostItem host) {
-				return Optional.of(host.getForgeroComponent());
-			}
-			return Optional.empty();
-		};
+		ForgeroClient.itemToComponent = (stack) -> bundle.componentRegistry().find(new OpenIdentifier(Registries.ITEM.getId(stack.getItem()).toString()));
 
 		// RESOURCE PROVIDER
 		ResourceProvider resourceProvider = new ClassPathResourceProvider("/assets");

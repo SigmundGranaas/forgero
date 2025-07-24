@@ -4,11 +4,16 @@
 
 dependencies {
 	implementation(project(":forgero-core-2"))
-	runtimeOnly(project(path: ":fabric:modules:render",  configuration: 'namedElements'))
 
 	// Fabric Loader
-	modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
+	modCompileOnly("net.fabricmc:fabric-loader:${project.loader_version}")
 
 	// Fabric API
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
+
+	modApi("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
+}
+
+loom {
+	accessWidenerPath = file("src/main/resources/render.accesswidener")
 }

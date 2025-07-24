@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "com.sigmundgranaas.forgero.armor.client.mixin",
+  "package": "com.sigmundgranaas.forgero.render.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
     "ArmorFeatureRendererMixin",

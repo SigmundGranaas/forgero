@@ -1,11 +1,15 @@
-package com.sigmundgranaas.forgero.armor.client.mixin;
+package com.sigmundgranaas.forgero.render.mixin;
 
-import com.sigmundgranaas.forgero.armor.item.ForgeroArmorItem;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.render.ForgeroClient;
+
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.registry.Registries;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,7 +25,7 @@ public class ArmorFeatureRendererMixin<T extends LivingEntity, M extends BipedEn
 	 */
 	@Inject(method = "renderArmor", at = @At("HEAD"), cancellable = true)
 	private void onRenderArmor(MatrixStack matrices, VertexConsumerProvider vertexConsumers, T entity, EquipmentSlot armorSlot, int light, A model, CallbackInfo ci) {
-		if (entity.getEquippedStack(armorSlot).getItem() instanceof ForgeroArmorItem) {
+		if (ForgeroClient.itemToComponent.apply(entity.getEquippedStack(armorSlot)).flatMap(comp -> ForgeroClient.armorModelRegistry.find(comp.id())).isPresent()) {
 			ci.cancel();
 		}
 	}

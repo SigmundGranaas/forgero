@@ -1,6 +1,6 @@
-package com.sigmundgranaas.forgero.armor.client.model;
+package com.sigmundgranaas.forgero.render.model.armor;
 
-import com.sigmundgranaas.forgero.armor.client.MinecraftResourceTextureProvider;
+import com.sigmundgranaas.forgero.render.texture.MinecraftResourceTextureProvider;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;

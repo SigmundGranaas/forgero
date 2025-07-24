@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.armor;
+package com.sigmundgranaas.forgero.render;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.model.registry.api.armor.ArmorModelRegistry;

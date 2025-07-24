@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.armor.client.model;
+package com.sigmundgranaas.forgero.render.model.item;
 
 import com.google.gson.JsonElement;
 import com.mojang.serialization.DataResult;
