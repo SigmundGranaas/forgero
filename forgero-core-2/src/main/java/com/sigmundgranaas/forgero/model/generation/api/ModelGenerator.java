@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.model.generation.api;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.model.loading.api.ModelTemplateProvider;
+import com.sigmundgranaas.forgero.model.loading.api.item.ModelTemplateProvider;
 
 import java.util.Map;
 
@@ -15,7 +15,7 @@ public interface ModelGenerator {
 	 * Generates models and texture tasks.
 	 *
 	 * @param components       A map of all generated runtime Components, keyed by their ID.
-	 * @param templateProvider Provider for loaded part and contextual model templates.
+	 * @param templateProvider Provider for loaded model templates.
 	 * @return A {@link ModelGenerationResult} containing the generated model DTOs and texture tasks.
 	 */
 	ModelGenerationResult generate(Map<OpenIdentifier, Component> components, ModelTemplateProvider templateProvider);

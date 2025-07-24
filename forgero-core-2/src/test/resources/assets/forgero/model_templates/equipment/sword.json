@@ -4,7 +4,7 @@
     "tag": "forgero:sword"
   },
   "model": {
-    "id": "forgero:equipment/{target.id.name}",
+    "id": "forgero:equipment/{target.name}",
     "type": "forgero:composite_model",
     "slots": [
       {

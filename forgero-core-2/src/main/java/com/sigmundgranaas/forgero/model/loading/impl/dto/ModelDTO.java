@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.model.loading.impl.dto;
 
+import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,7 +15,9 @@ public record ModelDTO(
 		@Nullable String texture,
 		@Nullable TexturesDTO textures,
 		@Nullable String target,
-		@Nullable String context
+		@Nullable String context,
+		@Nullable String parent,
+		@Nullable JsonElement display
 ) {
 	public Optional<List<LayerDTO>> getLayers() {
 		return Optional.ofNullable(layers);
@@ -42,5 +45,13 @@ public record ModelDTO(
 
 	public Optional<OpenIdentifier> getOpenIdentifierId() {
 		return Optional.ofNullable(id);
+	}
+
+	public Optional<String> getParent() {
+		return Optional.ofNullable(parent);
+	}
+
+	public Optional<JsonElement> getDisplay() {
+		return Optional.ofNullable(display);
 	}
 }

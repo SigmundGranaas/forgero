@@ -4,15 +4,14 @@
     "tag": "forgero:wood"
   },
   "model": {
-    "id": "forgero:parts/{target.id.name}-handle",
+    "id": "forgero:parts/{target.name}-handle",
     "type": "forgero:texture_model",
-    "textures": {
-      "generation": {
-        "type": "forgero:palette_retexture",
+    "layers": [
+      {
         "template": "forgero:texture_templates/parts/handle",
-        "palette": "forgero:palettes/{target.id.name}",
-        "output": "forgero:item/{target.id.name}-handle"
+        "palette": "forgero:palettes/{target.name}",
+        "output": "forgero:item/{target.name}-handle"
       }
-    }
+    ]
   }
 }

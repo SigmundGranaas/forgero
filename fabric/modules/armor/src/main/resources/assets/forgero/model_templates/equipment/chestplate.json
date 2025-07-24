@@ -1,0 +1,20 @@
+{
+  "type": "forgero:equipment_model_template",
+  "target": {
+    "tag": "forgero:materials/armor_material"
+  },
+  "models": [
+  {
+    "id": "forgero:{target.name}-chestplate",
+    "type": "forgero:texture_model",
+    "layers": [{
+      "order": 0,
+
+      "template": "forgero:texture_template/chestplate",
+      "palette": "forgero:palette/{target.name}",
+      "output": "forgero:item/{target.name}-chestplate"
+    }]
+  }
+
+  ]
+}

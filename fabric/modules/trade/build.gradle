@@ -4,4 +4,10 @@
 
 dependencies {
 	implementation(project(":fabric:${rootProject.mod_id}-fabric-core"))
+
+	// Common modules
+	implementation(project(path: ":fabric:minecraft-common", configuration: 'namedElements'))
+
+	// Fabric API
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 }

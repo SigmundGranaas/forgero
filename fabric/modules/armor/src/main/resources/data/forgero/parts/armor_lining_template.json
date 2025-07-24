@@ -1,0 +1,19 @@
+{
+  "type": "forgero:part_template",
+  "name": "Armor Lining",
+  "tags": ["forgero:armor_lining_type"],
+  "host_template": {
+    "create": {
+      "id": "forgero:{material.name}-lining",
+      "class_name": "forgero:part_item",
+      "item_group": "forgero:combat"
+    }
+  },
+  "structure": {
+    "id": "forgero:{material.name}-{shape.name}_lining",
+    "slots": {
+      "material": { "type": "forgero:armor_lining_material" },
+      "shape": { "type": "forgero:armor_lining_shape" }
+    }
+  }
+}

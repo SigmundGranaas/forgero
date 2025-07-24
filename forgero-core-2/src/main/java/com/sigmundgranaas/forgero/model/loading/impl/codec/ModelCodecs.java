@@ -22,6 +22,7 @@ public class ModelCodecs {
 
 	public static final Codec<SlotDTO> SLOT_DTO_CODEC = SlotDTO.CODEC;
 
+
 	public static final Codec<ModelDTO> MODEL_DTO_CODEC_DISPATCHER = RecordCodecBuilder.create(instance -> instance.group(
 			CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("id").forGetter(ModelDTO::getOpenIdentifierId),
 			Codec.STRING.fieldOf("type").forGetter(ModelDTO::type),
@@ -30,6 +31,8 @@ public class ModelCodecs {
 			Codec.STRING.optionalFieldOf("texture").forGetter(ModelDTO::getTexture),
 			TEXTURES_DTO_CODEC.optionalFieldOf("textures").forGetter(ModelDTO::getTextures),
 			Codec.STRING.optionalFieldOf("target").forGetter(ModelDTO::getTarget),
-			Codec.STRING.optionalFieldOf("context").forGetter(ModelDTO::getContext)
-	).apply(instance, (id, type, layers, slots, texture, textures, target, context) -> new ModelDTO(id.orElse(null), type, layers.orElse(null), slots.orElse(null), texture.orElse(null), textures.orElse(null), target.orElse(null), context.orElse(null))));
+			Codec.STRING.optionalFieldOf("context").forGetter(ModelDTO::getContext),
+			Codec.STRING.optionalFieldOf("parent").forGetter(ModelDTO::getParent),
+			JsonElementCodec.INSTANCE.optionalFieldOf("display").forGetter(ModelDTO::getDisplay)
+	).apply(instance, (id, type, layers, slots, texture, textures, target, context, parent, display) -> new ModelDTO(id.orElse(null), type, layers.orElse(null), slots.orElse(null), texture.orElse(null), textures.orElse(null), target.orElse(null), context.orElse(null), parent.orElse(null), display.orElse(null))));
 }

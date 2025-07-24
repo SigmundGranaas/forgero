@@ -1,0 +1,13 @@
+{
+  "type": "forgero:shape",
+  "name": "Padding",
+  "tags": ["forgero:armor_lining_shape", "forgero:default_armor_lining"],
+  "attributes": [
+    {
+      "id": "forgero:shape-padding-durability",
+      "type": "forgero:durability",
+      "composite": "forgero:part-composite",
+      "computation": { "multiply": 0.5 }
+    }
+  ]
+}

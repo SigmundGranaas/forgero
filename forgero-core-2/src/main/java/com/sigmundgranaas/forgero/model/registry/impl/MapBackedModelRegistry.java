@@ -1,15 +1,15 @@
 package com.sigmundgranaas.forgero.model.registry.impl;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.model.api.Model;
-import com.sigmundgranaas.forgero.model.registry.api.ModelRegistry;
+import com.sigmundgranaas.forgero.model.api.item.Model;
+import com.sigmundgranaas.forgero.model.registry.api.item.ItemModelRegistry;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MapBackedModelRegistry implements ModelRegistry {
+public class MapBackedModelRegistry implements ItemModelRegistry {
 	private static final String DEFAULT_CONTEXT = "default";
 	private final Map<String, Map<OpenIdentifier, Model>> models = new ConcurrentHashMap<>();
 

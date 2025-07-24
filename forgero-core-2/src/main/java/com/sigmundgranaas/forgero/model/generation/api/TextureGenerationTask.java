@@ -1,8 +1,10 @@
 package com.sigmundgranaas.forgero.model.generation.api;
 
+import com.sigmundgranaas.forgero.model.generation.api.item.ItemModelGenerator;
+
 /**
  * A record representing a single, self-contained instruction for generating a texture.
- * This is a pure data object produced by the {@link ModelGenerator} and consumed
+ * This is a pure data object produced by the {@link ItemModelGenerator} and consumed
  * by the {@link com.sigmundgranaas.forgero.model.texture.api.TextureGenerator}.
  *
  * @param template The identifier of the greyscale template image (e.g., "forgero:texture_template/part/pickaxe_head").
