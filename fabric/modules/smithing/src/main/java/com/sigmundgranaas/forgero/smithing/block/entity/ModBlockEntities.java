@@ -21,6 +21,8 @@ public class ModBlockEntities {
 
 	public static BlockEntityType<BloomeryExtensionBlockEntity> BLOOMERY_EXTENSION;
 
+	public static BlockEntityType<BellowsBlockEntity> BELLOWS;
+
 	public static BlockEntityType<MoldBlockEntity> MOLD;
 
 	// Track all mold blocks to potentially recreate the block entity type
@@ -41,6 +43,11 @@ public class ModBlockEntities {
 				new Identifier(Forgero.NAMESPACE, "bloomery_extension"),
 				FabricBlockEntityTypeBuilder.create(BloomeryExtensionBlockEntity::new,
 						ModBlocks.BLOOMERY_EXTENSION).build(null));
+
+		BELLOWS = Registry.register(Registries.BLOCK_ENTITY_TYPE,
+				new Identifier(Forgero.NAMESPACE, "bellows"),
+				FabricBlockEntityTypeBuilder.create(BellowsBlockEntity::new,
+						ModBlocks.BELLOWS).build(null));
 
 		// Initialize MOLD BlockEntityType with any already registered mold blocks
 		rebuildMoldBlockEntityType();

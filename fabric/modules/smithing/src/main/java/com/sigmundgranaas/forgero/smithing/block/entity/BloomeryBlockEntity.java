@@ -4,6 +4,7 @@ import com.sigmundgranaas.forgero.smithing.block.custom.BloomeryBlock;
 import com.sigmundgranaas.forgero.smithing.block.custom.BloomeryExtensionBlock;
 import com.sigmundgranaas.forgero.smithing.fuel.BloomeryFuelSystem;
 import com.sigmundgranaas.forgero.smithing.fuel.FuelType;
+import com.sigmundgranaas.forgero.smithing.block.custom.BellowsBlock;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -110,11 +111,13 @@ public class BloomeryBlockEntity extends BlockEntity {
 			fuelSlot = new ItemStack(stack.getItem(), 1);
 			fuelSystem.addFuel(fuelType, 1);
 			markDirty();
+			syncToClient(); // Sync fuel inventory change to client
 			return true;
 		} else if (fuelSlot.isOf(stack.getItem()) && fuelSlot.getCount() < fuelSlot.getMaxCount()) {
 			fuelSlot.increment(1);
 			fuelSystem.addFuel(fuelType, 1);
 			markDirty();
+			syncToClient(); // Sync fuel inventory change to client
 			return true;
 		}
 		return false;
@@ -131,6 +134,7 @@ public class BloomeryBlockEntity extends BlockEntity {
 		if (fuelSlot.getCount() <= 0) fuelSlot = ItemStack.EMPTY;
 		fuelSystem.consumeFuel();
 		markDirty();
+		syncToClient(); // Sync fuel inventory change to client
 		return burnTime;
 	}
 
@@ -138,14 +142,71 @@ public class BloomeryBlockEntity extends BlockEntity {
 	 * Gets the current temperature of the bloomery based on fuel
 	 */
 	public int getCurrentTemperature() {
-		return fuelSystem.getCurrentTemperature();
+		int baseTemperature = fuelSystem.getCurrentTemperature();
+
+		// If fuel system returns 0 but bloomery is lit, use the fuel type's max temperature
+		if (baseTemperature == 0 && isBurning()) {
+			// Determine base temperature from available fuel types
+			if (canReachTemperature(900)) {
+				baseTemperature = 1000; // Charcoal available
+			} else if (canReachTemperature(750)) {
+				baseTemperature = 800;  // Coal available
+			}
+		}
+
+		int bellowsBoost = getBellowsTemperatureBoost();
+		return baseTemperature + bellowsBoost;
+	}
+
+	/**
+	 * Gets the total temperature boost from all connected bellows
+	 */
+	private int getBellowsTemperatureBoost() {
+		if (world == null) return 0;
+
+		int totalBoost = 0;
+
+		// Check all horizontal directions for active bellows
+		for (Direction direction : new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST}) {
+			BlockPos bellowsPos = pos.offset(direction);
+			BlockEntity entity = world.getBlockEntity(bellowsPos);
+
+			if (entity instanceof BellowsBlockEntity bellows) {
+				totalBoost += bellows.getTemperatureBoost();
+			}
+		}
+
+		return totalBoost;
 	}
 
 	/**
 	 * Checks if the bloomery can reach the target temperature
 	 */
 	public boolean canReachTemperature(int targetTemp) {
-		return fuelSystem.canReachTemperature(targetTemp);
+		// Check base fuel system capability plus potential bellows boost
+		int maxPossibleTemp = fuelSystem.getCurrentTemperature() + getMaxPotentialBellowsBoost();
+		return maxPossibleTemp >= targetTemp || fuelSystem.canReachTemperature(targetTemp);
+	}
+
+	/**
+	 * Gets the maximum potential temperature boost from connected bellows
+	 */
+	private int getMaxPotentialBellowsBoost() {
+		if (world == null) return 0;
+
+		int maxBoost = 0;
+
+		// Check all horizontal directions for bellows (even if not currently active)
+		for (Direction direction : new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST}) {
+			BlockPos bellowsPos = pos.offset(direction);
+			BlockEntity entity = world.getBlockEntity(bellowsPos);
+
+			if (entity instanceof BellowsBlockEntity) {
+				maxBoost += 200; // Each bellows can provide 200 temperature boost
+			}
+		}
+
+		return maxBoost;
 	}
 
 	private FuelType getFuelType(ItemStack stack) {
@@ -200,19 +261,28 @@ public class BloomeryBlockEntity extends BlockEntity {
 	}
 
 	/**
-	 * Synchronizes the lit state with all adjacent bloomery extension blocks
+	 * Syncs the lit state with adjacent bloomery extension blocks
 	 */
 	public void syncLitStateWithExtensions(World world, BlockPos pos, boolean isLit) {
-		// Check all 6 directions for extension blocks and sync their lit state
-		for (Direction direction : Direction.values()) {
-			BlockPos adjacentPos = pos.offset(direction);
-			BlockState adjacentState = world.getBlockState(adjacentPos);
+		// Check all horizontal directions for bloomery extension blocks
+		for (Direction direction : new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST}) {
+			BlockPos extensionPos = pos.offset(direction);
+			BlockState extensionState = world.getBlockState(extensionPos);
 
-			// Check if it's a BloomeryExtensionBlock and update its LIT state
-			if (adjacentState.getBlock() instanceof BloomeryExtensionBlock) {
-				BlockState newState = adjacentState.with(BloomeryExtensionBlock.LIT, isLit);
-				world.setBlockState(adjacentPos, newState, Block.NOTIFY_ALL);
+			if (extensionState.getBlock() instanceof BloomeryExtensionBlock) {
+				// Update the extension block's lit state to match the main bloomery
+				BlockState newState = extensionState.with(BloomeryExtensionBlock.LIT, isLit);
+				world.setBlockState(extensionPos, newState, Block.NOTIFY_ALL);
 			}
+		}
+	}
+
+	/**
+	 * Syncs data to client when fuel inventory changes
+	 */
+	private void syncToClient() {
+		if (world != null && !world.isClient) {
+			world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_ALL);
 		}
 	}
 }

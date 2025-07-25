@@ -138,12 +138,15 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 		// Add fuel handling at the beginning
 		FuelType fuelType = getFuelType(stack);
 		if (fuelType != null) {
-			// Pass fuel to the main bloomery block if connected
-			BlockPos southPos = entity.getPos().offset(Direction.SOUTH);
+			// Find the main bloomery block relative to this extension's facing
+			Direction extensionFacing = entity.getCachedState().get(FACING);
+			Direction rightSide = extensionFacing.rotateYClockwise(); // Bloomery is to the right of the extension
+			BlockPos bloomeryPos = entity.getPos().offset(rightSide);
+
 			World world = entity.getWorld();
 			if (world != null) {
-				BlockEntity southEntity = world.getBlockEntity(southPos);
-				if (southEntity instanceof BloomeryBlockEntity bloomery) {
+				BlockEntity bloomeryEntity = world.getBlockEntity(bloomeryPos);
+				if (bloomeryEntity instanceof BloomeryBlockEntity bloomery) {
 					if (bloomery.insertFuel(stack)) {
 						return stack.copyWithCount(stack.getCount() - 1);
 					}
@@ -343,6 +346,28 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 	// Gets the placement state for the bloomery extension when placed by a player.
 	@Override
 	public BlockState getPlacementState(ItemPlacementContext ctx) {
+		BlockPos pos = ctx.getBlockPos();
+		World world = ctx.getWorld();
+
+		// Find the adjacent bloomery block and match its facing
+		for (Direction direction : Direction.Type.HORIZONTAL) {
+			BlockPos bloomeryPos = pos.offset(direction.getOpposite());
+			BlockState bloomeryState = world.getBlockState(bloomeryPos);
+
+			if (bloomeryState.getBlock() instanceof BloomeryBlock) {
+				Direction bloomeryFacing = bloomeryState.get(BloomeryBlock.FACING);
+				Direction leftSide = bloomeryFacing.rotateYCounterclockwise(); // Get the left side relative to facing
+
+				// If this position is to the left of the bloomery, use the bloomery's facing
+				if (direction == leftSide) {
+					return this.getDefaultState()
+							.with(FACING, bloomeryFacing)
+							.with(LIT, false);
+				}
+			}
+		}
+
+		// Fallback to default placement if no valid bloomery found
 		return this.getDefaultState()
 				.with(FACING, ctx.getHorizontalPlayerFacing().getOpposite())
 				.with(LIT, false);
@@ -355,10 +380,23 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 			return false;
 		}
 
-		// Only allow placement if there is a bloomery block to the SOUTH
-		BlockPos southPos = pos.offset(Direction.SOUTH);
-		BlockState southState = world.getBlockState(southPos);
-		return southState.getBlock() instanceof BloomeryBlock;
+		// Check all directions for a bloomery block and determine if this position is to the left
+		for (Direction direction : Direction.Type.HORIZONTAL) {
+			BlockPos bloomeryPos = pos.offset(direction.getOpposite());
+			BlockState bloomeryState = world.getBlockState(bloomeryPos);
+
+			if (bloomeryState.getBlock() instanceof BloomeryBlock) {
+				Direction bloomeryFacing = bloomeryState.get(BloomeryBlock.FACING);
+				Direction leftSide = bloomeryFacing.rotateYCounterclockwise(); // Get the left side relative to facing
+
+				// Check if this extension position is to the left of the bloomery
+				if (direction == leftSide) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	// Adds the block's properties to the state manager.

@@ -41,7 +41,7 @@ public class BloomeryExtensionBlockEntity extends BlockEntity {
 	public static final int ORE_SLOT = 2;
 
 	// Temperature system constants
-	private static final int HEAT_PER_TICK = 1; // Heating rate when bloomery is lit
+	private static final int HEAT_PER_TICK = 10; // Heating rate when bloomery is lit
 	private static final int COOL_PER_TICK = 1; // Cooling rate when bloomery is not lit
 	private static final int TICK_INTERVAL = 2; // Update every 10 ticks (twice as fast as regular cooling)
 	private int tickCounter = 0;
@@ -209,7 +209,7 @@ public class BloomeryExtensionBlockEntity extends BlockEntity {
 					// When bloomery is lit, determine max temperature based on fuel system
 					int maxAllowedTemp;
 					if (bloomeryTemperature > 0) {
-						// Use actual fuel system temperature if available
+						// Use actual fuel system temperature if available (includes bellows boost)
 						maxAllowedTemp = bloomeryTemperature;
 					} else {
 						// Fallback: check if connected bloomery can reach high temps (charcoal) or limited (coal)
@@ -221,12 +221,12 @@ public class BloomeryExtensionBlockEntity extends BlockEntity {
 					}
 
 					int targetTemp = Math.min(maxAllowedTemp, TemperatureUtils.getMaxTemp(toolStack));
+
+					// Always heat toward the target temperature when lit
 					if (currentTemp < targetTemp) {
 						newTemp = Math.min(targetTemp, currentTemp + HEAT_PER_TICK);
-					} else if (currentTemp > targetTemp) {
-						// Cool down if current temp exceeds what the fuel can provide
-						newTemp = Math.max(targetTemp, currentTemp - COOL_PER_TICK);
 					}
+					// Don't cool down when bloomery is active - let it maintain higher temps with bellows
 				} else {
 					// Cool the tool when bloomery is not lit
 					newTemp = Math.max(TemperatureUtils.DEFAULT_TEMPERATURE, currentTemp - COOL_PER_TICK);
@@ -342,9 +342,12 @@ public class BloomeryExtensionBlockEntity extends BlockEntity {
 			BlockState adjacentState = world.getBlockState(adjacentPos);
 
 			// Check if it's a BloomeryBlock and if it's lit
-			if (adjacentState.getBlock() instanceof com.sigmundgranaas.forgero.smithing.block.custom.BloomeryBlock) {
-				if (adjacentState.get(com.sigmundgranaas.forgero.smithing.block.custom.BloomeryBlock.LIT)) {
-					return true;
+			if (adjacentState.getBlock() instanceof com.sigmundgranaas.forgero.smithing.block.custom.BloomeryBlock bloomeryBlock) {
+				// Double check that the state actually has the LIT property before accessing it
+				if (adjacentState.contains(com.sigmundgranaas.forgero.smithing.block.custom.BloomeryBlock.LIT)) {
+					if (adjacentState.get(com.sigmundgranaas.forgero.smithing.block.custom.BloomeryBlock.LIT)) {
+						return true;
+					}
 				}
 			}
 		}

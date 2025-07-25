@@ -39,11 +39,6 @@ public class BloomeryBlockEntityRenderer implements BlockEntityRenderer<Bloomery
 
 	private void renderFuelBar(BloomeryBlockEntity entity, int coalLevel, Direction facing, MatrixStack matrices,
 							   VertexConsumerProvider vertexConsumers, int light, int overlay) {
-		// Debug: Log the coal level to see what we're getting
-		if (coalLevel > 0) {
-			System.out.println("Rendering fuel bar with coal level: " + coalLevel + " from fuel slot: " + entity.getFuelSlot());
-		}
-
 		// Calculate fill percentage (max 64 coal)
 		float fillPercentage = Math.min(coalLevel / 64.0f, 1.0f);
 
@@ -54,10 +49,10 @@ public class BloomeryBlockEntityRenderer implements BlockEntityRenderer<Bloomery
 
 		matrices.push();
 
-		// Position the bar based on facing direction
-		matrices.translate(2, 2, 2);
+		// Center on the block first
+		matrices.translate(0.5, 0, 0.5);
 
-		// Rotate based on facing direction to position bar on the front
+		// Rotate based on facing direction
 		switch (facing) {
 			case NORTH -> matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(0));
 			case SOUTH -> matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
@@ -65,40 +60,23 @@ public class BloomeryBlockEntityRenderer implements BlockEntityRenderer<Bloomery
 			case EAST -> matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-90));
 		}
 
-		// Move to the front face of the block
-		matrices.translate(0, 0, -0.48);
+		// Position the bar on the front face of the block (after rotation)
+		// This will always place it on the "front" face regardless of actual facing
+		matrices.translate(0.376, 0.1876, -0.3124);
 
 		// Bar dimensions
-		float barWidth = 0.08f;
-		float barHeight = 0.6f;
-		float barDepth = 0.02f;
-		float filledHeight = barHeight * fillPercentage;
+		float barWidth = 0.0624f; // Exactly 1 pixel (1/16 = 0.0625)
+		float maxBarHeight = 0.4373f; // Maximum 7 pixels high (7/16 = 0.4375)
+		float barDepth = 0.124f;
+		float filledHeight = maxBarHeight * fillPercentage;
 
-		// Position bar slightly to the side
-		matrices.translate(-0.35, 0.15, 0);
-
+		// Use translucent layer to prevent z-fighting and flickering
 		VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getSolid());
-
-		// Render bar outline (dark frame)
-		renderBarFrame(matrices, vertexConsumer, barWidth, barHeight, barDepth, light, overlay);
 
 		// Render filled portion if there's any coal
 		if (coalLevel > 0) {
-			// Choose color based on fill level
-			float red, green, blue;
-			if (fillPercentage < 0.25f) {
-				// Low - dark gray/black
-				red = 0.2f; green = 0.2f; blue = 0.2f;
-			} else if (fillPercentage < 0.5f) {
-				// Medium - brown/coal color
-				red = 0.3f; green = 0.2f; blue = 0.1f;
-			} else if (fillPercentage < 0.75f) {
-				// High - orange glow
-				red = 0.8f; green = 0.4f; blue = 0.1f;
-			} else {
-				// Full - bright orange/red
-				red = 1.0f; green = 0.3f; blue = 0.0f;
-			}
+			// Make it completely black
+			float red = 0.0f, green = 0.0f, blue = 0.0f;
 
 			renderFilledPortion(matrices, vertexConsumer, barWidth, filledHeight, barDepth, red, green, blue, light, overlay);
 		}
@@ -106,76 +84,56 @@ public class BloomeryBlockEntityRenderer implements BlockEntityRenderer<Bloomery
 		matrices.pop();
 	}
 
-	private void renderBarFrame(MatrixStack matrices, VertexConsumer vertexConsumer, float width, float height, float depth, int light, int overlay) {
-		// Frame color - dark gray
-		float r = 0.1f, g = 0.1f, b = 0.1f, a = 1.0f;
-
-		// Front face of frame
-		addQuad(matrices, vertexConsumer,
-			0, 0, 0,
-			width, 0, 0,
-			width, height, 0,
-			0, height, 0,
-			r, g, b, a, light, overlay);
-
-		// Back face of frame
-		addQuad(matrices, vertexConsumer,
-			width, 0, depth,
-			0, 0, depth,
-			0, height, depth,
-			width, height, depth,
-			r, g, b, a, light, overlay);
-
-		// Sides of frame
-		addQuad(matrices, vertexConsumer,
-			0, 0, depth,
-			0, 0, 0,
-			0, height, 0,
-			0, height, depth,
-			r, g, b, a, light, overlay);
-
-		addQuad(matrices, vertexConsumer,
-			width, 0, 0,
-			width, 0, depth,
-			width, height, depth,
-			width, height, 0,
-			r, g, b, a, light, overlay);
-	}
-
 	private void renderFilledPortion(MatrixStack matrices, VertexConsumer vertexConsumer, float width, float height, float depth,
 									 float red, float green, float blue, int light, int overlay) {
 		float a = 1.0f;
-		float inset = 0.01f; // Small inset from frame
 
-		// Front face of filled area
+		// Front face (negative Z)
 		addQuad(matrices, vertexConsumer,
-			inset, inset, -inset,
-			width - inset, inset, -inset,
-			width - inset, height, -inset,
-			inset, height, -inset,
+			0, 0, 0,
+			width, 0, 0,
+			width, height, 0,
+			0, height, 0,
 			red, green, blue, a, light, overlay);
 
-		// Back face of filled area
+		// Back face (positive Z)
 		addQuad(matrices, vertexConsumer,
-			width - inset, inset, depth + inset,
-			inset, inset, depth + inset,
-			inset, height, depth + inset,
-			width - inset, height, depth + inset,
+			width, 0, depth,
+			0, 0, depth,
+			0, height, depth,
+			width, height, depth,
 			red, green, blue, a, light, overlay);
 
-		// Sides of filled area
+		// Left face (negative X)
 		addQuad(matrices, vertexConsumer,
-			inset, inset, depth + inset,
-			inset, inset, -inset,
-			inset, height, -inset,
-			inset, height, depth + inset,
+			0, 0, depth,
+			0, 0, 0,
+			0, height, 0,
+			0, height, depth,
 			red, green, blue, a, light, overlay);
 
+		// Right face (positive X)
 		addQuad(matrices, vertexConsumer,
-			width - inset, inset, -inset,
-			width - inset, inset, depth + inset,
-			width - inset, height, depth + inset,
-			width - inset, height, -inset,
+			width, 0, 0,
+			width, 0, depth,
+			width, height, depth,
+			width, height, 0,
+			red, green, blue, a, light, overlay);
+
+		// Top face (positive Y)
+		addQuad(matrices, vertexConsumer,
+			0, height, 0,
+			width, height, 0,
+			width, height, depth,
+			0, height, depth,
+			red, green, blue, a, light, overlay);
+
+		// Bottom face (negative Y)
+		addQuad(matrices, vertexConsumer,
+			0, 0, depth,
+			width, 0, depth,
+			width, 0, 0,
+			0, 0, 0,
 			red, green, blue, a, light, overlay);
 	}
 
@@ -189,9 +147,29 @@ public class BloomeryBlockEntityRenderer implements BlockEntityRenderer<Bloomery
 		var matrix = matrices.peek().getPositionMatrix();
 		var normalMatrix = matrices.peek().getNormalMatrix();
 
-		// Calculate normal (assuming quad is facing forward)
-		float nx = 0, ny = 0, nz = 1;
+		// Calculate proper normal vector using cross product
+		float dx1 = x2 - x1;
+		float dy1 = y2 - y1;
+		float dz1 = z2 - z1;
 
+		float dx2 = x4 - x1;
+		float dy2 = y4 - y1;
+		float dz2 = z4 - z1;
+
+		// Cross product to get normal
+		float nx = dy1 * dz2 - dz1 * dy2;
+		float ny = dz1 * dx2 - dx1 * dz2;
+		float nz = dx1 * dy2 - dy1 * dx2;
+
+		// Normalize the normal vector
+		float length = (float) Math.sqrt(nx * nx + ny * ny + nz * nz);
+		if (length > 0) {
+			nx /= length;
+			ny /= length;
+			nz /= length;
+		}
+
+		// Add vertices in counter-clockwise order for proper front-face rendering
 		vertexConsumer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).texture(0, 0).overlay(overlay).light(light).normal(normalMatrix, nx, ny, nz).next();
 		vertexConsumer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).texture(1, 0).overlay(overlay).light(light).normal(normalMatrix, nx, ny, nz).next();
 		vertexConsumer.vertex(matrix, x3, y3, z3).color(red, green, blue, alpha).texture(1, 1).overlay(overlay).light(light).normal(normalMatrix, nx, ny, nz).next();
