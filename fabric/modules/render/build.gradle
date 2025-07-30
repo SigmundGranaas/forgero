@@ -4,9 +4,7 @@
 
 dependencies {
 	implementation(project(":forgero-core-2"))
-
-	// Fabric Loader
-	modCompileOnly("net.fabricmc:fabric-loader:${project.loader_version}")
+	implementation(project(path: ":fabric:modules:common", configuration: 'namedElements'))
 
 	// Fabric API
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")

@@ -44,7 +44,7 @@ public class ForgeroItemModelOverrides extends ModelOverrideList {
 
 		int cacheKey = generateCacheKey(component);
 
-		return modelCache.computeIfAbsent(cacheKey, key -> componentBaker.apply(component));
+		return modelCache.computeIfAbsent(cacheKey, k -> componentBaker.apply(component));
 	}
 
 	private int generateCacheKey(Component component) {

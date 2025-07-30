@@ -24,6 +24,7 @@ import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
 import com.sigmundgranaas.forgero.core.property.api.Property;
 import com.sigmundgranaas.forgero.core.property.api.PropertyRegistry;
 import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
+import com.sigmundgranaas.forgero.data.loading.api.data.PropertyData;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
@@ -212,7 +213,7 @@ public class ComponentCofCodec implements Codec<Component> {
 	}
 
 	@SuppressWarnings("unchecked")
-	private <D extends com.sigmundgranaas.forgero.data.loading.api.data.PropertyData> List<Property> buildProperties(List<D> dataList, Class<D> dataType) {
+	private <D extends PropertyData> List<Property> buildProperties(List<D> dataList, Class<D> dataType) {
 		if (dataList == null || dataList.isEmpty()) {
 			return Collections.emptyList();
 		}

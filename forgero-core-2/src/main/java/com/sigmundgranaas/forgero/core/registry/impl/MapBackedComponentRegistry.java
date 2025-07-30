@@ -13,7 +13,7 @@ public class MapBackedComponentRegistry implements ComponentRegistry {
 
 	private final Map<OpenIdentifier, Component> componentMap;
 
-	private MapBackedComponentRegistry(Map<OpenIdentifier, Component> componentMap) {
+	public MapBackedComponentRegistry(Map<OpenIdentifier, Component> componentMap) {
 		this.componentMap = componentMap;
 	}
 

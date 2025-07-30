@@ -57,7 +57,6 @@ public class ForgeroArmorMaterial implements ArmorMaterial {
 
 	@Override
 	public String getName() {
-
 		String path = component.id().path();
 		int dashIndex = path.indexOf('-');
 		if (dashIndex != -1) {

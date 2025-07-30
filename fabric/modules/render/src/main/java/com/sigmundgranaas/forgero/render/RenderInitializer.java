@@ -2,6 +2,12 @@ package com.sigmundgranaas.forgero.render;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.sigmundgranaas.forgero.common.item.ItemToComponentMapper;
+import com.sigmundgranaas.forgero.common.nbt.ComponentNbtConverter;
+import com.sigmundgranaas.forgero.common.service.ComponentService;
+import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
+import com.sigmundgranaas.forgero.core.registry.impl.MapBackedComponentRegistry;
+import com.sigmundgranaas.forgero.model.registry.impl.DefaultModelRegistrationService;
 import com.sigmundgranaas.forgero.render.texture.RuntimeTextureWriter;
 import com.sigmundgranaas.forgero.render.model.item.ForgeroModelProvider;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
@@ -57,7 +63,12 @@ public class RenderInitializer implements ClientModInitializer {
 		ForgeroDataBundle bundle = dataInitializer.getDataBundle();
 		TaggedRegistry<Component> componentRegistry = bundle.componentRegistry();
 
-		ForgeroClient.itemToComponent = (stack) -> bundle.componentRegistry().find(new OpenIdentifier(Registries.ITEM.getId(stack.getItem()).toString()));
+		ComponentRegistry components = new MapBackedComponentRegistry(bundle.componentRegistry().all().stream().collect(Collectors.toMap(Component::id, Function.identity())));
+		// Initialize services in the correct order
+		ComponentNbtConverter.initialize(components);
+		ItemToComponentMapper.initialize(bundle);
+		ComponentService.INSTANCE.initialize(components);
+		ForgeroClient.itemToComponent = ComponentService.INSTANCE::getComponent;
 
 		// RESOURCE PROVIDER
 		ResourceProvider resourceProvider = new ClassPathResourceProvider("/assets");
@@ -85,6 +96,12 @@ public class RenderInitializer implements ClientModInitializer {
 		ArmorModelRegistrationService manualArmorModelService = new DefaultArmorModelRegistrationService(ForgeroClient.armorModelRegistry, resourceProvider);
 		manualArmorModelService.registerModels(MOD_NAMESPACE);
 		LOGGER.info("Loaded manual/override models. Total armor models: {}", ForgeroClient.armorModelRegistry.findAll().size());
+
+		// Load any manually defined item models as overrides.
+		// These will be added to the registry that was already populated by the generator.
+		DefaultModelRegistrationService manualItemModelService = new DefaultModelRegistrationService(ForgeroClient.modelRegistry, resourceProvider);
+		manualItemModelService.registerModels(MOD_NAMESPACE);
+		LOGGER.info("Loaded manual/override models. Total armor models: {}", ForgeroClient.modelRegistry.models().size());
 
 
 		// ITEM MODEL OVERRIDE SETUP

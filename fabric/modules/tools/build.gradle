@@ -1,0 +1,15 @@
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection DependencyNotationArgument
+
+dependencies {
+	implementation(project(":forgero-core-2"))
+	implementation(project(path: ":fabric:modules:common", configuration: 'namedElements'))
+
+	runtimeOnly(project(path: ":fabric:modules:armor",  configuration: 'namedElements'))
+	runtimeOnly(project(path: ":fabric:modules:render",  configuration: 'namedElements'))
+
+	// Fabric
+	modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
+	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
+}

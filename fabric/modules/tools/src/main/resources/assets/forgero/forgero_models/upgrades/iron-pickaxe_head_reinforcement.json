@@ -1,0 +1,7 @@
+{
+  "type": "forgero:texture_model",
+  "id": "forgero:iron",
+  "target": "forgero:iron",
+  "context": "pickaxe_head_reinforcement",
+  "texture": "forgero:item/iron-pickaxe_head_reinforcement"
+}

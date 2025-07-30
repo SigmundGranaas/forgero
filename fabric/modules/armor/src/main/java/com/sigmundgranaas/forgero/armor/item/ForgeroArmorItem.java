@@ -1,8 +1,10 @@
 package com.sigmundgranaas.forgero.armor.item;
 
+import com.sigmundgranaas.forgero.common.item.ForgeroHostItem;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
+import net.minecraft.item.ItemStack;
 
 /**
  * A Forgero-specific armor item. It extends the vanilla ArmorItem but is also a
@@ -19,6 +21,11 @@ public class ForgeroArmorItem extends ArmorItem implements ForgeroHostItem {
 
 	@Override
 	public Component getForgeroComponent() {
+		return component;
+	}
+
+	@Override
+	public Component toComponent(ItemStack stack) {
 		return component;
 	}
 }

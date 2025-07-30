@@ -1,10 +1,10 @@
 {
   "type": "forgero:equipment_model_template",
   "target": {
-    "tag": "forgero:sword"
+    "tag": "forgero:material/tool_material"
   },
   "model": {
-    "id": "forgero:equipment/{target.name}",
+    "id": "forgero:equipment/{target.name}-sword",
     "type": "forgero:composite_model",
     "slots": [
       {
