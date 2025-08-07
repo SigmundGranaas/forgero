@@ -1,0 +1,15 @@
+{
+  "type": "forgero:composite_model",
+  "id": "forgero:item/leather-binding",
+  "target": "forgero:leather-binding",
+  "layers": [
+    {
+      "order": 10,
+      "textures": {
+        "default": "forgero:item/binding"
+      }
+    }
+  ],
+  "slots": [
+  ]
+}

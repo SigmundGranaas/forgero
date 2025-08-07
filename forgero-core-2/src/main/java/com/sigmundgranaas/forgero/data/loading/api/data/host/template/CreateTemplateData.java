@@ -8,11 +8,11 @@ import org.jetbrains.annotations.Nullable;
  *
  * @param id          The ID template for the new item.
  * @param className   The class name identifier for the new item.
- * @param item_group  An optional item group/creative tab ID template.
+ * @param itemGroup  An optional item group/creative tab ID template.
  */
 public record CreateTemplateData(
 		String id,
 		String className,
-		@Nullable String item_group
+		@Nullable String itemGroup
 ) {
 }

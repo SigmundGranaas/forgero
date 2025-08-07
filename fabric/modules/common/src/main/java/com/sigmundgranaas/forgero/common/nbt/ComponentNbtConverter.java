@@ -2,75 +2,38 @@ package com.sigmundgranaas.forgero.common.nbt;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
-import com.sigmundgranaas.forgero.cof.ComponentConstructorRegistry;
-import com.sigmundgranaas.forgero.cof.codec.CofCodecs;
-import com.sigmundgranaas.forgero.cof.codec.ComponentCofCodec;
-import com.sigmundgranaas.forgero.cof.dto.CofComponent;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.condition.DynamicCondition;
-import com.sigmundgranaas.forgero.core.property.condition.StaticCondition;
-import com.sigmundgranaas.forgero.core.property.predicate.TagMatchCondition;
-import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
-import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
-import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.AttributeCodecs;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.ConditionCodec;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.FeatureCodecs;
-
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtOps;
-
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class ComponentNbtConverter {
 	public static final String FORGERO_NBT_KEY = "ForgeroComponent";
-	private static ComponentNbtConverter INSTANCE;
 
 	private final Codec<Component> componentCodec;
 
-	private ComponentNbtConverter(Codec<Component> componentCodec) {
+	/**
+	 * Constructs a new converter with a specific codec for Components.
+	 * This class should be instantiated once and shared.
+	 *
+	 * @param componentCodec The codec to use for serialization and deserialization.
+	 */
+	public ComponentNbtConverter(Codec<Component> componentCodec) {
 		this.componentCodec = componentCodec;
 	}
 
-	public static void initialize(ComponentRegistry componentRegistry) {
-		if (INSTANCE == null) {
-			ComponentConstructorRegistry.getInstance().registerCoreTypes();
-
-			Map<String, Codec<? extends StaticCondition>> staticConditionCodecs = new HashMap<>();
-			staticConditionCodecs.put("forgero:self_has_tag", TagMatchCondition.CODEC);
-			Map<String, Codec<? extends DynamicCondition>> dynamicConditionCodecs = new HashMap<>();
-			ConditionCodec conditionCodec = new ConditionCodec(staticConditionCodecs, dynamicConditionCodecs);
-			Codec<List<AttributeData>> attributeListCodec = Codec.list(AttributeCodecs.create(conditionCodec));
-			Codec<List<FeatureData>> featureListCodec = FeatureCodecs.createFeatureDataListCodec()
-					;
-
-			Codec<CofComponent> cofComponentCodec = CofCodecs.create(attributeListCodec, featureListCodec);
-
-			ComponentCofCodec componentCodec = new ComponentCofCodec(
-					componentRegistry,
-					ComponentConstructorRegistry.getInstance(),
-					cofComponentCodec
-			);
-
-			INSTANCE = new ComponentNbtConverter(componentCodec);
-		}
-	}
-
-	public static ComponentNbtConverter getInstance() {
-		if (INSTANCE == null) {
-			throw new IllegalStateException("ComponentNbtConverter has not been initialized. Call initialize() first.");
-		}
-		return INSTANCE;
-	}
-
+	/**
+	 * Deserializes a Component from a given NBT compound tag.
+	 * It looks for a specific key ({@link #FORGERO_NBT_KEY}) within the compound tag.
+	 *
+	 * @param nbt The NBT compound to read from. Can be null.
+	 * @return An Optional containing the deserialized Component, or empty if the key is not present or deserialization fails.
+	 */
 	public Optional<Component> fromNbt(NbtCompound nbt) {
-		if (nbt == null || !nbt.contains(FORGERO_NBT_KEY)) {
+		if (nbt == null || !nbt.contains(FORGERO_NBT_KEY, NbtElement.COMPOUND_TYPE)) {
 			return Optional.empty();
 		}
 		NbtElement forgeroNbt = nbt.get(FORGERO_NBT_KEY);
@@ -80,6 +43,13 @@ public class ComponentNbtConverter {
 				.map(Pair::getFirst);
 	}
 
+	/**
+	 * Serializes a Component into an NBT compound tag.
+	 * The resulting NBT will contain a single key ({@link #FORGERO_NBT_KEY}) with the component data.
+	 *
+	 * @param component The component to serialize.
+	 * @return A new NBT compound containing the serialized component data.
+	 */
 	public NbtCompound toNbt(Component component) {
 		NbtCompound nbt = new NbtCompound();
 		componentCodec.encodeStart(NbtOps.INSTANCE, component)

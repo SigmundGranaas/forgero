@@ -21,8 +21,4 @@ public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroHostItem {
 		return component;
 	}
 
-	@Override
-	public Component toComponent(ItemStack stack) {
-		return ComponentNbtConverter.getInstance().fromNbt(stack.getNbt()).orElse(getForgeroComponent());
-	}
 }

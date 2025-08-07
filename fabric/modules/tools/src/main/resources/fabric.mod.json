@@ -3,11 +3,10 @@
   "id": "forgero-tools",
   "version": "${version}",
   "name": "Forgero tools",
-  "description": "Trade support for Forgero.",
+  "description": "Tools module for Forgero.",
   "authors": [
-    "JorisDeBeer"
-  ],
-  "contributors": [
+    "JorisDeBeer",
+    "Sigmund Granaas"
   ],
   "contact": {
     "homepage": "https://sigmundgranaas.com",
@@ -18,17 +17,20 @@
   "icon": "assets/forgero/icon.png",
   "environment": "*",
   "entrypoints": {
-    "main": [
-      "com.sigmundgranaas.forgero.tools.ToolInitializer"
+    "forgero:data_plugin": [
+      "com.sigmundgranaas.forgero.tools.ToolPlugin"
+    ],
+    "forgero:post_load_plugin": [
+      "com.sigmundgranaas.forgero.tools.ToolPlugin"
     ]
   },
   "depends": {
-    "fabricloader": ">=0.12.12",
+    "fabricloader": ">=0.14.21",
     "minecraft": "1.20.1",
-    "java": ">=17"
+    "java": ">=17",
+    "forgero-loader": "${version}"
   },
-  "suggests": {
-  },
+  "suggests": {},
   "custom": {
     "modmenu": {
       "links": {

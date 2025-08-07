@@ -95,13 +95,17 @@ public class ForgeroDataInitializer {
 		// =================================
 		// 3. RAW DEFINITION LOADING
 		// =================================
-		Map<OpenIdentifier, RawDefinition> rawDefinitions = loadRawDefinitions(defaultNamespace);
+		Map<OpenIdentifier, RawDefinition> forgeroDefs = loadRawDefinitions(defaultNamespace);
+		Map<OpenIdentifier, RawDefinition> mcDefs = loadRawDefinitions("minecraft");
+		var combined = new HashMap<OpenIdentifier, RawDefinition>();
+		combined.putAll(forgeroDefs);
+		combined.putAll(mcDefs);
 
 		// =================================
 		// 4. NORMALIZATION
 		// =================================
 		DataProcessor dataProcessor = new DataProcessorImpl();
-		NormalizedState normalizedState = dataProcessor.normalize(rawDefinitions);
+		NormalizedState normalizedState = dataProcessor.normalize(combined);
 		LOGGER.info("Normalized raw definitions into: {} materials, {} shapes, {} schematics, {} static parts, {} part templates, {} equipment templates.",
 				normalizedState.materials().size(),
 				normalizedState.shapes().size(),

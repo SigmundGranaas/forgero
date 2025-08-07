@@ -9,11 +9,11 @@ import org.jetbrains.annotations.Nullable;
  * @param id          The unique ID for the new item (e.g., "forgero:iron_pickaxe_head_item").
  * @param itemClass   An identifier for the Java class to instantiate (e.g., "forgero:part_item").
  *                    This is resolved to a real class by a platform-specific service.
- * @param item_group  An optional item group/creative tab ID for the new item.
+ * @param itemGroup  An optional item group/creative tab ID for the new item.
  */
 public record CreateData(
 		OpenIdentifier id,
 		String itemClass,
-		@Nullable String item_group
+		@Nullable String itemGroup
 ) {
 }

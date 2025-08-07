@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 public record ModelDTO(
-		@Nullable OpenIdentifier id,
-		String type,
+		@Nullable String id,
+		@Nullable String type,
 		@Nullable List<LayerDTO> layers,
 		@Nullable List<SlotDTO> slots,
 		@Nullable String texture,
@@ -44,6 +44,10 @@ public record ModelDTO(
 	}
 
 	public Optional<OpenIdentifier> getOpenIdentifierId() {
+		return getId().map(OpenIdentifier::new);
+	}
+
+	public Optional<String> getId() {
 		return Optional.ofNullable(id);
 	}
 

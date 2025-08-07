@@ -58,7 +58,7 @@ public class ModelGeneratorImpl implements ModelGenerator {
 				Map<String, Object> context = Map.of("target", component);
 				for (TemplateModelDTO modelTemplate : template.models()) {
 					ModelDTO resolvedModel = mapTemplateToModel(modelTemplate, context, tasks);
-					models.put(resolvedModel.id(), resolvedModel);
+					models.put(resolvedModel.getOpenIdentifierId().get(), resolvedModel);
 				}
 			}
 		}
@@ -121,7 +121,7 @@ public class ModelGeneratorImpl implements ModelGenerator {
 		String target = template.target() != null ? placeholderResolver.resolve(template.target(), context) : null;
 		String modelContext = template.context() != null ? placeholderResolver.resolve(template.context(), context) : null;
 
-		return new ModelDTO(resolvedId, template.type(), finalLayers, template.slots(), null, textures, target, modelContext, template.parent(), template.display());
+		return new ModelDTO(resolvedId.toString(), template.type(), finalLayers, template.slots(), null, textures, target, modelContext, template.parent(), template.display());
 	}
 
 	private List<LayerDTO> processLayerTemplates(List<TemplateModelDTO.TemplateLayerDTO> layerTemplates, Map<String, Object> context, List<TextureGenerationTask> tasks) {

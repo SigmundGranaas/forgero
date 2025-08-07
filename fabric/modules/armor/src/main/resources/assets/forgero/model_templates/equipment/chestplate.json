@@ -5,7 +5,8 @@
   },
   "models": [
     {
-      "id": "forgero:{target.name}-chestplate",
+      "id": "forgero:item/{target.name}-chestplate",
+      "target": "forgero:{target.name}-chestplate",
       "type": "forgero:texture_model",
       "layers": [{
         "order": 0,

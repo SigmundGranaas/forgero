@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-loader",
+  "version": "${version}",
+  "name": "Forgero Common Loader",
+  "description": "Centralized data loading and plugin system for Forgero.",
+  "authors": [
+    "Sigmund Granaas",
+    "JorisDeBeer"
+  ],
+  "contact": {
+    "homepage": "https://sigmundgranaas.com",
+    "sources": "https://github.com/sigmundgranaas/forgero",
+    "issues": "https://github.com/sigmundgranaas/forgero/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/forgero/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.sigmundgranaas.forgero.loader.ForgeroDataLoader"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "minecraft": "1.20.1",
+    "java": ">=17"
+  },
+  "suggests": {}
+}

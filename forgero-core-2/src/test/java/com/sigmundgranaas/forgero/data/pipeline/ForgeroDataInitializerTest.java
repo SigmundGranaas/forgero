@@ -56,6 +56,6 @@ class ForgeroDataInitializerTest {
 		assertNotNull(generatedEquipmentHostData.create());
 		assertEquals("forgero:iron-pickaxe", generatedEquipmentHostData.create().id().toString());
 		assertEquals("forgero:pickaxe_item", generatedEquipmentHostData.create().itemClass());
-		assertEquals("minecraft:tools", generatedEquipmentHostData.create().item_group());
+		assertEquals("minecraft:tools", generatedEquipmentHostData.create().itemGroup());
 	}
 }

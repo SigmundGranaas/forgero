@@ -1,0 +1,23 @@
+{
+  "type": "forgero:composite_model",
+  "id": "minecraft:item/iron_pickaxe",
+  "target": "minecraft:iron-pickaxe",
+  "layers": [
+    {
+      "order": 10,
+      "textures": {
+        "default": "minecraft:item/wooden_pickaxe"
+      }
+    }
+  ],
+  "slots": [
+    {
+      "id": "binding_slot",
+      "order": 15,
+      "renderer": {
+        "type": "forgero:component",
+        "context": "tool_binding"
+      }
+    }
+  ]
+}

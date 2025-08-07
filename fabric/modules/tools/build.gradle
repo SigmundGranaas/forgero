@@ -5,6 +5,7 @@
 dependencies {
 	implementation(project(":forgero-core-2"))
 	implementation(project(path: ":fabric:modules:common", configuration: 'namedElements'))
+	implementation(project(path: ":fabric:modules:loader", configuration: 'namedElements'))
 
 	runtimeOnly(project(path: ":fabric:modules:armor",  configuration: 'namedElements'))
 	runtimeOnly(project(path: ":fabric:modules:render",  configuration: 'namedElements'))
