@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-tools",
+  "version": "${version}",
+  "name": "Forgero tools",
+  "description": "Tools module for Forgero.",
+  "authors": [
+    "JorisDeBeer",
+    "Sigmund Granaas"
+  ],
+  "contact": {
+    "homepage": "https://sigmundgranaas.com",
+    "sources": "https://github.com/sigmundgranaas/forgero",
+    "issues": "https://github.com/sigmundgranaas/forgero/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/forgero/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "forgero:data_plugin": [
+      "com.sigmundgranaas.forgero.tools.ToolPlugin"
+    ],
+    "forgero:post_load_plugin": [
+      "com.sigmundgranaas.forgero.tools.ToolPlugin"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "minecraft": "1.20.1",
+    "java": ">=17",
+    "forgero-loader": "${version}"
+  },
+  "suggests": {},
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/v6sDsftE9N"
+      },
+      "badges": [
+        "library"
+      ],
+      "parent": {
+        "id": "forgero",
+        "name": "Forgero",
+        "description": "Equipment crafting expansion mod for Fabric!",
+        "icon": "icon.png"
+      }
+    }
+  }
+}

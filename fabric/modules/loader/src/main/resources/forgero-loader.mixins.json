@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "com.sigmundgranaas.forgero.loader.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "ItemMiningMixin",
+    "ItemStackAttributeMixin",
+    "ItemStackDurabilityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

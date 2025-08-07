@@ -22,7 +22,7 @@ public class MapBackedModelRegistry implements ItemModelRegistry {
 			OpenIdentifier targetId = model.getTarget().get();
 			models.computeIfAbsent(context, k -> new ConcurrentHashMap<>()).put(targetId, model);
 		} else {
-			models.computeIfAbsent(DEFAULT_CONTEXT, k -> new ConcurrentHashMap<>()).put(model.getIdentifier(), model);
+			models.computeIfAbsent(DEFAULT_CONTEXT, k -> new ConcurrentHashMap<>()).put(model.getTarget().orElse(model.getIdentifier()), model);
 		}
 	}
 

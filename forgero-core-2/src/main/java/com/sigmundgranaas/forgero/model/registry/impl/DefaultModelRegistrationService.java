@@ -26,7 +26,7 @@ public class DefaultModelRegistrationService implements ItemModelRegistrationSer
 		ResourceLoader<Model> modelLoader = new ResourceLoader<>(resourceProvider, modelConverter);
 
 		// Define the root path for models within the namespace's assets
-		OpenIdentifier modelsRootPath = new OpenIdentifier(namespace, "models");
+		OpenIdentifier modelsRootPath = new OpenIdentifier(namespace, "forgero_models");
 
 		// Load and register all models
 		// The `modelLoader.load` method will return a stream of Model objects,

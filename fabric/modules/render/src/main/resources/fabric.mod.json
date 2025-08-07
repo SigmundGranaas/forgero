@@ -3,11 +3,10 @@
   "id": "forgero-renderer",
   "version": "${version}",
   "name": "Forgero renderer",
-  "description": "Trade support for Forgero.",
+  "description": "Client-side rendering support for Forgero.",
   "authors": [
-    "JorisDeBeer"
-  ],
-  "contributors": [
+    "JorisDeBeer",
+    "Sigmund Granaas"
   ],
   "contact": {
     "homepage": "https://sigmundgranaas.com",
@@ -16,7 +15,7 @@
   },
   "license": "MIT",
   "icon": "assets/forgero/icon.png",
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "client": [
       "com.sigmundgranaas.forgero.render.RenderInitializer"
@@ -26,12 +25,12 @@
     "rendering.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.12.12",
+    "fabricloader": ">=0.14.21",
     "minecraft": "1.20.1",
-    "java": ">=17"
+    "java": ">=17",
+    "forgero-loader": "${version}"
   },
-  "suggests": {
-  },
+  "suggests": {},
   "custom": {
     "modmenu": {
       "links": {

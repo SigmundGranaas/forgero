@@ -5,7 +5,8 @@
   },
   "models": [
     {
-      "id": "forgero:{target.name}-leggings",
+      "id": "forgero:item/{target.name}-leggings",
+      "target": "forgero:{target.name}-leggings",
       "type": "forgero:texture_model",
       "layers": [{
         "order": 0,

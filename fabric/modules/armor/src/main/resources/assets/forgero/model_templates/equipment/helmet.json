@@ -5,7 +5,8 @@
   },
   "models": [
   {
-    "id": "forgero:{target.name}-helmet",
+    "id": "forgero:item/{target.name}-helmet",
+    "target": "forgero:{target.name}-helmet",
     "type": "forgero:texture_model",
     "layers":[{
       "order": 0,

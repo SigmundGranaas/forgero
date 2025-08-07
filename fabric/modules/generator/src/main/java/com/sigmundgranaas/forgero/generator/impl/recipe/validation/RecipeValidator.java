@@ -1,10 +1,20 @@
 package com.sigmundgranaas.forgero.generator.impl.recipe.validation;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.MapLike;
 import com.sigmundgranaas.forgero.generator.impl.IdentifiedJson;
 
+import java.util.Map;
+
 import static com.sigmundgranaas.forgero.core.Forgero.LOGGER;
-import static com.sigmundgranaas.forgero.minecraft.common.predicate.util.JsonUtils.prettyPrintJson;
 
 public class RecipeValidator {
 	private final ResultValidator resultValidator;
@@ -44,5 +54,12 @@ public class RecipeValidator {
 			LOGGER.error("The error was found in a recipe generated from this template: \n {}", prettyPrintJson(identifiedJson.template().toString()));
 		}
 		return isValid;
+	}
+
+	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+
+	public static <R> String prettyPrintJson(String json) {
+		JsonElement jsonElement = JsonParser.parseString(json);
+		return GSON.toJson(jsonElement);
 	}
 }

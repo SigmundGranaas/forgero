@@ -82,10 +82,10 @@ public class AttributeCodecs {
 						CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("id").forGetter(data -> Optional.ofNullable(data.id())),
 						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(AttributeData::type),
 						COMPUTATION_CODEC.fieldOf("computation").forGetter(AttributeData::computation),
-						conditionCodec.optionalFieldOf("condition", Condition.ALWAYS_TRUE).forGetter(AttributeData::condition),
+						conditionCodec.optionalFieldOf("condition").forGetter(data -> Optional.ofNullable(data.condition())),
 						CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("composite").forGetter(data -> Optional.ofNullable(data.composite()))
 				).apply(instance, (idOpt, type, comp, cond, compositeOpt) ->
-						new AttributeDataImpl(idOpt.orElse(null), type, comp, cond, compositeOpt.orElse(null)))
+						new AttributeDataImpl(idOpt.orElse(null), type, comp, cond.orElse(null), compositeOpt.orElse(null)))
 		);
 	}
 }

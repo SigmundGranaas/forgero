@@ -1,0 +1,19 @@
+{
+  "type": "forgero:static_part",
+  "name": "Leather Binding",
+  "tags": ["forgero:parts/binding_type", "forgero:parts/default_binding"],
+  "host": {
+    "create": {
+      "id": "forgero:leather-binding",
+      "class_name": "forgero:part_item",
+      "item_group": "forgero:tools"
+    }
+  },
+  "attributes": [
+    {
+      "id": "forgero:leather-binding-durability",
+      "type": "forgero:durability",
+      "computation": 50
+    }
+  ]
+}

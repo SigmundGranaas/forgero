@@ -194,7 +194,7 @@ public class ComponentGeneratorImpl implements ComponentGenerator {
 		if (template.create() != null) {
 			CreateTemplateData createTemplate = template.create();
 			String resolvedIdStr = idResolver.resolveId(createTemplate.id(), context);
-			create = new CreateData(idFactory.of(resolvedIdStr), createTemplate.className(), createTemplate.item_group());
+			create = new CreateData(idFactory.of(resolvedIdStr), createTemplate.className(), createTemplate.itemGroup());
 		}
 
 		if (identifiers == null && create == null) {

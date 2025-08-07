@@ -113,7 +113,7 @@ class ComponentGeneratorTest {
 		assertNotNull(host.create());
 		assertEquals(generatedId, host.create().id());
 		assertEquals("forgero:part", host.create().itemClass());
-		assertNull(host.create().item_group());
+		assertNull(host.create().itemGroup());
 	}
 
 	@Test
@@ -132,7 +132,7 @@ class ComponentGeneratorTest {
 		OpenIdentifier expectedHostId = idFactory.of("forgero:item/iron_pickaxe_head_shape");
 		assertEquals(expectedHostId, host.create().id());
 		assertEquals("forgero:custom_part", host.create().itemClass());
-		assertEquals("forgero:parts_group", host.create().item_group());
+		assertEquals("forgero:parts_group", host.create().itemGroup());
 	}
 
 	@Test

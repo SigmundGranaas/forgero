@@ -39,14 +39,6 @@ public class ForgeroModelProvider implements ModelResolver {
 
 	@Override
 	public @Nullable UnbakedModel resolveModel(Context context) {
-		Identifier resourceId = context.id();
-
-		if (resourceId.getPath().startsWith("item/")) {
-			String itemPath = resourceId.getPath().substring("item/".length());
-			Identifier itemId = new Identifier(resourceId.getNamespace(), itemPath);
-			return unbakedModelMap.get(itemId);
-		}
-
-		return null;
+		return unbakedModelMap.get(context.id());
 	}
 }

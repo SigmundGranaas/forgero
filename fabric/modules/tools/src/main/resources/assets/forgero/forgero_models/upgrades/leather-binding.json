@@ -1,0 +1,22 @@
+{
+  "type": "forgero:composite_model",
+  "id": "forgero:upgrade/leather-binding",
+  "target": "forgero:leather-binding",
+  "context": "tool_binding",
+  "layers": [
+    {
+      "order": 10,
+      "textures": {
+        "default": "forgero:item/binding",
+        "variants": [
+          {
+            "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:pickaxe" }],
+            "texture": "forgero:item/pickaxe_binding"
+          }
+        ]
+      }
+    }
+  ],
+  "slots": [
+  ]
+}

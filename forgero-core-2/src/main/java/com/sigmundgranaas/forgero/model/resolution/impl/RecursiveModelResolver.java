@@ -1,7 +1,9 @@
 package com.sigmundgranaas.forgero.model.resolution.impl;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
+import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
 import com.sigmundgranaas.forgero.model.api.*;
 import com.sigmundgranaas.forgero.model.api.item.CompositeModel;
@@ -10,11 +12,15 @@ import com.sigmundgranaas.forgero.model.api.item.Model;
 import com.sigmundgranaas.forgero.model.api.item.TextureModel;
 import com.sigmundgranaas.forgero.model.registry.api.item.ItemModelRegistry;
 import com.sigmundgranaas.forgero.model.resolution.api.item.ItemModelResolver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class RecursiveModelResolver implements ItemModelResolver {
+	private static final Logger LOGGER = LoggerFactory.getLogger(RecursiveModelResolver.class);
+
 	private final ItemModelRegistry modelRegistry;
 
 	public RecursiveModelResolver(ItemModelRegistry modelRegistry) {
@@ -69,6 +75,20 @@ public class RecursiveModelResolver implements ItemModelResolver {
 				Component childComponent = filledSlots.get(modelSlot.id());
 				if (childComponent != null) {
 					textures.addAll(resolveSlot(modelSlot, childComponent, context, baseOrder));
+				}
+			}
+		}
+
+		if (component instanceof CustomizableComponent customizable) {
+			// Create a map of the component's upgrade slots, keyed by their slot's id.
+			Map<String, Optional<Component>> slots = customizable.getUpgradeSlots().stream()
+					.collect(Collectors.toMap(slot -> slot.id().path(), UpgradeSlot::content));
+
+			for (ModelSlot modelSlot : composite.slots().stream().toList()) {
+				if(slots.containsKey(modelSlot.id())) {
+					slots.get(modelSlot.id()).ifPresent(childComponent -> textures.addAll(resolveSlot(modelSlot, childComponent, context, baseOrder)));
+				}else{
+					LOGGER.warn("No upgrade slot found in component found for slot {} in component {}",  modelSlot.id(), customizable.id());
 				}
 			}
 		}
