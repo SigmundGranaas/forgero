@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.cof.ComponentConstructorRegistry;
 import com.sigmundgranaas.forgero.cof.codec.CofCodecs;
 import com.sigmundgranaas.forgero.cof.codec.ComponentCofCodec;
 import com.sigmundgranaas.forgero.cof.dto.CofComponent;
+import com.sigmundgranaas.forgero.common.attribute.AttributeManager;
 import com.sigmundgranaas.forgero.common.convert.*;
 import com.sigmundgranaas.forgero.common.nbt.ComponentNbtConverter;
 import com.sigmundgranaas.forgero.core.component.api.Component;
@@ -173,6 +174,10 @@ public class ForgeroDataLoader implements ModInitializer {
 				nbtConverter,
 				bundle
 		);
+
+		// Initialize the attribute manager now that all dependencies are ready.
+		AttributeManager.initialize(componentConverter, resolver);
+		LOGGER.debug("Forgero Attribute Manager initialized.");
 
 		LOGGER.debug("Core services initialized");
 	}

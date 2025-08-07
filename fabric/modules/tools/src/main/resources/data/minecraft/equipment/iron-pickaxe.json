@@ -7,6 +7,28 @@
       { "type": "item", "id": "minecraft:iron_pickaxe" }
     ]
   },
+  "attributes": [
+    {
+      "id": "forgero:durability",
+      "type": "forgero:durability",
+      "computation": { "add": 333 }
+    },
+    {
+      "id": "forgero:base_attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": { "add": 10 }
+    },
+    {
+      "id": "forgero:base_attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": { "add": 6 }
+    },
+    {
+      "id": "forgero:mining_speed",
+      "type": "forgero:mining_speed",
+      "computation": { "add": 4 }
+    }
+  ],
   "upgrades": [
     {
       "id": "binding_slot",

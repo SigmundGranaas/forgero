@@ -8,3 +8,7 @@ dependencies {
 	// Fabric API
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
 }
+
+loom {
+	accessWidenerPath = file("src/main/resources/common.accesswidener")
+}
