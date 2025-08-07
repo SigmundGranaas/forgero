@@ -13,4 +13,23 @@ dependencies {
 	// Fabric
 	modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
+
+	// Testing
+	testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
+	testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
+}
+
+sourceSets {
+	test {
+		compileClasspath += main.compileClasspath
+		runtimeClasspath += main.runtimeClasspath
+	}
+}
+
+test {
+	useJUnitPlatform()
+	maxParallelForks = 32
+	testLogging.events("failed")
+	testLogging.info.events = ["failed", "skipped"]
 }
