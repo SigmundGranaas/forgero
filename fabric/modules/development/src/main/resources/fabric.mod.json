@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "forgero-tools",
+  "id": "forgero-development-module",
   "version": "${version}",
   "name": "Forgero tools",
-  "description": "Tools module for Forgero.",
+  "description": "Development module for Forgero.",
   "authors": [
     "JorisDeBeer",
     "Sigmund Granaas"
@@ -17,8 +17,8 @@
   "icon": "assets/forgero/icon.png",
   "environment": "*",
   "entrypoints": {
-    "forgero:data_plugin": [
-      "com.sigmundgranaas.forgero.tools.ToolPlugin"
+    "forgero:post_load_plugin": [
+      "com.sigmundgranaas.forgero.tools.DevPlugin"
     ]
   },
   "depends": {
