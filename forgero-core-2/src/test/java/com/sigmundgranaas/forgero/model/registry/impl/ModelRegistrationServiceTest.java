@@ -28,7 +28,6 @@ public class ModelRegistrationServiceTest {
 		assertTrue(registry.find(new OpenIdentifier("forgero", "parts/leather-binding")).isPresent(), "leather-binding model should be present");
 		assertTrue(registry.find(new OpenIdentifier("forgero", "common/empty")).isPresent(), "empty model should be present");
 
-
 		// Assertions for contextual models using the new lookup method:
 		assertTrue(registry.find(new OpenIdentifier("forgero", "iron"), "pickaxe_head_reinforcement").isPresent(), "iron-pickaxe_head_reinforcement model should be present");
 		assertTrue(registry.find(new OpenIdentifier("forgero", "iron"), "mastercrafted_pickaxe_head_reinforcement").isPresent(), "iron-mastercrafted_pickaxe_head_reinforcement model should be present");

@@ -8,7 +8,7 @@ import com.sigmundgranaas.forgero.core.property.api.DataTypeEngine;
 import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.impl.computation.ComputationChain;
-import com.sigmundgranaas.forgero.core.property.condition.Condition;
+import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 
 import java.util.List;

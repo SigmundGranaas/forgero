@@ -35,7 +35,7 @@ class ModelResolverTest {
 		ResourceProvider resourceProvider = new ClassPathResourceProvider("/assets");
 		var fileModelProvider = new FileModelProvider(resourceProvider);
 		new ResourceLoader<>(resourceProvider, fileModelProvider)
-				.load(new OpenIdentifier("forgero", "models"), true)
+				.load(new OpenIdentifier("forgero", "forgero_models"), true)
 				.forEach(registry::register);
 
 		// Setup Resolver

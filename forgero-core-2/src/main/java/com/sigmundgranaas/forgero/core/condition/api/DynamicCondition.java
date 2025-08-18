@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.property.condition;
+package com.sigmundgranaas.forgero.core.condition.api;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;

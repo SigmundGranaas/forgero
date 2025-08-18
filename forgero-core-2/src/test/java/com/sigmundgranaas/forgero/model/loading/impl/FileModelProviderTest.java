@@ -27,7 +27,7 @@ class FileModelProviderTest {
 
 		// Use ResourceLoader to load models, acting as the orchestrator
 		ResourceLoader<Model> modelLoader = new ResourceLoader<>(resourceProvider, provider);
-		modelLoader.load(new OpenIdentifier("forgero", "models"), true)
+		modelLoader.load(new OpenIdentifier("forgero", "forgero_models"), true)
 				.forEach(registry::register);
 	}
 

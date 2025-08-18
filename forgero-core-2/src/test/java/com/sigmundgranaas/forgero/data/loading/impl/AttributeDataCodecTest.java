@@ -5,14 +5,13 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.property.condition.Condition;
-import com.sigmundgranaas.forgero.core.property.condition.DynamicCondition;
-import com.sigmundgranaas.forgero.core.property.condition.StaticCondition;
-import com.sigmundgranaas.forgero.core.property.predicate.TagMatchCondition;
+import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
+import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
+import com.sigmundgranaas.forgero.core.condition.predicate.TagMatchCondition;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.AttributeCodecs;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.ConditionCodec;
+import com.sigmundgranaas.forgero.core.condition.api.ConditionCodec;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -89,10 +88,8 @@ class AttributeDataCodecTest {
 		assertEquals(id("forgero:diamond-durability"), data.id());
 		assertEquals(id("forgero:durability"), data.type());
 		assertNull(data.composite(), "Composite should be null when not present");
-		// The codec now defaults to Condition.ALWAYS_TRUE, not null.
-		assertNotNull(data.condition());
-		assertEquals(Condition.ALWAYS_TRUE, data.condition());
 
+		assertNull(data.condition());
 		assertEquals(1561f, data.computation().value());
 		assertEquals(AttributeCodecs.ADDITION_OPERATOR, data.computation().operator());
 		assertEquals(AttributeCodecs.BASE_ORDER, data.computation().order());

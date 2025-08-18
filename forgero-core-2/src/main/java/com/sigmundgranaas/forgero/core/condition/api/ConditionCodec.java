@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.data.loading.impl.codec;
+package com.sigmundgranaas.forgero.core.condition.api;
 
 import com.google.gson.JsonElement;
 import com.mojang.datafixers.util.Either;
@@ -8,12 +8,10 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.property.condition.Condition;
-import com.sigmundgranaas.forgero.core.property.condition.DynamicCondition;
-import com.sigmundgranaas.forgero.core.property.condition.StaticCondition;
-import com.sigmundgranaas.forgero.core.property.condition.logical.AndCondition;
-import com.sigmundgranaas.forgero.core.property.condition.logical.NotCondition;
-import com.sigmundgranaas.forgero.core.property.condition.logical.OrCondition;
+import com.sigmundgranaas.forgero.core.condition.logical.AndCondition;
+import com.sigmundgranaas.forgero.core.condition.logical.NotCondition;
+import com.sigmundgranaas.forgero.core.condition.logical.OrCondition;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.JsonElementCodec;
 
 import java.util.ArrayList;
 import java.util.List;

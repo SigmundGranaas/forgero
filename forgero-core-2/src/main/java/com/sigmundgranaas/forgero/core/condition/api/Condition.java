@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.property.condition;
+package com.sigmundgranaas.forgero.core.condition.api;
 
 import java.util.Collections;
 import java.util.List;

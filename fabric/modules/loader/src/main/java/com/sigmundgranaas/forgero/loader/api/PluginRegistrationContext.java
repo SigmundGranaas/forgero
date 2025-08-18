@@ -1,7 +1,9 @@
 package com.sigmundgranaas.forgero.loader.api;
 
 import com.mojang.serialization.Codec;
-import com.sigmundgranaas.forgero.core.property.condition.Condition;
+import com.sigmundgranaas.forgero.core.condition.api.Condition;
+import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
+import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 
 import java.util.List;
 import java.util.function.Function;
@@ -14,9 +16,18 @@ public interface PluginRegistrationContext {
 	void registerItemCreator(String itemClass, ItemCreator creator);
 
 	/**
-	 * Register custom condition codecs for data parsing.
+	 * Registers a codec for a custom static condition.
+	 * @param type The unique type identifier for the condition (e.g., "forgero:at_depth").
+	 * @param codec The codec for parsing the condition.
 	 */
-	void registerConditionCodec(String type, Object codec);
+	void registerStaticConditionCodec(String type, Codec<? extends StaticCondition> codec);
+
+	/**
+	 * Registers a codec for a custom dynamic condition.
+	 * @param type The unique type identifier for the condition (e.g., "forgero:target_has_tag").
+	 * @param codec The codec for parsing the condition.
+	 */
+	void registerDynamicConditionCodec(String type, Codec<? extends DynamicCondition> codec);
 
 	/**
 	 * Registers a builder function for a custom property codec.

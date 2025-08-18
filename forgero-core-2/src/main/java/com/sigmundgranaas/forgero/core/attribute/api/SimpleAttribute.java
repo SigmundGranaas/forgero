@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.core.attribute.api;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.operator.Operator;
 import com.sigmundgranaas.forgero.core.property.api.Property;
-import com.sigmundgranaas.forgero.core.property.condition.Condition;
+import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.attribute.api.operator.AdditionOperator;
 
 import javax.annotation.Nullable;

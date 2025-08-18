@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,8 +33,9 @@ class ForgeroDataInitializerTest {
 
 	@Test
 	void testInitializeData() {
+		ForgeroDataInitializer.Config config = new ForgeroDataInitializer.Config("forgero", testResourceProvider(), new HashMap<>(), new HashMap<>(), new HashMap<>());
 		// Updated to use the new constructor with a test-specific ResourceProvider
-		ForgeroDataInitializer initializer = new ForgeroDataInitializer("forgero", testResourceProvider());
+		ForgeroDataInitializer initializer = new ForgeroDataInitializer(config);
 		ForgeroDataBundle bundle = initializer.getDataBundle();
 
 		assertNotNull(bundle);

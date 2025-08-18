@@ -4,28 +4,28 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.ForgeroTest;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
-import com.sigmundgranaas.forgero.core.attribute.api.AttributeCodec;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
+import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.impl.StaticComponent;
+import com.sigmundgranaas.forgero.core.condition.api.Condition;
+import com.sigmundgranaas.forgero.core.condition.api.ConditionCodec;
+import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
+import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
+import com.sigmundgranaas.forgero.core.condition.predicate.TagMatchCondition;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.core.property.context.Key;
 import com.sigmundgranaas.forgero.core.property.engine.ResolverEngine;
-import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.AttributeCodecs;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.ConditionCodec;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.property.condition.DynamicCondition;
-import com.sigmundgranaas.forgero.core.property.condition.StaticCondition;
-
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -88,27 +88,32 @@ public class PredicateSystemTest extends ForgeroTest {
 		// Step 3: Create the master ConditionCodec with all registered predicates
 		ConditionCodec conditionCodec = new ConditionCodec(staticCodecs, dynamicCodecs);
 
-		// Step 4: Create services that depend on the ConditionCodec
-		Codec<AttributeData> attributeDataCodec = AttributeCodecs.create(conditionCodec);
-		var attributePropertyCodec = new AttributeCodec(conditionCodec);
+		this.resolver = new ResolverEngine();
 
-		this.resolver = new ResolverEngine(); // The resolver will use the registered DataTypeEngines.
-
-		// Step 5: Create a component with a property that uses the custom predicate by parsing JSON
-		String jsonProperty = """
+		// Step 4: Create a condition object that uses the custom predicate by parsing JSON
+		String conditionJson = """
 				{
-				    "id": "test_attribute",
-				    "type": "forgero:attack_damage",
-				    "computation": 10,
-				    "condition": {
-				        "type": "minecraft:is_sneaking",
-				        "value": true
-				    }
+				    "type": "minecraft:is_sneaking",
+				    "value": true
 				}
 				""";
 
-		Attribute data = attributePropertyCodec.parse(JsonOps.INSTANCE, JsonParser.parseString(jsonProperty)).getOrThrow(false, msg -> {});
-		this.componentWithPlatformPredicate = new StaticComponent(id("test:test_item"), Collections.emptySet(), new HashMap<>());
+		Condition customCondition = conditionCodec.parse(JsonOps.INSTANCE, JsonParser.parseString(conditionJson))
+				.getOrThrow(false, System.err::println);
+
+		// Step 5: Create an Attribute that uses this condition
+		Attribute attributeWithCustomCondition = new SimpleAttribute(
+				ATTACK_DAMAGE_IDENTIFIER,
+				10.0f,
+				customCondition
+		);
+
+		// Step 6: Create a component holding this attribute
+		this.componentWithPlatformPredicate = new StaticComponent(
+				id("test:test_item"),
+				Collections.emptySet(),
+				Map.of(Attribute.KEY.key(), List.of(attributeWithCustomCondition))
+		);
 	}
 
 	@Test
