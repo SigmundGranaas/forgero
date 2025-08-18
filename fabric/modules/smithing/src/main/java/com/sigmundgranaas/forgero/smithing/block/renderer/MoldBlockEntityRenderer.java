@@ -34,6 +34,11 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
             SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE,
             new Identifier("forgero", "block/fluid")
     );
+    // --- Align with MoldGenerator ---
+    private static final int GRID_SIZE = 16;
+    private static final int GRID_CENTER = 8;
+    private static final int ALPHA_THRESHOLD_MODEL = 1;
+    // ---------------------------------
     private final WeakHashMap<MoldBlockEntity, Float> displayedProgressMap = new WeakHashMap<>();
     private final WeakHashMap<String, NativeImageBackedTexture> coloredFluidTextureCache = new WeakHashMap<>();
 
@@ -149,14 +154,16 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
         String templateName = getTemplateName(entity);
         BufferedImage moldTemplate = getMoldTemplateImage(templateName);
 
-        // Only render fluid where the mold template is opaque
-        boolean[][] moldMask = new boolean[16][16];
+        // Only render fluid where the mold template is opaque (match generator threshold)
+        boolean[][] moldMask = new boolean[GRID_SIZE][GRID_SIZE];
         if (moldTemplate != null) {
-            for (int x = 0; x < 16; x++) {
-                for (int z = 0; z < 16; z++) {
+            int width = Math.min(GRID_SIZE, moldTemplate.getWidth());
+            int height = Math.min(GRID_SIZE, moldTemplate.getHeight());
+            for (int x = 0; x < width; x++) {
+                for (int z = 0; z < height; z++) {
                     int pixel = moldTemplate.getRGB(x, z);
                     int alpha = (pixel >> 24) & 0xff;
-                    moldMask[x][z] = alpha > 10;
+                    moldMask[x][z] = alpha >= ALPHA_THRESHOLD_MODEL;
                 }
             }
         } else {
@@ -164,25 +171,10 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
             return;
         }
 
-        // --- Centering logic with padding (matches MoldGenerator) ---
-        int minX = 16, maxX = -1, minZ = 16, maxZ = -1;
-        for (int x = 1; x < 15; x++) {
-            for (int z = 1; z < 15; z++) {
-                if (moldMask[x][z]) {
-                    if (x < minX) minX = x;
-                    if (x > maxX) maxX = x;
-                    if (z < minZ) minZ = z;
-                    if (z > maxZ) maxZ = z;
-                }
-            }
-        }
-        int dx = 0, dz = 0;
-        if (maxX >= minX && maxZ >= minZ) {
-            int shapeWidth = maxX - minX + 1, shapeDepth = maxZ - minZ + 1;
-            int centerX = minX + shapeWidth / 2, centerZ = minZ + shapeDepth / 2, gridCenter = 8;
-            dx = gridCenter - centerX;
-            dz = gridCenter - centerZ;
-        }
+        // --- Centering logic (match MoldGenerator: include edges) ---
+        int[] shift = computeCenterShift(moldMask);
+        int dx = shift[0];
+        int dz = shift[1];
         // ------------------------------------------------------------
 
         float blendStart = 0.60f;
@@ -235,13 +227,12 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
 
         // Only render fluid on mold pixels, centered
         if (lavaAlpha > 0.01f) {
-            for (int x = 0; x < 16; x++) {
-                for (int z = 0; z < 16; z++) {
-                    // Skip uppermost corners to avoid rendering outside the mold
-                    if ((x == 0 || x == 15) && (z == 0 || z == 15)) continue;
+            for (int x = 0; x < GRID_SIZE; x++) {
+                for (int z = 0; z < GRID_SIZE; z++) {
                     int sx = x + dx, sz = z + dz;
-                    if (sx < 0 || sx >= 16 || sz < 0 || sz >= 16) continue;
+                    if (sx < 0 || sx >= GRID_SIZE || sz < 0 || sz >= GRID_SIZE) continue;
                     if (!moldMask[x][z]) continue;
+
                     float fx0 = sx / 16.0f;
                     float fx1 = (sx + 1) / 16.0f;
                     float fz0 = sz / 16.0f;
@@ -253,7 +244,7 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
                     float v1 = minV + vSpan * (z + 1) / 16.0f;
 
                     vertexConsumer.vertex(entry.getPositionMatrix(), fx0, maxY, fz0)
-                            .color(1f, 1f, 1f, 1f)
+                            .color(1f, 1f, 1f, lavaAlpha)
                             .texture(u0, v0)
                             .overlay(overlay)
                             .light(light)
@@ -261,7 +252,7 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
                             .next();
 
                     vertexConsumer.vertex(entry.getPositionMatrix(), fx1, maxY, fz0)
-                            .color(1f, 1f, 1f, 1f)
+                            .color(1f, 1f, 1f, lavaAlpha)
                             .texture(u1, v0)
                             .overlay(overlay)
                             .light(light)
@@ -269,7 +260,7 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
                             .next();
 
                     vertexConsumer.vertex(entry.getPositionMatrix(), fx1, maxY, fz1)
-                            .color(1f, 1f, 1f, 1f)
+                            .color(1f, 1f, 1f, lavaAlpha)
                             .texture(u1, v1)
                             .overlay(overlay)
                             .light(light)
@@ -277,7 +268,7 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
                             .next();
 
                     vertexConsumer.vertex(entry.getPositionMatrix(), fx0, maxY, fz1)
-                            .color(1f, 1f, 1f, 1f)
+                            .color(1f, 1f, 1f, lavaAlpha)
                             .texture(u0, v1)
                             .overlay(overlay)
                             .light(light)
@@ -303,13 +294,12 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
             matrices.push();
             MatrixStack.Entry itemEntry = matrices.peek();
 
-            for (int x = 0; x < 16; x++) {
-                for (int z = 0; z < 16; z++) {
-                    // Skip uppermost corners to avoid rendering outside the mold
-                    if ((x == 0 || x == 15) && (z == 0 || z == 15)) continue;
+            for (int x = 0; x < GRID_SIZE; x++) {
+                for (int z = 0; z < GRID_SIZE; z++) {
                     int sx = x + dx, sz = z + dz;
-                    if (sx < 0 || sx >= 16 || sz < 0 || sz >= 16) continue;
+                    if (sx < 0 || sx >= GRID_SIZE || sz < 0 || sz >= GRID_SIZE) continue;
                     if (!moldMask[x][z]) continue;
+
                     float fx0 = sx / 16.0f;
                     float fx1 = (sx + 1) / 16.0f;
                     float fz0 = sz / 16.0f;
@@ -355,6 +345,31 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
             }
             matrices.pop();
         }
+    }
+
+    // Compute center shift based on colored pixels, including edges (matches MoldGenerator)
+    private int[] computeCenterShift(boolean[][] mask) {
+        int minX = GRID_SIZE, maxX = -1, minZ = GRID_SIZE, maxZ = -1;
+        for (int x = 0; x < GRID_SIZE; x++) {
+            for (int z = 0; z < GRID_SIZE; z++) {
+                if (mask[x][z]) {
+                    if (x < minX) minX = x;
+                    if (x > maxX) maxX = x;
+                    if (z < minZ) minZ = z;
+                    if (z > maxZ) maxZ = z;
+                }
+            }
+        }
+        if (maxX < minX || maxZ < minZ) {
+            return new int[] {0, 0};
+        }
+        int width = maxX - minX + 1;
+        int depth = maxZ - minZ + 1;
+        int centerX = minX + (width / 2);
+        int centerZ = minZ + (depth / 2);
+        int dx = GRID_CENTER - centerX;
+        int dz = GRID_CENTER - centerZ;
+        return new int[] {dx, dz};
     }
 
     @Override
