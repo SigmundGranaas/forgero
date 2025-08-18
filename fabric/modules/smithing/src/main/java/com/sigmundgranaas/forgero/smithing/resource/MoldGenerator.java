@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgero.smithing.resource;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -12,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import javax.imageio.ImageIO;
@@ -139,6 +137,9 @@ public class MoldGenerator implements DynamicResourceGenerator {
 			return createDefaultShape();
 		}
 
+		// 1) Read all pixels (including edges)
+		// 2) Center using colored pixels
+		// 3) Rebuild outline after centering
 		PixelGrid pixelGrid = analyzeTexture(image, ALPHA_THRESHOLD_SHAPE);
 		PixelGrid centeredGrid = centerPixelGrid(pixelGrid);
 
@@ -155,9 +156,9 @@ public class MoldGenerator implements DynamicResourceGenerator {
 		int width = Math.min(image.getWidth(), GRID_SIZE);
 		int height = Math.min(image.getHeight(), GRID_SIZE);
 
-		// Process pixels, excluding borders
-		for (int x = 1; x < width - 1; x++) {
-			for (int y = 1; y < height - 1; y++) {
+		// Read entire image area, including borders
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
 				int pixel = image.getRGB(x, y);
 				int alpha = (pixel >> 24) & 0xff;
 				if (alpha >= alphaThreshold) {
@@ -166,9 +167,8 @@ public class MoldGenerator implements DynamicResourceGenerator {
 			}
 		}
 
-		boolean[][] outlinePixels = createOutline(coloredPixels);
-
-		return new PixelGrid(coloredPixels, outlinePixels);
+		// Outline will be (re)generated after centering
+		return new PixelGrid(coloredPixels, new boolean[GRID_SIZE][GRID_SIZE]);
 	}
 
 	private boolean[][] createOutline(boolean[][] coloredPixels) {
@@ -213,7 +213,8 @@ public class MoldGenerator implements DynamicResourceGenerator {
 	}
 
 	private PixelGrid centerPixelGrid(PixelGrid grid) {
-		BoundingBox bounds = calculateBounds(grid.outlinePixels);
+		// Calculate bounds from colored pixels (not outline) to avoid clipping-induced bias
+		BoundingBox bounds = calculateBounds(grid.coloredPixels);
 		if (!bounds.isValid()) {
 			return grid;
 		}
@@ -221,7 +222,26 @@ public class MoldGenerator implements DynamicResourceGenerator {
 		int dx = GRID_CENTER - bounds.getCenterX();
 		int dy = GRID_CENTER - bounds.getCenterY();
 
-		return shiftPixelGrid(grid, dx, dy);
+		// Shift colored pixels, then rebuild outline to avoid losing edge pixels
+		boolean[][] shiftedColored = shiftBooleanGrid(grid.coloredPixels, dx, dy);
+		boolean[][] shiftedOutline = createOutline(shiftedColored);
+
+		return new PixelGrid(shiftedColored, shiftedOutline);
+	}
+
+	// Shifts a boolean grid by dx, dy inside the 16x16 bounds
+	private boolean[][] shiftBooleanGrid(boolean[][] src, int dx, int dy) {
+		boolean[][] dst = new boolean[GRID_SIZE][GRID_SIZE];
+		for (int x = 0; x < GRID_SIZE; x++) {
+			for (int y = 0; y < GRID_SIZE; y++) {
+				int sx = x - dx;
+				int sy = y - dy;
+				if (isValidGridPosition(sx, sy)) {
+					dst[x][y] = src[sx][sy];
+				}
+			}
+		}
+		return dst;
 	}
 
 	private BoundingBox calculateBounds(boolean[][] pixels) {
@@ -419,6 +439,7 @@ public class MoldGenerator implements DynamicResourceGenerator {
 		BufferedImage image = loadTextureImage(textureName);
 		if (image == null) return;
 
+		// Use same corrected pipeline for models
 		PixelGrid grid = analyzeTexture(image, ALPHA_THRESHOLD_MODEL);
 		grid = centerPixelGrid(grid);
 
