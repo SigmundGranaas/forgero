@@ -1,26 +1,32 @@
 package com.sigmundgranaas.forgero.loader;
 
 import com.mojang.serialization.Codec;
-import com.sigmundgranaas.forgero.cof.ComponentConstructorRegistry;
+import com.sigmundgranaas.forgero.cof.ComponentConstructor;
 import com.sigmundgranaas.forgero.cof.codec.CofCodecs;
 import com.sigmundgranaas.forgero.cof.codec.ComponentCofCodec;
 import com.sigmundgranaas.forgero.cof.dto.CofComponent;
 import com.sigmundgranaas.forgero.common.attribute.AttributeManager;
-import com.sigmundgranaas.forgero.common.convert.*;
+import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
+import com.sigmundgranaas.forgero.common.convert.ComponentConverterImpl;
+import com.sigmundgranaas.forgero.common.convert.IdMapper;
+import com.sigmundgranaas.forgero.common.convert.StatefulConverter;
+import com.sigmundgranaas.forgero.common.convert.TypeConverter;
 import com.sigmundgranaas.forgero.common.nbt.ComponentNbtConverter;
+import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
+import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
+import com.sigmundgranaas.forgero.core.attribute.api.AttributeCodec;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
-import com.sigmundgranaas.forgero.core.property.condition.DynamicCondition;
-import com.sigmundgranaas.forgero.core.property.condition.StaticCondition;
+import com.sigmundgranaas.forgero.core.property.api.codec.KeyMapDispatchCodec;
+import com.sigmundgranaas.forgero.core.property.api.codec.ListCodecWrapper;
+import com.sigmundgranaas.forgero.core.condition.api.Condition;
+import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
+import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 import com.sigmundgranaas.forgero.core.property.engine.ResolverEngine;
-import com.sigmundgranaas.forgero.core.property.predicate.TagMatchCondition;
 import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
 import com.sigmundgranaas.forgero.core.registry.impl.MapBackedComponentRegistry;
-import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
-import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.AttributeCodecs;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.ConditionCodec;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.FeatureCodecs;
+import com.sigmundgranaas.forgero.core.condition.api.ConditionCodec;
 import com.sigmundgranaas.forgero.data.pipeline.api.ForgeroDataBundle;
 import com.sigmundgranaas.forgero.data.pipeline.api.ForgeroDataInitializer;
 import com.sigmundgranaas.forgero.loader.api.*;
@@ -28,6 +34,8 @@ import com.sigmundgranaas.forgero.loader.impl.DataLoadingContextImpl;
 import com.sigmundgranaas.forgero.loader.impl.ItemRegistrar;
 import com.sigmundgranaas.forgero.loader.impl.PluginRegistrationContextImpl;
 import com.sigmundgranaas.forgero.loader.impl.PluginRegistry;
+import com.sigmundgranaas.forgero.loader.plugin.ForgeroDefaultsPlugin;
+import com.sigmundgranaas.forgero.utility.resource.loader.implementation.ClassPathResourceProvider;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
@@ -36,6 +44,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -57,6 +66,7 @@ public class ForgeroDataLoader implements ModInitializer {
 	private final DataLoadingContextImpl context;
 	private final Map<Identifier, Item> registeredItems;
 	private boolean initialized = false;
+	private TagGraph tagGraph = null;
 
 	public ForgeroDataLoader() {
 		this.pluginRegistry = new PluginRegistry();
@@ -79,24 +89,28 @@ public class ForgeroDataLoader implements ModInitializer {
 			collectPlugins();
 
 			// Phase 2: Register plugin requirements
-			PluginRegistrationContextImpl registrationContext = registerPluginRequirements();
+			PluginRegistrationContextImpl registrationContext = registerPluginRequirements(() -> this.tagGraph);
 
-			// Phase 3: Load data
-			ForgeroDataBundle bundle = loadData();
+			// Phase 3: Create configuration for the data initializer
+			ForgeroDataInitializer.Config dataConfig = createDataConfig(registrationContext);
 
-			// Phase 4: Initialize core systems
+			// Phase 4: Load data using the configuration
+			ForgeroDataBundle bundle = loadData(dataConfig);
+			this.tagGraph = bundle.tagGraph();
+
+			// Phase 5: Initialize core systems
 			initializeCoreServices(bundle, registrationContext);
 
-			// Phase 5: Setup item registration callbacks
+			// Phase 6: Setup item registration callbacks
 			ItemRegistrar itemRegistrar = setupItemRegistration();
 
-			// Phase 6: Process and register items
+			// Phase 7: Process and register items
 			List<ItemRegistrar.RegisteredItem> items = processItems(bundle, registrationContext.getItemCreators(), itemRegistrar);
 
 			// Store registered items for lookup
 			items.forEach(item -> registeredItems.put(item.id(), item.item()));
 
-			// Phase 7: Notify post-load plugins
+			// Phase 8: Notify post-load plugins
 			notifyPostLoadPlugins();
 
 			initialized = true;
@@ -112,14 +126,20 @@ public class ForgeroDataLoader implements ModInitializer {
 
 	private void collectPlugins() {
 		pluginRegistry.discoverPlugins();
-		// Logging logic remains the same
+		// Manually register the defaults plugin
+		pluginRegistry.registerPlugin(new ForgeroDefaultsPlugin());
+		int dataPlugins = pluginRegistry.getDataPlugins().size();
+		int itemRegPlugins = pluginRegistry.getItemRegistrationPlugins().size();
+		int postLoadPlugins = pluginRegistry.getPostLoadPlugins().size();
+		LOGGER.info("Discovered and registered {} plugins: {} data, {} item registration, {} post-load",
+				dataPlugins + itemRegPlugins + postLoadPlugins, dataPlugins, itemRegPlugins, postLoadPlugins);
 	}
 
-	private PluginRegistrationContextImpl registerPluginRequirements() {
-		PluginRegistrationContextImpl registrationContext = new PluginRegistrationContextImpl();
+	private PluginRegistrationContextImpl registerPluginRequirements(Supplier<TagGraph> tagGraphSupplier) {
+		PluginRegistrationContextImpl registrationContext = new PluginRegistrationContextImpl(tagGraphSupplier);
 		for (DataPlugin plugin : pluginRegistry.getDataPlugins()) {
 			try {
-				LOGGER.debug("Registering data plugin: {}", plugin.getId());
+				LOGGER.debug("Registering requirements for data plugin: {}", plugin.getId());
 				plugin.register(registrationContext);
 			} catch (Exception e) {
 				LOGGER.error("Failed to register data plugin: {}", plugin.getId(), e);
@@ -128,9 +148,37 @@ public class ForgeroDataLoader implements ModInitializer {
 		return registrationContext;
 	}
 
-	private ForgeroDataBundle loadData() {
+	private ForgeroDataInitializer.Config createDataConfig(PluginRegistrationContextImpl registrationContext) {
+		Map<String, Codec<? extends StaticCondition>> staticConditionCodecs = registrationContext.getStaticConditionCodecs();
+		Map<String, Codec<? extends DynamicCondition>> dynamicConditionCodecs = registrationContext.getDynamicConditionCodecs();
+
+		// Lazily create the ConditionCodec so it's only made once and can be shared.
+		Supplier<Codec<Condition>> conditionCodecSupplier = () -> new ConditionCodec(staticConditionCodecs, dynamicConditionCodecs);
+
+		// Build the full map of property codecs from plugin-provided builders
+		Map<String, Codec<? extends List<?>>> propertyCodecs = new HashMap<>();
+		// Add Forgero's default attribute codec
+		propertyCodecs.put("forgero:attributes", ListCodecWrapper.of(new AttributeCodec(conditionCodecSupplier.get())));
+
+		// Add all codecs from plugins
+		var propertyCodecBuilders = registrationContext.getPropertyCodecBuilders();
+		LOGGER.debug("Building {} property codecs from plugins.", propertyCodecBuilders.size());
+		for (var entry : propertyCodecBuilders.entrySet()) {
+			propertyCodecs.put(entry.getKey(), entry.getValue().apply(conditionCodecSupplier));
+		}
+
+		return new ForgeroDataInitializer.Config(
+				MOD_NAMESPACE,
+				new ClassPathResourceProvider("data"),
+				propertyCodecs,
+				staticConditionCodecs,
+				dynamicConditionCodecs
+		);
+	}
+
+	private ForgeroDataBundle loadData(ForgeroDataInitializer.Config config) {
 		LOGGER.info("Loading Forgero data bundle...");
-		ForgeroDataInitializer dataInitializer = new ForgeroDataInitializer(MOD_NAMESPACE);
+		ForgeroDataInitializer dataInitializer = new ForgeroDataInitializer(config);
 		ForgeroDataBundle bundle = dataInitializer.getDataBundle();
 		LOGGER.info("Data bundle loaded with {} components", bundle.componentRegistry().all().size());
 		return bundle;
@@ -139,33 +187,24 @@ public class ForgeroDataLoader implements ModInitializer {
 	private void initializeCoreServices(ForgeroDataBundle bundle, PluginRegistrationContextImpl registrationContext) {
 		LOGGER.debug("Initializing core services...");
 
-		// Create component registry
 		ComponentRegistry componentRegistry = new MapBackedComponentRegistry(
 				bundle.componentRegistry().all().stream()
 						.collect(Collectors.toMap(Component::id, Function.identity()))
 		);
 
-		// Initialize component constructors
-		ComponentConstructorRegistry constructorRegistry = ComponentConstructorRegistry.getInstance();
-		constructorRegistry.registerCoreTypes();
-		// In a full implementation, you'd register plugin constructors here
+		ComponentConstructor constructorRegistry = ComponentConstructor.defaults();
 
-		// Create the full component codec
 		Codec<Component> componentCodec = createComponentCodec(componentRegistry, constructorRegistry, registrationContext);
 
-		// Initialize NBT converter
 		ComponentNbtConverter nbtConverter = new ComponentNbtConverter(componentCodec);
 
-		// Initialize all new conversion classes
 		IdMapper idMapper = new IdMapper(bundle.hostItemMap());
 		TypeConverter typeConverter = new TypeConverter(idMapper, componentRegistry);
 		StatefulConverter statefulConverter = new StatefulConverter(nbtConverter, typeConverter);
 		ComponentConverter componentConverter = new ComponentConverterImpl(statefulConverter, typeConverter, idMapper, componentRegistry);
 
-		// Create resolver
 		Resolver resolver = new ResolverEngine();
 
-		// Store everything in context for other modules to access
 		context.initialize(
 				componentRegistry,
 				bundle.componentRegistry(), // This is the TaggedRegistry
@@ -175,25 +214,23 @@ public class ForgeroDataLoader implements ModInitializer {
 				bundle
 		);
 
-		// Initialize the attribute manager now that all dependencies are ready.
 		AttributeManager.initialize(componentConverter, resolver);
 		LOGGER.debug("Forgero Attribute Manager initialized.");
 
 		LOGGER.debug("Core services initialized");
 	}
 
-	private Codec<Component> createComponentCodec(ComponentRegistry componentRegistry, ComponentConstructorRegistry constructorRegistry, PluginRegistrationContextImpl registrationContext) {
-		Map<String, Codec<? extends StaticCondition>> staticConditionCodecs = new HashMap<>();
-		staticConditionCodecs.put("forgero:self_has_tag", TagMatchCondition.CODEC);
-		Map<String, Codec<? extends DynamicCondition>> dynamicConditionCodecs = new HashMap<>();
 
-		// TODO: Register codecs from plugins via registrationContext.getConditionCodecs()
+	private Codec<Component> createComponentCodec(ComponentRegistry componentRegistry, ComponentConstructor constructorRegistry, PluginRegistrationContextImpl registrationContext) {
+		// TODO: This method is now redundant as property codecs are handled in createDataConfig.
+		// It could be simplified or removed if component codec creation logic is also moved.
+		// For now, we recreate a minimal version for the COF codec.
+		Map<PropertyKey<?>, Codec<? extends List<?>>> propertyCodecs = new HashMap<>();
+		propertyCodecs.put(Attribute.KEY, ListCodecWrapper.of(new AttributeCodec(new ConditionCodec(Collections.emptyMap(), Collections.emptyMap()))));
 
-		ConditionCodec conditionCodec = new ConditionCodec(staticConditionCodecs, dynamicConditionCodecs);
-		Codec<List<AttributeData>> attributeListCodec = Codec.list(AttributeCodecs.create(conditionCodec));
-		Codec<List<FeatureData>> featureListCodec = FeatureCodecs.createFeatureDataListCodec();
+		Codec<Map<String, List<?>>> propertyMapCodec = new KeyMapDispatchCodec(propertyCodecs).codec();
 
-		Codec<CofComponent> cofComponentCodec = CofCodecs.create(attributeListCodec, featureListCodec);
+		Codec<CofComponent> cofComponentCodec = CofCodecs.create(propertyMapCodec);
 
 		return new ComponentCofCodec(
 				componentRegistry,
@@ -201,6 +238,7 @@ public class ForgeroDataLoader implements ModInitializer {
 				cofComponentCodec
 		);
 	}
+
 
 	private ItemRegistrar setupItemRegistration() {
 		ItemRegistrar registrar = new ItemRegistrar(
@@ -260,12 +298,8 @@ public class ForgeroDataLoader implements ModInitializer {
 		return INSTANCE.getRegisteredItems();
 	}
 
-	private static class ItemRegistrationCallbackContextImpl implements ItemRegistrationCallbackContext {
-		private final ItemRegistrar registrar;
-
-		ItemRegistrationCallbackContextImpl(ItemRegistrar registrar) {
-			this.registrar = registrar;
-		}
+	private record ItemRegistrationCallbackContextImpl(
+			ItemRegistrar registrar) implements ItemRegistrationCallbackContext {
 
 		@Override
 		public void addCallback(ItemRegistrationCallback callback) {

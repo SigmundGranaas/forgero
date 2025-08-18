@@ -4,7 +4,7 @@ import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.attribute.api.CompositeAttribute;
 import com.sigmundgranaas.forgero.core.attribute.api.CompositeAttributeComponent;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.condition.Condition;
+import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.property.context.ResolutionContext;
 
 import java.util.ArrayList;
@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.sigmundgranaas.forgero.core.attribute.api.Attribute.KEY;
 
 /**
  * An implementation of {@link AttributeBakingStrategy} that specifically handles
@@ -51,9 +53,8 @@ public class CompositeAttributeBakingStrategy implements AttributeBakingStrategy
 
 			// First, filter attributes from the current component based on static conditions
 			// and separate them into simple attributes and composite components.
-			currentComponent.getProperties().stream()
-					.filter(Attribute.class::isInstance)
-					.map(Attribute.class::cast)
+			currentComponent.properties(KEY)
+					.stream()
 					.filter(attribute -> {
 						ResolutionContext resCtx = new ResolutionContext(currentComponent, root);
 						return attribute.condition()

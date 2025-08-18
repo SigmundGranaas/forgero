@@ -1,12 +1,12 @@
 package com.sigmundgranaas.forgero.testutils;
 
+import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.property.api.Property;
-import com.sigmundgranaas.forgero.core.property.condition.Condition;
+import com.sigmundgranaas.forgero.core.condition.api.Condition;
 
 import java.util.Optional;
 
@@ -64,7 +64,7 @@ public class ForgeroTestFactory {
 			return this;
 		}
 
-		public Property build() {
+		public Attribute build() {
 			return new SimpleAttribute(type, value, condition);
 		}
 	}

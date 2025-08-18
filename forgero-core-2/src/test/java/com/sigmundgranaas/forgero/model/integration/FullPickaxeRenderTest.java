@@ -42,7 +42,7 @@ public class FullPickaxeRenderTest {
 		ResourceProvider resourceProvider = new ClassPathResourceProvider("/assets");
 		var fileModelProvider = new FileModelProvider(resourceProvider);
 		new ResourceLoader<>(resourceProvider, fileModelProvider)
-				.load(new OpenIdentifier("forgero", "models"), true)
+				.load(new OpenIdentifier("forgero", "forgero_models"), true)
 				.forEach(registry::register);
 
 		// Setup Resolver and Compositor
@@ -122,7 +122,7 @@ public class FullPickaxeRenderTest {
 		Set<OpenIdentifier> tagSet = Arrays.stream(tags)
 				.map(tag -> new OpenIdentifier("forgero", tag))
 				.collect(Collectors.toSet());
-		return new StaticComponent(new OpenIdentifier(id), tagSet, Collections.emptyList());
+		return new StaticComponent(new OpenIdentifier(id), tagSet, new HashMap<>());
 	}
 
 	private StructuredComponent mockStructuredComponent(String id, Map<String, Component> parts, String... tags) {
@@ -136,18 +136,18 @@ public class FullPickaxeRenderTest {
 		Set<OpenIdentifier> tagSet = Arrays.stream(tags)
 				.map(tag -> new OpenIdentifier("forgero", tag))
 				.collect(Collectors.toSet());
-		return new MockStructuredEquipment(new OpenIdentifier(id), tagSet, Collections.emptyList(), structure);
+		return new MockStructuredEquipment(new OpenIdentifier(id), tagSet, new HashMap<>(), structure);
 	}
 
-	private record MockStructuredEquipment(OpenIdentifier id, Set<OpenIdentifier> tags, List<Property> properties, ComponentStructure structure) implements StructuredComponent {
+	private record MockStructuredEquipment(OpenIdentifier id, Set<OpenIdentifier> tags, Map<String, List<?>> properties, ComponentStructure structure) implements StructuredComponent {
 		@Override
 		public Component withStructure(ComponentStructure newStructure) {
 			return new MockStructuredEquipment(id, tags, properties, newStructure);
 		}
 
 		@Override
-		public List<Property> getProperties() {
-			return List.of();
+		public  Map<String, List<?>> propertiesAsMap() {
+			return properties;
 		}
 
 		@Override

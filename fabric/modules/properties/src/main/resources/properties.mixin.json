@@ -1,0 +1,20 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.sigmundgranaas.forgero.properties.minecraft.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "PlayerInteractionManagerMixin",
+    "WorldRenderBlockBreakingMixin"
+  ],
+  "server": [
+    "playerInteractionManagerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+    "AbstractBlockMixin",
+    "PlayerServerInteractionManagerMixin"
+  ]
+}

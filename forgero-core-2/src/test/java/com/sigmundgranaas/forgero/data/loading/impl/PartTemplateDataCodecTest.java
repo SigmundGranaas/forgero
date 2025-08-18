@@ -6,18 +6,14 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.property.condition.DynamicCondition;
-import com.sigmundgranaas.forgero.core.property.condition.StaticCondition;
-import com.sigmundgranaas.forgero.core.property.predicate.TagMatchCondition;
+import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
+import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
-import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
-import com.sigmundgranaas.forgero.data.loading.api.data.feature.VeinMiningFeatureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.PartTemplateData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.UpgradeSlotData;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.AttributeCodecs;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.ConditionCodec;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.FeatureCodecs;
+import com.sigmundgranaas.forgero.core.condition.api.ConditionCodec;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.PartTemplateCodecs;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +21,6 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -40,11 +35,9 @@ class PartTemplateDataCodecTest {
 		ConditionCodec conditionCodec = new ConditionCodec(staticCodecs, dynamicCodecs);
 
 		Codec<List<AttributeData>> attributeListCodec = Codec.list(AttributeCodecs.create(conditionCodec));
-		FeatureCodecs.registerCodecs(conditionCodec); // Ensure feature codecs are initialized
-		Codec<List<FeatureData>> featureListCodec = FeatureCodecs.createFeatureDataListCodec();
 		Codec<List<UpgradeSlotData>> upgradeSlotDataListCodec = Codec.list(PartTemplateCodecs.UPGRADE_SLOT_DATA_CODEC);
 
-		this.partTemplateDataCodec = PartTemplateCodecs.create(attributeListCodec, featureListCodec, upgradeSlotDataListCodec);
+		this.partTemplateDataCodec = PartTemplateCodecs.create(attributeListCodec, upgradeSlotDataListCodec);
 	}
 
 	private <T> T parseSuccess(Codec<T> codec, String json) {
@@ -128,10 +121,6 @@ class PartTemplateDataCodecTest {
 		AttributeData miningSpeed = data.attributes().get(1);
 		assertEquals(id("forgero:variant-schematic-mining_speed-composite"), miningSpeed.id());
 
-		assertNotNull(data.features());
-		assertEquals(1, data.features().size());
-		assertInstanceOf(VeinMiningFeatureData.class, data.features().get(0));
-
 		assertNotNull(data.properties());
 		assertEquals(2, data.properties().size());
 		assertTrue(data.properties().containsKey("forgero:crafting_difficulty"));
@@ -164,7 +153,6 @@ class PartTemplateDataCodecTest {
 		assertNull(data.tags());
 		assertNull(data.upgrades());
 		assertNull(data.attributes());
-		assertNull(data.features());
 		assertNull(data.properties());
 
 		assertNotNull(data.structure());

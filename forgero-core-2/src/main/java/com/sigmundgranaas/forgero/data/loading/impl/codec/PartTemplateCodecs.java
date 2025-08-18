@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgero.data.loading.impl.codec;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
-import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.PartTemplateData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.PartTemplateStructureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.PartTemplateStructureSlotData;
@@ -40,7 +39,7 @@ public class PartTemplateCodecs {
 					new PartTemplateStructureData(id.orElse(null), slots)));
 
 
-	public static Codec<PartTemplateData> create(Codec<List<AttributeData>> attributeCodec, Codec<List<FeatureData>> featureCodec, Codec<List<UpgradeSlotData>> upgradeSlotCodec) {
+	public static Codec<PartTemplateData> create(Codec<List<AttributeData>> attributeCodec, Codec<List<UpgradeSlotData>> upgradeSlotCodec) {
 		return RecordCodecBuilder.create(instance ->
 				instance.group(
 						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(PartTemplateData::type),
@@ -51,9 +50,8 @@ public class PartTemplateCodecs {
 						PART_TEMPLATE_STRUCTURE_DATA_CODEC.fieldOf("structure").forGetter(PartTemplateData::structure),
 						upgradeSlotCodec.optionalFieldOf("upgrades").forGetter(data -> Optional.ofNullable(data.upgrades())),
 						attributeCodec.optionalFieldOf("attributes").forGetter(data -> Optional.ofNullable(data.attributes())),
-						featureCodec.optionalFieldOf("features").forGetter(data -> Optional.ofNullable(data.features())),
 						Codec.unboundedMap(Codec.STRING, CodecConstants.JSON_ELEMENT_CODEC).optionalFieldOf("properties").forGetter(data -> Optional.ofNullable(data.properties()))
-				).apply(instance, (type, name, include, tags, host, structure, upgrades, attributes, features, properties) ->
-						new PartTemplateData(type, name, include.orElse(null), tags.orElse(null), host.orElse(null), structure, upgrades.orElse(null), attributes.orElse(null), features.orElse(null), properties.orElse(null))));
+				).apply(instance, (type, name, include, tags, host, structure, upgrades, attributes, properties) ->
+						new PartTemplateData(type, name, include.orElse(null), tags.orElse(null), host.orElse(null), structure, upgrades.orElse(null), attributes.orElse(null), properties.orElse(null))));
 	}
 }

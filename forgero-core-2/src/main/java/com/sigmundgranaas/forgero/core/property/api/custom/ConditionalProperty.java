@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.core.property.api.custom;
 
 import com.sigmundgranaas.forgero.core.property.api.Property;
-import com.sigmundgranaas.forgero.core.property.condition.Condition;
+import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import org.jetbrains.annotations.Nullable;
 

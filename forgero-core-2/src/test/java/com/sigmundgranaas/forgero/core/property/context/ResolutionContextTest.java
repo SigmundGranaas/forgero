@@ -12,6 +12,7 @@ import com.sigmundgranaas.forgero.core.component.impl.StructuredPart;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -28,11 +29,11 @@ class ResolutionContextTest extends ForgeroTest {
 	void setUp() {
 		iron = material(IRON_ID, METAL_TAG);
 		// Update ComponentStructure to use Map.of
-		pickaxeHead = new StructuredPart(PICKAXE_HEAD_ID, Set.of(), List.of(), new ComponentStructure(slotsMap(slot(idFactory.of("material_slot"), MATERIAL_ID, iron))));
+		pickaxeHead = new StructuredPart(PICKAXE_HEAD_ID, Set.of(), new HashMap<>(), new ComponentStructure(slotsMap(slot(idFactory.of("material_slot"), MATERIAL_ID, iron))));
 		handle = part(HANDLE_ID, WOOD_TAG);
 		binding = part(idFactory.of("binding"), METAL_TAG);
 		// Update ComponentStructure to use Map.of
-		pickaxe = new StructuredPart(PICKAXE_ID, Set.of(), List.of(), new ComponentStructure(slotsMap(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, pickaxeHead), slot(HANDLE_SLOT_ID, HANDLE_TAG, handle), slot(BINDING_SLOT_ID, BINDING_TAG, binding))));
+		pickaxe = new StructuredPart(PICKAXE_ID, Set.of(),new HashMap<>(), new ComponentStructure(slotsMap(slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, pickaxeHead), slot(HANDLE_SLOT_ID, HANDLE_TAG, handle), slot(BINDING_SLOT_ID, BINDING_TAG, binding))));
 	}
 
 	@Test

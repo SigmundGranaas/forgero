@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.predicate.minecraft;
 
 import com.mojang.serialization.Codec;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.property.condition.DynamicCondition;
+import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 
 import com.sigmundgranaas.forgero.predicate.minecraft.block.BlockPredicate;
 import com.sigmundgranaas.forgero.predicate.minecraft.entity.EntityPredicate;

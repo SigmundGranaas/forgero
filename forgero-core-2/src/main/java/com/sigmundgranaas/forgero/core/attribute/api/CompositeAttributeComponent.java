@@ -6,7 +6,7 @@ import com.sigmundgranaas.forgero.core.attribute.api.operator.AdditionOperator;
 import com.sigmundgranaas.forgero.core.attribute.api.operator.Operator;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.property.api.Property;
-import com.sigmundgranaas.forgero.core.property.condition.Condition;
+import com.sigmundgranaas.forgero.core.condition.api.Condition;
 
 /**
  * Represents a single, conditional piece of a larger, internally complex attribute calculation.
@@ -23,6 +23,7 @@ import com.sigmundgranaas.forgero.core.property.condition.Condition;
  * {@link com.sigmundgranaas.forgero.core.attribute.impl.CompositeAttributeBakingStrategy} and will not contribute any value to the final stats.
  */
 public record CompositeAttributeComponent(
+		Optional<String> id,
 		OpenIdentifier type,
 		float value,
 		Operator operator,
@@ -35,10 +36,19 @@ public record CompositeAttributeComponent(
 	}
 
 	public CompositeAttributeComponent(OpenIdentifier type, float value, OpenIdentifier compositeKey) {
-		this(type, value, AdditionOperator.getInstance(), 0, compositeKey);
+		this(Optional.empty(), type, value, AdditionOperator.getInstance(), 0, compositeKey);
 	}
 
 	public Attribute asComputableAttribute() {
 		return new SimpleAttribute(type, value, operator, group);
+	}
+
+	public CompositeAttributeComponent(
+									   OpenIdentifier type,
+									   float value,
+									   Operator operator,
+									   int group,
+									   OpenIdentifier compositeKey) {
+		this(Optional.empty(), type, value, operator, group, compositeKey);
 	}
 }

@@ -2,56 +2,64 @@ package com.sigmundgranaas.forgero.model.generation.impl;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import org.jetbrains.annotations.Nullable;
-
+import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import java.util.Map;
-import java.util.regex.Matcher;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class PlaceholderResolver {
 	private static final Pattern PATTERN = Pattern.compile("\\{([^}]+)}");
 
-	public String resolve(String template, Map<String, Object> context) {
+	public String resolve(String template, Map<String, Component> context) {
 		if (template == null || template.isEmpty()) {
 			return "";
 		}
-		Matcher matcher = PATTERN.matcher(template);
-		StringBuilder sb = new StringBuilder();
-		while (matcher.find()) {
-			String fullPath = matcher.group(1);
-			Object resolvedValue = traversePath(context, fullPath);
-			String replacement = resolvedValue != null ? String.valueOf(resolvedValue) : "";
-			matcher.appendReplacement(sb, Matcher.quoteReplacement(replacement));
-		}
-		matcher.appendTail(sb);
-		return sb.toString();
+		// Use replaceAll with a lambda for cleaner logic
+		return PATTERN.matcher(template).replaceAll(matchResult ->
+				resolvePlaceholder(matchResult.group(1), context)
+						.orElse(matchResult.group(0)) // If resolution fails, keep the original placeholder
+		);
 	}
 
-	private Object traversePath(Object root, String fullPath) {
-		Object current = root;
-		String[] pathParts = fullPath.split("\\.");
-		for (String part : pathParts) {
-			if (current == null) return null;
+	private Optional<String> resolvePlaceholder(String placeholder, Map<String, Component> context) {
+		String[] parts = placeholder.split("\\.");
+		if (parts.length == 0) return Optional.empty();
 
-			if (current instanceof Map<?, ?> map) {
-				current = map.get(part);
+		Component current = context.get(parts[0]);
+		if (current == null) return Optional.empty();
+
+		// Traverse the component structure for parts like {head.material.name}
+		for (int i = 1; i < parts.length; i++) {
+			String property = parts[i];
+
+			// Check for final property "name"
+			if ("name".equals(property)) {
+				return Optional.of(getCleanName(current));
+			}
+
+			// Otherwise, traverse deeper
+			if (current instanceof StructuredComponent structured) {
+				// The part name (e.g., "material") is the key for the next component
+				current = Optional.ofNullable(structured.structure().slots().get(new OpenIdentifier("forgero", property)))
+						.flatMap(slot -> Optional.ofNullable(slot.content()))
+						.orElse(null);
+				if (current == null) return Optional.empty(); // Path traversal failed
 			} else {
-				current = getProperty(current, part);
+				return Optional.empty(); // Cannot traverse into a non-structured component
 			}
 		}
-		return current;
+
+		// If the loop finishes, it means the placeholder was just one part (e.g., {material})
+		// or the last part was a component itself. We resolve its name.
+		return Optional.of(getCleanName(current));
 	}
 
-	private @Nullable Object getProperty(Object obj, String propertyName) {
-		if (obj instanceof OpenIdentifier id) {
-			return "name".equals(propertyName) ? id.name() : id.toString();
-		} else if (obj instanceof Component comp) {
-			return switch (propertyName) {
-				case "id" -> comp.id();
-				case "name" -> comp.id().name();
-				default -> null;
-			};
+	private String getCleanName(Component component) {
+		String name = component.id().name();
+		// Special handling to trim suffixes for a cleaner name, important for palettes
+		if (name.endsWith("_shape")) {
+			return name.substring(0, name.length() - "_shape".length());
 		}
-		return null;
+		return name;
 	}
 }

@@ -5,16 +5,14 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.property.condition.DynamicCondition;
-import com.sigmundgranaas.forgero.core.property.condition.StaticCondition;
-import com.sigmundgranaas.forgero.data.loading.api.data.StaticPartData;
+import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
+import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
+import com.sigmundgranaas.forgero.data.loading.api.data.StaticData;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
-import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.UpgradeSlotData;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.AttributeCodecs;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.ConditionCodec;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.FeatureCodecs;
+import com.sigmundgranaas.forgero.core.condition.api.ConditionCodec;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.PartTemplateCodecs;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.StaticPartCodecs;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class StaticPartDataCodecTest {
 
-	private Codec<StaticPartData> staticPartDataCodec;
+	private Codec<StaticData> staticPartDataCodec;
 
 	@BeforeEach
 	void setUp() {
@@ -37,11 +35,9 @@ class StaticPartDataCodecTest {
 		ConditionCodec conditionCodec = new ConditionCodec(staticCodecs, dynamicCodecs);
 
 		Codec<List<AttributeData>> attributeListCodec = Codec.list(AttributeCodecs.create(conditionCodec));
-		FeatureCodecs.registerCodecs(conditionCodec); // Ensure feature codecs are initialized
-		Codec<List<FeatureData>> featureListCodec = FeatureCodecs.createFeatureDataListCodec();
 		Codec<List<UpgradeSlotData>> upgradeSlotDataListCodec = Codec.list(PartTemplateCodecs.UPGRADE_SLOT_DATA_CODEC);
 
-		this.staticPartDataCodec = StaticPartCodecs.create(attributeListCodec, featureListCodec, upgradeSlotDataListCodec);
+		this.staticPartDataCodec = StaticPartCodecs.create(attributeListCodec, upgradeSlotDataListCodec);
 	}
 
 	private <T> T parseSuccess(Codec<T> codec, String json) {
@@ -79,7 +75,7 @@ class StaticPartDataCodecTest {
 				}
 				""";
 
-		StaticPartData data = parseSuccess(staticPartDataCodec, json);
+		StaticData data = parseSuccess(staticPartDataCodec, json);
 		assertEquals(id("forgero:static_part"), data.type());
 		assertEquals("custom_stone", data.name());
 
@@ -96,9 +92,6 @@ class StaticPartDataCodecTest {
 		assertEquals(id("forgero:hardness"), hardness.type());
 		assertEquals(5.0f, hardness.computation().value());
 
-		assertNotNull(data.features());
-		assertTrue(data.features().isEmpty());
-
 		assertNotNull(data.properties());
 		assertEquals(1, data.properties().size());
 		assertTrue(data.properties().containsKey("forgero:weight"));
@@ -114,19 +107,18 @@ class StaticPartDataCodecTest {
 				}
 				""";
 
-		StaticPartData data = parseSuccess(staticPartDataCodec, json);
+		StaticData data = parseSuccess(staticPartDataCodec, json);
 		assertEquals(id("forgero:static_part"), data.type());
 		assertEquals("simple_stick", data.name());
 		assertNull(data.include());
 		assertNull(data.tags());
 		assertNull(data.attributes());
-		assertNull(data.features());
 		assertNull(data.properties());
 	}
 
 	@Test
 	void testParseStaticPartMissingRequiredFields() {
-		String json = "{ \"type\": \"forgero:static_part\" }"; // Missing 'name'
+		String json = "{ \"type\": \"forgero:static_part\" }";
 		parseFailure(staticPartDataCodec, json, "No key name");
 	}
 }

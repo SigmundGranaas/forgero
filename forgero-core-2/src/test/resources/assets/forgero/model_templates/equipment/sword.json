@@ -1,7 +1,7 @@
 {
   "type": "forgero:equipment_model_template",
   "target": {
-    "tag": "forgero:material/tool_material"
+    "tag": "forgero:metal"
   },
   "model": {
     "id": "forgero:equipment/{target.name}-sword",

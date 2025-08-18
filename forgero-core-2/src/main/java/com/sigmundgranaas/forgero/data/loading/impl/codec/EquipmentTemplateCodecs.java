@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgero.data.loading.impl.codec;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
-import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.EquipmentTemplateData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.EquipmentTemplateSlotData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.EquipmentTemplateStructureData;
@@ -29,7 +28,7 @@ public class EquipmentTemplateCodecs {
 			).apply(instance, (id, slots) -> new EquipmentTemplateStructureData(id.orElse(null), slots)));
 
 
-	public static Codec<EquipmentTemplateData> create(Codec<List<AttributeData>> attributeCodec, Codec<List<FeatureData>> featureCodec, Codec<List<UpgradeSlotData>> upgradeSlotCodec) {
+	public static Codec<EquipmentTemplateData> create(Codec<List<AttributeData>> attributeCodec, Codec<List<UpgradeSlotData>> upgradeSlotCodec) {
 		return RecordCodecBuilder.create(instance ->
 				instance.group(
 						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(EquipmentTemplateData::type),
@@ -40,9 +39,8 @@ public class EquipmentTemplateCodecs {
 						EQUIPMENT_TEMPLATE_STRUCTURE_DATA_CODEC.fieldOf("structure").forGetter(EquipmentTemplateData::structure),
 						upgradeSlotCodec.optionalFieldOf("upgrades").forGetter(data -> Optional.ofNullable(data.upgrades())),
 						attributeCodec.optionalFieldOf("attributes").forGetter(data -> Optional.ofNullable(data.attributes())),
-						featureCodec.optionalFieldOf("features").forGetter(data -> Optional.ofNullable(data.features())),
 						Codec.unboundedMap(Codec.STRING, CodecConstants.JSON_ELEMENT_CODEC).optionalFieldOf("properties").forGetter(data -> Optional.ofNullable(data.properties()))
-				).apply(instance, (type, name, include, tags, host, structure, upgrades, attributes, features, properties) ->
-						new EquipmentTemplateData(type, name, include.orElse(null), tags.orElse(null), host.orElse(null), structure, upgrades.orElse(null), attributes.orElse(null), features.orElse(null), properties.orElse(null))));
+				).apply(instance, (type, name, include, tags, host, structure, upgrades, attributes, properties) ->
+						new EquipmentTemplateData(type, name, include.orElse(null), tags.orElse(null), host.orElse(null), structure, upgrades.orElse(null), attributes.orElse(null), properties.orElse(null))));
 	}
 }

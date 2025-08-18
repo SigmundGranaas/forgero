@@ -35,7 +35,7 @@ class ModelResolverTest {
 		ResourceProvider resourceProvider = new ClassPathResourceProvider("/assets");
 		var fileModelProvider = new FileModelProvider(resourceProvider);
 		new ResourceLoader<>(resourceProvider, fileModelProvider)
-				.load(new OpenIdentifier("forgero", "models"), true)
+				.load(new OpenIdentifier("forgero", "forgero_models"), true)
 				.forEach(registry::register);
 
 		// Setup Resolver
@@ -46,7 +46,7 @@ class ModelResolverTest {
 		Set<OpenIdentifier> tagSet = Arrays.stream(tags)
 				.map(tag -> new OpenIdentifier("forgero", tag))
 				.collect(Collectors.toSet());
-		return new StaticComponent(new OpenIdentifier(id), tagSet, Collections.emptyList());
+		return new StaticComponent(new OpenIdentifier(id), tagSet, new HashMap<>());
 	}
 
 	private StructuredComponent mockStructuredComponent(String id, Map<String, Component> parts, String... tags) {
@@ -105,8 +105,8 @@ class ModelResolverTest {
 		}
 
 		@Override
-		public List<Property> getProperties() {
-			return List.of();
+		public Map<String, List<?>> propertiesAsMap() {
+			return new HashMap<>();
 		}
 
 		@Override

@@ -17,9 +17,8 @@ public class SchematicCodecs {
 						Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("tags").forGetter(data -> Optional.ofNullable(data.tags())),
 						HostCodecs.HOST_DATA_CODEC.optionalFieldOf("host").forGetter(data -> Optional.ofNullable(data.host())),
 						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("target").forGetter(SchematicData::target),
-						Codec.STRING.fieldOf("crafting_material").forGetter(SchematicData::craftingMaterial),
 						Codec.unboundedMap(Codec.STRING, CodecConstants.JSON_ELEMENT_CODEC).optionalFieldOf("properties").forGetter(data -> Optional.ofNullable(data.properties()))
-				).apply(instance, (type, name, include, tags, host, target, craftingMaterial, properties) ->
-						new SchematicData(type, name, include.orElse(null), tags.orElse(null), host.orElse(null), target, craftingMaterial, properties.orElse(null))));
+				).apply(instance, (type, name, include, tags, host, target, properties) ->
+						new SchematicData(type, name, include.orElse(null), tags.orElse(null), host.orElse(null), target, properties.orElse(null))));
 	}
 }

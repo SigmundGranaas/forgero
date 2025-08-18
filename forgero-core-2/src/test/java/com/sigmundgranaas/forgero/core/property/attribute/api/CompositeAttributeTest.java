@@ -33,7 +33,7 @@ class CompositeAttributeTest {
 		CompositeAttribute composite = result.get();
 		assertEquals(TEST_TYPE, composite.type());
 		assertEquals(TEST_KEY, composite.compositeKey());
-		assertEquals(2, composite.getComposites().size());
+		assertEquals(2, composite.composites().size());
 		assertEquals(AdditionOperator.getInstance(), composite.operator()); // Default operator
 		assertEquals(0, composite.group()); // Default group
 	}
@@ -97,7 +97,7 @@ class CompositeAttributeTest {
 
 		assertTrue(result.isPresent());
 		CompositeAttribute composite = result.get();
-		List<CompositeAttributeComponent> composites = composite.getComposites();
+		List<CompositeAttributeComponent> composites = composite.composites();
 
 		assertThrows(UnsupportedOperationException.class, () -> composites.add(new CompositeAttributeComponent(TEST_TYPE, 1f, DivisionOperator.getInstance(), 0, TEST_KEY)));
 	}

@@ -1,0 +1,8 @@
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection DependencyNotationArgument
+
+dependencies {
+	implementation(project(":forgero-core-2"))
+	implementation(project(path: ":fabric:modules:loader", configuration: 'namedElements'))
+}

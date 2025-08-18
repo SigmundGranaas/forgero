@@ -1,6 +1,14 @@
 package com.sigmundgranaas.forgero.loader.api;
 
-import com.sigmundgranaas.forgero.cof.ComponentConstructorRegistry;
+import com.mojang.serialization.Codec;
+import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
+import com.sigmundgranaas.forgero.core.condition.api.Condition;
+import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
+import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
+
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public interface PluginRegistrationContext {
 	/**
@@ -9,12 +17,33 @@ public interface PluginRegistrationContext {
 	void registerItemCreator(String itemClass, ItemCreator creator);
 
 	/**
-	 * Register a component constructor for custom component types.
+	 * Registers a codec for a custom static condition.
+	 * @param type The unique type identifier for the condition (e.g., "forgero:at_depth").
+	 * @param factory The codec for parsing the condition.
 	 */
-	void registerComponentConstructor(String type, ComponentConstructorRegistry.ComponentConstructor constructor);
+	void registerStaticConditionCodec(String type, Function<Supplier<TagGraph>, Codec<? extends StaticCondition>> factory);
 
 	/**
-	 * Register custom condition codecs for data parsing.
+	 * Registers a codec for a custom static condition.
+	 * @param type The unique type identifier for the condition (e.g., "forgero:at_depth").
+	 * @param codec The codec for parsing the condition.
 	 */
-	void registerConditionCodec(String type, Object codec);
+	void registerStaticConditionCodec(String type, Codec<? extends StaticCondition> codec);
+
+	/**
+	 * Registers a codec for a custom dynamic condition.
+	 * @param type The unique type identifier for the condition (e.g., "forgero:target_has_tag").
+	 * @param codec The codec for parsing the condition.
+	 */
+	void registerDynamicConditionCodec(String type, Codec<? extends DynamicCondition> codec);
+
+	/**
+	 * Registers a builder function for a custom property codec.
+	 * The function will be invoked by the data loader with a supplier for the master ConditionCodec,
+	 * allowing properties to correctly parse their own conditional blocks.
+	 *
+	 * @param key          The JSON key for the property (e.g., "forgero:attributes").
+	 * @param codecBuilder A function that takes a ConditionCodec supplier and returns a complete codec for your property list.
+	 */
+	void registerPropertyCodec(String key, Function<Supplier<Codec<Condition>>, Codec<? extends List<?>>> codecBuilder);
 }

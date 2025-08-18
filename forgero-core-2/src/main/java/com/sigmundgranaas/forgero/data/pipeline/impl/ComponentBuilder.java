@@ -1,0 +1,108 @@
+package com.sigmundgranaas.forgero.data.pipeline.impl;
+
+import com.mojang.serialization.DataResult;
+import com.sigmundgranaas.forgero.cof.ComponentConstructor;
+import com.sigmundgranaas.forgero.cof.dto.CofComponent;
+import com.sigmundgranaas.forgero.cof.dto.CofSlot;
+import com.sigmundgranaas.forgero.cof.dto.CofStructure;
+import com.sigmundgranaas.forgero.cof.dto.CofUpgrades;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgrades;
+import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
+import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
+import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
+
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+/**
+ * Builds runtime {@link Component} objects from a map of final {@link CofComponent} DTOs.
+ * This is the final stage of the pipeline, turning data into live game objects.
+ */
+public class ComponentBuilder {
+	private final ComponentConstructor constructorRegistry;
+	private final Map<OpenIdentifier, CofComponent> dtoList;
+	private final Map<OpenIdentifier, Component> componentCache = new HashMap<>();
+
+	public ComponentBuilder(ComponentConstructor registry, Map<OpenIdentifier, CofComponent> dtoList) {
+		this.constructorRegistry = registry;
+		this.dtoList = dtoList;
+	}
+
+	public List<Component> buildAll() {
+		return dtoList.keySet().stream().map(this::buildFromId).collect(Collectors.toList());
+	}
+
+	private Component buildFromId(OpenIdentifier id) {
+		if (componentCache.containsKey(id)) {
+			return componentCache.get(id);
+		}
+		CofComponent dto = dtoList.get(id);
+		if (dto == null) {
+			throw new IllegalStateException("Attempted to build a component that was not processed: " + id);
+		}
+
+		// Pre-cache the component to handle recursive structures
+		// We'll throw this away if building fails.
+		// A proxy/future approach would be more robust but this is simpler for now.
+		// To avoid issues, we will build children first.
+
+		Component component = buildComponentFromDto(dto)
+				.getOrThrow(false, err -> { throw new IllegalStateException(err); });
+
+		componentCache.put(id, component);
+		return component;
+	}
+
+	private DataResult<Component> buildComponentFromDto(CofComponent dto) {
+		DataResult<ComponentStructure> structureResult = dto.structure() != null
+				? buildStructureFromDto(dto.structure())
+				: DataResult.success(null);
+
+		DataResult<ComponentUpgrades> upgradesResult = dto.upgrades() != null
+				? buildUpgradesFromDto(dto.upgrades())
+				: DataResult.success(null);
+
+		return structureResult.flatMap(structure ->
+				upgradesResult.flatMap(upgrades ->
+						constructorRegistry.construct(dto.id(), dto.componentType(), dto.tags(), dto.properties(), structure, upgrades)
+				)
+		);
+	}
+
+	private DataResult<ComponentStructure> buildStructureFromDto(CofStructure structureDto) {
+		Map<OpenIdentifier, StructureSlot> slots = new HashMap<>();
+		for (Map.Entry<OpenIdentifier, CofSlot> entry : structureDto.slots().entrySet()) {
+			CofSlot slotDto = entry.getValue();
+			if (slotDto.content() == null) {
+				// This case should be handled by template generator, but as a safeguard.
+				return DataResult.error(() -> "Structure slot " + entry.getKey() + " is missing content.");
+			}
+			Component childComponent = buildFromId(slotDto.content().id());
+			slots.put(entry.getKey(), new StructureSlot(entry.getKey(), slotDto.type(), slotDto.description(), childComponent));
+		}
+		return DataResult.success(new ComponentStructure(slots));
+	}
+
+	private DataResult<ComponentUpgrades> buildUpgradesFromDto(CofUpgrades upgradesDto) {
+		List<UpgradeSlot> slots = new ArrayList<>();
+		for (CofSlot slotDto : upgradesDto.slots()) {
+			Component childComponent = null;
+			if (slotDto.content() != null) {
+				childComponent = buildFromId(slotDto.content().id());
+			}
+
+			Predicate<Component> validator = comp -> {
+				if (slotDto.validTags() == null || slotDto.validTags().isEmpty()) {
+					return true;
+				}
+				return comp.getTags().containsAll(slotDto.validTags());
+			};
+
+			slots.add(new UpgradeSlot(slotDto.type(), slotDto.type(), slotDto.description(), validator, Optional.ofNullable(childComponent)));
+		}
+		return DataResult.success(new ComponentUpgrades(slots));
+	}
+}

@@ -1,24 +1,26 @@
 package com.sigmundgranaas.forgero.core.property.attribute.impl;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
-import com.sigmundgranaas.forgero.core.property.api.PropertyRegistry;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
-import com.sigmundgranaas.forgero.core.property.condition.Condition;
-import com.sigmundgranaas.forgero.core.property.condition.DynamicCondition;
-import com.sigmundgranaas.forgero.core.property.condition.StaticCondition;
+import com.sigmundgranaas.forgero.core.condition.api.Condition;
+import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
+import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 import com.sigmundgranaas.forgero.core.property.context.ContextKeys;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.core.property.engine.ResolverEngine;
-import com.sigmundgranaas.forgero.core.property.predicate.SlotContainsCondition;
-import com.sigmundgranaas.forgero.core.property.predicate.TagMatchCondition;
+import com.sigmundgranaas.forgero.core.condition.predicate.SlotContainsCondition;
+import com.sigmundgranaas.forgero.core.condition.predicate.TagMatchCondition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.Set;
 
 import static com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes.*;
@@ -37,7 +39,6 @@ class AttributeResolverTest {
 	@BeforeEach
 	void setUp() {
 		// Reset and initialize the PropertyRegistry to ensure all core codecs are available
-		PropertyRegistry.getInstance().reset();
 		resolver = new ResolverEngine();
 	}
 
@@ -54,9 +55,7 @@ class AttributeResolverTest {
 				.withPart(handle, "handle_slot", HANDLE_SLOT_TYPE)
 				.build();
 
-		Optional<AttributeQueryResult> resultOpt = resolver.resolve(pickaxe, AttributeEngine.KEY);
-		assertTrue(resultOpt.isPresent());
-		AttributeQueryResult result = resultOpt.get();
+		AttributeQueryResult result = resolver.resolve(pickaxe, new AttributeEngine());
 
 		float attackDamage = result.getValue(ATTACK_DAMAGE);
 		assertEquals(11f, attackDamage, "Should be 10 from head + 1 from pickaxe base.");
@@ -89,13 +88,16 @@ class AttributeResolverTest {
 
 		var diamondCondition = new Condition(Collections.emptyList(), List.of(onStone));
 		var diamondProperty = attribute(MINING_SPEED).withValue(10f).withCondition(diamondCondition).build();
-		var diamond = part(DIAMOND_ID).withTag(GEM_TAG).withProperty(diamondProperty).build();
+		var diamond = part(DIAMOND_ID).withTag(GEM_TAG).withAttribute(diamondProperty).build();
+
+		Map<OpenIdentifier, Set<OpenIdentifier>> tagMap = new HashMap<>();
+		tagMap.put(id("pickaxe"), new HashSet<>());
 
 		// STATIC CONDITION: Active only if the root item is a 'pickaxe'.
-		StaticCondition rootIsPickaxe = new TagMatchCondition(id("forgero:root_has_tag"), id("pickaxe"));
+		StaticCondition rootIsPickaxe = new TagMatchCondition(id("forgero:root_has_tag"), id("pickaxe"), () -> new TagGraph(tagMap));
 		var ironCondition = new Condition(List.of(rootIsPickaxe), Collections.emptyList());
 		var ironProperty = attribute(MINING_SPEED).withValue(5f).withCondition(ironCondition).build();
-		var iron = part(IRON_ID).withTag(METAL_TAG).withProperty(ironProperty).build();
+		var iron = part(IRON_ID).withTag(METAL_TAG).withAttribute(ironProperty).build();
 
 
 		var head = part(PICKAXE_HEAD_ID)
@@ -115,17 +117,17 @@ class AttributeResolverTest {
 		DynamicContext woodTarget = new DynamicContext.Builder().put(ContextKeys.TARGET_TAGS, Set.of(id("wood"))).build();
 
 		// Test pickaxe against different contexts
-		AttributeQueryResult pickaxeStoneResult = resolver.resolve(pickaxe, AttributeEngine.KEY, stoneTarget).orElseThrow();
+		AttributeQueryResult pickaxeStoneResult = resolver.resolve(pickaxe, new AttributeEngine(), stoneTarget);
 		assertEquals(16f, pickaxeStoneResult.getValue(MINING_SPEED), "Base (1) + Iron (5) + Diamond (10) = 16");
 
-		AttributeQueryResult pickaxeWoodResult = resolver.resolve(pickaxe, AttributeEngine.KEY, woodTarget).orElseThrow();
+		AttributeQueryResult pickaxeWoodResult = resolver.resolve(pickaxe,  new AttributeEngine(), woodTarget);
 		assertEquals(6f, pickaxeWoodResult.getValue(MINING_SPEED), "Base (1) + Iron (5) = 6");
 
 		// Test sword against different contexts
-		AttributeQueryResult swordStoneResult = resolver.resolve(sword, AttributeEngine.KEY, stoneTarget).orElseThrow();
+		AttributeQueryResult swordStoneResult = resolver.resolve(sword, new AttributeEngine(), stoneTarget);
 		assertEquals(11f, swordStoneResult.getValue(MINING_SPEED), "Base (1) + Diamond (10) = 11. Iron bonus inactive.");
 
-		AttributeQueryResult swordWoodResult = resolver.resolve(sword, AttributeEngine.KEY, woodTarget).orElseThrow();
+		AttributeQueryResult swordWoodResult = resolver.resolve(sword, new AttributeEngine(), woodTarget);
 		assertEquals(1f, swordWoodResult.getValue(MINING_SPEED), "Base (1) only.");
 	}
 
@@ -139,7 +141,7 @@ class AttributeResolverTest {
 		var headBonusCondition = new Condition(List.of(handleContainsWood), Collections.emptyList());
 		var headBonus = attribute(ATTACK_DAMAGE).withValue(5).withCondition(headBonusCondition).build();
 
-		var head = part(PICKAXE_HEAD_ID).withTag(METAL_TAG).withProperty(headBonus).build();
+		var head = part(PICKAXE_HEAD_ID).withTag(METAL_TAG).withAttribute(headBonus).build();
 		var oakHandle = part(HANDLE_ID).withTag(WOOD_TAG).build();
 		var ironHandle = part(HANDLE_ID).withTag(METAL_TAG).build();
 
@@ -153,10 +155,10 @@ class AttributeResolverTest {
 				.withPart(ironHandle, "handle_slot", HANDLE_SLOT_TYPE)
 				.build();
 
-		float woodDamage = resolver.resolve(woodPickaxe, AttributeEngine.KEY).map(res -> res.getValue(ATTACK_DAMAGE)).orElse(0f);
+		float woodDamage = resolver.resolve(woodPickaxe,new AttributeEngine()).getValue(ATTACK_DAMAGE);
 		assertEquals(6f, woodDamage, "Base damage (1) + head bonus (5, because handle is wood) = 6");
 
-		float ironDamage = resolver.resolve(ironPickaxe, AttributeEngine.KEY).map(res -> res.getValue(ATTACK_DAMAGE)).orElse(0f);
+		float ironDamage = resolver.resolve(ironPickaxe,new AttributeEngine()).getValue(ATTACK_DAMAGE);
 		assertEquals(1f, ironDamage, "Base damage (1) only, because handle is not wood.");
 	}
 }

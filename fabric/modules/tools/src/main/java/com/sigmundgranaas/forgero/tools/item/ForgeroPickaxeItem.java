@@ -1,10 +1,8 @@
 package com.sigmundgranaas.forgero.tools.item;
 
 import com.sigmundgranaas.forgero.common.item.ForgeroHostItem;
-import com.sigmundgranaas.forgero.common.nbt.ComponentNbtConverter;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ToolMaterial;
 

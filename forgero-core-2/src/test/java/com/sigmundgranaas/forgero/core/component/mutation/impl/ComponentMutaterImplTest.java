@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -139,7 +140,7 @@ class ComponentMutaterImplTest {
 		));
 
 		assertThrows(IllegalArgumentException.class, () -> new StructuredExtensibleEquipment(
-						PICKAXE_ID, Set.of(), Collections.emptyList(), structure, upgradesWithDuplicate),
+						PICKAXE_ID, Set.of(), new HashMap<>(), structure, upgradesWithDuplicate),
 				"Should throw when a slot ID is duplicated between structure and upgrades."
 		);
 	}

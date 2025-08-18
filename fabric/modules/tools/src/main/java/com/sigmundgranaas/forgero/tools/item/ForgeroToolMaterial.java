@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
+
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
 
@@ -14,8 +15,7 @@ public class ForgeroToolMaterial implements ToolMaterial {
 
 	public ForgeroToolMaterial(Component component, Resolver resolver) {
 		this.component = component;
-		this.attributes = resolver.resolve(component, AttributeEngine.KEY)
-				.orElse(AttributeQueryResult.EMPTY);
+		this.attributes = resolver.resolve(component, new AttributeEngine());
 	}
 
 	@Override
