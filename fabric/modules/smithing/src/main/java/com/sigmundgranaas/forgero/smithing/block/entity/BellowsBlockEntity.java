@@ -17,12 +17,14 @@ import net.minecraft.world.World;
 public class BellowsBlockEntity extends BlockEntity {
 
     // Bellows operation constants
-    private static final int BOOST_DURATION = 200; // 10 seconds (200 ticks)
+    private static final int BOOST_DURATION = 200; // 10 seconds (200 ticks) - full boost phase
+    private static final int DECAY_DURATION = 400; // 20 seconds (400 ticks) - gradual decay phase
     private static final int COOLDOWN_DURATION = 100; // 5 seconds before can be used again
-    private static final int TEMPERATURE_BOOST = 200; // Additional temperature provided
+    private static final int TEMPERATURE_BOOST = 200; // Maximum additional temperature provided
 
     // State tracking
-    private int boostTicks = 0; // Remaining ticks of temperature boost
+    private int boostTicks = 0; // Remaining ticks of full temperature boost
+    private int decayTicks = 0; // Remaining ticks of gradual decay
     private int cooldownTicks = 0; // Remaining cooldown before next use
     private boolean wasActive = false; // For visual state management
 
@@ -37,6 +39,16 @@ public class BellowsBlockEntity extends BlockEntity {
         if (entity.boostTicks > 0) {
             entity.boostTicks--;
             if (entity.boostTicks == 0) {
+                // Start decay phase when boost ends
+                entity.decayTicks = DECAY_DURATION;
+                stateChanged = true;
+            }
+        }
+
+        // Update decay timer
+        if (entity.decayTicks > 0) {
+            entity.decayTicks--;
+            if (entity.decayTicks == 0) {
                 stateChanged = true;
             }
         }
@@ -46,8 +58,8 @@ public class BellowsBlockEntity extends BlockEntity {
             entity.cooldownTicks--;
         }
 
-        // Update visual state
-        boolean shouldBeActive = entity.boostTicks > 0;
+        // Update visual state - bellows appears active during boost and decay phases
+        boolean shouldBeActive = entity.boostTicks > 0 || entity.decayTicks > 0;
         boolean currentlyActive = state.get(BellowsBlock.ACTIVE);
 
         if (shouldBeActive != currentlyActive) {
@@ -75,8 +87,9 @@ public class BellowsBlockEntity extends BlockEntity {
             return false;
         }
 
-        // Activate bellows
+        // Activate bellows - clear any existing decay and start fresh boost
         boostTicks = BOOST_DURATION;
+        decayTicks = 0; // Clear any existing decay
         cooldownTicks = COOLDOWN_DURATION;
         markDirty();
 
@@ -85,17 +98,23 @@ public class BellowsBlockEntity extends BlockEntity {
 
     /**
      * Gets the current temperature boost provided by this bellows.
-     * @return temperature boost amount, 0 if not active
+     * Only provides boost during the boost phase, not during decay
+     * @return temperature boost amount, 0 if not in boost phase
      */
     public int getTemperatureBoost() {
-        return boostTicks > 0 ? TEMPERATURE_BOOST : 0;
+        if (boostTicks > 0) {
+            // Full boost during boost phase only
+            return TEMPERATURE_BOOST;
+        }
+        // During decay phase or inactive, return 0 so bloomery handles its own decay
+        return 0;
     }
 
     /**
-     * Checks if the bellows is currently providing a temperature boost.
+     * Checks if the bellows is currently providing any temperature boost.
      */
     public boolean isActive() {
-        return boostTicks > 0;
+        return boostTicks > 0 || decayTicks > 0;
     }
 
     /**
@@ -103,6 +122,13 @@ public class BellowsBlockEntity extends BlockEntity {
      */
     public int getRemainingBoostTicks() {
         return boostTicks;
+    }
+
+    /**
+     * Gets remaining decay time in ticks.
+     */
+    public int getRemainingDecayTicks() {
+        return decayTicks;
     }
 
     /**
@@ -158,6 +184,7 @@ public class BellowsBlockEntity extends BlockEntity {
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
         boostTicks = nbt.getInt("BoostTicks");
+        decayTicks = nbt.getInt("DecayTicks");
         cooldownTicks = nbt.getInt("CooldownTicks");
     }
 
@@ -165,6 +192,7 @@ public class BellowsBlockEntity extends BlockEntity {
     public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
         nbt.putInt("BoostTicks", boostTicks);
+        nbt.putInt("DecayTicks", decayTicks);
         nbt.putInt("CooldownTicks", cooldownTicks);
     }
 

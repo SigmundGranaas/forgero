@@ -4,7 +4,6 @@ import com.sigmundgranaas.forgero.smithing.block.custom.BloomeryBlock;
 import com.sigmundgranaas.forgero.smithing.block.custom.BloomeryExtensionBlock;
 import com.sigmundgranaas.forgero.smithing.fuel.BloomeryFuelSystem;
 import com.sigmundgranaas.forgero.smithing.fuel.FuelType;
-import com.sigmundgranaas.forgero.smithing.block.custom.BellowsBlock;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -27,6 +26,10 @@ public class BloomeryBlockEntity extends BlockEntity {
 	// Fuel temperature system
 	private BloomeryFuelSystem fuelSystem = new BloomeryFuelSystem();
 
+	// Bellows temperature tracking - gradual decay system
+	private int currentBellowsBoost = 0;
+	private int lastBellowsUpdate = 0;
+
 	public BloomeryBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.BLOOMERY, pos, state);
 	}
@@ -39,8 +42,17 @@ public class BloomeryBlockEntity extends BlockEntity {
 		if (blockEntity.isBurning()) {
 			blockEntity.fuelTime--;
 			if (blockEntity.fuelTime <= 0) {
-				blockEntity.fuelTime = 0;
-				blockEntity.maxFuelTime = 0;
+				// Try to consume more fuel from inventory to keep burning
+				int newFuelTime = blockEntity.consumeFuelForLighting();
+				if (newFuelTime > 0) {
+					// Successfully consumed fuel, continue burning
+					blockEntity.fuelTime = newFuelTime;
+					blockEntity.maxFuelTime = newFuelTime;
+				} else {
+					// No more fuel available, stop burning
+					blockEntity.fuelTime = 0;
+					blockEntity.maxFuelTime = 0;
+				}
 				dirty = true;
 			}
 		}
@@ -55,6 +67,9 @@ public class BloomeryBlockEntity extends BlockEntity {
 			blockEntity.syncLitStateWithExtensions(world, pos, isLit);
 			dirty = true;
 		}
+
+		// Update bellows temperature
+		blockEntity.updateBellowsTemperature();
 
 		// Mark dirty if needed
 		if (dirty) {
@@ -142,17 +157,28 @@ public class BloomeryBlockEntity extends BlockEntity {
 	 * Gets the current temperature of the bloomery based on fuel
 	 */
 	public int getCurrentTemperature() {
-		int baseTemperature = fuelSystem.getCurrentTemperature();
+		int baseTemperature = 0;
 
-		// If fuel system returns 0 but bloomery is lit, use the fuel type's max temperature
-		if (baseTemperature == 0 && isBurning()) {
-			// Determine base temperature from available fuel types
-			if (canReachTemperature(900)) {
-				baseTemperature = 1000; // Charcoal available
-			} else if (canReachTemperature(750)) {
-				baseTemperature = 800;  // Coal available
+		// When bloomery is burning, determine base temperature from fuel type
+		if (isBurning()) {
+			// Get base temperature from the fuel type currently burning
+			if (!fuelSlot.isEmpty()) {
+				// Use the actual fuel item to determine temperature
+				if (fuelSlot.isOf(Items.CHARCOAL)) {
+					baseTemperature = 1000;
+				} else if (fuelSlot.isOf(Items.COAL)) {
+					baseTemperature = 800;
+				}
+			} else {
+				// Fallback: check if connected bloomery can reach high temps (charcoal) or limited (coal)
+				if (canReachTemperature(900)) {
+					baseTemperature = 1000; // Charcoal available
+				} else if (canReachTemperature(750)) {
+					baseTemperature = 800;  // Coal available
+				}
 			}
 		}
+		// If not burning, temperature is 0
 
 		int bellowsBoost = getBellowsTemperatureBoost();
 		return baseTemperature + bellowsBoost;
@@ -162,21 +188,7 @@ public class BloomeryBlockEntity extends BlockEntity {
 	 * Gets the total temperature boost from all connected bellows
 	 */
 	private int getBellowsTemperatureBoost() {
-		if (world == null) return 0;
-
-		int totalBoost = 0;
-
-		// Check all horizontal directions for active bellows
-		for (Direction direction : new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST}) {
-			BlockPos bellowsPos = pos.offset(direction);
-			BlockEntity entity = world.getBlockEntity(bellowsPos);
-
-			if (entity instanceof BellowsBlockEntity bellows) {
-				totalBoost += bellows.getTemperatureBoost();
-			}
-		}
-
-		return totalBoost;
+		return currentBellowsBoost;
 	}
 
 	/**
@@ -231,6 +243,7 @@ public class BloomeryBlockEntity extends BlockEntity {
 		super.readNbt(nbt);
 		fuelTime = nbt.getInt("FuelTime");
 		maxFuelTime = nbt.getInt("MaxFuelTime");
+		currentBellowsBoost = nbt.getInt("CurrentBellowsBoost");
 		if (nbt.contains("FuelSlot")) {
 			fuelSlot = ItemStack.fromNbt(nbt.getCompound("FuelSlot"));
 		} else {
@@ -243,6 +256,7 @@ public class BloomeryBlockEntity extends BlockEntity {
 		super.writeNbt(nbt);
 		nbt.putInt("FuelTime", fuelTime);
 		nbt.putInt("MaxFuelTime", maxFuelTime);
+		nbt.putInt("CurrentBellowsBoost", currentBellowsBoost);
 		if (!fuelSlot.isEmpty()) {
 			nbt.put("FuelSlot", fuelSlot.writeNbt(new NbtCompound()));
 		}
@@ -284,5 +298,43 @@ public class BloomeryBlockEntity extends BlockEntity {
 		if (world != null && !world.isClient) {
 			world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_ALL);
 		}
+	}
+
+	/**
+	 * Updates the bellows temperature, gradually changing towards active bellows values
+	 */
+	private void updateBellowsTemperature() {
+		if (world == null) return;
+
+		int targetBoost = 0;
+
+		// Check all horizontal directions for active bellows
+		for (Direction direction : new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST}) {
+			BlockPos bellowsPos = pos.offset(direction);
+			BlockEntity entity = world.getBlockEntity(bellowsPos);
+
+			if (entity instanceof BellowsBlockEntity bellows) {
+				targetBoost += bellows.getTemperatureBoost();
+			}
+		}
+
+		// Gradually adjust current boost towards target
+		if (currentBellowsBoost < targetBoost) {
+			// Heat up quickly (immediate boost when bellows activated)
+			currentBellowsBoost = targetBoost;
+		} else if (currentBellowsBoost > targetBoost) {
+			// Cool down slowly (gradual decay)
+			currentBellowsBoost -= 1; // Decay 1 degree per tick
+			if (currentBellowsBoost < targetBoost) {
+				currentBellowsBoost = targetBoost;
+			}
+		}
+	}
+
+	/**
+	 * Sets the target temperature for the bellows, causing it to gradually change the temperature
+	 */
+	public void setBellowsTargetTemperature(int temperature) {
+		this.currentBellowsBoost = temperature;
 	}
 }

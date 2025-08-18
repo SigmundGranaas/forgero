@@ -360,11 +360,20 @@ public class BloomeryExtensionBlockEntity extends BlockEntity {
 	public int getCurrentTemperature() {
 		if (world == null) return 0;
 
-		// Check south position for main bloomery (where fuel system is located)
-		BlockPos southPos = pos.offset(net.minecraft.util.math.Direction.SOUTH);
-		BlockEntity southEntity = world.getBlockEntity(southPos);
+		// Get the extension's facing direction to find the connected bloomery
+		BlockState extensionState = getCachedState();
+		if (!extensionState.contains(com.sigmundgranaas.forgero.smithing.block.custom.BloomeryExtensionBlock.FACING)) {
+			return 0;
+		}
 
-		if (southEntity instanceof BloomeryBlockEntity bloomery) {
+		net.minecraft.util.math.Direction extensionFacing = extensionState.get(com.sigmundgranaas.forgero.smithing.block.custom.BloomeryExtensionBlock.FACING);
+		// Since the extension is to the LEFT of the bloomery, the bloomery is to the RIGHT of the extension
+		// So we rotate clockwise from the extension's facing to find the bloomery
+		net.minecraft.util.math.Direction bloomeryDirection = extensionFacing.rotateYClockwise();
+		BlockPos bloomeryPos = pos.offset(bloomeryDirection);
+		BlockEntity bloomeryEntity = world.getBlockEntity(bloomeryPos);
+
+		if (bloomeryEntity instanceof BloomeryBlockEntity bloomery) {
 			return bloomery.getCurrentTemperature();
 		}
 
@@ -377,10 +386,20 @@ public class BloomeryExtensionBlockEntity extends BlockEntity {
 	public boolean canReachTemperature(int targetTemp) {
 		if (world == null) return false;
 
-		BlockPos southPos = pos.offset(net.minecraft.util.math.Direction.SOUTH);
-		BlockEntity southEntity = world.getBlockEntity(southPos);
+		// Get the extension's facing direction to find the connected bloomery
+		BlockState extensionState = getCachedState();
+		if (!extensionState.contains(com.sigmundgranaas.forgero.smithing.block.custom.BloomeryExtensionBlock.FACING)) {
+			return false;
+		}
 
-		if (southEntity instanceof BloomeryBlockEntity bloomery) {
+		net.minecraft.util.math.Direction extensionFacing = extensionState.get(com.sigmundgranaas.forgero.smithing.block.custom.BloomeryExtensionBlock.FACING);
+		// Since the extension is to the LEFT of the bloomery, the bloomery is to the RIGHT of the extension
+		// So we rotate clockwise from the extension's facing to find the bloomery
+		net.minecraft.util.math.Direction bloomeryDirection = extensionFacing.rotateYClockwise();
+		BlockPos bloomeryPos = pos.offset(bloomeryDirection);
+		BlockEntity bloomeryEntity = world.getBlockEntity(bloomeryPos);
+
+		if (bloomeryEntity instanceof BloomeryBlockEntity bloomery) {
 			return bloomery.canReachTemperature(targetTemp);
 		}
 

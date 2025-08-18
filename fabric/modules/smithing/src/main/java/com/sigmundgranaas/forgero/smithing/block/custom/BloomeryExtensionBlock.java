@@ -360,9 +360,11 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 
 				// If this position is to the left of the bloomery, use the bloomery's facing
 				if (direction == leftSide) {
+					// Check if the bloomery is lit and inherit that state
+					boolean bloomeryIsLit = bloomeryState.get(BloomeryBlock.LIT);
 					return this.getDefaultState()
 							.with(FACING, bloomeryFacing)
-							.with(LIT, false);
+							.with(LIT, bloomeryIsLit);
 				}
 			}
 		}
