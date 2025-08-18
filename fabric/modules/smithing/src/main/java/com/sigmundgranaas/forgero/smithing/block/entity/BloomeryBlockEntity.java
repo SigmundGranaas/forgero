@@ -68,8 +68,7 @@ public class BloomeryBlockEntity extends BlockEntity {
 			dirty = true;
 		}
 
-		// Update bellows temperature
-		blockEntity.updateBellowsTemperature();
+
 
 		// Mark dirty if needed
 		if (dirty) {
@@ -300,36 +299,6 @@ public class BloomeryBlockEntity extends BlockEntity {
 		}
 	}
 
-	/**
-	 * Updates the bellows temperature, gradually changing towards active bellows values
-	 */
-	private void updateBellowsTemperature() {
-		if (world == null) return;
-
-		int targetBoost = 0;
-
-		// Check all horizontal directions for active bellows
-		for (Direction direction : new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST}) {
-			BlockPos bellowsPos = pos.offset(direction);
-			BlockEntity entity = world.getBlockEntity(bellowsPos);
-
-			if (entity instanceof BellowsBlockEntity bellows) {
-				targetBoost += bellows.getTemperatureBoost();
-			}
-		}
-
-		// Gradually adjust current boost towards target
-		if (currentBellowsBoost < targetBoost) {
-			// Heat up quickly (immediate boost when bellows activated)
-			currentBellowsBoost = targetBoost;
-		} else if (currentBellowsBoost > targetBoost) {
-			// Cool down slowly (gradual decay)
-			currentBellowsBoost -= 1; // Decay 1 degree per tick
-			if (currentBellowsBoost < targetBoost) {
-				currentBellowsBoost = targetBoost;
-			}
-		}
-	}
 
 	/**
 	 * Sets the target temperature for the bellows, causing it to gradually change the temperature

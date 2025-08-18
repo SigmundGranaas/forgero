@@ -28,7 +28,7 @@ public class ModBlocks {
 			new BloomeryExtensionBlock(FabricBlockSettings.copyOf(Blocks.FURNACE)));
 
 	public static final Block BELLOWS = registerBlock("bellows",
-			new BellowsBlock(FabricBlockSettings.copyOf(Blocks.STONE)));
+			new BellowsBlock(FabricBlockSettings.copyOf(Blocks.ACACIA_WOOD)));
 
 
 
