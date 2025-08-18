@@ -8,27 +8,18 @@ import com.sigmundgranaas.forgero.loader.property.bettercombat.BetterCombatIdent
 import com.sigmundgranaas.forgero.loader.property.namereplacement.NameReplacementProperty;
 import com.sigmundgranaas.forgero.loader.property.tooltip.TooltipProperty;
 
-
 /**
- * A Forgero data plugin that registers all the default custom properties.
- * This demonstrates how the modular property system is intended to be used.
+ * A Forgero data plugin that registers all the default custom properties and conditions.
  */
 public class ForgeroDefaultsPlugin implements DataPlugin {
 
 	@Override
 	public void register(PluginRegistrationContext context) {
-		// Register default property codecs
 		registerPropertyCodecs(context);
-
-		// Register default static condition codecs
 		registerConditionCodecs(context);
 	}
 
 	private void registerPropertyCodecs(PluginRegistrationContext context) {
-		// Register a builder for the tooltip property codec.
-		// The builder function receives a supplier for the ConditionCodec and returns the final property codec.
-		// This lazy-evaluation approach ensures that the ConditionCodec is fully configured with all
-		// custom conditions from other plugins before our property codec is created.
 		context.registerPropertyCodec(
 				TooltipProperty.KEY_ID.toString(),
 				conditionCodecSupplier -> ListCodecWrapper.of(TooltipProperty.codec(conditionCodecSupplier.get()))
@@ -46,13 +37,16 @@ public class ForgeroDefaultsPlugin implements DataPlugin {
 	}
 
 	private void registerConditionCodecs(PluginRegistrationContext context) {
+		// Conditions with no dependencies ignore the supplier.
 		context.registerStaticConditionCodec("forgero:at_depth", AtDepthCondition.CODEC);
 		context.registerStaticConditionCodec("forgero:has_sibling", HasSiblingCondition.CODEC);
-		context.registerStaticConditionCodec("forgero:in_slot_type", InSlotTypeCondition.CODEC);
+		context.registerStaticConditionCodec("forgero:in_slot_type",  InSlotTypeCondition.CODEC);
 		context.registerStaticConditionCodec("forgero:is_root", IsRootCondition.CODEC);
 		context.registerStaticConditionCodec("forgero:slot_contains", SlotContainsCondition.CODEC);
-		context.registerStaticConditionCodec("forgero:self_has_tag", TagMatchCondition.CODEC);
-		context.registerStaticConditionCodec("forgero:root_has_tag", TagMatchCondition.CODEC);
+
+		// The factory for TagMatchCondition.codec is now registered.
+		context.registerStaticConditionCodec("forgero:self_has_tag", TagMatchCondition::codec);
+		context.registerStaticConditionCodec("forgero:root_has_tag", TagMatchCondition::codec);
 	}
 
 	@Override

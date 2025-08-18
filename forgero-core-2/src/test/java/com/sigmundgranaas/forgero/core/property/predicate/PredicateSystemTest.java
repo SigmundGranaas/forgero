@@ -78,9 +78,6 @@ public class PredicateSystemTest extends ForgeroTest {
 	void setUp() {
 		// Step 1: Create maps of all known predicate codecs
 		Map<String, Codec<? extends StaticCondition>> staticCodecs = new HashMap<>();
-		staticCodecs.put("forgero:self_has_tag", TagMatchCondition.CODEC);
-		staticCodecs.put("forgero:root_has_tag", TagMatchCondition.CODEC);
-
 		Map<String, Codec<? extends DynamicCondition>> dynamicCodecs = new HashMap<>();
 		// Step 2: Register our custom predicate codec
 		dynamicCodecs.put("minecraft:is_sneaking", IsSneakingCondition.CODEC);

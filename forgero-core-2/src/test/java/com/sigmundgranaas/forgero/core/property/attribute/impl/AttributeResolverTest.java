@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.property.attribute.impl;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
@@ -16,7 +17,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes.*;
@@ -86,8 +90,11 @@ class AttributeResolverTest {
 		var diamondProperty = attribute(MINING_SPEED).withValue(10f).withCondition(diamondCondition).build();
 		var diamond = part(DIAMOND_ID).withTag(GEM_TAG).withAttribute(diamondProperty).build();
 
+		Map<OpenIdentifier, Set<OpenIdentifier>> tagMap = new HashMap<>();
+		tagMap.put(id("pickaxe"), new HashSet<>());
+
 		// STATIC CONDITION: Active only if the root item is a 'pickaxe'.
-		StaticCondition rootIsPickaxe = new TagMatchCondition(id("forgero:root_has_tag"), id("pickaxe"));
+		StaticCondition rootIsPickaxe = new TagMatchCondition(id("forgero:root_has_tag"), id("pickaxe"), () -> new TagGraph(tagMap));
 		var ironCondition = new Condition(List.of(rootIsPickaxe), Collections.emptyList());
 		var ironProperty = attribute(MINING_SPEED).withValue(5f).withCondition(ironCondition).build();
 		var iron = part(IRON_ID).withTag(METAL_TAG).withAttribute(ironProperty).build();

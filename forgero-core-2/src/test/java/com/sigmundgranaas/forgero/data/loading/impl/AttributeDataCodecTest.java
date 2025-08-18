@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
 import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 import com.sigmundgranaas.forgero.core.condition.predicate.TagMatchCondition;
@@ -16,8 +17,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+import static com.sigmundgranaas.forgero.testutils.TestIdentifiers.id;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AttributeDataCodecTest {
@@ -27,7 +31,9 @@ class AttributeDataCodecTest {
 	@BeforeEach
 	void setUp() {
 		Map<String, Codec<? extends StaticCondition>> staticCodecs = new HashMap<>();
-		staticCodecs.put("forgero:self_has_tag", TagMatchCondition.CODEC);
+		Map<OpenIdentifier, Set<OpenIdentifier>> tagMap = new HashMap<>();
+		tagMap.put(id("pickaxe"), new HashSet<>());
+		staticCodecs.put("forgero:self_has_tag", TagMatchCondition.codec(() -> new TagGraph(tagMap)));
 		Map<String, Codec<? extends DynamicCondition>> dynamicCodecs = new HashMap<>();
 		ConditionCodec conditionCodec = new ConditionCodec(staticCodecs, dynamicCodecs);
 		this.attributeDataCodec = AttributeCodecs.create(conditionCodec);

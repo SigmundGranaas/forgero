@@ -12,6 +12,7 @@ import com.sigmundgranaas.forgero.common.convert.IdMapper;
 import com.sigmundgranaas.forgero.common.convert.StatefulConverter;
 import com.sigmundgranaas.forgero.common.convert.TypeConverter;
 import com.sigmundgranaas.forgero.common.nbt.ComponentNbtConverter;
+import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeCodec;
 import com.sigmundgranaas.forgero.core.component.api.Component;
@@ -65,6 +66,7 @@ public class ForgeroDataLoader implements ModInitializer {
 	private final DataLoadingContextImpl context;
 	private final Map<Identifier, Item> registeredItems;
 	private boolean initialized = false;
+	private TagGraph tagGraph = null;
 
 	public ForgeroDataLoader() {
 		this.pluginRegistry = new PluginRegistry();
@@ -87,13 +89,14 @@ public class ForgeroDataLoader implements ModInitializer {
 			collectPlugins();
 
 			// Phase 2: Register plugin requirements
-			PluginRegistrationContextImpl registrationContext = registerPluginRequirements();
+			PluginRegistrationContextImpl registrationContext = registerPluginRequirements(() -> this.tagGraph);
 
 			// Phase 3: Create configuration for the data initializer
 			ForgeroDataInitializer.Config dataConfig = createDataConfig(registrationContext);
 
 			// Phase 4: Load data using the configuration
 			ForgeroDataBundle bundle = loadData(dataConfig);
+			this.tagGraph = bundle.tagGraph();
 
 			// Phase 5: Initialize core systems
 			initializeCoreServices(bundle, registrationContext);
@@ -132,8 +135,8 @@ public class ForgeroDataLoader implements ModInitializer {
 				dataPlugins + itemRegPlugins + postLoadPlugins, dataPlugins, itemRegPlugins, postLoadPlugins);
 	}
 
-	private PluginRegistrationContextImpl registerPluginRequirements() {
-		PluginRegistrationContextImpl registrationContext = new PluginRegistrationContextImpl();
+	private PluginRegistrationContextImpl registerPluginRequirements(Supplier<TagGraph> tagGraphSupplier) {
+		PluginRegistrationContextImpl registrationContext = new PluginRegistrationContextImpl(tagGraphSupplier);
 		for (DataPlugin plugin : pluginRegistry.getDataPlugins()) {
 			try {
 				LOGGER.debug("Registering requirements for data plugin: {}", plugin.getId());

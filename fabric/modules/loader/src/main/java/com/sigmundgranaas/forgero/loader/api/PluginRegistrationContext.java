@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.loader.api;
 
 import com.mojang.serialization.Codec;
+import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
@@ -14,6 +15,13 @@ public interface PluginRegistrationContext {
 	 * Register an item creator for a specific item class identifier.
 	 */
 	void registerItemCreator(String itemClass, ItemCreator creator);
+
+	/**
+	 * Registers a codec for a custom static condition.
+	 * @param type The unique type identifier for the condition (e.g., "forgero:at_depth").
+	 * @param factory The codec for parsing the condition.
+	 */
+	void registerStaticConditionCodec(String type, Function<Supplier<TagGraph>, Codec<? extends StaticCondition>> factory);
 
 	/**
 	 * Registers a codec for a custom static condition.
