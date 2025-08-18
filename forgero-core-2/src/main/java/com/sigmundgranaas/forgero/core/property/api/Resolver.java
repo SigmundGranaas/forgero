@@ -3,37 +3,37 @@ package com.sigmundgranaas.forgero.core.property.api;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 
-import java.util.Optional;
-
 /**
  * The public-facing service for resolving all types of properties from components.
- * This resolver is a generic engine that delegates all logic to registered {@link DataTypeEngine}s.
- * It is completely unaware of specific data types like "attributes" or "features", making the system
- * highly extensible.
+ * This resolver is a generic engine that orchestrates the two-phase resolution process
+ * ("bake" and "apply") for a given {@link DataTypeEngine}. It is completely unaware
+ * of specific data types, making the system highly extensible.
  */
 public interface Resolver {
 	/**
-	 * Performs a full resolution for a given component and a type-safe key.
+	 * Performs a full resolution for a given component using a specific engine.
 	 * The process is designed to be highly efficient, with internal caching of the expensive "bake" phase.
 	 *
 	 * @param component The root component of the item (e.g., a pickaxe).
-	 * @param key       The type-safe key identifying the data to resolve (e.g., {@code AttributeEngine.KEY}).
+	 * @param engine    The {@link DataTypeEngine} that defines the entire resolution logic for a specific data type.
 	 * @param context   The dynamic context for the calculation, containing runtime information.
-	 * @param <R>       The type of the result, which is inferred from the key, ensuring type safety.
-	 * @return An Optional containing the fully resolved data, or empty if no engine is registered for the key.
+	 * @param <B>       The type of the intermediate baked result, managed by the engine.
+	 * @param <R>       The type of the final result, which is inferred from the engine.
+	 * @return The fully resolved data, as produced by the engine.
 	 */
-	<R> Optional<R> resolve(Component component, ResolutionKey<R> key, DynamicContext context);
+	<B, R> R resolve(Component component, DataTypeEngine<B, R> engine, DynamicContext context);
 
 	/**
 	 * Convenience overload for resolving with an empty dynamic context.
 	 * This is useful for properties that do not depend on runtime information.
 	 *
 	 * @param component The root component of the item.
-	 * @param key       The type-safe key identifying the data to resolve.
-	 * @param <R>       The type of the result, inferred from the key.
-	 * @return An Optional containing the fully resolved data, or empty if no engine is registered for the key.
+	 * @param engine    The {@link DataTypeEngine} that defines the resolution logic.
+	 * @param <B>       The type of the intermediate baked result.
+	 * @param <R>       The type of the final result.
+	 * @return The fully resolved data.
 	 */
-	default <R> Optional<R> resolve(Component component, ResolutionKey<R> key) {
-		return resolve(component, key, DynamicContext.empty());
+	default <B, R> R resolve(Component component, DataTypeEngine<B, R> engine) {
+		return resolve(component, engine, DynamicContext.empty());
 	}
 }

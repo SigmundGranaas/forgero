@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.testutils;
 
+import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
@@ -64,7 +65,7 @@ public class ForgeroTestFactory {
 			return this;
 		}
 
-		public Property build() {
+		public Attribute build() {
 			return new SimpleAttribute(type, value, condition);
 		}
 	}

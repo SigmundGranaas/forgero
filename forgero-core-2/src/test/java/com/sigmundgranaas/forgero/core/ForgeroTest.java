@@ -10,6 +10,7 @@ import com.sigmundgranaas.forgero.core.property.api.Property;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -59,31 +60,31 @@ public class ForgeroTest {
 
 
 	// Builder Methods
-	public StaticComponent part(OpenIdentifier id, Set<OpenIdentifier> tags, List<Property> props) {
+	public StaticComponent part(OpenIdentifier id, Set<OpenIdentifier> tags, Map<String, List<?>> props) {
 		return new StaticComponent(id, tags, props);
 	}
-	public StaticComponent part(OpenIdentifier id, OpenIdentifier tag, List<Property> props) {
+	public StaticComponent part(OpenIdentifier id, OpenIdentifier tag, Map<String, List<?>> props) {
 		return new StaticComponent(id, Set.of(tag), props);
 	}
 
 	public StaticComponent part(OpenIdentifier id, Set<OpenIdentifier> tags) {
-		return part(id, tags, Collections.emptyList());
+		return part(id, tags, new HashMap<>());
 	}
 
 	public StaticComponent part(OpenIdentifier id, OpenIdentifier tag) {
-		return part(id, Set.of(tag), Collections.emptyList());
+		return part(id, Set.of(tag), new HashMap<>());
 	}
 
-	public StaticComponent material(OpenIdentifier id, OpenIdentifier tag, List<Property> props) {
+	public StaticComponent material(OpenIdentifier id, OpenIdentifier tag, Map<String, List<?>> props) {
 		return part(id, Set.of(tag), props);
 	}
 
 	public StaticComponent material(OpenIdentifier id, OpenIdentifier tag) {
-		return part(id, Set.of(tag), Collections.emptyList());
+		return part(id, Set.of(tag), new HashMap<>());
 	}
 
 	public StaticComponent schematic(OpenIdentifier id) {
-		return new StaticComponent(id, Collections.emptySet(), Collections.emptyList());
+		return new StaticComponent(id, Collections.emptySet(), new HashMap<>());
 	}
 
 	public StructureSlot slot(OpenIdentifier id, OpenIdentifier type, Component component) {

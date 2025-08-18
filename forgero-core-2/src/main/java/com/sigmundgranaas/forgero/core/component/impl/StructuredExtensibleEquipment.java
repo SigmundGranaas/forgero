@@ -11,6 +11,7 @@ import com.sigmundgranaas.forgero.core.property.api.Property;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,7 +24,7 @@ import java.util.stream.Stream;
 public record StructuredExtensibleEquipment(
 		OpenIdentifier id,
 		Set<OpenIdentifier> tags,
-		List<Property> properties,
+		Map<String, List<?>> properties,
 		ComponentStructure structure,
 		ComponentUpgrades upgrades
 ) implements StructuredComponent, CustomizableComponent {
@@ -40,7 +41,7 @@ public record StructuredExtensibleEquipment(
 
 
 	@Override
-	public List<Property> getProperties() {
+	public Map<String, List<?>> propertiesAsMap() {
 		return properties;
 	}
 

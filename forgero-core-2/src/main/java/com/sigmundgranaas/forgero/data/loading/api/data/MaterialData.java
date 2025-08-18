@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgero.data.loading.api.data;
 import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
-import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.HostData;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +20,6 @@ import java.util.Map;
  * @param tags       Optional list of tags associated with the material.
  * @param host       Optional data for mapping to a platform-specific item.
  * @param attributes Optional list of attributes provided by this material.
- * @param features   Optional list of features provided by this material.
  * @param properties Optional map for custom, extensible properties.
  */
 public record MaterialData(
@@ -36,9 +34,5 @@ public record MaterialData(
 		@Nullable
 		List<AttributeData> attributes,
 		@Nullable
-		List<FeatureData> features,
-		@Nullable
 		Map<String, JsonElement> properties
-) implements PropertyContainer {
-
-}
+){}

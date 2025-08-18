@@ -12,9 +12,9 @@ import java.util.Optional;
 
 /**
  * An attribute representing a numerical modification.
- * It now uses a single, unified Condition object to handle all conditional logic.
  */
 public record SimpleAttribute(
+		Optional<String> id,
 		OpenIdentifier type,
 		float value,
 		Operator operator,
@@ -28,14 +28,23 @@ public record SimpleAttribute(
 	}
 
 	public SimpleAttribute(OpenIdentifier type, float value) {
-		this(type, value, AdditionOperator.getInstance(), 0, Condition.ALWAYS_TRUE);
+		this(Optional.empty(), type, value, AdditionOperator.getInstance(), 0, Condition.ALWAYS_TRUE);
 	}
 
 	public SimpleAttribute(OpenIdentifier type, float value, Condition condition) {
-		this(type, value, AdditionOperator.getInstance(), 0, condition);
+		this(Optional.empty(), type, value, AdditionOperator.getInstance(), 0, condition);
 	}
 
 	public SimpleAttribute(OpenIdentifier type, float value, Operator operator, int group) {
-		this(type, value, operator, group, Condition.ALWAYS_TRUE);
+		this(Optional.empty(), type, value, operator, group, Condition.ALWAYS_TRUE);
+	}
+
+	public SimpleAttribute(OpenIdentifier type,
+						   float value,
+						   Operator operator,
+						   int group,
+						   @Nullable
+						   Condition localCondition) {
+		this(Optional.empty(), type, value, operator, group, Condition.ALWAYS_TRUE);
 	}
 }

@@ -14,8 +14,7 @@ public class ForgeroToolMaterial implements ToolMaterial {
 
 	public ForgeroToolMaterial(Component component, Resolver resolver) {
 		this.component = component;
-		this.attributes = resolver.resolve(component, AttributeEngine.KEY)
-				.orElse(AttributeQueryResult.EMPTY);
+		this.attributes = resolver.resolve(component, new AttributeEngine());
 	}
 
 	@Override

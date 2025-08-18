@@ -1,18 +1,25 @@
 package com.sigmundgranaas.forgero.testutils;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.property.api.Property;
+import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
+import com.sigmundgranaas.forgero.core.property.context.Key;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import static com.sigmundgranaas.forgero.core.attribute.api.Attribute.KEY;
 
 @SuppressWarnings("unchecked")
 public abstract class BaseComponentBuilder<T extends BaseComponentBuilder<T>> {
 	protected final OpenIdentifier id;
 	protected Set<OpenIdentifier> tags = new HashSet<>();
-	protected List<Property> properties = new ArrayList<>();
+	protected Map<String, List<?>> properties = new HashMap<>();
 
 	protected BaseComponentBuilder(OpenIdentifier id) {
 		this.id = id;
@@ -28,12 +35,22 @@ public abstract class BaseComponentBuilder<T extends BaseComponentBuilder<T>> {
 		return (T) this;
 	}
 
-	public T withProperty(Property property) {
-		this.properties.add(property);
+	public <R> T withProperty(PropertyKey<R> key, R property) {
+		if(properties.containsKey(key.key())) {
+			List<R> newList = new ArrayList<>(List.of(property));
+			List<R> list = (List<R>)properties.get(key);
+			newList.addAll(list);
+			properties.put(key.key(), newList);
+		}else{
+			properties.put(key.key(), new ArrayList<>(List.of(property)));
+		}
 		return (T) this;
 	}
 
 	public T withAttribute(OpenIdentifier type, float value) {
-		return withProperty(ForgeroTestFactory.attribute(type).withValue(value).build());
+		return withProperty(KEY, ForgeroTestFactory.attribute(type).withValue(value).build());
+	}
+	public T withAttribute(Attribute attribute) {
+		return withProperty(KEY, attribute);
 	}
 }

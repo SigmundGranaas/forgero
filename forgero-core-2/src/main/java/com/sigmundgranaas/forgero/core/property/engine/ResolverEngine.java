@@ -2,31 +2,24 @@ package com.sigmundgranaas.forgero.core.property.engine;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.property.api.DataTypeEngine;
-import com.sigmundgranaas.forgero.core.property.api.PropertyRegistry;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
-import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * The primary implementation of the {@link Resolver} interface.
- * This engine manages a collection of {@link DataTypeEngine}s and orchestrates the two-phase
- * resolution process ("bake" and "apply"). It uses a cache to store the results of the
- * expensive "bake" phase, ensuring high performance for repeated resolutions.
+ * This engine orchestrates the two-phase resolution process ("bake" and "apply") for a given
+ * {@link DataTypeEngine}. It uses a cache to store the results of the expensive "bake" phase,
+ * ensuring high performance for repeated resolutions.
  */
 public class ResolverEngine implements Resolver {
-	private final Map<OpenIdentifier, DataTypeEngine<?, ?>> engines;
 	private final Cache<CacheKey, Object> bakedCache;
 
 	/**
@@ -37,44 +30,31 @@ public class ResolverEngine implements Resolver {
 	private record CacheKey(Component component, OpenIdentifier engineId) {
 	}
 
-	/**
-	 * Constructs a ResolverEngine. It automatically retrieves all registered DataTypeEngines
-	 * from the {@link PropertyRegistry}.
-	 */
 	public ResolverEngine() {
-		this.engines = PropertyRegistry.getInstance().getDataTypeEngines().stream()
-				.collect(Collectors.toMap(engine -> engine.key().id(), Function.identity()));
 		this.bakedCache = Caffeine.newBuilder().maximumSize(1000).build();
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <R> Optional<R> resolve(Component component, ResolutionKey<R> key, DynamicContext context) {
-		// 1. Find the correct engine for the given key.
-		DataTypeEngine<?, ?> untypedEngine = engines.get(key.id());
-		if (untypedEngine == null) {
-			return Optional.empty();
-		}
-		// We cast here, but it's safe because the key's type R is tied to the engine's result type.
-		DataTypeEngine<Object, R> engine = (DataTypeEngine<Object, R>) untypedEngine;
+	public <B, R> R resolve(Component component, DataTypeEngine<B, R> engine, DynamicContext context) {
+		// 1. Get the intermediate baked result, computing it only if not in the cache.
+		// The engine's own key is used for caching to distinguish between different engine types.
+		CacheKey cacheKey = new CacheKey(component, engine.key().id());
 
-		// 2. Get the intermediate baked result, computing it only if not in the cache.
-		CacheKey cacheKey = new CacheKey(component, key.id());
-		Object bakedResult = bakedCache.get(cacheKey, k -> {
-			List<Component> componentStream = traverse(component);
-			return engine.bake(componentStream.stream());
+		B bakedResult = (B) bakedCache.get(cacheKey, k -> {
+			List<Component> componentList = traverse(component);
+			return engine.bake(componentList.stream());
 		});
 
-		// 3. Apply the context to the baked result to get the final result.
-		R finalResult = engine.apply(bakedResult, context);
-		return Optional.of(finalResult);
+		// 2. Apply the context to the baked result to get the final result.
+		return engine.apply(bakedResult, context);
 	}
 
 	/**
 	 * Performs a full, non-recursive, pre-order traversal of the component tree.
 	 *
 	 * @param component The root component to start traversal from.
-	 * @return A stream of all components in the tree.
+	 * @return A list of all components in the tree.
 	 */
 	private List<Component> traverse(Component component) {
 		List<Component> allComponents = new ArrayList<>();

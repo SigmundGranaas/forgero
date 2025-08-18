@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.property.attribute.impl;
 
 import com.sigmundgranaas.forgero.core.ForgeroTest;
+import com.sigmundgranaas.forgero.core.attribute.api.Attribute; // This import is crucial for Attribute.KEY
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.api.CompositeAttributeComponent;
 import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
@@ -22,7 +23,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -56,21 +59,38 @@ class AttributeEngineTest extends ForgeroTest {
 	}
 
 	/**
+	 * Helper method to create StaticComponent with the new property map structure.
+	 * This method assumes the `StaticComponent` constructor takes `Map<String, List<?>>` for properties.
+	 * It centralizes the logic of putting attributes into the map using `Attribute.KEY.key()`.
+	 */
+	private StaticComponent part(OpenIdentifier id, OpenIdentifier tag, List<Attribute> attributes) {
+		Map<String, List<?>> properties = new HashMap<>();
+		if (attributes != null && !attributes.isEmpty()) {
+			properties.put(Attribute.KEY.key(), attributes); // Use Attribute.KEY.key() here
+		}
+		return new StaticComponent(id, Set.of(tag), properties);
+	}
+
+	/**
 	 * Test case 1: Non-Structured Component (Default Strategy)
 	 * Should behave exactly as before, no composite handling special logic applies.
 	 */
 	@Test
 	void testStaticEquipmentBakesSimpleAttributesCorrectly() {
+		List<Attribute> attributes = List.of(
+				new SimpleAttribute(DefaultAttributes.ATTACK_DAMAGE, 10f),
+				new SimpleAttribute(DefaultAttributes.ATTACK_SPEED, 1.2f)
+		);
+		Map<String, List<?>> properties = new HashMap<>();
+		properties.put(Attribute.KEY.key(), attributes); // Changed: use Attribute.KEY.key()
+
 		StaticEquipment basicAxe = new StaticEquipment(
 				idFactory.of("basic_axe"),
 				Set.of(idFactory.of("axe")),
-				List.of(
-						new SimpleAttribute(DefaultAttributes.ATTACK_DAMAGE, 10f),
-						new SimpleAttribute(DefaultAttributes.ATTACK_SPEED, 1.2f)
-				)
+				properties
 		);
 
-		AttributeQueryResult result = resolver.resolve(basicAxe, AttributeEngine.KEY).orElseThrow();
+		AttributeQueryResult result = resolver.resolve(basicAxe,  new AttributeEngine());
 
 		assertEquals(10f, result.getValue(DefaultAttributes.ATTACK_DAMAGE));
 		assertEquals(1.2f, result.getValue(DefaultAttributes.ATTACK_SPEED));
@@ -86,17 +106,21 @@ class AttributeEngineTest extends ForgeroTest {
 		StaticComponent head = part(PICKAXE_HEAD_ID, PICKAXE_HEAD_TAG, List.of(new SimpleAttribute(DefaultAttributes.ATTACK_DAMAGE, 5f)));
 		StaticComponent handle = part(HANDLE_ID, HANDLE_TAG, List.of(new SimpleAttribute(DefaultAttributes.ATTACK_DAMAGE, 2f)));
 
+		// StructuredEquipment's base properties argument now also needs to be Map<String, List<?>>
+		Map<String, List<?>> baseProperties = new HashMap<>();
+		baseProperties.put(Attribute.KEY.key(), List.of(new SimpleAttribute(DefaultAttributes.ATTACK_DAMAGE, 3f))); // Use Attribute.KEY.key()
+
 		StructuredEquipment pickaxe = new StructuredEquipment(
 				PICKAXE_ID,
 				Set.of(idFactory.of("pickaxe")),
-				List.of(new SimpleAttribute(DefaultAttributes.ATTACK_DAMAGE, 3f)), // Base attribute
-				new ComponentStructure(slotsMap( // Update to Map.of
+				baseProperties, // Changed: Now passing a Map<String, List<?>>
+				new ComponentStructure(slotsMap(
 						slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head),
 						slot(HANDLE_SLOT_ID, HANDLE_TAG, handle)
 				))
 		);
 
-		AttributeQueryResult result = resolver.resolve(pickaxe, AttributeEngine.KEY).orElseThrow();
+		AttributeQueryResult result = resolver.resolve(pickaxe,  new AttributeEngine());
 		assertEquals(10f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), "Total attack damage should be base + head + handle (3+5+2=10)");
 	}
 
@@ -117,12 +141,14 @@ class AttributeEngineTest extends ForgeroTest {
 
 		// Base attribute on the tool itself
 		SimpleAttribute baseDamage = new SimpleAttribute(DefaultAttributes.ATTACK_DAMAGE, 100f);
+		Map<String, List<?>> baseProperties = new HashMap<>();
+		baseProperties.put(Attribute.KEY.key(), List.of(baseDamage)); // Use Attribute.KEY.key()
 
 		StructuredEquipment pickaxe = new StructuredEquipment(
 				PICKAXE_ID,
 				Set.of(idFactory.of("pickaxe")),
-				List.of(baseDamage),
-				new ComponentStructure(slotsMap( // Update to Map.of
+				baseProperties, // Changed: Now passing a Map<String, List<?>>
+				new ComponentStructure(slotsMap(
 						slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head),
 						slot(HANDLE_SLOT_ID, HANDLE_TAG, handle)
 				))
@@ -131,7 +157,7 @@ class AttributeEngineTest extends ForgeroTest {
 		// Expected composite calculation (internal to CompositeAttribute formed from head's properties):
 		// (0 + 10) * 2 - 5 = 20 - 5 = 15
 		// Total ATTACK_DAMAGE: Base (100) + Composite from head (15) = 115
-		AttributeQueryResult result = resolver.resolve(pickaxe, AttributeEngine.KEY).orElseThrow();
+		AttributeQueryResult result = resolver.resolve(pickaxe,  new AttributeEngine());
 
 		assertEquals(115f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), "Total ATTACK_DAMAGE should be sum of base and composite attribute from head.");
 	}
@@ -154,14 +180,14 @@ class AttributeEngineTest extends ForgeroTest {
 		StructuredEquipment pickaxe = new StructuredEquipment(
 				PICKAXE_ID,
 				Set.of(idFactory.of("pickaxe")),
-				Collections.emptyList(), // No base attributes to keep test focused
-				new ComponentStructure(slotsMap( // Update to Map.of
+				new HashMap<>(), // No base attributes, use empty map
+				new ComponentStructure(slotsMap(
 						slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head),
 						slot(HANDLE_SLOT_ID, HANDLE_TAG, handle)
 				))
 		);
 
-		AttributeQueryResult result = resolver.resolve(pickaxe, AttributeEngine.KEY).orElseThrow();
+		AttributeQueryResult result = resolver.resolve(pickaxe,  new AttributeEngine());
 
 		// Expected:
 		// - Head: `headCompAdd` (single operator, fails to form composite) -> DISCARDED
@@ -189,14 +215,14 @@ class AttributeEngineTest extends ForgeroTest {
 		StructuredEquipment pickaxe = new StructuredEquipment(
 				PICKAXE_ID,
 				Set.of(idFactory.of("pickaxe")),
-				Collections.emptyList(),
-				new ComponentStructure(slotsMap( // Update to Map.of
+				new HashMap<>(), // No base attributes, use empty map
+				new ComponentStructure(slotsMap(
 						slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head),
 						slot(HANDLE_SLOT_ID, HANDLE_TAG, handle)
 				))
 		);
 
-		AttributeQueryResult result = resolver.resolve(pickaxe, AttributeEngine.KEY).orElseThrow();
+		AttributeQueryResult result = resolver.resolve(pickaxe,  new AttributeEngine());
 
 		// Expected: Since composition fails for the head's composite components (only addition operators),
 		// they should be discarded. Result for SPECIAL_COMPOSITE_ATTRIBUTE_TYPE should be 0.
@@ -231,17 +257,21 @@ class AttributeEngineTest extends ForgeroTest {
 		StaticComponent head = part(PICKAXE_HEAD_ID, PICKAXE_HEAD_TAG, List.of(headCompA1, headCompA2));
 		StaticComponent handle = part(HANDLE_ID, HANDLE_TAG, List.of(handleCompB1, handleCompB2, handleMiningSpeed));
 
+		// Base properties for StructuredEquipment
+		Map<String, List<?>> baseProperties = new HashMap<>();
+		baseProperties.put(Attribute.KEY.key(), List.of(baseMiningSpeed)); // Use Attribute.KEY.key()
+
 		StructuredEquipment tool = new StructuredEquipment(
 				PICKAXE_ID,
 				Set.of(idFactory.of("tool")),
-				List.of(baseMiningSpeed),
-				new ComponentStructure(slotsMap( // Update to Map.of
+				baseProperties, // Changed: Now passing a Map<String, List<?>>
+				new ComponentStructure(slotsMap(
 						slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head),
 						slot(HANDLE_SLOT_ID, HANDLE_TAG, handle)
 				))
 		);
 
-		AttributeQueryResult result = resolver.resolve(tool, AttributeEngine.KEY).orElseThrow();
+		AttributeQueryResult result = resolver.resolve(tool,  new AttributeEngine());
 
 		// Verify Mining Speed: Base (2.0) + Handle (3.0) = 5.0
 		assertEquals(5.0f, result.getValue(DefaultAttributes.MINING_SPEED), "Mining Speed should be sum of base and handle.");
@@ -268,15 +298,15 @@ class AttributeEngineTest extends ForgeroTest {
 		StructuredEquipment tool = new StructuredEquipment(
 				PICKAXE_ID,
 				Set.of(idFactory.of("tool")),
-				Collections.emptyList(),
-				new ComponentStructure(slotsMap( // Update to Map.of
+				new HashMap<>(), // No base attributes, use empty map
+				new ComponentStructure(slotsMap(
 						slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head)
 				))
 		);
 
 		AttributeEngine engine = new AttributeEngine();
 		// Use the new helper to flatten the component tree for bake method
-		List<com.sigmundgranaas.forgero.core.attribute.api.Attribute> bakedAttributes = engine.bake(flattenComponentTree(tool).stream());
+		List<Attribute> bakedAttributes = engine.bake(flattenComponentTree(tool).stream());
 
 		// We expect one CompositeAttribute to be present, and no individual CompositeAttributeComponents
 		long compositeAttributeCount = bakedAttributes.stream()
@@ -290,7 +320,7 @@ class AttributeEngineTest extends ForgeroTest {
 		assertEquals(0, compositeComponentCount, "No individual CompositeAttributeComponents should remain after baking.");
 
 		// Verify the value still
-		AttributeQueryResult result = resolver.resolve(tool, AttributeEngine.KEY).orElseThrow();
+		AttributeQueryResult result = resolver.resolve(tool,  new AttributeEngine());
 		assertEquals(20f, result.getValue(SPECIAL_COMPOSITE_ATTRIBUTE_TYPE), "Composite attribute value should be 20 (0 + 10 * 2).");
 	}
 
@@ -308,8 +338,8 @@ class AttributeEngineTest extends ForgeroTest {
 		StructuredEquipment tool = new StructuredEquipment(
 				PICKAXE_ID,
 				Set.of(idFactory.of("tool")),
-				Collections.emptyList(),
-				new ComponentStructure(slotsMap( // Update to Map.of
+				new HashMap<>(), // No base attributes, use empty map
+				new ComponentStructure(slotsMap(
 						slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head)
 				))
 		);
@@ -336,7 +366,7 @@ class AttributeEngineTest extends ForgeroTest {
 		assertEquals(0, compositeComponentCount, "No individual CompositeAttributeComponents should remain after baking.");
 
 		// Verify the value still (should be 0 as components are discarded)
-		AttributeQueryResult result = resolver.resolve(tool, AttributeEngine.KEY).orElseThrow();
+		AttributeQueryResult result = resolver.resolve(tool, new AttributeEngine());
 		assertEquals(0f, result.getValue(SPECIAL_COMPOSITE_ATTRIBUTE_TYPE), "Composite attribute value should be 0 as components are discarded.");
 	}
 }

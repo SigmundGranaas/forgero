@@ -25,8 +25,7 @@ public class ForgeroArmorMaterial implements ArmorMaterial {
 
 	public ForgeroArmorMaterial(Component component, Resolver resolver) {
 		this.component = component;
-		this.attributes = resolver.resolve(component, AttributeEngine.KEY)
-				.orElse(AttributeQueryResult.EMPTY);
+		this.attributes = resolver.resolve(component, new AttributeEngine());
 	}
 
 	@Override

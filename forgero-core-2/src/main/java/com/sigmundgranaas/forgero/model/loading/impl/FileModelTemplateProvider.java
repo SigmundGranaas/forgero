@@ -1,9 +1,6 @@
 package com.sigmundgranaas.forgero.model.loading.impl;
 
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.model.loading.api.item.ModelTemplateProvider;
 import com.sigmundgranaas.forgero.model.loading.impl.codec.ModelTemplateCodecs;
@@ -12,16 +9,13 @@ import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.ContextualMod
 import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.EquipmentModelTemplateDTO;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.PartModelTemplateDTO;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceProvider;
+import com.sigmundgranaas.forgero.utility.resource.loader.implementation.JsonCodecConverter;
+import com.sigmundgranaas.forgero.utility.resource.loader.implementation.ResourceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-
-import static com.sigmundgranaas.forgero.model.loading.impl.codec.ModelTemplateCodecs.PART_MODEL_TEMPLATE_CODEC;
 
 /**
  * Implementation of {@link ModelTemplateProvider} that loads model templates from JSON files
@@ -35,7 +29,7 @@ public class FileModelTemplateProvider implements ModelTemplateProvider {
 	private final List<ArmorModelTemplateDTO> armorTemplates;
 
 	public FileModelTemplateProvider(ResourceProvider resourceProvider, String namespace) {
-		this.partTemplates = loadTemplates(resourceProvider, namespace, "parts", PART_MODEL_TEMPLATE_CODEC);
+		this.partTemplates = loadTemplates(resourceProvider, namespace, "parts", ModelTemplateCodecs.PART_MODEL_TEMPLATE_CODEC);
 		this.contextualTemplates = loadTemplates(resourceProvider, namespace, "contextual", ModelTemplateCodecs.CONTEXTUAL_MODEL_TEMPLATE_CODEC);
 		this.equipmentTemplates = loadTemplates(resourceProvider, namespace, "equipment", ModelTemplateCodecs.EQUIPMENT_MODEL_TEMPLATE_CODEC);
 		this.armorTemplates = loadTemplates(resourceProvider, namespace, "armor", ModelTemplateCodecs.ARMOR_MODEL_TEMPLATE_CODEC);
@@ -47,34 +41,15 @@ public class FileModelTemplateProvider implements ModelTemplateProvider {
 	private <T> List<T> loadTemplates(ResourceProvider provider, String namespace, String folder, Codec<T> codec) {
 		OpenIdentifier root = new OpenIdentifier(namespace, "model_templates/" + folder);
 		// Check if the root directory exists before trying to list files
-		if (provider.read(root).isEmpty()) {
-			LOGGER.debug("Template directory not found, skipping: {}", root);
+		if (provider.list(root, false).findAny().isEmpty()) {
+			LOGGER.debug("Template directory not found or empty, skipping: {}", root);
 			return Collections.emptyList();
 		}
 
-		return provider.list(root, true)
-				.filter(id -> id.path().endsWith(".json"))
-				.flatMap(id -> provider.read(id)
-						.flatMap(stream -> parse(stream, codec, id))
-						.stream()
-				)
-				.toList();
+		JsonCodecConverter<T> converter = new JsonCodecConverter<>(codec);
+		ResourceLoader<T> loader = new ResourceLoader<>(provider, converter);
+		return loader.load(root, true).toList();
 	}
-
-	private <T> Optional<T> parse(java.io.InputStream stream, Codec<T> codec, OpenIdentifier id) {
-		try (var reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
-			var json = JsonParser.parseReader(reader);
-			return codec.parse(JsonOps.INSTANCE, json)
-					.resultOrPartial(error -> LOGGER.error("Failed to parse template file {}: {}", id, error));
-		} catch (JsonSyntaxException e) {
-			LOGGER.error("Invalid JSON syntax in template file {}: {}", id, e.getMessage());
-			return Optional.empty();
-		} catch (Exception e) {
-			LOGGER.error("An unexpected error occurred while parsing template file {}: {}", id, e.getMessage(), e);
-			return Optional.empty();
-		}
-	}
-
 
 	@Override
 	public List<PartModelTemplateDTO> getPartTemplates() {

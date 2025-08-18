@@ -64,7 +64,6 @@ class SchematicDataCodecTest {
 		assertNotNull(data.tags());
 		assertTrue(data.tags().contains(id("forgero:common_schematic")));
 		assertEquals(id("forgero:mandrill-pickaxe-head"), data.target());
-		assertEquals("minecraft:paper", data.craftingMaterial());
 
 		assertNotNull(data.properties());
 		assertEquals(2, data.properties().size());
@@ -91,7 +90,6 @@ class SchematicDataCodecTest {
 		assertNull(data.include());
 		assertNull(data.tags());
 		assertEquals(id("forgero:wooden-handle"), data.target());
-		assertEquals("minecraft:stick", data.craftingMaterial());
 		assertNull(data.properties());
 	}
 

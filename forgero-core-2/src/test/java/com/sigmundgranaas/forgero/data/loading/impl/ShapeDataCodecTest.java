@@ -9,12 +9,9 @@ import com.sigmundgranaas.forgero.core.property.condition.DynamicCondition;
 import com.sigmundgranaas.forgero.core.property.condition.StaticCondition;
 import com.sigmundgranaas.forgero.data.loading.api.data.ShapeData;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
-import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
-import com.sigmundgranaas.forgero.data.loading.api.data.feature.VeinMiningFeatureData;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.AttributeCodecs;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.ConditionCodec;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.FeatureCodecs;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.ShapeCodecs;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,10 +34,7 @@ class ShapeDataCodecTest {
 		ConditionCodec conditionCodec = new ConditionCodec(staticCodecs, dynamicCodecs);
 
 		Codec<List<AttributeData>> attributeListCodec = Codec.list(AttributeCodecs.create(conditionCodec));
-		FeatureCodecs.registerCodecs(conditionCodec); // Ensure feature codecs are initialized
-		Codec<List<FeatureData>> featureListCodec = FeatureCodecs.createFeatureDataListCodec();
-
-		this.shapeDataCodec = ShapeCodecs.create(attributeListCodec, featureListCodec);
+		this.shapeDataCodec = ShapeCodecs.create(attributeListCodec);
 	}
 
 	private <T> T parseSuccess(Codec<T> codec, String json) {
@@ -98,10 +92,6 @@ class ShapeDataCodecTest {
 		assertTrue(miningSpeed.isPresent());
 		assertEquals(1.25f, miningSpeed.get().computation().value());
 
-		assertNotNull(data.features());
-		assertEquals(1, data.features().size());
-		assertInstanceOf(VeinMiningFeatureData.class, data.features().get(0));
-
 		assertNotNull(data.properties());
 		assertEquals(2, data.properties().size());
 		assertTrue(data.properties().containsKey("forgero:visual"));
@@ -126,7 +116,6 @@ class ShapeDataCodecTest {
 		assertNull(data.include());
 		assertNull(data.tags());
 		assertNull(data.attributes());
-		assertNull(data.features());
 		assertNull(data.properties());
 	}
 

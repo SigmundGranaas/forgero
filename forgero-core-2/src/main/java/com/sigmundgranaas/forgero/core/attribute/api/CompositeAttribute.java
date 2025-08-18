@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * <p>
  * A CompositeAttribute is considered "complete" and valid only if it is constructed from
  * a list of {@link CompositeAttributeComponent}s that share the same type and composite key,
- * and crucially, include components with at least two different {@link com.sigmundgranaas.forgero.core.attribute.computation.operator.Operator} types.
+ * and crucially, include components with at least two different {@link com.sigmundgranaas.forgero.core.attribute} types.
  *
  * <p><b>Creation Context</b></p>
  * Within the Forgero ecosystem, CompositeAttributes are typically created by the {@link com.sigmundgranaas.forgero.core.attribute.impl.CompositeAttributeBakingStrategy}.
@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
  * into a {@link CompositeAttribute}.
  */
 public record CompositeAttribute(
+		Optional<String> id,
 		OpenIdentifier type,
 		OpenIdentifier compositeKey,
 		List<CompositeAttributeComponent> composites,
@@ -87,9 +88,11 @@ public record CompositeAttribute(
 			return Optional.empty();
 		}
 
+		Optional<String> id = components.stream().map(Attribute::id).flatMap(Optional::stream).reduce((id1, id2) -> id1 + "-" + id2);
+
 		// If all validations pass, create and return the new instance
 		// Provide default operator and group for the CompositeAttribute itself
-		return Optional.of(new CompositeAttribute(type, compositeKey, components, AdditionOperator.getInstance(), 0));
+		return Optional.of(new CompositeAttribute(id, type, compositeKey, components, AdditionOperator.getInstance(), 0));
 	}
 
 	/**
@@ -113,18 +116,5 @@ public record CompositeAttribute(
 		// as the conditions of its constituent components are handled by the
 		// AttributeEngine during the initial filtering (baking) phase.
 		return Optional.empty();
-	}
-
-	/**
-	 * Gets an unmodifiable list of the {@link CompositeAttributeComponent}s
-	 * that make up this composite attribute.
-	 * <p>
-	 * Note: Records automatically provide accessor methods for their components (e.g., `composites()`).
-	 * This method is provided for explicit naming, but `composites()` could also be used.
-	 *
-	 * @return An unmodifiable list of composite components.
-	 */
-	public List<CompositeAttributeComponent> getComposites() {
-		return composites;
 	}
 }

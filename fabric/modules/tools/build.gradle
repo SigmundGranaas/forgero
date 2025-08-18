@@ -9,6 +9,7 @@ dependencies {
 
 	runtimeOnly(project(path: ":fabric:modules:armor",  configuration: 'namedElements'))
 	runtimeOnly(project(path: ":fabric:modules:render",  configuration: 'namedElements'))
+	runtimeOnly(project(path: ":fabric:modules:properties",  configuration: 'namedElements'))
 
 	// Fabric
 	modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")

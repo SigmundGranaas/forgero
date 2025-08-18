@@ -29,5 +29,25 @@
       "type": "forgero:upgrade_material",
       "tags": ["forgero:materials/tool_material"]
     }
-  ]
+  ],
+  "properties": {
+    "forgero:block_breaking": [
+      {
+         "selector": {
+           "type": "forgero:radius",
+           "radius": 2,
+           "filter": {
+               "type": "forgero:filter_wrapper",
+               "filters": [
+                   { "type": "forgero:can_mine" },
+                   { "type": "forgero:same_block" }
+                 ]
+             }
+         },
+         "speed": {
+           "type": "forgero:all"
+         }
+      }
+    ]
+  }
 }

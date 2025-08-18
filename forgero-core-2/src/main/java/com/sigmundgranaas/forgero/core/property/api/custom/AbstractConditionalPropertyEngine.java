@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.core.property.api.custom;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.property.api.DataTypeEngine;
+import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import com.sigmundgranaas.forgero.core.property.condition.Condition;
 import com.sigmundgranaas.forgero.core.property.context.ResolutionContext;
@@ -22,11 +23,11 @@ import java.util.stream.Stream;
 public abstract class AbstractConditionalPropertyEngine<P extends ConditionalProperty, R> implements DataTypeEngine<OptimizedBakedResult<P>, R> {
 
 	private final ResolutionKey<R> key;
-	private final Class<P> propertyClass;
+	private final PropertyKey<P> propertyKey;
 
-	protected AbstractConditionalPropertyEngine(ResolutionKey<R> key, Class<P> propertyClass) {
+	protected AbstractConditionalPropertyEngine(ResolutionKey<R> key, PropertyKey<P> propertyKey) {
 		this.key = key;
-		this.propertyClass = propertyClass;
+		this.propertyKey = propertyKey;
 	}
 
 	@Override
@@ -42,9 +43,8 @@ public abstract class AbstractConditionalPropertyEngine<P extends ConditionalPro
 		List<P> staticallyValid = componentList.stream()
 				.flatMap(component -> {
 					ResolutionContext resCtx = new ResolutionContext(component, root);
-					return component.getProperties().stream()
-							.filter(propertyClass::isInstance)
-							.map(propertyClass::cast)
+					// Use the PropertyKey to get only the relevant properties from the holder
+					return component.properties(propertyKey).stream()
 							.filter(prop -> prop.getCondition()
 									.map(Condition::staticConditions)
 									.map(resCtx::test)

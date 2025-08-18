@@ -10,15 +10,12 @@ import com.sigmundgranaas.forgero.core.property.condition.DynamicCondition;
 import com.sigmundgranaas.forgero.core.property.condition.StaticCondition;
 import com.sigmundgranaas.forgero.core.property.predicate.TagMatchCondition;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
-import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
-import com.sigmundgranaas.forgero.data.loading.api.data.feature.VeinMiningFeatureData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.EquipmentTemplateData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.UpgradeSlotData;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.AttributeCodecs;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.ConditionCodec;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.EquipmentTemplateCodecs;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.FeatureCodecs;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.PartTemplateCodecs;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +23,6 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,11 +38,9 @@ class EquipmentTemplateDataCodecTest {
 		ConditionCodec conditionCodec = new ConditionCodec(staticCodecs, dynamicCodecs);
 
 		Codec<List<AttributeData>> attributeListCodec = Codec.list(AttributeCodecs.create(conditionCodec));
-		FeatureCodecs.registerCodecs(conditionCodec); // Ensure feature codecs are initialized
-		Codec<List<FeatureData>> featureListCodec = FeatureCodecs.createFeatureDataListCodec();
 		Codec<List<UpgradeSlotData>> upgradeSlotDataListCodec = Codec.list(PartTemplateCodecs.UPGRADE_SLOT_DATA_CODEC);
 
-		this.equipmentTemplateDataCodec = EquipmentTemplateCodecs.create(attributeListCodec, featureListCodec, upgradeSlotDataListCodec);
+		this.equipmentTemplateDataCodec = EquipmentTemplateCodecs.create(attributeListCodec, upgradeSlotDataListCodec);
 	}
 
 	private <T> T parseSuccess(Codec<T> codec, String json) {
@@ -135,10 +129,6 @@ class EquipmentTemplateDataCodecTest {
 		assertEquals(id("forgero:tool-attack_speed"), attackSpeed.id());
 		assertEquals(id("forgero:attack_speed"), attackSpeed.type());
 
-		assertNotNull(data.features());
-		assertEquals(1, data.features().size());
-		assertInstanceOf(VeinMiningFeatureData.class, data.features().get(0));
-
 		assertNotNull(data.properties());
 		assertEquals(2, data.properties().size());
 		assertTrue(data.properties().containsKey("forgero:tool_model_override"));
@@ -175,7 +165,6 @@ class EquipmentTemplateDataCodecTest {
 		assertNull(mainSlot.defaultTag());
 		assertNull(data.upgrades());
 		assertNull(data.attributes());
-		assertNull(data.features());
 		assertNull(data.properties());
 	}
 }

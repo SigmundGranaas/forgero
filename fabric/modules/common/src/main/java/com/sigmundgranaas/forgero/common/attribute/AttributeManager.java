@@ -66,7 +66,7 @@ public class AttributeManager {
 			return Optional.empty();
 		}
 		return converter.toComponent(stack)
-				.flatMap(component -> resolver.resolve(component, AttributeEngine.KEY));
+				.map(component -> resolver.resolve(component, new AttributeEngine()));
 	}
 
 	/**

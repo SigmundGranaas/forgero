@@ -8,15 +8,11 @@ import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.property.condition.DynamicCondition;
 import com.sigmundgranaas.forgero.core.property.condition.StaticCondition;
-import com.sigmundgranaas.forgero.core.property.predicate.TagMatchCondition;
 import com.sigmundgranaas.forgero.data.loading.api.data.MaterialData;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
-import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
-import com.sigmundgranaas.forgero.data.loading.api.data.feature.VeinMiningFeatureData;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.AttributeCodecs;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.ConditionCodec;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.FeatureCodecs;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.MaterialCodecs;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,10 +35,8 @@ class MaterialDataCodecTest {
 		ConditionCodec conditionCodec = new ConditionCodec(staticCodecs, dynamicCodecs);
 
 		Codec<List<AttributeData>> attributeListCodec = Codec.list(AttributeCodecs.create(conditionCodec));
-		FeatureCodecs.registerCodecs(conditionCodec); // Ensure feature codecs are initialized
-		Codec<List<FeatureData>> featureListCodec = FeatureCodecs.createFeatureDataListCodec();
 
-		this.materialDataCodec = MaterialCodecs.create(attributeListCodec, featureListCodec);
+		this.materialDataCodec = MaterialCodecs.create(attributeListCodec);
 	}
 
 	private <T> T parseSuccess(Codec<T> codec, String json) {
@@ -109,10 +103,6 @@ class MaterialDataCodecTest {
 		assertTrue(durability.isPresent());
 		assertEquals(1561f, durability.get().computation().value());
 
-		assertNotNull(data.features());
-		assertEquals(1, data.features().size());
-		assertInstanceOf(VeinMiningFeatureData.class, data.features().get(0));
-
 		assertNotNull(data.properties());
 		assertEquals(2, data.properties().size());
 		assertTrue(data.properties().containsKey("forgero:tooltip"));
@@ -137,7 +127,6 @@ class MaterialDataCodecTest {
 		assertNull(data.include());
 		assertNull(data.tags());
 		assertNull(data.attributes());
-		assertNull(data.features());
 		assertNull(data.properties());
 	}
 

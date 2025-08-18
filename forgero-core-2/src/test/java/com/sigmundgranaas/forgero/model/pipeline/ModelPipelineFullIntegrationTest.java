@@ -31,6 +31,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -78,27 +79,27 @@ public class ModelPipelineFullIntegrationTest {
 		));
 
 		// Create mock runtime components, including composites with material children
-		Component iron = new StructuredPart(ironId, Set.of(metalTag, partTag), Collections.emptyList(), new ComponentStructure(Collections.emptyMap()));
-		Component oak = new StructuredPart(oakId, Set.of(woodTag, partTag), Collections.emptyList(), new ComponentStructure(Collections.emptyMap()));
+		Component iron = new StructuredPart(ironId, Set.of(metalTag, partTag), new HashMap<>(), new ComponentStructure(Collections.emptyMap()));
+		Component oak = new StructuredPart(oakId, Set.of(woodTag, partTag), new HashMap<>(), new ComponentStructure(Collections.emptyMap()));
 
 		Component ironBlade = new StructuredPart(
 				ironBladeId,
 				Set.of(partTag, swordBladePartTag),
-				Collections.emptyList(),
+				new HashMap<>(),
 				new ComponentStructure(Map.of(new OpenIdentifier("forgero:material"), new StructureSlot(new OpenIdentifier("forgero:material"), iron.id(), "", iron)))
 		);
 
 		Component oakHandle = new StructuredPart(
 				oakHandleId,
 				Set.of(partTag, handlePartTag),
-				Collections.emptyList(),
+				new HashMap<>(),
 				new ComponentStructure(Map.of(new OpenIdentifier("forgero:material"), new StructureSlot(new OpenIdentifier("forgero:material"), oak.id(), "", oak)))
 		);
 
 		Component ironSword = new StructuredEquipment(
 				ironSwordId,
 				Set.of(toolTag, swordTag),
-				Collections.emptyList(),
+				new HashMap<>(),
 				new ComponentStructure(Map.of(
 						new OpenIdentifier("forgero:blade"), new StructureSlot(new OpenIdentifier("forgero:blade"), ironBlade.id(), "", ironBlade),
 						new OpenIdentifier("forgero:handle"), new StructureSlot(new OpenIdentifier("forgero:handle"), oakHandle.id(), "", oakHandle)

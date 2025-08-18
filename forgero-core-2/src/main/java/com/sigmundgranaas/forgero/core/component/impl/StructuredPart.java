@@ -6,6 +6,7 @@ import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructur
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.property.api.Property;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -16,12 +17,12 @@ import java.util.Set;
 public record StructuredPart(
 		OpenIdentifier id,
 		Set<OpenIdentifier> tags,
-		List<Property> properties,
+		Map<String, List<?>> properties,
 		ComponentStructure structure
 ) implements StructuredComponent {
 
 	@Override
-	public List<Property> getProperties() {
+	public Map<String, List<?>> propertiesAsMap() {
 		return properties;
 	}
 

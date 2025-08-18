@@ -8,6 +8,8 @@ import com.sigmundgranaas.forgero.core.property.context.ResolutionContext;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static com.sigmundgranaas.forgero.core.attribute.api.Attribute.KEY;
+
 /**
  * Default implementation of {@link AttributeBakingStrategy} that processes attributes
  * without special handling for composite attributes from structured components.
@@ -21,10 +23,8 @@ public class DefaultBakingStrategyImpl implements AttributeBakingStrategy {
 		Component root = componentList.isEmpty() ? null : componentList.get(0);
 
 		return componentList.stream()
-				.flatMap(component -> component.getProperties()
+				.flatMap(component -> component.properties(KEY)
 						.stream()
-						.filter(Attribute.class::isInstance)
-						.map(Attribute.class::cast)
 						.filter(attribute -> {
 							// Apply static conditions using a ResolutionContext specific to this component.
 							ResolutionContext resCtx = new ResolutionContext(component, root);

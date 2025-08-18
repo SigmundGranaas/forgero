@@ -1,9 +1,7 @@
 package com.sigmundgranaas.forgero.data.loading.api.data.template;
 
 import com.google.gson.JsonElement;
-import com.sigmundgranaas.forgero.data.loading.api.data.PropertyContainer;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
-import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.template.HostTemplateData;
 import org.jetbrains.annotations.Nullable;
@@ -24,7 +22,6 @@ import java.util.Map;
  * @param structure     Defines the required parts for equipment assembly.
  * @param upgrades      Optional list of equipment-group upgrade slots.
  * @param attributes    Optional list of attributes inherent to this equipment template.
- * @param features      Optional list of features inherent to this equipment template.
  * @param properties    Optional map for custom, extensible properties.
  */
 public record EquipmentTemplateData(
@@ -36,15 +33,12 @@ public record EquipmentTemplateData(
 		List<OpenIdentifier> tags,
 		@Nullable
 		HostTemplateData host_template,
-
 		EquipmentTemplateStructureData structure,
 		@Nullable
 		List<UpgradeSlotData> upgrades,
 		@Nullable
 		List<AttributeData> attributes,
 		@Nullable
-		List<FeatureData> features,
-		@Nullable
 		Map<String, JsonElement> properties
-) implements PropertyContainer {
+) {
 }

@@ -5,9 +5,9 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import java.util.Map;
 
 /**
- * DTO for a serialized ComponentStructure object.
+ * DTO representing the required structural composition of a component.
+ * Uses a map for direct, key-based access to slots.
  *
- * @param slots A map from slot ID to the recursively serialized component in that slot.
+ * @param slots A map where keys are unique slot names (e.g., "head") and values are the CofSlot DTOs.
  */
-public record CofStructure(Map<OpenIdentifier, CofComponent> slots) {
-}
+public record CofStructure(Map<OpenIdentifier, CofSlot> slots) {}

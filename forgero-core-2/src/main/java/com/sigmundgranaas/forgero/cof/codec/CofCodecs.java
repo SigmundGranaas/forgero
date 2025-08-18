@@ -6,32 +6,27 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.cof.dto.CofComponent;
+import com.sigmundgranaas.forgero.cof.dto.CofSlot;
 import com.sigmundgranaas.forgero.cof.dto.CofStructure;
-import com.sigmundgranaas.forgero.cof.dto.CofUpgradeSlot;
 import com.sigmundgranaas.forgero.cof.dto.CofUpgrades;
-import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
-import com.sigmundgranaas.forgero.data.loading.api.data.feature.FeatureData;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class CofCodecs {
 
 	/**
 	 * Creates the master codec for {@link CofComponent}. This factory method resolves the
-	 * dependency on attribute and feature codecs, which are now created dynamically.
+	 * dependency on the property map codec, which is now created dynamically.
 	 *
-	 * @param attributeListCodec The fully constructed codec for a list of {@link AttributeData}.
-	 * @param featureListCodec   The fully constructed codec for a list of {@link FeatureData}.
+	 * @param propertyMapCodec The fully constructed codec for the properties map.
 	 * @return A complete, recursive codec for {@link CofComponent}.
 	 */
-	public static Codec<CofComponent> create(Codec<List<AttributeData>> attributeListCodec, Codec<List<FeatureData>> featureListCodec) {
+	public static Codec<CofComponent> create(Codec<Map<String, List<?>>> propertyMapCodec) {
 
-		/**
-		 * A private proxy codec to break the recursive static initialization cycle.
-		 * This codec is referenced by other codecs, but its delegate is set later.
-		 */
+		// A private proxy codec to break the recursive static initialization cycle.
 		class ComponentDtoCodecProxy implements Codec<CofComponent> {
 			private Codec<CofComponent> delegate;
 
@@ -59,41 +54,43 @@ public class CofCodecs {
 		// 1. Instantiate the proxy first. It can be referenced immediately.
 		ComponentDtoCodecProxy recursiveComponentCodec = new ComponentDtoCodecProxy();
 
-		// 2. Define the other DTO codecs using the proxy for recursive parts.
+		// 2. Define the unified Slot DTO codec using the proxy for recursive content.
+		Codec<CofSlot> slotCodec = RecordCodecBuilder.create(instance ->
+				instance.group(
+						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("id").forGetter(CofSlot::id),
+						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(CofSlot::type),
+						Codec.STRING.optionalFieldOf("description").forGetter(slot -> Optional.ofNullable(slot.description())),
+						recursiveComponentCodec.optionalFieldOf("content").forGetter(CofSlot::contentOpt),
+						Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("valid_tags").forGetter(slot -> Optional.ofNullable(slot.validTags()))
+				).apply(instance, (id, type, desc, content, tags) -> new CofSlot(id, type, desc.orElse(null), content.orElse(null), tags.orElse(null)))
+		);
+
+		// 3. Define the other DTO codecs using the slot codec.
 		Codec<CofStructure> structureDtoCodec = RecordCodecBuilder.create(instance ->
 				instance.group(
-						Codec.unboundedMap(CodecConstants.OPEN_IDENTIFIER_CODEC, recursiveComponentCodec).fieldOf("slots").forGetter(CofStructure::slots)
+						Codec.unboundedMap(CodecConstants.OPEN_IDENTIFIER_CODEC, slotCodec).fieldOf("slots").forGetter(CofStructure::slots)
 				).apply(instance, CofStructure::new));
-
-		Codec<CofUpgradeSlot> upgradeSlotDtoCodec = RecordCodecBuilder.create(instance ->
-				instance.group(
-						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("id").forGetter(CofUpgradeSlot::id),
-						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(CofUpgradeSlot::type),
-						Codec.STRING.fieldOf("description").forGetter(CofUpgradeSlot::description),
-						recursiveComponentCodec.optionalFieldOf("content").forGetter(CofUpgradeSlot::content)
-				).apply(instance, CofUpgradeSlot::new));
 
 		Codec<CofUpgrades> upgradesDtoCodec = RecordCodecBuilder.create(instance ->
 				instance.group(
-						Codec.list(upgradeSlotDtoCodec).fieldOf("slots").forGetter(CofUpgrades::slots)
+						Codec.list(slotCodec).fieldOf("slots").forGetter(CofUpgrades::slots)
 				).apply(instance, CofUpgrades::new));
 
-		// 3. Now, the full component codec can be defined, using the injected dependencies.
+		// 4. Now, the full component codec can be defined.
 		Codec<CofComponent> fullComponentDtoCodec = RecordCodecBuilder.create(instance ->
 				instance.group(
 						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("id").forGetter(CofComponent::id),
-						Codec.STRING.fieldOf("component_type").forGetter(CofComponent::componentType),
+						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("component_type").forGetter(CofComponent::componentType),
 						Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).xmap(java.util.Set::copyOf, java.util.List::copyOf).optionalFieldOf("tags").forGetter(dto -> Optional.ofNullable(dto.tags())),
-						attributeListCodec.optionalFieldOf("attributes").forGetter(dto -> Optional.ofNullable(dto.attributes())),
-						featureListCodec.optionalFieldOf("features").forGetter(dto -> Optional.ofNullable(dto.features())),
+						propertyMapCodec.optionalFieldOf("properties").forGetter(dto -> Optional.ofNullable(dto.properties())),
 						structureDtoCodec.optionalFieldOf("structure").forGetter(dto -> Optional.ofNullable(dto.structure())),
 						upgradesDtoCodec.optionalFieldOf("upgrades").forGetter(dto -> Optional.ofNullable(dto.upgrades())),
 						Codec.INT.optionalFieldOf("cof_version").forGetter(dto -> Optional.ofNullable(dto.cofVersion()))
-				).apply(instance, (id, type, tags, attributes, features, structure, upgrades, version) ->
-						new CofComponent(id, type, tags.orElse(null), attributes.orElse(null), features.orElse(null), structure.orElse(null), upgrades.orElse(null), version.orElse(0))
+				).apply(instance, (id, type, tags, properties, structure, upgrades, version) ->
+						new CofComponent(id, type, tags.orElse(null), properties.orElse(null), structure.orElse(null), upgrades.orElse(null), version.orElse(1))
 				));
 
-		// 4. Finally, set the delegate in the proxy to the fully constructed codec.
+		// 5. Finally, set the delegate in the proxy to the fully constructed codec.
 		recursiveComponentCodec.setDelegate(fullComponentDtoCodec);
 
 		return fullComponentDtoCodec;

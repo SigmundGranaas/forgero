@@ -1,3 +1,4 @@
+// FILE: /home/sigmund/Documents/projects/forgero/1-20/forgero-core-2/src/main/java/com/sigmundgranaas/forgero/model/generation/impl/ModelGeneratorImpl.java
 package com.sigmundgranaas.forgero.model.generation.impl;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
@@ -55,9 +56,9 @@ public class ModelGeneratorImpl implements ModelGenerator {
 					.toList();
 
 			for (Component component : compatibleComponents) {
-				Map<String, Object> context = Map.of("target", component);
+				Map<String, Component> generationContext = createGenerationContext(component);
 				for (TemplateModelDTO modelTemplate : template.models()) {
-					ModelDTO resolvedModel = mapTemplateToModel(modelTemplate, context, tasks);
+					ModelDTO resolvedModel = mapTemplateToModel(modelTemplate, generationContext, tasks);
 					models.put(resolvedModel.getOpenIdentifierId().get(), resolvedModel);
 				}
 			}
@@ -72,16 +73,32 @@ public class ModelGeneratorImpl implements ModelGenerator {
 					.toList();
 
 			for (Component component : compatibleComponents) {
-				Map<String, Object> context = Map.of("target", component);
+				Map<String, Component> generationContext = createGenerationContext(component);
 				for (TemplateArmorModelDTO modelTemplate : template.models()) {
-					ArmorModelDTO resolvedModel = mapTemplateToArmorModel(modelTemplate, context, tasks);
+					ArmorModelDTO resolvedModel = mapTemplateToArmorModel(modelTemplate, generationContext, tasks);
 					models.put(resolvedModel.id(), resolvedModel);
 				}
 			}
 		}
 	}
 
-	private ArmorModelDTO mapTemplateToArmorModel(TemplateArmorModelDTO template, Map<String, Object> context, List<TextureGenerationTask> tasks) {
+	private Map<String, Component> createGenerationContext(Component root) {
+		Map<String, Component> context = new HashMap<>();
+		context.put("target", root); // The root component itself
+
+		// Recursively unpack structured components to flatten the context
+		if (root instanceof StructuredComponent structured) {
+			structured.structure().slots().forEach((id, slot) -> {
+				// Key by slot name, e.g., "head", "handle", "material"
+				context.put(id.name(), slot.content());
+				// Also add children of children to the context
+				context.putAll(createGenerationContext(slot.content()));
+			});
+		}
+		return context;
+	}
+
+	private ArmorModelDTO mapTemplateToArmorModel(TemplateArmorModelDTO template, Map<String, Component> context, List<TextureGenerationTask> tasks) {
 		String rawId = template.id() != null ? placeholderResolver.resolve(template.id(), context) : null;
 		OpenIdentifier resolvedId = (rawId != null && !rawId.isEmpty()) ? new OpenIdentifier(rawId) : null;
 		if (resolvedId == null) {
@@ -96,7 +113,7 @@ public class ModelGeneratorImpl implements ModelGenerator {
 		return new ArmorModelDTO(resolvedId, "forgero:armor_model", modelIdentifier, finalLayers, template.slots(), target, modelContext);
 	}
 
-	private ModelDTO mapTemplateToModel(TemplateModelDTO template, Map<String, Object> context, List<TextureGenerationTask> tasks) {
+	private ModelDTO mapTemplateToModel(TemplateModelDTO template, Map<String, Component> context, List<TextureGenerationTask> tasks) {
 		String rawId = template.id() != null ? placeholderResolver.resolve(template.id(), context) : null;
 		OpenIdentifier resolvedId = (rawId != null && !rawId.isEmpty()) ? new OpenIdentifier(rawId) : null;
 		if (resolvedId == null) {
@@ -124,7 +141,7 @@ public class ModelGeneratorImpl implements ModelGenerator {
 		return new ModelDTO(resolvedId.toString(), template.type(), finalLayers, template.slots(), null, textures, target, modelContext, template.parent(), template.display());
 	}
 
-	private List<LayerDTO> processLayerTemplates(List<TemplateModelDTO.TemplateLayerDTO> layerTemplates, Map<String, Object> context, List<TextureGenerationTask> tasks) {
+	private List<LayerDTO> processLayerTemplates(List<TemplateModelDTO.TemplateLayerDTO> layerTemplates, Map<String, Component> context, List<TextureGenerationTask> tasks) {
 		if (layerTemplates == null) {
 			return Collections.emptyList();
 		}
