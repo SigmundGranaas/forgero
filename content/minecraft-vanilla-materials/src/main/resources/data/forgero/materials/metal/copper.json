@@ -1,0 +1,18 @@
+{
+  "type": "forgero:material",
+  "name": "Copper",
+  "tags": ["forgero:materials/metal"],
+  "host": { "identifiers": [{ "type": "item", "id": "minecraft:copper_ingot" }] },
+  "attributes": [
+    { "id": "forgero:copper-attack_speed", "type": "forgero:attack_speed", "composite": "forgero:part-composite", "computation": { "value": 2.0 } },
+    { "id": "forgero:copper-attack_damage", "type": "forgero:attack_damage", "composite": "forgero:part-composite", "computation": { "value": 3.5 } },
+    { "id": "forgero:copper-mining_speed", "type": "forgero:mining_speed", "composite": "forgero:part-composite", "computation": { "value": 5.0 } },
+    { "id": "forgero:copper-mining_level", "type": "forgero:mining_level", "composite": "forgero:part-composite", "computation": { "value": 2 } },
+    { "id": "forgero:copper-durability", "type": "forgero:durability", "composite": "forgero:part-composite", "computation": { "value": 320 } },
+    { "id": "forgero:copper-rarity", "type": "forgero:rarity", "composite": "forgero:part-composite", "computation": { "value": 30 } },
+    { "id": "forgero:copper-weight", "type": "forgero:weight", "composite": "forgero:part-composite", "computation": { "value": 5.8 } },
+    { "id": "forgero:copper-draw_speed", "type": "forgero:draw_speed", "composite": "forgero:part-composite", "computation": { "value": 1.25 } },
+    { "id": "forgero:copper-draw_power", "type": "forgero:draw_power", "composite": "forgero:part-composite", "computation": { "value": 3.5 } },
+    { "id": "forgero:copper-armor", "type": "forgero:armor", "composite": "forgero:part-composite", "computation": { "value": 6 } }
+  ]
+}

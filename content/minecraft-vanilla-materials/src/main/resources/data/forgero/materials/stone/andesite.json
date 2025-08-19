@@ -1,0 +1,16 @@
+{
+  "type": "forgero:material",
+  "name": "Andesite",
+  "tags": ["forgero:materials/stone"],
+  "host": { "identifiers": [{ "type": "item", "id": "minecraft:andesite" }] },
+  "attributes": [
+    { "id": "forgero:andesite-attack_speed", "type": "forgero:attack_speed", "composite": "forgero:part-composite", "computation": { "value": 2.0 } },
+    { "id": "forgero:andesite-attack_damage", "type": "forgero:attack_damage", "composite": "forgero:part-composite", "computation": { "value": 3.0 } },
+    { "id": "forgero:andesite-mining_speed", "type": "forgero:mining_speed", "composite": "forgero:part-composite", "computation": { "value": 4.0 } },
+    { "id": "forgero:andesite-mining_level", "type": "forgero:mining_level", "composite": "forgero:part-composite", "computation": { "value": 1 } },
+    { "id": "forgero:andesite-durability", "type": "forgero:durability", "composite": "forgero:part-composite", "computation": { "value": 170 } },
+    { "id": "forgero:andesite-rarity", "type": "forgero:rarity", "composite": "forgero:part-composite", "computation": { "value": 15 } },
+    { "id": "forgero:andesite-weight", "type": "forgero:weight", "composite": "forgero:part-composite", "computation": { "value": 3.0 } },
+    { "id": "forgero:andesite-armor", "type": "forgero:armor", "composite": "forgero:part-composite", "computation": { "value": 3 } }
+  ]
+}

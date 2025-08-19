@@ -1,0 +1,16 @@
+{
+  "type": "forgero:material",
+  "name": "Amethyst",
+  "tags": ["forgero:materials/mineral"],
+  "host": { "identifiers": [{ "type": "item", "id": "minecraft:amethyst_shard" }] },
+  "attributes": [
+    { "id": "forgero:amethyst-attack_speed", "type": "forgero:attack_speed", "composite": "forgero:part-composite", "computation": { "value": 2.0 } },
+    { "id": "forgero:amethyst-attack_damage", "type": "forgero:attack_damage", "composite": "forgero:part-composite", "computation": { "value": 5.0 } },
+    { "id": "forgero:amethyst-mining_speed", "type": "forgero:mining_speed", "composite": "forgero:part-composite", "computation": { "value": 9.0 } },
+    { "id": "forgero:amethyst-mining_level", "type": "forgero:mining_level", "composite": "forgero:part-composite", "computation": { "value": 3 } },
+    { "id": "forgero:amethyst-durability", "type": "forgero:durability", "composite": "forgero:part-composite", "computation": { "value": 1370 } },
+    { "id": "forgero:amethyst-rarity", "type": "forgero:rarity", "composite": "forgero:part-composite", "computation": { "value": 90 } },
+    { "id": "forgero:amethyst-weight", "type": "forgero:weight", "composite": "forgero:part-composite", "computation": { "value": 3.0 } },
+    { "id": "forgero:amethyst-armor", "type": "forgero:armor", "composite": "forgero:part-composite", "computation": { "value": 5 } }
+  ]
+}

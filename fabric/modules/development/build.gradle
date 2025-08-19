@@ -12,6 +12,12 @@ dependencies {
 	runtimeOnly(project(path: ":fabric:modules:render",  configuration: 'namedElements'))
 	runtimeOnly(project(path: ":fabric:modules:properties",  configuration: 'namedElements'))
 
+	// Materials
+	runtimeOnly(project(path: ":content:minecraft-vanilla-materials"))
+	runtimeOnly(project(path: ":content:forgero-tools"))
+	runtimeOnly(project(path: ":content:forgero-armor"))
+	runtimeOnly(project(path: ":content:minecraft-tools"))
+
 	// Fabric
 	modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")

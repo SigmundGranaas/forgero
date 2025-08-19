@@ -1,0 +1,18 @@
+{
+  "type": "forgero:material",
+  "name": "Dark Oak",
+  "tags": ["forgero:materials/wood"],
+  "host": { "identifiers": [{ "type": "item", "id": "minecraft:dark_oak_planks" }] },
+  "attributes": [
+    { "id": "forgero:dark_oak-attack_speed", "type": "forgero:attack_speed", "composite": "forgero:part-composite", "computation": { "value": 2.0 } },
+    { "id": "forgero:dark_oak-attack_damage", "type": "forgero:attack_damage", "composite": "forgero:part-composite", "computation": { "value": 2.3 } },
+    { "id": "forgero:dark_oak-mining_speed", "type": "forgero:mining_speed", "composite": "forgero:part-composite", "computation": { "value": 2.0 } },
+    { "id": "forgero:dark_oak-mining_level", "type": "forgero:mining_level", "composite": "forgero:part-composite", "computation": { "value": 0 } },
+    { "id": "forgero:dark_oak-durability", "type": "forgero:durability", "composite": "forgero:part-composite", "computation": { "value": 80 } },
+    { "id": "forgero:dark_oak-rarity", "type": "forgero:rarity", "composite": "forgero:part-composite", "computation": { "value": 25 } },
+    { "id": "forgero:dark_oak-weight", "type": "forgero:weight", "composite": "forgero:part-composite", "computation": { "value": 3.0 } },
+    { "id": "forgero:dark_oak-draw_speed", "type": "forgero:draw_speed", "composite": "forgero:part-composite", "computation": { "value": 1.2 } },
+    { "id": "forgero:dark_oak-draw_power", "type": "forgero:draw_power", "composite": "forgero:part-composite", "computation": { "value": 3.0 } },
+    { "id": "forgero:dark_oak-armor", "type": "forgero:armor", "composite": "forgero:part-composite", "computation": { "value": 0 } }
+  ]
+}

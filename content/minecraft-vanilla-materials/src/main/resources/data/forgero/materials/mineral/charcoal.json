@@ -1,0 +1,16 @@
+{
+  "type": "forgero:material",
+  "name": "Charcoal",
+  "tags": ["forgero:materials/mineral"],
+  "host": { "identifiers": [{ "type": "item", "id": "minecraft:charcoal" }] },
+  "attributes": [
+    { "id": "forgero:charcoal-attack_speed", "type": "forgero:attack_speed", "composite": "forgero:part-composite", "computation": { "value": 2.0 } },
+    { "id": "forgero:charcoal-attack_damage", "type": "forgero:attack_damage", "composite": "forgero:part-composite", "computation": { "value": 3.5 } },
+    { "id": "forgero:charcoal-mining_speed", "type": "forgero:mining_speed", "composite": "forgero:part-composite", "computation": { "value": 6.0 } },
+    { "id": "forgero:charcoal-mining_level", "type": "forgero:mining_level", "composite": "forgero:part-composite", "computation": { "value": 1 } },
+    { "id": "forgero:charcoal-durability", "type": "forgero:durability", "composite": "forgero:part-composite", "computation": { "value": 190 } },
+    { "id": "forgero:charcoal-rarity", "type": "forgero:rarity", "composite": "forgero:part-composite", "computation": { "value": 30 } },
+    { "id": "forgero:charcoal-weight", "type": "forgero:weight", "composite": "forgero:part-composite", "computation": { "value": 3.0 } },
+    { "id": "forgero:charcoal-armor", "type": "forgero:armor", "composite": "forgero:part-composite", "computation": { "value": 5 } }
+  ]
+}

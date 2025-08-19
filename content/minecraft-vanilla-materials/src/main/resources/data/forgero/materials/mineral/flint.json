@@ -1,0 +1,16 @@
+{
+  "type": "forgero:material",
+  "name": "Flint",
+  "tags": ["forgero:materials/mineral"],
+  "host": { "identifiers": [{ "type": "item", "id": "minecraft:flint" }] },
+  "attributes": [
+    { "id": "forgero:flint-attack_speed", "type": "forgero:attack_speed", "composite": "forgero:part-composite", "computation": { "value": 2.0 } },
+    { "id": "forgero:flint-attack_damage", "type": "forgero:attack_damage", "composite": "forgero:part-composite", "computation": { "value": 2.5 } },
+    { "id": "forgero:flint-mining_speed", "type": "forgero:mining_speed", "composite": "forgero:part-composite", "computation": { "value": 5.0 } },
+    { "id": "forgero:flint-mining_level", "type": "forgero:mining_level", "composite": "forgero:part-composite", "computation": { "value": 1 } },
+    { "id": "forgero:flint-durability", "type": "forgero:durability", "composite": "forgero:part-composite", "computation": { "value": 140 } },
+    { "id": "forgero:flint-rarity", "type": "forgero:rarity", "composite": "forgero:part-composite", "computation": { "value": 25 } },
+    { "id": "forgero:flint-weight", "type": "forgero:weight", "composite": "forgero:part-composite", "computation": { "value": 2.0 } },
+    { "id": "forgero:flint-armor", "type": "forgero:armor", "composite": "forgero:part-composite", "computation": { "value": 5 } }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "type": "forgero:material",
+  "name": "Blackstone",
+  "tags": ["forgero:materials/stone"],
+  "host": { "identifiers": [{ "type": "item", "id": "minecraft:blackstone" }] },
+  "attributes": [
+    { "id": "forgero:blackstone-attack_speed", "type": "forgero:attack_speed", "composite": "forgero:part-composite", "computation": { "value": 2.0 } },
+    { "id": "forgero:blackstone-attack_damage", "type": "forgero:attack_damage", "composite": "forgero:part-composite", "computation": { "value": 4.0 } },
+    { "id": "forgero:blackstone-mining_speed", "type": "forgero:mining_speed", "composite": "forgero:part-composite", "computation": { "value": 4.0 } },
+    { "id": "forgero:blackstone-mining_level", "type": "forgero:mining_level", "composite": "forgero:part-composite", "computation": { "value": 1 } },
+    { "id": "forgero:blackstone-durability", "type": "forgero:durability", "composite": "forgero:part-composite", "computation": { "value": 140 } },
+    { "id": "forgero:blackstone-rarity", "type": "forgero:rarity", "composite": "forgero:part-composite", "computation": { "value": 35 } },
+    { "id": "forgero:blackstone-weight", "type": "forgero:weight", "composite": "forgero:part-composite", "computation": { "value": 4.5 } },
+    { "id": "forgero:blackstone-armor", "type": "forgero:armor", "composite": "forgero:part-composite", "computation": { "value": 3 } }
+  ]
+}

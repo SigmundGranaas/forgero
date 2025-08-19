@@ -1,0 +1,16 @@
+{
+  "type": "forgero:material",
+  "name": "Stone",
+  "tags": ["forgero:materials/stone", "forgero:materials/tool_material"],
+  "host": { "identifiers": [{ "type": "item", "id": "minecraft:stone" }] },
+  "attributes": [
+    { "id": "forgero:stone-attack_speed", "type": "forgero:attack_speed", "composite": "forgero:part-composite", "computation": { "value": 2.0 } },
+    { "id": "forgero:stone-attack_damage", "type": "forgero:attack_damage", "composite": "forgero:part-composite", "computation": { "value": 3.0 } },
+    { "id": "forgero:stone-mining_speed", "type": "forgero:mining_speed", "composite": "forgero:part-composite", "computation": { "value": 4.0 } },
+    { "id": "forgero:stone-mining_level", "type": "forgero:mining_level", "composite": "forgero:part-composite", "computation": { "value": 1 } },
+    { "id": "forgero:stone-durability", "type": "forgero:durability", "composite": "forgero:part-composite", "computation": { "value": 140 } },
+    { "id": "forgero:stone-rarity", "type": "forgero:rarity", "composite": "forgero:part-composite", "computation": { "value": 20 } },
+    { "id": "forgero:stone-weight", "type": "forgero:weight", "composite": "forgero:part-composite", "computation": { "value": 3.0 } },
+    { "id": "forgero:stone-armor", "type": "forgero:armor", "composite": "forgero:part-composite", "computation": { "value": 3 } }
+  ]
+}
