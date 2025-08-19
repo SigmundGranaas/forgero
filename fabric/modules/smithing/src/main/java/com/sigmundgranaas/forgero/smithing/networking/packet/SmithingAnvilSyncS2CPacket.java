@@ -7,6 +7,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.world.World;
@@ -40,6 +41,10 @@ public class SmithingAnvilSyncS2CPacket {
 		int markerAttempts = buf.readInt();
 		int markerHitsCount = buf.readInt();
 
+		// NEW: read ingot crafting state
+		boolean ingotCrafting = buf.readBoolean();
+		boolean hasPlanned = buf.readBoolean();
+		Identifier plannedProductId = hasPlanned ? buf.readIdentifier() : null;
 
 		client.execute(() -> {
 			// All logic that interacts with the world must be executed on the client thread
@@ -71,6 +76,9 @@ public class SmithingAnvilSyncS2CPacket {
 			// Update progress
 			anvilEntity.setMarkerAttempts(markerAttempts);
 			anvilEntity.setMarkerHitsCount(markerHitsCount);
+
+			// NEW: update ingot crafting state on client without resetting game state
+			anvilEntity.clientSyncIngotState(ingotCrafting, plannedProductId);
 		});
 	}
 }

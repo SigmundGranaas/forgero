@@ -1,15 +1,13 @@
 package com.sigmundgranaas.forgero.smithing.block.custom;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.SmithingAnvilBlockEntity;
-
-import net.minecraft.block.BlockState;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
@@ -227,6 +225,15 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
 		}
 
 		ItemStack stackInHand = player.getStackInHand(hand);
+
+		// QoL: if ingot crafting active but no mold selected yet, reopen selection on empty-hand use
+		if (stackInHand.isEmpty() && !world.isClient) {
+			var invStack = smithingAnvilBlockEntity.getInventory().getStack(0);
+			if (!invStack.isEmpty() && smithingAnvilBlockEntity.isIngotCrafting() && smithingAnvilBlockEntity.getPlannedProductId() == null) {
+				smithingAnvilBlockEntity.openMoldSelection(player);
+				return ActionResult.SUCCESS;
+			}
+		}
 
 		// Hammering Logic
 		if (stackInHand.getItem().getTranslationKey().contains("smithing_hammer")) {

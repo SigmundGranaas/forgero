@@ -24,6 +24,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.util.Identifier;
+import net.minecraft.registry.Registries;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -32,6 +34,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.listener.ClientPlayPacketListener;
@@ -114,6 +117,11 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	// This offset positions particles and debug visuals slightly above the item's surface.
 	private static final float MARKER_VISUAL_Y_OFFSET = 0.01f;
 
+	// Ingot-crafting mode
+	private boolean ingotCrafting = false;
+	@Nullable
+	private Identifier plannedProductId = null;
+
 	public SmithingAnvilBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.SMITHING_ANVIL, pos, state);
 		this.markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
@@ -133,22 +141,30 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			return ActionResult.FAIL;
 		}
 
+		// If crafting from ingot, ensure a mold is selected before accepting hits
+		if (ingotCrafting && plannedProductId == null) {
+			openMoldSelection(player);
+			return ActionResult.FAIL;
+		}
+
 		int temp = TemperatureUtils.getTemperature(anvilItem);
 
-		// Check for existing condition
-		var stateOpt = StateService.INSTANCE.convert(anvilItem);
-		if (stateOpt.isPresent() && stateOpt.get() instanceof Conditional<?> conditional) {
-			if (!conditional.localConditions().isEmpty()) {
-				player.sendMessage(Text.literal("The tool is too weak to perform this again"), true);
-				world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 1.0f);
-				resetMarkerProgress();
-				return ActionResult.FAIL;
+		// Check for existing condition (skip condition gate if we are crafting from ingot)
+		if (!ingotCrafting) {
+			var stateOpt = StateService.INSTANCE.convert(anvilItem);
+			if (stateOpt.isPresent() && stateOpt.get() instanceof Conditional<?> conditional) {
+				if (!conditional.localConditions().isEmpty()) {
+					player.sendMessage(Text.literal("The tool is too weak to perform this again"), true);
+					world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 1.0f);
+					resetMarkerProgress();
+					return ActionResult.FAIL;
+				}
 			}
 		}
 
 		// Check temperature
 		if (temp < 0) {
-			player.sendMessage(Text.literal("The tool is too cold to work!"), true);
+			player.sendMessage(Text.literal("The material is too cold to work!"), true);
 			world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 1.0f);
 			playMissEffect();
 			return ActionResult.FAIL;
@@ -190,6 +206,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			saveProgressToItem();
 			player.getInventory().offerOrDrop(anvilItem.copy());
 			getInventory().setStack(0, ItemStack.EMPTY);
+			// Clear ingot mode state
+			ingotCrafting = false;
+			plannedProductId = null;
 			markDirty();
 			resetMarkers();
 		}
@@ -204,7 +223,25 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		ItemStack anvilItem = getInventory().getStack(0);
 
 		if (anvilItem.isEmpty()) {
-			// Check if item is a valid part
+			// Allow iron ingot
+			if (stackInHand.isOf(Items.IRON_INGOT)) {
+				ItemStack toPlace = stackInHand.copy();
+				toPlace.setCount(1);
+				getInventory().setStack(0, toPlace);
+				// NEW: initialize a safe working temperature so “too cold” doesn’t block and markers can start
+				TemperatureUtils.setTemperature(toPlace, Math.max(TemperatureUtils.MIN_TEMPERATURE + 1, 100));
+				stackInHand.decrement(1);
+
+				// Enter ingot-crafting mode and prompt mold selection
+				ingotCrafting = true;
+				plannedProductId = null;
+				resetMarkerProgress(); // Fresh session (will be gated until selection)
+				markDirty();
+				openMoldSelection(player);
+				return ActionResult.SUCCESS;
+			}
+
+			// Existing: Check if item is a valid part
 			var type = StateService.INSTANCE.convert(stackInHand)
 					.filter(s -> s instanceof Typed)
 					.map(s -> ((Typed) s).type())
@@ -227,6 +264,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			getInventory().setStack(0, toPlace);
 			loadProgressFromItem();
 			stackInHand.decrement(1);
+			// Ensure we exit ingot mode for normal parts
+			ingotCrafting = false;
+			plannedProductId = null;
 			markDirty();
 			resetMarkerProgress(); // Start a new session
 		}
@@ -284,6 +324,12 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			itemNbt.putInt(HITS_NBT_KEY, markerHitsCount);
 			itemNbt.putInt(ATTEMPTS_NBT_KEY, markerAttempts);
 		}
+
+		// Ingot crafting state
+		nbt.putBoolean("ingotCrafting", ingotCrafting);
+		if (plannedProductId != null) {
+			nbt.putString("plannedProductId", plannedProductId.toString());
+		}
 	}
 
 	@Override
@@ -320,6 +366,18 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		} else {
 			this.markerHitsCount = 0;
 			this.markerAttempts = 0;
+		}
+
+		// Ingot crafting state
+		this.ingotCrafting = nbt.getBoolean("ingotCrafting");
+		if (nbt.contains("plannedProductId")) {
+			try {
+				this.plannedProductId = new Identifier(nbt.getString("plannedProductId"));
+			} catch (Exception e) {
+				this.plannedProductId = null;
+			}
+		} else {
+			this.plannedProductId = null;
 		}
 	}
 
@@ -358,6 +416,13 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		// Progress counters
 		data.writeInt(markerAttempts);
 		data.writeInt(markerHitsCount);
+
+		// Ingot crafting state
+		data.writeBoolean(ingotCrafting);
+		data.writeBoolean(plannedProductId != null);
+		if (plannedProductId != null) {
+			data.writeIdentifier(plannedProductId);
+		}
 
 		for (ServerPlayerEntity player : PlayerLookup.tracking((ServerWorld) world, getPos())) {
 			ServerPlayNetworking.send(player, ModMessages.ITEM_SYNC, data);
@@ -417,6 +482,26 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	private void applySmithingResult() {
 		ItemStack anvilItem = getInventory().getStack(0);
 		if (anvilItem.isEmpty() || world == null) {
+			return;
+		}
+
+		// Ingot crafting path: transform ingot into selected tool head
+		if (ingotCrafting && plannedProductId != null) {
+			ItemStack newProduct = createProductFromPlanned(plannedProductId);
+			if (!newProduct.isEmpty()) {
+				int temp = TemperatureUtils.getTemperature(anvilItem);
+				TemperatureUtils.setTemperature(newProduct, temp);
+				getInventory().setStack(0, newProduct);
+				world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 1.0f, 1.0f);
+			} else {
+				if (world != null) {
+					world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 0.8f);
+				}
+			}
+			// Reset ingot mode
+			ingotCrafting = false;
+			plannedProductId = null;
+			markDirty();
 			return;
 		}
 
@@ -541,10 +626,24 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			return;
 		}
 
+		// If crafting from ingot, require a selected mold before spawning markers
+		if (ingotCrafting && plannedProductId == null) {
+			// Keep progress cleared until user selects a mold
+			if (!markerPositions.isEmpty() || markerSpawnDelay != INITIAL_MARKER_DELAY_TICKS) {
+				clearMarkerProgress();
+				markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
+				markDirty();
+			}
+			return;
+		}
+
 		int temp = TemperatureUtils.getTemperature(stackForMarker);
 		int maxTemp = TemperatureUtils.getMaxTemp(stackForMarker);
 		boolean inStage;
-		if (markerAttempts < 5) {
+		// NEW: when forging from ingot, don’t block marker spawning on temperature stages
+		if (ingotCrafting) {
+			inStage = true;
+		} else if (markerAttempts < 5) {
 			inStage = TemperatureColorProvider.inFirstStageSmithing(temp, maxTemp);
 		} else {
 			inStage = TemperatureColorProvider.inSecondStageSmithing(temp, maxTemp);
@@ -628,6 +727,138 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 	public SimpleInventory getInventory() {
 		return simpleInventory;
+	}
+
+	// ---------------------------------
+	// Mold selection helpers / API
+	// ---------------------------------
+
+	public void openMoldSelection(PlayerEntity player) {
+		if (world == null || world.isClient) return;
+		List<Identifier> options = findAvailableMoldProductsForPlayer(player);
+		if (options.isEmpty()) {
+			player.sendMessage(Text.literal("You have no molds for this material."), true);
+			return;
+		}
+
+		PacketByteBuf data = PacketByteBufs.create();
+		data.writeBlockPos(getPos());
+		data.writeInt(options.size());
+		for (Identifier id : options) {
+			data.writeIdentifier(id);
+		}
+		// Use the shared channel so the client can receive and open the UI
+		ServerPlayNetworking.send((ServerPlayerEntity) player, ModMessages.OPEN_MOLD_SELECTION, data);
+	}
+
+	public void setPlannedProduct(Identifier productId) {
+		this.plannedProductId = productId;
+		markDirty();
+		// Reset the mini-game so it starts fresh after selection
+		resetMarkerProgress();
+	}
+
+	private List<Identifier> findAvailableMoldProductsForPlayer(PlayerEntity player) {
+		List<Identifier> result = new ArrayList<>();
+		var inv = player.getInventory();
+		for (int i = 0; i < inv.size(); i++) {
+			ItemStack s = inv.getStack(i);
+			if (s.isEmpty()) continue;
+			deriveProductIdFromMold(s).ifPresent(id -> {
+				if (!result.contains(id)) {
+					result.add(id);
+				}
+			});
+		}
+		return result;
+	}
+
+	private java.util.Optional<Identifier> deriveProductIdFromMold(ItemStack moldStack) {
+		// Simple default: translation key ending in "_mold" maps to product by stripping suffix.
+		// Replace with your real mold → product mapping or tags.
+		String key = moldStack.getItem().getTranslationKey();
+		if (key.endsWith("_mold")) {
+			String base = key.substring(0, key.length() - "_mold".length());
+			// Try to convert translationKey-like "item.forgero.pickaxe_head" to Identifier "forgero:pickaxe_head"
+			int nsIdx = base.indexOf('.');
+			if (nsIdx >= 0 && nsIdx < base.length() - 1) {
+				String afterPrefix = base.substring(nsIdx + 1);
+				int typeIdx = afterPrefix.indexOf('.');
+				if (typeIdx >= 0 && typeIdx < afterPrefix.length() - 1) {
+					String namespace = afterPrefix.substring(0, typeIdx);
+					String path = afterPrefix.substring(typeIdx + 1);
+					try {
+						return java.util.Optional.of(new Identifier(namespace, path));
+					} catch (Exception ignored) {
+					}
+				}
+			}
+		}
+		return java.util.Optional.empty();
+	}
+
+	private ItemStack createProductFromPlanned(Identifier productId) {
+		// Prefer resolving via StateService if your tool heads are states
+		try {
+			var maybeState = StateService.INSTANCE.find(productId.toString());
+			if (maybeState.isPresent()) {
+				var state = maybeState.get();
+				var stackOpt = StateService.INSTANCE.convert(state);
+				if (stackOpt.isPresent()) {
+					return stackOpt.get();
+				}
+			}
+		} catch (Throwable ignored) {
+			// Fall through to try more specific materialized IDs
+		}
+
+		// Materialize the product for the current workpiece material (e.g., iron)
+		String material = detectMaterialForStack(getInventory().getStack(0)); // "iron" for iron ingot
+		List<Identifier> candidates = new ArrayList<>();
+		if (material != null && !material.isEmpty()) {
+			// Try namespace/path combinations with material prefixes
+			// e.g., forgero:iron_pickaxe_head and forgero:iron-pickaxe_head
+			candidates.add(new Identifier(productId.getNamespace(), material + "_" + productId.getPath()));
+			candidates.add(new Identifier(productId.getNamespace(), material + "-" + productId.getPath()));
+		}
+		// Also try the original (already attempted via StateService above), but include for completeness in item registry
+		candidates.add(productId);
+
+		// Try resolving candidates via StateService first
+		for (Identifier id : candidates) {
+			try {
+				var maybeState = StateService.INSTANCE.find(id.toString());
+				if (maybeState.isPresent()) {
+					var stackOpt = StateService.INSTANCE.convert(maybeState.get());
+					if (stackOpt.isPresent() && !stackOpt.get().isEmpty()) {
+						return stackOpt.get();
+					}
+				}
+			} catch (Throwable ignored) {
+			}
+		}
+
+		// Fallback: try resolve as raw items from the registry
+		for (Identifier id : candidates) {
+			try {
+				var itemOpt = Registries.ITEM.getOrEmpty(id);
+				if (itemOpt.isPresent()) {
+					return new ItemStack(itemOpt.get());
+				}
+			} catch (Throwable ignored) {
+			}
+		}
+		return ItemStack.EMPTY;
+	}
+
+	// Detect a simple material name from the current workpiece on the anvil.
+	// Extend this when you add other materials (copper, steel, etc.).
+	private String detectMaterialForStack(ItemStack stack) {
+		if (stack.isOf(Items.IRON_INGOT)) {
+			return "iron";
+		}
+		// ...add more material detections as needed...
+		return "";
 	}
 
 	// =================================
@@ -856,5 +1087,12 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			}
 			return new int[]{0, 0};
 		}
+	}
+
+	// Client-only setter used by S2C sync to reflect ingot crafting state without resetting markers/minigame.
+	public void clientSyncIngotState(boolean ingotCrafting, @Nullable Identifier plannedProductId) {
+		this.ingotCrafting = ingotCrafting;
+		this.plannedProductId = plannedProductId;
+		// No reset; just reflect state locally for UI/renderer if needed.
 	}
 }
