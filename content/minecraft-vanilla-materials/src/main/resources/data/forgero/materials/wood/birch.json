@@ -1,0 +1,18 @@
+{
+  "type": "forgero:material",
+  "name": "Birch",
+  "tags": ["forgero:materials/wood"],
+  "host": { "identifiers": [{ "type": "item", "id": "minecraft:birch_planks" }] },
+  "attributes": [
+    { "id": "forgero:birch-attack_speed", "type": "forgero:attack_speed", "composite": "forgero:part-composite", "computation": { "value": 2.0 } },
+    { "id": "forgero:birch-attack_damage", "type": "forgero:attack_damage", "composite": "forgero:part-composite", "computation": { "value": 2.0 } },
+    { "id": "forgero:birch-mining_speed", "type": "forgero:mining_speed", "composite": "forgero:part-composite", "computation": { "value": 2.0 } },
+    { "id": "forgero:birch-mining_level", "type": "forgero:mining_level", "composite": "forgero:part-composite", "computation": { "value": 0 } },
+    { "id": "forgero:birch-durability", "type": "forgero:durability", "composite": "forgero:part-composite", "computation": { "value": 40 } },
+    { "id": "forgero:birch-rarity", "type": "forgero:rarity", "composite": "forgero:part-composite", "computation": { "value": 10 } },
+    { "id": "forgero:birch-weight", "type": "forgero:weight", "composite": "forgero:part-composite", "computation": { "value": 1.0 } },
+    { "id": "forgero:birch-draw_speed", "type": "forgero:draw_speed", "composite": "forgero:part-composite", "computation": { "value": 1.2 } },
+    { "id": "forgero:birch-draw_power", "type": "forgero:draw_power", "composite": "forgero:part-composite", "computation": { "value": 3.25 } },
+    { "id": "forgero:birch-armor", "type": "forgero:armor", "composite": "forgero:part-composite", "computation": { "value": 0 } }
+  ]
+}

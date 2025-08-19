@@ -1,0 +1,16 @@
+{
+  "type": "forgero:material",
+  "name": "Basalt",
+  "tags": ["forgero:materials/stone"],
+  "host": { "identifiers": [{ "type": "item", "id": "minecraft:basalt" }] },
+  "attributes": [
+    { "id": "forgero:basalt-attack_speed", "type": "forgero:attack_speed", "composite": "forgero:part-composite", "computation": { "value": 2.0 } },
+    { "id": "forgero:basalt-attack_damage", "type": "forgero:attack_damage", "composite": "forgero:part-composite", "computation": { "value": 3.0 } },
+    { "id": "forgero:basalt-mining_speed", "type": "forgero:mining_speed", "composite": "forgero:part-composite", "computation": { "value": 4.0 } },
+    { "id": "forgero:basalt-mining_level", "type": "forgero:mining_level", "composite": "forgero:part-composite", "computation": { "value": 1 } },
+    { "id": "forgero:basalt-durability", "type": "forgero:durability", "composite": "forgero:part-composite", "computation": { "value": 190 } },
+    { "id": "forgero:basalt-rarity", "type": "forgero:rarity", "composite": "forgero:part-composite", "computation": { "value": 30 } },
+    { "id": "forgero:basalt-weight", "type": "forgero:weight", "composite": "forgero:part-composite", "computation": { "value": 4.0 } },
+    { "id": "forgero:basalt-armor", "type": "forgero:armor", "composite": "forgero:part-composite", "computation": { "value": 3 } }
+  ]
+}

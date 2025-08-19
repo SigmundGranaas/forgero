@@ -1,0 +1,16 @@
+{
+  "type": "forgero:material",
+  "name": "Crying Obsidian",
+  "tags": ["forgero:materials/glass"],
+  "host": { "identifiers": [{ "type": "item", "id": "minecraft:crying_obsidian" }] },
+  "attributes": [
+    { "id": "forgero:crying_obsidian-attack_speed", "type": "forgero:attack_speed", "composite": "forgero:part-composite", "computation": { "value": 2.0 } },
+    { "id": "forgero:crying_obsidian-attack_damage", "type": "forgero:attack_damage", "composite": "forgero:part-composite", "computation": { "value": 4.0 } },
+    { "id": "forgero:crying_obsidian-mining_speed", "type": "forgero:mining_speed", "composite": "forgero:part-composite", "computation": { "value": 6.0 } },
+    { "id": "forgero:crying_obsidian-mining_level", "type": "forgero:mining_level", "composite": "forgero:part-composite", "computation": { "value": 3 } },
+    { "id": "forgero:crying_obsidian-durability", "type": "forgero:durability", "composite": "forgero:part-composite", "computation": { "value": 1880 } },
+    { "id": "forgero:crying_obsidian-rarity", "type": "forgero:rarity", "composite": "forgero:part-composite", "computation": { "value": 70 } },
+    { "id": "forgero:crying_obsidian-weight", "type": "forgero:weight", "composite": "forgero:part-composite", "computation": { "value": 5.0 } },
+    { "id": "forgero:crying_obsidian-emissive", "type": "forgero:emissive", "composite": "forgero:part-composite", "computation": { "value": 4 } }
+  ]
+}

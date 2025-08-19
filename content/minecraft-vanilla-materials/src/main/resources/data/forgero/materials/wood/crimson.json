@@ -1,0 +1,18 @@
+{
+  "type": "forgero:material",
+  "name": "Crimson",
+  "tags": ["forgero:materials/wood"],
+  "host": { "identifiers": [{ "type": "item", "id": "minecraft:crimson_planks" }] },
+  "attributes": [
+    { "id": "forgero:crimson-attack_speed", "type": "forgero:attack_speed", "composite": "forgero:part-composite", "computation": { "value": 2.0 } },
+    { "id": "forgero:crimson-attack_damage", "type": "forgero:attack_damage", "composite": "forgero:part-composite", "computation": { "value": 2.0 } },
+    { "id": "forgero:crimson-mining_speed", "type": "forgero:mining_speed", "composite": "forgero:part-composite", "computation": { "value": 2.2 } },
+    { "id": "forgero:crimson-mining_level", "type": "forgero:mining_level", "composite": "forgero:part-composite", "computation": { "value": 0 } },
+    { "id": "forgero:crimson-durability", "type": "forgero:durability", "composite": "forgero:part-composite", "computation": { "value": 35 } },
+    { "id": "forgero:crimson-rarity", "type": "forgero:rarity", "composite": "forgero:part-composite", "computation": { "value": 35 } },
+    { "id": "forgero:crimson-weight", "type": "forgero:weight", "composite": "forgero:part-composite", "computation": { "value": 2.0 } },
+    { "id": "forgero:crimson-draw_speed", "type": "forgero:draw_speed", "composite": "forgero:part-composite", "computation": { "value": 1.2 } },
+    { "id": "forgero:crimson-draw_power", "type": "forgero:draw_power", "composite": "forgero:part-composite", "computation": { "value": 3.0 } },
+    { "id": "forgero:crimson-armor", "type": "forgero:armor", "composite": "forgero:part-composite", "computation": { "value": 0 } }
+  ]
+}

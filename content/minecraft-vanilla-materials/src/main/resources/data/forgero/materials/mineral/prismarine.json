@@ -1,0 +1,16 @@
+{
+  "type": "forgero:material",
+  "name": "Prismarine",
+  "tags": ["forgero:materials/mineral"],
+  "host": { "identifiers": [{ "type": "item", "id": "minecraft:prismarine_shard" }] },
+  "attributes": [
+    { "id": "forgero:prismarine_shard-attack_speed", "type": "forgero:attack_speed", "composite": "forgero:part-composite", "computation": { "value": 2.0 } },
+    { "id": "forgero:prismarine_shard-attack_damage", "type": "forgero:attack_damage", "composite": "forgero:part-composite", "computation": { "value": 6.5 } },
+    { "id": "forgero:prismarine_shard-mining_speed", "type": "forgero:mining_speed", "composite": "forgero:part-composite", "computation": { "value": 8.0 } },
+    { "id": "forgero:prismarine_shard-mining_level", "type": "forgero:mining_level", "composite": "forgero:part-composite", "computation": { "value": 3 } },
+    { "id": "forgero:prismarine_shard-durability", "type": "forgero:durability", "composite": "forgero:part-composite", "computation": { "value": 1150 } },
+    { "id": "forgero:prismarine_shard-rarity", "type": "forgero:rarity", "composite": "forgero:part-composite", "computation": { "value": 70 } },
+    { "id": "forgero:prismarine_shard-weight", "type": "forgero:weight", "composite": "forgero:part-composite", "computation": { "value": 2.5 } },
+    { "id": "forgero:prismarine_shard-armor", "type": "forgero:armor", "composite": "forgero:part-composite", "computation": { "value": 5 } }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "type": "forgero:material",
+  "name": "End Stone",
+  "tags": ["forgero:materials/stone"],
+  "host": { "identifiers": [{ "type": "item", "id": "minecraft:end_stone" }] },
+  "attributes": [
+    { "id": "forgero:end_stone-attack_speed", "type": "forgero:attack_speed", "composite": "forgero:part-composite", "computation": { "value": 2.0 } },
+    { "id": "forgero:end_stone-attack_damage", "type": "forgero:attack_damage", "composite": "forgero:part-composite", "computation": { "value": 3.0 } },
+    { "id": "forgero:end_stone-mining_speed", "type": "forgero:mining_speed", "composite": "forgero:part-composite", "computation": { "value": 4.0 } },
+    { "id": "forgero:end_stone-mining_level", "type": "forgero:mining_level", "composite": "forgero:part-composite", "computation": { "value": 2 } },
+    { "id": "forgero:end_stone-durability", "type": "forgero:durability", "composite": "forgero:part-composite", "computation": { "value": 180 } },
+    { "id": "forgero:end_stone-rarity", "type": "forgero:rarity", "composite": "forgero:part-composite", "computation": { "value": 40 } },
+    { "id": "forgero:end_stone-weight", "type": "forgero:weight", "composite": "forgero:part-composite", "computation": { "value": 4.0 } },
+    { "id": "forgero:end_stone-armor", "type": "forgero:armor", "composite": "forgero:part-composite", "computation": { "value": 3 } }
+  ]
+}

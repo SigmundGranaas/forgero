@@ -1,0 +1,16 @@
+{
+  "type": "forgero:material",
+  "name": "Bone",
+  "tags": ["forgero:materials/bone"],
+  "host": { "identifiers": [{ "type": "item", "id": "minecraft:bone" }] },
+  "attributes": [
+    { "id": "forgero:bone-attack_speed", "type": "forgero:attack_speed", "composite": "forgero:part-composite", "computation": { "value": 2.0 } },
+    { "id": "forgero:bone-attack_damage", "type": "forgero:attack_damage", "composite": "forgero:part-composite", "computation": { "value": 2.5 } },
+    { "id": "forgero:bone-mining_speed", "type": "forgero:mining_speed", "composite": "forgero:part-composite", "computation": { "value": 3.0 } },
+    { "id": "forgero:bone-mining_level", "type": "forgero:mining_level", "composite": "forgero:part-composite", "computation": { "value": 1 } },
+    { "id": "forgero:bone-durability", "type": "forgero:durability", "composite": "forgero:part-composite", "computation": { "value": 80 } },
+    { "id": "forgero:bone-rarity", "type": "forgero:rarity", "composite": "forgero:part-composite", "computation": { "value": 30 } },
+    { "id": "forgero:bone-weight", "type": "forgero:weight", "composite": "forgero:part-composite", "computation": { "value": 2.5 } },
+    { "id": "forgero:bone-armor", "type": "forgero:armor", "composite": "forgero:part-composite", "computation": { "value": 3 } }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "type": "forgero:material",
+  "name": "Netherrack",
+  "tags": ["forgero:materials/stone"],
+  "host": { "identifiers": [{ "type": "item", "id": "minecraft:netherrack" }] },
+  "attributes": [
+    { "id": "forgero:netherrack-attack_speed", "type": "forgero:attack_speed", "composite": "forgero:part-composite", "computation": { "value": 2.0 } },
+    { "id": "forgero:netherrack-attack_damage", "type": "forgero:attack_damage", "composite": "forgero:part-composite", "computation": { "value": 3.0 } },
+    { "id": "forgero:netherrack-mining_speed", "type": "forgero:mining_speed", "composite": "forgero:part-composite", "computation": { "value": 3.5 } },
+    { "id": "forgero:netherrack-mining_level", "type": "forgero:mining_level", "composite": "forgero:part-composite", "computation": { "value": 1 } },
+    { "id": "forgero:netherrack-durability", "type": "forgero:durability", "composite": "forgero:part-composite", "computation": { "value": 100 } },
+    { "id": "forgero:netherrack-rarity", "type": "forgero:rarity", "composite": "forgero:part-composite", "computation": { "value": 25 } },
+    { "id": "forgero:netherrack-weight", "type": "forgero:weight", "composite": "forgero:part-composite", "computation": { "value": 2.5 } },
+    { "id": "forgero:netherrack-armor", "type": "forgero:armor", "composite": "forgero:part-composite", "computation": { "value": 3 } }
+  ]
+}

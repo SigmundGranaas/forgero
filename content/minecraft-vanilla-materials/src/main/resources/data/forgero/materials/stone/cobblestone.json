@@ -1,0 +1,16 @@
+{
+  "type": "forgero:material",
+  "name": "Cobblestone",
+  "tags": ["forgero:materials/stone"],
+  "host": { "identifiers": [{ "type": "item", "id": "minecraft:cobblestone" }] },
+  "attributes": [
+    { "id": "forgero:cobblestone-attack_speed", "type": "forgero:attack_speed", "composite": "forgero:part-composite", "computation": { "value": 2.0 } },
+    { "id": "forgero:cobblestone-attack_damage", "type": "forgero:attack_damage", "composite": "forgero:part-composite", "computation": { "value": 3.0 } },
+    { "id": "forgero:cobblestone-mining_speed", "type": "forgero:mining_speed", "composite": "forgero:part-composite", "computation": { "value": 4.0 } },
+    { "id": "forgero:cobblestone-mining_level", "type": "forgero:mining_level", "composite": "forgero:part-composite", "computation": { "value": 1 } },
+    { "id": "forgero:cobblestone-durability", "type": "forgero:durability", "composite": "forgero:part-composite", "computation": { "value": 120 } },
+    { "id": "forgero:cobblestone-rarity", "type": "forgero:rarity", "composite": "forgero:part-composite", "computation": { "value": 20 } },
+    { "id": "forgero:cobblestone-weight", "type": "forgero:weight", "composite": "forgero:part-composite", "computation": { "value": 3.0 } },
+    { "id": "forgero:cobblestone-armor", "type": "forgero:armor", "composite": "forgero:part-composite", "computation": { "value": 3 } }
+  ]
+}

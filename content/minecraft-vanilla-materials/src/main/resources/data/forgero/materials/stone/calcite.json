@@ -1,0 +1,16 @@
+{
+  "type": "forgero:material",
+  "name": "Calcite",
+  "tags": ["forgero:materials/stone"],
+  "host": { "identifiers": [{ "type": "item", "id": "minecraft:calcite" }] },
+  "attributes": [
+    { "id": "forgero:calcite-attack_speed", "type": "forgero:attack_speed", "composite": "forgero:part-composite", "computation": { "value": 2.0 } },
+    { "id": "forgero:calcite-attack_damage", "type": "forgero:attack_damage", "composite": "forgero:part-composite", "computation": { "value": 3.0 } },
+    { "id": "forgero:calcite-mining_speed", "type": "forgero:mining_speed", "composite": "forgero:part-composite", "computation": { "value": 4.0 } },
+    { "id": "forgero:calcite-mining_level", "type": "forgero:mining_level", "composite": "forgero:part-composite", "computation": { "value": 1 } },
+    { "id": "forgero:calcite-durability", "type": "forgero:durability", "composite": "forgero:part-composite", "computation": { "value": 210 } },
+    { "id": "forgero:calcite-rarity", "type": "forgero:rarity", "composite": "forgero:part-composite", "computation": { "value": 30 } },
+    { "id": "forgero:calcite-weight", "type": "forgero:weight", "composite": "forgero:part-composite", "computation": { "value": 3.0 } },
+    { "id": "forgero:calcite-armor", "type": "forgero:armor", "composite": "forgero:part-composite", "computation": { "value": 3 } }
+  ]
+}
