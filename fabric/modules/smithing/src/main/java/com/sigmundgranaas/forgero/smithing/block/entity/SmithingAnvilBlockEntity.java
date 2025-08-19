@@ -5,27 +5,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.sigmundgranaas.forgero.core.condition.Conditional;
-import com.sigmundgranaas.forgero.core.condition.NamedCondition;
-import com.sigmundgranaas.forgero.core.state.State;
-import com.sigmundgranaas.forgero.core.state.Typed;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.smithing.block.renderer.SmithingAnvilBlockEntityRenderer;
-import com.sigmundgranaas.forgero.smithing.condition.ConditionLootTables;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 import com.sigmundgranaas.forgero.smithing.util.BoundingBoxUtil;
 import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
-import com.sigmundgranaas.forgero.smithing.util.ToolPartTypeUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import net.minecraft.util.Identifier;
-import net.minecraft.registry.Registries;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -33,6 +25,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
@@ -41,6 +34,9 @@ import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -48,6 +44,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -122,6 +119,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	@Nullable
 	private Identifier plannedProductId = null;
 
+	// Tag for any mod-provided ingots (c:ingots). Fallback heuristics are used if tags are missing.
+	private static final TagKey<Item> INGOTS_TAG = TagKey.of(RegistryKeys.ITEM, new Identifier("c", "ingots"));
+
 	public SmithingAnvilBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.SMITHING_ANVIL, pos, state);
 		this.markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
@@ -141,7 +141,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			return ActionResult.FAIL;
 		}
 
-		// If crafting from ingot, ensure a mold is selected before accepting hits
+		// Require mold selection for ingot-crafting
 		if (ingotCrafting && plannedProductId == null) {
 			openMoldSelection(player);
 			return ActionResult.FAIL;
@@ -149,20 +149,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 		int temp = TemperatureUtils.getTemperature(anvilItem);
 
-		// Check for existing condition (skip condition gate if we are crafting from ingot)
-		if (!ingotCrafting) {
-			var stateOpt = StateService.INSTANCE.convert(anvilItem);
-			if (stateOpt.isPresent() && stateOpt.get() instanceof Conditional<?> conditional) {
-				if (!conditional.localConditions().isEmpty()) {
-					player.sendMessage(Text.literal("The tool is too weak to perform this again"), true);
-					world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 1.0f);
-					resetMarkerProgress();
-					return ActionResult.FAIL;
-				}
-			}
-		}
-
-		// Check temperature
+		// Temperature gate
 		if (temp < 0) {
 			player.sendMessage(Text.literal("The material is too cold to work!"), true);
 			world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 1.0f);
@@ -223,52 +210,23 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		ItemStack anvilItem = getInventory().getStack(0);
 
 		if (anvilItem.isEmpty()) {
-			// Allow iron ingot
-			if (stackInHand.isOf(Items.IRON_INGOT)) {
+			// Accept any ingot (by tag or fallback heuristic)
+			if (isIngot(stackInHand)) {
 				ItemStack toPlace = stackInHand.copy();
 				toPlace.setCount(1);
 				getInventory().setStack(0, toPlace);
-				// NEW: initialize a safe working temperature so “too cold” doesn’t block and markers can start
+				// Initialize a working temperature so markers can start post-selection
 				TemperatureUtils.setTemperature(toPlace, Math.max(TemperatureUtils.MIN_TEMPERATURE + 1, 100));
 				stackInHand.decrement(1);
 
 				// Enter ingot-crafting mode and prompt mold selection
 				ingotCrafting = true;
 				plannedProductId = null;
-				resetMarkerProgress(); // Fresh session (will be gated until selection)
+				resetMarkerProgress();
 				markDirty();
 				openMoldSelection(player);
 				return ActionResult.SUCCESS;
 			}
-
-			// Existing: Check if item is a valid part
-			var type = StateService.INSTANCE.convert(stackInHand)
-					.filter(s -> s instanceof Typed)
-					.map(s -> ((Typed) s).type())
-					.orElse(null);
-			if (!ToolPartTypeUtils.isToolPartType(type)) {
-				return ActionResult.FAIL;
-			}
-
-			// Check if item already has a condition
-			var stateOpt = StateService.INSTANCE.convert(stackInHand);
-			if (stateOpt.isPresent() && stateOpt.get() instanceof Conditional<?> conditional) {
-				if (!conditional.localConditions().isEmpty()) {
-					player.sendMessage(Text.literal("That item already has a condition!"), true);
-					return ActionResult.FAIL;
-				}
-			}
-
-			ItemStack toPlace = stackInHand.copy();
-			toPlace.setCount(1);
-			getInventory().setStack(0, toPlace);
-			loadProgressFromItem();
-			stackInHand.decrement(1);
-			// Ensure we exit ingot mode for normal parts
-			ingotCrafting = false;
-			plannedProductId = null;
-			markDirty();
-			resetMarkerProgress(); // Start a new session
 		}
 		return ActionResult.SUCCESS;
 	}
@@ -485,7 +443,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			return;
 		}
 
-		// Ingot crafting path: transform ingot into selected tool head
+		// Only ingot-crafting path remains
 		if (ingotCrafting && plannedProductId != null) {
 			ItemStack newProduct = createProductFromPlanned(plannedProductId);
 			if (!newProduct.isEmpty()) {
@@ -494,43 +452,12 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				getInventory().setStack(0, newProduct);
 				world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 1.0f, 1.0f);
 			} else {
-				if (world != null) {
-					world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 0.8f);
-				}
+				world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 0.8f);
 			}
-			// Reset ingot mode
 			ingotCrafting = false;
 			plannedProductId = null;
 			markDirty();
 			return;
-		}
-
-		int hits = getMarkerHitsCount();
-		List<NamedCondition> lootTable;
-		if (hits == 10) {
-			lootTable = ConditionLootTables.BEST;
-		} else if (hits >= 7) {
-			lootTable = ConditionLootTables.GOOD;
-		} else if (hits >= 4) {
-			lootTable = ConditionLootTables.NEUTRAL;
-		} else {
-			lootTable = ConditionLootTables.BAD;
-		}
-
-		var stateOpt = StateService.INSTANCE.convert(anvilItem);
-		if (stateOpt.isPresent() && stateOpt.get() instanceof Conditional<?> conditional) {
-			if (!lootTable.isEmpty()) {
-				var randomCondition = ConditionLootTables.getRandomCondition(lootTable);
-				var conditioned = conditional.applyCondition(randomCondition);
-				var newStackOpt = StateService.INSTANCE.convert((State) conditioned);
-				newStackOpt.ifPresent(newStack -> {
-					int temp = TemperatureUtils.getTemperature(anvilItem);
-					TemperatureUtils.setTemperature(newStack, temp);
-					getInventory().setStack(0, newStack);
-					markDirty();
-				});
-				world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 1.0f, 1.0f);
-			}
 		}
 	}
 
@@ -626,7 +553,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			return;
 		}
 
-		// If crafting from ingot, require a selected mold before spawning markers
+		// Require a selected mold before spawning markers
 		if (ingotCrafting && plannedProductId == null) {
 			// Keep progress cleared until user selects a mold
 			if (!markerPositions.isEmpty() || markerSpawnDelay != INITIAL_MARKER_DELAY_TICKS) {
@@ -640,7 +567,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		int temp = TemperatureUtils.getTemperature(stackForMarker);
 		int maxTemp = TemperatureUtils.getMaxTemp(stackForMarker);
 		boolean inStage;
-		// NEW: when forging from ingot, don’t block marker spawning on temperature stages
+		// For ingots, bypass stage gating to allow immediate play after selection
 		if (ingotCrafting) {
 			inStage = true;
 		} else if (markerAttempts < 5) {
@@ -648,12 +575,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		} else {
 			inStage = TemperatureColorProvider.inSecondStageSmithing(temp, maxTemp);
 		}
-		boolean hasCondition = StateService.INSTANCE.convert(stackForMarker)
-				.filter(s -> s instanceof Conditional)
-				.map(s -> !((Conditional<?>) s).localConditions().isEmpty())
-				.orElse(false);
 
-		if (inStage && !hasCondition) {
+		if (inStage) {
 			if (markerPositions.isEmpty()) {
 				if (markerSpawnDelay > 0) {
 					markerSpawnDelay--;
@@ -812,19 +735,16 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			// Fall through to try more specific materialized IDs
 		}
 
-		// Materialize the product for the current workpiece material (e.g., iron)
-		String material = detectMaterialForStack(getInventory().getStack(0)); // "iron" for iron ingot
+		// Materialize the product for the current workpiece material (e.g., iron, copper, gold, etc.)
+		String material = detectMaterialForStack(getInventory().getStack(0));
 		List<Identifier> candidates = new ArrayList<>();
 		if (material != null && !material.isEmpty()) {
-			// Try namespace/path combinations with material prefixes
-			// e.g., forgero:iron_pickaxe_head and forgero:iron-pickaxe_head
 			candidates.add(new Identifier(productId.getNamespace(), material + "_" + productId.getPath()));
 			candidates.add(new Identifier(productId.getNamespace(), material + "-" + productId.getPath()));
 		}
-		// Also try the original (already attempted via StateService above), but include for completeness in item registry
 		candidates.add(productId);
 
-		// Try resolving candidates via StateService first
+		// Try states first
 		for (Identifier id : candidates) {
 			try {
 				var maybeState = StateService.INSTANCE.find(id.toString());
@@ -838,7 +758,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			}
 		}
 
-		// Fallback: try resolve as raw items from the registry
+		// Fallback: registry items
 		for (Identifier id : candidates) {
 			try {
 				var itemOpt = Registries.ITEM.getOrEmpty(id);
@@ -851,15 +771,44 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		return ItemStack.EMPTY;
 	}
 
-	// Detect a simple material name from the current workpiece on the anvil.
-	// Extend this when you add other materials (copper, steel, etc.).
-	private String detectMaterialForStack(ItemStack stack) {
-		if (stack.isOf(Items.IRON_INGOT)) {
-			return "iron";
+	// Accepts any ingot by tag or simple name heuristic
+	private boolean isIngot(ItemStack stack) {
+		if (stack.isEmpty()) return false;
+		try {
+			if (stack.isIn(INGOTS_TAG)) return true;
+		} catch (Throwable ignored) {
 		}
-		// ...add more material detections as needed...
+		Identifier id = Registries.ITEM.getId(stack.getItem());
+		String path = id.getPath();
+		// Common patterns: copper_ingot, iron_ingot, netherite_ingot, ingot_copper
+		return path.endsWith("_ingot") || path.startsWith("ingot_") || stack.isOf(Items.IRON_INGOT);
+	}
+
+	// Detect a simple material name from the current workpiece on the anvil.
+	// Works for common naming schemes like "iron_ingot", "ingot_copper"
+	private String detectMaterialForStack(ItemStack stack) {
+		if (stack.isEmpty()) return "";
+		Identifier id = Registries.ITEM.getId(stack.getItem());
+		String path = id.getPath();
+		if (path.endsWith("_ingot")) {
+			return path.substring(0, path.length() - "_ingot".length());
+		}
+		if (path.startsWith("ingot_") && path.length() > "ingot_".length()) {
+			return path.substring("ingot_".length());
+		}
+		// Fallbacks: known vanilla special cases
+		if (stack.isOf(Items.IRON_INGOT)) return "iron";
+		if (stack.isOf(Items.GOLD_INGOT)) return "gold";
+		if (stack.isOf(Items.COPPER_INGOT)) return "copper";
+		if (stack.isOf(Items.NETHERITE_INGOT)) return "netherite";
 		return "";
 	}
+
+	// =================================
+	// Positioning Utility Class and client sync remain unchanged
+	// =================================
+
+	// ...existing Positioning class...
 
 	// =================================
 	// Positioning Utility Class
@@ -873,17 +822,17 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		 * Converts a world-space hit result into the item's local texture space (-0.5 to 0.5).
 		 * This function needs to inverse the transformations applied in the renderer.
 		 *
-		 * @param hit             The BlockHitResult from the player's interaction.
-		 * @param anvilState      The BlockState of the Smithing Anvil, providing its facing direction.
+		 * @param hit               The BlockHitResult from the player's interaction.
+		 * @param anvilState        The BlockState of the Smithing Anvil, providing its facing direction.
 		 * @param itemTextureOffset The (dx, dz) texture offset for the item in block units (0-1 range, e.g., 2/16 = 0.125).
 		 * @return Vec2f representing the hit position in the item's local texture space (-0.5 to 0.5 for X,Y).
 		 */
 		public static Vec2f worldHitToItemLocal(BlockHitResult hit, BlockState anvilState, Vec2f itemTextureOffset) {
-			// Step 1: Convert world hit position to coordinates relative to the block's center
+			// Step 1: Convert world hit position to coordinates relative to the block's center (range -0.5..0.5)
 			double localX_block_center = hit.getPos().x - hit.getBlockPos().getX() - 0.5;
 			double localZ_block_center = hit.getPos().z - hit.getBlockPos().getZ() - 0.5;
 
-			// Step 2: Inverse of Anvil's Rotation
+			// Step 2: Inverse of anvil rotation
 			Direction facing = anvilState.get(com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.FACING);
 			float anvilAngleDegrees = 0.0f;
 			switch (facing) {
@@ -895,32 +844,35 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			float invAnvilAngleRadians = (float) Math.toRadians(-anvilAngleDegrees);
 			double cosInv = Math.cos(invAnvilAngleRadians);
 			double sinInv = Math.sin(invAnvilAngleRadians);
-			double hitX_afterAnvilRot = localX_block_center * cosInv - localZ_block_center * sinInv;
-			double hitZ_afterAnvilRot = localX_block_center * sinInv + localZ_block_center * cosInv;
 
-			// Step 3: Inverse of Item's 180-degree rotation
-			double hitX_beforeItemRot = -hitX_afterAnvilRot;
-			double hitZ_beforeItemRot = -hitZ_afterAnvilRot;
+			double xAfterAnvilRot = localX_block_center * cosInv - localZ_block_center * sinInv;
+			double zAfterAnvilRot = localX_block_center * sinInv + localZ_block_center * cosInv;
 
-			// Step 4: Inverse of the RENDER_SCALE_FACTOR
-			double hitX_unscaled = hitX_beforeItemRot / SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
-			double hitZ_unscaled = hitZ_beforeItemRot / SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
+			// Step 3: Inverse of item's 180-degree rotation (rotation by -180 is equivalent to negation)
+			float xBeforeItemRot = (float) -xAfterAnvilRot;
+			float zBeforeItemRot = (float) -zAfterAnvilRot;
 
-			// Step 5: Inverse of the texture centering offset
-			float hitX_itemLocal = (float) (hitX_unscaled - itemTextureOffset.x);
-			float hitZ_itemLocal = (float) (hitZ_unscaled - itemTextureOffset.y);
+			// Step 4: Inverse of texture offset (offset was applied before scaling in renderer)
+			float xBeforeOffset = xBeforeItemRot - itemTextureOffset.x;
+			float zBeforeOffset = zBeforeItemRot - itemTextureOffset.y;
 
-			return new Vec2f(hitX_itemLocal, hitZ_itemLocal);
+			// Step 5: Inverse of scale
+			float xLocal = xBeforeOffset / SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
+			float zLocal = zBeforeOffset / SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
+
+			// Return item-local coordinates in the same space as markerPositions (no extra negation)
+			return new Vec2f(xLocal, zLocal);
 		}
+
 		/**
 		 * Converts an item's local texture space coordinate (-0.5 to 0.5) to a world-space position for rendering particles.
 		 * This function applies the transformations in the same order as the renderer, but for a single point.
 		 *
-		 * @param itemLocalPos The position in the item's local texture space (-0.5 to 0.5 for X,Y).
-		 * @param anvilBlockPos The BlockPos of the Smithing Anvil.
-		 * @param anvilState The BlockState of the Smithing Anvil.
+		 * @param itemLocalPos      The position in the item's local texture space (-0.5 to 0.5 for X,Y).
+		 * @param anvilBlockPos     The BlockPos of the Smithing Anvil.
+		 * @param anvilState        The BlockState of the Smithing Anvil.
 		 * @param itemTextureOffset The (dx, dz) texture offset for the item.
-		 * @param baseY The base Y-coordinate offset relative to the block's origin (0-1 range).
+		 * @param baseY             The base Y-coordinate offset relative to the block's origin (0-1 range).
 		 * @return Vec3d representing the world coordinates where the particle should spawn.
 		 */
 		public static Vec3d itemLocalToWorld(Vec2f itemLocalPos, BlockPos anvilBlockPos, BlockState anvilState, Vec2f itemTextureOffset, float baseY) {
@@ -966,9 +918,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		 * Checks if a normalized (x, z) in item-local space is inside the top face of the *unscaled* anvil's voxel shape.
 		 * This is used for generating markers, ensuring they appear on the anvil's surface, not off it.
 		 *
-		 * @param itemLocalX The X coordinate in item's local texture space (-0.5 to 0.5).
-		 * @param itemLocalZ The Z coordinate in item's local texture space (-0.5 to 0.5).
-		 * @param anvilState The BlockState of the Smithing Anvil.
+		 * @param itemLocalX     The X coordinate in item's local texture space (-0.5 to 0.5).
+		 * @param itemLocalZ     The Z coordinate in item's local texture space (-0.5 to 0.5).
+		 * @param anvilState     The BlockState of the Smithing Anvil.
 		 * @param anvilItemStack The ItemStack currently on the anvil, used to get its texture offset.
 		 * @return True if the point, when scaled to block space, is within the anvil's top layer.
 		 */
@@ -1034,7 +986,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		/**
 		 * Gets a random marker position within the item's texture, in local coordinates (-0.5 to 0.5).
 		 *
-		 * @param stack The ItemStack representing the item on the anvil.
+		 * @param stack      The ItemStack representing the item on the anvil.
 		 * @param anvilState The BlockState of the Smithing Anvil.
 		 * @return Vec2f representing a random valid marker position in the item's local texture space, or Vec2f.ZERO if no valid position can be found.
 		 */
@@ -1093,6 +1045,5 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	public void clientSyncIngotState(boolean ingotCrafting, @Nullable Identifier plannedProductId) {
 		this.ingotCrafting = ingotCrafting;
 		this.plannedProductId = plannedProductId;
-		// No reset; just reflect state locally for UI/renderer if needed.
 	}
 }
