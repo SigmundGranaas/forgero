@@ -3,9 +3,7 @@
   "package": "com.sigmundgranaas.forgero.smithing.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "TemperatureTooltipMixin",
-    "BlockModelRendererMixin",
-    "ModelRotationMixin"
+    "TemperatureTooltipMixin"
   ],
   "injectors": {
     "defaultRequire": 1
