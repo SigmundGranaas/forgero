@@ -17,6 +17,7 @@ import com.sigmundgranaas.forgero.smithing.block.renderer.BellowsBlockEntityRend
 import com.sigmundgranaas.forgero.smithing.block.renderer.MoldBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.block.renderer.SmithingAnvilBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.model.BellowsModel;
+import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider;
 
 import net.minecraft.client.render.RenderLayer;
@@ -66,7 +67,7 @@ public class ForgeroClientSmithingInitializer implements ClientModInitializer {
 
 		BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.HEARTH, RenderLayer.getCutout());
 
-
+		ModMessages.registerS2CPackets();
 
 
 		// Initialize and store the TextureService and TextureGenerator for smithing
