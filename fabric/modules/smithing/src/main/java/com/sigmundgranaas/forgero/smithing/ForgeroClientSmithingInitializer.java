@@ -45,12 +45,10 @@ public class ForgeroClientSmithingInitializer implements ClientModInitializer {
     public void onInitializeClient() {
 		        // Make sure MOLD is registered (null check)
 		        if (ModBlockEntities.MOLD == null) {
-		            Forgero.LOGGER.warn("MOLD BlockEntityType is null, rebuilding it...");
 		            ModBlockEntities.rebuildMoldBlockEntityType();
 
 		            // If still null after rebuilding, log error and skip registration
 		            if (ModBlockEntities.MOLD == null) {
-		                Forgero.LOGGER.error("Failed to rebuild MOLD BlockEntityType, renderer will not be registered");
 		                // Continue with other initializations, skipping the MOLD renderer
 		            }
 		        }

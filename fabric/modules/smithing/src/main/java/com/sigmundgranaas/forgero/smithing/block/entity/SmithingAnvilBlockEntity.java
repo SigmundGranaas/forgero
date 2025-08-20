@@ -141,9 +141,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			return ActionResult.FAIL;
 		}
 
-		// Require mold selection for ingot-crafting
+		// Require schematic selection for ingot-crafting
 		if (ingotCrafting && plannedProductId == null) {
-			openMoldSelection(player);
+			openSchematicSelection(player);
 			return ActionResult.FAIL;
 		}
 
@@ -219,12 +219,12 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				TemperatureUtils.setTemperature(toPlace, Math.max(TemperatureUtils.MIN_TEMPERATURE + 1, 100));
 				stackInHand.decrement(1);
 
-				// Enter ingot-crafting mode and prompt mold selection
+				// Enter ingot-crafting mode and prompt schematic selection
 				ingotCrafting = true;
 				plannedProductId = null;
 				resetMarkerProgress();
 				markDirty();
-				openMoldSelection(player);
+				openSchematicSelection(player);
 				return ActionResult.SUCCESS;
 			}
 		}
@@ -653,14 +653,14 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	}
 
 	// ---------------------------------
-	// Mold selection helpers / API
+	// Schematic selection helpers / API
 	// ---------------------------------
 
-	public void openMoldSelection(PlayerEntity player) {
+	public void openSchematicSelection(PlayerEntity player) {
 		if (world == null || world.isClient) return;
-		List<Identifier> options = findAvailableMoldProductsForPlayer(player);
+		List<Identifier> options = findAvailableSchematicProductsForPlayer(player);
 		if (options.isEmpty()) {
-			player.sendMessage(Text.literal("You have no molds for this material."), true);
+			player.sendMessage(Text.literal("You have no schematics for this material."), true);
 			return;
 		}
 
@@ -671,7 +671,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			data.writeIdentifier(id);
 		}
 		// Use the shared channel so the client can receive and open the UI
-		ServerPlayNetworking.send((ServerPlayerEntity) player, ModMessages.OPEN_MOLD_SELECTION, data);
+		ServerPlayNetworking.send((ServerPlayerEntity) player, ModMessages.OPEN_SCHEMATIC_SELECTION, data); // You may want to rename this channel
 	}
 
 	public void setPlannedProduct(Identifier productId) {
@@ -681,13 +681,13 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		resetMarkerProgress();
 	}
 
-	private List<Identifier> findAvailableMoldProductsForPlayer(PlayerEntity player) {
+	private List<Identifier> findAvailableSchematicProductsForPlayer(PlayerEntity player) {
 		List<Identifier> result = new ArrayList<>();
 		var inv = player.getInventory();
 		for (int i = 0; i < inv.size(); i++) {
 			ItemStack s = inv.getStack(i);
 			if (s.isEmpty()) continue;
-			deriveProductIdFromMold(s).ifPresent(id -> {
+			deriveProductIdFromSchematic(s).ifPresent(id -> {
 				if (!result.contains(id)) {
 					result.add(id);
 				}
@@ -696,13 +696,12 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		return result;
 	}
 
-	private java.util.Optional<Identifier> deriveProductIdFromMold(ItemStack moldStack) {
-		// Simple default: translation key ending in "_mold" maps to product by stripping suffix.
-		// Replace with your real mold → product mapping or tags.
-		String key = moldStack.getItem().getTranslationKey();
-		if (key.endsWith("_mold")) {
-			String base = key.substring(0, key.length() - "_mold".length());
-			// Try to convert translationKey-like "item.forgero.pickaxe_head" to Identifier "forgero:pickaxe_head"
+	private java.util.Optional<Identifier> deriveProductIdFromSchematic(ItemStack schematicStack) {
+		// Translation key ending in "-schematic" maps to product by stripping suffix.
+		String key = schematicStack.getItem().getTranslationKey();
+		if (key.endsWith("-schematic")) {
+			String base = key.substring(0, key.length() - "-schematic".length());
+			// Try to convert translationKey-like "item.forgero.axe_head" to Identifier "forgero:axe_head"
 			int nsIdx = base.indexOf('.');
 			if (nsIdx >= 0 && nsIdx < base.length() - 1) {
 				String afterPrefix = base.substring(nsIdx + 1);

@@ -230,7 +230,7 @@ public class SmithingAnvil extends BlockWithEntity implements BlockEntityProvide
 		if (stackInHand.isEmpty() && !world.isClient) {
 			var invStack = smithingAnvilBlockEntity.getInventory().getStack(0);
 			if (!invStack.isEmpty() && smithingAnvilBlockEntity.isIngotCrafting() && smithingAnvilBlockEntity.getPlannedProductId() == null) {
-				smithingAnvilBlockEntity.openMoldSelection(player);
+				smithingAnvilBlockEntity.openSchematicSelection(player);
 				return ActionResult.SUCCESS;
 			}
 		}
