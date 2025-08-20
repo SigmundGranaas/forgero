@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.smithing.block.entity.custom;
 
 import com.sigmundgranaas.forgero.smithing.item.custom.CrucibleItem;
 import com.sigmundgranaas.forgero.smithing.networking.packet.HeartBlockSyncS2CPacket;
+import com.sigmundgranaas.forgero.smithing.recipe.MetalSmeltingRecipe;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -13,6 +14,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
@@ -20,6 +23,18 @@ import net.minecraft.world.World;
 
 public class HearthBlockEntity extends BlockEntity implements Inventory {
 	private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1, ItemStack.EMPTY);
+
+	// Smelting state
+	private boolean smelting = false;
+	private int smeltTime = 0;
+	private int smeltTimeTotal = 0;
+
+	// Crucible NBT keys (mirror MetalSmeltingRecipe)
+	private static final String STORED_ITEM_KEY = "StoredItem";
+	private static final String COUNT_KEY = "Count";
+
+	// Add this field to track if smelting just finished
+	private boolean smeltingJustFinished = false;
 
 	public HearthBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
@@ -30,6 +45,11 @@ public class HearthBlockEntity extends BlockEntity implements Inventory {
 	}
 
 	public static final int CRUCIBLE_SLOT = 0;
+
+	// Expose smelting state to block interactions
+	public boolean isSmelting() {
+		return smelting;
+	}
 
 	// Inventory methods
 	@Override
@@ -121,12 +141,20 @@ public class HearthBlockEntity extends BlockEntity implements Inventory {
 	public void readNbt(NbtCompound nbt) {
 		super.readNbt(nbt);
 		Inventories.readNbt(nbt, inventory);
+		// Smelting state
+		this.smelting = nbt.getBoolean("Smelting");
+		this.smeltTime = nbt.getInt("SmeltTime");
+		this.smeltTimeTotal = nbt.getInt("SmeltTimeTotal");
 	}
 
 	@Override
 	protected void writeNbt(NbtCompound nbt) {
 		super.writeNbt(nbt);
 		Inventories.writeNbt(nbt, inventory);
+		// Smelting state
+		nbt.putBoolean("Smelting", this.smelting);
+		nbt.putInt("SmeltTime", this.smeltTime);
+		nbt.putInt("SmeltTimeTotal", this.smeltTimeTotal);
 	}
 
 	// Sync to client when the inventory changes
@@ -156,13 +184,13 @@ public class HearthBlockEntity extends BlockEntity implements Inventory {
 		}
 	}
 
-	// Spawns smoke particles exactly like vanilla campfire
+	// Spawns smoke particles exactly like vanilla campfire (client), and drives smelting (server)
 	public static void tick(World world, BlockPos pos, BlockState state, HearthBlockEntity blockEntity) {
-		if (world.isClient && state.get(com.sigmundgranaas.forgero.smithing.block.custom.HearthBlock.LIT)) {
+		if (world.isClient) {
 			Random random = world.random;
 			// 50 pixels = 50/16 = 3.125 block units above base
-			double yOffset = blockEntity.getStack(CRUCIBLE_SLOT).isEmpty() ? 1.0 : 2.225;
-			if (random.nextFloat() < 0.11F) {
+			double yOffset = blockEntity.getStack(CRUCIBLE_SLOT).isEmpty() ? 1.0 : 2.225; // keep your custom offset
+			if (state.get(com.sigmundgranaas.forgero.smithing.block.custom.HearthBlock.LIT) && random.nextFloat() < 0.11F) {
 				for (int i = 0; i < random.nextInt(2) + 2; i++) {
 					net.minecraft.block.CampfireBlock.spawnSmokeParticle(
 						world,
@@ -172,7 +200,109 @@ public class HearthBlockEntity extends BlockEntity implements Inventory {
 					);
 				}
 			}
+
+			// Play lava sound if smelting is done and crucible is still present
+			if (!blockEntity.smelting && !blockEntity.getStack(CRUCIBLE_SLOT).isEmpty() && blockEntity.smeltTimeTotal > 0) {
+				if (world.getTime() % 20 == 0) { // every second
+					world.playSound(
+						pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5,
+						SoundEvents.BLOCK_LAVA_POP,
+						SoundCategory.BLOCKS,
+						0.5f,
+						1.0f,
+						false
+					);
+				}
+			}
+			return;
 		}
+
+		// Server-side: drive smelting
+		boolean lit = state.get(com.sigmundgranaas.forgero.smithing.block.custom.HearthBlock.LIT);
+		ItemStack crucible = blockEntity.getStack(CRUCIBLE_SLOT);
+
+		// If we aren't smelting, try to start when conditions are met
+		if (!blockEntity.smelting) {
+			if (lit && !crucible.isEmpty() && crucible.getItem() instanceof CrucibleItem) {
+				blockEntity.tryStartSmelting();
+			}
+			return;
+		}
+
+		// If we are smelting, only progress while lit and crucible still present
+		if (!lit || crucible.isEmpty() || !(crucible.getItem() instanceof CrucibleItem)) {
+			// Pause smelting if unlit or crucible missing; do not reset to preserve progress while relighting
+			return;
+		}
+
+		// Progress
+		blockEntity.smeltTime++;
+		if (blockEntity.smeltTime >= blockEntity.smeltTimeTotal) {
+			// Finish: craft and apply result
+			blockEntity.finishSmelting();
+		}
+	}
+
+	private void tryStartSmelting() {
+		if (world == null || world.isClient) return;
+		ItemStack crucible = getStack(CRUCIBLE_SLOT);
+		if (crucible.isEmpty() || !(crucible.getItem() instanceof CrucibleItem)) return;
+
+		world.getRecipeManager()
+			.getFirstMatch(MetalSmeltingRecipe.Type.INSTANCE, this, world)
+			.ifPresent(recipe -> {
+				int count = getStoredOreCount(crucible);
+				if (count <= 0) return;
+
+				this.smelting = true;
+				this.smeltTime = 0;
+				this.smeltTimeTotal = Math.max(1, recipe.getCookTime() * count);
+				markDirtyAndSync();
+			});
+	}
+
+	private void finishSmelting() {
+		if (world == null || world.isClient) return;
+
+		// Revalidate recipe and craft
+		world.getRecipeManager()
+			.getFirstMatch(MetalSmeltingRecipe.Type.INSTANCE, this, world)
+			.ifPresentOrElse(recipe -> {
+				// Ensure matches recomputes lastOutput internally
+				if (!recipe.matches(this, world)) {
+					cancelSmelting();
+					return;
+				}
+				ItemStack out = recipe.craft(this, world.getRegistryManager());
+				// Put finished crucible back in the slot (setStack keeps CustomModelData=1)
+				setStack(CRUCIBLE_SLOT, out);
+				this.smelting = false;
+				this.smeltTime = 0;
+				this.smeltTimeTotal = 0;
+				this.smeltingJustFinished = true;
+				markDirtyAndSync();
+				// Play sound when smelting is done
+				world.playSound(
+					null, // player
+					pos,
+					SoundEvents.BLOCK_ANVIL_FALL, // or another fitting sound
+					SoundCategory.BLOCKS,
+					1.0f,
+					1.0f
+				);
+			}, this::cancelSmelting);
+	}
+
+	private void cancelSmelting() {
+		this.smelting = false;
+		this.smeltTime = 0;
+		this.smeltTimeTotal = 0;
+		markDirtyAndSync();
+	}
+
+	private int getStoredOreCount(ItemStack crucible) {
+		if (!crucible.hasNbt()) return 0;
+		return crucible.getNbt().getInt(COUNT_KEY);
 	}
 
 	// Utility to remove CustomModelData from a stack

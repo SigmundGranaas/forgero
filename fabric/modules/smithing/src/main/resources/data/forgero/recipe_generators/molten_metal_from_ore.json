@@ -5,14 +5,10 @@
       "type": "METAL"
     }
   },
-  "identifier": "forgero:${metal.name}-ore_to_molten-recipe",
+  "identifier": "forgero:${metal.name}_ore_metal_smelting",
   "type": "forgero:metal_smelting",
-  "ingredient": {
-    "item": "minecraft:${metal.name}_ore"
-  },
-  "cooking_time": 1,
-  "result": {
-    "liquid": "forgero:molten_${metal.name}",
-    "amount": 1000
-  }
+  "cooking_time": 200,
+  "mb_per_item": 100,
+  "liquid_namespace": "forgero",
+  "liquid_prefix": "molten_"
 }

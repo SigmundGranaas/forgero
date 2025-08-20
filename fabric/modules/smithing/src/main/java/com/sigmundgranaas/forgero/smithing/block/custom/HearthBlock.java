@@ -61,6 +61,12 @@ public class HearthBlock extends CampfireBlock implements Waterloggable {
 		ItemStack slot = hearth.getStack(0);
 
 		boolean wantsExtract = player.isSneaking() || held.isEmpty();
+
+		// Block extraction while smelting
+		if (wantsExtract && hearth.isSmelting()) {
+			return ActionResult.SUCCESS; // consume without action
+		}
+
 		if (wantsExtract && !slot.isEmpty()) {
 			if (!world.isClient) {
 				ItemStack extracted = slot.copy();
@@ -87,6 +93,8 @@ public class HearthBlock extends CampfireBlock implements Waterloggable {
 				hearth.setStack(0, crucibleStack);
 				held.decrement(1);
 				hearth.markDirtyAndSync();
+				// Optionally start smelting immediately (server will also handle next tick)
+				// hearth.tryStartSmelting(); // if made public
 			}
 			return ActionResult.SUCCESS;
 		}

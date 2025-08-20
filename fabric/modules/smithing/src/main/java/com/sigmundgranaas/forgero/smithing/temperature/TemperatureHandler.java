@@ -9,8 +9,8 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.state.property.Properties;
+import net.minecraft.util.math.BlockPos;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 
