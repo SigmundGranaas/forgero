@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.smithing.item;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 
+import com.sigmundgranaas.forgero.smithing.item.custom.CrucibleItem;
 import com.sigmundgranaas.forgero.smithing.item.custom.LiquidMetalCrucibleItem;
 
 import net.minecraft.item.Item;
@@ -19,12 +20,14 @@ public class ModItems {
 	public static final Item SMITHING_TONGS = registerItem("smithing_tongs", new Item(new FabricItemSettings()));
 	public static final Item CLAY_CRUCIBLE = registerItem("clay_crucible", new Item(new FabricItemSettings()));
 	public static final Item CRUCIBLE = registerItem("crucible", new LiquidMetalCrucibleItem(new FabricItemSettings()));
+	public static final Item CRUCIBLE2 = registerItem("crucible2", new CrucibleItem(new FabricItemSettings()));
 
 	private static void addItemsToIngredientItemGroup(FabricItemGroupEntries entries) {
 		entries.add(SMITHING_HAMMER);
 		entries.add(SMITHING_TONGS);
 		entries.add(CLAY_CRUCIBLE);
 		entries.add(CRUCIBLE);
+		entries.add(CRUCIBLE2);
 	}
 
 	private static Item registerItem(String name, Item item) {

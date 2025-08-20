@@ -7,6 +7,8 @@ import com.sigmundgranaas.forgero.smithing.block.ModBlocks;
 import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
 import com.sigmundgranaas.forgero.smithing.item.ModItemGroups;
 import com.sigmundgranaas.forgero.smithing.item.ModItems;
+import com.sigmundgranaas.forgero.smithing.item.tooltip.CrucibleTooltipComponent;
+import com.sigmundgranaas.forgero.smithing.item.tooltip.CrucibleTooltipData;
 import com.sigmundgranaas.forgero.smithing.recipe.ModRecipes;
 import com.sigmundgranaas.forgero.smithing.resource.MoldGenerator;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureHandler;
@@ -15,6 +17,8 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
+
+import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
 
 
 
@@ -29,10 +33,15 @@ public class ForgeroSmithingInitializer implements ForgeroPreInitializationEntry
 		ModItems.registerModItems();
 		ModRecipes.registerRecipes();
 
-
-
 		ARRPGenerator.register(new MoldGenerator());
 
 		TemperatureHandler.register();
+
+		TooltipComponentCallback.EVENT.register(data -> {
+			if (data instanceof CrucibleTooltipData crucibleData) {
+				return new CrucibleTooltipComponent(crucibleData);
+			}
+			return null;
+		});
 	}
 }
