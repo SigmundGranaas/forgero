@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.smithing.networking.packet;
 
-import com.sigmundgranaas.forgero.smithing.block.entity.SmithingAnvilBlockEntity;
+import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
 
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;

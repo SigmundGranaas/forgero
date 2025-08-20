@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.smithing.block.entity;
+package com.sigmundgranaas.forgero.smithing.block.entity.custom;
 
 import static com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities.MOLD;
 

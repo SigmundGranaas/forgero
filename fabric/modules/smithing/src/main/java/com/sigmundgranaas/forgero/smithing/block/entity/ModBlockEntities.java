@@ -6,6 +6,11 @@ import java.util.List;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.smithing.block.ModBlocks;
 
+import com.sigmundgranaas.forgero.smithing.block.entity.custom.BellowsBlockEntity;
+import com.sigmundgranaas.forgero.smithing.block.entity.custom.HearthBlockEntity;
+import com.sigmundgranaas.forgero.smithing.block.entity.custom.MoldBlockEntity;
+import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.registry.Registries;

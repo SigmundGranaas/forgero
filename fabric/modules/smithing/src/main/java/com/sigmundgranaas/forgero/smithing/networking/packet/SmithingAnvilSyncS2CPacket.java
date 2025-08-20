@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.smithing.networking.packet;
 
-import com.sigmundgranaas.forgero.smithing.block.entity.SmithingAnvilBlockEntity;
+import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.client.MinecraftClient;

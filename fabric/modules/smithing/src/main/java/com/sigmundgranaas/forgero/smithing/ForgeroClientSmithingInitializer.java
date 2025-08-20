@@ -14,6 +14,7 @@ import com.sigmundgranaas.forgero.fabric.resources.FileService;
 import com.sigmundgranaas.forgero.smithing.block.ModBlocks;
 import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
 import com.sigmundgranaas.forgero.smithing.block.renderer.BellowsBlockEntityRenderer;
+import com.sigmundgranaas.forgero.smithing.block.renderer.HearthBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.block.renderer.MoldBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.block.renderer.SmithingAnvilBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.model.BellowsModel;
@@ -57,11 +58,8 @@ public class ForgeroClientSmithingInitializer implements ClientModInitializer {
 
 		// Register block entity renderers
 		BlockEntityRendererRegistry.register(ModBlockEntities.SMITHING_ANVIL, SmithingAnvilBlockEntityRenderer::new);
-
-		// Only register MOLD renderer if the BlockEntityType is not null
-		if (ModBlockEntities.MOLD != null) {
-		    BlockEntityRendererRegistry.register(ModBlockEntities.MOLD, MoldBlockEntityRenderer::new);
-		}
+		BlockEntityRendererRegistry.register(ModBlockEntities.HEARTH, HearthBlockEntityRenderer::new);
+		BlockEntityRendererRegistry.register(ModBlockEntities.MOLD, MoldBlockEntityRenderer::new);
 
 		BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.HEARTH, RenderLayer.getCutout());
 

@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.smithing.block.entity;
+package com.sigmundgranaas.forgero.smithing.block.entity.custom;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
 import com.sigmundgranaas.forgero.smithing.block.renderer.SmithingAnvilBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider;

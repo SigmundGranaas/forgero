@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.smithing.block.custom;
 
-import com.sigmundgranaas.forgero.smithing.block.entity.SmithingAnvilBlockEntity;
+import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

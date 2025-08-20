@@ -1,5 +1,6 @@
-package com.sigmundgranaas.forgero.smithing.block.entity;
+package com.sigmundgranaas.forgero.smithing.block.entity.custom;
 
+import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;

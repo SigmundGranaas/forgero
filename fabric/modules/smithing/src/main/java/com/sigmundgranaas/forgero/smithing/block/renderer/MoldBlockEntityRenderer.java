@@ -11,7 +11,7 @@ import com.sigmundgranaas.forgero.core.texture.V2.TemplateTexture;
 import com.sigmundgranaas.forgero.core.texture.V2.recolor.DefaultRecolorStrategy;
 import com.sigmundgranaas.forgero.smithing.ForgeroClientSmithingInitializer;
 import com.sigmundgranaas.forgero.smithing.block.custom.MoldBlock;
-import com.sigmundgranaas.forgero.smithing.block.entity.MoldBlockEntity;
+import com.sigmundgranaas.forgero.smithing.block.entity.custom.MoldBlockEntity;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;

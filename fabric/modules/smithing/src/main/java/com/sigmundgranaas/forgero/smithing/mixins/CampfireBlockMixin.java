@@ -22,6 +22,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+
 @Mixin(CampfireBlock.class)
 public class CampfireBlockMixin {
 
@@ -33,13 +34,9 @@ public class CampfireBlockMixin {
 
 		if (itemStack.getItem() == Items.IRON_BARS) {
 			if (!world.isClient) {
-				// Get the old block entity data before replacing (if you need to preserve anything)
 				BlockEntity oldBlockEntity = world.getBlockEntity(pos);
-
-				// Remove the old block entity first
 				world.removeBlockEntity(pos);
 
-				// Replace with your custom block
 				BlockState newState = ModBlocks.HEARTH.getDefaultState()
 						.with(HearthBlock.FACING, state.get(CampfireBlock.FACING))
 						.with(HearthBlock.LIT, state.get(CampfireBlock.LIT))
@@ -48,8 +45,7 @@ public class CampfireBlockMixin {
 
 				world.setBlockState(pos, newState, Block.NOTIFY_ALL);
 
-				// Create and set the new block entity
-				world.setBlockState(pos, newState, Block.NOTIFY_ALL);
+				// Optionally transfer data from oldBlockEntity to new HearthBlockEntity here
 
 				if (!player.getAbilities().creativeMode) {
 					itemStack.decrement(1);

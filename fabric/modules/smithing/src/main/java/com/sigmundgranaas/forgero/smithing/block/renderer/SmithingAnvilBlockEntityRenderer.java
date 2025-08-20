@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil;
-import com.sigmundgranaas.forgero.smithing.block.entity.SmithingAnvilBlockEntity;
+import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
 import com.sigmundgranaas.forgero.smithing.util.BoundingBoxUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,8 +22,6 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;

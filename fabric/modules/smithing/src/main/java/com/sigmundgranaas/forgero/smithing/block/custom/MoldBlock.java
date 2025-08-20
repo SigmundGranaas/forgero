@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.smithing.block.custom;
 
 import static com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities.MOLD;
 
-import com.sigmundgranaas.forgero.smithing.block.entity.MoldBlockEntity;
+import com.sigmundgranaas.forgero.smithing.block.entity.custom.MoldBlockEntity;
 import com.sigmundgranaas.forgero.smithing.item.custom.CrucibleItem;
 import com.sigmundgranaas.forgero.smithing.recipe.MetalMoldRecipe;
 import org.jetbrains.annotations.NotNull;

@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.smithing.block.renderer;
 
-import com.sigmundgranaas.forgero.smithing.block.entity.BellowsBlockEntity;
+import com.sigmundgranaas.forgero.smithing.block.entity.custom.BellowsBlockEntity;
 import com.sigmundgranaas.forgero.smithing.model.BellowsModel;
 
 import net.minecraft.client.render.RenderLayer;
