@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.smithing.block.renderer;
 
-import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -8,7 +7,6 @@ import java.util.WeakHashMap;
 import com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil;
 import com.sigmundgranaas.forgero.smithing.block.entity.SmithingAnvilBlockEntity;
 import com.sigmundgranaas.forgero.smithing.util.BoundingBoxUtil;
-import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -105,7 +103,7 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 
 		renderMarker(matrices, vertexConsumers, entity);
 		if (MinecraftClient.getInstance().options.debugEnabled) {
-			renderDebugElements(entity, matrices, vertexConsumers, itemStack);
+
 		}
 
 		// Step 6: Rotate the item to lay flat on the anvil.
@@ -149,73 +147,6 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 			matrices.pop();
 		}
 	}
-
-	private void renderDebugElements(SmithingAnvilBlockEntity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, ItemStack itemStack) {
-		matrices.push();
-		// The current matrix stack is set up such that XZ is the horizontal plane, and Y points up.
-
-		// Render mouse hover position
-		renderMouseHoverMarker(entity, matrices, vertexConsumers);
-
-		// Render valid pixels of the texture
-		List<java.awt.Point> validPixels = validPixelsCache.computeIfAbsent(itemStack, stack -> {
-			BufferedImage image = RuntimeModelUtil.getFirstQuadTextureImage(stack, MinecraftClient.getInstance());
-			return image != null ? boundingBoxUtil.collectValidPixels(image) : List.of();
-		});
-
-		if (!validPixels.isEmpty()) {
-			VertexConsumer quadConsumer = vertexConsumers.getBuffer(RenderLayer.getDebugQuads());
-			float pixelSize = 1f / 16f; // Each pixel represents a 1/16th block unit square
-			float pixelYOffset = MARKER_RENDER_OFFSET_Y; // Use the consistent offset for filled pixels
-
-			for (java.awt.Point p : validPixels) {
-				// Convert pixel coordinates (0-15) to item local coordinates (-0.5 to 0.5)
-				float px_local = (float) p.x / 16.0f - 0.5f;
-				float pz_local = (float) p.y / 16.0f - 0.5f; // Image Y is block Z
-
-				// Draw a small quad for each pixel
-				WorldRenderer.drawBox(
-						matrices, quadConsumer,
-						px_local, pixelYOffset, pz_local, px_local + pixelSize, pixelYOffset, pz_local + pixelSize,
-						0.0f, 0.8f, 0.0f, 0.5f // Green color for filled pixels (with transparency)
-				);
-			}
-		}
-
-		matrices.pop();
-	}
-
-	private void renderMouseHoverMarker(SmithingAnvilBlockEntity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
-		HitResult crosshairTarget = MinecraftClient.getInstance().crosshairTarget;
-		// Ensure it's a block hit and on *this* anvil block
-		if (crosshairTarget == null || crosshairTarget.getType() != HitResult.Type.BLOCK || !entity.getPos().equals(((BlockHitResult) crosshairTarget).getBlockPos())) {
-			return;
-		}
-		BlockHitResult blockHit = (BlockHitResult) crosshairTarget;
-
-		// Get item's texture offset
-		int[] offset = itemTextureOffsetCache.computeIfAbsent(entity.getInventory().getStack(0), SmithingAnvilBlockEntity.Positioning::getItemTextureOffset);
-		Vec2f itemTextureOffset = new Vec2f(offset[0] / 16.0f, offset[1] / 16.0f);
-
-		// Convert world hit position to the item's local coordinate system (-0.5 to 0.5 range)
-		// This is the core transformation.
-		Vec2f localHit = SmithingAnvilBlockEntity.Positioning.worldHitToItemLocal(blockHit, entity.getCachedState(), itemTextureOffset);
-
-		matrices.push();
-		// Translate to the calculated local hit position.
-		matrices.translate(localHit.x, MARKER_RENDER_OFFSET_Y, localHit.y); // Use the consistent offset.
-
-		// Draw a small red box at the mouse position
-		float markerBoxSize = 1.0f / 32.0f; // Half a pixel in the unscaled 16x16 texture, which then gets scaled down
-		float markerBoxHalf = markerBoxSize / 2.0f;
-		WorldRenderer.drawBox(
-				matrices, vertexConsumers.getBuffer(RenderLayer.getLines()),
-				-markerBoxHalf, 0, -markerBoxHalf, markerBoxHalf, 0, markerBoxHalf,
-				1.0f, 0.0f, 0.0f, 1.0f // Red color for mouse hover marker
-		);
-		matrices.pop();
-	}
-
 
 	private int getLightLevel(World world, BlockPos pos) {
 		if (world == null) {
