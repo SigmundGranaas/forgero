@@ -19,6 +19,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 
 import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 
 
 
@@ -29,8 +30,9 @@ public class ForgeroSmithingInitializer implements ForgeroPreInitializationEntry
 	public void onPreInitialization() {
 		ModBlocks.registerModBlocks();
 		ModBlockEntities.registerBlockEntities();
-		ModItemGroups.registerItemGroups();
 		ModItems.registerModItems();
+		ItemGroupEvents.modifyEntriesEvent(ModItemGroups.SMITHING_GROUP_KEY)
+				.register(ModItems::addItemsToSmithingGroup);
 		ModRecipes.registerRecipes();
 
 		ARRPGenerator.register(new MoldGenerator());
