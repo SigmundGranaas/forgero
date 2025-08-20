@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.smithing.recipe;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.sigmundgranaas.forgero.smithing.block.inventory.BloomeryInventory;
-import com.sigmundgranaas.forgero.smithing.item.custom.LiquidMetalCrucibleItem;
+import com.sigmundgranaas.forgero.smithing.item.custom.CrucibleItem;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
@@ -36,11 +36,11 @@ public class MetalSmeltingRecipe implements Recipe<BloomeryInventory> {
 		ItemStack crucible = inventory.getCrucible();
 		ItemStack ingredient = inventory.getIngredient();
 
-		if (!(crucible.getItem() instanceof LiquidMetalCrucibleItem)) {
+		if (!(crucible.getItem() instanceof CrucibleItem)) {
 			return false;
 		}
 
-		LiquidMetalCrucibleItem crucibleItem = (LiquidMetalCrucibleItem) crucible.getItem();
+		CrucibleItem crucibleItem = (CrucibleItem) crucible.getItem();
 		Identifier currentLiquid = crucibleItem.getLiquidType(crucible);
 		boolean ingredientMatches = this.ingredient.test(ingredient);
 		boolean liquidMatches = currentLiquid == null || currentLiquid.equals(this.liquid);
@@ -52,7 +52,7 @@ public class MetalSmeltingRecipe implements Recipe<BloomeryInventory> {
 	@Override
 	public ItemStack craft(BloomeryInventory inventory, DynamicRegistryManager registryManager) {
 		ItemStack crucible = inventory.getCrucible().copy();
-		LiquidMetalCrucibleItem crucibleItem = (LiquidMetalCrucibleItem) crucible.getItem();
+		CrucibleItem crucibleItem = (CrucibleItem) crucible.getItem();
 		crucibleItem.addLiquid(crucible, this.liquid, this.liquidAmount);
 		return crucible;
 	}

@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.smithing.recipe;
 
 import com.google.gson.JsonObject;
-import com.sigmundgranaas.forgero.smithing.item.custom.LiquidMetalCrucibleItem;
+import com.sigmundgranaas.forgero.smithing.item.custom.CrucibleItem;
 
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
@@ -50,7 +50,7 @@ public class MetalMoldRecipe implements Recipe<SimpleInventory> {
 		}
 
 		// Check if crucible is valid and contains the right liquid
-		if (!(crucible.getItem() instanceof LiquidMetalCrucibleItem crucibleItem)) {
+		if (!(crucible.getItem() instanceof CrucibleItem crucibleItem)) {
 			return false;
 		}
 

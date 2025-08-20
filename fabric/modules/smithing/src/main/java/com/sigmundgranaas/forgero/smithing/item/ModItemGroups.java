@@ -22,7 +22,6 @@ public class ModItemGroups {
 						entries.add(ModItems.SMITHING_HAMMER);
 						entries.add(ModItems.CLAY_CRUCIBLE);
 						entries.add(ModItems.CRUCIBLE);
-						entries.add(ModItems.CRUCIBLE2);
 
 
 				 		entries.add(ModBlocks.SMITHING_ANVIL);

@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.smithing.block.custom;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.BloomeryExtensionBlockEntity;
 import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
-import com.sigmundgranaas.forgero.smithing.item.custom.LiquidMetalCrucibleItem;
+import com.sigmundgranaas.forgero.smithing.item.custom.CrucibleItem;
 import com.sigmundgranaas.forgero.smithing.fuel.FuelType;
 import com.sigmundgranaas.forgero.smithing.block.entity.BloomeryBlockEntity;
 import org.jetbrains.annotations.Nullable;
@@ -186,7 +186,7 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 					}
 				}
 			}
-			if ((stack.getItem() instanceof LiquidMetalCrucibleItem) && entity.getStack(BloomeryExtensionBlockEntity.CRUCIBLE_SLOT).isEmpty()) {
+			if ((stack.getItem() instanceof CrucibleItem) && entity.getStack(BloomeryExtensionBlockEntity.CRUCIBLE_SLOT).isEmpty()) {
 				// Use custom crucible stack with CustomModelData = 1
 				entity.setStack(BloomeryExtensionBlockEntity.CRUCIBLE_SLOT, entity.createCustomCrucibleStack());
 				return stack.copyWithCount(stack.getCount() - 1);
@@ -196,7 +196,7 @@ public class BloomeryExtensionBlock extends BlockWithEntity {
 		}
 
 		// If all slots are empty, allow any valid item, but only add one at a time
-		if (stack.getItem() instanceof LiquidMetalCrucibleItem && entity.getStack(BloomeryExtensionBlockEntity.CRUCIBLE_SLOT).isEmpty()) {
+		if (stack.getItem() instanceof CrucibleItem && entity.getStack(BloomeryExtensionBlockEntity.CRUCIBLE_SLOT).isEmpty()) {
 			// Use custom crucible stack with CustomModelData = 1
 			entity.setStack(BloomeryExtensionBlockEntity.CRUCIBLE_SLOT, entity.createCustomCrucibleStack());
 			return stack.copyWithCount(stack.getCount() - 1);

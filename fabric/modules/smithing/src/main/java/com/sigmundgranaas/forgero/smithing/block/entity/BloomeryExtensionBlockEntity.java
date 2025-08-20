@@ -4,7 +4,7 @@ package com.sigmundgranaas.forgero.smithing.block.entity;
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.smithing.block.inventory.BloomeryInventory;
 import com.sigmundgranaas.forgero.smithing.item.ModItems;
-import com.sigmundgranaas.forgero.smithing.item.custom.LiquidMetalCrucibleItem;
+import com.sigmundgranaas.forgero.smithing.item.custom.CrucibleItem;
 import com.sigmundgranaas.forgero.smithing.recipe.MetalSmeltingRecipe;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 import com.sigmundgranaas.forgero.smithing.util.ToolPartTypeUtils;
@@ -269,7 +269,7 @@ public class BloomeryExtensionBlockEntity extends BlockEntity {
 			return false;
 		}
 
-		if (!(crucible.getItem() instanceof LiquidMetalCrucibleItem)) {
+		if (!(crucible.getItem() instanceof CrucibleItem)) {
 			return false;
 		}
 
@@ -293,7 +293,7 @@ public class BloomeryExtensionBlockEntity extends BlockEntity {
 		ItemStack crucible = getStack(CRUCIBLE_SLOT);
 		ItemStack ore = getStack(ORE_SLOT);
 
-		if (crucible.isEmpty() || ore.isEmpty() || !(crucible.getItem() instanceof LiquidMetalCrucibleItem)) {
+		if (crucible.isEmpty() || ore.isEmpty() || !(crucible.getItem() instanceof CrucibleItem)) {
 			return;
 		}
 
@@ -305,7 +305,7 @@ public class BloomeryExtensionBlockEntity extends BlockEntity {
 		var recipeOpt = world.getRecipeManager().getFirstMatch(MetalSmeltingRecipe.Type.INSTANCE, recipeInventory, world);
 		if (recipeOpt.isPresent()) {
 			MetalSmeltingRecipe recipe = recipeOpt.get();
-			LiquidMetalCrucibleItem crucibleItem = (LiquidMetalCrucibleItem) crucible.getItem();
+			CrucibleItem crucibleItem = (CrucibleItem) crucible.getItem();
 
 			// Add liquid to crucible
 			crucibleItem.addLiquid(crucible, recipe.getLiquid(), recipe.getLiquidAmount());

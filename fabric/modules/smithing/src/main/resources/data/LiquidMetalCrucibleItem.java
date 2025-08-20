@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.smithing.item.custom;
+package data;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class LiquidMetalCrucibleItem extends Item {
+public class CrucibleItem extends Item {
 	private static final String LIQUID_TYPE_KEY = "LiquidType";
 	private static final String LIQUID_AMOUNT_KEY = "LiquidAmount";
 	private static final int MAX_CAPACITY = 1000; // mB (millibuckets)
