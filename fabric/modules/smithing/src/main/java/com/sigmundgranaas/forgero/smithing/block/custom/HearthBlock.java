@@ -4,6 +4,7 @@ import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.HearthBlockEntity;
 import com.sigmundgranaas.forgero.smithing.item.custom.CrucibleItem;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CampfireBlock;
 import net.minecraft.block.Waterloggable;
@@ -13,6 +14,9 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -21,13 +25,21 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
 public class HearthBlock extends CampfireBlock implements Waterloggable {
+	public static final BooleanProperty CRUCIBLE_PRESENT = BooleanProperty.of("crucible_present");
+
 	public HearthBlock(boolean emitsParticles, int fireDamage, Settings settings) {
 		super(emitsParticles, fireDamage, settings);
 		this.setDefaultState(this.getStateManager().getDefaultState()
 			.with(FACING, Direction.NORTH)
 			.with(LIT, true)
-			.with(SIGNAL_FIRE, false)
+			.with(CRUCIBLE_PRESENT, false)
 			.with(WATERLOGGED, false));
+	}
+
+	@Override
+	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+		super.appendProperties(builder);
+		builder.add(CRUCIBLE_PRESENT);
 	}
 
 	@Override
@@ -64,6 +76,9 @@ public class HearthBlock extends CampfireBlock implements Waterloggable {
 
 		// Block extraction while smelting
 		if (wantsExtract && hearth.isSmelting()) {
+			if (world.isClient) {
+				player.sendMessage(Text.literal("That's not done yet!"), true);
+			}
 			return ActionResult.SUCCESS; // consume without action
 		}
 
@@ -79,6 +94,8 @@ public class HearthBlock extends CampfireBlock implements Waterloggable {
 				player.giveItemStack(extracted);
 				hearth.setStack(0, ItemStack.EMPTY);
 				hearth.markDirtyAndSync();
+				// Update block state: crucible removed
+				world.setBlockState(pos, state.with(CRUCIBLE_PRESENT, false), 3);
 			}
 			return ActionResult.SUCCESS;
 		}
@@ -93,8 +110,8 @@ public class HearthBlock extends CampfireBlock implements Waterloggable {
 				hearth.setStack(0, crucibleStack);
 				held.decrement(1);
 				hearth.markDirtyAndSync();
-				// Optionally start smelting immediately (server will also handle next tick)
-				// hearth.tryStartSmelting(); // if made public
+				// Update block state: crucible placed
+				world.setBlockState(pos, state.with(CRUCIBLE_PRESENT, true), 3);
 			}
 			return ActionResult.SUCCESS;
 		}

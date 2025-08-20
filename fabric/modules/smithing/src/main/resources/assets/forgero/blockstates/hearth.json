@@ -1,24 +1,27 @@
 {
   "variants": {
-    "facing=north,lit=true,signal_fire=false": { "model": "forgero:block/hearth" },
-    "facing=south,lit=true,signal_fire=false": { "model": "forgero:block/hearth", "y": 180 },
-    "facing=west,lit=true,signal_fire=false": { "model": "forgero:block/hearth", "y": 270 },
-    "facing=east,lit=true,signal_fire=false": { "model": "forgero:block/hearth", "y": 90 },
 
-    "facing=north,lit=false,signal_fire=false": { "model": "forgero:block/hearth_unlit" },
-    "facing=south,lit=false,signal_fire=false": { "model": "forgero:block/hearth_unlit", "y": 180 },
-    "facing=west,lit=false,signal_fire=false": { "model": "forgero:block/hearth_unlit", "y": 270 },
-    "facing=east,lit=false,signal_fire=false": { "model": "forgero:block/hearth_unlit", "y": 90 },
+    "facing=north,lit=true,crucible_present=true": { "model": "forgero:block/hearth_crucible" },
+    "facing=south,lit=true,crucible_present=true": { "model": "forgero:block/hearth_crucible", "y": 180 },
+    "facing=west,lit=true,crucible_present=true": { "model": "forgero:block/hearth_crucible", "y": 270 },
+    "facing=east,lit=true,crucible_present=true": { "model": "forgero:block/hearth_crucible", "y": 90 },
 
-    "facing=north,lit=true,signal_fire=true": { "model": "forgero:block/hearth_signal" },
-    "facing=south,lit=true,signal_fire=true": { "model": "forgero:block/hearth_signal", "y": 180 },
-    "facing=west,lit=true,signal_fire=true": { "model": "forgero:block/hearth_signal", "y": 270 },
-    "facing=east,lit=true,signal_fire=true": { "model": "forgero:block/hearth_signal", "y": 90 },
 
-    "facing=north,lit=false,signal_fire=true": { "model": "forgero:block/hearth_unlit" },
-    "facing=south,lit=false,signal_fire=true": { "model": "forgero:block/hearth_unlit", "y": 180 },
-    "facing=west,lit=false,signal_fire=true": { "model": "forgero:block/hearth_unlit", "y": 270 },
-    "facing=east,lit=false,signal_fire=true": { "model": "forgero:block/hearth_unlit", "y": 90 }
+    "facing=north,lit=false,crucible_present=true": { "model": "forgero:block/hearth_unlit" },
+    "facing=south,lit=false,crucible_present=true": { "model": "forgero:block/hearth_unlit", "y": 180 },
+    "facing=west,lit=false,crucible_present=true": { "model": "forgero:block/hearth_unlit", "y": 270 },
+    "facing=east,lit=false,crucible_present=true": { "model": "forgero:block/hearth_unlit", "y": 90 },
+
+
+    "facing=north,lit=true,crucible_present=false": { "model": "forgero:block/hearth" },
+    "facing=south,lit=true,crucible_present=false": { "model": "forgero:block/hearth", "y": 180 },
+    "facing=west,lit=true,crucible_present=false": { "model": "forgero:block/hearth", "y": 270 },
+    "facing=east,lit=true,crucible_present=false": { "model": "forgero:block/hearth", "y": 90 },
+
+
+    "facing=north,lit=false,crucible_present=false": { "model": "forgero:block/hearth_unlit" },
+    "facing=south,lit=false,crucible_present=false": { "model": "forgero:block/hearth_unlit", "y": 180 },
+    "facing=west,lit=false,crucible_present=false": { "model": "forgero:block/hearth_unlit", "y": 270 },
+    "facing=east,lit=false,crucible_present=false": { "model": "forgero:block/hearth_unlit", "y": 90 }
   }
 }
-

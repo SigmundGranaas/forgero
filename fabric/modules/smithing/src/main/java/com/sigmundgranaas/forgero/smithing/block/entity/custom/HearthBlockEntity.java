@@ -241,6 +241,15 @@ public class HearthBlockEntity extends BlockEntity implements Inventory {
 			// Finish: craft and apply result
 			blockEntity.finishSmelting();
 		}
+
+		// Optionally sync CRUCIBLE_PRESENT if crucible is added/removed by other means
+		if (!world.isClient) {
+			boolean cruciblePresent = !blockEntity.getStack(CRUCIBLE_SLOT).isEmpty();
+			if (state.contains(com.sigmundgranaas.forgero.smithing.block.custom.HearthBlock.CRUCIBLE_PRESENT)
+				&& state.get(com.sigmundgranaas.forgero.smithing.block.custom.HearthBlock.CRUCIBLE_PRESENT) != cruciblePresent) {
+				world.setBlockState(pos, state.with(com.sigmundgranaas.forgero.smithing.block.custom.HearthBlock.CRUCIBLE_PRESENT, cruciblePresent), 3);
+			}
+		}
 	}
 
 	private void tryStartSmelting() {
