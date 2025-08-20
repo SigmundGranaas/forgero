@@ -21,6 +21,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ClickType;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
 
@@ -328,5 +330,42 @@ public class CrucibleItem extends BundleItem {
 	private int getStoredCount(ItemStack stack) {
 		NbtCompound nbt = stack.getNbt();
 		return nbt != null ? nbt.getInt(COUNT_KEY) : 0;
+	}
+
+	@Override
+	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+		ItemStack crucible = user.getStackInHand(hand);
+
+		// If we have liquid or no items, let other handlers decide.
+		if (hasLiquid(crucible) || getStoredCount(crucible) <= 0) {
+			return TypedActionResult.pass(crucible);
+		}
+
+		if (!world.isClient) {
+			NbtCompound nbt = crucible.getOrCreateNbt();
+			String storedId = nbt.getString(STORED_ITEM_KEY);
+			if (!storedId.isEmpty()) {
+				int remaining = nbt.getInt(COUNT_KEY);
+				var item = Registries.ITEM.get(new Identifier(storedId));
+
+				while (remaining > 0) {
+					int toMove = Math.min(item.getMaxCount(), remaining);
+					ItemStack stackToGive = new ItemStack(item, toMove);
+
+					boolean fullyInserted = user.getInventory().insertStack(stackToGive);
+					if (!fullyInserted && !stackToGive.isEmpty()) {
+						user.dropItem(stackToGive, false);
+					}
+					remaining -= toMove;
+				}
+
+				// Clear crucible storage and UI preview
+				nbt.remove(STORED_ITEM_KEY);
+				nbt.putInt(COUNT_KEY, 0);
+				nbt.remove(VANILLA_ITEMS_KEY);
+			}
+		}
+
+		return TypedActionResult.success(crucible, world.isClient);
 	}
 }
