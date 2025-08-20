@@ -17,13 +17,11 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 public class ModBlockEntities {
 	public static BlockEntityType<SmithingAnvilBlockEntity> SMITHING_ANVIL;
 
-	public static BlockEntityType<BloomeryBlockEntity> BLOOMERY;
-
-	public static BlockEntityType<BloomeryExtensionBlockEntity> BLOOMERY_EXTENSION;
-
 	public static BlockEntityType<BellowsBlockEntity> BELLOWS;
 
 	public static BlockEntityType<MoldBlockEntity> MOLD;
+
+	public static BlockEntityType<HearthBlockEntity> HEARTH;
 
 	// Track all mold blocks to potentially recreate the block entity type
 	private static final List<Block> moldBlocks = new ArrayList<>();
@@ -34,20 +32,15 @@ public class ModBlockEntities {
 				FabricBlockEntityTypeBuilder.create(SmithingAnvilBlockEntity::new,
 						ModBlocks.SMITHING_ANVIL).build(null));
 
-		BLOOMERY = Registry.register(Registries.BLOCK_ENTITY_TYPE,
-				new Identifier(Forgero.NAMESPACE, "bloomery"),
-				FabricBlockEntityTypeBuilder.create(BloomeryBlockEntity::new,
-						ModBlocks.BLOOMERY).build(null));
-
-		BLOOMERY_EXTENSION = Registry.register(Registries.BLOCK_ENTITY_TYPE,
-				new Identifier(Forgero.NAMESPACE, "bloomery_extension"),
-				FabricBlockEntityTypeBuilder.create(BloomeryExtensionBlockEntity::new,
-						ModBlocks.BLOOMERY_EXTENSION).build(null));
-
 		BELLOWS = Registry.register(Registries.BLOCK_ENTITY_TYPE,
 				new Identifier(Forgero.NAMESPACE, "bellows"),
 				FabricBlockEntityTypeBuilder.create(BellowsBlockEntity::new,
 						ModBlocks.BELLOWS).build(null));
+
+		HEARTH = Registry.register(Registries.BLOCK_ENTITY_TYPE,
+				new Identifier(Forgero.NAMESPACE, "hearth"),
+				FabricBlockEntityTypeBuilder.create(HearthBlockEntity::new,
+						ModBlocks.HEARTH).build(null));
 
 		// Initialize MOLD BlockEntityType with any already registered mold blocks
 		rebuildMoldBlockEntityType();

@@ -99,11 +99,11 @@ public class MoldBlock extends BlockWithEntity {
 				MetalMoldRecipe recipe = findRecipe(world, heldItem);
 				if (recipe != null) {
 					// Pour liquid into mold
-					if (crucibleItem.removeLiquid(heldItem, recipe.getLiquidAmount())) {
+					if (crucibleItem.removeLiquid(heldItem, recipe.liquidAmount())) {
 						moldEntity.pourLiquid(
-								recipe.getLiquid(),
-								recipe.getLiquidAmount(),
-								recipe.getCoolingTime(),
+								recipe.liquid(),
+								recipe.liquidAmount(),
+								recipe.coolingTime(),
 								recipe.getOutput(world.getRegistryManager())
 						);
 

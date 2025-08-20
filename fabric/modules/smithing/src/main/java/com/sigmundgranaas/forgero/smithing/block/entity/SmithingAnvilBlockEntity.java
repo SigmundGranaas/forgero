@@ -1046,4 +1046,13 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		this.ingotCrafting = ingotCrafting;
 		this.plannedProductId = plannedProductId;
 	}
+
+	public void onIngotUsed(PlayerEntity player, ItemStack ingot) {
+		// Add the ingot to the anvil's inventory
+		ItemStack toPlace = ingot.copy();
+		toPlace.setCount(1);
+		getInventory().setStack(0, toPlace);
+		markDirty();
+		player.sendMessage(Text.literal("Ingot used on anvil!"), true);
+	}
 }

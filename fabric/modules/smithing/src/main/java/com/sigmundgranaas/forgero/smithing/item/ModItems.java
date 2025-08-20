@@ -1,13 +1,13 @@
 package com.sigmundgranaas.forgero.smithing.item;
 
+import static com.sigmundgranaas.forgero.smithing.block.ModBlocks.HEARTH;
+
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.smithing.item.custom.CrucibleItem;
 
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -29,6 +29,8 @@ public class ModItems {
 		entries.add(SMITHING_TONGS);
 		entries.add(CLAY_CRUCIBLE);
 		entries.add(CRUCIBLE);
+
+		entries.add(HEARTH);
 	}
 
 	public static void registerModItems() {

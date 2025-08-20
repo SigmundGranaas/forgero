@@ -1,9 +1,8 @@
 package com.sigmundgranaas.forgero.smithing.block;
 
 import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.smithing.block.custom.BloomeryBlock;
-import com.sigmundgranaas.forgero.smithing.block.custom.BloomeryExtensionBlock;
 import com.sigmundgranaas.forgero.smithing.block.custom.BellowsBlock;
+import com.sigmundgranaas.forgero.smithing.block.custom.HearthBlock;
 import com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil;
 
 import net.minecraft.block.Block;
@@ -21,14 +20,11 @@ public class ModBlocks {
 	public static final Block SMITHING_ANVIL = registerBlock("smithing_anvil",
 			new SmithingAnvil(FabricBlockSettings.copyOf(Blocks.ANVIL)));
 
-	public static final Block BLOOMERY = registerBlock("bloomery",
-			new BloomeryBlock(FabricBlockSettings.copyOf(Blocks.FURNACE)));
-
-	public static final Block BLOOMERY_EXTENSION = registerBlock("bloomery_extension",
-			new BloomeryExtensionBlock(FabricBlockSettings.copyOf(Blocks.FURNACE)));
-
 	public static final Block BELLOWS = registerBlock("bellows",
 			new BellowsBlock(FabricBlockSettings.copyOf(Blocks.ACACIA_WOOD)));
+
+	public static final Block HEARTH = registerBlock("hearth",
+			new HearthBlock(true, 2, FabricBlockSettings.copyOf(Blocks.CAMPFIRE)));
 
 
 

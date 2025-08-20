@@ -23,9 +23,6 @@ public class ModItemGroups {
 					.build()
 	);
 
-	public static void registerItemGroups() {
-	}
-
 	public static final RegistryKey<ItemGroup> SMITHING_GROUP_KEY = RegistryKey.of(Registries.ITEM_GROUP.getKey(), new Identifier(Forgero.NAMESPACE, "smithing"));
 
 }

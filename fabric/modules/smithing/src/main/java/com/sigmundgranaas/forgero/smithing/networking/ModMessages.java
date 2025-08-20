@@ -1,14 +1,10 @@
 package com.sigmundgranaas.forgero.smithing.networking;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.smithing.block.entity.BloomeryExtensionBlockEntity;
 import com.sigmundgranaas.forgero.smithing.block.entity.SmithingAnvilBlockEntity;
-import com.sigmundgranaas.forgero.smithing.networking.packet.BloomeryExtensionSyncS2CPacket;
-import com.sigmundgranaas.forgero.smithing.networking.packet.SmithingAnvilSyncS2CPacket;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -21,35 +17,18 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-
 public class ModMessages {
 
     public static final Identifier ITEM_SYNC = new Identifier(Forgero.NAMESPACE, "item_sync");
     public static final Identifier OPEN_MOLD_SELECTION = new Identifier(Forgero.NAMESPACE, "open_mold_selection");
     public static final Identifier MOLD_SELECTED = new Identifier(Forgero.NAMESPACE, "mold_selected");
 
+
     // Register C2S on class load (server + client). Safe-guard with a flag to avoid duplicate registrations.
     private static volatile boolean C2S_REGISTERED = false;
     static {
         registerC2SPackets();
-    }
-
-    @Environment(EnvType.CLIENT)
-    public static void registerS2CPackets() {
-        ClientPlayNetworking.registerGlobalReceiver(ITEM_SYNC, SmithingAnvilSyncS2CPacket::receive);
-        ClientPlayNetworking.registerGlobalReceiver(BloomeryExtensionBlockEntity.SYNC_PACKET_ID, BloomeryExtensionSyncS2CPacket::receive);
-        ClientPlayNetworking.registerGlobalReceiver(OPEN_MOLD_SELECTION, (client, handler, buf, responseSender) -> {
-            BlockPos pos = buf.readBlockPos();
-            int count = buf.readInt();
-            List<Identifier> options = new ArrayList<>(count);
-            for (int i = 0; i < count; i++) {
-                options.add(buf.readIdentifier());
-            }
-            client.execute(() -> {
-                if (client.player == null) return;
-                client.setScreen(new SimpleMoldSelectionScreen(pos, options));
-            });
-        });
+        registerClientPackets();
     }
 
     public static void registerC2SPackets() {
@@ -65,6 +44,12 @@ public class ModMessages {
                     anvil.setPlannedProduct(selected);
                 }
             });
+        });
+    }
+
+    public static void registerClientPackets() {
+        ClientPlayNetworking.registerGlobalReceiver(ITEM_SYNC, (client, handler, buf, responseSender) -> {
+            // No-op handler for now. Add logic here if needed.
         });
     }
 

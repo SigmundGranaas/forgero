@@ -22,14 +22,13 @@ import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 
 
-
 public class ForgeroSmithingInitializer implements ForgeroPreInitializationEntryPoint {
 	public static final RegistryKey<ItemGroup> FORGERO_SMITHING_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(Forgero.NAMESPACE, "smithing"));
 
 	@Override
 	public void onPreInitialization() {
-		ModBlocks.registerModBlocks();
 		ModBlockEntities.registerBlockEntities();
+		ModBlocks.registerModBlocks();
 		ModItems.registerModItems();
 		ItemGroupEvents.modifyEntriesEvent(ModItemGroups.SMITHING_GROUP_KEY)
 				.register(ModItems::addItemsToSmithingGroup);

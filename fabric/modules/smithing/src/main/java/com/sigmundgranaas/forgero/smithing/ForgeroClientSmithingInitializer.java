@@ -11,19 +11,19 @@ import javax.imageio.ImageIO;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.fabric.client.ForgeroClient;
 import com.sigmundgranaas.forgero.fabric.resources.FileService;
+import com.sigmundgranaas.forgero.smithing.block.ModBlocks;
 import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
 import com.sigmundgranaas.forgero.smithing.block.renderer.BellowsBlockEntityRenderer;
-import com.sigmundgranaas.forgero.smithing.block.renderer.BloomeryBlockEntityRenderer;
-import com.sigmundgranaas.forgero.smithing.block.renderer.BloomeryExtensionBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.block.renderer.MoldBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.block.renderer.SmithingAnvilBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.model.BellowsModel;
-import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider;
 
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 
@@ -56,19 +56,20 @@ public class ForgeroClientSmithingInitializer implements ClientModInitializer {
 		BlockEntityRendererFactories.register(ModBlockEntities.BELLOWS, BellowsBlockEntityRenderer::new);
 		EntityModelLayerRegistry.registerModelLayer(BellowsModel.LAYER_LOCATION, BellowsModel::getTexturedModelData);
 
-		        // Register block entity renderers
-		        BlockEntityRendererRegistry.register(ModBlockEntities.SMITHING_ANVIL, SmithingAnvilBlockEntityRenderer::new);
-		        BlockEntityRendererRegistry.register(ModBlockEntities.BLOOMERY, BloomeryBlockEntityRenderer::new);
-		        BlockEntityRendererRegistry.register(ModBlockEntities.BLOOMERY_EXTENSION, BloomeryExtensionBlockEntityRenderer::new);
+		// Register block entity renderers
+		BlockEntityRendererRegistry.register(ModBlockEntities.SMITHING_ANVIL, SmithingAnvilBlockEntityRenderer::new);
+
 		// Only register MOLD renderer if the BlockEntityType is not null
 		if (ModBlockEntities.MOLD != null) {
 		    BlockEntityRendererRegistry.register(ModBlockEntities.MOLD, MoldBlockEntityRenderer::new);
 		}
 
-        // Register network messages
-        ModMessages.registerS2CPackets();
-        
-        // Initialize and store the TextureService and TextureGenerator for smithing
+		BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.HEARTH, RenderLayer.getCutout());
+
+
+
+
+		// Initialize and store the TextureService and TextureGenerator for smithing
         var textureGenerator = com.sigmundgranaas.forgero.core.texture.V2.TextureGenerator.getInstance(new FileService(), ForgeroClient.PALETTE_REMAP);
         textureService = textureGenerator.getService();
         // Pass textureGenerator to MoldBlockEntityRenderer if needed (e.g., via static setter or context)

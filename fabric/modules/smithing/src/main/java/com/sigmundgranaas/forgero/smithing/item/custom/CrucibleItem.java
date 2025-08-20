@@ -23,6 +23,9 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
+
+//TODO fix duplicating right click throwing
+
 public class CrucibleItem extends BundleItem {
 	// Item storage constants
 	private static final String STORED_ITEM_KEY = "StoredItem";
