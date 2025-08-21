@@ -1,8 +1,11 @@
 package com.sigmundgranaas.forgero.smithing.block.entity.custom;
 
+import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.smithing.item.custom.CrucibleItem;
 import com.sigmundgranaas.forgero.smithing.networking.S2C.HeartBlockSyncS2CPacket;
 import com.sigmundgranaas.forgero.smithing.recipe.Custom.MetalSmeltingRecipe;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
+import com.sigmundgranaas.forgero.smithing.util.TemperatureItemUtil;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -217,20 +220,33 @@ public class HearthBlockEntity extends BlockEntity implements Inventory {
 			return;
 		}
 
-		// Server-side: drive smelting
+		// Server-side: drive smelting and heating
 		boolean lit = state.get(com.sigmundgranaas.forgero.smithing.block.custom.HearthBlock.LIT);
-		ItemStack crucible = blockEntity.getStack(CRUCIBLE_SLOT);
+		ItemStack slotStack = blockEntity.getStack(CRUCIBLE_SLOT);
 
-		// If we aren't smelting, try to start when conditions are met
+		// Heat up TemperatureItems if present and hearth is lit
+		if (lit && !slotStack.isEmpty() && slotStack.getItem() instanceof StateItem stateItem &&
+			TemperatureItemUtil.shouldApplyTemperature(stateItem.dynamicState(slotStack).type())) {
+			int temp = TemperatureUtils.getTemperature(slotStack);
+			int maxTemp = TemperatureUtils.getMaxTemp(slotStack);
+			int heatRate = 20; // Amount to heat per tick, adjust as needed
+			if (temp < maxTemp) {
+				TemperatureUtils.setTemperature(slotStack, Math.min(maxTemp, temp + heatRate));
+				blockEntity.markDirtyAndSync();
+			}
+			// Don't return; allow smelting logic for crucible below
+		}
+
+		// If we aren't smelting, try to start when conditions are met (only for CrucibleItem)
 		if (!blockEntity.smelting) {
-			if (lit && !crucible.isEmpty() && crucible.getItem() instanceof CrucibleItem) {
+			if (lit && !slotStack.isEmpty() && slotStack.getItem() instanceof CrucibleItem) {
 				blockEntity.tryStartSmelting();
 			}
 			return;
 		}
 
 		// If we are smelting, only progress while lit and crucible still present
-		if (!lit || crucible.isEmpty() || !(crucible.getItem() instanceof CrucibleItem)) {
+		if (!lit || slotStack.isEmpty() || !(slotStack.getItem() instanceof CrucibleItem)) {
 			// Pause smelting if unlit or crucible missing; do not reset to preserve progress while relighting
 			return;
 		}

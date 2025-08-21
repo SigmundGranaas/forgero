@@ -1,8 +1,10 @@
 package com.sigmundgranaas.forgero.smithing.block.custom;
 
+import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.HearthBlockEntity;
 import com.sigmundgranaas.forgero.smithing.item.custom.CrucibleItem;
+import com.sigmundgranaas.forgero.smithing.util.TemperatureItemUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -103,17 +105,26 @@ public class HearthBlock extends CampfireBlock implements Waterloggable {
 			return ActionResult.SUCCESS;
 		}
 
-		// Only allow CrucibleItem to be placed in the slot
+		// Allow CrucibleItem or TemperatureItem (StateItem with shouldApplyTemperature) to be placed in the slot
 		if (!held.isEmpty() && slot.isEmpty()) {
-			if (!(held.getItem() instanceof CrucibleItem)) {
+			boolean isCrucible = held.getItem() instanceof CrucibleItem;
+			boolean isTemperatureItem = held.getItem() instanceof StateItem stateItem &&
+				TemperatureItemUtil.shouldApplyTemperature(stateItem.dynamicState(held).type());
+			if (!(isCrucible || isTemperatureItem)) {
 				return ActionResult.PASS;
 			}
 			if (!world.isClient) {
-				ItemStack crucibleStack = hearth.createCustomCrucibleStack(held);
-				hearth.setStack(0, crucibleStack);
+				ItemStack stackToInsert;
+				if (isCrucible) {
+					stackToInsert = hearth.createCustomCrucibleStack(held);
+				} else {
+					stackToInsert = held.copy();
+					stackToInsert.setCount(1);
+				}
+				hearth.setStack(0, stackToInsert);
 				held.decrement(1);
 				hearth.markDirtyAndSync();
-				// Update block state: crucible placed
+				// Update block state: crucible placed (or temperature item, same visual)
 				world.setBlockState(pos, state.with(CRUCIBLE_PRESENT, true), 3);
 			}
 			return ActionResult.SUCCESS;
