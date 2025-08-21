@@ -19,13 +19,28 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 public class AnvilUseC2SPacket {
     public static void register() {
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
-            if (world.isClient && player.isSneaking()) {
-                if (world.getBlockState(hitResult.getBlockPos()).getBlock() == Blocks.ANVIL) {
-                    PacketByteBuf buf = PacketByteBufs.create();
-                    buf.writeBlockPos(hitResult.getBlockPos());
-                    buf.writeEnumConstant(hand);
-                    ClientPlayNetworking.send(ModMessages.ANVIL_SHIFT_USE, buf);
-                    return ActionResult.SUCCESS; // Prevent vanilla GUI
+            if (world.isClient && world.getBlockState(hitResult.getBlockPos()).getBlock() == Blocks.ANVIL) {
+                // Always allow pickup if hand is empty and anvil has item
+                boolean isSneaking = player.isSneaking();
+                boolean isHandEmpty = player.getStackInHand(hand).isEmpty();
+                BlockEntity entity = world.getBlockEntity(hitResult.getBlockPos());
+                if (entity instanceof SmithingAnvilBlockEntity anvilEntity) {
+                    ItemStack anvilItem = anvilEntity.getInventory().getStack(0);
+                    if (isHandEmpty && !anvilItem.isEmpty()) {
+                        PacketByteBuf buf = PacketByteBufs.create();
+                        buf.writeBlockPos(hitResult.getBlockPos());
+                        buf.writeEnumConstant(hand);
+                        ClientPlayNetworking.send(ModMessages.ANVIL_SHIFT_USE, buf);
+                        return ActionResult.SUCCESS;
+                    }
+                    // Only allow placing ingot if sneaking
+                    if (isSneaking) {
+                        PacketByteBuf buf = PacketByteBufs.create();
+                        buf.writeBlockPos(hitResult.getBlockPos());
+                        buf.writeEnumConstant(hand);
+                        ClientPlayNetworking.send(ModMessages.ANVIL_SHIFT_USE, buf);
+                        return ActionResult.SUCCESS;
+                    }
                 }
             }
             return ActionResult.PASS;
