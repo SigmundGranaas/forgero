@@ -41,7 +41,11 @@ public class AnvilUseC2SPacket {
                 if (entity instanceof SmithingAnvilBlockEntity anvilEntity) {
                     ItemStack stackInHand = player.getStackInHand(hand);
                     ItemStack anvilItem = anvilEntity.getInventory().getStack(0);
-                    if (anvilItem.isEmpty() && anvilEntity.isIngot(stackInHand)) {
+                    if (stackInHand.isEmpty() && !anvilItem.isEmpty()) {
+                        // Pick up item from anvil if hand is empty and anvil has item
+                        anvilEntity.tryPickupItem(player);
+                    } else if (anvilItem.isEmpty() && anvilEntity.isIngot(stackInHand)) {
+                        // Place ingot if anvil is empty and hand has ingot
                         anvilEntity.tryPlaceItem(player, hand);
                     }
                 }

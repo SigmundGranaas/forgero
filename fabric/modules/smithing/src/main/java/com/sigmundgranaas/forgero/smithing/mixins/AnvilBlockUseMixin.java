@@ -32,6 +32,10 @@ public abstract class AnvilBlockUseMixin {
 			CallbackInfoReturnable<ActionResult> cir
 	) {
 		if (world.getBlockEntity(pos) instanceof com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity smithingAnvilBlockEntity) {
+			if (smithingAnvilBlockEntity.isGuiBlocked(world)) {
+				cir.setReturnValue(ActionResult.SUCCESS);
+				return;
+			}
 			if (!smithingAnvilBlockEntity.getInventory().getStack(0).isEmpty()) {
 				// Block vanilla UI if item is present
 				cir.setReturnValue(ActionResult.SUCCESS);

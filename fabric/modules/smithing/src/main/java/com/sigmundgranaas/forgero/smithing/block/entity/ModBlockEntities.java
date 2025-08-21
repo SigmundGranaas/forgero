@@ -36,7 +36,8 @@ public class ModBlockEntities {
 		SMITHING_ANVIL = Registry.register(Registries.BLOCK_ENTITY_TYPE,
 				new Identifier(Forgero.NAMESPACE, "smithing_anvil"),
 				FabricBlockEntityTypeBuilder.create(SmithingAnvilBlockEntity::new,
-						ModBlocks.SMITHING_ANVIL, Blocks.ANVIL).build(null));
+						ModBlocks.SMITHING_ANVIL, Blocks.ANVIL)
+						.build(null));
 
 		BELLOWS = Registry.register(Registries.BLOCK_ENTITY_TYPE,
 				new Identifier(Forgero.NAMESPACE, "bellows"),

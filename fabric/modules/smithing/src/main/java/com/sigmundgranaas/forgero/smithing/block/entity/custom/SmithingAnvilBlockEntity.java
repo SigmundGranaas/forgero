@@ -54,6 +54,7 @@ import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.world.World;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -123,6 +124,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	// Tag for any mod-provided ingots (c:ingots). Fallback heuristics are used if tags are missing.
 	private static final TagKey<Item> INGOTS_TAG = TagKey.of(RegistryKeys.ITEM, new Identifier("c", "ingots"));
 
+	private long guiBlockCooldownUntil = 0;
+
 	public SmithingAnvilBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.SMITHING_ANVIL, pos, state);
 		this.markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
@@ -185,6 +188,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		return ActionResult.SUCCESS;
 	}
 
+	public boolean isGuiBlocked(World world) {
+		return world != null && world.getTime() < guiBlockCooldownUntil;
+	}
+
 	public ActionResult tryPickupItem(PlayerEntity player) {
 		if (world == null || world.isClient) {
 			return ActionResult.SUCCESS;
@@ -199,6 +206,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			plannedProductId = null;
 			markDirty();
 			resetMarkers();
+			guiBlockCooldownUntil = world.getTime() + 20; // Block GUI for 1 second
 		}
 		return ActionResult.SUCCESS;
 	}
@@ -527,6 +535,11 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	public void tick() {
 		if (world == null || world.isClient) {
 			return;
+		}
+
+		// --- Cooldown logic ---
+		if (guiBlockCooldownUntil > 0 && world.getTime() >= guiBlockCooldownUntil) {
+			guiBlockCooldownUntil = 0;
 		}
 
 		// --- Inventory cooling ---
