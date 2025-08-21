@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.smithing.temperature;
 
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
-import com.sigmundgranaas.forgero.smithing.util.ToolPartTypeUtils;
+import com.sigmundgranaas.forgero.smithing.util.TemperatureItemUtil;
 
 import net.minecraft.registry.Registries;
 
@@ -12,7 +12,7 @@ public class TemperatureColorProvider {
         Registries.ITEM.forEach(item -> {
             if (item instanceof StateItem stateItem) {
                 var type = stateItem.defaultState().type();
-                if (ToolPartTypeUtils.isToolPartType(type)) {
+                if (TemperatureItemUtil.shouldApplyTemperature(type)) {
                     ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
                         int temp = TemperatureUtils.getTemperature(stack);
                         int maxTemp = TemperatureUtils.getMaxTemp(stack); // You need to implement this method to get the metal's maxTemp

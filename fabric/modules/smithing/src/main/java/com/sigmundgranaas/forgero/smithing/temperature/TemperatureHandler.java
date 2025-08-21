@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.smithing.temperature;
 
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
-import com.sigmundgranaas.forgero.smithing.util.ToolPartTypeUtils;
+import com.sigmundgranaas.forgero.smithing.util.TemperatureItemUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +43,7 @@ public class TemperatureHandler {
                     continue;
                 }
                 var type = stateItem.dynamicState(stack).type();
-                if (!ToolPartTypeUtils.isToolPartType(type)) {
+                if (!TemperatureItemUtil.shouldApplyTemperature(type)) {
                     continue;
                 }
                 int temp = TemperatureUtils.getTemperature(stack);
@@ -82,7 +82,7 @@ public class TemperatureHandler {
             }
             var type = stateItem.dynamicState(stack).type();
             LOGGER.debug("Type for item {}: {}", stack.getItem().getTranslationKey(), type.typeName());
-            if (!ToolPartTypeUtils.isToolPartType(type)) {
+            if (!TemperatureItemUtil.shouldApplyTemperature(type)) {
                 LOGGER.debug("Skipped: Not a tool part head or tool part");
                 continue;
             }

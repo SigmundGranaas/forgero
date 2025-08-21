@@ -13,7 +13,7 @@ import com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 import com.sigmundgranaas.forgero.smithing.util.MinigamePositioningUtil;
 import com.sigmundgranaas.forgero.smithing.util.SchematicResultUtil;
-import com.sigmundgranaas.forgero.smithing.util.ToolPartTypeUtils;
+import com.sigmundgranaas.forgero.smithing.util.TemperatureItemUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
@@ -463,7 +463,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 						com.sigmundgranaas.forgero.core.condition.Conditional<?> conditional = (com.sigmundgranaas.forgero.core.condition.Conditional<?>) stateOpt.get();
 						if (state instanceof com.sigmundgranaas.forgero.core.state.Typed) {
 							com.sigmundgranaas.forgero.core.state.Typed typed = (com.sigmundgranaas.forgero.core.state.Typed) state;
-							if (ToolPartTypeUtils.isToolPartType(typed.type())) {
+							if (TemperatureItemUtil.shouldApplyTemperature(typed.type())) {
 								LOGGER.info("applySmithingResult: Toolpart found in newProduct: {}", newProduct);
 								int hits = getMarkerHitsCount();
 								java.util.List<com.sigmundgranaas.forgero.core.condition.NamedCondition> lootTable;
