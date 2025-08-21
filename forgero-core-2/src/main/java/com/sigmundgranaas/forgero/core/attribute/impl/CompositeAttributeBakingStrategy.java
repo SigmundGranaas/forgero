@@ -16,15 +16,21 @@ import java.util.stream.Stream;
 import static com.sigmundgranaas.forgero.core.attribute.api.Attribute.KEY;
 
 /**
- * An implementation of {@link AttributeBakingStrategy} that specifically handles
- * {@link CompositeAttributeComponent}s for structured items. It processes the component tree
- * and attempts to form {@link CompositeAttribute}s from groups of {@link CompositeAttributeComponent}s.
+ * An implementation of {@link AttributeBakingStrategy} that processes attributes from each component individually,
+ * attempting to form {@link CompositeAttribute}s from {@link CompositeAttributeComponent}s that are local to a single component.
  *
- * <p><b>Core Design Principle: Local Composition</b></p>
- * This strategy intentionally enforces a "local composition" model. A {@link CompositeAttribute}
- * can only be formed from a group of {@link CompositeAttributeComponent}s that all originate
- - * from the <strong>same parent {@link Component}</strong> in the tree (e.g., all from a single pickaxe head).
- - * These components must also share the same {@code type} and {@code compositeKey}.
+ * <p><b>Core Logic: Local Composition</b></p>
+ * This strategy iterates through each component in the hierarchy and performs the following steps:
+ * <ol>
+ *   <li><b>Gather:</b> It collects all attributes from the current component, filtering them based on their static conditions.</li>
+ *   <li><b>Partition:</b> It separates the component's attributes into simple {@link Attribute}s and {@link CompositeAttributeComponent}s. All simple attributes are immediately added to the final baked list.</li>
+ *   <li><b>Combine Locally:</b> It groups the {@link CompositeAttributeComponent}s by their type and composite key. Each group, containing components *only from the current component*, is used to attempt to form a single {@link CompositeAttribute}.</li>
+ * </ol>
+ *
+ * <p><b>Grouping</b></p>
+ * A {@link CompositeAttribute} is formed from a group of {@link CompositeAttributeComponent}s that share
+ * the same {@code type}, {@code compositeKey}, and originate from the <strong>same parent component</strong>.
+ * This ensures that composite calculations are encapsulated within the component that defines them.
  *
  * <p><b>Discard on Failure</b></p>
  * If a local group of {@link CompositeAttributeComponent}s fails to meet the criteria for forming a valid
@@ -32,61 +38,56 @@ import static com.sigmundgranaas.forgero.core.attribute.api.Attribute.KEY;
  * is <strong>discarded</strong>. They do NOT fall back to being treated as simple attributes.
  *
  * <p><b>Design Rationale</b></p>
- * This "local-only" approach ensures that attribute calculations are highly predictable and encapsulated.
- * For example, a "Reinforced Iron Ingot" part will always contribute the same final composite attribute value,
- * regardless of what other parts (like a handle or binding) it is combined with. This prevents complex,
- * hard-to-debug cross-component interactions at the composite level and promotes modular part design.
- * Standard cross-component interactions should be handled using {@link com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute}.
+ * This "local composition" approach ensures that complex attribute calculations are self-contained and predictable.
+ * It prevents unintended interactions between composite components defined on different, unrelated parts of a tool.
+ * Simple attributes, which are not combined in this way, are passed through directly.
  */
 public class CompositeAttributeBakingStrategy implements AttributeBakingStrategy {
 
 	@Override
 	public List<Attribute> bake(Stream<Component> components) {
 		List<Component> componentList = components.toList();
-		Component root = componentList.isEmpty() ? null : componentList.get(0);
-
+		if (componentList.isEmpty()) {
+			return List.of();
+		}
+		Component root = componentList.get(0);
 		List<Attribute> bakedAttributes = new ArrayList<>();
 
-		for (Component currentComponent : componentList) {
-			List<CompositeAttributeComponent> compositeComponentsFromCurrent = new ArrayList<>();
-			List<Attribute> simpleAttributesFromCurrent = new ArrayList<>();
+		for (Component component : componentList) {
+			ResolutionContext resCtx = new ResolutionContext(component, root);
 
-			// First, filter attributes from the current component based on static conditions
-			// and separate them into simple attributes and composite components.
-			currentComponent.properties(KEY)
+			// GATHER attributes from the current component and filter by static conditions
+			List<Attribute> componentAttributes = component.properties(KEY).stream()
+					.filter(attribute -> attribute.condition()
+							.map(Condition::staticConditions)
+							.map(resCtx::test)
+							.orElse(true))
+					.toList();
+
+			// PARTITION attributes from this specific component
+			Map<Boolean, List<Attribute>> partitionedAttributes = componentAttributes.stream()
+					.collect(Collectors.partitioningBy(attr -> attr instanceof CompositeAttributeComponent));
+
+			// Add this component's simple attributes to the final list
+			bakedAttributes.addAll(partitionedAttributes.get(false));
+
+			List<CompositeAttributeComponent> localCompositeComponents = partitionedAttributes.get(true)
 					.stream()
-					.filter(attribute -> {
-						ResolutionContext resCtx = new ResolutionContext(currentComponent, root);
-						return attribute.condition()
-								.map(Condition::staticConditions)
-								.map(resCtx::test)
-								.orElse(true); // If no static conditions, it passes.
-					})
-					.forEach(attribute -> {
-						if (attribute instanceof CompositeAttributeComponent compAttribute) {
-							compositeComponentsFromCurrent.add(compAttribute);
-						} else {
-							simpleAttributesFromCurrent.add(attribute);
-						}
-					});
+					.map(CompositeAttributeComponent.class::cast)
+					.toList();
 
-			// Add all valid simple attributes from this component directly.
-			bakedAttributes.addAll(simpleAttributesFromCurrent);
 
-			// Now, attempt to form composite attributes *from the components gathered from THIS component only*.
-			// Group them by their compositeKey (and type, though type should already be consistent per attribute kind).
-			Map<String, List<CompositeAttributeComponent>> groupedLocalComposites = compositeComponentsFromCurrent.stream()
-					.collect(Collectors.groupingBy(comp -> comp.type().toString() + ":" + comp.compositeKey().toString()));
+			// COMBINE composite components locally for this component
+			if (!localCompositeComponents.isEmpty()) {
+				Map<String, List<CompositeAttributeComponent>> groupedLocalComposites = localCompositeComponents.stream()
+						.collect(Collectors.groupingBy(comp -> comp.type().toString() + ":" + comp.compositeKey().toString()));
 
-			for (List<CompositeAttributeComponent> group : groupedLocalComposites.values()) {
-				if (!group.isEmpty()) {
-					// All components in a group share the same type and compositeKey by design.
-					// Try to form a CompositeAttribute.
+				for (List<CompositeAttributeComponent> group : groupedLocalComposites.values()) {
+					// A group will never be empty here due to how groupingBy works
 					CompositeAttribute.of(group.get(0).type(), group.get(0).compositeKey(), group)
 							.ifPresentOrElse(
-									bakedAttributes::add, // Successfully formed a CompositeAttribute, add it.
-									// If CompositeAttribute could not be formed, DO NOTHING (discard).
-									() -> { /* Discard these components */ }
+									bakedAttributes::add, // Successfully formed, add it.
+									() -> { /* If it fails, the group is discarded. */ }
 							);
 				}
 			}

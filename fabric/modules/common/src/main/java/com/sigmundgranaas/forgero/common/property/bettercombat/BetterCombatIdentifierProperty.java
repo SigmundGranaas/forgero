@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.loader.property.bettercombat;
+package com.sigmundgranaas.forgero.common.property.bettercombat;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

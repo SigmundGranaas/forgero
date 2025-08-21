@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.tag.engine;
 
-import com.sigmundgranaas.forgero.core.identifier.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.tags.core.engine.DotGraphRenderer;
 import com.sigmundgranaas.forgero.core.tags.core.engine.TagGraph;
 import com.sigmundgranaas.forgero.core.tags.core.engine.TagGraphBuilder;

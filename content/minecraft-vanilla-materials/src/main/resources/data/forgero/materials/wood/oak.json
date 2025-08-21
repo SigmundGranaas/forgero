@@ -14,5 +14,13 @@
     { "id": "forgero:oak-draw_speed", "type": "forgero:draw_speed", "composite": "forgero:part-composite", "computation": { "value": 1.2 } },
     { "id": "forgero:oak-draw_power", "type": "forgero:draw_power", "composite": "forgero:part-composite", "computation": { "value": 3.0 } },
     { "id": "forgero:oak-armor", "type": "forgero:armor", "composite": "forgero:part-composite", "computation": { "value": 0 } }
-  ]
+  ],
+  "properties": {
+    "forgero:tooltip_sections": [
+      {
+        "key": "forgero:description",
+        "value": "material.forgero.oak.description"
+      }
+    ]
+  }
 }

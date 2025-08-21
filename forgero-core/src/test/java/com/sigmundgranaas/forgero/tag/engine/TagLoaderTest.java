@@ -1,7 +1,5 @@
 package com.sigmundgranaas.forgero.tag.engine;
 
-import com.sigmundgranaas.forgero.core.identifier.IdentifierFactory;
-import com.sigmundgranaas.forgero.core.identifier.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.tags.core.engine.TagGraph;
 import com.sigmundgranaas.forgero.core.tags.core.engine.TagLoader;
 import com.sigmundgranaas.forgero.core.tags.core.engine.TagParser;

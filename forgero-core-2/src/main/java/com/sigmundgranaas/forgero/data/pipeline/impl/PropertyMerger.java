@@ -4,13 +4,19 @@ import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
+import com.sigmundgranaas.forgero.core.attribute.api.CompositeAttributeComponent;
+import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.data.loading.api.data.*;
+import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.HostData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.EquipmentTemplateData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.PartTemplateData;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.OperatorMapper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Merges properties from a chain of raw DTOs into a single result.
@@ -18,8 +24,10 @@ import java.util.*;
  */
 public class PropertyMerger {
 	private final Map<String, Codec<? extends List<?>>> propertyCodecs;
+	private final OperatorMapper operatorMapper = new OperatorMapper();
 
-	public record MergedResult(Set<OpenIdentifier> tags, Map<String, List<?>> properties, @Nullable HostData host) {}
+	public record MergedResult(Set<OpenIdentifier> tags, Map<String, List<?>> properties, @Nullable HostData host) {
+	}
 
 	public PropertyMerger(Map<String, Codec<? extends List<?>>> propertyCodecs) {
 		this.propertyCodecs = propertyCodecs;
@@ -28,6 +36,7 @@ public class PropertyMerger {
 	public MergedResult merge(List<Object> dtoList) {
 		Set<OpenIdentifier> mergedTags = new LinkedHashSet<>();
 		Map<String, JsonElement> mergedJsonProperties = new HashMap<>();
+		List<AttributeData> mergedAttributes = new ArrayList<>();
 		HostData hostData = null;
 
 		// Check if this merge is for a template-based component
@@ -50,7 +59,11 @@ public class PropertyMerger {
 				}
 			}
 
-			if (getProperties(dto) != null) {
+			if (getAttributes(dto) != null && !isTemplateBasedMerge) {
+				mergedAttributes.addAll(getAttributes(dto));
+			}
+
+			if (getProperties(dto) != null && !isTemplateBasedMerge) {
 				mergedJsonProperties.putAll(getProperties(dto));
 			}
 			if (getHost(dto) != null) {
@@ -68,7 +81,42 @@ public class PropertyMerger {
 			}
 		});
 
+		if (!mergedAttributes.isEmpty()) {
+			List<Attribute> runtimeAttributes = mergedAttributes.stream()
+					.map(this::convertAttributeData)
+					.collect(Collectors.toList());
+			parsedProperties.put(Attribute.KEY.key(), runtimeAttributes);
+		}
+
+
 		return new MergedResult(mergedTags, parsedProperties, hostData);
+	}
+
+	private Attribute convertAttributeData(AttributeData data) {
+		var computation = data.computation();
+		var operator = operatorMapper.apply(computation.operator());
+		var order = operatorMapper.leveledOrder(computation.order());
+		var id = Optional.ofNullable(data.id()).map(OpenIdentifier::toString);
+
+		if (data.composite() != null) {
+			return new CompositeAttributeComponent(
+					id,
+					data.type(),
+					computation.value(),
+					operator,
+					order,
+					data.composite()
+			);
+		} else {
+			return new SimpleAttribute(
+					id,
+					data.type(),
+					computation.value(),
+					operator,
+					order,
+					data.condition()
+			);
+		}
 	}
 
 	private List<OpenIdentifier> getTags(Object dto) {
@@ -78,6 +126,15 @@ public class PropertyMerger {
 		if (dto instanceof StaticData data) return data.tags();
 		if (dto instanceof PartTemplateData data) return data.tags();
 		if (dto instanceof EquipmentTemplateData data) return data.tags();
+		return Collections.emptyList();
+	}
+
+	private List<AttributeData> getAttributes(Object dto) {
+		if (dto instanceof MaterialData data) return data.attributes();
+		if (dto instanceof ShapeData data) return data.attributes();
+		if (dto instanceof StaticData data) return data.attributes();
+		if (dto instanceof PartTemplateData data) return data.attributes();
+		if (dto instanceof EquipmentTemplateData data) return data.attributes();
 		return Collections.emptyList();
 	}
 

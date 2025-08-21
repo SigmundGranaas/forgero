@@ -4,9 +4,9 @@ import com.sigmundgranaas.forgero.core.condition.predicate.*;
 import com.sigmundgranaas.forgero.core.property.api.codec.ListCodecWrapper;
 import com.sigmundgranaas.forgero.loader.api.DataPlugin;
 import com.sigmundgranaas.forgero.loader.api.PluginRegistrationContext;
-import com.sigmundgranaas.forgero.loader.property.bettercombat.BetterCombatIdentifierProperty;
-import com.sigmundgranaas.forgero.loader.property.namereplacement.NameReplacementProperty;
-import com.sigmundgranaas.forgero.loader.property.tooltip.TooltipProperty;
+import com.sigmundgranaas.forgero.common.property.bettercombat.BetterCombatIdentifierProperty;
+import com.sigmundgranaas.forgero.common.property.namereplacement.NameReplacementProperty;
+import com.sigmundgranaas.forgero.common.property.tooltip.TooltipProperty;
 
 /**
  * A Forgero data plugin that registers all the default custom properties and conditions.

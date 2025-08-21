@@ -13,6 +13,7 @@ import com.sigmundgranaas.forgero.common.convert.StatefulConverter;
 import com.sigmundgranaas.forgero.common.convert.TypeConverter;
 import com.sigmundgranaas.forgero.common.nbt.ComponentNbtConverter;
 import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
+import com.sigmundgranaas.forgero.common.tooltip.ForgeroTooltipRenderer;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeCodec;
 import com.sigmundgranaas.forgero.core.component.api.Component;
@@ -114,6 +115,8 @@ public class ForgeroDataLoader implements ModInitializer {
 			notifyPostLoadPlugins();
 
 			initialized = true;
+			ForgeroTooltipRenderer.initialize(context.getConverter(), context.getResolver());
+
 			long endTime = System.currentTimeMillis();
 			LOGGER.info("Forgero data loading complete. Registered {} items in {}ms",
 					registeredItems.size(), endTime - startTime);
