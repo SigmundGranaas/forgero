@@ -221,12 +221,12 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				TemperatureUtils.setTemperature(toPlace, Math.max(TemperatureUtils.MIN_TEMPERATURE + 1, 100));
 				stackInHand.decrement(1);
 
-				// Enter ingot-crafting mode and prompt schematic selection
+				// Enter ingot-crafting mode and wait for schematic selection on hammer hit
 				ingotCrafting = true;
 				plannedProductId = null;
 				resetMarkerProgress();
 				markDirty();
-				openSchematicSelection(player);
+				// GUI will open on first hammer hit, not here
 				return ActionResult.SUCCESS;
 			}
 		}
