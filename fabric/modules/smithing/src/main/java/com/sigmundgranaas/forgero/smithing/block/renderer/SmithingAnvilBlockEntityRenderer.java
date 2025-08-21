@@ -172,7 +172,6 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 					cache.lastDynamicTexture = null;
 					cache.lastTextureId = null;
 				}
-				// Convert PNG -> NativeImage -> NativeImageBackedTexture (dynamic)
 				NativeImage nativeImage = bufferedImageToNativeImage(cache.lastImage);
 				cache.lastDynamicTexture = new NativeImageBackedTexture(nativeImage);
 				cache.lastTextureId = MinecraftClient.getInstance().getTextureManager()
@@ -182,15 +181,12 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 			morphDynamicTexture = cache.lastDynamicTexture;
 			morphTextureId = cache.lastTextureId;
 
-			// Render the morphed item as a thin 3D box so it receives lighting/perspective
-			if (morphTextureId != null && morphDynamicTexture != null) {
-				// Rotate morph texture 90 degrees in positive X before rendering
+			// Render the morphed texture as a 3D extruded pixel mesh (only where colored)
+			if (morphTextureId != null && morphDynamicTexture != null && cache.lastImage != null) {
 				matrices.push();
+				// Requested rotation: rotate morph 90 degrees in positive X
 				matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
-				// Pass texture size so sides can sample a single edge texel
-				int texW = (cache.lastImage != null) ? cache.lastImage.getWidth() : 16;
-				int texH = (cache.lastImage != null) ? cache.lastImage.getHeight() : 16;
-				renderMorphAs3DItem(matrices, vertexConsumers, morphTextureId, lightLevel, overlay, texW, texH);
+				renderMorphAs3DExtrudedPixels(matrices, vertexConsumers, morphTextureId, lightLevel, overlay, cache.lastImage);
 				matrices.pop();
 			} else if (minigameActive) {
 				// Fallback to default item if morph texture isn't ready
@@ -229,70 +225,106 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 		return nativeImage;
 	}
 
-	// Render the morph texture as a thin 3D item (front/back faces + thin sides)
-	private void renderMorphAs3DItem(MatrixStack matrices, VertexConsumerProvider vertexConsumers, Identifier textureId, int light, int overlay, int texW, int texH) {
+	// Render only opaque pixels of the morph texture as a thin extruded 3D mesh (top quads + edge sides)
+	private void renderMorphAs3DExtrudedPixels(MatrixStack matrices, VertexConsumerProvider vertexConsumers, Identifier textureId, int light, int overlay, BufferedImage morphImage) {
 		VertexConsumer vc = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(textureId));
 		MatrixStack.Entry entry = matrices.peek();
 		Matrix4f posMat = entry.getPositionMatrix();
 		Matrix3f normalMat = entry.getNormalMatrix();
 
-		// Box dimensions
+		int texW = Math.max(1, morphImage.getWidth());
+		int texH = Math.max(1, morphImage.getHeight());
+
+		// Coordinate space: X/Z in [-0.5, 0.5], Y up
 		float min = -0.5f;
-		float max = 0.5f;
-		float yTop = 0.002f;      // slightly above the anvil surface
-		float thickness = 0.035f; // visual thickness
+		float stepX = 1.0f / texW;
+		float stepZ = 1.0f / texH;
+
+		// Thickness and vertical placement
+		float yTop = 0.002f;
+		float thickness = 0.06f; // thicker so sides are visible
 		float yBottom = yTop - thickness;
 
-		int r = 255, g = 255, b = 255, a = 255;
+		// Simple shading multipliers: top bright, sides slightly darker, bottom darkest
+		int a = 255;
+		int topR = 255, topG = 255, topB = 255;
+		int sideR = (int)(255 * 0.85f), sideG = (int)(255 * 0.85f), sideB = (int)(255 * 0.85f);
+		int botR = (int)(255 * 0.70f), botG = (int)(255 * 0.70f), botB = (int)(255 * 0.70f);
 
-		// Full-face UVs
-		float u0 = 0f, u1 = 1f, v0 = 0f, v1 = 1f;
+		// Iterate image and extrude only opaque pixels
+		for (int y = 0; y < texH; y++) {
+			for (int x = 0; x < texW; x++) {
+				int argb = morphImage.getRGB(x, y);
+				int alpha = (argb >>> 24) & 0xFF;
+				if (alpha == 0) continue; // skip transparent pixels
 
-		// Sub-texel offsets to sample exactly the outermost texel centers for the sides
-		float du = (texW > 0) ? (0.5f / texW) : 0.0f;
-		float dv = (texH > 0) ? (0.5f / texH) : 0.0f;
-		float uLeft = u0 + du;     // column 0 center
-		float uRight = u1 - du;    // last column center
-		float vTop = v0 + dv;      // row 0 center
-		float vBottom = v1 - dv;   // last row center
+				// Pixel quad bounds in local coords
+				float x0 = min + x * stepX;
+				float x1 = x0 + stepX;
+				float z0 = min + y * stepZ;
+				float z1 = z0 + stepZ;
 
-		// Front (top) face: normal +Y, use full texture
-		vc.vertex(posMat, min, yTop, min).color(r, g, b, a).texture(u0, v0).overlay(overlay).light(light).normal(normalMat, 0, 1, 0).next();
-		vc.vertex(posMat, max, yTop, min).color(r, g, b, a).texture(u1, v0).overlay(overlay).light(light).normal(normalMat, 0, 1, 0).next();
-		vc.vertex(posMat, max, yTop, max).color(r, g, b, a).texture(u1, v1).overlay(overlay).light(light).normal(normalMat, 0, 1, 0).next();
-		vc.vertex(posMat, min, yTop, max).color(r, g, b, a).texture(u0, v1).overlay(overlay).light(light).normal(normalMat, 0, 1, 0).next();
+				// UVs for the pixel (full coverage of that texel)
+				float u0 = x / (float) texW;
+				float u1 = (x + 1) / (float) texW;
+				float v0 = y / (float) texH;
+				float v1 = (y + 1) / (float) texH;
 
-		// Back (bottom) face: normal -Y, mirror UVs
-		vc.vertex(posMat, min, yBottom, max).color(r, g, b, a).texture(u0, v1).overlay(overlay).light(light).normal(normalMat, 0, -1, 0).next();
-		vc.vertex(posMat, max, yBottom, max).color(r, g, b, a).texture(u1, v1).overlay(overlay).light(light).normal(normalMat, 0, -1, 0).next();
-		vc.vertex(posMat, max, yBottom, min).color(r, g, b, a).texture(u1, v0).overlay(overlay).light(light).normal(normalMat, 0, -1, 0).next();
-		vc.vertex(posMat, min, yBottom, min).color(r, g, b, a).texture(u0, v0).overlay(overlay).light(light).normal(normalMat, 0, -1, 0).next();
+				// Center UV for sides to inherit the top color (prevents see-through/stretch)
+				float uC = (x + 0.5f) / texW;
+				float vC = (y + 0.5f) / texH;
 
-		// Sides: sample a single border texel strip for coherent edges
+				// Top face (quad facing +Y)
+				vc.vertex(posMat, x0, yTop, z0).color(topR, topG, topB, a).texture(u0, v0).overlay(overlay).light(light).normal(normalMat, 0, 1, 0).next();
+				vc.vertex(posMat, x1, yTop, z0).color(topR, topG, topB, a).texture(u1, v0).overlay(overlay).light(light).normal(normalMat, 0, 1, 0).next();
+				vc.vertex(posMat, x1, yTop, z1).color(topR, topG, topB, a).texture(u1, v1).overlay(overlay).light(light).normal(normalMat, 0, 1, 0).next();
+				vc.vertex(posMat, x0, yTop, z1).color(topR, topG, topB, a).texture(u0, v1).overlay(overlay).light(light).normal(normalMat, 0, 1, 0).next();
 
-		// +X side (right wall): normal +X, use the last column (uRight), V along Z (0..1)
-		vc.vertex(posMat, max, yTop, min).color(r, g, b, a).texture(uRight, v0).overlay(overlay).light(light).normal(normalMat, 1, 0, 0).next();
-		vc.vertex(posMat, max, yBottom, min).color(r, g, b, a).texture(uRight, v0).overlay(overlay).light(light).normal(normalMat, 1, 0, 0).next();
-		vc.vertex(posMat, max, yBottom, max).color(r, g, b, a).texture(uRight, v1).overlay(overlay).light(light).normal(normalMat, 1, 0, 0).next();
-		vc.vertex(posMat, max, yTop, max).color(r, g, b, a).texture(uRight, v1).overlay(overlay).light(light).normal(normalMat, 1, 0, 0).next();
+				// Optional bottom cap (quad facing -Y) for completeness
+				vc.vertex(posMat, x0, yBottom, z1).color(botR, botG, botB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, 0, -1, 0).next();
+				vc.vertex(posMat, x1, yBottom, z1).color(botR, botG, botB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, 0, -1, 0).next();
+				vc.vertex(posMat, x1, yBottom, z0).color(botR, botG, botB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, 0, -1, 0).next();
+				vc.vertex(posMat, x0, yBottom, z0).color(botR, botG, botB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, 0, -1, 0).next();
 
-		// -X side (left wall): normal -X, use the first column (uLeft), V along Z (1..0 to keep orientation)
-		vc.vertex(posMat, min, yTop, max).color(r, g, b, a).texture(uLeft, v1).overlay(overlay).light(light).normal(normalMat, -1, 0, 0).next();
-		vc.vertex(posMat, min, yBottom, max).color(r, g, b, a).texture(uLeft, v1).overlay(overlay).light(light).normal(normalMat, -1, 0, 0).next();
-		vc.vertex(posMat, min, yBottom, min).color(r, g, b, a).texture(uLeft, v0).overlay(overlay).light(light).normal(normalMat, -1, 0, 0).next();
-		vc.vertex(posMat, min, yTop, min).color(r, g, b, a).texture(uLeft, v0).overlay(overlay).light(light).normal(normalMat, -1, 0, 0).next();
+				// For sides, only draw where the neighboring pixel is transparent or out of bounds
 
-		// +Z side (far wall): normal +Z, use last row (vBottom), U along X (1..0 to match front orientation)
-		vc.vertex(posMat, max, yTop, max).color(r, g, b, a).texture(u1, vBottom).overlay(overlay).light(light).normal(normalMat, 0, 0, 1).next();
-		vc.vertex(posMat, max, yBottom, max).color(r, g, b, a).texture(u1, vBottom).overlay(overlay).light(light).normal(normalMat, 0, 0, 1).next();
-		vc.vertex(posMat, min, yBottom, max).color(r, g, b, a).texture(u0, vBottom).overlay(overlay).light(light).normal(normalMat, 0, 0, 1).next();
-		vc.vertex(posMat, min, yTop, max).color(r, g, b, a).texture(u0, vBottom).overlay(overlay).light(light).normal(normalMat, 0, 0, 1).next();
+				// -X neighbor (left)
+				boolean leftTransparent = (x - 1 < 0) || ((morphImage.getRGB(x - 1, y) >>> 24) & 0xFF) == 0;
+				if (leftTransparent) {
+					vc.vertex(posMat, x0, yTop, z1).color(sideR, sideG, sideB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, -1, 0, 0).next();
+					vc.vertex(posMat, x0, yBottom, z1).color(sideR, sideG, sideB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, -1, 0, 0).next();
+					vc.vertex(posMat, x0, yBottom, z0).color(sideR, sideG, sideB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, -1, 0, 0).next();
+					vc.vertex(posMat, x0, yTop, z0).color(sideR, sideG, sideB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, -1, 0, 0).next();
+				}
 
-		// -Z side (near wall): normal -Z, use first row (vTop), U along X (0..1)
-		vc.vertex(posMat, min, yTop, min).color(r, g, b, a).texture(u0, vTop).overlay(overlay).light(light).normal(normalMat, 0, 0, -1).next();
-		vc.vertex(posMat, min, yBottom, min).color(r, g, b, a).texture(u0, vTop).overlay(overlay).light(light).normal(normalMat, 0, 0, -1).next();
-		vc.vertex(posMat, max, yBottom, min).color(r, g, b, a).texture(u1, vTop).overlay(overlay).light(light).normal(normalMat, 0, 0, -1).next();
-		vc.vertex(posMat, max, yTop, min).color(r, g, b, a).texture(u1, vTop).overlay(overlay).light(light).normal(normalMat, 0, 0, -1).next();
+				// +X neighbor (right)
+				boolean rightTransparent = (x + 1 >= texW) || ((morphImage.getRGB(x + 1, y) >>> 24) & 0xFF) == 0;
+				if (rightTransparent) {
+					vc.vertex(posMat, x1, yTop, z0).color(sideR, sideG, sideB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, 1, 0, 0).next();
+					vc.vertex(posMat, x1, yBottom, z0).color(sideR, sideG, sideB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, 1, 0, 0).next();
+					vc.vertex(posMat, x1, yBottom, z1).color(sideR, sideG, sideB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, 1, 0, 0).next();
+					vc.vertex(posMat, x1, yTop, z1).color(sideR, sideG, sideB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, 1, 0, 0).next();
+				}
+
+				// -Z neighbor (near/top row)
+				boolean nearTransparent = (y - 1 < 0) || ((morphImage.getRGB(x, y - 1) >>> 24) & 0xFF) == 0;
+				if (nearTransparent) {
+					vc.vertex(posMat, x0, yTop, z0).color(sideR, sideG, sideB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, 0, 0, -1).next();
+					vc.vertex(posMat, x0, yBottom, z0).color(sideR, sideG, sideB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, 0, 0, -1).next();
+					vc.vertex(posMat, x1, yBottom, z0).color(sideR, sideG, sideB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, 0, 0, -1).next();
+					vc.vertex(posMat, x1, yTop, z0).color(sideR, sideG, sideB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, 0, 0, -1).next();
+				}
+
+				// +Z neighbor (far/bottom row)
+				boolean farTransparent = (y + 1 >= texH) || ((morphImage.getRGB(x, y + 1) >>> 24) & 0xFF) == 0;
+				if (farTransparent) {
+					vc.vertex(posMat, x1, yTop, z1).color(sideR, sideG, sideB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, 0, 0, 1).next();
+					vc.vertex(posMat, x1, yBottom, z1).color(sideR, sideG, sideB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, 0, 0, 1).next();
+					vc.vertex(posMat, x0, yBottom, z1).color(sideR, sideG, sideB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, 0, 0, 1).next();
+					vc.vertex(posMat, x0, yTop, z1).color(sideR, sideG, sideB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, 0, 0, 1).next();
+				}
+			}
+		}
 	}
 
 	// Ensure both images share the same canvas size by center-padding to max dims
