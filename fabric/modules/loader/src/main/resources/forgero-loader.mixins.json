@@ -5,7 +5,8 @@
   "mixins": [
     "ItemMiningMixin",
     "ItemStackAttributeMixin",
-    "ItemStackDurabilityMixin"
+    "ItemStackDurabilityMixin",
+    "ItemTooltipMixin"
   ],
   "injectors": {
     "defaultRequire": 1

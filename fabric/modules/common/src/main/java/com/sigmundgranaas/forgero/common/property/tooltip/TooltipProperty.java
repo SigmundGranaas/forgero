@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.loader.property.tooltip;
+package com.sigmundgranaas.forgero.common.property.tooltip;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -40,7 +40,7 @@ public record TooltipProperty(
 	}
 
 	/**
-	 * The expert engine for resolving Tooltip properties.
+	 * The engine for resolving Tooltip properties.
 	 * <p>
 	 * Intermediate Baked Type {@code <B>}: {@link OptimizedBakedResult}
 	 * Final Result Type {@code <R>}: {@code List<TooltipProperty>}

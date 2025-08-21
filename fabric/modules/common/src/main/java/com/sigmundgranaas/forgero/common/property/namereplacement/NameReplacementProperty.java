@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.loader.property.namereplacement;
+package com.sigmundgranaas.forgero.common.property.namereplacement;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

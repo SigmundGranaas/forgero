@@ -1,0 +1,18 @@
+{
+  "tooltip.forgero.attributes": "Attributes",
+  "tooltip.forgero.component_attributes": "Component Attributes",
+  "tooltip.forgero.base_values": "Base Values",
+  "tooltip.forgero.multipliers": "Multipliers",
+
+  "attribute.forgero.attack_damage": "Attack Damage",
+  "attribute.forgero.attack_speed": "Attack Speed",
+  "attribute.forgero.durability": "Durability",
+  "attribute.forgero.mining_speed": "Mining Speed",
+  "attribute.forgero.mining_level": "Mining Level",
+  "attribute.forgero.armor": "Armor",
+  "attribute.forgero.armor_toughness": "Armor Toughness",
+
+  "tooltip.forgero.section.description": "Description",
+  "tooltip.forgero.section.lore": "Lore",
+  "tooltip.forgero.section.ability": "Ability"
+}

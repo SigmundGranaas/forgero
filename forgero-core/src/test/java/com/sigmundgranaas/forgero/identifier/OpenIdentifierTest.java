@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.identifier;
 
-import com.sigmundgranaas.forgero.core.identifier.OpenIdentifier;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.tag.engine;
 
-import com.sigmundgranaas.forgero.core.identifier.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.tags.core.engine.TagGraphBuilder;
 import org.junit.jupiter.api.Test;
 

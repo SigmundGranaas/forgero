@@ -10,7 +10,7 @@
       "id": "forgero:shape-durability-mult",
       "type": "forgero:durability",
       "composite": "forgero:part-composite",
-      "computation": { "multiply": 1.5 }
+      "computation": { "multiply": 1.0 }
     },
     {
       "id": "forgero:shape-mining_speed-mult",
