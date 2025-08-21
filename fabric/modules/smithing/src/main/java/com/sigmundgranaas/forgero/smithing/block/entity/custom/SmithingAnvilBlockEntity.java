@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.smithing.block.entity.custom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
@@ -710,7 +711,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 	public void openSchematicSelection(PlayerEntity player) {
 		if (world == null || world.isClient) return;
-		List<Identifier> options = SchematicResultUtil.findAvailableSchematicProductsForPlayer(player);
+		List<Identifier> options = SchematicResultUtil.findAvailableSchematicProductsForPlayer(player)
+				.stream()
+				.filter(id -> !createProductFromPlanned(id).isEmpty())
+				.collect(Collectors.toList());
 		SchematicResultUtil.openSchematicSelection(player, getPos(), options, world);
 	}
 
