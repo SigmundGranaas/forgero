@@ -168,8 +168,15 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			return ActionResult.FAIL;
 		}
 
-		int[] offset = MinigamePositioningUtil.getItemTextureOffset(anvilItem);
-		Vec2f itemLocalHit = MinigamePositioningUtil.worldHitToItemLocal(hitResult, getCachedState(), new Vec2f(offset[0] / 16.0f, offset[1] / 16.0f));
+		int[] offset;
+		if (ingotCrafting && plannedProductId != null) {
+			offset = MinigamePositioningUtil.getMorphedTextureOffset(this);
+		} else {
+			offset = MinigamePositioningUtil.getItemTextureOffset(anvilItem);
+		}
+		Vec2f itemLocalHit = MinigamePositioningUtil.worldHitToItemLocal(
+				hitResult, getCachedState(), new Vec2f(offset[0] / 16.0f, offset[1] / 16.0f)
+		);
 
 		boolean hit = false;
 		if (markerPositions.size() == 1) { // Only check if a marker is active
@@ -553,7 +560,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			// Use a fixed Y for server-side particle spawning. Client will handle precise Y.
 			float particleY = ANVIL_TOP_Y + Y_FIGHTING_OFFSET + MARKER_VISUAL_Y_OFFSET;
 
-			int[] offset = MinigamePositioningUtil.getItemTextureOffset(getInventory().getStack(0));
+			int[] offset = (ingotCrafting && plannedProductId != null)
+					? MinigamePositioningUtil.getMorphedTextureOffset(getInventory().getStack(0).isEmpty() ? this : this)
+					: MinigamePositioningUtil.getItemTextureOffset(getInventory().getStack(0));
 			Vec2f offsetVec = new Vec2f(offset[0] / 16.0f, offset[1] / 16.0f);
 
 			net.minecraft.util.math.Vec3d worldParticlePos = MinigamePositioningUtil.itemLocalToWorld(
@@ -582,7 +591,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			// Use a fixed Y for server-side particle spawning. Client will handle precise Y.
 			float particleY = ANVIL_TOP_Y + Y_FIGHTING_OFFSET + MARKER_VISUAL_Y_OFFSET;
 
-			int[] offset = MinigamePositioningUtil.getItemTextureOffset(itemStack);
+			int[] offset = (ingotCrafting && plannedProductId != null)
+					? MinigamePositioningUtil.getMorphedTextureOffset(this)
+					: MinigamePositioningUtil.getItemTextureOffset(itemStack);
 			Vec2f offsetVec = new Vec2f(offset[0] / 16.0f, offset[1] / 16.0f);
 
 			net.minecraft.util.math.Vec3d worldParticlePos = MinigamePositioningUtil.itemLocalToWorld(
@@ -664,7 +675,15 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 					markerSpawnDelay--;
 				}
 				if (markerSpawnDelay == 0) {
-					Vec2f marker = MinigamePositioningUtil.getRandomMarkerPosition(stackForMarker, getCachedState());
+					Vec2f marker;
+					if (ingotCrafting && plannedProductId != null) {
+						marker = MinigamePositioningUtil.getRandomMarkerPositionMorphed(this);
+						if (marker.equals(Vec2f.ZERO)) {
+							marker = MinigamePositioningUtil.getRandomMarkerPosition(stackForMarker, getCachedState());
+						}
+					} else {
+						marker = MinigamePositioningUtil.getRandomMarkerPosition(stackForMarker, getCachedState());
+					}
 					if (marker.equals(Vec2f.ZERO)) {
 						markerSpawnDelay = SUBSEQUENT_MARKER_DELAY_TICKS;
 						return;
@@ -781,7 +800,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		}
 	}
 
-	private ItemStack createProductFromPlanned(Identifier productId) {
+	// Make product creation accessible to positioning util
+	public ItemStack createProductFromPlanned(Identifier productId) {
 		// Prefer resolving via StateService if your tool heads are states
 		try {
 			var maybeState = StateService.INSTANCE.find(productId.toString());

@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Random;
 
+import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
 import com.sigmundgranaas.forgero.smithing.block.renderer.SmithingAnvilBlockEntityRenderer;
 
 import net.minecraft.block.BlockState;
@@ -20,6 +21,8 @@ import net.minecraft.util.shape.VoxelShapes;
 public class MinigamePositioningUtil {
 	private static final BoundingBoxUtil boundingBoxUtil = new BoundingBoxUtil();
 	private static final Random random = new Random();
+	// NEW: morpher for building morphed images on demand
+	private static final PositionPreservingMorpher MORPHER = new PositionPreservingMorpher();
 
 	public static Vec2f worldHitToItemLocal(BlockHitResult hit, BlockState anvilState, Vec2f itemTextureOffset) {
 		double localX_block_center = hit.getPos().x - hit.getBlockPos().getX() - 0.5;
@@ -125,6 +128,47 @@ public class MinigamePositioningUtil {
 		return false;
 	}
 
+	// NEW: Overload using an explicit texture offset (used for morphed offset)
+	private static boolean isInsideAnvilTopLayer(float itemLocalX, float itemLocalZ, BlockState anvilState, Vec2f textureOffset) {
+		Direction anvilFacing = anvilState.get(net.minecraft.block.AnvilBlock.FACING);
+		VoxelShape shape = VoxelShapes.fullCube();
+
+		// Apply offset and scale identical to renderer pipeline
+		float transformedX_preScale = itemLocalX + textureOffset.x;
+		float transformedZ_preScale = itemLocalZ + textureOffset.y;
+
+		float transformedX_scaled = transformedX_preScale * SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
+		float transformedZ_scaled = transformedZ_preScale * SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
+
+		float transformedX_afterItemRot = -transformedX_scaled;
+		float transformedZ_afterItemRot = -transformedZ_scaled;
+
+		float anvilAngleDegrees = switch (anvilFacing) {
+			case EAST -> -180.0f;
+			case SOUTH -> 90.0f;
+			case WEST -> 0.0f;
+			case NORTH -> -90.0f;
+			default -> 0.0f;
+		};
+		float angleRadians = (float) Math.toRadians(anvilAngleDegrees);
+		float cos = (float) Math.cos(angleRadians);
+		float sin = (float) Math.sin(angleRadians);
+
+		float finalX_block_center = transformedX_afterItemRot * cos - transformedZ_afterItemRot * sin;
+		float finalZ_block_center = transformedX_afterItemRot * sin + transformedZ_afterItemRot * cos;
+
+		double testX = finalX_block_center + 0.5;
+		double testZ = finalZ_block_center + 0.5;
+		double testY = 1.0 - 1e-6;
+
+		for (net.minecraft.util.math.Box box : shape.getBoundingBoxes()) {
+			if (box.contains(testX, testY, testZ)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static Vec2f getRandomMarkerPosition(ItemStack stack, BlockState anvilState) {
 		try {
 			MinecraftClient client = MinecraftClient.getInstance();
@@ -162,5 +206,98 @@ public class MinigamePositioningUtil {
 		} catch (Exception e) {
 		}
 		return new int[]{0, 0};
+	}
+
+	// NEW: center-pad two images to identical canvas
+	private static BufferedImage[] centerPadToSameSize(BufferedImage a, BufferedImage b) {
+		int w = Math.max(a.getWidth(), b.getWidth());
+		int h = Math.max(a.getHeight(), b.getHeight());
+		if (a.getWidth() == w && a.getHeight() == h && b.getWidth() == w && b.getHeight() == h) {
+			return new BufferedImage[]{a, b};
+		}
+		BufferedImage aa = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bb = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+		var ga = aa.createGraphics();
+		var gb = bb.createGraphics();
+		ga.drawImage(a, (w - a.getWidth()) / 2, (h - a.getHeight()) / 2, null);
+		gb.drawImage(b, (w - b.getWidth()) / 2, (h - b.getHeight()) / 2, null);
+		ga.dispose();
+		gb.dispose();
+		return new BufferedImage[]{aa, bb};
+	}
+
+	// NEW: compute current texture offset from the morphed texture; fallback to original offset
+	public static int[] getMorphedTextureOffset(SmithingAnvilBlockEntity entity) {
+		try {
+			ItemStack base = entity.getInventory().getStack(0);
+			if (base.isEmpty()) return new int[]{0, 0};
+
+			MinecraftClient client = MinecraftClient.getInstance();
+			BufferedImage start = RuntimeModelUtil.getFirstQuadTextureImage(base, client);
+			if (start == null) return getItemTextureOffset(base);
+
+			if (entity.getPlannedProductId() == null) {
+				return getItemTextureOffset(base);
+			}
+			ItemStack planned = entity.createProductFromPlanned(entity.getPlannedProductId());
+			if (planned.isEmpty()) return getItemTextureOffset(base);
+			BufferedImage result = RuntimeModelUtil.getFirstQuadTextureImage(planned, client);
+			if (result == null) return getItemTextureOffset(base);
+
+			double weight = entity.getMorphProgress();
+			BufferedImage[] padded = centerPadToSameSize(start, result);
+			BufferedImage morph = MORPHER.morphStep(padded[0], padded[1], weight);
+			return BoundingBoxUtil.getItemTextureOffsetFromImage(morph);
+		} catch (Throwable t) {
+			return new int[]{0, 0};
+		}
+	}
+
+	// NEW: choose a random marker position based on the current morphed texture
+	public static Vec2f getRandomMarkerPositionMorphed(SmithingAnvilBlockEntity entity) {
+		try {
+			ItemStack base = entity.getInventory().getStack(0);
+			if (base.isEmpty()) return Vec2f.ZERO;
+
+			MinecraftClient client = MinecraftClient.getInstance();
+			BufferedImage start = RuntimeModelUtil.getFirstQuadTextureImage(base, client);
+			if (start == null) return Vec2f.ZERO;
+
+			if (entity.getPlannedProductId() == null) return Vec2f.ZERO;
+			ItemStack planned = entity.createProductFromPlanned(entity.getPlannedProductId());
+			if (planned.isEmpty()) return Vec2f.ZERO;
+
+			BufferedImage result = RuntimeModelUtil.getFirstQuadTextureImage(planned, client);
+			if (result == null) return Vec2f.ZERO;
+
+			double weight = entity.getMorphProgress();
+			BufferedImage[] padded = centerPadToSameSize(start, result);
+			BufferedImage morph = MORPHER.morphStep(padded[0], padded[1], weight);
+
+			List<java.awt.Point> validPixels = boundingBoxUtil.collectValidPixels(morph);
+			if (validPixels.isEmpty()) return Vec2f.ZERO;
+
+			int texW = Math.max(1, morph.getWidth());
+			int texH = Math.max(1, morph.getHeight());
+
+			// Use morphed texture offset for consistent placement
+			int[] off = getMorphedTextureOffset(entity);
+			Vec2f offsetVec = new Vec2f(off[0] / 16.0f, off[1] / 16.0f);
+
+			BlockState anvilState = entity.getCachedState();
+			for (int attempt = 0; attempt < 32; attempt++) {
+				java.awt.Point p = validPixels.get(random.nextInt(validPixels.size()));
+				// Map pixel center into [-0.5,0.5] using actual texture dimensions
+				float markerX_local = (p.x + 0.5f) / texW - 0.5f;
+				float markerZ_local = (p.y + 0.5f) / texH - 0.5f;
+
+				if (isInsideAnvilTopLayer(markerX_local, markerZ_local, anvilState, offsetVec)) {
+					return new Vec2f(markerX_local, markerZ_local);
+				}
+			}
+			return Vec2f.ZERO;
+		} catch (Throwable t) {
+			return Vec2f.ZERO;
+		}
 	}
 }

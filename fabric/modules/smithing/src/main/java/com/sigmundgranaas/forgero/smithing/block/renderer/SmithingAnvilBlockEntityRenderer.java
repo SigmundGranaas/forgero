@@ -41,6 +41,9 @@ import net.minecraft.world.World;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
+//TODO for some reason the side pixels are inverted, not biggest problem but I hate it.
+//TODO dont think I can complain but its happening again.
+
 @Environment(EnvType.CLIENT)
 public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<SmithingAnvilBlockEntity> {
 	private static final Logger LOGGER = LogManager.getLogger("ForgeroSmithingAnvilRenderer");
@@ -110,7 +113,8 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
 
 		// Step 4: Apply centering offset from item's texture (dx, dz).
-		int[] offset = itemTextureOffsetCache.computeIfAbsent(itemStack, MinigamePositioningUtil::getItemTextureOffset);
+		// CHANGED: use morphed offset when available; falls back internally
+		int[] offset = MinigamePositioningUtil.getMorphedTextureOffset(entity);
 		float dx = offset[0] / 16.0f;
 		float dz = offset[1] / 16.0f;
 		dx = Math.max(-0.2f, Math.min(0.2f, dx));
