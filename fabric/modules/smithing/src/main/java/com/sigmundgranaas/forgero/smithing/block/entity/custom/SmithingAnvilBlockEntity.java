@@ -59,6 +59,8 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
+// TODO it seems its just randomly adding conditions not based on any loottable? Or maybe because there is not loottable for 10 hits currently. Probably better to register misshits and base the loottables around that.
+
 @Getter
 public class SmithingAnvilBlockEntity extends BlockEntity {
 	private static final Logger LOGGER = LogManager.getLogger("ForgeroSmithingAnvil");
@@ -168,14 +170,14 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			return ActionResult.FAIL;
 		}
 
-		int[] offset;
+		Vec2f offsetVec;
 		if (ingotCrafting && plannedProductId != null) {
-			offset = MinigamePositioningUtil.getMorphedTextureOffset(this);
+			offsetVec = MinigamePositioningUtil.getMorphedTextureOffsetVec2f(this);
 		} else {
-			offset = MinigamePositioningUtil.getItemTextureOffset(anvilItem);
+			offsetVec = MinigamePositioningUtil.getItemTextureOffsetVec2f(anvilItem);
 		}
 		Vec2f itemLocalHit = MinigamePositioningUtil.worldHitToItemLocal(
-				hitResult, getCachedState(), new Vec2f(offset[0] / 16.0f, offset[1] / 16.0f)
+				hitResult, getCachedState(), offsetVec
 		);
 
 		boolean hit = false;
@@ -560,10 +562,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			// Use a fixed Y for server-side particle spawning. Client will handle precise Y.
 			float particleY = ANVIL_TOP_Y + Y_FIGHTING_OFFSET + MARKER_VISUAL_Y_OFFSET;
 
-			int[] offset = (ingotCrafting && plannedProductId != null)
-					? MinigamePositioningUtil.getMorphedTextureOffset(getInventory().getStack(0).isEmpty() ? this : this)
-					: MinigamePositioningUtil.getItemTextureOffset(getInventory().getStack(0));
-			Vec2f offsetVec = new Vec2f(offset[0] / 16.0f, offset[1] / 16.0f);
+			Vec2f offsetVec = (ingotCrafting && plannedProductId != null)
+					? MinigamePositioningUtil.getMorphedTextureOffsetVec2f(this)
+					: MinigamePositioningUtil.getItemTextureOffsetVec2f(getInventory().getStack(0));
 
 			net.minecraft.util.math.Vec3d worldParticlePos = MinigamePositioningUtil.itemLocalToWorld(
 					markerLocalPos, getPos(), getCachedState(), offsetVec, particleY
@@ -591,10 +592,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			// Use a fixed Y for server-side particle spawning. Client will handle precise Y.
 			float particleY = ANVIL_TOP_Y + Y_FIGHTING_OFFSET + MARKER_VISUAL_Y_OFFSET;
 
-			int[] offset = (ingotCrafting && plannedProductId != null)
-					? MinigamePositioningUtil.getMorphedTextureOffset(this)
-					: MinigamePositioningUtil.getItemTextureOffset(itemStack);
-			Vec2f offsetVec = new Vec2f(offset[0] / 16.0f, offset[1] / 16.0f);
+			Vec2f offsetVec = (ingotCrafting && plannedProductId != null)
+					? MinigamePositioningUtil.getMorphedTextureOffsetVec2f(this)
+					: MinigamePositioningUtil.getItemTextureOffsetVec2f(itemStack);
 
 			net.minecraft.util.math.Vec3d worldParticlePos = MinigamePositioningUtil.itemLocalToWorld(
 					markerLocalPos, getPos(), getCachedState(), offsetVec, particleY

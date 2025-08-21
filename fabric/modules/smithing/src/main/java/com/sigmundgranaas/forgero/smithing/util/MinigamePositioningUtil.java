@@ -21,7 +21,6 @@ import net.minecraft.util.shape.VoxelShapes;
 public class MinigamePositioningUtil {
 	private static final BoundingBoxUtil boundingBoxUtil = new BoundingBoxUtil();
 	private static final Random random = new Random();
-	// NEW: morpher for building morphed images on demand
 	private static final PositionPreservingMorpher MORPHER = new PositionPreservingMorpher();
 
 	public static Vec2f worldHitToItemLocal(BlockHitResult hit, BlockState anvilState, Vec2f itemTextureOffset) {
@@ -169,6 +168,23 @@ public class MinigamePositioningUtil {
 		return false;
 	}
 
+	// NEW: normalized offset (item-local units) for an ItemStack using its texture size
+	public static Vec2f getItemTextureOffsetVec2f(ItemStack stack) {
+		if (stack.isEmpty()) return Vec2f.ZERO;
+		try {
+			MinecraftClient client = MinecraftClient.getInstance();
+			BufferedImage image = RuntimeModelUtil.getFirstQuadTextureImage(stack, client);
+			if (image != null) {
+				int[] px = BoundingBoxUtil.getItemTextureOffsetFromImage(image);
+				float w = Math.max(1, image.getWidth());
+				float h = Math.max(1, image.getHeight());
+				return new Vec2f(px[0] / w, px[1] / h);
+			}
+		} catch (Exception ignored) {
+		}
+		return Vec2f.ZERO;
+	}
+
 	public static Vec2f getRandomMarkerPosition(ItemStack stack, BlockState anvilState) {
 		try {
 			MinecraftClient client = MinecraftClient.getInstance();
@@ -178,12 +194,16 @@ public class MinigamePositioningUtil {
 			List<java.awt.Point> validPixels = boundingBoxUtil.collectValidPixels(image);
 			if (validPixels.isEmpty()) return Vec2f.ZERO;
 
+			int texW = Math.max(1, image.getWidth());
+			int texH = Math.max(1, image.getHeight());
+			Vec2f offsetVec = getItemTextureOffsetVec2f(stack);
+
 			for (int attempt = 0; attempt < 32; attempt++) {
 				java.awt.Point p = validPixels.get(random.nextInt(validPixels.size()));
-				float markerX_local = (p.x + 0.5f) / 16.0f - 0.5f;
-				float markerZ_local = (p.y + 0.5f) / 16.0f - 0.5f;
+				float markerX_local = (p.x + 0.5f) / texW - 0.5f;
+				float markerZ_local = (p.y + 0.5f) / texH - 0.5f;
 
-				if (isInsideAnvilTopLayer(markerX_local, markerZ_local, anvilState, stack)) {
+				if (isInsideAnvilTopLayer(markerX_local, markerZ_local, anvilState, offsetVec)) {
 					return new Vec2f(markerX_local, markerZ_local);
 				}
 			}
@@ -226,7 +246,35 @@ public class MinigamePositioningUtil {
 		return new BufferedImage[]{aa, bb};
 	}
 
-	// NEW: compute current texture offset from the morphed texture; fallback to original offset
+	// NEW: normalized offset (item-local units) based on the current morphed image size
+	public static Vec2f getMorphedTextureOffsetVec2f(SmithingAnvilBlockEntity entity) {
+		try {
+			ItemStack base = entity.getInventory().getStack(0);
+			if (base.isEmpty()) return Vec2f.ZERO;
+
+			MinecraftClient client = MinecraftClient.getInstance();
+			BufferedImage start = RuntimeModelUtil.getFirstQuadTextureImage(base, client);
+			if (start == null || entity.getPlannedProductId() == null) {
+				return getItemTextureOffsetVec2f(base);
+			}
+			ItemStack planned = entity.createProductFromPlanned(entity.getPlannedProductId());
+			if (planned.isEmpty()) return getItemTextureOffsetVec2f(base);
+			BufferedImage result = RuntimeModelUtil.getFirstQuadTextureImage(planned, client);
+			if (result == null) return getItemTextureOffsetVec2f(base);
+
+			double weight = entity.getMorphProgress();
+			BufferedImage[] padded = centerPadToSameSize(start, result);
+			BufferedImage morph = MORPHER.morphStep(padded[0], padded[1], weight);
+			int[] px = BoundingBoxUtil.getItemTextureOffsetFromImage(morph);
+			float w = Math.max(1, morph.getWidth());
+			float h = Math.max(1, morph.getHeight());
+			return new Vec2f(px[0] / w, px[1] / h);
+		} catch (Throwable t) {
+			return Vec2f.ZERO;
+		}
+	}
+
+	// Existing int[] version retained for compatibility (used elsewhere)
 	public static int[] getMorphedTextureOffset(SmithingAnvilBlockEntity entity) {
 		try {
 			ItemStack base = entity.getInventory().getStack(0);
@@ -234,9 +282,7 @@ public class MinigamePositioningUtil {
 
 			MinecraftClient client = MinecraftClient.getInstance();
 			BufferedImage start = RuntimeModelUtil.getFirstQuadTextureImage(base, client);
-			if (start == null) return getItemTextureOffset(base);
-
-			if (entity.getPlannedProductId() == null) {
+			if (start == null || entity.getPlannedProductId() == null) {
 				return getItemTextureOffset(base);
 			}
 			ItemStack planned = entity.createProductFromPlanned(entity.getPlannedProductId());
@@ -253,7 +299,6 @@ public class MinigamePositioningUtil {
 		}
 	}
 
-	// NEW: choose a random marker position based on the current morphed texture
 	public static Vec2f getRandomMarkerPositionMorphed(SmithingAnvilBlockEntity entity) {
 		try {
 			ItemStack base = entity.getInventory().getStack(0);
@@ -261,9 +306,8 @@ public class MinigamePositioningUtil {
 
 			MinecraftClient client = MinecraftClient.getInstance();
 			BufferedImage start = RuntimeModelUtil.getFirstQuadTextureImage(base, client);
-			if (start == null) return Vec2f.ZERO;
+			if (start == null || entity.getPlannedProductId() == null) return Vec2f.ZERO;
 
-			if (entity.getPlannedProductId() == null) return Vec2f.ZERO;
 			ItemStack planned = entity.createProductFromPlanned(entity.getPlannedProductId());
 			if (planned.isEmpty()) return Vec2f.ZERO;
 
@@ -280,14 +324,11 @@ public class MinigamePositioningUtil {
 			int texW = Math.max(1, morph.getWidth());
 			int texH = Math.max(1, morph.getHeight());
 
-			// Use morphed texture offset for consistent placement
-			int[] off = getMorphedTextureOffset(entity);
-			Vec2f offsetVec = new Vec2f(off[0] / 16.0f, off[1] / 16.0f);
-
+			Vec2f offsetVec = getMorphedTextureOffsetVec2f(entity);
 			BlockState anvilState = entity.getCachedState();
+
 			for (int attempt = 0; attempt < 32; attempt++) {
 				java.awt.Point p = validPixels.get(random.nextInt(validPixels.size()));
-				// Map pixel center into [-0.5,0.5] using actual texture dimensions
 				float markerX_local = (p.x + 0.5f) / texW - 0.5f;
 				float markerZ_local = (p.y + 0.5f) / texH - 0.5f;
 

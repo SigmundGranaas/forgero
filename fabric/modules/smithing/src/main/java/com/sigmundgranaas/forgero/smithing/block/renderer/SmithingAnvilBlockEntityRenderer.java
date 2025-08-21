@@ -113,13 +113,9 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
 
 		// Step 4: Apply centering offset from item's texture (dx, dz).
-		// CHANGED: use morphed offset when available; falls back internally
-		int[] offset = MinigamePositioningUtil.getMorphedTextureOffset(entity);
-		float dx = offset[0] / 16.0f;
-		float dz = offset[1] / 16.0f;
-		dx = Math.max(-0.2f, Math.min(0.2f, dx));
-		dz = Math.max(-0.2f, Math.min(0.2f, dz));
-		matrices.translate(dx, 0, dz);
+		// Use normalized morphed offset (item-local units) to match hit/particle mapping.
+		Vec2f normOffset = MinigamePositioningUtil.getMorphedTextureOffsetVec2f(entity);
+		matrices.translate(normOffset.x, 0, normOffset.y);
 
 		// Step 5: Apply the uniform scaling factor. This affects everything after this point.
 		matrices.scale(RENDER_SCALE_FACTOR, RENDER_SCALE_FACTOR, RENDER_SCALE_FACTOR);
@@ -365,7 +361,7 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 			Vec2f markerPos = entity.getMarkerPositions().get(0);
 
 			// Translate to the marker's position within the item's local space
-			matrices.translate(markerPos.x, MARKER_RENDER_OFFSET_Y, markerPos.y); // Use MARKER_RENDER_OFFSET_Y
+			matrices.translate(markerPos.x, MARKER_RENDER_OFFSET_Y, markerPos.y);
 
 			// Draw the marker
 			boolean isFast = entity.getFastMarkerIndices().contains(entity.getMarkerAttempts());
