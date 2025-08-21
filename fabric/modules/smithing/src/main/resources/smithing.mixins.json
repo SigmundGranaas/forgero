@@ -4,7 +4,9 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "TemperatureTooltipMixin",
-    "CampfireBlockMixin"
+    "CampfireBlockMixin",
+    "AnvilBlockMixin",
+    "AnvilBlockUseMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.smithing.networking.packet;
+package com.sigmundgranaas.forgero.smithing.networking.S2C;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -17,6 +17,7 @@ import com.sigmundgranaas.forgero.smithing.block.renderer.BellowsBlockEntityRend
 import com.sigmundgranaas.forgero.smithing.block.renderer.HearthBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.block.renderer.MoldBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.block.renderer.SmithingAnvilBlockEntityRenderer;
+import com.sigmundgranaas.forgero.smithing.networking.C2S.AnvilUseC2SPacket;
 import com.sigmundgranaas.forgero.smithing.model.BellowsModel;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider;
@@ -44,6 +45,7 @@ public class ForgeroClientSmithingInitializer implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        AnvilUseC2SPacket.register();
 		        // Make sure MOLD is registered (null check)
 		        if (ModBlockEntities.MOLD == null) {
 		            ModBlockEntities.rebuildMoldBlockEntityType();

@@ -9,6 +9,7 @@ import com.sigmundgranaas.forgero.smithing.item.ModItemGroups;
 import com.sigmundgranaas.forgero.smithing.item.ModItems;
 import com.sigmundgranaas.forgero.smithing.item.tooltip.CrucibleTooltipComponent;
 import com.sigmundgranaas.forgero.smithing.item.tooltip.CrucibleTooltipData;
+import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.recipe.ModRecipes;
 import com.sigmundgranaas.forgero.smithing.resource.MoldGenerator;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureHandler;
@@ -44,5 +45,6 @@ public class ForgeroSmithingInitializer implements ForgeroPreInitializationEntry
 			}
 			return null;
 		});
+		ModMessages.registerC2SPackets();
 	}
 }

@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.smithing.networking.packet;
+package com.sigmundgranaas.forgero.smithing.networking.C2S;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
 

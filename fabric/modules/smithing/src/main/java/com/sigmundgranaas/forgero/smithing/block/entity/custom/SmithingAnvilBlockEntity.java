@@ -772,7 +772,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	}
 
 	// Accepts any ingot by tag or simple name heuristic
-	private boolean isIngot(ItemStack stack) {
+	public boolean isIngot(ItemStack stack) {
 		if (stack.isEmpty()) return false;
 		try {
 			if (stack.isIn(INGOTS_TAG)) return true;
