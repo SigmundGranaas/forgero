@@ -1,15 +1,13 @@
 package com.sigmundgranaas.forgero.smithing.mixins;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -18,8 +16,6 @@ import net.minecraft.world.World;
 
 @Mixin(net.minecraft.block.AnvilBlock.class)
 public abstract class AnvilBlockUseMixin {
-	@Unique
-	private static final Logger LOGGER = LoggerFactory.getLogger(AnvilBlockUseMixin.class);
 
 	@Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
 	private void forgero$customOnUse(
@@ -39,6 +35,14 @@ public abstract class AnvilBlockUseMixin {
 			if (!smithingAnvilBlockEntity.getInventory().getStack(0).isEmpty()) {
 				// Block vanilla UI if item is present
 				cir.setReturnValue(ActionResult.SUCCESS);
+				// --- Hammering Logic for vanilla anvil ---
+				if (!world.isClient) {
+					ItemStack stackInHand = player.getStackInHand(hand);
+					if (stackInHand.getItem().getTranslationKey().contains("smithing_hammer")) {
+						cir.setReturnValue(smithingAnvilBlockEntity.onHammerHit(player, hit));
+						return;
+					}
+				}
 			}
 		}
 	}
