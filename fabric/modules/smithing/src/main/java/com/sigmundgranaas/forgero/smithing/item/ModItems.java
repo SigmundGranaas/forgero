@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.smithing.item;
 
 import static com.sigmundgranaas.forgero.smithing.block.ModBlocks.HEARTH;
-import static com.sigmundgranaas.forgero.smithing.block.ModBlocks.SMITHING_ANVIL;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.smithing.item.custom.CrucibleItem;
@@ -32,7 +31,6 @@ public class ModItems {
 		entries.add(CRUCIBLE);
 
 		entries.add(HEARTH);
-		entries.add(SMITHING_ANVIL);
 	}
 
 	public static void registerModItems() {

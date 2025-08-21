@@ -111,7 +111,6 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 		// A -90 degree rotation around the X-axis will lay it flat on the XZ plane.
 		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
 
-		// Render the actual 3D item model
 		int lightLevel = getLightLevel(entity.getWorld(), entity.getPos());
 		itemRenderer.renderItem(itemStack, ModelTransformationMode.NONE, lightLevel, overlay,
 				matrices, vertexConsumers, entity.getWorld(), (int) entity.getPos().asLong());
@@ -155,9 +154,9 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 
 	private int getLightLevel(World world, BlockPos pos) {
 		if (world == null) {
-			return 15728880; // Full brightness fallback
+			return 15728880;
 		}
-		// Get light level from the block position *above* the anvil, where the item is rendered
+
 		int blockLight = world.getLightLevel(LightType.BLOCK, pos.up());
 		int skyLight = world.getLightLevel(LightType.SKY, pos.up());
 		return LightmapTextureManager.pack(blockLight, skyLight);

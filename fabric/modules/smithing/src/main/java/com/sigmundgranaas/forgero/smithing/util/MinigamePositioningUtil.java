@@ -85,13 +85,7 @@ public class MinigamePositioningUtil {
 
 	private static boolean isInsideAnvilTopLayer(float itemLocalX, float itemLocalZ, BlockState anvilState, ItemStack anvilItemStack) {
 		Direction facing = anvilState.get(net.minecraft.block.AnvilBlock.FACING);
-		VoxelShape shape = switch (facing) {
-			case NORTH -> com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.SHAPE_NORTH;
-			case SOUTH -> com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.SHAPE_SOUTH;
-			case EAST -> com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.SHAPE_EAST;
-			case WEST -> com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.SHAPE_WEST;
-			default -> VoxelShapes.fullCube();
-		};
+		VoxelShape shape = VoxelShapes.fullCube();
 
 		Vec2f itemTextureOffset = new Vec2f(getItemTextureOffset(anvilItemStack)[0] / 16.0f, getItemTextureOffset(anvilItemStack)[1] / 16.0f);
 

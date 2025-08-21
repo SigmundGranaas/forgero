@@ -2,8 +2,8 @@ package com.sigmundgranaas.forgero.smithing.item;
 
 
 import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.smithing.block.ModBlocks;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -19,7 +19,7 @@ public class ModItemGroups {
 			new Identifier(Forgero.NAMESPACE, "smithing"),
 			FabricItemGroup.builder()
 					.displayName(Text.translatable("itemgroup.smithing"))
-					.icon(() -> new ItemStack(ModBlocks.SMITHING_ANVIL))
+					.icon(() -> new ItemStack(Blocks.ANVIL))
 					.build()
 	);
 

@@ -79,24 +79,6 @@ public class ForgeroClientSmithingInitializer implements ClientModInitializer {
         // Register temperature-based color provider for all tool part head/part items
         TemperatureColorProvider.register();
 
-        // Register highlight overlay tracking for smithing anvil
-        net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents.BLOCK_OUTLINE.register((context, blockOutline) -> {
-            net.minecraft.client.MinecraftClient client = net.minecraft.client.MinecraftClient.getInstance();
-            hoveredAnvilPos = null;
-            if (client.crosshairTarget instanceof net.minecraft.util.hit.BlockHitResult hit) {
-                net.minecraft.util.math.BlockPos pos = hit.getBlockPos();
-                if (context.world().getBlockState(pos).getBlock() instanceof com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil) {
-                    net.minecraft.item.ItemStack mainHand = client.player.getStackInHand(net.minecraft.util.Hand.MAIN_HAND);
-                    if (mainHand.getItem().getTranslationKey().contains("smithing_hammer")) {
-                        net.minecraft.util.math.Vec3d hitPos = hit.getPos();
-                        hoveredAnvilPos = pos;
-                        hoveredLocalX = hitPos.x - pos.getX();
-                        hoveredLocalZ = hitPos.z - pos.getZ();
-                    }
-                }
-            }
-            return true;
-        });
     }
 
     private void ensureGrayscaleFluidTexture() {

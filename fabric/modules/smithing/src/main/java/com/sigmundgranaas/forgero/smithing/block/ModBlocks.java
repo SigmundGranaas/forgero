@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgero.smithing.block;
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.smithing.block.custom.BellowsBlock;
 import com.sigmundgranaas.forgero.smithing.block.custom.HearthBlock;
-import com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -17,16 +16,11 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 
 public class ModBlocks {
-	public static final Block SMITHING_ANVIL = registerBlock("smithing_anvil",
-			new SmithingAnvil(FabricBlockSettings.copyOf(Blocks.ANVIL)));
-
 	public static final Block BELLOWS = registerBlock("bellows",
 			new BellowsBlock(FabricBlockSettings.copyOf(Blocks.ACACIA_WOOD)));
 
 	public static final Block HEARTH = registerBlock("hearth",
 			new HearthBlock(true, 2, FabricBlockSettings.copyOf(Blocks.CAMPFIRE)));
-
-
 
 
 	private static Block registerBlock(String name, Block block) {
