@@ -7,6 +7,7 @@ import java.util.WeakHashMap;
 import com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil;
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
 import com.sigmundgranaas.forgero.smithing.util.BoundingBoxUtil;
+import com.sigmundgranaas.forgero.smithing.util.MinigamePositioningUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -89,7 +90,7 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
 
 		// Step 4: Apply centering offset from item's texture (dx, dz).
-		int[] offset = itemTextureOffsetCache.computeIfAbsent(itemStack, SmithingAnvilBlockEntity.Positioning::getItemTextureOffset);
+		int[] offset = itemTextureOffsetCache.computeIfAbsent(itemStack, MinigamePositioningUtil::getItemTextureOffset);
 		float dx = offset[0] / 16.0f;
 		float dz = offset[1] / 16.0f;
 		dx = Math.max(-0.2f, Math.min(0.2f, dx));

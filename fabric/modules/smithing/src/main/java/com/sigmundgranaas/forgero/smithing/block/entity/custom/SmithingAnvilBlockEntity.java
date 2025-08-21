@@ -1,18 +1,16 @@
 package com.sigmundgranaas.forgero.smithing.block.entity.custom;
 
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
-import com.sigmundgranaas.forgero.smithing.block.renderer.SmithingAnvilBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
-import com.sigmundgranaas.forgero.smithing.util.BoundingBoxUtil;
-import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
+import com.sigmundgranaas.forgero.smithing.util.MinigamePositioningUtil;
+import com.sigmundgranaas.forgero.smithing.util.SchematicResultUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
@@ -22,7 +20,6 @@ import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SimpleInventory;
@@ -49,11 +46,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec2f;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -161,8 +154,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			return ActionResult.FAIL;
 		}
 
-		int[] offset = Positioning.getItemTextureOffset(anvilItem);
-		Vec2f itemLocalHit = SmithingAnvilBlockEntity.Positioning.worldHitToItemLocal(hitResult, getCachedState(), new Vec2f(offset[0] / 16.0f, offset[1] / 16.0f));
+		int[] offset = MinigamePositioningUtil.getItemTextureOffset(anvilItem);
+		Vec2f itemLocalHit = MinigamePositioningUtil.worldHitToItemLocal(hitResult, getCachedState(), new Vec2f(offset[0] / 16.0f, offset[1] / 16.0f));
 
 		boolean hit = false;
 		if (markerPositions.size() == 1) { // Only check if a marker is active
@@ -485,10 +478,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			// Use a fixed Y for server-side particle spawning. Client will handle precise Y.
 			float particleY = ANVIL_TOP_Y + Y_FIGHTING_OFFSET + MARKER_VISUAL_Y_OFFSET;
 
-			int[] offset = Positioning.getItemTextureOffset(getInventory().getStack(0));
+			int[] offset = MinigamePositioningUtil.getItemTextureOffset(getInventory().getStack(0));
 			Vec2f offsetVec = new Vec2f(offset[0] / 16.0f, offset[1] / 16.0f);
 
-			net.minecraft.util.math.Vec3d worldParticlePos = SmithingAnvilBlockEntity.Positioning.itemLocalToWorld(
+			net.minecraft.util.math.Vec3d worldParticlePos = MinigamePositioningUtil.itemLocalToWorld(
 					markerLocalPos, getPos(), getCachedState(), offsetVec, particleY
 			);
 
@@ -514,10 +507,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			// Use a fixed Y for server-side particle spawning. Client will handle precise Y.
 			float particleY = ANVIL_TOP_Y + Y_FIGHTING_OFFSET + MARKER_VISUAL_Y_OFFSET;
 
-			int[] offset = Positioning.getItemTextureOffset(itemStack);
+			int[] offset = MinigamePositioningUtil.getItemTextureOffset(itemStack);
 			Vec2f offsetVec = new Vec2f(offset[0] / 16.0f, offset[1] / 16.0f);
 
-			net.minecraft.util.math.Vec3d worldParticlePos = SmithingAnvilBlockEntity.Positioning.itemLocalToWorld(
+			net.minecraft.util.math.Vec3d worldParticlePos = MinigamePositioningUtil.itemLocalToWorld(
 					markerLocalPos, getPos(), getCachedState(), offsetVec, particleY
 			);
 
@@ -596,7 +589,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 					markerSpawnDelay--;
 				}
 				if (markerSpawnDelay == 0) {
-					Vec2f marker = SmithingAnvilBlockEntity.Positioning.getRandomMarkerPosition(stackForMarker, getCachedState());
+					Vec2f marker = MinigamePositioningUtil.getRandomMarkerPosition(stackForMarker, getCachedState());
 					if (marker.equals(Vec2f.ZERO)) {
 						markerSpawnDelay = SUBSEQUENT_MARKER_DELAY_TICKS;
 						return;
@@ -672,20 +665,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 	public void openSchematicSelection(PlayerEntity player) {
 		if (world == null || world.isClient) return;
-		List<Identifier> options = findAvailableSchematicProductsForPlayer(player);
-		if (options.isEmpty()) {
-			player.sendMessage(Text.literal("You have no schematics for this material."), true);
-			return;
-		}
-
-		PacketByteBuf data = PacketByteBufs.create();
-		data.writeBlockPos(getPos());
-		data.writeInt(options.size());
-		for (Identifier id : options) {
-			data.writeIdentifier(id);
-		}
-		// Use the shared channel so the client can receive and open the UI
-		ServerPlayNetworking.send((ServerPlayerEntity) player, ModMessages.OPEN_SCHEMATIC_SELECTION, data); // You may want to rename this channel
+		List<Identifier> options = SchematicResultUtil.findAvailableSchematicProductsForPlayer(player);
+		SchematicResultUtil.openSchematicSelection(player, getPos(), options, world);
 	}
 
 	public void setPlannedProduct(Identifier productId) {
@@ -695,43 +676,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		resetMarkerProgress();
 	}
 
-	private List<Identifier> findAvailableSchematicProductsForPlayer(PlayerEntity player) {
-		List<Identifier> result = new ArrayList<>();
-		var inv = player.getInventory();
-		for (int i = 0; i < inv.size(); i++) {
-			ItemStack s = inv.getStack(i);
-			if (s.isEmpty()) continue;
-			deriveProductIdFromSchematic(s).ifPresent(id -> {
-				if (!result.contains(id)) {
-					result.add(id);
-				}
-			});
-		}
-		return result;
-	}
-
-	private java.util.Optional<Identifier> deriveProductIdFromSchematic(ItemStack schematicStack) {
-		// Translation key ending in "-schematic" maps to product by stripping suffix.
-		String key = schematicStack.getItem().getTranslationKey();
-		if (key.endsWith("-schematic")) {
-			String base = key.substring(0, key.length() - "-schematic".length());
-			// Try to convert translationKey-like "item.forgero.axe_head" to Identifier "forgero:axe_head"
-			int nsIdx = base.indexOf('.');
-			if (nsIdx >= 0 && nsIdx < base.length() - 1) {
-				String afterPrefix = base.substring(nsIdx + 1);
-				int typeIdx = afterPrefix.indexOf('.');
-				if (typeIdx >= 0 && typeIdx < afterPrefix.length() - 1) {
-					String namespace = afterPrefix.substring(0, typeIdx);
-					String path = afterPrefix.substring(typeIdx + 1);
-					try {
-						return java.util.Optional.of(new Identifier(namespace, path));
-					} catch (Exception ignored) {
-					}
-				}
-			}
-		}
-		return java.util.Optional.empty();
-	}
 
 	private ItemStack createProductFromPlanned(Identifier productId) {
 		// Prefer resolving via StateService if your tool heads are states
@@ -820,239 +764,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	// =================================
 	// Positioning Utility Class and client sync remain unchanged
 	// =================================
-
-	// ...existing Positioning class...
-
-	// =================================
-	// Positioning Utility Class
-	// =================================
-
-	public static class Positioning {
-		private static final BoundingBoxUtil boundingBoxUtil = new BoundingBoxUtil();
-		private static final Random random = new Random();
-
-		/**
-		 * Converts a world-space hit result into the item's local texture space (-0.5 to 0.5).
-		 * This function needs to inverse the transformations applied in the renderer.
-		 *
-		 * @param hit               The BlockHitResult from the player's interaction.
-		 * @param anvilState        The BlockState of the Smithing Anvil, providing its facing direction.
-		 * @param itemTextureOffset The (dx, dz) texture offset for the item in block units (0-1 range, e.g., 2/16 = 0.125).
-		 * @return Vec2f representing the hit position in the item's local texture space (-0.5 to 0.5 for X,Y).
-		 */
-		public static Vec2f worldHitToItemLocal(BlockHitResult hit, BlockState anvilState, Vec2f itemTextureOffset) {
-			// Step 1: Convert world hit position to coordinates relative to the block's center (range -0.5..0.5)
-			double localX_block_center = hit.getPos().x - hit.getBlockPos().getX() - 0.5;
-			double localZ_block_center = hit.getPos().z - hit.getBlockPos().getZ() - 0.5;
-
-			// Step 2: Inverse of anvil rotation
-			Direction facing = anvilState.get(com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.FACING);
-			float anvilAngleDegrees = 0.0f;
-			switch (facing) {
-				case EAST -> anvilAngleDegrees = -90.0f;
-				case SOUTH -> anvilAngleDegrees = 180.0f;
-				case WEST -> anvilAngleDegrees = 90.0f;
-				case NORTH -> anvilAngleDegrees = 0.0f;
-			}
-			float invAnvilAngleRadians = (float) Math.toRadians(-anvilAngleDegrees);
-			double cosInv = Math.cos(invAnvilAngleRadians);
-			double sinInv = Math.sin(invAnvilAngleRadians);
-
-			double xAfterAnvilRot = localX_block_center * cosInv - localZ_block_center * sinInv;
-			double zAfterAnvilRot = localX_block_center * sinInv + localZ_block_center * cosInv;
-
-			// Step 3: Inverse of item's 180-degree rotation (rotation by -180 is equivalent to negation)
-			float xBeforeItemRot = (float) -xAfterAnvilRot;
-			float zBeforeItemRot = (float) -zAfterAnvilRot;
-
-			// Step 4: Inverse of texture offset (offset was applied before scaling in renderer)
-			float xBeforeOffset = xBeforeItemRot - itemTextureOffset.x;
-			float zBeforeOffset = zBeforeItemRot - itemTextureOffset.y;
-
-			// Step 5: Inverse of scale
-			float xLocal = xBeforeOffset / SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
-			float zLocal = zBeforeOffset / SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
-
-			// Return item-local coordinates in the same space as markerPositions (no extra negation)
-			return new Vec2f(xLocal, zLocal);
-		}
-
-		/**
-		 * Converts an item's local texture space coordinate (-0.5 to 0.5) to a world-space position for rendering particles.
-		 * This function applies the transformations in the same order as the renderer, but for a single point.
-		 *
-		 * @param itemLocalPos      The position in the item's local texture space (-0.5 to 0.5 for X,Y).
-		 * @param anvilBlockPos     The BlockPos of the Smithing Anvil.
-		 * @param anvilState        The BlockState of the Smithing Anvil.
-		 * @param itemTextureOffset The (dx, dz) texture offset for the item.
-		 * @param baseY             The base Y-coordinate offset relative to the block's origin (0-1 range).
-		 * @return Vec3d representing the world coordinates where the particle should spawn.
-		 */
-		public static Vec3d itemLocalToWorld(Vec2f itemLocalPos, BlockPos anvilBlockPos, BlockState anvilState, Vec2f itemTextureOffset, float baseY) {
-			// These steps mirror the transformation chain in SmithingAnvilBlockEntityRenderer.render
-
-			// Step 1: Apply texture centering offset (in unscaled item local space).
-			float transformedX_preScale = itemLocalPos.x + itemTextureOffset.x;
-			float transformedZ_preScale = itemLocalPos.y + itemTextureOffset.y; // itemLocalPos.y is equivalent to Z in world space
-
-			// Step 2: Apply the RENDER_SCALE_FACTOR.
-			float transformedX_scaled = transformedX_preScale * SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
-			float transformedZ_scaled = transformedZ_preScale * SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
-
-			// Step 3: Apply Item's 180-degree rotation.
-			float transformedX_afterItemRot = -transformedX_scaled;
-			float transformedZ_afterItemRot = -transformedZ_scaled;
-
-			// Step 4: Apply Anvil's Rotation (to align with the block's orientation)
-			// Use the same anvilAngleDegrees as the renderer.
-			Direction facing = anvilState.get(com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.FACING);
-			float anvilAngleDegrees = 0.0f;
-			switch (facing) {
-				case EAST -> anvilAngleDegrees = -90.0f;
-				case SOUTH -> anvilAngleDegrees = 180.0f;
-				case WEST -> anvilAngleDegrees = 90.0f;
-				case NORTH -> anvilAngleDegrees = 0.0f;
-			}
-			float angleRadians = (float) Math.toRadians(anvilAngleDegrees);
-			float cos = (float) Math.cos(angleRadians);
-			float sin = (float) Math.sin(angleRadians);
-			double rotatedX = transformedX_afterItemRot * cos - transformedZ_afterItemRot * sin;
-			double rotatedZ = transformedX_afterItemRot * sin + transformedZ_afterItemRot * cos;
-
-			// Step 5: Final world coordinates (translation to block center).
-			double worldX = anvilBlockPos.getX() + 0.5 + rotatedX;
-			double worldY = anvilBlockPos.getY() + baseY; // Use the provided baseY
-			double worldZ = anvilBlockPos.getZ() + 0.5 + rotatedZ;
-
-			return new net.minecraft.util.math.Vec3d(worldX, worldY, worldZ);
-		}
-
-		/**
-		 * Checks if a normalized (x, z) in item-local space is inside the top face of the *unscaled* anvil's voxel shape.
-		 * This is used for generating markers, ensuring they appear on the anvil's surface, not off it.
-		 *
-		 * @param itemLocalX     The X coordinate in item's local texture space (-0.5 to 0.5).
-		 * @param itemLocalZ     The Z coordinate in item's local texture space (-0.5 to 0.5).
-		 * @param anvilState     The BlockState of the Smithing Anvil.
-		 * @param anvilItemStack The ItemStack currently on the anvil, used to get its texture offset.
-		 * @return True if the point, when scaled to block space, is within the anvil's top layer.
-		 */
-		private static boolean isInsideAnvilTopLayer(float itemLocalX, float itemLocalZ, BlockState anvilState, ItemStack anvilItemStack) {
-			Direction facing = anvilState.get(com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.FACING);
-			VoxelShape shape = switch (facing) {
-				case NORTH -> com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.SHAPE_NORTH;
-				case SOUTH -> com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.SHAPE_SOUTH;
-				case EAST -> com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.SHAPE_EAST;
-				case WEST -> com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.SHAPE_WEST;
-				default -> VoxelShapes.fullCube();
-			};
-
-			// To check against the anvil's VoxelShape (which is defined in unscaled 0-1 block coordinates),
-			// we apply the *forward* transformations from itemLocal space to block space.
-
-			// Step 1: Apply texture centering offset (in unscaled item local space).
-			Vec2f itemTextureOffset = new Vec2f(Positioning.getItemTextureOffset(anvilItemStack)[0] / 16.0f, Positioning.getItemTextureOffset(anvilItemStack)[1] / 16.0f);
-
-			float transformedX_preScale = itemLocalX + itemTextureOffset.x;
-			float transformedZ_preScale = itemLocalZ + itemTextureOffset.y;
-
-			// Step 2: Apply the RENDER_SCALE_FACTOR.
-			float transformedX_scaled = transformedX_preScale * SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
-			float transformedZ_scaled = transformedZ_preScale * SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
-
-			// Step 3: Apply Item's 180-degree rotation.
-			float transformedX_afterItemRot = -transformedX_scaled;
-			float transformedZ_afterItemRot = -transformedZ_scaled;
-
-
-			// Step 4: Apply Anvil's Rotation (to align with the block's orientation)
-			// Use the same anvilAngleDegrees as the renderer.
-			Direction anvilFacing = anvilState.get(com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.FACING);
-			float anvilAngleDegrees = 0.0f;
-			switch (anvilFacing) {
-				case EAST -> anvilAngleDegrees = -90.0f;
-				case SOUTH -> anvilAngleDegrees = 180.0f;
-				case WEST -> anvilAngleDegrees = 90.0f;
-				case NORTH -> anvilAngleDegrees = 0.0f;
-			}
-			float angleRadians = (float) Math.toRadians(anvilAngleDegrees);
-			float cos = (float) Math.cos(angleRadians);
-			float sin = (float) Math.sin(angleRadians);
-
-			float finalX_block_center = transformedX_afterItemRot * cos - transformedZ_afterItemRot * sin;
-			float finalZ_block_center = transformedX_afterItemRot * sin + transformedZ_afterItemRot * cos;
-
-
-			// Step 5: Shift to 0-1 range for VoxelShape comparison.
-			double testX = finalX_block_center + 0.5;
-			double testZ = finalZ_block_center + 0.5;
-			double testY = 1.0 - 1e-6; // Check slightly below the top surface of the anvil.
-
-			for (net.minecraft.util.math.Box box : shape.getBoundingBoxes()) {
-				if (box.contains(testX, testY, testZ)) {
-					return true;
-				}
-			}
-			return false;
-		}
-
-		/**
-		 * Gets a random marker position within the item's texture, in local coordinates (-0.5 to 0.5).
-		 *
-		 * @param stack      The ItemStack representing the item on the anvil.
-		 * @param anvilState The BlockState of the Smithing Anvil.
-		 * @return Vec2f representing a random valid marker position in the item's local texture space, or Vec2f.ZERO if no valid position can be found.
-		 */
-		public static Vec2f getRandomMarkerPosition(ItemStack stack, BlockState anvilState) {
-			try {
-				MinecraftClient client = MinecraftClient.getInstance();
-				BufferedImage image = RuntimeModelUtil.getFirstQuadTextureImage(stack, client);
-				if (image == null) return Vec2f.ZERO;
-
-				List<java.awt.Point> validPixels = boundingBoxUtil.collectValidPixels(image);
-				if (validPixels.isEmpty()) return Vec2f.ZERO;
-
-				for (int attempt = 0; attempt < 32; attempt++) {
-					java.awt.Point p = validPixels.get(random.nextInt(validPixels.size()));
-					// Convert pixel coordinates (0-15) to item local coordinates (-0.5 to 0.5)
-					float markerX_local = (p.x + 0.5f) / 16.0f - 0.5f;
-					float markerZ_local = (p.y + 0.5f) / 16.0f - 0.5f;
-
-					if (isInsideAnvilTopLayer(markerX_local, markerZ_local, anvilState, stack)) { // Pass the stack here
-						return new Vec2f(markerX_local, markerZ_local);
-					}
-				}
-				LOGGER.warn("Could not find a valid marker position for stack {} after 32 attempts.", stack.getName().getString());
-				return Vec2f.ZERO;
-			} catch (Exception e) {
-				LOGGER.error("Error generating random marker position for stack {}: {}", stack.getName().getString(), e.getMessage());
-				return Vec2f.ZERO;
-			}
-		}
-
-		/**
-		 * Retrieves the texture offset for a given ItemStack from its cached model.
-		 * Used to correctly center the item's visible part.
-		 *
-		 * @param stack The ItemStack to get the offset for.
-		 * @return An int array [dx, dz] in pixels (0-15 range), or [0,0] if not found.
-		 */
-		public static int[] getItemTextureOffset(ItemStack stack) {
-			if (stack.isEmpty()) {
-				return new int[]{0, 0};
-			}
-			try {
-				MinecraftClient client = MinecraftClient.getInstance();
-				BufferedImage image = RuntimeModelUtil.getFirstQuadTextureImage(stack, client);
-				if (image != null) {
-					return BoundingBoxUtil.getItemTextureOffsetFromImage(image);
-				}
-			} catch (Exception e) {
-				// Fallthrough
-			}
-			return new int[]{0, 0};
-		}
-	}
 
 	// Client-only setter used by S2C sync to reflect ingot crafting state without resetting markers/minigame.
 	public void clientSyncIngotState(boolean ingotCrafting, @Nullable Identifier plannedProductId) {
