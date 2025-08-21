@@ -121,11 +121,17 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 	}
 
 	private void renderMarker(MatrixStack matrices, VertexConsumerProvider vertexConsumers, SmithingAnvilBlockEntity entity) {
-		// This square marker is now debug-only
 		if (!entity.getMarkerPositions().isEmpty()) {
 			matrices.push();
 			// The current matrix stack is set up such that XZ is the horizontal plane, and Y points up.
 			// Markers are defined in item-local space (-0.5 to 0.5), matching this setup.
+
+
+			// Apply extra 180° rotation for North and South facings
+			Direction facing = entity.getCachedState().get(AnvilBlock.FACING);
+			if (facing == Direction.NORTH || facing == Direction.SOUTH) {
+				matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+			}
 
 			Vec2f markerPos = entity.getMarkerPositions().get(0);
 

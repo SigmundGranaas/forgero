@@ -22,7 +22,6 @@ public class MinigamePositioningUtil {
 	private static final Random random = new Random();
 
 	public static Vec2f worldHitToItemLocal(BlockHitResult hit, BlockState anvilState, Vec2f itemTextureOffset) {
-		// ...logic from Positioning.worldHitToItemLocal...
 		double localX_block_center = hit.getPos().x - hit.getBlockPos().getX() - 0.5;
 		double localZ_block_center = hit.getPos().z - hit.getBlockPos().getZ() - 0.5;
 
@@ -54,7 +53,6 @@ public class MinigamePositioningUtil {
 	}
 
 	public static Vec3d itemLocalToWorld(Vec2f itemLocalPos, BlockPos anvilBlockPos, BlockState anvilState, Vec2f itemTextureOffset, float baseY) {
-		// ...logic from Positioning.itemLocalToWorld...
 		float transformedX_preScale = itemLocalPos.x + itemTextureOffset.x;
 		float transformedZ_preScale = itemLocalPos.y + itemTextureOffset.y;
 
