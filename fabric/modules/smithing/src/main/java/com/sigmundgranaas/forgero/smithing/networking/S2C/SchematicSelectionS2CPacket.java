@@ -43,6 +43,7 @@ public class SchematicSelectionS2CPacket {
 		private int x, startY, viewportHeight, contentHeight, maxScroll, trackX, trackW;
 		private boolean scrollable, draggingScrollbar;
 		private float scrollOffset;
+		private ButtonWidget cancelButton; // render after clipping
 
 		protected SimpleSchematicSelectionScreen(BlockPos anvilPos, List<Identifier> options) {
 			super(Text.literal("Select mold"));
@@ -89,7 +90,7 @@ public class SchematicSelectionS2CPacket {
 			updateOptionButtons();
 
 			// Cancel button stays below the viewport
-			this.addDrawableChild(
+			this.cancelButton = this.addDrawableChild(
 					ButtonWidget.builder(Text.literal("Cancel"), btn -> close())
 							.dimensions(this.x, this.startY + this.viewportHeight + 8, this.buttonWidth, this.buttonHeight)
 							.build()
@@ -176,17 +177,53 @@ public class SchematicSelectionS2CPacket {
 
 		@Override
 		public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-			super.render(context, mouseX, mouseY, delta);
+			// Draw world background
+			this.renderBackground(context);
 
-			// Draw scrollbar if needed
+			// Compute box bounds
+			int padding = 4;
+			int left = this.x - padding - 1;
+			int right = Math.max(this.x + this.buttonWidth, this.trackX + this.trackW) + padding + 1;
+			int top = this.startY - padding - 1;
+			int bottom = this.startY + this.viewportHeight + 8 + this.buttonHeight + padding + 1;
+
+			// Panel background inside the border (fitting color)
+			int boxBg = 0xB0202020; // semi-transparent dark panel
+			context.fill(left, top, right, bottom, boxBg);
+
+			// Clip list area so buttons never render outside the box
+			context.enableScissor(this.x, this.startY, this.x + this.buttonWidth, this.startY + this.viewportHeight);
+			for (ButtonWidget btn : this.optionButtons) {
+				if (btn.visible) {
+					btn.render(context, mouseX, mouseY, delta);
+				}
+			}
+			context.disableScissor();
+
+			// Scrollbar: make track slightly larger than the thumb range
 			if (this.scrollable) {
+				int trackPad = 2;
+				int trackTop = this.startY - trackPad;
+				int trackBottom = this.startY + this.viewportHeight + trackPad;
 				// Track
-				context.fill(this.trackX, this.startY, this.trackX + this.trackW, this.startY + this.viewportHeight, 0x66000000);
-				// Thumb
+				context.fill(this.trackX, trackTop, this.trackX + this.trackW, trackBottom, 0x66000000);
+				// Thumb (still constrained to viewport)
 				int thumbY = getThumbY();
 				int thumbH = getThumbHeight();
 				context.fill(this.trackX + 1, thumbY, this.trackX + this.trackW - 1, thumbY + thumbH, 0xCCFFFFFF);
 			}
+
+			// Cancel button (outside of scissor)
+			if (this.cancelButton != null) {
+				this.cancelButton.render(context, mouseX, mouseY, delta);
+			}
+
+			// 1px border
+			int borderColor = 0xCCFFFFFF;
+			context.fill(left, top, right, top + 1, borderColor);           // Top
+			context.fill(left, bottom - 1, right, bottom, borderColor);     // Bottom
+			context.fill(left, top, left + 1, bottom, borderColor);         // Left
+			context.fill(right - 1, top, right, bottom, borderColor);       // Right
 		}
 
 		@Override
