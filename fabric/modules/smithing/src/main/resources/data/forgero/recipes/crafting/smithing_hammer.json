@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "  X",
+        " I ",
+        "I  "
+    ],
+    "key": {
+        "I": {
+          "item": "minecraft:stick"
+        },
+        "X": {
+          "item": "minecraft:cobblestone"
+        }
+    },
+    "result": {
+        "item": "forgero:smithing_hammer",
+        "count": 1
+
+    }
+}
