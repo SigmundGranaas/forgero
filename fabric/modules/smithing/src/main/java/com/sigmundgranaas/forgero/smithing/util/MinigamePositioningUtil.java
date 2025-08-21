@@ -326,11 +326,18 @@ public class MinigamePositioningUtil {
 
 			Vec2f offsetVec = getMorphedTextureOffsetVec2f(entity);
 			BlockState anvilState = entity.getCachedState();
+			Direction facing = anvilState.get(net.minecraft.block.AnvilBlock.FACING);
 
 			for (int attempt = 0; attempt < 32; attempt++) {
 				java.awt.Point p = validPixels.get(random.nextInt(validPixels.size()));
 				float markerX_local = (p.x + 0.5f) / texW - 0.5f;
 				float markerZ_local = (p.y + 0.5f) / texH - 0.5f;
+
+				// Apply 180° rotation for NORTH and SOUTH facings to match renderer
+				if (facing == Direction.NORTH || facing == Direction.SOUTH) {
+					markerX_local = -markerX_local;
+					markerZ_local = -markerZ_local;
+				}
 
 				if (isInsideAnvilTopLayer(markerX_local, markerZ_local, anvilState, offsetVec)) {
 					return new Vec2f(markerX_local, markerZ_local);
