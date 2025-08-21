@@ -2,6 +2,9 @@ package com.sigmundgranaas.forgero.smithing.recipe;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 
+import com.sigmundgranaas.forgero.smithing.recipe.Custom.MetalMoldRecipe;
+import com.sigmundgranaas.forgero.smithing.recipe.Custom.MetalSmeltingRecipe;
+
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;

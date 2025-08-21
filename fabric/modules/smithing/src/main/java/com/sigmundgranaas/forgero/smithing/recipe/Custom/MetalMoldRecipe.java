@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.smithing.recipe;
+package com.sigmundgranaas.forgero.smithing.recipe.Custom;
 
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.smithing.item.custom.CrucibleItem;

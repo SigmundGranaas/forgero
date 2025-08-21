@@ -4,7 +4,7 @@ import static com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities.
 
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.MoldBlockEntity;
 import com.sigmundgranaas.forgero.smithing.item.custom.CrucibleItem;
-import com.sigmundgranaas.forgero.smithing.recipe.MetalMoldRecipe;
+import com.sigmundgranaas.forgero.smithing.recipe.Custom.MetalMoldRecipe;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

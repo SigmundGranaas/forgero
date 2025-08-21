@@ -1,5 +1,5 @@
 // Java
-package com.sigmundgranaas.forgero.smithing.recipe;
+package com.sigmundgranaas.forgero.smithing.recipe.Custom;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;

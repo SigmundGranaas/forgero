@@ -1,8 +1,0 @@
-{
-  "type": "forgero:metal_smelting",
-  "cooking_time": 150,
-  "mb_per_item": 120,
-  "liquid_namespace": "forgero",
-  "liquid_prefix": "molten_"
-}
-

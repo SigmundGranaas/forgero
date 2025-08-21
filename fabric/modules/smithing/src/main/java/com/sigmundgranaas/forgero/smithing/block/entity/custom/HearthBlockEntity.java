@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.smithing.block.entity.custom;
 
 import com.sigmundgranaas.forgero.smithing.item.custom.CrucibleItem;
 import com.sigmundgranaas.forgero.smithing.networking.packet.HeartBlockSyncS2CPacket;
-import com.sigmundgranaas.forgero.smithing.recipe.MetalSmeltingRecipe;
+import com.sigmundgranaas.forgero.smithing.recipe.Custom.MetalSmeltingRecipe;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
