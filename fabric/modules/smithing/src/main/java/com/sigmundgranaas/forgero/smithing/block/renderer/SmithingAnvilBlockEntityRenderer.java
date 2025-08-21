@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil;
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
 import com.sigmundgranaas.forgero.smithing.util.BoundingBoxUtil;
 import com.sigmundgranaas.forgero.smithing.util.MinigamePositioningUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import net.minecraft.block.AnvilBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.RenderLayer;
@@ -76,13 +76,13 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 		matrices.translate(0.5f, itemRenderY, 0.5f);
 
 		// Step 2: Rotate the entire visual setup (item + overlays) by the anvil's facing direction.
-		Direction facing = entity.getCachedState().get(SmithingAnvil.FACING);
+		Direction facing = entity.getCachedState().get(AnvilBlock.FACING);
 		float anvilAngleDegrees = 0.0f;
 		switch (facing) {
-			case EAST -> anvilAngleDegrees = -90.0f;
-			case SOUTH -> anvilAngleDegrees = 180.0f;
-			case WEST -> anvilAngleDegrees = 90.0f;
-			case NORTH -> anvilAngleDegrees = 0.0f; // Default for NORTH
+			case EAST -> anvilAngleDegrees = -180.0f;
+			case SOUTH -> anvilAngleDegrees = 90.0f;
+			case WEST -> anvilAngleDegrees = 0.0f;
+			case NORTH -> anvilAngleDegrees = -90.0f;
 		}
 		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(anvilAngleDegrees));
 

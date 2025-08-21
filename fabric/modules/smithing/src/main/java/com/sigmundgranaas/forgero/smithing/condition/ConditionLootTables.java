@@ -40,7 +40,8 @@ public class ConditionLootTables {
     ).stream().filter(java.util.Objects::nonNull).toList();
 
     public static final List<NamedCondition> BAD = List.of(
-        Conditions.INSTANCE.of("forgero:pig_affinity").orElse(null)
+        Conditions.INSTANCE.of("forgero:pig_affinity").orElse(null),
+		Conditions.INSTANCE.of("forgero:unfinished").orElse(null)
     ).stream().filter(java.util.Objects::nonNull).toList();
 
     private static final Random RANDOM = new Random();

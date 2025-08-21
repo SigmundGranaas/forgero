@@ -26,12 +26,12 @@ public class MinigamePositioningUtil {
 		double localX_block_center = hit.getPos().x - hit.getBlockPos().getX() - 0.5;
 		double localZ_block_center = hit.getPos().z - hit.getBlockPos().getZ() - 0.5;
 
-		Direction facing = anvilState.get(com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.FACING);
+		Direction facing = anvilState.get(net.minecraft.block.AnvilBlock.FACING);
 		float anvilAngleDegrees = switch (facing) {
-			case EAST -> -90.0f;
-			case SOUTH -> 180.0f;
-			case WEST -> 90.0f;
-			case NORTH -> 0.0f;
+			case EAST -> -180.0f;
+			case SOUTH -> 90.0f;
+			case WEST -> 0.0f;
+			case NORTH -> -90.0f;
 			default -> 0.0f;
 		};
 		float invAnvilAngleRadians = (float) Math.toRadians(-anvilAngleDegrees);
@@ -64,12 +64,12 @@ public class MinigamePositioningUtil {
 		float transformedX_afterItemRot = -transformedX_scaled;
 		float transformedZ_afterItemRot = -transformedZ_scaled;
 
-		Direction facing = anvilState.get(com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.FACING);
+		Direction facing = anvilState.get(net.minecraft.block.AnvilBlock.FACING);
 		float anvilAngleDegrees = switch (facing) {
-			case EAST -> -90.0f;
-			case SOUTH -> 180.0f;
-			case WEST -> 90.0f;
-			case NORTH -> 0.0f;
+			case EAST -> -180.0f;
+			case SOUTH -> 90.0f;
+			case WEST -> 0.0f;
+			case NORTH -> -90.0f;
 			default -> 0.0f;
 		};
 		float angleRadians = (float) Math.toRadians(anvilAngleDegrees);
@@ -86,7 +86,7 @@ public class MinigamePositioningUtil {
 	}
 
 	private static boolean isInsideAnvilTopLayer(float itemLocalX, float itemLocalZ, BlockState anvilState, ItemStack anvilItemStack) {
-		Direction facing = anvilState.get(com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.FACING);
+		Direction facing = anvilState.get(net.minecraft.block.AnvilBlock.FACING);
 		VoxelShape shape = switch (facing) {
 			case NORTH -> com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.SHAPE_NORTH;
 			case SOUTH -> com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.SHAPE_SOUTH;
@@ -106,12 +106,12 @@ public class MinigamePositioningUtil {
 		float transformedX_afterItemRot = -transformedX_scaled;
 		float transformedZ_afterItemRot = -transformedZ_scaled;
 
-		Direction anvilFacing = anvilState.get(com.sigmundgranaas.forgero.smithing.block.custom.SmithingAnvil.FACING);
+		Direction anvilFacing = anvilState.get(net.minecraft.block.AnvilBlock.FACING);
 		float anvilAngleDegrees = switch (anvilFacing) {
-			case EAST -> -90.0f;
-			case SOUTH -> 180.0f;
-			case WEST -> 90.0f;
-			case NORTH -> 0.0f;
+			case EAST -> -180.0f;
+			case SOUTH -> 90.0f;
+			case WEST -> 0.0f;
+			case NORTH -> -90.0f;
 			default -> 0.0f;
 		};
 		float angleRadians = (float) Math.toRadians(anvilAngleDegrees);
