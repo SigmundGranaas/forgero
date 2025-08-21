@@ -1,0 +1,49 @@
+{
+  "type": "forgero:shaped_recipe",
+  "group": "forgero:pickaxes",
+  "category": "equipment",
+  "pattern": [
+    " H ",
+    " S ",
+    " B "
+  ],
+  "key": {
+    "H": {
+      "item": "forgero:diamond-pickaxe_head"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "B": {
+      "item": "minecraft:leather"
+    }
+  },
+  "result": {
+    "item": "forgero:diamond-pickaxe",
+    "structure": {
+      "forgero:head": "H",
+      "forgero:handle": "forgero:oak-handle"
+    },
+    "upgrades": [
+      {
+        "slot": "forgero:binding",
+        "component": "forgero:leather-binding"
+      }
+    ],
+    "properties": {
+      "forgero:attributes": [
+        {
+          "type": "forgero:mining_speed",
+          "operator": "mul",
+          "value": 1.1
+        }
+      ],
+      "forgero:tooltip_sections": [
+        {
+          "key": "forgero:description",
+          "value": "tooltip.forgero.reinforced_craft"
+        }
+      ]
+    }
+  }
+}

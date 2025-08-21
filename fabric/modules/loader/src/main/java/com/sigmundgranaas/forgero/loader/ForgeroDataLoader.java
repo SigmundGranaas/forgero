@@ -12,11 +12,14 @@ import com.sigmundgranaas.forgero.common.convert.IdMapper;
 import com.sigmundgranaas.forgero.common.convert.StatefulConverter;
 import com.sigmundgranaas.forgero.common.convert.TypeConverter;
 import com.sigmundgranaas.forgero.common.nbt.ComponentNbtConverter;
+import com.sigmundgranaas.forgero.common.recipe.ForgeroShapedRecipeSerializer;
 import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
 import com.sigmundgranaas.forgero.common.tooltip.ForgeroTooltipRenderer;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeCodec;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.component.mutation.api.ComponentMutater;
+import com.sigmundgranaas.forgero.core.component.mutation.impl.ComponentMutaterImpl;
 import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.api.codec.KeyMapDispatchCodec;
@@ -25,6 +28,7 @@ import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 import com.sigmundgranaas.forgero.core.property.engine.ResolverEngine;
+import com.sigmundgranaas.forgero.core.recipe.ForgeroEnvironment;
 import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
 import com.sigmundgranaas.forgero.core.registry.impl.MapBackedComponentRegistry;
 import com.sigmundgranaas.forgero.core.condition.api.ConditionCodec;
@@ -39,6 +43,8 @@ import com.sigmundgranaas.forgero.loader.plugin.ForgeroDefaultsPlugin;
 import com.sigmundgranaas.forgero.utility.resource.loader.implementation.ClassPathResourceProvider;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -111,6 +117,8 @@ public class ForgeroDataLoader implements ModInitializer {
 			// Store registered items for lookup
 			items.forEach(item -> registeredItems.put(item.id(), item.item()));
 
+			initializeRecipes(dataConfig);
+
 			// Phase 8: Notify post-load plugins
 			notifyPostLoadPlugins();
 
@@ -159,9 +167,9 @@ public class ForgeroDataLoader implements ModInitializer {
 		Supplier<Codec<Condition>> conditionCodecSupplier = () -> new ConditionCodec(staticConditionCodecs, dynamicConditionCodecs);
 
 		// Build the full map of property codecs from plugin-provided builders
-		Map<String, Codec<? extends List<?>>> propertyCodecs = new HashMap<>();
+		Map<PropertyKey<?>, Codec<? extends List<?>>> propertyCodecs = new HashMap<>();
 		// Add Forgero's default attribute codec
-		propertyCodecs.put("forgero:attributes", ListCodecWrapper.of(new AttributeCodec(conditionCodecSupplier.get())));
+		propertyCodecs.put(Attribute.KEY, ListCodecWrapper.of(new AttributeCodec(conditionCodecSupplier.get())));
 
 		// Add all codecs from plugins
 		var propertyCodecBuilders = registrationContext.getPropertyCodecBuilders();
@@ -177,6 +185,13 @@ public class ForgeroDataLoader implements ModInitializer {
 				staticConditionCodecs,
 				dynamicConditionCodecs
 		);
+	}
+
+	private void initializeRecipes(ForgeroDataInitializer.Config dataConfig) {
+		// Instantiate and register the serializer
+		ForgeroShapedRecipeSerializer.INSTANCE = new ForgeroShapedRecipeSerializer(dataConfig.propertyCodecs());
+		Registry.register(Registries.RECIPE_SERIALIZER, ForgeroShapedRecipeSerializer.ID, ForgeroShapedRecipeSerializer.INSTANCE);
+		LOGGER.info("Registered Forgero shaped recipe serializer.");
 	}
 
 	private ForgeroDataBundle loadData(ForgeroDataInitializer.Config config) {
@@ -219,6 +234,12 @@ public class ForgeroDataLoader implements ModInitializer {
 
 		AttributeManager.initialize(componentConverter, resolver);
 		LOGGER.debug("Forgero Attribute Manager initialized.");
+
+		// Initialize the environment for recipes
+		ComponentMutater mutater = new ComponentMutaterImpl();
+		ForgeroEnvironment.initialize(componentRegistry, componentConverter, mutater);
+		LOGGER.debug("Forgero Environment initialized for crafting.");
+
 
 		LOGGER.debug("Core services initialized");
 	}

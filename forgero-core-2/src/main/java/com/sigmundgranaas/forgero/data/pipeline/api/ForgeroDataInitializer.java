@@ -13,6 +13,7 @@ import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.condition.api.ConditionCodec;
 import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
+import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 import com.sigmundgranaas.forgero.data.loading.api.RawDefinition;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.HostData;
@@ -52,7 +53,7 @@ public class ForgeroDataInitializer {
 	public record Config(
 			String defaultNamespace,
 			ResourceProvider resourceProvider,
-			Map<String, Codec<? extends List<?>>> propertyCodecs,
+			Map<PropertyKey<?>, Codec<? extends List<?>>> propertyCodecs,
 			Map<String, Codec<? extends StaticCondition>> staticConditionCodecs,
 			Map<String, Codec<? extends DynamicCondition>> dynamicConditionCodecs
 	) {

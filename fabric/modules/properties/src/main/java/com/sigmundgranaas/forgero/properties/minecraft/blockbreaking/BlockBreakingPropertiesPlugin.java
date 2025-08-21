@@ -11,7 +11,7 @@ public class BlockBreakingPropertiesPlugin implements DataPlugin, PostLoadPlugin
 	@Override
 	public void register(PluginRegistrationContext context) {
 		context.registerPropertyCodec(
-				BlockBreakingProperty.KEY_ID.toString(),
+				BlockBreakingProperty.PROPERTY_KEY,
 				conditionCodecSupplier -> ListCodecWrapper.of(BlockBreakingProperty.codec(conditionCodecSupplier.get()))
 		);
 	}
