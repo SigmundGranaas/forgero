@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 
-public class SmithingAnvilSyncS2CPacket {
+public class AnvilSyncS2CPacket {
 	public static void receive(@NotNull MinecraftClient client, ClientPlayNetworkHandler handler, @NotNull PacketByteBuf buf, PacketSender responseSender) {
 		// Read data in the same order it was written by the server
 		BlockPos position = buf.readBlockPos();

@@ -6,11 +6,13 @@ import java.util.Random;
 
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
+import com.sigmundgranaas.forgero.smithing.condition.ConditionLootTables;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 import com.sigmundgranaas.forgero.smithing.util.MinigamePositioningUtil;
 import com.sigmundgranaas.forgero.smithing.util.SchematicResultUtil;
+import com.sigmundgranaas.forgero.smithing.util.ToolPartTypeUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
@@ -451,6 +453,49 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			if (!newProduct.isEmpty()) {
 				int temp = TemperatureUtils.getTemperature(anvilItem);
 				TemperatureUtils.setTemperature(newProduct, temp);
+
+				// --- Apply condition to ingot-crafted tool ---
+				if (getMarkerAttempts() >= 3) {
+					var stateOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert(newProduct);
+					if (stateOpt.isPresent() && stateOpt.get() instanceof com.sigmundgranaas.forgero.core.condition.Conditional<?>) {
+						var state = stateOpt.get();
+						com.sigmundgranaas.forgero.core.condition.Conditional<?> conditional = (com.sigmundgranaas.forgero.core.condition.Conditional<?>) stateOpt.get();
+						if (state instanceof com.sigmundgranaas.forgero.core.state.Typed) {
+							com.sigmundgranaas.forgero.core.state.Typed typed = (com.sigmundgranaas.forgero.core.state.Typed) state;
+							if (ToolPartTypeUtils.isToolPartType(typed.type())) {
+								LOGGER.info("applySmithingResult: Toolpart found in newProduct: {}", newProduct);
+								int hits = getMarkerHitsCount();
+								java.util.List<com.sigmundgranaas.forgero.core.condition.NamedCondition> lootTable;
+								if (hits == 3) {
+									lootTable = ConditionLootTables.BEST;
+								} else if (hits == 2) {
+									lootTable = ConditionLootTables.GOOD;
+								} else if (hits == 1) {
+									lootTable = ConditionLootTables.NEUTRAL;
+								} else if (hits == 0) {
+									lootTable = ConditionLootTables.BAD;
+								} else {
+									lootTable = com.sigmundgranaas.forgero.core.condition.Conditions.INSTANCE.all().stream()
+											.filter(c -> c instanceof com.sigmundgranaas.forgero.core.condition.NamedCondition)
+											.map(c -> (com.sigmundgranaas.forgero.core.condition.NamedCondition) c)
+											.collect(java.util.stream.Collectors.toList());
+								}
+								if (!lootTable.isEmpty()) {
+									var randomCondition = ConditionLootTables.getRandomCondition(lootTable);
+									LOGGER.info("applySmithingResult: Applying loot table condition: {}", randomCondition.name());
+									var conditioned = conditional.applyCondition(randomCondition);
+									var newStackOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert((com.sigmundgranaas.forgero.core.state.State) conditioned);
+									if (newStackOpt.isPresent()) {
+										newProduct = newStackOpt.get();
+										LOGGER.info("applySmithingResult: Condition applied to ingot-crafted tool");
+									}
+								} else {
+									LOGGER.info("applySmithingResult: No conditions available to apply");
+								}
+							}
+						}
+					}
+				}
 				getInventory().setStack(0, newProduct);
 				world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 1.0f, 1.0f);
 			} else {

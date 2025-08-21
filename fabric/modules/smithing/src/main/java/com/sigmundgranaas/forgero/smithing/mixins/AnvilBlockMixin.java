@@ -2,8 +2,6 @@ package com.sigmundgranaas.forgero.smithing.mixins;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.Mixin;
 
 import net.minecraft.block.AnvilBlock;
@@ -17,11 +15,10 @@ import net.minecraft.world.World;
 
 @Mixin(AnvilBlock.class)
 public abstract class AnvilBlockMixin implements BlockEntityProvider {
-	private static final Logger LOGGER = LoggerFactory.getLogger("Forgero/SmithingAnvilBlockMixin");
 
 	@Override
 	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-		LOGGER.info("Creating SmithingAnvilBlockEntity at {}", pos);
+
 		return new SmithingAnvilBlockEntity(pos, state);
 	}
 

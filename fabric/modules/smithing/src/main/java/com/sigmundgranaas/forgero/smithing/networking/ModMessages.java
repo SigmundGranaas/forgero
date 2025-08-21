@@ -6,7 +6,7 @@ import com.sigmundgranaas.forgero.smithing.networking.C2S.AnvilUseC2SPacket;
 import com.sigmundgranaas.forgero.smithing.networking.C2S.SchematicSelectionC2SPacket;
 import com.sigmundgranaas.forgero.smithing.networking.S2C.HeartBlockSyncS2CPacket;
 import com.sigmundgranaas.forgero.smithing.networking.S2C.SchematicSelectionS2CPacket;
-import com.sigmundgranaas.forgero.smithing.networking.S2C.SmithingAnvilSyncS2CPacket;
+import com.sigmundgranaas.forgero.smithing.networking.S2C.AnvilSyncS2CPacket;
 
 import net.minecraft.util.Identifier;
 
@@ -30,7 +30,7 @@ public class ModMessages {
 
 	@Environment(EnvType.CLIENT)
 	public static void registerS2CPackets() {
-		ClientPlayNetworking.registerGlobalReceiver(ITEM_SYNC, SmithingAnvilSyncS2CPacket::receive);
+		ClientPlayNetworking.registerGlobalReceiver(ITEM_SYNC, AnvilSyncS2CPacket::receive);
 		ClientPlayNetworking.registerGlobalReceiver(OPEN_SCHEMATIC_SELECTION, SchematicSelectionS2CPacket::receive);
 		ClientPlayNetworking.registerGlobalReceiver(HEART_BLOCK_SYNC, (client, handler, buf, responseSender) -> {
 			HeartBlockSyncS2CPacket.receive(client, buf);
