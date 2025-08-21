@@ -24,6 +24,9 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
+//TODO Fuel System & Heating parts and ingots & Recipe system is fucked?
+
+
 public class HearthBlock extends CampfireBlock implements Waterloggable {
 	public static final BooleanProperty CRUCIBLE_PRESENT = BooleanProperty.of("crucible_present");
 
