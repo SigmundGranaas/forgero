@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -230,9 +229,9 @@ public class PositionPreservingMorpher {
 		return res;
 	}
 
-	// Signed Distance Field: distance to background minus distance to foreground.
+	// Signed Distance Field: distance to foreground minus distance to background.
 	public double[][] signedDistance(boolean[][] mask) {
-		// distance to background
+		// distance to background (outside of shape)
 		EDTResult toBg = edtToBackground(mask);
 		// distance to foreground: just invert mask
 		int h = mask.length, w = mask[0].length;
@@ -246,7 +245,8 @@ public class PositionPreservingMorpher {
 		double[][] sdf = new double[h][w];
 		for (int y = 0; y < h; y++)
 			for (int x = 0; x < w; x++)
-				sdf[y][x] = toBg.dist[y][x] - toFg.dist[y][x]; // <=0 inside, >0 outside
+				// Inside should be <= 0, outside > 0
+				sdf[y][x] = toFg.dist[y][x] - toBg.dist[y][x];
 		return sdf;
 	}
 
@@ -347,6 +347,9 @@ public class PositionPreservingMorpher {
 	/* =========================== Morph Step =========================== */
 
 	public BufferedImage morphStep(BufferedImage img1, BufferedImage img2, double weight) {
+		// Keep deterministic seed (no longer used for color assignment, but harmless for future random ops)
+		rng.setSeed(seedFor(img1, img2, weight));
+
 		int h = img1.getHeight(), w = img1.getWidth();
 		BufferedImage result = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 		int numOutlineColors = 2; // darkest 2 are outline
@@ -361,124 +364,44 @@ public class PositionPreservingMorpher {
 		List<Integer> outlinePalette1 = fullPalette1.subList(0, Math.min(numOutlineColors, fullPalette1.size()));
 		List<Integer> outlinePalette2 = fullPalette2.subList(0, Math.min(numOutlineColors, fullPalette2.size()));
 
-		List<Integer> fillPalette1 = (fullPalette1.size() > numOutlineColors) ? fullPalette1.subList(numOutlineColors, fullPalette1.size()) : Collections.emptyList();
-		List<Integer> fillPalette2 = (fullPalette2.size() > numOutlineColors) ? fullPalette2.subList(numOutlineColors, fullPalette2.size()) : Collections.emptyList();
-
-		int[][] fillIndexMap1 = createColorIndexMap(img1, fillPalette1);
-		int[][] fillIndexMap2 = createColorIndexMap(img2, fillPalette2);
-
-		boolean[][] edge1 = edgePixels(mask1);
-		boolean[][] edge2 = edgePixels(mask2);
-		boolean[][] fillMask1 = and(mask1, not(edge1));
-		boolean[][] fillMask2 = and(mask2, not(edge2));
-
-		// 2) Shape interpolation
+		// 2) Shape interpolation (unchanged)
 		boolean[][] morphedMask = interpolateShapes(mask1, mask2, weight);
 		if (!anyTrue(morphedMask)) return result;
 
 		boolean[][] morphedEdge = edgePixels(morphedMask);
-		boolean[][] morphedFillMask = and(morphedMask, not(morphedEdge));
 
-		// 3) Warp source fill maps using nearest-background coordinates
-		EDTResult bg1 = edtToBackground(mask1);
-		EDTResult bg2 = edtToBackground(mask2);
+		// 3) Coherent color sampling:
+		//    For each pixel in the morphed mask, take the color from each source image by:
+		//    - if inside source mask: sample x,y directly
+		//    - else: snap to nearest foreground pixel via EDT on the inverted mask
+		boolean[][] inv1 = not(mask1);
+		boolean[][] inv2 = not(mask2);
+		EDTResult toFg1 = edtToBackground(inv1); // nearest foreground of mask1
+		EDTResult toFg2 = edtToBackground(inv2); // nearest foreground of mask2
 
-		// interpolate coords
-		int[][] warpedFillIdx1 = new int[h][w];
-		int[][] warpedFillIdx2 = new int[h][w];
 		for (int y = 0; y < h; y++) {
 			for (int x = 0; x < w; x++) {
-				// nearest background coords (float interpolation)
-				double iy = bg1.nearestY[y][x] * (1.0 - weight) + bg2.nearestY[y][x] * weight;
-				double ix = bg1.nearestX[y][x] * (1.0 - weight) + bg2.nearestX[y][x] * weight;
+				if (!morphedMask[y][x]) {
+					// leave fully transparent outside
+					continue;
+				}
 
-				int sy = clamp((int)Math.round(iy), 0, h - 1);
-				int sx = clamp((int)Math.round(ix), 0, w - 1);
+				int sx1 = mask1[y][x] ? x : clamp(toFg1.nearestX[y][x], 0, w - 1);
+				int sy1 = mask1[y][x] ? y : clamp(toFg1.nearestY[y][x], 0, h - 1);
 
-				warpedFillIdx1[y][x] = fillIndexMap1[sy][sx];
-				warpedFillIdx2[y][x] = fillIndexMap2[sy][sx];
+				int sx2 = mask2[y][x] ? x : clamp(toFg2.nearestX[y][x], 0, w - 1);
+				int sy2 = mask2[y][x] ? y : clamp(toFg2.nearestY[y][x], 0, h - 1);
+
+				int c1 = img1.getRGB(sx1, sy1);
+				int c2 = img2.getRGB(sx2, sy2);
+
+				int blended = blendColor(c1, c2, weight);
+				result.setRGB(x, y, blended);
 			}
 		}
 
-		// 4) Histogram-preserving fill assignment
-		int[] targetCounts1 = new int[0], targetCounts2 = new int[0];
-		int[] current1 = new int[0], current2 = new int[0];
-
-		if (anyTrue(morphedFillMask) && !fillPalette1.isEmpty() && !fillPalette2.isEmpty()) {
-			targetCounts1 = calculateTargetCounts(
-					fillIndexMap1, fillMask1,
-					fillIndexMap2, fillMask2,
-					morphedFillMask, weight, fillPalette1.size(), fillPalette2.size(), true);
-			targetCounts2 = calculateTargetCounts(
-					fillIndexMap1, fillMask1,
-					fillIndexMap2, fillMask2,
-					morphedFillMask, weight, fillPalette1.size(), fillPalette2.size(), false);
-
-			current1 = new int[targetCounts1.length];
-			current2 = new int[targetCounts2.length];
-
-			// Shuffle fill pixel coordinates
-			List<int[]> coords = new ArrayList<>();
-			for (int y = 0; y < h; y++)
-				for (int x = 0; x < w; x++)
-					if (morphedFillMask[y][x]) coords.add(new int[]{y, x});
-			Collections.shuffle(coords, rng);
-
-			for (int[] p : coords) {
-				int y = p[0], x = p[1];
-				int idx1 = warpedFillIdx1[y][x];
-				int idx2 = warpedFillIdx2[y][x];
-
-				boolean can1 = (idx1 >= 0 && idx1 < targetCounts1.length && current1[idx1] < targetCounts1[idx1]);
-				boolean can2 = (idx2 >= 0 && idx2 < targetCounts2.length && current2[idx2] < targetCounts2[idx2]);
-
-				if (can1 && can2) {
-					if (rng.nextDouble() < weight) {
-						result.setRGB(x, y, fillPalette2.get(idx2));
-						current2[idx2]++;
-					} else {
-						result.setRGB(x, y, fillPalette1.get(idx1));
-						current1[idx1]++;
-					}
-				} else if (can2) {
-					result.setRGB(x, y, fillPalette2.get(idx2));
-					current2[idx2]++;
-				} else if (can1) {
-					result.setRGB(x, y, fillPalette1.get(idx1));
-					current1[idx1]++;
-				}
-			}
-
-			// Fallback for any unassigned fill pixels (artifact guard)
-			for (int y = 0; y < h; y++) {
-				for (int x = 0; x < w; x++) {
-					if (morphedFillMask[y][x] && ((result.getRGB(x, y) >>> 24) & 0xFF) == 0) {
-						// build remaining pool lazily once
-						// We'll regenerate/reuse a pool for every pixel scan for simplicity
-						List<Integer> pool = new ArrayList<>();
-						for (int i = 0; i < targetCounts1.length; i++) {
-							int rem = targetCounts1[i] - current1[i];
-							for (int t = 0; t < rem; t++) pool.add(fillPalette1.get(i));
-						}
-						for (int i = 0; i < targetCounts2.length; i++) {
-							int rem = targetCounts2[i] - current2[i];
-							for (int t = 0; t < rem; t++) pool.add(fillPalette2.get(i));
-						}
-						if (!pool.isEmpty()) {
-							result.setRGB(x, y, pool.get(rng.nextInt(pool.size())));
-						} else {
-							// extreme edge-case: pick a neutral from palettes
-							int c = !fillPalette2.isEmpty() ? fillPalette2.get(0) :
-									(!fillPalette1.isEmpty() ? fillPalette1.get(0) : 0);
-							result.setRGB(x, y, c);
-						}
-					}
-				}
-			}
-		}
-
-		// 5) Directional two-tone outline
-		if (anyTrue(morphedEdge) && !outlinePalette1.isEmpty() && !outlinePalette2.isEmpty()) {
+		// 4) Directional two-tone outline (kept, to emphasize edges)
+		if (!outlinePalette1.isEmpty() && !outlinePalette2.isEmpty()) {
 			int darkest1 = fullPalette1.get(0);
 			int darkest2 = fullPalette2.get(0);
 			int outlineDark = blendColor(darkest1, darkest2, weight);
@@ -504,6 +427,57 @@ public class PositionPreservingMorpher {
 		}
 
 		return result;
+	}
+
+	/* =========================== Deterministic RNG helpers =========================== */
+
+	// Mix two image hashes and a quantized weight into a stable 64-bit seed.
+	private long seedFor(BufferedImage a, BufferedImage b, double weight) {
+		long ha = hashImageFast(a);
+		long hb = hashImageFast(b);
+		// Quantize weight so only discrete progress steps (hits/TOTAL_MARKERS) change the seed.
+		// 1e6 resolution is ample; weight here is already discrete in practice.
+		long qw = (long) Math.round(weight * 1_000_000.0);
+		long seed = 0x9E3779B97F4A7C15L; // golden ratio
+		seed ^= Long.rotateLeft(ha, 13) + 0xC2B2AE3D27D4EB4FL;
+		seed ^= Long.rotateLeft(hb, 27) + 0x165667B19E3779F9L;
+		seed ^= (qw * 0x9E3779B97F4A7C15L);
+		// Final avalanche
+		seed ^= (seed >>> 33);
+		seed *= 0xff51afd7ed558ccdL;
+		seed ^= (seed >>> 33);
+		seed *= 0xc4ceb9fe1a85ec53L;
+		seed ^= (seed >>> 33);
+		return seed;
+	}
+
+	// Fast content hash for a BufferedImage: sample pixels on a grid to avoid full scans every frame.
+	private long hashImageFast(BufferedImage img) {
+		int w = img.getWidth();
+		int h = img.getHeight();
+		// Sample stride: balance speed and stability. 4 gives 16x fewer samples on 64x64.
+		int sx = Math.max(1, w / 16);
+		int sy = Math.max(1, h / 16);
+		long h1 = 0x9E3779B97F4A7C15L ^ w * 0xC2B2AE3D27D4EB4FL ^ h * 0x165667B19E3779F9L;
+		for (int y = 0; y < h; y += sy) {
+			for (int x = 0; x < w; x += sx) {
+				int argb = img.getRGB(x, y);
+				long v = argb * 0x9E3779B9L + ((long) x << 16) + y;
+				// mix
+				v ^= (v >>> 23);
+				v *= 0x2127599bf4325c37L;
+				v ^= (v >>> 47);
+				h1 ^= v;
+				h1 *= 0x880355f21e6d1965L;
+			}
+		}
+		// final mix
+		h1 ^= (h1 >>> 33);
+		h1 *= 0xff51afd7ed558ccdL;
+		h1 ^= (h1 >>> 33);
+		h1 *= 0xc4ceb9fe1a85ec53L;
+		h1 ^= (h1 >>> 33);
+		return h1;
 	}
 
 	/* =========================== Frame Generator (like your CLI) =========================== */

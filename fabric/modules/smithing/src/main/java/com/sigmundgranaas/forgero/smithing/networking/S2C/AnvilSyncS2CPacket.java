@@ -46,6 +46,9 @@ public class AnvilSyncS2CPacket {
 		boolean hasPlanned = buf.readBoolean();
 		Identifier plannedProductId = hasPlanned ? buf.readIdentifier() : null;
 
+		// NEW: one-shot final morph overlay flag
+		boolean finalMorphOnce = buf.readBoolean();
+
 		client.execute(() -> {
 			// All logic that interacts with the world must be executed on the client thread
 			World world = client.world;
@@ -77,8 +80,23 @@ public class AnvilSyncS2CPacket {
 			anvilEntity.setMarkerAttempts(markerAttempts);
 			anvilEntity.setMarkerHitsCount(markerHitsCount);
 
-			// NEW: update ingot crafting state on client without resetting game state
+			// Update ingot crafting state
 			anvilEntity.clientSyncIngotState(ingotCrafting, plannedProductId);
+
+			// Refresh start/result images on the client so renderer has them
+			anvilEntity.clientRefreshMorphImages();
+
+			// Trigger final morph overlay if requested
+			if (finalMorphOnce) {
+				anvilEntity.clientTriggerFinalMorphOnce();
+			}
+
+			// Force re-render
+			var wr = client.worldRenderer;
+			if (wr != null) {
+				var state = world.getBlockState(position);
+				wr.updateBlock(world, position, state, state, 3);
+			}
 		});
 	}
 }

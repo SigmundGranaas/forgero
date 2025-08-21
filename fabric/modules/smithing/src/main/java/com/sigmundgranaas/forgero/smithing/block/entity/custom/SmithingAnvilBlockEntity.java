@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.smithing.block.entity.custom;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -12,6 +13,7 @@ import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 import com.sigmundgranaas.forgero.smithing.util.MinigamePositioningUtil;
+import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
 import com.sigmundgranaas.forgero.smithing.util.SchematicResultUtil;
 import com.sigmundgranaas.forgero.smithing.util.TemperatureItemUtil;
 import lombok.Getter;
@@ -23,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SimpleInventory;
@@ -122,6 +125,14 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 	private long guiBlockCooldownUntil = 0;
 
+	// Cached images for morphing/minigame
+	private transient BufferedImage startingItemImage = null;
+	private transient BufferedImage plannedProductImage = null;
+
+	// One-shot client overlay to show the final fully-morphed texture
+	private transient boolean showFinalMorphOnce = false; // client-only, not persisted
+	private boolean pendingFinalMorphNotify = false;      // server-side signal for clients
+
 	public SmithingAnvilBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.SMITHING_ANVIL, pos, state);
 		this.markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
@@ -177,7 +188,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		}
 		processMarkerAttempt(hit);
 
-		if (getMarkerAttempts() >= TOTAL_MARKERS) {
+		if (getMarkerHitsCount() >= TOTAL_MARKERS) {
 			applySmithingResult();
 			resetMarkerProgress();
 		}
@@ -387,9 +398,14 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			data.writeIdentifier(plannedProductId);
 		}
 
+		// One-shot final morph overlay notification
+		data.writeBoolean(pendingFinalMorphNotify);
+
 		for (ServerPlayerEntity player : PlayerLookup.tracking((ServerWorld) world, getPos())) {
 			ServerPlayNetworking.send(player, ModMessages.ITEM_SYNC, data);
 		}
+		// Reset the pending flag after sending to all players
+		pendingFinalMorphNotify = false;
 	}
 
 
@@ -410,6 +426,17 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				fastMarkerIndices.add(idx);
 			}
 		}
+		// --- Fetch starting item image and planned product image ---
+		if (world != null && world.isClient) {
+			ItemStack stack = getInventory().getStack(0);
+			startingItemImage = RuntimeModelUtil.getFirstQuadTextureImage(stack, MinecraftClient.getInstance());
+			if (plannedProductId != null) {
+				ItemStack plannedStack = createProductFromPlanned(plannedProductId);
+				plannedProductImage = RuntimeModelUtil.getFirstQuadTextureImage(plannedStack, MinecraftClient.getInstance());
+			} else {
+				plannedProductImage = null;
+			}
+		}
 		markDirty();
 	}
 
@@ -423,7 +450,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	}
 
 	public void processMarkerAttempt(boolean hit) {
-		if (markerAttempts >= TOTAL_MARKERS) return;
+		if (markerHitsCount >= TOTAL_MARKERS) return;
 		markerAttempts++;
 		ItemStack stack = simpleInventory.getStack(0);
 		int temp = TemperatureUtils.getTemperature(stack);
@@ -437,9 +464,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		markerPositions.clear(); // Clear existing marker to wait for next spawn
 		markerHits.clear(); // Clear existing marker hit status
 
-		if (markerAttempts < TOTAL_MARKERS) {
-			markerSpawnDelay = SUBSEQUENT_MARKER_DELAY_TICKS; // Set delay for next marker
-		}
+		markerSpawnDelay = SUBSEQUENT_MARKER_DELAY_TICKS; // Always set delay for next marker
 	}
 
 	private void applySmithingResult() {
@@ -456,7 +481,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				TemperatureUtils.setTemperature(newProduct, temp);
 
 				// --- Apply condition to ingot-crafted tool ---
-				if (getMarkerAttempts() >= 3) {
+				if (getMarkerHitsCount() >= 3) {
 					var stateOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert(newProduct);
 					if (stateOpt.isPresent() && stateOpt.get() instanceof com.sigmundgranaas.forgero.core.condition.Conditional<?>) {
 						var state = stateOpt.get();
@@ -504,6 +529,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			}
 			ingotCrafting = false;
 			plannedProductId = null;
+
+			// Notify clients to show a one-frame fully morphed overlay
+			pendingFinalMorphNotify = true;
+
 			markDirty();
 			return;
 		}
@@ -598,7 +627,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 		// --- Marker spawn logic ---
 		ItemStack stackForMarker = simpleInventory.getStack(0);
-		if (stackForMarker.isEmpty() || markerAttempts >= TOTAL_MARKERS) {
+		if (stackForMarker.isEmpty() || markerHitsCount >= TOTAL_MARKERS) {
 			if (!markerPositions.isEmpty() || markerSpawnDelay > 0) {
 				clearMarkerProgress();
 				markDirty();
@@ -723,8 +752,34 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		markDirty();
 		// Reset the mini-game so it starts fresh after selection
 		resetMarkerProgress();
+		// --- Fetch planned product image ---
+		if (world != null && world.isClient) {
+			ItemStack plannedStack = createProductFromPlanned(productId);
+			plannedProductImage = RuntimeModelUtil.getFirstQuadTextureImage(plannedStack, MinecraftClient.getInstance());
+		}
 	}
 
+	// --- Getters for cached images ---
+	public BufferedImage getStartingItemImage() {
+		return startingItemImage;
+	}
+
+	public BufferedImage getPlannedProductImage() {
+		return plannedProductImage;
+	}
+
+	// Client-only: refresh morph images based on current inventory and planned product
+	public void clientRefreshMorphImages() {
+		if (world == null || !world.isClient) return;
+		ItemStack stack = getInventory().getStack(0);
+		this.startingItemImage = RuntimeModelUtil.getFirstQuadTextureImage(stack, MinecraftClient.getInstance());
+		if (plannedProductId != null) {
+			ItemStack plannedStack = createProductFromPlanned(plannedProductId);
+			this.plannedProductImage = RuntimeModelUtil.getFirstQuadTextureImage(plannedStack, MinecraftClient.getInstance());
+		} else {
+			this.plannedProductImage = null;
+		}
+	}
 
 	private ItemStack createProductFromPlanned(Identifier productId) {
 		// Prefer resolving via StateService if your tool heads are states
@@ -820,4 +875,22 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		this.plannedProductId = plannedProductId;
 	}
 
+	// Client-only: trigger a one-frame overlay of the fully-morphed texture
+	public void clientTriggerFinalMorphOnce() {
+		this.showFinalMorphOnce = true;
+	}
+	public boolean isShowFinalMorphOnce() {
+		return showFinalMorphOnce;
+	}
+	public void clearFinalMorphOnce() {
+		this.showFinalMorphOnce = false;
+	}
+
+	/**
+	 * Returns the morph progress as a value between 0.0 and 1.0.
+	 * Used for texture interpolation between starting and result images.
+	 */
+	public double getMorphProgress() {
+		return Math.min(1.0, Math.max(0.0, (double) markerHitsCount / TOTAL_MARKERS));
+	}
 }
