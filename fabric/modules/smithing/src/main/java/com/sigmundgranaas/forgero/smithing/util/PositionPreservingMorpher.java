@@ -419,31 +419,42 @@ public class PositionPreservingMorpher {
 			for (int x = 0; x < w; x++) {
 				if (darkMask[y][x]) {
 					// Sample the actual color at this edge position from both images
-					int actualColor1 = morphedMask[y][x] ? img1.getRGB(x, y) :
-							img1.getRGB(clamp(toFg1.nearestX[y][x], 0, w-1), clamp(toFg1.nearestY[y][x], 0, h-1));
-					int actualColor2 = morphedMask[y][x] ? img2.getRGB(x, y) :
-							img2.getRGB(clamp(toFg2.nearestX[y][x], 0, w-1), clamp(toFg2.nearestY[y][x], 0, h-1));
+					int sx1 = mask1[y][x] ? x : clamp(toFg1.nearestX[y][x], 0, w - 1);
+					int sy1 = mask1[y][x] ? y : clamp(toFg1.nearestY[y][x], 0, h - 1);
+					int sx2 = mask2[y][x] ? x : clamp(toFg2.nearestX[y][x], 0, w - 1);
+					int sy2 = mask2[y][x] ? y : clamp(toFg2.nearestY[y][x], 0, h - 1);
 
-					// Darken the actual sampled colors slightly for shadow effect
-					int darkenedColor1 = darkenColor(actualColor1, 0.85f);
-					int darkenedColor2 = darkenColor(actualColor2, 0.85f);
-					int blendedDark = blendColor(darkenedColor1, darkenedColor2, weight);
-					result.setRGB(x, y, blendedDark);
+					int actualColor1 = img1.getRGB(sx1, sy1);
+					int actualColor2 = img2.getRGB(sx2, sy2);
+
+					// Ensure colors are opaque before darkening
+					if (((actualColor1 >>> 24) & 0xFF) > 0 && ((actualColor2 >>> 24) & 0xFF) > 0) {
+						// Darken the actual sampled colors slightly for shadow effect
+						int darkenedColor1 = darkenColor(actualColor1, 0.85f);
+						int darkenedColor2 = darkenColor(actualColor2, 0.85f);
+						int blendedDark = blendColor(darkenedColor1, darkenedColor2, weight);
+						result.setRGB(x, y, blendedDark);
+					}
 				} else if (lightMask[y][x]) {
 					// Sample actual colors and lighten slightly for highlight effect
-					int actualColor1 = morphedMask[y][x] ? img1.getRGB(x, y) :
-							img1.getRGB(clamp(toFg1.nearestX[y][x], 0, w-1), clamp(toFg1.nearestY[y][x], 0, h-1));
-					int actualColor2 = morphedMask[y][x] ? img2.getRGB(x, y) :
-							img2.getRGB(clamp(toFg2.nearestX[y][x], 0, w-1), clamp(toFg2.nearestY[y][x], 0, h-1));
+					int sx1 = mask1[y][x] ? x : clamp(toFg1.nearestX[y][x], 0, w - 1);
+					int sy1 = mask1[y][x] ? y : clamp(toFg1.nearestY[y][x], 0, h - 1);
+					int sx2 = mask2[y][x] ? x : clamp(toFg2.nearestX[y][x], 0, w - 1);
+					int sy2 = mask2[y][x] ? y : clamp(toFg2.nearestY[y][x], 0, h - 1);
 
-					int lightenedColor1 = lightenColor(actualColor1, 1.15f);
-					int lightenedColor2 = lightenColor(actualColor2, 1.15f);
-					int blendedLight = blendColor(lightenedColor1, lightenedColor2, weight);
-					result.setRGB(x, y, blendedLight);
+					int actualColor1 = img1.getRGB(sx1, sy1);
+					int actualColor2 = img2.getRGB(sx2, sy2);
+
+					// Ensure colors are opaque before lightening
+					if (((actualColor1 >>> 24) & 0xFF) > 0 && ((actualColor2 >>> 24) & 0xFF) > 0) {
+						int lightenedColor1 = lightenColor(actualColor1, 1.15f);
+						int lightenedColor2 = lightenColor(actualColor2, 1.15f);
+						int blendedLight = blendColor(lightenedColor1, lightenedColor2, weight);
+						result.setRGB(x, y, blendedLight);
+					}
 				}
 			}
 		}
-
 
 		return result;
 	}
