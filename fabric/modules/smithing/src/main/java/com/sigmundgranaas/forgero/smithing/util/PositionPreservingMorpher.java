@@ -400,35 +400,109 @@ public class PositionPreservingMorpher {
 			}
 		}
 
-		// 4) Directional two-tone outline (kept, to emphasize edges)
-		if (!outlinePalette1.isEmpty() && !outlinePalette2.isEmpty()) {
-			int darkest1 = fullPalette1.get(0);
-			int darkest2 = fullPalette2.get(0);
-			int outlineDark = blendColor(darkest1, darkest2, weight);
+		// Create the edge masks from existing outline detection logic
+		boolean[][] darkMask = new boolean[h][w];
+		boolean[][] lightMask = new boolean[h][w];
 
-			int brighter1 = (fullPalette1.size() > 1) ? fullPalette1.get(1) : fullPalette1.get(0);
-			int brighter2 = (fullPalette2.size() > 1) ? fullPalette2.get(1) : fullPalette2.get(0);
-			int outlineBright = blendColor(brighter1, brighter2, weight);
-
-			// Fix the directional lighting to match vanilla convention
-			boolean[][] background = not(morphedMask);
-			boolean[][] belowBg = roll(background, -1, 0);  // Background shifted up (detects bg above)
-			boolean[][] rightBg = roll(background, 0, -1);  // Background shifted left (detects bg to right)
-			boolean[][] aboveBg = roll(background, 1, 0);   // Background shifted down (detects bg below)
-			boolean[][] leftBg  = roll(background, 0, 1);   // Background shifted right (detects bg to left)
-
-// Swap these assignments to fix the lighting direction
-			boolean[][] darkMask  = or(and(morphedEdge, belowBg), and(morphedEdge, rightBg));  // Dark on bottom/right
-			boolean[][] lightMask = or(and(morphedEdge, aboveBg), and(morphedEdge, leftBg));   // Light on top/left
-
-			for (int y = 0; y < h; y++)
-				for (int x = 0; x < w; x++) {
-					if (lightMask[y][x]) result.setRGB(x, y, outlineBright);
-					if (darkMask[y][x])  result.setRGB(x, y, outlineDark);
-				}
+// Extract edge detection logic to populate the masks
+		for (int y = 0; y < h; y++) {
+			for (int x = 0; x < w; x++) {
+				// Check if this pixel is on a dark edge (shadow side)
+				darkMask[y][x] = isOnDarkEdge(x, y, morphedMask, w, h);
+				// Check if this pixel is on a light edge (highlight side)
+				lightMask[y][x] = isOnLightEdge(x, y, morphedMask, w, h);
+			}
 		}
 
+// Sample actual edge colors from the original images instead of forcing darkest/brightest
+		for (int y = 0; y < h; y++) {
+			for (int x = 0; x < w; x++) {
+				if (darkMask[y][x]) {
+					// Sample the actual color at this edge position from both images
+					int actualColor1 = morphedMask[y][x] ? img1.getRGB(x, y) :
+							img1.getRGB(clamp(toFg1.nearestX[y][x], 0, w-1), clamp(toFg1.nearestY[y][x], 0, h-1));
+					int actualColor2 = morphedMask[y][x] ? img2.getRGB(x, y) :
+							img2.getRGB(clamp(toFg2.nearestX[y][x], 0, w-1), clamp(toFg2.nearestY[y][x], 0, h-1));
+
+					// Darken the actual sampled colors slightly for shadow effect
+					int darkenedColor1 = darkenColor(actualColor1, 0.85f);
+					int darkenedColor2 = darkenColor(actualColor2, 0.85f);
+					int blendedDark = blendColor(darkenedColor1, darkenedColor2, weight);
+					result.setRGB(x, y, blendedDark);
+				} else if (lightMask[y][x]) {
+					// Sample actual colors and lighten slightly for highlight effect
+					int actualColor1 = morphedMask[y][x] ? img1.getRGB(x, y) :
+							img1.getRGB(clamp(toFg1.nearestX[y][x], 0, w-1), clamp(toFg1.nearestY[y][x], 0, h-1));
+					int actualColor2 = morphedMask[y][x] ? img2.getRGB(x, y) :
+							img2.getRGB(clamp(toFg2.nearestX[y][x], 0, w-1), clamp(toFg2.nearestY[y][x], 0, h-1));
+
+					int lightenedColor1 = lightenColor(actualColor1, 1.15f);
+					int lightenedColor2 = lightenColor(actualColor2, 1.15f);
+					int blendedLight = blendColor(lightenedColor1, lightenedColor2, weight);
+					result.setRGB(x, y, blendedLight);
+				}
+			}
+		}
+
+
 		return result;
+	}
+
+	private boolean isOnDarkEdge(int x, int y, boolean[][] morphedMask, int w, int h) {
+		// Check if this pixel is on an edge where we want dark outline
+		// This typically means it's a foreground pixel adjacent to background
+		if (!morphedMask[y][x]) return false; // Only apply to foreground pixels
+
+		// Check 4-connected neighbors for background pixels
+		boolean hasBackgroundNeighbor = false;
+		int[] dx = {-1, 1, 0, 0};
+		int[] dy = {0, 0, -1, 1};
+
+		for (int i = 0; i < 4; i++) {
+			int nx = x + dx[i];
+			int ny = y + dy[i];
+			if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
+				if (!morphedMask[ny][nx]) {
+					hasBackgroundNeighbor = true;
+					break;
+				}
+			} else {
+				// Edge of image counts as background
+				hasBackgroundNeighbor = true;
+				break;
+			}
+		}
+
+		return hasBackgroundNeighbor;
+	}
+
+	private boolean isOnLightEdge(int x, int y, boolean[][] morphedMask, int w, int h) {
+		// Check if this pixel is on an edge where we want light outline
+		// This typically means it's a foreground pixel with inner edge characteristics
+		if (!morphedMask[y][x]) return false; // Only apply to foreground pixels
+
+		// Check 8-connected neighbors for inner edge detection
+		int foregroundNeighbors = 0;
+		int totalNeighbors = 0;
+
+		for (int dy = -1; dy <= 1; dy++) {
+			for (int dx = -1; dx <= 1; dx++) {
+				if (dx == 0 && dy == 0) continue; // Skip center pixel
+
+				int nx = x + dx;
+				int ny = y + dy;
+
+				if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
+					totalNeighbors++;
+					if (morphedMask[ny][nx]) {
+						foregroundNeighbors++;
+					}
+				}
+			}
+		}
+
+		// Light edge: has most neighbors as foreground but not all (inner edge)
+		return totalNeighbors > 0 && foregroundNeighbors >= totalNeighbors * 0.6 && foregroundNeighbors < totalNeighbors;
 	}
 
 	/* =========================== Deterministic RNG helpers =========================== */
@@ -616,6 +690,22 @@ public class PositionPreservingMorpher {
 			}
 		}
 		return out;
+	}
+
+	private int darkenColor(int color, float factor) {
+		int a = (color >>> 24) & 0xFF;
+		int r = Math.round(((color >>> 16) & 0xFF) * factor);
+		int g = Math.round(((color >>> 8) & 0xFF) * factor);
+		int b = Math.round((color & 0xFF) * factor);
+		return (a << 24) | (Math.min(255, r) << 16) | (Math.min(255, g) << 8) | Math.min(255, b);
+	}
+
+	private int lightenColor(int color, float factor) {
+		int a = (color >>> 24) & 0xFF;
+		int r = Math.min(255, Math.round(((color >>> 16) & 0xFF) * factor));
+		int g = Math.min(255, Math.round(((color >>> 8) & 0xFF) * factor));
+		int b = Math.min(255, Math.round((color & 0xFF) * factor));
+		return (a << 24) | (r << 16) | (g << 8) | b;
 	}
 
 	/* =========================== CLI (optional) =========================== */
