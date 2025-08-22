@@ -18,6 +18,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 
+//TODO it seems particles spawning in north and south faces is off probably also requires 180 degrees somewhere
+
 public class MinigamePositioningUtil {
 	private static final BoundingBoxUtil boundingBoxUtil = new BoundingBoxUtil();
 	private static final Random random = new Random();

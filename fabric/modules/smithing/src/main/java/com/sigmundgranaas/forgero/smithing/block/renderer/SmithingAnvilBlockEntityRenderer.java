@@ -240,10 +240,11 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 		float stepX = 1.0f / texW;
 		float stepZ = 1.0f / texH;
 
-		// Thickness and vertical placement
-		float yTop = 0.002f;
-		float thickness = 0.06f; // thicker so sides are visible
-		float yBottom = yTop - thickness;
+		// Thickness and vertical placement: exactly 1 texel tall, centered around 0 with a tiny epsilon to prevent z-fighting
+		float thickness = Math.min(stepX, stepZ); // 1 pixel height
+		float epsilon = 0.001f;
+		float yBottom = -thickness / 2.0f + epsilon;
+		float yTop = yBottom + thickness;
 
 		// Simple shading multipliers: top bright, sides slightly darker, bottom darkest
 		int a = 255;
@@ -287,8 +288,6 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 				vc.vertex(posMat, x0, yBottom, z0).color(botR, botG, botB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, 0, -1, 0).next();
 
 				// For sides, only draw where the neighboring pixel is transparent or out of bounds
-
-				// -X neighbor (left)
 				boolean leftTransparent = (x - 1 < 0) || ((morphImage.getRGB(x - 1, y) >>> 24) & 0xFF) == 0;
 				if (leftTransparent) {
 					vc.vertex(posMat, x0, yTop, z1).color(sideR, sideG, sideB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, -1, 0, 0).next();
@@ -297,7 +296,6 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 					vc.vertex(posMat, x0, yTop, z0).color(sideR, sideG, sideB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, -1, 0, 0).next();
 				}
 
-				// +X neighbor (right)
 				boolean rightTransparent = (x + 1 >= texW) || ((morphImage.getRGB(x + 1, y) >>> 24) & 0xFF) == 0;
 				if (rightTransparent) {
 					vc.vertex(posMat, x1, yTop, z0).color(sideR, sideG, sideB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, 1, 0, 0).next();
@@ -306,7 +304,6 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 					vc.vertex(posMat, x1, yTop, z1).color(sideR, sideG, sideB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, 1, 0, 0).next();
 				}
 
-				// -Z neighbor (near/top row)
 				boolean nearTransparent = (y - 1 < 0) || ((morphImage.getRGB(x, y - 1) >>> 24) & 0xFF) == 0;
 				if (nearTransparent) {
 					vc.vertex(posMat, x0, yTop, z0).color(sideR, sideG, sideB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, 0, 0, -1).next();
@@ -315,7 +312,6 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 					vc.vertex(posMat, x1, yTop, z0).color(sideR, sideG, sideB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, 0, 0, -1).next();
 				}
 
-				// +Z neighbor (far/bottom row)
 				boolean farTransparent = (y + 1 >= texH) || ((morphImage.getRGB(x, y + 1) >>> 24) & 0xFF) == 0;
 				if (farTransparent) {
 					vc.vertex(posMat, x1, yTop, z1).color(sideR, sideG, sideB, a).texture(uC, vC).overlay(overlay).light(light).normal(normalMat, 0, 0, 1).next();
