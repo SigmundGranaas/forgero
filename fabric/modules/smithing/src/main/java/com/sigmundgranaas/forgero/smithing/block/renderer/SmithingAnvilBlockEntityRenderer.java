@@ -72,7 +72,14 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 		BufferedImage lastResult = null;
 		NativeImageBackedTexture lastDynamicTexture = null;
 		Identifier lastTextureId = null;
+
+		// Add these for smoother transitions
+		private long lastUpdateTime = 0;
+		private static final long MIN_UPDATE_INTERVAL = 16; // ~60fps limit
 	}
+
+	// Modified cache comparison to be more tolerant of small weight changes
+	private static final double WEIGHT_TOLERANCE = 0.001; // Tolerance for weight changes
 
 	public SmithingAnvilBlockEntityRenderer(BlockEntityRendererFactory.Context context) {
 	}
@@ -158,24 +165,38 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 			MorphCache cache = morphTextureCache.computeIfAbsent(entity, k -> new MorphCache());
 			boolean canRecompute = (startImage != null && resultImage != null);
 
-			// Convert PNG -> NativeImage -> NativeImageBackedTexture (dynamic) and cache
-			if (canRecompute && (cache.lastImage == null || cache.lastWeight != weight
-					|| cache.lastStart != startImage || cache.lastResult != resultImage)) {
+			long currentTime = System.currentTimeMillis();
+			boolean shouldUpdate = (cache.lastImage == null ||
+				Math.abs(cache.lastWeight - weight) > WEIGHT_TOLERANCE ||
+				cache.lastStart != startImage ||
+				cache.lastResult != resultImage) &&
+				(currentTime - cache.lastUpdateTime) > cache.MIN_UPDATE_INTERVAL;
+
+			if (canRecompute && shouldUpdate) {
+				cache.lastUpdateTime = currentTime;
+
+				// Store the previous texture temporarily to avoid flicker
+				NativeImageBackedTexture previousTexture = cache.lastDynamicTexture;
+				Identifier previousTextureId = cache.lastTextureId;
+
 				BufferedImage[] padded = centerPadToSameSize(startImage, resultImage);
 				cache.lastImage = morpher.morphStep(padded[0], padded[1], weight);
 				cache.lastWeight = weight;
 				cache.lastStart = startImage;
 				cache.lastResult = resultImage;
 
-				if (cache.lastDynamicTexture != null) {
-					cache.lastDynamicTexture.close();
-					cache.lastDynamicTexture = null;
-					cache.lastTextureId = null;
-				}
+				// Create new texture
 				NativeImage nativeImage = bufferedImageToNativeImage(cache.lastImage);
 				cache.lastDynamicTexture = new NativeImageBackedTexture(nativeImage);
 				cache.lastTextureId = MinecraftClient.getInstance().getTextureManager()
-						.registerDynamicTexture("forgero_morph_" + entity.getPos().asLong(), cache.lastDynamicTexture);
+						.registerDynamicTexture("forgero_morph_" + entity.getPos().asLong() + "_" + System.currentTimeMillis(),
+								cache.lastDynamicTexture);
+
+				// Only dispose previous texture after new one is ready and registered
+				if (previousTexture != null && previousTexture != cache.lastDynamicTexture) {
+					// Delay disposal to next frame to ensure smooth transition
+					MinecraftClient.getInstance().execute(() -> previousTexture.close());
+				}
 			}
 
 			morphDynamicTexture = cache.lastDynamicTexture;
@@ -383,6 +404,8 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 		int skyLight = world.getLightLevel(LightType.SKY, pos.up());
 		return LightmapTextureManager.pack(blockLight, skyLight);
 	}
+
+
 
 	// NEW: release cached dynamic texture when not needed
 	private void releaseMorphCache(SmithingAnvilBlockEntity entity) {
