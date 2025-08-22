@@ -45,6 +45,11 @@ public class MinigamePositioningUtil {
 		float xBeforeItemRot = (float) -xAfterAnvilRot;
 		float zBeforeItemRot = (float) -zAfterAnvilRot;
 
+		// Invert offset for NORTH/SOUTH facings to match marker and renderer logic
+		if (facing == Direction.NORTH || facing == Direction.SOUTH) {
+			itemTextureOffset = new Vec2f(-itemTextureOffset.x, -itemTextureOffset.y);
+		}
+
 		float xBeforeOffset = xBeforeItemRot - itemTextureOffset.x;
 		float zBeforeOffset = zBeforeItemRot - itemTextureOffset.y;
 
