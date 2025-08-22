@@ -410,14 +410,16 @@ public class PositionPreservingMorpher {
 			int brighter2 = (fullPalette2.size() > 1) ? fullPalette2.get(1) : fullPalette2.get(0);
 			int outlineBright = blendColor(brighter1, brighter2, weight);
 
+			// Fix the directional lighting to match vanilla convention
 			boolean[][] background = not(morphedMask);
-			boolean[][] belowBg = roll(background, -1, 0);
-			boolean[][] rightBg = roll(background, 0, -1);
-			boolean[][] aboveBg = roll(background, 1, 0);
-			boolean[][] leftBg  = roll(background, 0, 1);
+			boolean[][] belowBg = roll(background, -1, 0);  // Background shifted up (detects bg above)
+			boolean[][] rightBg = roll(background, 0, -1);  // Background shifted left (detects bg to right)
+			boolean[][] aboveBg = roll(background, 1, 0);   // Background shifted down (detects bg below)
+			boolean[][] leftBg  = roll(background, 0, 1);   // Background shifted right (detects bg to left)
 
-			boolean[][] lightMask = or(and(morphedEdge, belowBg), and(morphedEdge, rightBg));
-			boolean[][] darkMask  = or(and(morphedEdge, aboveBg), and(morphedEdge, leftBg));
+// Swap these assignments to fix the lighting direction
+			boolean[][] darkMask  = or(and(morphedEdge, belowBg), and(morphedEdge, rightBg));  // Dark on bottom/right
+			boolean[][] lightMask = or(and(morphedEdge, aboveBg), and(morphedEdge, leftBg));   // Light on top/left
 
 			for (int y = 0; y < h; y++)
 				for (int x = 0; x < w; x++) {
