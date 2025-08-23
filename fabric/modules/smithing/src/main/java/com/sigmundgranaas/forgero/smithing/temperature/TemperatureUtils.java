@@ -31,13 +31,12 @@ public class TemperatureUtils {
         int maxTemp = 2000; // Default max temperature if attribute is not present
 		Optional<State> state = StateService.INSTANCE.convert(stack);
 		if (state.isPresent()) {
-			return ComputedAttribute.of(state.get(), MAX_TEMPERATURE).asInt();
+			int attr = ComputedAttribute.of(state.get(), MAX_TEMPERATURE).asInt();
+			if (attr > 0) {
+				return attr;
+			}
 		}
-        // Clamp to a minimum of 1 to avoid invalid values
-        if (maxTemp < 1) {
-            maxTemp = 1;
-        }
-        return maxTemp;
+		return 0;
     }
 
     public static int clamp(int temperature, ItemStack stack) {

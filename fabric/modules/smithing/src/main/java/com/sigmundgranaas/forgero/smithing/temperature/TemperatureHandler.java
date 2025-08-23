@@ -43,7 +43,7 @@ public class TemperatureHandler {
                     continue;
                 }
                 var type = stateItem.dynamicState(stack).type();
-                if (!TemperatureItemUtil.shouldApplyTemperature(type)) {
+                if (!TemperatureItemUtil.hasMaxTemperature(stack)) {
                     continue;
                 }
                 int temp = TemperatureUtils.getTemperature(stack);
@@ -82,7 +82,7 @@ public class TemperatureHandler {
             }
             var type = stateItem.dynamicState(stack).type();
             LOGGER.debug("Type for item {}: {}", stack.getItem().getTranslationKey(), type.typeName());
-            if (!TemperatureItemUtil.shouldApplyTemperature(type)) {
+            if (!TemperatureItemUtil.hasMaxTemperature(stack)) {
                 LOGGER.debug("Skipped: Not a tool part head or tool part");
                 continue;
             }

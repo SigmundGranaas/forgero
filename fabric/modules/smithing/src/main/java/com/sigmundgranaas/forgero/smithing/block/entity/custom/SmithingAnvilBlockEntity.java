@@ -197,7 +197,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		}
 		processMarkerAttempt(hit);
 
-		if (getMarkerHitsCount() >= TOTAL_MARKERS) {
+		if (markerHitsCount >= TOTAL_MARKERS) {
 			applySmithingResult();
 			resetMarkerProgress();
 		}
@@ -490,16 +490,16 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				TemperatureUtils.setTemperature(newProduct, temp);
 
 				// --- Apply condition to ingot-crafted tool ---
-				if (getMarkerHitsCount() >= 3) {
+				if (markerHitsCount >= 3) {
 					var stateOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert(newProduct);
 					if (stateOpt.isPresent() && stateOpt.get() instanceof com.sigmundgranaas.forgero.core.condition.Conditional<?>) {
 						var state = stateOpt.get();
 						com.sigmundgranaas.forgero.core.condition.Conditional<?> conditional = (com.sigmundgranaas.forgero.core.condition.Conditional<?>) stateOpt.get();
 						if (state instanceof com.sigmundgranaas.forgero.core.state.Typed) {
 							com.sigmundgranaas.forgero.core.state.Typed typed = (com.sigmundgranaas.forgero.core.state.Typed) state;
-							if (TemperatureItemUtil.shouldApplyTemperature(typed.type())) {
+							if (TemperatureItemUtil.hasMaxTemperature(newProduct)) {
 								LOGGER.info("applySmithingResult: Toolpart found in newProduct: {}", newProduct);
-								int hits = getMarkerHitsCount();
+								int hits = markerHitsCount;
 								java.util.List<com.sigmundgranaas.forgero.core.condition.NamedCondition> lootTable;
 								if (hits == 3) {
 									lootTable = ConditionLootTables.BEST;

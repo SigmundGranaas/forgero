@@ -105,17 +105,11 @@ public class HearthBlock extends CampfireBlock implements Waterloggable {
 			return ActionResult.SUCCESS;
 		}
 
-		// Allow CrucibleItem or TemperatureItem (StateItem with shouldApplyTemperature) to be placed in the slot
+		// Accept any item in the slot
 		if (!held.isEmpty() && slot.isEmpty()) {
-			boolean isCrucible = held.getItem() instanceof CrucibleItem;
-			boolean isTemperatureItem = held.getItem() instanceof StateItem stateItem &&
-				TemperatureItemUtil.shouldApplyTemperature(stateItem.dynamicState(held).type());
-			if (!(isCrucible || isTemperatureItem)) {
-				return ActionResult.PASS;
-			}
 			if (!world.isClient) {
 				ItemStack stackToInsert;
-				if (isCrucible) {
+				if (held.getItem() instanceof CrucibleItem) {
 					stackToInsert = hearth.createCustomCrucibleStack(held);
 				} else {
 					stackToInsert = held.copy();
