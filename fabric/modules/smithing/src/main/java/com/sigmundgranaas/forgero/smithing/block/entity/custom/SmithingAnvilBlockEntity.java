@@ -235,8 +235,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		ItemStack anvilItem = getInventory().getStack(0);
 
 		if (anvilItem.isEmpty()) {
-			// Accept any ingot (by tag or fallback heuristic)
-			if (isIngot(stackInHand)) {
+			// Only allow items with forgero:max_temperature attribute
+			if (com.sigmundgranaas.forgero.smithing.util.TemperatureItemUtil.hasMaxTemperature(stackInHand)) {
 				ItemStack toPlace = stackInHand.copy();
 				toPlace.setCount(1);
 				getInventory().setStack(0, toPlace);

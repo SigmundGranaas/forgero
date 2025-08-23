@@ -26,6 +26,7 @@ public class AnvilUseC2SPacket {
                 BlockEntity entity = world.getBlockEntity(hitResult.getBlockPos());
                 if (entity instanceof SmithingAnvilBlockEntity anvilEntity) {
                     ItemStack anvilItem = anvilEntity.getInventory().getStack(0);
+                    ItemStack stackInHand = player.getStackInHand(hand);
                     if (isHandEmpty && !anvilItem.isEmpty()) {
                         PacketByteBuf buf = PacketByteBufs.create();
                         buf.writeBlockPos(hitResult.getBlockPos());
@@ -33,8 +34,8 @@ public class AnvilUseC2SPacket {
                         ClientPlayNetworking.send(ModMessages.ANVIL_SHIFT_USE, buf);
                         return ActionResult.SUCCESS;
                     }
-                    // Only allow placing ingot if sneaking
-                    if (isSneaking) {
+                    // Only allow placing if sneaking and item has max temperature
+                    if (isSneaking && !stackInHand.isEmpty() && com.sigmundgranaas.forgero.smithing.util.TemperatureItemUtil.hasMaxTemperature(stackInHand)) {
                         PacketByteBuf buf = PacketByteBufs.create();
                         buf.writeBlockPos(hitResult.getBlockPos());
                         buf.writeEnumConstant(hand);
@@ -59,8 +60,8 @@ public class AnvilUseC2SPacket {
                     if (stackInHand.isEmpty() && !anvilItem.isEmpty()) {
                         // Pick up item from anvil if hand is empty and anvil has item
                         anvilEntity.tryPickupItem(player);
-                    } else if (anvilItem.isEmpty() && anvilEntity.isIngot(stackInHand)) {
-                        // Place ingot if anvil is empty and hand has ingot
+                    } else if (anvilItem.isEmpty() && com.sigmundgranaas.forgero.smithing.util.TemperatureItemUtil.hasMaxTemperature(stackInHand)) {
+                        // Place item with max temperature if anvil is empty and hand has valid item
                         anvilEntity.tryPlaceItem(player, hand);
                     }
                 }
