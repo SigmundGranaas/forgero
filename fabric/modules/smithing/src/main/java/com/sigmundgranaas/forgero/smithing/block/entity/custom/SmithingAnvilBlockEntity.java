@@ -95,6 +95,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	public static final int MARKER_LIFETIME_TICKS_NORMAL = 35; // 1.5 seconds for normal markers
 	public static final int MARKER_LIFETIME_TICKS_FAST = 20; // 0.75 seconds for fast markers
 
+	// Hit radius squared for marker detection in item-local space
+	private static final double MARKER_HIT_RADIUS_SQ = 0.0085d;
+
 	private final Random random = new Random();
 
 	private static final int ANVIL_INVENTORY_COOL_PER_TICK = 1;
@@ -142,14 +145,60 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	}
 
 	// =================================
+	// Utilities
+	// =================================
+
+	private boolean isServer() {
+		return world != null && !world.isClient;
+	}
+
+	private ItemStack currentStack() {
+		return simpleInventory.getStack(0);
+	}
+
+	private Vec2f resolveOffsetVec(ItemStack stack) {
+		boolean morphedOrPlanned = (ingotCrafting && plannedProductId != null) || stack.getItem() instanceof MorphedItem;
+		return morphedOrPlanned
+				? MinigamePositioningUtil.getMorphedTextureOffsetVec2f(this)
+				: MinigamePositioningUtil.getItemTextureOffsetVec2f(stack);
+	}
+
+	private float serverParticleY() {
+		return ANVIL_TOP_Y + Y_FIGHTING_OFFSET + MARKER_VISUAL_Y_OFFSET;
+	}
+
+	private boolean isMorphingActive(ItemStack stack) {
+		return stack.getItem() instanceof MorphedItem && MorphedItem.getMorphProgress(stack) < 1.0;
+	}
+
+	private void clearActiveMarker() {
+		markerPositions.clear();
+		markerHits.clear();
+	}
+
+	private void resetCraftingState() {
+		ingotCrafting = false;
+		plannedProductId = null;
+	}
+
+	private Vec2f nextMarkerPosition(ItemStack stackForMarker) {
+		// Prefer morphed/overlay-aware placement; fall back to item UV-based placement
+		Vec2f marker = MinigamePositioningUtil.getRandomMarkerPositionMorphed(this);
+		if (marker.equals(Vec2f.ZERO)) {
+			marker = MinigamePositioningUtil.getRandomMarkerPosition(stackForMarker, getCachedState());
+		}
+		return marker;
+	}
+
+	// =================================
 	// Main Interaction Logic
 	// =================================
 
 	public ActionResult onHammerHit(PlayerEntity player, BlockHitResult hitResult) {
-		if (world == null || world.isClient) {
+		if (!isServer()) {
 			return ActionResult.SUCCESS;
 		}
-		ItemStack anvilItem = getInventory().getStack(0);
+		ItemStack anvilItem = currentStack();
 		if (anvilItem.isEmpty()) {
 			playMissEffect();
 			return ActionResult.FAIL;
@@ -161,24 +210,14 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			return ActionResult.FAIL;
 		}
 
-		Vec2f offsetVec;
-		if ((ingotCrafting && plannedProductId != null) || anvilItem.getItem() instanceof MorphedItem) {
-			offsetVec = MinigamePositioningUtil.getMorphedTextureOffsetVec2f(this);
-		} else {
-			offsetVec = MinigamePositioningUtil.getItemTextureOffsetVec2f(anvilItem);
-		}
-		Vec2f itemLocalHit = MinigamePositioningUtil.worldHitToItemLocal(
-				hitResult, getCachedState(), offsetVec
-		);
+		Vec2f offsetVec = resolveOffsetVec(anvilItem);
+		Vec2f itemLocalHit = MinigamePositioningUtil.worldHitToItemLocal(hitResult, getCachedState(), offsetVec);
 
 		boolean hit = false;
-		if (markerPositions.size() == 1) { // Only check if a marker is active
+		if (markerPositions.size() == 1) {
 			Vec2f marker = markerPositions.get(0);
-			// The visual marker has a half-width of 0.035. The squared distance to the corner is 2 * (0.035^2) = 0.00245.
-			// We use a slightly larger radius to be more forgiving.
-			double distSq = marker.distanceSquared(itemLocalHit);
-			if (distSq < 0.0085f) {
-				setMarkerHit(0); // This calls playHitEffect and handles particle/sound
+			if (marker.distanceSquared(itemLocalHit) < MARKER_HIT_RADIUS_SQ) {
+				setMarkerHit(0);
 				hit = true;
 			}
 		}
@@ -205,26 +244,24 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	}
 
 	public ActionResult tryPickupItem(PlayerEntity player) {
-		if (world == null || world.isClient) {
+		if (!isServer()) {
 			return ActionResult.SUCCESS;
 		}
-		ItemStack anvilItem = getInventory().getStack(0);
+		ItemStack anvilItem = currentStack();
 		if (!anvilItem.isEmpty()) {
 			saveProgressToItem();
 			player.getInventory().offerOrDrop(anvilItem.copy());
 			getInventory().setStack(0, ItemStack.EMPTY);
-			// Clear ingot mode state
-			ingotCrafting = false;
-			plannedProductId = null;
+			resetCraftingState();
 			markDirty();
 			resetMarkers();
-			guiBlockCooldownUntil = world.getTime() + 20; // Block GUI for 1 second
+			guiBlockCooldownUntil = world.getTime() + 20; // 1s
 		}
 		return ActionResult.SUCCESS;
 	}
 
 	public ActionResult tryPlaceItem(PlayerEntity player, Hand hand) {
-		if (world == null || world.isClient) {
+		if (!isServer()) {
 			return ActionResult.SUCCESS;
 		}
 		ItemStack stackInHand = player.getStackInHand(hand);
@@ -256,14 +293,11 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 	@Override
 	public void markDirty() {
-		if (world == null || world.isClient) {
-			super.markDirty();
-			return;
-		}
 		super.markDirty();
-		world.updateListeners(pos, getCachedState(), getCachedState(), 3);
-		// Manual sync for marker and progress data
-		syncCustomDataToClients();
+		if (isServer()) {
+			world.updateListeners(pos, getCachedState(), getCachedState(), 3);
+			syncCustomDataToClients();
+		}
 	}
 
 	@Override
@@ -466,14 +500,12 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		}
 		updateMorphProgressOnItem();
 		markDirty();
-		markerPositions.clear(); // Clear existing marker to wait for next spawn
-		markerHits.clear(); // Clear existing marker hit status
-
-		markerSpawnDelay = SUBSEQUENT_MARKER_DELAY_TICKS; // Always set delay for next marker
+		clearActiveMarker(); // wait for next spawn
+		markerSpawnDelay = SUBSEQUENT_MARKER_DELAY_TICKS;
 	}
 
 	private void applySmithingResult() {
-		ItemStack anvilItem = getInventory().getStack(0);
+		ItemStack anvilItem = currentStack();
 		if (anvilItem.isEmpty() || world == null) {
 			return;
 		}
@@ -529,12 +561,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			} else {
 				world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 0.8f);
 			}
-			ingotCrafting = false;
-			plannedProductId = null;
+			resetCraftingState();
 
 			// Notify clients to show a one-frame fully morphed overlay
 			pendingFinalMorphNotify = true;
-
 			markDirty();
 			return;
 		}
@@ -543,141 +573,101 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	public void setMarkerHit(int index) {
 		if (world != null && !world.isClient && index >= 0 && index < markerHits.size()) {
 			markerHits.set(index, true);
-			playHitEffect(markerPositions.get(index)); // Trigger hit effect with position
-			markerPositions.clear(); // Clear marker immediately on hit
-			markerHits.clear();
+			playHitEffect(markerPositions.get(index));
+			clearActiveMarker();
 			markDirty();
 		}
 	}
 
 	private void playHitEffect(Vec2f markerLocalPos) {
 		if (world instanceof ServerWorld serverWorld) {
-			// Use a fixed Y for server-side particle spawning. Client will handle precise Y.
-			float particleY = ANVIL_TOP_Y + Y_FIGHTING_OFFSET + MARKER_VISUAL_Y_OFFSET;
-
-			Vec2f offsetVec = (ingotCrafting && plannedProductId != null)
-					? MinigamePositioningUtil.getMorphedTextureOffsetVec2f(this)
-					: MinigamePositioningUtil.getItemTextureOffsetVec2f(getInventory().getStack(0));
-
+			float particleY = serverParticleY();
+			Vec2f offsetVec = resolveOffsetVec(currentStack());
 			net.minecraft.util.math.Vec3d worldParticlePos = MinigamePositioningUtil.itemLocalToWorld(
 					markerLocalPos, getPos(), getCachedState(), offsetVec, particleY
 			);
-
-			// Distinct particle for hit
-			// Reduced spread and speed for smaller particles
 			serverWorld.spawnParticles(ParticleTypes.LAVA, worldParticlePos.x, worldParticlePos.y, worldParticlePos.z, 2, 0.01, 0.01, 0.01, 0.02);
-			// Distinct sound for hit
 			serverWorld.playSound(null, getPos(), SoundEvents.BLOCK_ANVIL_PLACE, SoundCategory.BLOCKS, 1f, 1f);
 		}
 	}
 
 	private void playMissEffect() {
 		if (world instanceof ServerWorld serverWorld) {
-			// Distinct sound for miss
 			serverWorld.playSound(null, getPos(), SoundEvents.ITEM_AXE_SCRAPE, SoundCategory.BLOCKS, 1f, 1.0f);
-			// Distinct particle for miss (e.g., smoke)
 			serverWorld.spawnParticles(ParticleTypes.SMOKE, getPos().getX() + 0.5, getPos().getY() + 1.0, getPos().getZ() + 0.5, 10, 0.3, 0.1, 0.3, 0.05);
 		}
 	}
 
 	private void spawnMarkerAppearanceEffect(Vec2f markerLocalPos, ItemStack itemStack) {
 		if (world instanceof ServerWorld serverWorld) {
-			// Use a fixed Y for server-side particle spawning. Client will handle precise Y.
-			float particleY = ANVIL_TOP_Y + Y_FIGHTING_OFFSET + MARKER_VISUAL_Y_OFFSET;
-
-			Vec2f offsetVec = (ingotCrafting && plannedProductId != null)
-					? MinigamePositioningUtil.getMorphedTextureOffsetVec2f(this)
-					: MinigamePositioningUtil.getItemTextureOffsetVec2f(itemStack);
-
+			float particleY = serverParticleY();
+			Vec2f offsetVec = resolveOffsetVec(itemStack);
 			net.minecraft.util.math.Vec3d worldParticlePos = MinigamePositioningUtil.itemLocalToWorld(
 					markerLocalPos, getPos(), getCachedState(), offsetVec, particleY
 			);
-
-			// Reduced spread and speed for smaller particles
 			serverWorld.spawnParticles(ParticleTypes.END_ROD, worldParticlePos.x, worldParticlePos.y, worldParticlePos.z, 1, 0.005, 0.005, 0.005, 0.01);
 			serverWorld.playSound(null, getPos(), SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.BLOCKS, 0.5f, 1.0f);
 		}
 	}
-
 
 	public void resetMarkers() {
 		resetMarkerProgress();
 	}
 
 	public void tick() {
-		if (world == null || world.isClient) {
+		if (!isServer()) {
 			return;
 		}
+
+		// GUI cooldown
 		if (guiBlockCooldownUntil > 0 && world.getTime() >= guiBlockCooldownUntil) {
 			guiBlockCooldownUntil = 0;
 		}
+
+		// Periodic dirty to ensure cooling/etc. visuals
 		anvilInventoryCoolTickCounter++;
 		if (anvilInventoryCoolTickCounter >= ANVIL_INVENTORY_COOL_TICK_INTERVAL) {
 			anvilInventoryCoolTickCounter = 0;
-			ItemStack stack = simpleInventory.getStack(0);
-			if (!stack.isEmpty()) {
+			if (!currentStack().isEmpty()) {
 				markDirty();
 			}
 		}
-		ItemStack stackForMarker = simpleInventory.getStack(0);
 
-		boolean isMorphed = stackForMarker.getItem() instanceof MorphedItem;
-		boolean morphComplete = isMorphed && MorphedItem.getMorphProgress(stackForMarker) >= 1.0;
+		ItemStack stackForMarker = currentStack();
+		boolean activeMorph = isMorphingActive(stackForMarker);
 
 		// Only run minigame if MorphedItem and morph not complete
-		if (!isMorphed || morphComplete || stackForMarker.isEmpty()) {
+		if (!activeMorph || stackForMarker.isEmpty()) {
 			if (!markerPositions.isEmpty() || markerSpawnDelay > 0) {
 				clearMarkerProgress();
 				markDirty();
 			}
 			return;
 		}
-		// Always allow minigame for MorphedItem
-		if (!isMorphed && ingotCrafting && plannedProductId == null) {
-			// Only block for ingots without a planned product
-			if (!markerPositions.isEmpty() || markerSpawnDelay != INITIAL_MARKER_DELAY_TICKS) {
-				clearMarkerProgress();
-				markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
-				markDirty();
+
+		// Marker lifecycle
+		if (markerPositions.isEmpty()) {
+			if (markerSpawnDelay > 0) {
+				markerSpawnDelay--;
 			}
-			return;
-		}
-		boolean inStage = true;
-		if (inStage) {
-			if (markerPositions.isEmpty()) {
-				if (markerSpawnDelay > 0) {
-					markerSpawnDelay--;
+			if (markerSpawnDelay == 0) {
+				Vec2f marker = nextMarkerPosition(stackForMarker);
+				if (marker.equals(Vec2f.ZERO)) {
+					markerSpawnDelay = SUBSEQUENT_MARKER_DELAY_TICKS;
+					return;
 				}
-				if (markerSpawnDelay == 0) {
-					Vec2f marker;
-					if ((ingotCrafting && plannedProductId != null) || isMorphed) {
-						marker = MinigamePositioningUtil.getRandomMarkerPositionMorphed(this);
-						if (marker.equals(Vec2f.ZERO)) {
-							marker = MinigamePositioningUtil.getRandomMarkerPosition(stackForMarker, getCachedState());
-						}
-					} else {
-						marker = MinigamePositioningUtil.getRandomMarkerPosition(stackForMarker, getCachedState());
-					}
-					if (marker.equals(Vec2f.ZERO)) {
-						markerSpawnDelay = SUBSEQUENT_MARKER_DELAY_TICKS;
-						return;
-					}
-					markerPositions.add(marker);
-					markerHits.add(false);
-					markerTimeout = fastMarkerIndices.contains(markerAttempts) ? MARKER_LIFETIME_TICKS_FAST : MARKER_LIFETIME_TICKS_NORMAL;
-					markDirty();
-					spawnMarkerAppearanceEffect(marker, stackForMarker);
-				}
-			} else {
-				markerTimeout--;
-				if (markerTimeout <= 0) {
-					processMarkerAttempt(false);
-				}
+				markerPositions.add(marker);
+				markerHits.add(false);
+				markerTimeout = fastMarkerIndices.contains(markerAttempts)
+						? MARKER_LIFETIME_TICKS_FAST
+						: MARKER_LIFETIME_TICKS_NORMAL;
+				markDirty();
+				spawnMarkerAppearanceEffect(marker, stackForMarker);
 			}
 		} else {
-			if (!markerPositions.isEmpty() || markerSpawnDelay > 0) {
-				clearMarkerProgress();
-				markDirty();
+			markerTimeout--;
+			if (markerTimeout <= 0) {
+				processMarkerAttempt(false);
 			}
 		}
 	}
@@ -861,10 +851,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		return "";
 	}
 
-	// =================================
-	// Positioning Utility Class and client sync remain unchanged
-	// =================================
-
 	// Client-only setter used by S2C sync to reflect ingot crafting state without resetting markers/minigame.
 	public void clientSyncIngotState(boolean ingotCrafting, @Nullable Identifier plannedProductId) {
 		this.ingotCrafting = ingotCrafting;
@@ -882,7 +868,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		this.showFinalMorphOnce = false;
 	}
 
-	// Replace the current ingot on the anvil with a MorphedItem, initializing its NBT
 	private void replaceIngotWithMorphed() {
 		if (world == null || world.isClient) return;
 		if (plannedProductId == null) return;
