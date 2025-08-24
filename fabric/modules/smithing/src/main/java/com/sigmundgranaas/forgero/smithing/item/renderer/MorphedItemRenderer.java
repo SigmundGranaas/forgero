@@ -32,6 +32,9 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 
+
+// TODO find correct transformations for different render modes
+
 @Environment(EnvType.CLIENT)
 public class MorphedItemRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {
 	private static final Logger LOGGER = LogManager.getLogger("ForgeroMorphedItemRenderer");
@@ -77,8 +80,13 @@ public class MorphedItemRenderer implements BuiltinItemRendererRegistry.DynamicI
 				matrices.scale(0.5f, 0.5f, 0.5f);
 				matrices.multiply(net.minecraft.util.math.RotationAxis.POSITIVE_X.rotationDegrees(90.0F));
 			}
-			case FIRST_PERSON_RIGHT_HAND, FIRST_PERSON_LEFT_HAND -> {
-				matrices.translate(0, 0.25, 0);
+			case FIRST_PERSON_RIGHT_HAND -> {
+				matrices.translate(0.5F, 0.5F, 0.5F);
+				matrices.scale(0.5f, 0.5f, 0.5f);
+				// No rotation, keep upright
+			}
+			case  FIRST_PERSON_LEFT_HAND -> {
+				matrices.translate(0F, 0F, 0F); // vanilla left hand baseline
 				matrices.scale(1f, 1f, 1f);
 				// No rotation, keep upright
 			}
@@ -88,7 +96,7 @@ public class MorphedItemRenderer implements BuiltinItemRendererRegistry.DynamicI
 			}
 			case GROUND -> {
 				matrices.translate(0.5, 0.4, 0.5);
-				matrices.scale(1f, 1f, 1f);
+				matrices.scale(0.5f, 0.5f, 0.5f);
 				matrices.multiply(net.minecraft.util.math.RotationAxis.POSITIVE_X.rotationDegrees(90.0F));
 			}
 			case NONE -> {
