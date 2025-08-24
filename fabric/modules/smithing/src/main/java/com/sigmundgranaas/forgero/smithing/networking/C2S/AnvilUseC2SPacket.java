@@ -57,10 +57,8 @@ public class AnvilUseC2SPacket {
                     ItemStack stackInHand = player.getStackInHand(hand);
                     ItemStack anvilItem = anvilEntity.getInventory().getStack(0);
                     if (stackInHand.isEmpty() && !anvilItem.isEmpty()) {
-                        // Pick up item from anvil if hand is empty and anvil has item
                         anvilEntity.tryPickupItem(player);
-                    } else if (anvilItem.isEmpty() && anvilEntity.isIngot(stackInHand)) {
-                        // Place ingot if anvil is empty and hand has ingot
+                    } else if (anvilItem.isEmpty() && (anvilEntity.isIngot(stackInHand) || stackInHand.getItem() instanceof com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem)) {
                         anvilEntity.tryPlaceItem(player, hand);
                     }
                 }

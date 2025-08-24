@@ -278,7 +278,26 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 				plannedProductId = null;
 				stackInHand.decrement(1);
-				resetMarkerProgress();
+
+				if (stackInHand.getItem() instanceof MorphedItem) {
+					// Restore progress from NBT for MorphedItem
+					NbtCompound nbt = toPlace.getOrCreateNbt();
+					this.markerHitsCount = nbt.getInt(HITS_NBT_KEY);
+					this.markerAttempts = nbt.getInt(ATTEMPTS_NBT_KEY);
+					this.fastMarkerIndices.clear();
+					if (nbt.contains("fastMarkerIndices")) {
+						int[] arr = nbt.getIntArray("fastMarkerIndices");
+						for (int idx : arr) {
+							this.fastMarkerIndices.add(idx);
+						}
+					}
+					this.morphProgress = nbt.getDouble("morphProgress");
+					// Do NOT reset marker progress, just clear active marker
+					clearActiveMarker();
+				} else {
+					// Reset progress for new ingots
+					resetMarkerProgress();
+				}
 				markDirty();
 				return ActionResult.SUCCESS;
 			}
@@ -466,11 +485,24 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				fastMarkerIndices.add(idx);
 			}
 		}
-		// Keep the item's morph NBT in sync with the reset (progress -> 0)
+		// Only reset morph progress if not a MorphedItem with existing progress
+		ItemStack stack = getInventory().getStack(0);
+		if (!stack.isEmpty() && stack.getItem() instanceof MorphedItem) {
+			NbtCompound nbt = stack.getOrCreateNbt();
+			if (nbt.contains(HITS_NBT_KEY) || nbt.contains(ATTEMPTS_NBT_KEY)) {
+				this.markerHitsCount = nbt.getInt(HITS_NBT_KEY);
+				this.markerAttempts = nbt.getInt(ATTEMPTS_NBT_KEY);
+				this.morphProgress = nbt.getDouble("morphProgress");
+				// Do not reset morph progress, just clear markers
+			} else {
+				this.morphProgress = 0.0;
+			}
+		} else {
+			this.morphProgress = 0.0;
+		}
 		updateMorphProgressOnItem();
 		// --- Fetch starting item image and planned product image ---
 		if (world != null && world.isClient) {
-			ItemStack stack = getInventory().getStack(0);
 			startingItemImage = RuntimeModelUtil.getFirstQuadTextureImage(stack, MinecraftClient.getInstance());
 			if (plannedProductId != null) {
 				ItemStack plannedStack = createProductFromPlanned(plannedProductId);
@@ -687,32 +719,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		}
 	}
 
-	public void loadProgressFromItem() {
-		ItemStack stack = simpleInventory.getStack(0);
-		if (!stack.isEmpty()) {
-			NbtCompound itemNbt = stack.getOrCreateNbt();
-			this.markerHitsCount = itemNbt.getInt(HITS_NBT_KEY);
-			this.markerAttempts = itemNbt.getInt(ATTEMPTS_NBT_KEY);
-			if (itemNbt.contains("fastMarkerIndices")) {
-				int[] arr = itemNbt.getIntArray("fastMarkerIndices");
-				if (arr.length > 0) {
-					fastMarkerIndices.clear();
-					for (int idx : arr) {
-						fastMarkerIndices.add(idx);
-					}
-				} else {
-					resetMarkerProgress();
-				}
-			} else {
-				resetMarkerProgress();
-			}
-		} else {
-			this.markerHitsCount = 0;
-			this.markerAttempts = 0;
-			this.fastMarkerIndices.clear();
-		}
-	}
-
 	public SimpleInventory getInventory() {
 		return simpleInventory;
 	}
@@ -742,15 +748,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			ItemStack plannedStack = createProductFromPlanned(productId);
 			plannedProductImage = RuntimeModelUtil.getFirstQuadTextureImage(plannedStack, MinecraftClient.getInstance());
 		}
-	}
-
-	// --- Getters for cached images ---
-	public BufferedImage getStartingItemImage() {
-		return startingItemImage;
-	}
-
-	public BufferedImage getPlannedProductImage() {
-		return plannedProductImage;
 	}
 
 	// Client-only: refresh morph images based on current inventory and planned product
@@ -831,8 +828,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		return path.endsWith("_ingot") || path.startsWith("ingot_") || stack.isOf(Items.IRON_INGOT);
 	}
 
-	// Detect a simple material name from the current workpiece on the anvil.
-	// Works for common naming schemes like "iron_ingot", "ingot_copper"
 	private String detectMaterialForStack(ItemStack stack) {
 		if (stack.isEmpty()) return "";
 		Identifier id = Registries.ITEM.getId(stack.getItem());
@@ -860,12 +855,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	// Client-only: trigger a one-frame overlay of the fully-morphed texture
 	public void clientTriggerFinalMorphOnce() {
 		this.showFinalMorphOnce = true;
-	}
-	public boolean isShowFinalMorphOnce() {
-		return showFinalMorphOnce;
-	}
-	public void clearFinalMorphOnce() {
-		this.showFinalMorphOnce = false;
 	}
 
 	private void replaceIngotWithMorphed() {
@@ -921,14 +910,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		}
 	}
 
-	/**
-	 * Returns the morph progress as a discrete step value.
-	 * Each successful hit advances to the next morph step (0/10, 1/10, 2/10, etc.).
-	 * This causes immediate texture updates after each hit rather than smooth interpolation.
-	 */
+
 	public double getMorphProgress() {
-		// Return discrete steps: 0.0, 0.1, 0.2, 0.3, ..., 1.0
-		// This ensures the texture changes immediately after each successful hit
 		if (TOTAL_MARKERS <= 0) return 0.0;
 		return Math.min(1.0, (double) markerHitsCount / TOTAL_MARKERS);
 	}
@@ -942,7 +925,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				if (resultItem != null) {
 					ItemStack resultStack = new ItemStack(resultItem, stack.getCount());
 					getInventory().setStack(0, resultStack);
-					// Play finishing sound when morphing is completed
 					if (world != null && !world.isClient) {
 						world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 1.0f, 1.0f);
 					}

@@ -30,10 +30,9 @@ import net.fabricmc.api.Environment;
 public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<SmithingAnvilBlockEntity> {
 	public static final float RENDER_SCALE_FACTOR = 0.5f;
 
-	// Anvil specific constants for positioning
 	private static final float ANVIL_TOP_Y = 1;
-	private static final float Y_FIGHTING_OFFSET = 0.001f; // Small offset to prevent z-fighting
-	private static final float MARKER_RENDER_OFFSET_Y = 0.04f; // Offset for marker/debug visuals above item surface
+	private static final float Y_FIGHTING_OFFSET = 0.001f;
+	private static final float MARKER_RENDER_OFFSET_Y = 0.025f;
 
 	public SmithingAnvilBlockEntityRenderer(BlockEntityRendererFactory.Context context) {
 	}
@@ -95,10 +94,8 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 
 			Vec2f markerPos = entity.getMarkerPositions().get(0);
 
-			// Translate to the marker's position within the item's local space
 			matrices.translate(markerPos.x, MARKER_RENDER_OFFSET_Y, markerPos.y);
 
-			// Draw the marker
 			boolean isFast = entity.getFastMarkerIndices().contains(entity.getMarkerAttempts());
 			float r = isFast ? 1.0f : 1.0f;
 			float g = isFast ? 0.2f : 1.0f;
