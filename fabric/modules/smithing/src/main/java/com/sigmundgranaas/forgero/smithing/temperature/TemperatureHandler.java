@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.smithing.temperature;
 
-import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,10 +37,6 @@ public class TemperatureHandler {
             boolean tookHeatDamage = false;
             for (int i = 0; i < player.getInventory().size(); i++) {
                 ItemStack stack = player.getInventory().getStack(i);
-                if (!(stack.getItem() instanceof StateItem stateItem)) {
-                    continue;
-                }
-                var type = stateItem.dynamicState(stack).type();
                 if (!TemperatureUtils.hasMaxTemperature(stack)) {
                     continue;
                 }
@@ -74,36 +69,32 @@ public class TemperatureHandler {
             if (!(entity instanceof ItemEntity itemEntity)) continue;
             ItemStack stack = itemEntity.getStack();
             LOGGER.debug("Checking item entity: {} at {}", stack.getItem().getTranslationKey(), itemEntity.getBlockPos());
-            // Only apply to tool part heads or tool parts
-            if (!(stack.getItem() instanceof StateItem stateItem)) {
-                LOGGER.debug("Skipped: Not a StateItem");
+            // Apply cooling to any item with hasMaxTemperature (including ingots and diamonds)
+            if (!TemperatureUtils.hasMaxTemperature(stack)) {
                 continue;
             }
-            var type = stateItem.dynamicState(stack).type();
-            LOGGER.debug("Type for item {}: {}", stack.getItem().getTranslationKey(), type.typeName());
-            if (!TemperatureUtils.hasMaxTemperature(stack)) {
-                LOGGER.debug("Skipped: Not a tool part head or tool part");
-                continue;
+            int temp = TemperatureUtils.getTemperature(stack);
+            int prevTemp = temp;
+            if (tickCounter % 20 == 0) {
+                if (temp > 20) {
+                    temp = Math.max(20, temp - INVENTORY_COOL_PER_TICK);
+                    TemperatureUtils.setTemperature(stack, temp);
+                }
+                LOGGER.debug("Entity cooling checked for {}: {} -> {}", stack.getName().getString(), prevTemp, temp);
             }
             BlockPos pos = itemEntity.getBlockPos();
             var blockState = world.getBlockState(pos);
-            // Use the block at the item's position for cauldron detection
             LOGGER.info("[Forgero] Item at {}: blockAt registry={} class={}", pos, blockState.getBlock().getTranslationKey(), blockState.getBlock().getClass().getName());
             boolean changed = false;
-            int temp = TemperatureUtils.getTemperature(stack);
-            int prevTemp = temp;
-            // Improved cauldron detection for water cauldron at the item's position
             boolean isWaterCauldron = blockState.isOf(net.minecraft.block.Blocks.WATER_CAULDRON);
             int cauldronLevel = isWaterCauldron && blockState.contains(Properties.LEVEL_3) ? blockState.get(Properties.LEVEL_3) : 0;
             boolean inFilledCauldron = isWaterCauldron && cauldronLevel == 3;
             LOGGER.info("[Forgero] Checking for filled water cauldron at item pos {}: isWaterCauldron={} level={}", pos, isWaterCauldron, cauldronLevel);
             if (inFilledCauldron) {
                 if (temp > 100) {
-                    // Spawn cloud particles and play extinguish sound
                     world.spawnParticles(net.minecraft.particle.ParticleTypes.CLOUD, itemEntity.getX(), itemEntity.getY() + 0.2, itemEntity.getZ(), 8, 0.2, 0.1, 0.2, 0.01);
                     world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_FIRE_EXTINGUISH, net.minecraft.sound.SoundCategory.BLOCKS, 0.7F, 1.2F);
                 }
-                // --- Fix: Always cool if temp > 20, not just once ---
                 if (temp > 20) {
                     temp = Math.max(20, temp - FLUID_COOL_PER_TICK);
                     TemperatureUtils.setTemperature(stack, temp);

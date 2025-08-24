@@ -32,7 +32,6 @@ public class ModItems {
 		entries.add(SMITHING_TONGS);
 		entries.add(CLAY_CRUCIBLE);
 		entries.add(CRUCIBLE);
-		entries.add(MORPHED_ITEM);
 
 		entries.add(HEARTH);
 	}

@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.smithing.item.custom;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class MorphedItem extends Item {
@@ -56,5 +57,15 @@ public class MorphedItem extends Item {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+
+	@Override
+	public Text getName(ItemStack stack) {
+		Item resultItem = getResultItem(stack);
+		if (resultItem != null) {
+			Text resultName = resultItem.getName(new ItemStack(resultItem));
+			return Text.literal("Unfinished ").append(resultName);
+		}
+		return super.getName(stack);
 	}
 }

@@ -58,7 +58,9 @@ public class AnvilUseC2SPacket {
                     ItemStack anvilItem = anvilEntity.getInventory().getStack(0);
                     if (stackInHand.isEmpty() && !anvilItem.isEmpty()) {
                         anvilEntity.tryPickupItem(player);
-                    } else if (anvilItem.isEmpty() && (anvilEntity.isIngot(stackInHand) || stackInHand.getItem() instanceof com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem)) {
+                    } else if (anvilItem.isEmpty() && (anvilEntity.isIngot(stackInHand)
+                        || stackInHand.getItem() instanceof com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem
+                        || com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.hasMaxTemperature(stackInHand))) {
                         anvilEntity.tryPlaceItem(player, hand);
                     }
                 }

@@ -13,6 +13,7 @@ import net.minecraft.nbt.NbtCompound;
 
 public class TemperatureUtils {
     public static final String TEMPERATURE_KEY = "forgero_temperature";
+    public static final String MAX_TEMPERATURE_KEY = "forgero_max_temperature";
     public static final int DEFAULT_TEMPERATURE = 20;
     public static final int MIN_TEMPERATURE = 0;
 
@@ -27,21 +28,30 @@ public class TemperatureUtils {
     }
 
     public static int getMaxTemp(ItemStack stack) {
+        NbtCompound nbt = stack.getOrCreateNbt();
+        if (nbt.contains(MAX_TEMPERATURE_KEY)) {
+            return nbt.getInt(MAX_TEMPERATURE_KEY);
+        }
         Optional<State> stateOpt = StateService.INSTANCE.convert(stack);
         int maxTemp = 2000; // Default max temperature if attribute is not present
-		Optional<State> state = StateService.INSTANCE.convert(stack);
-		if (state.isPresent()) {
-			int attr = ComputedAttribute.of(state.get(), MAX_TEMPERATURE).asInt();
-			if (attr > 0) {
-				return attr;
-			}
-		}
-		return 0;
+        Optional<State> state = StateService.INSTANCE.convert(stack);
+        if (state.isPresent()) {
+            int attr = ComputedAttribute.of(state.get(), MAX_TEMPERATURE).asInt();
+            if (attr > 0) {
+                return attr;
+            }
+        }
+        return 0;
+    }
+
+    public static void setMaxTemperature(ItemStack stack, int maxTemperature) {
+        NbtCompound nbt = stack.getOrCreateNbt();
+        nbt.putInt(MAX_TEMPERATURE_KEY, maxTemperature);
     }
 
     public static boolean hasMaxTemperature(ItemStack stack) {
-        // Exclude full tools
-        if (stack.getItem() instanceof com.sigmundgranaas.forgero.minecraft.common.item.ToolStateItem) {
+        // Exclude full tools, but allow MorphedItem
+        if (stack.getItem() instanceof com.sigmundgranaas.forgero.minecraft.common.item.ToolStateItem && !(stack.getItem() instanceof com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem)) {
             return false;
         }
         return getMaxTemp(stack) > 0;

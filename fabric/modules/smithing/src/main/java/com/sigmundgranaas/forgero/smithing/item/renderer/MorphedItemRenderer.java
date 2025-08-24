@@ -123,76 +123,60 @@ public class MorphedItemRenderer implements BuiltinItemRendererRegistry.DynamicI
 		matrices.pop();
 	}
 
+	private int getTemperatureColor(ItemStack stack) {
+		if (!com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.hasMaxTemperature(stack)) {
+			return 0xFFFFFF;
+		}
+		int temp = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getTemperature(stack);
+		int max = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getMaxTemp(stack);
+		return com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.getHeatColor(temp, max);
+	}
+
 	private boolean renderMorphed3D(ItemStack morphedStack, double progress, MatrixStack matrices,
 									VertexConsumerProvider vertexConsumers, int light, int overlay) {
 		Identifier startId = MorphedItem.getStartItemId(morphedStack);
 		Identifier resultId = MorphedItem.getResultItemId(morphedStack);
-
 		if (startId == null && resultId == null) {
 			return false;
 		}
-
-		// Clamp progress between 0.0 and 1.0
 		double progressClamped = MathHelper.clamp(progress, 0.0, 1.0);
-
-		// Create cache key based on start, result, and progress (rounded to nearest 0.1)
 		double stepProgress = Math.round(progressClamped * 10.0) / 10.0;
 		String cacheKey = String.format("%s_%s_%.1f",
 			startId != null ? startId.toString() : "null",
 			resultId != null ? resultId.toString() : "null",
 			stepProgress);
-
-		// Check if we have a cached morphed texture
 		MorphTextureCache cached = morphTextureCache.get(cacheKey);
 		if (cached != null && Math.abs(cached.lastProgress - stepProgress) < 0.001) {
-			// Render using the cached morphed texture with 3D extrusion
-			renderMorphAs3DExtrudedPixels(matrices, vertexConsumers, cached.textureId, light, overlay, cached.morphImage);
+			renderMorphAs3DExtrudedPixels(matrices, vertexConsumers, cached.textureId, light, overlay, cached.morphImage, morphedStack);
 			return true;
 		}
-
-		// Generate new morphed texture
 		try {
 			BufferedImage startImage = getItemImage(startId);
 			BufferedImage resultImage = getItemImage(resultId);
-
 			if (startImage == null || resultImage == null) {
-				return false; // Can't generate morphed texture
+				return false;
 			}
-
-			// Use morph step to create intermediate texture
 			BufferedImage morphedImage = MORPHER.morphStep(startImage, resultImage, stepProgress);
-
 			if (morphedImage != null) {
-				// Create dynamic texture from the morphed image
 				NativeImage nativeImage = bufferedImageToNativeImage(morphedImage);
 				NativeImageBackedTexture dynamicTexture = new NativeImageBackedTexture(nativeImage);
 				Identifier textureId = new Identifier("forgero", "morphed_item_" + Math.abs(cacheKey.hashCode()));
-
-				// Register the texture with Minecraft's texture manager
 				MinecraftClient.getInstance().getTextureManager().registerTexture(textureId, dynamicTexture);
-
-				// Clean up old texture if exists
 				if (cached != null) {
 					cached.cleanup();
 				}
-
-				// Cache the new texture with the morphed image
 				morphTextureCache.put(cacheKey, new MorphTextureCache(dynamicTexture, textureId, morphedImage, stepProgress));
-
-				// Render the morphed texture as 3D extruded pixels
-				renderMorphAs3DExtrudedPixels(matrices, vertexConsumers, textureId, light, overlay, morphedImage);
+				renderMorphAs3DExtrudedPixels(matrices, vertexConsumers, textureId, light, overlay, morphedImage, morphedStack);
 				return true;
 			}
-
 		} catch (Exception e) {
 			LOGGER.warn("Failed to create morphed texture: {}", e.getMessage());
 		}
-
-		return false; // Failed to render morphed texture
+		return false;
 	}
 
 	// Render only opaque pixels of the morph texture as a thin extruded 3D mesh (top quads + edge sides)
-	private void renderMorphAs3DExtrudedPixels(MatrixStack matrices, VertexConsumerProvider vertexConsumers, Identifier textureId, int light, int overlay, BufferedImage morphImage) {
+	private void renderMorphAs3DExtrudedPixels(MatrixStack matrices, VertexConsumerProvider vertexConsumers, Identifier textureId, int light, int overlay, BufferedImage morphImage, ItemStack stack) {
 		VertexConsumer vc = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(textureId));
 		MatrixStack.Entry entry = matrices.peek();
 		Matrix4f posMat = entry.getPositionMatrix();
@@ -201,22 +185,19 @@ public class MorphedItemRenderer implements BuiltinItemRendererRegistry.DynamicI
 		int texW = Math.max(1, morphImage.getWidth());
 		int texH = Math.max(1, morphImage.getHeight());
 
-		// Coordinate space: X/Z in [-0.5, 0.5], Y up (but we want the item to lie flat)
 		float min = -0.5f;
 		float stepX = 1.0f / texW;
 		float stepZ = 1.0f / texH;
-
-		// For flat items on anvil: very thin in Y direction, spread out in X/Z
-		float thickness = 0.05f; // Fixed thin thickness for flat appearance
+		float thickness = 0.05f;
 		float epsilon = 0.001f;
 		float yBottom = -thickness / 2.0f + epsilon;
 		float yTop = yBottom + thickness;
 
-		// Simple shading multipliers: top bright, sides slightly darker, bottom darkest
+		int color = getTemperatureColor(stack);
 		int a = 255;
-		int topR = 255, topG = 255, topB = 255;
-		int sideR = (int)(255 * 0.85f), sideG = (int)(255 * 0.85f), sideB = (int)(255 * 0.85f);
-		int botR = (int)(255 * 0.70f), botG = (int)(255 * 0.70f), botB = (int)(255 * 0.70f);
+		int topR = (color >> 16) & 0xFF, topG = (color >> 8) & 0xFF, topB = color & 0xFF;
+		int sideR = (int)(topR * 0.85f), sideG = (int)(topG * 0.85f), sideB = (int)(topB * 0.85f);
+		int botR = (int)(topR * 0.70f), botG = (int)(topG * 0.70f), botB = (int)(topB * 0.70f);
 
 		// Iterate image and extrude only opaque pixels
 		for (int y = 0; y < texH; y++) {

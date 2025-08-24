@@ -10,6 +10,7 @@ import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 import com.sigmundgranaas.forgero.smithing.util.MinigamePositioningUtil;
 import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
 import com.sigmundgranaas.forgero.smithing.util.SchematicResultUtil;
@@ -539,6 +540,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			net.minecraft.util.math.Vec3d worldParticlePos = MinigamePositioningUtil.itemLocalToWorld(
 					markerLocalPos, getPos(), getCachedState(), offsetVec, particleY
 			);
+			serverWorld.spawnParticles(ParticleTypes.FLAME, worldParticlePos.x, worldParticlePos.y, worldParticlePos.z, 4, 0.001, 0.001, 0.001, 0.05);
 			serverWorld.spawnParticles(ParticleTypes.LAVA, worldParticlePos.x, worldParticlePos.y, worldParticlePos.z, 2, 0.01, 0.01, 0.01, 0.02);
 			serverWorld.playSound(null, getPos(), SoundEvents.BLOCK_ANVIL_PLACE, SoundCategory.BLOCKS, 1f, 1f);
 		}
@@ -558,7 +560,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			net.minecraft.util.math.Vec3d worldParticlePos = MinigamePositioningUtil.itemLocalToWorld(
 					markerLocalPos, getPos(), getCachedState(), offsetVec, particleY
 			);
-			serverWorld.spawnParticles(ParticleTypes.END_ROD, worldParticlePos.x, worldParticlePos.y, worldParticlePos.z, 1, 0.005, 0.005, 0.005, 0.01);
 			serverWorld.playSound(null, getPos(), SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.BLOCKS, 0.5f, 1.0f);
 		}
 	}
@@ -581,9 +582,18 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		anvilInventoryCoolTickCounter++;
 		if (anvilInventoryCoolTickCounter >= ANVIL_INVENTORY_COOL_TICK_INTERVAL) {
 			anvilInventoryCoolTickCounter = 0;
-			if (!currentStack().isEmpty()) {
-				markDirty();
+			ItemStack stack = currentStack();
+			if (!stack.isEmpty() && (stack.getItem() instanceof com.sigmundgranaas.forgero.minecraft.common.item.StateItem || stack.getItem() instanceof com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem)) {
+				if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.hasMaxTemperature(stack)) {
+					int temp = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getTemperature(stack);
+					int prevTemp = temp;
+					if (temp > 20) {
+						temp = Math.max(20, temp - 1); // Cool by 1 per interval
+						com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.setTemperature(stack, temp);
+					}
+				}
 			}
+			markDirty();
 		}
 
 		ItemStack stackForMarker = currentStack();
@@ -787,7 +797,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 		Item morphedItem = findMorphedItem();
 		if (morphedItem == null) {
-			LOGGER.warn("No MorphedItem found in registry; cannot replace ingot for morph rendering.");
 			return;
 		}
 
@@ -803,6 +812,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		}
 		MorphedItem.setStartItem(morphed, current.getItem());
 		MorphedItem.setMorphProgress(morphed, 0.0);
+
+		TemperatureUtils.setMaxTemperature(morphed, TemperatureUtils.getMaxTemp(current));
+		TemperatureUtils.setTemperature(morphed, TemperatureUtils.getTemperature(current));
 
 		getInventory().setStack(0, morphed);
 		// Keep ingotCrafting true so minigame continues to work with morphed item
@@ -850,41 +862,36 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 					if (stateOpt.isPresent() && stateOpt.get() instanceof com.sigmundgranaas.forgero.core.condition.Conditional<?>) {
 						var state = stateOpt.get();
 						com.sigmundgranaas.forgero.core.condition.Conditional<?> conditional = (com.sigmundgranaas.forgero.core.condition.Conditional<?>) stateOpt.get();
-						if (state instanceof com.sigmundgranaas.forgero.core.state.Typed) {
-							com.sigmundgranaas.forgero.core.state.Typed typed = (com.sigmundgranaas.forgero.core.state.Typed) state;
-							if (com.sigmundgranaas.forgero.smithing.util.TemperatureItemUtil.shouldApplyTemperature(typed.type())) {
-								LOGGER.info("setMorphProgress: Toolpart found in morphed result: {}", resultStack);
-								int hits = getMarkerHitsCount();
-								java.util.List<com.sigmundgranaas.forgero.core.condition.NamedCondition> lootTable;
-								if (hits == 3) {
-									lootTable = com.sigmundgranaas.forgero.smithing.condition.ConditionLootTables.BEST;
-								} else if (hits == 2) {
-									lootTable = com.sigmundgranaas.forgero.smithing.condition.ConditionLootTables.GOOD;
-								} else if (hits == 1) {
-									lootTable = com.sigmundgranaas.forgero.smithing.condition.ConditionLootTables.NEUTRAL;
-								} else if (hits == 0) {
-									lootTable = com.sigmundgranaas.forgero.smithing.condition.ConditionLootTables.BAD;
-								} else {
-									lootTable = com.sigmundgranaas.forgero.core.condition.Conditions.INSTANCE.all().stream()
-											.filter(c -> c instanceof com.sigmundgranaas.forgero.core.condition.NamedCondition)
-											.map(c -> (com.sigmundgranaas.forgero.core.condition.NamedCondition) c)
-											.collect(java.util.stream.Collectors.toList());
-								}
-								if (!lootTable.isEmpty()) {
-									var randomCondition = com.sigmundgranaas.forgero.smithing.condition.ConditionLootTables.getRandomCondition(lootTable);
-									LOGGER.info("setMorphProgress: Applying loot table condition: {}", randomCondition.name());
-									var conditioned = conditional.applyCondition(randomCondition);
-									var newStackOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert((com.sigmundgranaas.forgero.core.state.State) conditioned);
-									if (newStackOpt.isPresent()) {
-										resultStack = newStackOpt.get();
-										LOGGER.info("setMorphProgress: Condition applied to morphed result item");
-									}
-								} else {
-									LOGGER.info("setMorphProgress: No conditions available to apply");
+						if (TemperatureUtils.hasMaxTemperature(resultStack)) {
+							int hits = getMarkerHitsCount();
+							java.util.List<com.sigmundgranaas.forgero.core.condition.NamedCondition> lootTable;
+							if (hits == 3) {
+								lootTable = com.sigmundgranaas.forgero.smithing.condition.ConditionLootTables.BEST;
+							} else if (hits == 2) {
+								lootTable = com.sigmundgranaas.forgero.smithing.condition.ConditionLootTables.GOOD;
+							} else if (hits == 1) {
+								lootTable = com.sigmundgranaas.forgero.smithing.condition.ConditionLootTables.NEUTRAL;
+							} else if (hits == 0) {
+								lootTable = com.sigmundgranaas.forgero.smithing.condition.ConditionLootTables.BAD;
+							} else {
+								lootTable = com.sigmundgranaas.forgero.core.condition.Conditions.INSTANCE.all().stream()
+										.filter(c -> c instanceof com.sigmundgranaas.forgero.core.condition.NamedCondition)
+										.map(c -> (com.sigmundgranaas.forgero.core.condition.NamedCondition) c)
+										.collect(java.util.stream.Collectors.toList());
+							}
+							if (!lootTable.isEmpty()) {
+								var randomCondition = com.sigmundgranaas.forgero.smithing.condition.ConditionLootTables.getRandomCondition(lootTable);
+								var conditioned = conditional.applyCondition(randomCondition);
+								var newStackOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert((com.sigmundgranaas.forgero.core.state.State) conditioned);
+								if (newStackOpt.isPresent()) {
+									resultStack = newStackOpt.get();
 								}
 							}
 						}
 					}
+					// --- Copy temperature from morphed item to result item ---
+					double currentTemp = TemperatureUtils.getTemperature(stack);
+					TemperatureUtils.setTemperature(resultStack, (int) Math.round(currentTemp));
 					getInventory().setStack(0, resultStack);
 					if (world != null && !world.isClient) {
 						world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 1.0f, 1.0f);
