@@ -18,7 +18,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 
-//TODO it seems particles spawning in north and south faces is off probably also requires 180 degrees somewhere
+
 
 public class MinigamePositioningUtil {
 	private static final BoundingBoxUtil boundingBoxUtil = new BoundingBoxUtil();
@@ -260,14 +260,29 @@ public class MinigamePositioningUtil {
 			if (base.isEmpty()) return Vec2f.ZERO;
 
 			MinecraftClient client = MinecraftClient.getInstance();
-			BufferedImage start = RuntimeModelUtil.getFirstQuadTextureImage(base, client);
-			if (start == null || entity.getPlannedProductId() == null) {
+			BufferedImage start = null;
+			BufferedImage result = null;
+
+			// Check if this is a MorphedItem with NBT data
+			if (base.getItem() instanceof com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem) {
+				// Extract start and result from MorphedItem NBT
+				start = MorphingItemUtil.getStartImage(base);
+				result = MorphingItemUtil.getResultImage(base);
+			}
+
+			// Fallback to planned product workflow if no NBT data or if NBT extraction failed
+			if ((start == null || result == null) && entity.getPlannedProductId() != null) {
+				start = RuntimeModelUtil.getFirstQuadTextureImage(base, client);
+				ItemStack planned = entity.createProductFromPlanned(entity.getPlannedProductId());
+				if (!planned.isEmpty()) {
+					result = RuntimeModelUtil.getFirstQuadTextureImage(planned, client);
+				}
+			}
+
+			// Final fallback to regular item texture if we still don't have both images
+			if (start == null || result == null) {
 				return getItemTextureOffsetVec2f(base);
 			}
-			ItemStack planned = entity.createProductFromPlanned(entity.getPlannedProductId());
-			if (planned.isEmpty()) return getItemTextureOffsetVec2f(base);
-			BufferedImage result = RuntimeModelUtil.getFirstQuadTextureImage(planned, client);
-			if (result == null) return getItemTextureOffsetVec2f(base);
 
 			double weight = entity.getMorphProgress();
 			BufferedImage[] padded = centerPadToSameSize(start, result);
@@ -312,14 +327,27 @@ public class MinigamePositioningUtil {
 			if (base.isEmpty()) return Vec2f.ZERO;
 
 			MinecraftClient client = MinecraftClient.getInstance();
-			BufferedImage start = RuntimeModelUtil.getFirstQuadTextureImage(base, client);
-			if (start == null || entity.getPlannedProductId() == null) return Vec2f.ZERO;
+			BufferedImage start = null;
+			BufferedImage result = null;
 
-			ItemStack planned = entity.createProductFromPlanned(entity.getPlannedProductId());
-			if (planned.isEmpty()) return Vec2f.ZERO;
+			// Check if this is a MorphedItem with NBT data
+			if (base.getItem() instanceof com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem) {
+				// Extract start and result from MorphedItem NBT
+				start = MorphingItemUtil.getStartImage(base);
+				result = MorphingItemUtil.getResultImage(base);
+			}
 
-			BufferedImage result = RuntimeModelUtil.getFirstQuadTextureImage(planned, client);
-			if (result == null) return Vec2f.ZERO;
+			// Fallback to planned product workflow if no NBT data or if NBT extraction failed
+			if ((start == null || result == null) && entity.getPlannedProductId() != null) {
+				start = RuntimeModelUtil.getFirstQuadTextureImage(base, client);
+				ItemStack planned = entity.createProductFromPlanned(entity.getPlannedProductId());
+				if (!planned.isEmpty()) {
+					result = RuntimeModelUtil.getFirstQuadTextureImage(planned, client);
+				}
+			}
+
+			// Return zero if we still don't have both images
+			if (start == null || result == null) return Vec2f.ZERO;
 
 			double weight = entity.getMorphProgress();
 			BufferedImage[] padded = centerPadToSameSize(start, result);

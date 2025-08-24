@@ -429,9 +429,9 @@ public class PositionPreservingMorpher {
 
 					// Ensure colors are opaque before darkening
 					if (((actualColor1 >>> 24) & 0xFF) > 0 && ((actualColor2 >>> 24) & 0xFF) > 0) {
-						// Darken the actual sampled colors slightly for shadow effect
-						int darkenedColor1 = darkenColor(actualColor1, 0.85f);
-						int darkenedColor2 = darkenColor(actualColor2, 0.85f);
+						// Reduce darkening factor from 0.85 to 0.95 to preserve original brightness better
+						int darkenedColor1 = darkenColor(actualColor1, 1f);
+						int darkenedColor2 = darkenColor(actualColor2, 1f);
 						int blendedDark = blendColor(darkenedColor1, darkenedColor2, weight);
 						result.setRGB(x, y, blendedDark);
 					}
@@ -447,8 +447,9 @@ public class PositionPreservingMorpher {
 
 					// Ensure colors are opaque before lightening
 					if (((actualColor1 >>> 24) & 0xFF) > 0 && ((actualColor2 >>> 24) & 0xFF) > 0) {
-						int lightenedColor1 = lightenColor(actualColor1, 1.15f);
-						int lightenedColor2 = lightenColor(actualColor2, 1.15f);
+						// Reduce lightening factor from 1.15 to 1.05 to preserve original brightness better
+						int lightenedColor1 = lightenColor(actualColor1, 1f);
+						int lightenedColor2 = lightenColor(actualColor2, 1f);
 						int blendedLight = blendColor(lightenedColor1, lightenedColor2, weight);
 						result.setRGB(x, y, blendedLight);
 					}
@@ -488,8 +489,7 @@ public class PositionPreservingMorpher {
 	}
 
 	private boolean isOnLightEdge(int x, int y, boolean[][] morphedMask, int w, int h) {
-		// Check if this pixel is on an edge where we want light outline
-		// This typically means it's a foreground pixel with inner edge characteristics
+		// More conservative light edge detection - only apply to very specific inner edges
 		if (!morphedMask[y][x]) return false; // Only apply to foreground pixels
 
 		// Check 8-connected neighbors for inner edge detection
@@ -512,8 +512,8 @@ public class PositionPreservingMorpher {
 			}
 		}
 
-		// Light edge: has most neighbors as foreground but not all (inner edge)
-		return totalNeighbors > 0 && foregroundNeighbors >= totalNeighbors * 0.6 && foregroundNeighbors < totalNeighbors;
+		// Much more conservative: only very specific inner edges, and reduce frequency
+		return totalNeighbors > 0 && foregroundNeighbors >= totalNeighbors * 0.8 && foregroundNeighbors < totalNeighbors;
 	}
 
 	/* =========================== Deterministic RNG helpers =========================== */

@@ -17,8 +17,10 @@ import com.sigmundgranaas.forgero.smithing.block.renderer.BellowsBlockEntityRend
 import com.sigmundgranaas.forgero.smithing.block.renderer.HearthBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.block.renderer.MoldBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.block.renderer.SmithingAnvilBlockEntityRenderer;
-import com.sigmundgranaas.forgero.smithing.networking.C2S.AnvilUseC2SPacket;
+import com.sigmundgranaas.forgero.smithing.item.ModItems;
+import com.sigmundgranaas.forgero.smithing.item.renderer.MorphedItemRenderer;
 import com.sigmundgranaas.forgero.smithing.model.BellowsModel;
+import com.sigmundgranaas.forgero.smithing.networking.C2S.AnvilUseC2SPacket;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider;
 
@@ -28,6 +30,7 @@ import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 
 public class ForgeroClientSmithingInitializer implements ClientModInitializer {
@@ -62,6 +65,8 @@ public class ForgeroClientSmithingInitializer implements ClientModInitializer {
 		BlockEntityRendererRegistry.register(ModBlockEntities.SMITHING_ANVIL, SmithingAnvilBlockEntityRenderer::new);
 		BlockEntityRendererRegistry.register(ModBlockEntities.HEARTH, HearthBlockEntityRenderer::new);
 		BlockEntityRendererRegistry.register(ModBlockEntities.MOLD, MoldBlockEntityRenderer::new);
+		BuiltinItemRendererRegistry.INSTANCE.register(ModItems.MORPHED_ITEM, new MorphedItemRenderer());
+
 
 		BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.HEARTH, RenderLayer.getCutout());
 
