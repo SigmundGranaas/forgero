@@ -59,6 +59,7 @@ import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 // TODO it seems its just randomly adding conditions not based on any loottable? Or maybe because there is not loottable for 10 hits currently. Probably better to register misshits and base the loottables around that.
+// TODO adding already made items triggers : No schematics.
 
 @Getter
 public class SmithingAnvilBlockEntity extends BlockEntity {
@@ -148,8 +149,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			return ActionResult.SUCCESS;
 		}
 		ItemStack anvilItem = getInventory().getStack(0);
-		if (anvilItem.isEmpty()) {
-			playMissEffect();
+		// Block hammer interaction if recipe is finished and result item is present
+		if (!anvilItem.isEmpty() && !ingotCrafting && plannedProductId == null) {
+			player.sendMessage(net.minecraft.text.Text.literal("That is done!"), true);
 			return ActionResult.FAIL;
 		}
 
@@ -585,6 +587,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 			// Distinct particle for hit
 			// Reduced spread and speed for smaller particles
+			serverWorld.spawnParticles(ParticleTypes.FLAME, worldParticlePos.x, worldParticlePos.y, worldParticlePos.z, 4, 0.001, 0.001, 0.001, 0.05);
 			serverWorld.spawnParticles(ParticleTypes.LAVA, worldParticlePos.x, worldParticlePos.y, worldParticlePos.z, 2, 0.01, 0.01, 0.01, 0.02);
 			// Distinct sound for hit
 			serverWorld.playSound(null, getPos(), SoundEvents.BLOCK_ANVIL_PLACE, SoundCategory.BLOCKS, 1f, 1f);
@@ -614,7 +617,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			);
 
 			// Reduced spread and speed for smaller particles
-			serverWorld.spawnParticles(ParticleTypes.END_ROD, worldParticlePos.x, worldParticlePos.y, worldParticlePos.z, 1, 0.005, 0.005, 0.005, 0.01);
 			serverWorld.playSound(null, getPos(), SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.BLOCKS, 0.5f, 1.0f);
 		}
 	}
