@@ -15,7 +15,6 @@ import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 import com.sigmundgranaas.forgero.smithing.util.MinigamePositioningUtil;
 import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
 import com.sigmundgranaas.forgero.smithing.util.SchematicResultUtil;
-import com.sigmundgranaas.forgero.smithing.util.TemperatureItemUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
@@ -214,6 +213,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		}
 		ItemStack anvilItem = getInventory().getStack(0);
 		if (!anvilItem.isEmpty()) {
+			if (ingotCrafting && plannedProductId != null) {
+				player.sendMessage(Text.literal("That needs to be finished first!"), true);
+				return ActionResult.SUCCESS;
+			}
 			saveProgressToItem();
 			player.getInventory().offerOrDrop(anvilItem.copy());
 			getInventory().setStack(0, ItemStack.EMPTY);
@@ -236,14 +239,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 		if (anvilItem.isEmpty()) {
 			// Only allow items with forgero:max_temperature attribute
-			if (com.sigmundgranaas.forgero.smithing.util.TemperatureItemUtil.hasMaxTemperature(stackInHand)) {
+			if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.hasMaxTemperature(stackInHand)) {
 				ItemStack toPlace = stackInHand.copy();
 				toPlace.setCount(1);
 				getInventory().setStack(0, toPlace);
-				// --- Only set temperature if not present ---
-				if (!toPlace.getOrCreateNbt().contains(TemperatureUtils.TEMPERATURE_KEY)) {
-					TemperatureUtils.setTemperature(toPlace, Math.max(TemperatureUtils.MIN_TEMPERATURE + 1, 100));
-				}
 				stackInHand.decrement(1);
 
 				// Enter ingot-crafting mode and wait for schematic selection on hammer hit
@@ -509,7 +508,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 						com.sigmundgranaas.forgero.core.condition.Conditional<?> conditional = (com.sigmundgranaas.forgero.core.condition.Conditional<?>) stateOpt.get();
 						if (state instanceof com.sigmundgranaas.forgero.core.state.Typed) {
 							com.sigmundgranaas.forgero.core.state.Typed typed = (com.sigmundgranaas.forgero.core.state.Typed) state;
-							if (TemperatureItemUtil.hasMaxTemperature(newProduct)) {
+							if (TemperatureUtils.hasMaxTemperature(newProduct)) {
 								LOGGER.info("applySmithingResult: Toolpart found in newProduct: {}", newProduct);
 								int hits = markerHitsCount;
 								java.util.List<com.sigmundgranaas.forgero.core.condition.NamedCondition> lootTable;

@@ -1,11 +1,9 @@
 package com.sigmundgranaas.forgero.smithing.block.entity.custom;
 
-import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.smithing.item.custom.CrucibleItem;
 import com.sigmundgranaas.forgero.smithing.networking.S2C.HeartBlockSyncS2CPacket;
 import com.sigmundgranaas.forgero.smithing.recipe.Custom.MetalSmeltingRecipe;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
-import com.sigmundgranaas.forgero.smithing.util.TemperatureItemUtil;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -225,7 +223,7 @@ public class HearthBlockEntity extends BlockEntity implements Inventory {
 		ItemStack slotStack = blockEntity.getStack(CRUCIBLE_SLOT);
 
 		// Heat up TemperatureItems if present and hearth is lit
-		if (lit && !slotStack.isEmpty() && TemperatureItemUtil.hasMaxTemperature(slotStack)) {
+		if (lit && !slotStack.isEmpty() && TemperatureUtils.hasMaxTemperature(slotStack)) {
 			int temp = TemperatureUtils.getTemperature(slotStack);
 			int maxTemp = TemperatureUtils.getMaxTemp(slotStack);
 			int heatRate = 20; // Amount to heat per tick, adjust as needed

@@ -39,6 +39,10 @@ public class TemperatureUtils {
 		return 0;
     }
 
+    public static boolean hasMaxTemperature(ItemStack stack) {
+        return getMaxTemp(stack) > 0;
+    }
+
     public static int clamp(int temperature, ItemStack stack) {
         return Math.max(MIN_TEMPERATURE, Math.min(getMaxTemp(stack), temperature));
     }

@@ -35,7 +35,7 @@ public class AnvilUseC2SPacket {
                         return ActionResult.SUCCESS;
                     }
                     // Only allow placing if sneaking and item has max temperature
-                    if (isSneaking && !stackInHand.isEmpty() && com.sigmundgranaas.forgero.smithing.util.TemperatureItemUtil.hasMaxTemperature(stackInHand)) {
+                    if (isSneaking && !stackInHand.isEmpty() && com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.hasMaxTemperature(stackInHand)) {
                         PacketByteBuf buf = PacketByteBufs.create();
                         buf.writeBlockPos(hitResult.getBlockPos());
                         buf.writeEnumConstant(hand);
@@ -60,7 +60,7 @@ public class AnvilUseC2SPacket {
                     if (stackInHand.isEmpty() && !anvilItem.isEmpty()) {
                         // Pick up item from anvil if hand is empty and anvil has item
                         anvilEntity.tryPickupItem(player);
-                    } else if (anvilItem.isEmpty() && com.sigmundgranaas.forgero.smithing.util.TemperatureItemUtil.hasMaxTemperature(stackInHand)) {
+                    } else if (anvilItem.isEmpty() && com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.hasMaxTemperature(stackInHand)) {
                         // Place item with max temperature if anvil is empty and hand has valid item
                         anvilEntity.tryPlaceItem(player, hand);
                     }

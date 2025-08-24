@@ -77,7 +77,7 @@ public class SchematicSelectionS2CPacket {
 			this.optionButtons.clear();
 			for (int i = 0; i < options.size(); i++) {
 				Identifier id = options.get(i);
-				Text label = Text.literal(id.getPath().replace('_', ' '));
+				Text label = Text.literal(capitalizeWords(id.getPath().replace('_', ' ')));
 				ButtonWidget btn = ButtonWidget.builder(label, b -> {
 					var data = PacketByteBufs.create();
 					data.writeBlockPos(anvilPos);
@@ -231,6 +231,22 @@ public class SchematicSelectionS2CPacket {
 			if (this.client != null) {
 				this.client.setScreen(null);
 			}
+		}
+
+		// Add utility method to capitalize every word
+		private static String capitalizeWords(String input) {
+			String[] words = input.split(" ");
+			StringBuilder sb = new StringBuilder();
+			for (String word : words) {
+				if (!word.isEmpty()) {
+					sb.append(Character.toUpperCase(word.charAt(0)));
+					if (word.length() > 1) {
+						sb.append(word.substring(1));
+					}
+					sb.append(" ");
+				}
+			}
+			return sb.toString().trim();
 		}
 	}
 }

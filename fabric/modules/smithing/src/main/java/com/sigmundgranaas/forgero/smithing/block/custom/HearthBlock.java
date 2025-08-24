@@ -108,7 +108,7 @@ public class HearthBlock extends CampfireBlock implements Waterloggable {
 		// Accept only Crucible or temperature items in the slot
 		if (!held.isEmpty() && slot.isEmpty()) {
 			boolean isCrucible = held.getItem() instanceof CrucibleItem;
-			boolean isTemperatureItem = TemperatureItemUtil.hasMaxTemperature(held);
+			boolean isTemperatureItem = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.hasMaxTemperature(held);
 			if (!isCrucible && !isTemperatureItem) {
 				if (world.isClient) {
 					player.sendMessage(Text.literal("Only crucibles and temperature items can be placed on the hearth!"), true);

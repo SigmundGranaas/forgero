@@ -12,7 +12,7 @@ public class TemperatureColorProvider {
     public static void register() {
         Registries.ITEM.forEach(item -> {
             ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
-                if (!com.sigmundgranaas.forgero.smithing.util.TemperatureItemUtil.hasMaxTemperature(stack)) {
+                if (!TemperatureUtils.hasMaxTemperature(stack)) {
                     return 0xFFFFFF; // Default color (white) for items without temperature
                 }
                 int temp = TemperatureUtils.getTemperature(stack);
