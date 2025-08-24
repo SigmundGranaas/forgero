@@ -957,6 +957,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				if (resultItem != null) {
 					ItemStack resultStack = new ItemStack(resultItem, stack.getCount());
 					getInventory().setStack(0, resultStack);
+					// Play finishing sound when morphing is completed
+					if (world != null && !world.isClient) {
+						world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 1.0f, 1.0f);
+					}
 				}
 			}
 		}
