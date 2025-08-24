@@ -465,12 +465,19 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		markerAttempts++;
 		ItemStack stack = simpleInventory.getStack(0);
 		int temp = TemperatureUtils.getTemperature(stack);
+		int maxTemp = TemperatureUtils.getMaxTemp(stack);
 		int depletion = hit ? 0 : 10;
 		if (hit) {
 			markerHitsCount++;
+			// Determine if this is a fast marker
+			boolean isFastMarker = fastMarkerIndices.contains(markerAttempts - 1); // markerAttempts is incremented above
+			int tempIncrease = isFastMarker ? 50 : 30;
+			int newTemp = Math.min(maxTemp, temp + tempIncrease);
+			TemperatureUtils.setTemperature(stack, newTemp);
+		} else {
+			int newTemp = Math.max(TemperatureUtils.MIN_TEMPERATURE, temp - depletion);
+			TemperatureUtils.setTemperature(stack, newTemp);
 		}
-		int newTemp = Math.max(TemperatureUtils.MIN_TEMPERATURE, temp - depletion);
-		TemperatureUtils.setTemperature(stack, newTemp);
 		markDirty();
 		markerPositions.clear(); // Clear existing marker to wait for next spawn
 		markerHits.clear(); // Clear existing marker hit status
