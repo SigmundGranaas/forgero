@@ -83,17 +83,14 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	@Setter
 	private int markerHitsCount = 0;
 
-	// Minigame Timing Variables
 	private int markerTimeout = 0;
 	private int markerSpawnDelay = 0;
 
-	// Minigame Timing Constants - Made configurable
 	public static final int INITIAL_MARKER_DELAY_TICKS = 25; // 0.5 seconds
 	public static final int SUBSEQUENT_MARKER_DELAY_TICKS = 20; // 0.75 seconds
 	public static final int MARKER_LIFETIME_TICKS_NORMAL = 35; // 1.5 seconds for normal markers
 	public static final int MARKER_LIFETIME_TICKS_FAST = 20; // 0.75 seconds for fast markers
 
-	// Hit radius squared for marker detection in item-local space
 	private static final double MARKER_HIT_RADIUS_SQ = 0.0085d;
 
 	private final Random random = new Random();
@@ -109,11 +106,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 	private final List<Integer> fastMarkerIndices = new ArrayList<>();
 
-	// Anvil specific constants for positioning. These are the fixed Y values for server-side particle spawning.
-	// The renderer will calculate more precise values.
-	private static final float ANVIL_TOP_Y = 0.9375f; // Max Y from anvil voxel shapes
-	private static final float Y_FIGHTING_OFFSET = 0.001f; // Small offset to prevent z-fighting
-	// This offset positions particles and debug visuals slightly above the item's surface.
+	private static final float ANVIL_TOP_Y = 0.9375f;
+	private static final float Y_FIGHTING_OFFSET = 0.001f;
 	private static final float MARKER_VISUAL_Y_OFFSET = 0.01f;
 
 	// Ingot-crafting mode
@@ -130,11 +124,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	private transient BufferedImage startingItemImage = null;
 	private transient BufferedImage plannedProductImage = null;
 
-	// One-shot client overlay to show the final fully-morphed texture
-	private transient boolean showFinalMorphOnce = false; // client-only, not persisted
-	private boolean pendingFinalMorphNotify = false;      // server-side signal for clients
+	private transient boolean showFinalMorphOnce = false;
+	private boolean pendingFinalMorphNotify = false;
 
-	// Morph progress for morphed item minigame
 	private double morphProgress = 0.0;
 
 	public SmithingAnvilBlockEntity(BlockPos pos, BlockState state) {
@@ -180,7 +172,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	}
 
 	private Vec2f nextMarkerPosition(ItemStack stackForMarker) {
-		// Prefer morphed/overlay-aware placement; fall back to item UV-based placement
 		Vec2f marker = MinigamePositioningUtil.getRandomMarkerPositionMorphed(this);
 		if (marker.equals(Vec2f.ZERO)) {
 			marker = MinigamePositioningUtil.getRandomMarkerPosition(stackForMarker, getCachedState());
@@ -202,7 +193,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			return ActionResult.FAIL;
 		}
 
-		// Require schematic selection for ingot-crafting (but not for MorphedItems)
 		if (ingotCrafting && plannedProductId == null && !(anvilItem.getItem() instanceof MorphedItem)) {
 			openSchematicSelection(player);
 			return ActionResult.FAIL;
@@ -230,8 +220,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				setMorphProgress(1.0);
 				resetMarkerProgress();
 			} else {
-				// Remove: applySmithingResult();
-				// Instead, just reset marker progress
 				resetMarkerProgress();
 			}
 		}
