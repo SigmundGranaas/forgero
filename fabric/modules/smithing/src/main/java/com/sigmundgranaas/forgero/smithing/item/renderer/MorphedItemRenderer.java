@@ -27,6 +27,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RotationAxis;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -77,13 +78,14 @@ public class MorphedItemRenderer implements BuiltinItemRendererRegistry.DynamicI
 			}
 			case FIXED -> {
 				matrices.translate(0.5, 0.5, 0.5);
-				matrices.scale(0.5f, 0.5f, 0.5f);
+				matrices.scale(1f, 1f, 1f);
 				matrices.multiply(net.minecraft.util.math.RotationAxis.POSITIVE_X.rotationDegrees(90.0F));
 			}
 			case FIRST_PERSON_RIGHT_HAND -> {
-				matrices.translate(0.5F, 0.5F, 0.5F);
-				matrices.scale(0.5f, 0.5f, 0.5f);
-				// No rotation, keep upright
+				matrices.translate(0.5F, 0.75F, 0.65F);
+				matrices.scale(0.60f, 0.60f, 0.60f);
+				matrices.multiply(net.minecraft.util.math.RotationAxis.POSITIVE_X.rotationDegrees(65.0F));
+				matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(90.0F));
 			}
 			case  FIRST_PERSON_LEFT_HAND -> {
 				matrices.translate(0F, 0F, 0F); // vanilla left hand baseline
@@ -91,6 +93,7 @@ public class MorphedItemRenderer implements BuiltinItemRendererRegistry.DynamicI
 				// No rotation, keep upright
 			}
 			case THIRD_PERSON_RIGHT_HAND, THIRD_PERSON_LEFT_HAND -> {
+
 				matrices.scale(0.5f, 0.5f, 0.5f);
 				// No rotation, keep upright
 			}
