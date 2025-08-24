@@ -928,11 +928,15 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	}
 
 	/**
-	 * Returns the morph progress as a value between 0.0 and 1.0.
-	 * Used for texture interpolation between starting and result images.
+	 * Returns the morph progress as a discrete step value.
+	 * Each successful hit advances to the next morph step (0/10, 1/10, 2/10, etc.).
+	 * This causes immediate texture updates after each hit rather than smooth interpolation.
 	 */
 	public double getMorphProgress() {
-		return morphProgress;
+		// Return discrete steps: 0.0, 0.1, 0.2, 0.3, ..., 1.0
+		// This ensures the texture changes immediately after each successful hit
+		if (TOTAL_MARKERS <= 0) return 0.0;
+		return Math.min(1.0, (double) markerHitsCount / TOTAL_MARKERS);
 	}
 
 	public void setMorphProgress(double progress) {
