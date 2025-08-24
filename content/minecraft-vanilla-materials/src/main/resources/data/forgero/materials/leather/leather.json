@@ -1,7 +1,7 @@
 {
   "type": "forgero:material",
   "name": "Leather",
-  "tags": ["forgero:materials/armor_lining_material", "forgero:materials/leather"],
+  "tags": ["forgero:materials/armor_lining_material", "forgero:materials/leather", "forgero:upgrade/binding", "forgero:upgrade/grip"],
   "attributes": [
     {
       "id": "forgero:leather-durability",
