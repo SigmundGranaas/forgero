@@ -9,14 +9,12 @@ import java.util.stream.Collectors;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
 import com.sigmundgranaas.forgero.smithing.condition.ConditionLootTables;
+import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
-import com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider;
-import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 import com.sigmundgranaas.forgero.smithing.util.MinigamePositioningUtil;
 import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
 import com.sigmundgranaas.forgero.smithing.util.SchematicResultUtil;
 import com.sigmundgranaas.forgero.smithing.util.TemperatureItemUtil;
-import com.sigmundgranaas.forgero.smithing.item.MorphedItem;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
@@ -46,7 +44,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -136,6 +133,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	private transient boolean showFinalMorphOnce = false; // client-only, not persisted
 	private boolean pendingFinalMorphNotify = false;      // server-side signal for clients
 
+	// Morph progress for morphed item minigame
+	private double morphProgress = 0.0;
+
 	public SmithingAnvilBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.SMITHING_ANVIL, pos, state);
 		this.markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
@@ -155,24 +155,14 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			return ActionResult.FAIL;
 		}
 
-		// Require schematic selection for ingot-crafting
-		if (ingotCrafting && plannedProductId == null) {
+		// Require schematic selection for ingot-crafting (but not for MorphedItems)
+		if (ingotCrafting && plannedProductId == null && !(anvilItem.getItem() instanceof MorphedItem)) {
 			openSchematicSelection(player);
 			return ActionResult.FAIL;
 		}
 
-		int temp = TemperatureUtils.getTemperature(anvilItem);
-
-		// Temperature gate
-		if (temp < 0) {
-			player.sendMessage(Text.literal("The material is too cold to work!"), true);
-			world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 1.0f);
-			playMissEffect();
-			return ActionResult.FAIL;
-		}
-
 		Vec2f offsetVec;
-		if (ingotCrafting && plannedProductId != null) {
+		if ((ingotCrafting && plannedProductId != null) || anvilItem.getItem() instanceof MorphedItem) {
 			offsetVec = MinigamePositioningUtil.getMorphedTextureOffsetVec2f(this);
 		} else {
 			offsetVec = MinigamePositioningUtil.getItemTextureOffsetVec2f(anvilItem);
@@ -237,26 +227,17 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 		if (anvilItem.isEmpty()) {
 			// Accept any ingot (by tag or fallback heuristic) OR MorphedItem
-			if (isIngot(stackInHand) || stackInHand.getItem() instanceof com.sigmundgranaas.forgero.smithing.item.MorphedItem) {
+			if (isIngot(stackInHand) || stackInHand.getItem() instanceof MorphedItem) {
 				ItemStack toPlace = stackInHand.copy();
 				toPlace.setCount(1);
 				getInventory().setStack(0, toPlace);
-				// Initialize a working temperature so markers can start post-selection
-				TemperatureUtils.setTemperature(toPlace, Math.max(TemperatureUtils.MIN_TEMPERATURE + 1, 100));
-				stackInHand.decrement(1);
 
-				// Enter ingot-crafting mode and wait for schematic selection on hammer hit
-				if (isIngot(toPlace)) {
-					ingotCrafting = true;
-					plannedProductId = null;
-				} else {
-					// If it's a MorphedItem, set ingotCrafting to false
-					ingotCrafting = false;
-					plannedProductId = null;
-				}
+				ingotCrafting = !(stackInHand.getItem() instanceof MorphedItem);
+
+				plannedProductId = null;
+				stackInHand.decrement(1);
 				resetMarkerProgress();
 				markDirty();
-				// GUI will open on first hammer hit, not here
 				return ActionResult.SUCCESS;
 			}
 		}
@@ -320,6 +301,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		if (plannedProductId != null) {
 			nbt.putString("plannedProductId", plannedProductId.toString());
 		}
+		nbt.putDouble("morphProgress", morphProgress);
 	}
 
 	@Override
@@ -368,6 +350,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			}
 		} else {
 			this.plannedProductId = null;
+		}
+		if (nbt.contains("morphProgress")) {
+			morphProgress = nbt.getDouble("morphProgress");
 		}
 	}
 
@@ -471,17 +456,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		if (markerHitsCount >= TOTAL_MARKERS) return;
 		markerAttempts++;
 		ItemStack stack = simpleInventory.getStack(0);
-		int temp = TemperatureUtils.getTemperature(stack);
-		int depletion = hit ? 0 : 10;
 		if (hit) {
 			markerHitsCount++;
 		}
-		int newTemp = Math.max(TemperatureUtils.MIN_TEMPERATURE, temp - depletion);
-		TemperatureUtils.setTemperature(stack, newTemp);
-
-		// Update morph progress on the MorphedItem so the client renderer can morph the texture
 		updateMorphProgressOnItem();
-
 		markDirty();
 		markerPositions.clear(); // Clear existing marker to wait for next spawn
 		markerHits.clear(); // Clear existing marker hit status
@@ -499,9 +477,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		if (ingotCrafting && plannedProductId != null) {
 			ItemStack newProduct = createProductFromPlanned(plannedProductId);
 			if (!newProduct.isEmpty()) {
-				int temp = TemperatureUtils.getTemperature(anvilItem);
-				TemperatureUtils.setTemperature(newProduct, temp);
-
 				// --- Apply condition to ingot-crafted tool ---
 				if (getMarkerHitsCount() >= 3) {
 					var stateOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert(newProduct);
@@ -628,28 +603,17 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		if (world == null || world.isClient) {
 			return;
 		}
-
-		// --- Cooldown logic ---
 		if (guiBlockCooldownUntil > 0 && world.getTime() >= guiBlockCooldownUntil) {
 			guiBlockCooldownUntil = 0;
 		}
-
-		// --- Inventory cooling ---
 		anvilInventoryCoolTickCounter++;
 		if (anvilInventoryCoolTickCounter >= ANVIL_INVENTORY_COOL_TICK_INTERVAL) {
 			anvilInventoryCoolTickCounter = 0;
 			ItemStack stack = simpleInventory.getStack(0);
 			if (!stack.isEmpty()) {
-				int temp = TemperatureUtils.getTemperature(stack);
-				if (temp > 20) {
-					temp = Math.max(20, temp - ANVIL_INVENTORY_COOL_PER_TICK);
-					TemperatureUtils.setTemperature(stack, temp);
-					markDirty();
-				}
+				markDirty();
 			}
 		}
-
-		// --- Marker spawn logic ---
 		ItemStack stackForMarker = simpleInventory.getStack(0);
 		if (stackForMarker.isEmpty() || markerHitsCount >= TOTAL_MARKERS) {
 			if (!markerPositions.isEmpty() || markerSpawnDelay > 0) {
@@ -658,13 +622,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			}
 			return;
 		}
-
-		// Allow minigame for MorphedItem as well as ingot-crafting
-		boolean allowMinigame = ingotCrafting || stackForMarker.getItem() instanceof com.sigmundgranaas.forgero.smithing.item.MorphedItem;
-
-		// Require a selected mold before spawning markers (only for ingot-crafting)
-		if (ingotCrafting && plannedProductId == null) {
-			// Keep progress cleared until user selects a mold
+		// Always allow minigame for MorphedItem
+		boolean isMorphed = stackForMarker.getItem() instanceof MorphedItem;
+		if (!isMorphed && ingotCrafting && plannedProductId == null) {
+			// Only block for ingots without a planned product
 			if (!markerPositions.isEmpty() || markerSpawnDelay != INITIAL_MARKER_DELAY_TICKS) {
 				clearMarkerProgress();
 				markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
@@ -672,19 +633,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			}
 			return;
 		}
-
-		int temp = TemperatureUtils.getTemperature(stackForMarker);
-		int maxTemp = TemperatureUtils.getMaxTemp(stackForMarker);
-		boolean inStage;
-		// For MorphedItem, always allow minigame
-		if (allowMinigame) {
-			inStage = true;
-		} else if (markerAttempts < 5) {
-			inStage = TemperatureColorProvider.inFirstStageSmithing(temp, maxTemp);
-		} else {
-			inStage = TemperatureColorProvider.inSecondStageSmithing(temp, maxTemp);
-		}
-
+		boolean inStage = true;
 		if (inStage) {
 			if (markerPositions.isEmpty()) {
 				if (markerSpawnDelay > 0) {
@@ -692,7 +641,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				}
 				if (markerSpawnDelay == 0) {
 					Vec2f marker;
-					if (ingotCrafting && plannedProductId != null) {
+					if ((ingotCrafting && plannedProductId != null) || isMorphed) {
 						marker = MinigamePositioningUtil.getRandomMarkerPositionMorphed(this);
 						if (marker.equals(Vec2f.ZERO)) {
 							marker = MinigamePositioningUtil.getRandomMarkerPosition(stackForMarker, getCachedState());
@@ -940,12 +889,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 		ItemStack morphed = new ItemStack(morphedItem, 1);
 
-		// Preserve temperature
-		int temp = TemperatureUtils.getTemperature(current);
-		if (temp > 0) {
-			TemperatureUtils.setTemperature(morphed, temp);
-		}
-
 		// Initialize morph NBT (start -> ingot id, result -> selected product item id)
 		ItemStack resultStack = createProductFromPlanned(plannedProductId);
 		if (!resultStack.isEmpty()) {
@@ -958,7 +901,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		MorphedItem.setMorphProgress(morphed, 0.0);
 
 		getInventory().setStack(0, morphed);
+		// Keep ingotCrafting true so minigame continues to work with morphed item
 		markDirty();
+
+		LOGGER.info("Replaced ingot with MorphedItem");
 	}
 
 	// Scan registry to find the MorphedItem instance registered by the mod
@@ -986,6 +932,11 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	 * Used for texture interpolation between starting and result images.
 	 */
 	public double getMorphProgress() {
-		return Math.min(1.0, Math.max(0.0, (double) markerHitsCount / TOTAL_MARKERS));
+		return morphProgress;
+	}
+
+	public void setMorphProgress(double progress) {
+		this.morphProgress = progress;
+		markDirty();
 	}
 }

@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.smithing.item.renderer;
 
-import com.sigmundgranaas.forgero.smithing.item.MorphedItem;
+import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.smithing.item;
+package com.sigmundgranaas.forgero.smithing.item.custom;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
