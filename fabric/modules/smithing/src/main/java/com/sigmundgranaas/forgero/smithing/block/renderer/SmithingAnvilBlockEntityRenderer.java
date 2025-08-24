@@ -95,17 +95,9 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 
 		matrices.push();
 
-		// All transformations are applied in reverse order to how they are called.
-		// The common transformations (translate, anvil rotation, item 180 rot, texture offset, overall scale)
-		// establish a coordinate system where (0,0,0) is the visual center of the *scaled* item on the anvil,
-		// and the XZ plane is horizontal (flat on the anvil surface).
-		// The +Y axis at this point points "upwards" from the anvil surface.
-
 		float itemRenderY = ANVIL_TOP_Y + Y_FIGHTING_OFFSET + 0.01f;
-
 		matrices.translate(0.5f, itemRenderY, 0.5f);
 
-		// Step 2: Rotate the entire visual setup (item + overlays) by the anvil's facing direction.
 		Direction facing = entity.getCachedState().get(AnvilBlock.FACING);
 		float anvilAngleDegrees = 0.0f;
 		switch (facing) {
@@ -115,16 +107,10 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 			case NORTH -> anvilAngleDegrees = -90.0f;
 		}
 		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(anvilAngleDegrees));
-
-		// Step 3: Rotate the item 180 degrees around Y to make it face the player consistently.
 		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
 
-		// Step 4: Apply centering offset from item's texture (dx, dz).
-		// Use normalized morphed offset (item-local units) to match hit/particle mapping.
 		Vec2f normOffset = MinigamePositioningUtil.getMorphedTextureOffsetVec2f(entity);
 		matrices.translate(normOffset.x, 0, normOffset.y);
-
-		// Step 5: Apply the uniform scaling factor. This affects everything after this point.
 		matrices.scale(RENDER_SCALE_FACTOR, RENDER_SCALE_FACTOR, RENDER_SCALE_FACTOR);
 
 		renderMarker(matrices, vertexConsumers, entity);
@@ -132,98 +118,14 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 
 		}
 
-		// Step 6: Rotate the item to lay flat on the anvil.
-		// This rotation makes the item's internal "up" axis (-Y in its model space) align with the anvil's Y.
-		// If ModelTransformationMode.NONE is used, the item model is typically rendered standing upright.
-		// A -90 degree rotation around the X-axis will lay it flat on the XZ plane.
 		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
 
 		int lightLevel = getLightLevel(entity.getWorld(), entity.getPos());
 
-		// Determine minigame active state: when ingot-crafting is ongoing and a planned product image exists
-		boolean minigameActive = entity.isIngotCrafting() && entity.getPlannedProductImage() != null;
-
-		// If the minigame is NOT active, render the default item as usual
-		if (!minigameActive) {
-			ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
-			itemRenderer.renderItem(itemStack, ModelTransformationMode.NONE, lightLevel, overlay,
+		// Always render the item in the slot using vanilla renderer
+		ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
+		itemRenderer.renderItem(itemStack, ModelTransformationMode.NONE, lightLevel, overlay,
 					matrices, vertexConsumers, entity.getWorld(), (int) entity.getPos().asLong());
-		}
-
-		// --- MORPHED TEXTURE RENDERING ---
-		// Render morph if the minigame is active, or if a one-shot final overlay is requested
-		boolean forceFinal = entity.isShowFinalMorphOnce();
-		if (minigameActive || forceFinal) {
-			BufferedImage startImage = entity.getStartingItemImage();
-			BufferedImage resultImage = entity.getPlannedProductImage();
-
-			double weight = forceFinal ? 1.0 : entity.getMorphProgress();
-
-			NativeImageBackedTexture morphDynamicTexture = null;
-			Identifier morphTextureId = null;
-
-			MorphCache cache = morphTextureCache.computeIfAbsent(entity, k -> new MorphCache());
-			boolean canRecompute = (startImage != null && resultImage != null);
-
-			long currentTime = System.currentTimeMillis();
-			boolean shouldUpdate = (cache.lastImage == null ||
-				Math.abs(cache.lastWeight - weight) > WEIGHT_TOLERANCE ||
-				cache.lastStart != startImage ||
-				cache.lastResult != resultImage) &&
-				(currentTime - cache.lastUpdateTime) > cache.MIN_UPDATE_INTERVAL;
-
-			if (canRecompute && shouldUpdate) {
-				cache.lastUpdateTime = currentTime;
-
-				// Store the previous texture temporarily to avoid flicker
-				NativeImageBackedTexture previousTexture = cache.lastDynamicTexture;
-				Identifier previousTextureId = cache.lastTextureId;
-
-				BufferedImage[] padded = centerPadToSameSize(startImage, resultImage);
-				cache.lastImage = morpher.morphStep(padded[0], padded[1], weight);
-				cache.lastWeight = weight;
-				cache.lastStart = startImage;
-				cache.lastResult = resultImage;
-
-				// Create new texture
-				NativeImage nativeImage = bufferedImageToNativeImage(cache.lastImage);
-				cache.lastDynamicTexture = new NativeImageBackedTexture(nativeImage);
-				cache.lastTextureId = MinecraftClient.getInstance().getTextureManager()
-						.registerDynamicTexture("forgero_morph_" + entity.getPos().asLong() + "_" + System.currentTimeMillis(),
-								cache.lastDynamicTexture);
-
-				// Only dispose previous texture after new one is ready and registered
-				if (previousTexture != null && previousTexture != cache.lastDynamicTexture) {
-					// Delay disposal to next frame to ensure smooth transition
-					MinecraftClient.getInstance().execute(() -> previousTexture.close());
-				}
-			}
-
-			morphDynamicTexture = cache.lastDynamicTexture;
-			morphTextureId = cache.lastTextureId;
-
-			// Render the morphed texture as a 3D extruded pixel mesh (only where colored)
-			if (morphTextureId != null && morphDynamicTexture != null && cache.lastImage != null) {
-				matrices.push();
-				// Requested rotation: rotate morph 90 degrees in positive X
-				matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
-				renderMorphAs3DExtrudedPixels(matrices, vertexConsumers, morphTextureId, lightLevel, overlay, cache.lastImage);
-				matrices.pop();
-			} else if (minigameActive) {
-				// Fallback to default item if morph texture isn't ready
-				ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
-				itemRenderer.renderItem(itemStack, ModelTransformationMode.NONE, lightLevel, overlay,
-						matrices, vertexConsumers, entity.getWorld(), (int) entity.getPos().asLong());
-			}
-
-			// Clear the one-shot flag after rendering once
-			if (forceFinal) {
-				entity.clearFinalMorphOnce();
-			}
-		} else {
-			// Minigame inactive: release cached texture to prevent leaks
-			releaseMorphCache(entity);
-		}
 
 		matrices.pop();
 	}
