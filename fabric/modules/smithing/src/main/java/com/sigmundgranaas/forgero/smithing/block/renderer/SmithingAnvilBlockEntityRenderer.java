@@ -10,6 +10,8 @@ import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBloc
 import com.sigmundgranaas.forgero.smithing.util.BoundingBoxUtil;
 import com.sigmundgranaas.forgero.smithing.util.MinigamePositioningUtil;
 import com.sigmundgranaas.forgero.smithing.util.PositionPreservingMorpher;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joml.Matrix3f;
@@ -41,8 +43,6 @@ import net.minecraft.world.World;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-//TODO for some reason the side pixels are inverted, not biggest problem but I hate it.
-//TODO dont think I can complain but its happening again.
 
 @Environment(EnvType.CLIENT)
 public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<SmithingAnvilBlockEntity> {
@@ -140,10 +140,8 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 
 		int lightLevel = getLightLevel(entity.getWorld(), entity.getPos());
 
-		// Determine minigame active state: when ingot-crafting is ongoing and a planned product image exists
 		boolean minigameActive = entity.isIngotCrafting() && entity.getPlannedProductImage() != null;
 
-		// If the minigame is NOT active, render the default item as usual
 		if (!minigameActive) {
 			ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
 			itemRenderer.renderItem(itemStack, ModelTransformationMode.NONE, lightLevel, overlay,
@@ -175,26 +173,31 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 			if (canRecompute && shouldUpdate) {
 				cache.lastUpdateTime = currentTime;
 
-				// Store the previous texture temporarily to avoid flicker
 				NativeImageBackedTexture previousTexture = cache.lastDynamicTexture;
 				Identifier previousTextureId = cache.lastTextureId;
 
 				BufferedImage[] padded = centerPadToSameSize(startImage, resultImage);
-				cache.lastImage = morpher.morphStep(padded[0], padded[1], weight);
+				BufferedImage morphed = morpher.morphStep(padded[0], padded[1], weight);
+
+				// --- Apply temperature colormap ---
+				int temp = TemperatureUtils.getTemperature(itemStack);
+				int maxTemp = TemperatureUtils.getMaxTemp(itemStack);
+				int heatColor = TemperatureColorProvider.getHeatColor(temp, maxTemp);
+
+				BufferedImage coloredMorph = applyColormapToImage(morphed, heatColor);
+
+				cache.lastImage = coloredMorph;
 				cache.lastWeight = weight;
 				cache.lastStart = startImage;
 				cache.lastResult = resultImage;
 
-				// Create new texture
-				NativeImage nativeImage = bufferedImageToNativeImage(cache.lastImage);
+				NativeImage nativeImage = bufferedImageToNativeImage(coloredMorph);
 				cache.lastDynamicTexture = new NativeImageBackedTexture(nativeImage);
 				cache.lastTextureId = MinecraftClient.getInstance().getTextureManager()
 						.registerDynamicTexture("forgero_morph_" + entity.getPos().asLong() + "_" + System.currentTimeMillis(),
 								cache.lastDynamicTexture);
 
-				// Only dispose previous texture after new one is ready and registered
 				if (previousTexture != null && previousTexture != cache.lastDynamicTexture) {
-					// Delay disposal to next frame to ensure smooth transition
 					MinecraftClient.getInstance().execute(() -> previousTexture.close());
 				}
 			}
@@ -419,5 +422,41 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 			cache.lastResult = null;
 			cache.lastWeight = -1.0;
 		}
+	}
+
+	// --- New helper: apply colormap ---
+	private BufferedImage applyColormapToImage(BufferedImage image, int heatColor) {
+		int w = image.getWidth();
+		int h = image.getHeight();
+		BufferedImage out = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+
+		int rC = (heatColor >> 16) & 0xFF;
+		int gC = (heatColor >> 8) & 0xFF;
+		int bC = heatColor & 0xFF;
+
+		for (int y = 0; y < h; y++) {
+			for (int x = 0; x < w; x++) {
+				int argb = image.getRGB(x, y);
+				int a = (argb >>> 24) & 0xFF;
+				int r = (argb >>> 16) & 0xFF;
+				int g = (argb >>> 8) & 0xFF;
+				int b = argb & 0xFF;
+
+				// Only colorize non-transparent pixels
+				if (a == 0) {
+					out.setRGB(x, y, argb);
+					continue;
+				}
+
+				// Simple colorization: multiply pixel color by heat color, preserving alpha
+				int nr = (r * rC) / 255;
+				int ng = (g * gC) / 255;
+				int nb = (b * bC) / 255;
+
+				int outArgb = (a << 24) | (nr << 16) | (ng << 8) | nb;
+				out.setRGB(x, y, outArgb);
+			}
+		}
+		return out;
 	}
 }

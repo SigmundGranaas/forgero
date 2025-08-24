@@ -240,8 +240,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				ItemStack toPlace = stackInHand.copy();
 				toPlace.setCount(1);
 				getInventory().setStack(0, toPlace);
-				// Initialize a working temperature so markers can start post-selection
-				TemperatureUtils.setTemperature(toPlace, Math.max(TemperatureUtils.MIN_TEMPERATURE + 1, 100));
+				// --- Only set temperature if not present ---
+				if (!toPlace.getOrCreateNbt().contains(TemperatureUtils.TEMPERATURE_KEY)) {
+					TemperatureUtils.setTemperature(toPlace, Math.max(TemperatureUtils.MIN_TEMPERATURE + 1, 100));
+				}
 				stackInHand.decrement(1);
 
 				// Enter ingot-crafting mode and wait for schematic selection on hammer hit
@@ -482,12 +484,15 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			return;
 		}
 
+		int temp = TemperatureUtils.getTemperature(anvilItem); // Always get starting item temperature
+
 		// Only ingot-crafting path remains
 		if (ingotCrafting && plannedProductId != null) {
 			ItemStack newProduct = createProductFromPlanned(plannedProductId);
 			if (!newProduct.isEmpty()) {
-				int temp = TemperatureUtils.getTemperature(anvilItem);
+				// --- Copy temperature from original item to result item ---
 				TemperatureUtils.setTemperature(newProduct, temp);
+				// The colormap is determined by temperature, so this ensures the result item uses the same colormap.
 
 				// --- Apply condition to ingot-crafted tool ---
 				if (markerHitsCount >= 3) {
@@ -523,6 +528,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 									if (newStackOpt.isPresent()) {
 										newProduct = newStackOpt.get();
 										LOGGER.info("applySmithingResult: Condition applied to ingot-crafted tool");
+										// Ensure temperature is still set after condition application
+										TemperatureUtils.setTemperature(newProduct, temp);
 									}
 								} else {
 									LOGGER.info("applySmithingResult: No conditions available to apply");
