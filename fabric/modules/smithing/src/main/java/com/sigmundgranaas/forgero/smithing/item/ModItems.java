@@ -19,6 +19,7 @@ public class ModItems {
 	public static final Item SMITHING_TONGS = registerItem("smithing_tongs", new Item(new FabricItemSettings()));
 	public static final Item CLAY_CRUCIBLE = registerItem("clay_crucible", new Item(new FabricItemSettings()));
 	public static final Item CRUCIBLE = registerItem("crucible", new CrucibleItem(new FabricItemSettings()));
+	public static final Item MORPHED_ITEM = registerItem("morphed_item", new com.sigmundgranaas.forgero.smithing.item.MorphedItem(new FabricItemSettings()));
 
 	private static Item registerItem(String name, Item item) {
 		return Registry.register(Registries.ITEM, new Identifier(Forgero.NAMESPACE, name), item);
@@ -29,6 +30,7 @@ public class ModItems {
 		entries.add(SMITHING_TONGS);
 		entries.add(CLAY_CRUCIBLE);
 		entries.add(CRUCIBLE);
+		entries.add(MORPHED_ITEM);
 
 		entries.add(HEARTH);
 	}
