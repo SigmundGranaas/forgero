@@ -40,6 +40,10 @@ public class TemperatureUtils {
     }
 
     public static boolean hasMaxTemperature(ItemStack stack) {
+        // Exclude full tools
+        if (stack.getItem() instanceof com.sigmundgranaas.forgero.minecraft.common.item.ToolStateItem) {
+            return false;
+        }
         return getMaxTemp(stack) > 0;
     }
 

@@ -1,9 +1,5 @@
 package com.sigmundgranaas.forgero.smithing.temperature;
 
-import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
-import com.sigmundgranaas.forgero.smithing.util.TemperatureItemUtil;
-
-import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;

@@ -1,10 +1,9 @@
 package com.sigmundgranaas.forgero.smithing.block.custom;
 
-import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
 import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.HearthBlockEntity;
 import com.sigmundgranaas.forgero.smithing.item.custom.CrucibleItem;
-import com.sigmundgranaas.forgero.smithing.util.TemperatureItemUtil;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -108,7 +107,7 @@ public class HearthBlock extends CampfireBlock implements Waterloggable {
 		// Accept only Crucible or temperature items in the slot
 		if (!held.isEmpty() && slot.isEmpty()) {
 			boolean isCrucible = held.getItem() instanceof CrucibleItem;
-			boolean isTemperatureItem = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.hasMaxTemperature(held);
+			boolean isTemperatureItem =  TemperatureUtils.hasMaxTemperature(held);
 			if (!isCrucible && !isTemperatureItem) {
 				if (world.isClient) {
 					player.sendMessage(Text.literal("Only crucibles and temperature items can be placed on the hearth!"), true);

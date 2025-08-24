@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.smithing.temperature;
 
 import com.sigmundgranaas.forgero.minecraft.common.item.StateItem;
-import com.sigmundgranaas.forgero.smithing.util.TemperatureItemUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
