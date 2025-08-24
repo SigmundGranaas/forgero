@@ -189,8 +189,13 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		processMarkerAttempt(hit);
 
 		if (getMarkerHitsCount() >= TOTAL_MARKERS) {
-			applySmithingResult();
-			resetMarkerProgress();
+			if (anvilItem.getItem() instanceof MorphedItem) {
+				setMorphProgress(1.0);
+				resetMarkerProgress();
+			} else {
+				applySmithingResult();
+				resetMarkerProgress();
+			}
 		}
 		return ActionResult.SUCCESS;
 	}
@@ -615,7 +620,12 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			}
 		}
 		ItemStack stackForMarker = simpleInventory.getStack(0);
-		if (stackForMarker.isEmpty() || markerHitsCount >= TOTAL_MARKERS) {
+
+		boolean isMorphed = stackForMarker.getItem() instanceof MorphedItem;
+		boolean morphComplete = isMorphed && MorphedItem.getMorphProgress(stackForMarker) >= 1.0;
+
+		// Only run minigame if MorphedItem and morph not complete
+		if (!isMorphed || morphComplete || stackForMarker.isEmpty()) {
 			if (!markerPositions.isEmpty() || markerSpawnDelay > 0) {
 				clearMarkerProgress();
 				markDirty();
@@ -623,7 +633,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			return;
 		}
 		// Always allow minigame for MorphedItem
-		boolean isMorphed = stackForMarker.getItem() instanceof MorphedItem;
 		if (!isMorphed && ingotCrafting && plannedProductId == null) {
 			// Only block for ingots without a planned product
 			if (!markerPositions.isEmpty() || markerSpawnDelay != INITIAL_MARKER_DELAY_TICKS) {
@@ -941,6 +950,16 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 	public void setMorphProgress(double progress) {
 		this.morphProgress = progress;
+		if (progress >= 1.0) {
+			ItemStack stack = getInventory().getStack(0);
+			if (!stack.isEmpty() && stack.getItem() instanceof MorphedItem) {
+				Item resultItem = MorphedItem.getResultItem(stack);
+				if (resultItem != null) {
+					ItemStack resultStack = new ItemStack(resultItem, stack.getCount());
+					getInventory().setStack(0, resultStack);
+				}
+			}
+		}
 		markDirty();
 	}
 }

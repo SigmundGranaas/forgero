@@ -46,4 +46,15 @@ public class MorphedItem extends Item {
 		if (!stack.hasNbt() || !stack.getNbt().contains(RESULT_KEY)) return null;
 		return new Identifier(stack.getNbt().getString(RESULT_KEY));
 	}
+
+	public static Item getResultItem(ItemStack stack) {
+		if (!stack.hasNbt() || !stack.getNbt().contains(RESULT_KEY)) return null;
+		String resultIdStr = stack.getNbt().getString(RESULT_KEY);
+		try {
+			Identifier resultId = new Identifier(resultIdStr);
+			return Registries.ITEM.get(resultId);
+		} catch (Exception e) {
+			return null;
+		}
+	}
 }
