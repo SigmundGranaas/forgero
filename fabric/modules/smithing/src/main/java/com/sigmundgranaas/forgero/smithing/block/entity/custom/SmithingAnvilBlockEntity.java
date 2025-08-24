@@ -256,8 +256,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		ItemStack anvilItem = getInventory().getStack(0);
 
 		if (anvilItem.isEmpty()) {
-			// Accept any ingot (by tag or fallback heuristic) OR MorphedItem
-			if (isIngot(stackInHand) || stackInHand.getItem() instanceof MorphedItem) {
+			// Accept any item with hasMaxTemperature OR MorphedItem
+			if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.hasMaxTemperature(stackInHand)){
 				ItemStack toPlace = stackInHand.copy();
 				toPlace.setCount(1);
 				getInventory().setStack(0, toPlace);
@@ -283,7 +283,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 					// Do NOT reset marker progress, just clear active marker
 					clearActiveMarker();
 				} else {
-					// Reset progress for new ingots
+					// Reset progress for new items
 					resetMarkerProgress();
 				}
 				markDirty();
@@ -763,18 +763,23 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		if (stack.isEmpty()) return "";
 		Identifier id = Registries.ITEM.getId(stack.getItem());
 		String path = id.getPath();
-		if (path.endsWith("_ingot")) {
-			return path.substring(0, path.length() - "_ingot".length());
+		if (isIngot(stack)) {
+			if (path.endsWith("_ingot")) {
+				return path.substring(0, path.length() - "_ingot".length());
+			}
+			if (path.startsWith("ingot_") && path.length() > "ingot_".length()) {
+				return path.substring("ingot_".length());
+			}
+			// Fallbacks: known vanilla special cases
+			if (stack.isOf(Items.IRON_INGOT)) return "iron";
+			if (stack.isOf(Items.GOLD_INGOT)) return "gold";
+			if (stack.isOf(Items.COPPER_INGOT)) return "copper";
+			if (stack.isOf(Items.NETHERITE_INGOT)) return "netherite";
+			return path;
+		} else {
+			// For non-ingots, use the full item name
+			return path;
 		}
-		if (path.startsWith("ingot_") && path.length() > "ingot_".length()) {
-			return path.substring("ingot_".length());
-		}
-		// Fallbacks: known vanilla special cases
-		if (stack.isOf(Items.IRON_INGOT)) return "iron";
-		if (stack.isOf(Items.GOLD_INGOT)) return "gold";
-		if (stack.isOf(Items.COPPER_INGOT)) return "copper";
-		if (stack.isOf(Items.NETHERITE_INGOT)) return "netherite";
-		return "";
 	}
 
 	// Client-only setter used by S2C sync to reflect ingot crafting state without resetting markers/minigame.
@@ -819,8 +824,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		getInventory().setStack(0, morphed);
 		// Keep ingotCrafting true so minigame continues to work with morphed item
 		markDirty();
-
-		LOGGER.info("Replaced ingot with MorphedItem");
 	}
 
 	// Scan registry to find the MorphedItem instance registered by the mod
