@@ -22,33 +22,25 @@ public class TemperatureColorProvider {
     public static int getHeatColor(int temperature, int maxTemp) {
         // Colors are in 0xRRGGBB format
         final int[][] baseScale = {
-				{2000, 0xFFFF00}, // Bright Yellow
-				{1900, 0xFFD700}, // Dark Yellow
-				{1800, 0xFFC800}, // Orange Yellow
-				{1700, 0xFF9900}, // Orange
-				{1600, 0xFF5500}, // Orange Red
-				{1500, 0xFF2222}, // Bright Red
-				{1400, 0xFF0000}, // Red
-				{1300, 0xCC0000}, // Medium Red
-				{1200, 0x990000}, // Dull Red
-				{1100, 0x882222}, // Slight Red
-				{1000, 0x555555}, // Very Slightly Red, Mostly Grey
-				{800,  0x222222}, // Dark Grey
-				{575,  0x222288}, // Blue
-				{540,  0x220055}, // Dark Purple
-				{520,  0x660088}, // Purple
-				{500,  0x442233}, // Brown/Purple
-				{480,  0x664422}, // Brown
-				{465,  0xBBAA44}, // Dark Straw
-				{445,  0xFFFACD}, // Light Straw
-				{390,  0xFFF8DC}, // Faint Straw
-				{0,    0xCCCCCC}  // Default cold (
+				{1600, 0xFFFF99}, // Very bright yellow-orange (upper forging limit)
+				{1500, 0xFFFF66}, // Bright yellow
+				{1400, 0xFFCC33}, // Yellow-orange
+				{1300, 0xFF9900}, // Orange
+				{1200, 0xFF6600}, // Deep orange
+				{1100, 0xFF3300}, // Bright red-orange
+				{1000, 0xFF0000}, // Bright red
+				{900,  0xCC0000}, // Red
+				{800,  0x990000}, // Dark red
+				{700,  0x660000}, // Very dark red
+				{600,  0x330000}, // Faint red
+				{500,  0x220000}, // Barely glowing red
+				{0,    0xCCCCCC}  // Cold metal (neutral grey)
 		};
 
 
 
-        // If maxTemp >= 2000, use the original scale
-        if (maxTemp >= 2000) {
+        // If maxTemp >= 1600, use the original scale
+        if (maxTemp >= 1600) {
             for (int i = 0; i < baseScale.length - 1; i++) {
                 int tHigh = baseScale[i][0];
                 int tLow = baseScale[i + 1][0];
@@ -66,7 +58,7 @@ public class TemperatureColorProvider {
         int[][] scaledScale = new int[baseScale.length][2];
         for (int i = 0; i < baseScale.length; i++) {
             int origTemp = baseScale[i][0];
-            int scaledTemp = (int)(origTemp / 2000.0 * maxTemp);
+            int scaledTemp = (int)(origTemp / 1600.0 * maxTemp);
             scaledScale[i][0] = scaledTemp;
             scaledScale[i][1] = baseScale[i][1];
         }
@@ -101,49 +93,49 @@ public class TemperatureColorProvider {
 
 
     public static boolean isHotEnoughForWork(int temperature, int maxTemp) {
-        int minWorkingTemp = maxTemp >= 2000 ? 390 : (int)(390 / 2000.0 * maxTemp);
+        int minWorkingTemp = maxTemp >= 1600 ? 500 : (int)(500 / 1600.0 * maxTemp);
         return temperature >= minWorkingTemp;
     }
 
-    public static boolean isInRedStage(int temperature, int maxTemp) {
-        return isInStage(temperature, maxTemp, 1100, 1500);
-    }
+	public static boolean isInOverheatedStage(int temperature, int maxTemp) {
+		return isInStage(temperature, maxTemp, 1500, 1601); // 1500+ is liquid
+	}
 
-    public static boolean isInOrangeStage(int temperature, int maxTemp) {
-        return isInStage(temperature, maxTemp, 1600, 1800);
-    }
+	public static boolean isInWeldingStage(int temperature, int maxTemp) {
+		return isInStage(temperature, maxTemp, 1300, 1500); // 1300–1500
+	}
 
-    public static boolean isInYellowStage(int temperature, int maxTemp) {
-        return isInStage(temperature, maxTemp, 1900, 2000);
-    }
+	public static boolean isInForgingStage(int temperature, int maxTemp) {
+		return isInStage(temperature, maxTemp, 1100, 1300); // 1100–1300
+	}
 
-    public static boolean isInPurpleStage(int temperature, int maxTemp) {
-        return isInStage(temperature, maxTemp, 520, 575);
-    }
+	public static boolean isInShapingStage(int temperature, int maxTemp) {
+		return isInStage(temperature, maxTemp, 900, 1100); // 900–1100
+	}
 
-    public static boolean isInStrawStage(int temperature, int maxTemp) {
-        return isInStage(temperature, maxTemp, 390, 520);
-    }
+	public static boolean isInCriticalStage(int temperature, int maxTemp) {
+		return isInStage(temperature, maxTemp, 700, 900); // 700–900
+	}
 
-    public static boolean isInBlueStage(int temperature, int maxTemp) {
-        return isInStage(temperature, maxTemp, 575, 800);
-    }
+	public static boolean isInTemperingStage(int temperature, int maxTemp) {
+		return isInStage(temperature, maxTemp, 500, 700); // 500–700
+	}
 
-    public static boolean isInBrownStage(int temperature, int maxTemp) {
-        return isInStage(temperature, maxTemp, 465, 520);
-    }
+	public static boolean isInColdStage(int temperature, int maxTemp) {
+		return isInStage(temperature, maxTemp, 0, 500); // <500
+	}
 
-    public static boolean isInGreyStage(int temperature, int maxTemp) {
-        return isInStage(temperature, maxTemp, 800, 1100);
-    }
+	public static boolean isInPerfectStage(int temperature, int maxTemp) {
+		return isInStage(temperature, maxTemp, 1150, 1250); // 1100–1300
+	}
 
-    private static boolean isInStage(int temperature, int maxTemp, int min, int max) {
-        if (maxTemp >= 2000) {
-            return temperature >= min && temperature < max;
-        } else {
-            int scaledMin = (int)(min / 2000.0 * maxTemp);
-            int scaledMax = (int)(max / 2000.0 * maxTemp);
-            return temperature >= scaledMin && temperature < scaledMax;
-        }
-    }
+	private static boolean isInStage(int temperature, int maxTemp, int min, int max) {
+		if (maxTemp >= 1600) {
+			return temperature >= min && temperature < max;
+		} else {
+			int scaledMin = (int)(min / 1600.0 * maxTemp);
+			int scaledMax = (int)(max / 1600.0 * maxTemp);
+			return temperature >= scaledMin && temperature < scaledMax;
+		}
+	}
 }

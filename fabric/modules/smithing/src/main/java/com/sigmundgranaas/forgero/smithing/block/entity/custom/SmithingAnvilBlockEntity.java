@@ -19,8 +19,6 @@ import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
 import com.sigmundgranaas.forgero.smithing.util.SchematicResultUtil;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,11 +57,8 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
-// TODO isInStartingStage fails after 1200 max temp or something?
-
 @Getter
 public class SmithingAnvilBlockEntity extends BlockEntity {
-	private static final Logger LOGGER = LogManager.getLogger("ForgeroSmithingAnvil");
 	private static final @NotNull String INVENTORY_NBT_KEY = "inventory";
 
 	private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1, ItemStack.EMPTY);
@@ -82,16 +77,18 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 	private List<Vec2f> markerPositions = new ArrayList<>();
 	private List<Boolean> markerHits = new ArrayList<>();
-	// Temperature tracking for hits
 	private List<Integer> hitTemperatures = new ArrayList<>();
-	private int redStageHits = 0;
-	private int orangeStageHits = 0;
-	private int yellowStageHits = 0;
-	private int purpleStageHits = 0;
-	private int strawStageHits = 0;
-	private int blueStageHits = 0;
-	private int brownStageHits = 0;
-	private int greyStageHits = 0;
+	private int overheatedStageHits = 0;
+	private int weldingStageHits = 0;
+	private int forgingStageHits = 0;
+	private int shapingStageHits = 0;
+	private int criticalStageHits = 0;
+	private int temperingStageHits = 0;
+	private int coldStageHits = 0;
+	private int perfectStageHits = 0;
+
+	// New: track number of fast markers that were successfully hit
+	private int fastMarkerHits = 0;
 
 	@Setter
 	private int markerAttempts = 0;
@@ -101,22 +98,25 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	private int markerTimeout = 0;
 	private int markerSpawnDelay = 0;
 
-	public static final int INITIAL_MARKER_DELAY_TICKS = 25; // 0.5 seconds
-	public static final int SUBSEQUENT_MARKER_DELAY_TICKS = 20; // 0.75 seconds
-	public static final int MARKER_LIFETIME_TICKS_NORMAL = 35; // 1.5 seconds for normal markers
-	public static final int MARKER_LIFETIME_TICKS_FAST = 20; // 0.75 seconds for fast markers
+	public static final int INITIAL_MARKER_DELAY_TICKS = 25;
+	public static final int SUBSEQUENT_MARKER_DELAY_TICKS = 20;
+	public static final int MARKER_LIFETIME_TICKS_NORMAL = 35;
+	public static final int MARKER_LIFETIME_TICKS_FAST = 20;
 
 	private static final double MARKER_HIT_RADIUS_SQ = 0.0075d;
 
 	private final Random random = new Random();
 
-	private static final int ANVIL_INVENTORY_COOL_TICK_INTERVAL = 3; // 6 times per second
+	private static final int ANVIL_INVENTORY_COOL_TICK_INTERVAL = 4;
 	private int anvilInventoryCoolTickCounter = 0;
 
 	private static final String HITS_NBT_KEY = "forgero_markerHitsCount";
 	private static final String ATTEMPTS_NBT_KEY = "forgero_markerAttempts";
 	private static final int TOTAL_MARKERS = 10;
 	private static final int FAST_MARKERS = 5;
+
+	// Persist fast marker hits count
+	private static final String FAST_MARKER_HITS_NBT_KEY = "forgero_fastMarkerHits";
 
 	private final List<Integer> fastMarkerIndices = new ArrayList<>();
 
@@ -365,14 +365,14 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 		// Store temperature tracking data
 		nbt.putIntArray("hitTemperatures", hitTemperatures.stream().mapToInt(Integer::intValue).toArray());
-		nbt.putInt("redStageHits", redStageHits);
-		nbt.putInt("orangeStageHits", orangeStageHits);
-		nbt.putInt("yellowStageHits", yellowStageHits);
-		nbt.putInt("purpleStageHits", purpleStageHits);
-		nbt.putInt("strawStageHits", strawStageHits);
-		nbt.putInt("blueStageHits", blueStageHits);
-		nbt.putInt("brownStageHits", brownStageHits);
-		nbt.putInt("greyStageHits", greyStageHits);
+		nbt.putInt("overheatedStageHits", overheatedStageHits);
+		nbt.putInt("weldingStageHits", weldingStageHits);
+		nbt.putInt("forgingStageHits", forgingStageHits);
+		nbt.putInt("shapingStageHits", shapingStageHits);
+		nbt.putInt("criticalStageHits", criticalStageHits);
+		nbt.putInt("temperingStageHits", temperingStageHits);
+		nbt.putInt("coldStageHits", coldStageHits);
+		nbt.putInt("perfectStageHits", perfectStageHits);
 
 		nbt.putIntArray("fastMarkerIndices", fastMarkerIndices.stream().mapToInt(Integer::intValue).toArray());
 		ItemStack stack = simpleInventory.getStack(0);
@@ -382,14 +382,14 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			itemNbt.putInt(ATTEMPTS_NBT_KEY, markerAttempts);
 			// Store temperature data on the item as well
 			itemNbt.putIntArray("hitTemperatures", hitTemperatures.stream().mapToInt(Integer::intValue).toArray());
-			itemNbt.putInt("redStageHits", redStageHits);
-			itemNbt.putInt("orangeStageHits", orangeStageHits);
-			itemNbt.putInt("yellowStageHits", yellowStageHits);
-			itemNbt.putInt("purpleStageHits", purpleStageHits);
-			itemNbt.putInt("strawStageHits", strawStageHits);
-			itemNbt.putInt("blueStageHits", blueStageHits);
-			itemNbt.putInt("brownStageHits", brownStageHits);
-			itemNbt.putInt("greyStageHits", greyStageHits);
+			itemNbt.putInt("overheatedStageHits", overheatedStageHits);
+			itemNbt.putInt("weldingStageHits", weldingStageHits);
+			itemNbt.putInt("forgingStageHits", forgingStageHits);
+			itemNbt.putInt("shapingStageHits", shapingStageHits);
+			itemNbt.putInt("criticalStageHits", criticalStageHits);
+			itemNbt.putInt("temperingStageHits", temperingStageHits);
+			itemNbt.putInt("coldStageHits", coldStageHits);
+			itemNbt.putInt("perfectStageHits", perfectStageHits);
 		}
 
 		// Ingot crafting state
@@ -426,14 +426,14 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				hitTemperatures.add(temp);
 			}
 		}
-		redStageHits = nbt.getInt("redStageHits");
-		orangeStageHits = nbt.getInt("orangeStageHits");
-		yellowStageHits = nbt.getInt("yellowStageHits");
-		purpleStageHits = nbt.getInt("purpleStageHits");
-		strawStageHits = nbt.getInt("strawStageHits");
-		blueStageHits = nbt.getInt("blueStageHits");
-		brownStageHits = nbt.getInt("brownStageHits");
-		greyStageHits = nbt.getInt("greyStageHits");
+		overheatedStageHits = nbt.getInt("overheatedStageHits");
+		weldingStageHits = nbt.getInt("weldingStageHits");
+		forgingStageHits = nbt.getInt("forgingStageHits");
+		shapingStageHits = nbt.getInt("shapingStageHits");
+		criticalStageHits = nbt.getInt("criticalStageHits");
+		temperingStageHits = nbt.getInt("temperingStageHits");
+		coldStageHits = nbt.getInt("coldStageHits");
+		perfectStageHits = nbt.getInt("perfectStageHits");
 
 		fastMarkerIndices.clear();
 		if (nbt.contains("fastMarkerIndices")) {
@@ -454,18 +454,23 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				for (int temp : temps) {
 					hitTemperatures.add(temp);
 				}
-				redStageHits = itemNbt.getInt("redStageHits");
-				orangeStageHits = itemNbt.getInt("orangeStageHits");
-				yellowStageHits = itemNbt.getInt("yellowStageHits");
-				purpleStageHits = itemNbt.getInt("purpleStageHits");
-				strawStageHits = itemNbt.getInt("strawStageHits");
-				blueStageHits = itemNbt.getInt("blueStageHits");
-				brownStageHits = itemNbt.getInt("brownStageHits");
-				greyStageHits = itemNbt.getInt("greyStageHits");
+				overheatedStageHits = itemNbt.getInt("overheatedStageHits");
+				weldingStageHits = itemNbt.getInt("weldingStageHits");
+				forgingStageHits = itemNbt.getInt("forgingStageHits");
+				shapingStageHits = itemNbt.getInt("shapingStageHits");
+				criticalStageHits = itemNbt.getInt("criticalStageHits");
+				temperingStageHits = itemNbt.getInt("temperingStageHits");
+				coldStageHits = itemNbt.getInt("coldStageHits");
+				perfectStageHits = itemNbt.getInt("perfectStageHits");
+			}
+			// Restore fast marker hits if present
+			if (itemNbt.contains(FAST_MARKER_HITS_NBT_KEY)) {
+				fastMarkerHits = itemNbt.getInt(FAST_MARKER_HITS_NBT_KEY);
 			}
 		} else {
 			this.markerHitsCount = 0;
 			this.markerAttempts = 0;
+			this.fastMarkerHits = 0;
 		}
 
 		// Ingot crafting state
@@ -555,7 +560,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				fastMarkerIndices.add(idx);
 			}
 		}
-		// Only reset morph progress if not a MorphedItem with existing progress
+		// Reset fast marker hit count unless restoring from NBT for a MorphedItem
 		ItemStack stack = getInventory().getStack(0);
 		if (!stack.isEmpty() && stack.getItem() instanceof MorphedItem) {
 			NbtCompound nbt = stack.getOrCreateNbt();
@@ -563,12 +568,15 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				this.markerHitsCount = nbt.getInt(HITS_NBT_KEY);
 				this.markerAttempts = nbt.getInt(ATTEMPTS_NBT_KEY);
 				this.morphProgress = nbt.getDouble("morphProgress");
+				this.fastMarkerHits = nbt.getInt(FAST_MARKER_HITS_NBT_KEY);
 				// Do not reset morph progress, just clear markers
 			} else {
 				this.morphProgress = 0.0;
+				this.fastMarkerHits = 0;
 			}
 		} else {
 			this.morphProgress = 0.0;
+			this.fastMarkerHits = 0;
 		}
 		updateMorphProgressOnItem();
 		// --- Fetch starting item image and planned product image ---
@@ -591,6 +599,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		markerHitsCount = 0;
 		markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS; // Reset to initial delay
 		fastMarkerIndices.clear(); // Clear fast marker indices, will be regenerated on next start
+		fastMarkerHits = 0;
 	}
 
 	public void processMarkerAttempt(boolean hit) {
@@ -611,37 +620,35 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			// Track temperature at the time of successful hit
 			int temperature = TemperatureUtils.getTemperature(stack);
 			int maxTemp = TemperatureUtils.getMaxTemp(stack);
-			// Add temperature on successful hit
+			// Changed: fast marker now removes 10 temperature, normal adds 30
 			int markerIndex = markerAttempts - 1;
-			int tempIncrease = fastMarkerIndices.contains(markerIndex) ? 10 : 30;
-			TemperatureUtils.setTemperature(stack, Math.min(temperature + tempIncrease, maxTemp));
+			int tempChange = fastMarkerIndices.contains(markerIndex) ? -10 : 30;
+			TemperatureUtils.setTemperature(stack, Math.max(0, Math.min(temperature + tempChange, maxTemp)));
+			// Count fast marker hit
+			if (fastMarkerIndices.contains(markerIndex)) {
+				fastMarkerHits++;
+			}
 			hitTemperatures.add(TemperatureUtils.getTemperature(stack));
 
 			// Update temperature stage counters using TemperatureColorProvider
-			if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInRedStage(temperature, maxTemp)) {
-				redStageHits++;
-			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInOrangeStage(temperature, maxTemp)) {
-				orangeStageHits++;
-			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInYellowStage(temperature, maxTemp)) {
-				yellowStageHits++;
-			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInPurpleStage(temperature, maxTemp)) {
-				purpleStageHits++;
-			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInStrawStage(temperature, maxTemp)) {
-				strawStageHits++;
-			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInBlueStage(temperature, maxTemp)) {
-				blueStageHits++;
-			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInBrownStage(temperature, maxTemp)) {
-				brownStageHits++;
-			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInGreyStage(temperature, maxTemp)) {
-				greyStageHits++;
+			if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInPerfectStage(temperature, maxTemp)) {
+				perfectStageHits++;
+			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInOverheatedStage(temperature, maxTemp)) {
+				overheatedStageHits++;
+			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInWeldingStage(temperature, maxTemp)) {
+				weldingStageHits++;
+			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInForgingStage(temperature, maxTemp)) {
+				forgingStageHits++;
+			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInShapingStage(temperature, maxTemp)) {
+				shapingStageHits++;
+			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInCriticalStage(temperature, maxTemp)) {
+				criticalStageHits++;
+			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInTemperingStage(temperature, maxTemp)) {
+				temperingStageHits++;
+			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInColdStage(temperature, maxTemp)) {
+				coldStageHits++;
 			}
 
-		} else if (wasPlayerAttempt) {
-			// Only reduce temperature on actual player misses, not timeouts
-			// Remove 15 temperature on misshit
-			int temperature = TemperatureUtils.getTemperature(stack);
-			int minTemp = 0;
-			TemperatureUtils.setTemperature(stack, Math.max(temperature - 15, minTemp));
 		}
 		updateMorphProgressOnItem();
 		markDirty();
@@ -786,6 +793,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			itemNbt.putInt(HITS_NBT_KEY, markerHitsCount);
 			itemNbt.putInt(ATTEMPTS_NBT_KEY, markerAttempts);
 			itemNbt.putIntArray("fastMarkerIndices", fastMarkerIndices.stream().mapToInt(Integer::intValue).toArray());
+			itemNbt.putInt(FAST_MARKER_HITS_NBT_KEY, fastMarkerHits);
 		}
 	}
 
@@ -1017,22 +1025,17 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 						context = context.put(MinecraftContextKeys.STACK, stack);
 
 						// Add temperature tracking data to context
-						context = context.put(MinecraftContextKeys.RED_STAGE_HITS, redStageHits);
-						context = context.put(MinecraftContextKeys.ORANGE_STAGE_HITS, orangeStageHits);
-						context = context.put(MinecraftContextKeys.YELLOW_STAGE_HITS, yellowStageHits);
-						context = context.put(MinecraftContextKeys.PURPLE_STAGE_HITS, purpleStageHits);
-						context = context.put(MinecraftContextKeys.STRAW_STAGE_HITS, strawStageHits);
-						context = context.put(MinecraftContextKeys.BLUE_STAGE_HITS, blueStageHits);
-						context = context.put(MinecraftContextKeys.BROWN_STAGE_HITS, brownStageHits);
-						context = context.put(MinecraftContextKeys.GREY_STAGE_HITS, greyStageHits);
+						context = context.put(MinecraftContextKeys.OVERHEATED_STAGE_HITS, overheatedStageHits);
+						context = context.put(MinecraftContextKeys.WELDING_STAGE_HITS, weldingStageHits);
+						context = context.put(MinecraftContextKeys.FORGING_STAGE_HITS, forgingStageHits);
+						context = context.put(MinecraftContextKeys.SHAPING_STAGE_HITS, shapingStageHits);
+						context = context.put(MinecraftContextKeys.CRITICAL_STAGE_HITS, criticalStageHits);
+						context = context.put(MinecraftContextKeys.TEMPERING_STAGE_HITS, temperingStageHits);
+						context = context.put(MinecraftContextKeys.COLD_STAGE_HITS, coldStageHits);
+						context = context.put(MinecraftContextKeys.PERFECT_STAGE_HITS, perfectStageHits);
 						context = context.put(MinecraftContextKeys.TOTAL_HITS, markerHitsCount);
-
-						// Add accuracy and performance tracking data to context
-						context = context.put(MinecraftContextKeys.TOTAL_ATTEMPTS, markerAttempts);
-						int missHits = markerAttempts - markerHitsCount;
-						context = context.put(MinecraftContextKeys.MISS_HITS, missHits);
-						double accuracyRate = markerAttempts > 0 ? (double) markerHitsCount / markerAttempts : 0.0;
-						context = context.put(MinecraftContextKeys.ACCURACY_RATE, accuracyRate);
+						context = context.put(MinecraftContextKeys.MISS_HITS, markerAttempts - markerHitsCount);
+						context = context.put(MinecraftContextKeys.FAST_MARKER_HITS, fastMarkerHits);
 
 						// Check for direct condition assignment using predicates
 						com.sigmundgranaas.forgero.core.condition.NamedCondition directCondition = PredicateConditionLootRegistry.getCondition(context);

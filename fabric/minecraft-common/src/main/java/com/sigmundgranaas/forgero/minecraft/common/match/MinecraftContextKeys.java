@@ -15,19 +15,16 @@ public class MinecraftContextKeys {
 	public static final ContextKey<World> WORLD = ContextKey.of("world", World.class);
 	public static final ContextKey<ItemStack> STACK = ContextKey.of("stack", ItemStack.class);
 
-	// Temperature-related context keys
-	public static final ContextKey<Integer> RED_STAGE_HITS = ContextKey.of("red_stage_hits", Integer.class);
-	public static final ContextKey<Integer> ORANGE_STAGE_HITS = ContextKey.of("orange_stage_hits", Integer.class);
-	public static final ContextKey<Integer> YELLOW_STAGE_HITS = ContextKey.of("yellow_stage_hits", Integer.class);
-	public static final ContextKey<Integer> PURPLE_STAGE_HITS = ContextKey.of("purple_stage_hits", Integer.class);
-	public static final ContextKey<Integer> STRAW_STAGE_HITS = ContextKey.of("straw_stage_hits", Integer.class);
-	public static final ContextKey<Integer> BLUE_STAGE_HITS = ContextKey.of("blue_stage_hits", Integer.class);
-	public static final ContextKey<Integer> BROWN_STAGE_HITS = ContextKey.of("brown_stage_hits", Integer.class);
-	public static final ContextKey<Integer> GREY_STAGE_HITS = ContextKey.of("grey_stage_hits", Integer.class);
-	public static final ContextKey<Integer> TOTAL_HITS = ContextKey.of("total_hits", Integer.class);
+	public static final ContextKey<Integer> OVERHEATED_STAGE_HITS = ContextKey.of("overheated_stage_hits", Integer.class);
+	public static final ContextKey<Integer> WELDING_STAGE_HITS = ContextKey.of("welding_stage_hits", Integer.class);
+	public static final ContextKey<Integer> FORGING_STAGE_HITS = ContextKey.of("forging_stage_hits", Integer.class);
+	public static final ContextKey<Integer> SHAPING_STAGE_HITS = ContextKey.of("shaping_stage_hits", Integer.class);
+	public static final ContextKey<Integer> CRITICAL_STAGE_HITS = ContextKey.of("critical_stage_hits", Integer.class);
+	public static final ContextKey<Integer> TEMPERING_STAGE_HITS = ContextKey.of("tempering_stage_hits", Integer.class);
+	public static final ContextKey<Integer> COLD_STAGE_HITS = ContextKey.of("cold_stage_hits", Integer.class);
+	public static final ContextKey<Integer> PERFECT_STAGE_HITS = ContextKey.of("perfect_stage_hits", Integer.class);
 
-	// Accuracy and performance tracking
-	public static final ContextKey<Integer> TOTAL_ATTEMPTS = ContextKey.of("total_attempts", Integer.class);
+	public static final ContextKey<Integer> TOTAL_HITS = ContextKey.of("total_hits", Integer.class);
 	public static final ContextKey<Integer> MISS_HITS = ContextKey.of("miss_hits", Integer.class);
-	public static final ContextKey<Double> ACCURACY_RATE = ContextKey.of("accuracy_rate", Double.class);
+	public static final ContextKey<Integer> FAST_MARKER_HITS = ContextKey.of("fast_marker_hits", Integer.class);
 }
