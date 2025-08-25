@@ -37,10 +37,33 @@ public class PredicateConditionLootRegistry {
 	).stream().filter(java.util.Objects::nonNull).toList();
 
 	static {
-		// Register nether dimension predicate for netherborn condition
+		// Register dimension-based predicates
 		registerCondition(createDimensionPredicate("minecraft:the_nether"), Conditions.INSTANCE.of("forgero:netherborn").orElse(null));
-		// Example: Register end dimension predicate for endborn condition
 		registerCondition(createDimensionPredicate("minecraft:the_end"), Conditions.INSTANCE.of("forgero:voidtouched").orElse(null));
+
+		// Register temperature-based predicates
+		registerTemperaturePredicates();
+	}
+
+	private static void registerTemperaturePredicates() {
+		// Hot working predicates - for items forged with high heat
+		registerCondition(TemperaturePredicates.hotWorkingPredicate(), Conditions.INSTANCE.of("forgero:tempered").orElse(null));
+		registerCondition(TemperaturePredicates.majorityRedStageHits(), Conditions.INSTANCE.of("forgero:sharp").orElse(null));
+		registerCondition(TemperaturePredicates.majorityOrangeStageHits(), Conditions.INSTANCE.of("forgero:hardened").orElse(null));
+		registerCondition(TemperaturePredicates.majorityYellowStageHits(), Conditions.INSTANCE.of("forgero:honed").orElse(null));
+
+		// Cold working predicates - for items worked at lower temperatures
+		registerCondition(TemperaturePredicates.coldWorkingPredicate(), Conditions.INSTANCE.of("forgero:sturdy").orElse(null));
+		registerCondition(TemperaturePredicates.majorityPurpleStageHits(), Conditions.INSTANCE.of("forgero:reinforced").orElse(null));
+		registerCondition(TemperaturePredicates.majorityStartingStageHits(), Conditions.INSTANCE.of("forgero:lightweight").orElse(null));
+
+		// Perfect temperature control predicate
+		registerCondition(TemperaturePredicates.perfectTemperatureControl(), Conditions.INSTANCE.of("forgero:rare").orElse(null));
+
+		// Minimum hit count predicates for specific effects
+		registerCondition(TemperaturePredicates.minRedStageHits(7), Conditions.INSTANCE.of("forgero:mighty").orElse(null));
+		registerCondition(TemperaturePredicates.minYellowStageHits(8), Conditions.INSTANCE.of("forgero:swift").orElse(null));
+		registerCondition(TemperaturePredicates.minOrangeStageHits(6), Conditions.INSTANCE.of("forgero:quick").orElse(null));
 	}
 
 	/**

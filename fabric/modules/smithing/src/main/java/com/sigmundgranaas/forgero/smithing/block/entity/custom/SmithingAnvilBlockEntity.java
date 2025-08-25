@@ -82,6 +82,14 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 	private List<Vec2f> markerPositions = new ArrayList<>();
 	private List<Boolean> markerHits = new ArrayList<>();
+	// Temperature tracking for hits
+	private List<Integer> hitTemperatures = new ArrayList<>();
+	private int redStageHits = 0;
+	private int orangeStageHits = 0;
+	private int yellowStageHits = 0;
+	private int purpleStageHits = 0;
+	private int startingStageHits = 0;
+
 	@Setter
 	private int markerAttempts = 0;
 	@Setter
@@ -95,11 +103,11 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	public static final int MARKER_LIFETIME_TICKS_NORMAL = 35; // 1.5 seconds for normal markers
 	public static final int MARKER_LIFETIME_TICKS_FAST = 20; // 0.75 seconds for fast markers
 
-	private static final double MARKER_HIT_RADIUS_SQ = 0.0085d;
+	private static final double MARKER_HIT_RADIUS_SQ = 0.0075d;
 
 	private final Random random = new Random();
 
-	private static final int ANVIL_INVENTORY_COOL_PER_TICK = 1;
+	private static final int ANVIL_INVENTORY_COOL_PER_TICK = 5;
 	private static final int ANVIL_INVENTORY_COOL_TICK_INTERVAL = 20;
 	private int anvilInventoryCoolTickCounter = 0;
 
@@ -198,6 +206,12 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		}
 
 		if (ingotCrafting && plannedProductId == null && !(anvilItem.getItem() instanceof MorphedItem)) {
+			int temperature = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getTemperature(anvilItem);
+			int maxTemp = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getMaxTemp(anvilItem);
+			if (!com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInStartingStage(temperature, maxTemp)) {
+				player.sendMessage(net.minecraft.text.Text.of("That needs to be heaten up first!"), true);
+				return ActionResult.FAIL;
+			}
 			openSchematicSelection(player);
 			return ActionResult.FAIL;
 		}
@@ -337,12 +351,27 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		}
 		nbt.put("markers", markersNbt);
 
+		// Store temperature tracking data
+		nbt.putIntArray("hitTemperatures", hitTemperatures.stream().mapToInt(Integer::intValue).toArray());
+		nbt.putInt("redStageHits", redStageHits);
+		nbt.putInt("orangeStageHits", orangeStageHits);
+		nbt.putInt("yellowStageHits", yellowStageHits);
+		nbt.putInt("purpleStageHits", purpleStageHits);
+		nbt.putInt("startingStageHits", startingStageHits);
+
 		nbt.putIntArray("fastMarkerIndices", fastMarkerIndices.stream().mapToInt(Integer::intValue).toArray());
 		ItemStack stack = simpleInventory.getStack(0);
 		if (!stack.isEmpty()) {
 			NbtCompound itemNbt = stack.getOrCreateNbt();
 			itemNbt.putInt(HITS_NBT_KEY, markerHitsCount);
 			itemNbt.putInt(ATTEMPTS_NBT_KEY, markerAttempts);
+			// Store temperature data on the item as well
+			itemNbt.putIntArray("hitTemperatures", hitTemperatures.stream().mapToInt(Integer::intValue).toArray());
+			itemNbt.putInt("redStageHits", redStageHits);
+			itemNbt.putInt("orangeStageHits", orangeStageHits);
+			itemNbt.putInt("yellowStageHits", yellowStageHits);
+			itemNbt.putInt("purpleStageHits", purpleStageHits);
+			itemNbt.putInt("startingStageHits", startingStageHits);
 		}
 
 		// Ingot crafting state
@@ -371,6 +400,20 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			}
 		}
 
+		// Restore temperature tracking data
+		hitTemperatures.clear();
+		if (nbt.contains("hitTemperatures")) {
+			int[] temps = nbt.getIntArray("hitTemperatures");
+			for (int temp : temps) {
+				hitTemperatures.add(temp);
+			}
+		}
+		redStageHits = nbt.getInt("redStageHits");
+		orangeStageHits = nbt.getInt("orangeStageHits");
+		yellowStageHits = nbt.getInt("yellowStageHits");
+		purpleStageHits = nbt.getInt("purpleStageHits");
+		startingStageHits = nbt.getInt("startingStageHits");
+
 		fastMarkerIndices.clear();
 		if (nbt.contains("fastMarkerIndices")) {
 			int[] arr = nbt.getIntArray("fastMarkerIndices");
@@ -384,6 +427,18 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			NbtCompound itemNbt = stack.getOrCreateNbt();
 			this.markerHitsCount = itemNbt.getInt(HITS_NBT_KEY);
 			this.markerAttempts = itemNbt.getInt(ATTEMPTS_NBT_KEY);
+			// Restore temperature data from item if available
+			if (itemNbt.contains("hitTemperatures") && hitTemperatures.isEmpty()) {
+				int[] temps = itemNbt.getIntArray("hitTemperatures");
+				for (int temp : temps) {
+					hitTemperatures.add(temp);
+				}
+				redStageHits = itemNbt.getInt("redStageHits");
+				orangeStageHits = itemNbt.getInt("orangeStageHits");
+				yellowStageHits = itemNbt.getInt("yellowStageHits");
+				purpleStageHits = itemNbt.getInt("purpleStageHits");
+				startingStageHits = itemNbt.getInt("startingStageHits");
+			}
 		} else {
 			this.markerHitsCount = 0;
 			this.markerAttempts = 0;
@@ -520,6 +575,30 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		ItemStack stack = simpleInventory.getStack(0);
 		if (hit) {
 			markerHitsCount++;
+			// Track temperature at the time of successful hit
+			int temperature = TemperatureUtils.getTemperature(stack);
+			int maxTemp = TemperatureUtils.getMaxTemp(stack);
+			// Add 30 temperature on successful hit
+			TemperatureUtils.setTemperature(stack, Math.min(temperature + 30, maxTemp));
+			hitTemperatures.add(TemperatureUtils.getTemperature(stack));
+
+			// Update temperature stage counters using TemperatureColorProvider
+			if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInRedStage(temperature, maxTemp)) {
+				redStageHits++;
+			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInOrangeStage(temperature, maxTemp)) {
+				orangeStageHits++;
+			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInYellowStage(temperature, maxTemp)) {
+				yellowStageHits++;
+			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInPurpleStage(temperature, maxTemp)) {
+				purpleStageHits++;
+			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInStartingStage(temperature, maxTemp)) {
+				startingStageHits++;
+			}
+		} else {
+			// Remove 15 temperature on misshit
+			int temperature = TemperatureUtils.getTemperature(stack);
+			int minTemp = 0;
+			TemperatureUtils.setTemperature(stack, Math.max(temperature - 15, minTemp));
 		}
 		updateMorphProgressOnItem();
 		markDirty();
@@ -879,6 +958,14 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 						}
 						// Add the ItemStack to context for potential predicate use
 						context = context.put(MinecraftContextKeys.STACK, stack);
+
+						// Add temperature tracking data to context
+						context = context.put(MinecraftContextKeys.RED_STAGE_HITS, redStageHits);
+						context = context.put(MinecraftContextKeys.ORANGE_STAGE_HITS, orangeStageHits);
+						context = context.put(MinecraftContextKeys.YELLOW_STAGE_HITS, yellowStageHits);
+						context = context.put(MinecraftContextKeys.PURPLE_STAGE_HITS, purpleStageHits);
+						context = context.put(MinecraftContextKeys.STARTING_STAGE_HITS, startingStageHits);
+						context = context.put(MinecraftContextKeys.TOTAL_HITS, markerHitsCount);
 
 						// Check for direct condition assignment using predicates
 						com.sigmundgranaas.forgero.core.condition.NamedCondition directCondition = PredicateConditionLootRegistry.getCondition(context);
