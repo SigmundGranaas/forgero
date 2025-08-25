@@ -884,9 +884,12 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 							if (lootTable.isEmpty()) {
 								lootTable = com.sigmundgranaas.forgero.smithing.condition.NbtConditionLootRegistry.NEUTRAL;
 							}
-							// Apply a random condition from the lootTable if available
-							if (!lootTable.isEmpty()) {
-								com.sigmundgranaas.forgero.core.condition.NamedCondition randomCondition = lootTable.get(new Random().nextInt(lootTable.size()));
+							// Filter lootTable to only include conditions whose target matches the state
+							List<com.sigmundgranaas.forgero.core.condition.NamedCondition> applicableConditions = lootTable.stream()
+									.filter(cond -> cond.matches(state))
+									.collect(Collectors.toList());
+							if (!applicableConditions.isEmpty()) {
+								com.sigmundgranaas.forgero.core.condition.NamedCondition randomCondition = applicableConditions.get(new Random().nextInt(applicableConditions.size()));
 								var conditioned = conditional.applyCondition(randomCondition);
 								var newStackOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert((com.sigmundgranaas.forgero.core.state.State) conditioned);
 								if (newStackOpt.isPresent()) {
