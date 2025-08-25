@@ -1,8 +1,11 @@
 package com.sigmundgranaas.forgero.render.model.item;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.model.api.RenderableTexture;
 import com.sigmundgranaas.forgero.model.api.item.Model;
 import com.sigmundgranaas.forgero.model.registry.api.item.ItemModelRegistry;
+import com.sigmundgranaas.forgero.model.resolution.api.item.ItemModelResolver;
+import com.sigmundgranaas.forgero.model.resolution.impl.RecursiveModelResolver;
 import net.minecraft.client.render.model.*;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
@@ -12,16 +15,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
-
- An unbaked model for a single type of Forgero component.
-
- It holds the baseline component and a function to resolve components from item stacks,
-
- passing these dependencies down to the BakedForgeroModel during the baking process.
+ * An unbaked model for a single type of Forgero component.
+ * It holds the baseline component and a function to resolve components from item stacks,
+ * passing these dependencies down to the BakedForgeroModel during the baking process.
  */
 public class UnbakedForgeroModel implements UnbakedModel {
 
@@ -37,16 +39,14 @@ public class UnbakedForgeroModel implements UnbakedModel {
 
 	@Override
 	public Collection<Identifier> getModelDependencies() {
-		// Find our own model definition to see if it has a parent.
-		return modelRegistry.find(baselineComponent.id())
-				.flatMap(Model::getParent)
-				.map(parentId -> new Identifier(parentId.toString()))
-				.map(Collections::singletonList)
-				.orElse(Collections.emptyList());
+		return Collections.emptyList();
 	}
+
 
 	@Override
 	public void setParents(Function<Identifier, UnbakedModel> modelLoader) {
+		// The parent model is loaded on-demand during the bake() phase inside BakedForgeroModel.
+		// This method can safely be left empty.
 	}
 
 	@Nullable

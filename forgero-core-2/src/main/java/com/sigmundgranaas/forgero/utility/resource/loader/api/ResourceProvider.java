@@ -4,6 +4,7 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 
 import java.io.InputStream;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -11,6 +12,11 @@ import java.util.stream.Stream;
  * This allows the ResourceLoader to be independent of where the data comes from.
  */
 public interface ResourceProvider {
+	/**
+	 * @return A set of all currently loaded namespaces (e.g., "minecraft", "forgero").
+	 */
+	Set<String> getNamespaces();
+
 	/**
 	 * Lists all resource identifiers within a given path.
 	 *

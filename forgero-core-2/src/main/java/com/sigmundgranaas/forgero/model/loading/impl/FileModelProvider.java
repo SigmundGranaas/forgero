@@ -1,4 +1,5 @@
 package com.sigmundgranaas.forgero.model.loading.impl;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
@@ -6,22 +7,22 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.model.api.item.Model;
-import com.sigmundgranaas.forgero.model.loading.api.item.ItemModelProvider;
 import com.sigmundgranaas.forgero.model.loading.impl.codec.ModelCodecs;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.ModelDTO;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceConverter;
-import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Optional;
 
-public class FileModelProvider implements ItemModelProvider, ResourceConverter<Model> {
-	private final ResourceProvider resourceProvider;
+public class FileModelProvider implements ResourceConverter<Model> {
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileModelProvider.class);
+	private static final String MODELS_BASE_PATH = "forgero/models/";
 	private final ModelTranslator translator;
 
-	public FileModelProvider(ResourceProvider resourceProvider) {
-		this.resourceProvider = resourceProvider;
+	public FileModelProvider() {
 		this.translator = new ModelTranslator();
 	}
 
@@ -31,35 +32,35 @@ public class FileModelProvider implements ItemModelProvider, ResourceConverter<M
 			JsonElement modelJson = JsonParser.parseReader(reader);
 
 			if (modelJson == null || modelJson.isJsonNull()) {
-				System.err.println("Failed to parse model " + resourceId + ": File is empty or contains only 'null'.");
+				LOGGER.error("Failed to parse model {}: File is empty or contains only 'null'.", resourceId);
 				return Optional.empty();
 			}
 
 			DataResult<ModelDTO> result = ModelCodecs.MODEL_DTO_CODEC_DISPATCHER.parse(JsonOps.INSTANCE, modelJson);
 			if (result.error().isPresent()) {
-				System.err.println("Failed to parse model " + resourceId + " due to codec error: " + result.error().get().message());
+				LOGGER.error("Failed to parse model {} due to codec error: {}", resourceId, result.error().get().message());
 				return Optional.empty();
 			}
 
-			String idPath = resourceId.path();
-			String normalizedPath = idPath.substring(idPath.indexOf("models/") + "models/".length());
-			normalizedPath = normalizedPath.replace(".json", "");
-			OpenIdentifier fileDerivedId = new OpenIdentifier(resourceId.namespace(), normalizedPath);
+			// Derive the model's public-facing ID from its file path.
+			// e.g., "assets/minecraft/forgero/models/item/oak_handle.json" -> "minecraft:item/oak_handle"
+			String path = resourceId.path();
+			int basePathIndex = path.indexOf(MODELS_BASE_PATH);
+			if (basePathIndex == -1) {
+				LOGGER.warn("Model file {} is not in the expected '{}' directory. Skipping.", resourceId, MODELS_BASE_PATH);
+				return Optional.empty();
+			}
+			// We remove the "forgero/models/" part but keep the subdirectory (item, armor, etc.)
+			String relativePath = path.substring(basePathIndex + MODELS_BASE_PATH.length()).replace(".json", "");
+			OpenIdentifier derivedId = new OpenIdentifier(resourceId.namespace(), relativePath);
 
-			return result.result().map(dto -> translator.toDomain(fileDerivedId, dto));
+			return result.result().map(dto -> translator.toDomain(derivedId, dto));
 		} catch (JsonSyntaxException e) {
-			System.err.println("Failed to parse model " + resourceId + " due to a JSON syntax error: " + e.getMessage());
+			LOGGER.error("Failed to parse model {} due to a JSON syntax error: {}", resourceId, e.getMessage());
 			return Optional.empty();
 		} catch (Exception e) {
-			System.err.println("An unexpected error occurred while parsing model " + resourceId + ": " + e.getMessage());
-			e.printStackTrace();
+			LOGGER.error("An unexpected error occurred while parsing model {}: {}", resourceId, e.getMessage(), e);
 			return Optional.empty();
 		}
-	}
-
-	@Override
-	public Optional<Model> get(OpenIdentifier id) {
-		OpenIdentifier modelFilePath = new OpenIdentifier(id.namespace(), "models/" + id.path() + ".json");
-		return resourceProvider.read(modelFilePath).flatMap(stream -> convert(stream, modelFilePath));
 	}
 }

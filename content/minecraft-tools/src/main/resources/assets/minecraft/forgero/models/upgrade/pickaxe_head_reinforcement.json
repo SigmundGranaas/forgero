@@ -12,7 +12,7 @@
       "layers": [
         {
           "order": 5,
-          "template": "forgero:textures/template/upgrade/pickaxe_tip_reinforcement",
+          "template": "forgero:template/upgrade/pickaxe_tip_reinforcement",
           "palette": "forgero:palette/{target.name}",
           "output": "forgero:item/upgrade/{target.name}-pickaxe_tip_reinforcement"
         }

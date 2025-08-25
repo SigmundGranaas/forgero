@@ -19,6 +19,9 @@
   "entrypoints": {
     "client": [
       "com.sigmundgranaas.forgero.render.RenderInitializer"
+    ],
+    "forgero:post_load_plugin": [
+      "com.sigmundgranaas.forgero.render.plugin.ForgeroRenderPlugin"
     ]
   },
   "mixins": [

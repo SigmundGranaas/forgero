@@ -1,6 +1,35 @@
 //file:noinspection GroovyAccessibility
 //file:noinspection GroovyAssignabilityCheck
 
+tasks.register('updateDevResources') {
+	description = "Updates the build resources for all runtime content packs for hot-reloading."
+	group = "Forgero Development"
+
+	// Define which project's 'processResources' task we want to run
+	def contentProjects = [
+		project(":content:minecraft-vanilla-materials"),
+		project(":content:forgero-tools"),
+		project(":content:forgero-armor"),
+		project(":content:minecraft-tools")
+	]
+
+	contentProjects.each { proj ->
+		dependsOn proj.tasks.named("processResources")
+	}
+
+	doFirst {
+		logger.lifecycle("Updating development resources for hot-reloading...")
+		logger.lifecycle("Will run 'processResources' for:")
+		contentProjects.each { proj ->
+			logger.lifecycle("- ${proj.path}")
+		}
+	}
+
+	doLast {
+		logger.lifecycle("All content pack resources are now updated in their build/resources directories.")
+	}
+}
+
 subprojects {
 	dependencies {
 		implementation(project(":${rootProject.mod_id}-core"))
