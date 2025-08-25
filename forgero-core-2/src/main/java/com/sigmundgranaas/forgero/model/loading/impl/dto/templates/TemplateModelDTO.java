@@ -1,3 +1,4 @@
+// /home/sigmund/Documents/projects/forgero/1-20/forgero-core-2/src/main/java/com/sigmundgranaas/forgero/model/loading/impl/dto/templates/TemplateModelDTO.java
 package com.sigmundgranaas.forgero.model.loading.impl.dto.templates;
 
 import com.google.gson.JsonElement;

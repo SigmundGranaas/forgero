@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
+import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 import com.sigmundgranaas.forgero.loader.api.ItemCreator;
 import com.sigmundgranaas.forgero.loader.api.PluginRegistrationContext;
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ public class PluginRegistrationContextImpl implements PluginRegistrationContext 
 	private final Map<String, ItemCreator> itemCreators = new HashMap<>();
 	private final Map<String, Codec<? extends StaticCondition>> staticConditionCodecs = new HashMap<>();
 	private final Map<String, Codec<? extends DynamicCondition>> dynamicConditionCodecs = new HashMap<>();
-	private final Map<String, Function<Supplier<Codec<Condition>>, Codec<? extends List<?>>>> propertyCodecBuilders = new HashMap<>();
+	private final Map<PropertyKey<?>, Function<Supplier<Codec<Condition>>, Codec<? extends List<?>>>> propertyCodecBuilders = new HashMap<>();
 	private final Supplier<TagGraph> tagGraphSupplier;
 
 	public PluginRegistrationContextImpl(Supplier<TagGraph> tagGraphSupplier) {
@@ -70,7 +71,7 @@ public class PluginRegistrationContextImpl implements PluginRegistrationContext 
 
 
 	@Override
-	public void registerPropertyCodec(String key, Function<Supplier<Codec<Condition>>, Codec<? extends List<?>>> codecBuilder) {
+	public void registerPropertyCodec(PropertyKey<?> key, Function<Supplier<Codec<Condition>>, Codec<? extends List<?>>> codecBuilder) {
 		if (propertyCodecBuilders.containsKey(key)) {
 			LOGGER.warn("Property codec builder for key '{}' is being overwritten by a new plugin.", key);
 		}
@@ -91,7 +92,7 @@ public class PluginRegistrationContextImpl implements PluginRegistrationContext 
 		return new HashMap<>(dynamicConditionCodecs);
 	}
 
-	public Map<String, Function<Supplier<Codec<Condition>>, Codec<? extends List<?>>>> getPropertyCodecBuilders() {
+	public Map<PropertyKey<?>, Function<Supplier<Codec<Condition>>, Codec<? extends List<?>>>> getPropertyCodecBuilders() {
 		return new HashMap<>(propertyCodecBuilders);
 	}
 }

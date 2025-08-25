@@ -24,7 +24,7 @@
       "order": 20,
       "renderer": {
         "type": "forgero:component",
-        "context": "tool_grip"
+        "context": "handle_grip"
       }
     },
     {
@@ -32,7 +32,7 @@
       "order": 25,
       "renderer": {
         "type": "forgero:component",
-        "context": "tool_tip"
+        "context": "pickaxe_head_reinforcement"
       }
     }
   ]

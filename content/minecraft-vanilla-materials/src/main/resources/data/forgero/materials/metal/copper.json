@@ -1,7 +1,7 @@
 {
   "type": "forgero:material",
   "name": "Copper",
-  "tags": ["forgero:materials/metal"],
+  "tags": ["forgero:materials/metal", "forgero:materials/tool_material", "forgero:upgrade/tip_reinforcement"],
   "host": { "identifiers": [{ "type": "item", "id": "minecraft:copper_ingot" }] },
   "attributes": [
     { "id": "forgero:copper-attack_speed", "type": "forgero:attack_speed", "composite": "forgero:part-composite", "computation": { "value": 2.0 } },

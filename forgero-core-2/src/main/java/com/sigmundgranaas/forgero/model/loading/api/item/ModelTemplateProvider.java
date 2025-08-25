@@ -1,12 +1,13 @@
+// /home/sigmund/Documents/projects/forgero/1-20/forgero-core-2/src/main/java/com/sigmundgranaas/forgero/model/loading/api/item/ModelTemplateProvider.java
 package com.sigmundgranaas.forgero.model.loading.api.item;
 
 import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.ArmorModelTemplateDTO;
-import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.ContextualModelTemplateDTO;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.EquipmentModelTemplateDTO;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.PartModelTemplateDTO;
+import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.UpgradeModelTemplateDTO;
+
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Provides access to loaded model template DTOs for all model types.
@@ -20,9 +21,9 @@ public interface ModelTemplateProvider {
 	List<PartModelTemplateDTO> getPartTemplates();
 
 	/**
-	 * @return A list of all loaded Contextual Model Templates.
+	 * @return A list of all loaded Upgrade Model Templates.
 	 */
-	List<ContextualModelTemplateDTO> getContextualTemplates();
+	List<UpgradeModelTemplateDTO> getUpgradeTemplates();
 
 	/**
 	 * @return A list of all loaded Equipment Model Templates.

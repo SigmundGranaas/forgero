@@ -12,7 +12,7 @@ dependencies {
 	runtimeOnly(project(path: ":fabric:modules:render",  configuration: 'namedElements'))
 	runtimeOnly(project(path: ":fabric:modules:properties",  configuration: 'namedElements'))
 
-	// Materials
+	// Resources
 	runtimeOnly(project(path: ":content:minecraft-vanilla-materials"))
 	runtimeOnly(project(path: ":content:forgero-tools"))
 	runtimeOnly(project(path: ":content:forgero-armor"))

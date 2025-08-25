@@ -141,33 +141,34 @@ public class ClassPathResourceProvider implements ResourceProvider {
 	}
 
 	private Stream<OpenIdentifier> listResourcesFromJar(URI namespaceRootUri, String targetDirectory, String namespace, boolean recursive) throws Exception {
-		try (FileSystem fs = getFileSystem(namespaceRootUri)) {
-			String[] uriParts = namespaceRootUri.toString().split("!");
-			if (uriParts.length < 2) {
-				LOGGER.warn("Malformed JAR URI, cannot find internal path: {}", namespaceRootUri);
-				return Stream.empty();
-			}
-			String internalPathStr = uriParts[1].startsWith("/") ? uriParts[1].substring(1) : uriParts[1];
+		// FIX: Do not use try-with-resources here, as it closes the filesystem for the whole JAR.
+		FileSystem fs = getFileSystem(namespaceRootUri);
+		String[] uriParts = namespaceRootUri.toString().split("!");
+		if (uriParts.length < 2) {
+			LOGGER.warn("Malformed JAR URI, cannot find internal path: {}", namespaceRootUri);
+			return Stream.empty();
+		}
+		String internalPathStr = uriParts[1].startsWith("/") ? uriParts[1].substring(1) : uriParts[1];
 
-			Path namespaceRootInJar = fs.getPath(internalPathStr);
-			Path startPathInJar = namespaceRootInJar.resolve(targetDirectory);
+		Path namespaceRootInJar = fs.getPath(internalPathStr);
+		Path startPathInJar = namespaceRootInJar.resolve(targetDirectory);
 
-			if (!Files.exists(startPathInJar) || !Files.isDirectory(startPathInJar)) {
-				return Stream.empty();
-			}
+		if (!Files.exists(startPathInJar) || !Files.isDirectory(startPathInJar)) {
+			return Stream.empty();
+		}
 
-			int maxDepth = recursive ? Integer.MAX_VALUE : 1;
-			try (Stream<Path> walk = Files.walk(startPathInJar, maxDepth)) {
-				return walk
-						.filter(Files::isRegularFile)
-						.filter(p -> p.toString().endsWith(".json"))
-						.map(filePath -> {
-							Path relativePath = namespaceRootInJar.relativize(filePath);
-							String relativePathString = relativePath.toString().replace('\\', '/');
-							return new OpenIdentifier(namespace, relativePathString);
-						})
-						.toList().stream();
-			}
+		int maxDepth = recursive ? Integer.MAX_VALUE : 1;
+		// Use a try-with-resources on the walk stream, but not the FileSystem itself.
+		try (Stream<Path> walk = Files.walk(startPathInJar, maxDepth)) {
+			return walk
+					.filter(Files::isRegularFile)
+					.filter(p -> p.toString().endsWith(".json"))
+					.map(filePath -> {
+						Path relativePath = namespaceRootInJar.relativize(filePath);
+						String relativePathString = relativePath.toString().replace('\\', '/');
+						return new OpenIdentifier(namespace, relativePathString);
+					})
+					.toList().stream();
 		}
 	}
 

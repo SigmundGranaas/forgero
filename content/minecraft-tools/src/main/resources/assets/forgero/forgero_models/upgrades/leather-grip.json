@@ -1,0 +1,7 @@
+{
+  "type": "forgero:texture_model",
+  "id": "forgero:upgrade/leather-grip",
+  "target": "forgero:leather",
+  "context": "handle_grip",
+  "texture": "forgero:item/upgrade/grip"
+}

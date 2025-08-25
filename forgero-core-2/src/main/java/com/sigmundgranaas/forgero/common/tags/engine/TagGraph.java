@@ -8,8 +8,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class TagGraph {
+	private static final TagGraph EMPTY = new TagGraph(Collections.emptyMap());
 	private final Map<OpenIdentifier, Set<OpenIdentifier>> parentRelationships;
-	private final Map<OpenIdentifier, Set<OpenIdentifier>> childRelationships; // New for efficient queries
+	private final Map<OpenIdentifier, Set<OpenIdentifier>> childRelationships;
 
 	public TagGraph(Map<OpenIdentifier, Set<OpenIdentifier>> parentRelationships) {
 		var immutableRelationShips = parentRelationships.entrySet().stream()
@@ -18,6 +19,40 @@ public class TagGraph {
 
 		// Pre-calculate the reverse mapping for fast descendant lookups
 		this.childRelationships = buildChildRelationships(this.parentRelationships);
+	}
+
+	/**
+	 * @return A shared, immutable instance of an empty TagGraph.
+	 */
+	public static TagGraph empty() {
+		return EMPTY;
+	}
+
+	/**
+	 * Merges this TagGraph with another, returning a new TagGraph containing the combined relationships.
+	 *
+	 * @param other The other TagGraph to merge with.
+	 * @return A new, combined TagGraph.
+	 */
+	public TagGraph merge(TagGraph other) {
+		if (this == EMPTY) {
+			return other;
+		}
+		if (other == EMPTY) {
+			return this;
+		}
+
+		Map<OpenIdentifier, Set<OpenIdentifier>> mergedRelationships = new HashMap<>();
+
+		// Deep copy current relationships to the new map
+		this.parentRelationships.forEach((key, value) -> mergedRelationships.put(key, new HashSet<>(value)));
+
+		// Merge relationships from the other graph
+		other.parentRelationships.forEach((childId, parentsToAdd) -> {
+			mergedRelationships.computeIfAbsent(childId, k -> new HashSet<>()).addAll(parentsToAdd);
+		});
+
+		return new TagGraph(mergedRelationships);
 	}
 
 	private Map<OpenIdentifier, Set<OpenIdentifier>> buildChildRelationships(Map<OpenIdentifier, Set<OpenIdentifier>> parents) {

@@ -1,0 +1,7 @@
+{
+  "type": "forgero:texture_model",
+  "id": "forgero:upgrade/leather-binding",
+  "target": "forgero:leather",
+  "context": "tool_binding",
+  "texture": "forgero:item/upgrade/binding"
+}
