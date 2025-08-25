@@ -54,14 +54,48 @@ public class TemperaturePredicates {
         };
     }
 
+
     /**
-     * Predicate that checks if the majority of hits were in starting temperature stage
+     * Predicate that checks if the majority of hits were in straw temperature stage
      */
-    public static Predicate<MatchContext> majorityStartingStageHits() {
+    public static Predicate<MatchContext> majorityStrawStageHits() {
         return context -> {
-            Integer startingHits = context.get(MinecraftContextKeys.STARTING_STAGE_HITS).orElse(0);
+            Integer strawHits = context.get(MinecraftContextKeys.STRAW_STAGE_HITS).orElse(0);
             Integer totalHits = context.get(MinecraftContextKeys.TOTAL_HITS).orElse(0);
-            return totalHits > 0 && (double) startingHits / totalHits > 0.5;
+            return totalHits > 0 && (double) strawHits / totalHits > 0.5;
+        };
+    }
+
+    /**
+     * Predicate that checks if the majority of hits were in blue temperature stage
+     */
+    public static Predicate<MatchContext> majorityBlueStageHits() {
+        return context -> {
+            Integer blueHits = context.get(MinecraftContextKeys.BLUE_STAGE_HITS).orElse(0);
+            Integer totalHits = context.get(MinecraftContextKeys.TOTAL_HITS).orElse(0);
+            return totalHits > 0 && (double) blueHits / totalHits > 0.5;
+        };
+    }
+
+    /**
+     * Predicate that checks if the majority of hits were in brown temperature stage
+     */
+    public static Predicate<MatchContext> majorityBrownStageHits() {
+        return context -> {
+            Integer brownHits = context.get(MinecraftContextKeys.BROWN_STAGE_HITS).orElse(0);
+            Integer totalHits = context.get(MinecraftContextKeys.TOTAL_HITS).orElse(0);
+            return totalHits > 0 && (double) brownHits / totalHits > 0.5;
+        };
+    }
+
+    /**
+     * Predicate that checks if the majority of hits were in grey temperature stage
+     */
+    public static Predicate<MatchContext> majorityGreyStageHits() {
+        return context -> {
+            Integer greyHits = context.get(MinecraftContextKeys.GREY_STAGE_HITS).orElse(0);
+            Integer totalHits = context.get(MinecraftContextKeys.TOTAL_HITS).orElse(0);
+            return totalHits > 0 && (double) greyHits / totalHits > 0.5;
         };
     }
 
@@ -106,12 +140,12 @@ public class TemperaturePredicates {
     }
 
     /**
-     * Predicate that checks if at least X hits were in starting temperature stage
+     * Predicate that checks if at least X hits were in straw temperature stage
      */
-    public static Predicate<MatchContext> minStartingStageHits(int minHits) {
+    public static Predicate<MatchContext> minStrawStageHits(int minHits) {
         return context -> {
-            Integer startingHits = context.get(MinecraftContextKeys.STARTING_STAGE_HITS).orElse(0);
-            return startingHits >= minHits;
+            Integer strawHits = context.get(MinecraftContextKeys.STRAW_STAGE_HITS).orElse(0);
+            return strawHits >= minHits;
         };
     }
 
@@ -131,15 +165,16 @@ public class TemperaturePredicates {
     }
 
     /**
-     * Predicate that checks if hits are predominantly in cold temperature stages (purple, starting)
+     * Predicate that checks if hits are predominantly in cold temperature stages (purple, straw, brown)
      */
     public static Predicate<MatchContext> coldWorkingPredicate() {
         return context -> {
             Integer purpleHits = context.get(MinecraftContextKeys.PURPLE_STAGE_HITS).orElse(0);
-            Integer startingHits = context.get(MinecraftContextKeys.STARTING_STAGE_HITS).orElse(0);
+            Integer strawHits = context.get(MinecraftContextKeys.STRAW_STAGE_HITS).orElse(0);
+            Integer brownHits = context.get(MinecraftContextKeys.BROWN_STAGE_HITS).orElse(0);
             Integer totalHits = context.get(MinecraftContextKeys.TOTAL_HITS).orElse(0);
 
-            int coldHits = purpleHits + startingHits;
+            int coldHits = purpleHits + strawHits + brownHits;
             return totalHits > 0 && (double) coldHits / totalHits > 0.6;
         };
     }
@@ -155,6 +190,140 @@ public class TemperaturePredicates {
 
             int optimalHits = redHits + orangeHits;
             return totalHits > 0 && (double) optimalHits / totalHits > 0.8;
+        };
+    }
+
+    // =================================
+    // Accuracy and Performance Predicates
+    // =================================
+
+    /**
+     * Predicate that checks for perfect accuracy (100% hit rate)
+     */
+    public static Predicate<MatchContext> perfectAccuracy() {
+        return context -> {
+            Integer totalAttempts = context.get(MinecraftContextKeys.TOTAL_ATTEMPTS).orElse(0);
+            Integer missHits = context.get(MinecraftContextKeys.MISS_HITS).orElse(0);
+            return totalAttempts > 0 && missHits == 0;
+        };
+    }
+
+    /**
+     * Predicate that checks for excellent accuracy (>= 90% hit rate)
+     */
+    public static Predicate<MatchContext> excellentAccuracy() {
+        return context -> {
+            Double accuracyRate = context.get(MinecraftContextKeys.ACCURACY_RATE).orElse(0.0);
+            return accuracyRate >= 0.9;
+        };
+    }
+
+    /**
+     * Predicate that checks for good accuracy (>= 75% hit rate)
+     */
+    public static Predicate<MatchContext> goodAccuracy() {
+        return context -> {
+            Double accuracyRate = context.get(MinecraftContextKeys.ACCURACY_RATE).orElse(0.0);
+            return accuracyRate >= 0.75;
+        };
+    }
+
+    /**
+     * Predicate that checks for poor accuracy (< 50% hit rate)
+     */
+    public static Predicate<MatchContext> poorAccuracy() {
+        return context -> {
+            Double accuracyRate = context.get(MinecraftContextKeys.ACCURACY_RATE).orElse(0.0);
+            return accuracyRate < 0.5;
+        };
+    }
+
+    /**
+     * Predicate that checks for terrible accuracy (< 30% hit rate)
+     */
+    public static Predicate<MatchContext> terribleAccuracy() {
+        return context -> {
+            Double accuracyRate = context.get(MinecraftContextKeys.ACCURACY_RATE).orElse(0.0);
+            return accuracyRate < 0.3;
+        };
+    }
+
+    /**
+     * Predicate that checks for high miss count (>= 5 misses)
+     */
+    public static Predicate<MatchContext> highMissCount() {
+        return context -> {
+            Integer missHits = context.get(MinecraftContextKeys.MISS_HITS).orElse(0);
+            return missHits >= 5;
+        };
+    }
+
+    /**
+     * Predicate that checks for excessive miss count (>= 8 misses)
+     */
+    public static Predicate<MatchContext> excessiveMissCount() {
+        return context -> {
+            Integer missHits = context.get(MinecraftContextKeys.MISS_HITS).orElse(0);
+            return missHits >= 8;
+        };
+    }
+
+    // =================================
+    // Combined Temperature and Performance Predicates
+    // =================================
+
+    /**
+     * Predicate for skilled hot working - high temperature work with good accuracy
+     */
+    public static Predicate<MatchContext> skilledHotWorking() {
+        return context -> {
+            return hotWorkingPredicate().test(context) && goodAccuracy().test(context);
+        };
+    }
+
+    /**
+     * Predicate for expert cold working - cold temperature work with excellent accuracy
+     */
+    public static Predicate<MatchContext> expertColdWorking() {
+        return context -> {
+            return coldWorkingPredicate().test(context) && excellentAccuracy().test(context);
+        };
+    }
+
+    /**
+     * Predicate for sloppy hot working - hot work but poor accuracy
+     */
+    public static Predicate<MatchContext> sloppyHotWorking() {
+        return context -> {
+            return hotWorkingPredicate().test(context) && poorAccuracy().test(context);
+        };
+    }
+
+    /**
+     * Predicate for inconsistent working - work done at wrong temperatures
+     */
+    public static Predicate<MatchContext> inconsistentWorking() {
+        return context -> {
+            Integer totalHits = context.get(MinecraftContextKeys.TOTAL_HITS).orElse(0);
+            Integer strawHits = context.get(MinecraftContextKeys.STRAW_STAGE_HITS).orElse(0);
+            Integer brownHits = context.get(MinecraftContextKeys.BROWN_STAGE_HITS).orElse(0);
+
+            if (totalHits == 0) return false;
+
+            int veryLowTempHits = strawHits + brownHits;
+            double lowTempRatio = (double) veryLowTempHits / totalHits;
+
+            // Inconsistent if significant work done at very low temperatures
+            return lowTempRatio > 0.4;
+        };
+    }
+
+    /**
+     * Predicate for rushed work - poor temperature control and poor accuracy
+     */
+    public static Predicate<MatchContext> rushedWork() {
+        return context -> {
+            return inconsistentWorking().test(context) && poorAccuracy().test(context);
         };
     }
 }

@@ -1,0 +1,14 @@
+{
+  "id": "forgero:weak",
+  "priority": 5,
+  "target": {
+    "types": ["PART", "TOOL", "WEAPON", "ARMOR", "SCHEMATIC"],
+    "ids": [],
+    "incompatibilities": []
+  },
+  "chance": 0.04,
+  "properties": {
+    "attributes": []
+  }
+}
+

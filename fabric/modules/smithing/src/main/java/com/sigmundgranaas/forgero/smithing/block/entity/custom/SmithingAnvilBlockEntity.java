@@ -88,7 +88,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	private int orangeStageHits = 0;
 	private int yellowStageHits = 0;
 	private int purpleStageHits = 0;
-	private int startingStageHits = 0;
+	private int strawStageHits = 0;
+	private int blueStageHits = 0;
+	private int brownStageHits = 0;
+	private int greyStageHits = 0;
 
 	@Setter
 	private int markerAttempts = 0;
@@ -107,8 +110,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 	private final Random random = new Random();
 
-	private static final int ANVIL_INVENTORY_COOL_PER_TICK = 5;
-	private static final int ANVIL_INVENTORY_COOL_TICK_INTERVAL = 20;
+	private static final int ANVIL_INVENTORY_COOL_TICK_INTERVAL = 1; // Reduced from 20 to 5 ticks (0.25 seconds)
 	private int anvilInventoryCoolTickCounter = 0;
 
 	private static final String HITS_NBT_KEY = "forgero_markerHitsCount";
@@ -367,6 +369,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		nbt.putInt("orangeStageHits", orangeStageHits);
 		nbt.putInt("yellowStageHits", yellowStageHits);
 		nbt.putInt("purpleStageHits", purpleStageHits);
+		nbt.putInt("strawStageHits", strawStageHits);
+		nbt.putInt("blueStageHits", blueStageHits);
+		nbt.putInt("brownStageHits", brownStageHits);
+		nbt.putInt("greyStageHits", greyStageHits);
 
 		nbt.putIntArray("fastMarkerIndices", fastMarkerIndices.stream().mapToInt(Integer::intValue).toArray());
 		ItemStack stack = simpleInventory.getStack(0);
@@ -380,6 +386,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			itemNbt.putInt("orangeStageHits", orangeStageHits);
 			itemNbt.putInt("yellowStageHits", yellowStageHits);
 			itemNbt.putInt("purpleStageHits", purpleStageHits);
+			itemNbt.putInt("strawStageHits", strawStageHits);
+			itemNbt.putInt("blueStageHits", blueStageHits);
+			itemNbt.putInt("brownStageHits", brownStageHits);
+			itemNbt.putInt("greyStageHits", greyStageHits);
 		}
 
 		// Ingot crafting state
@@ -420,6 +430,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		orangeStageHits = nbt.getInt("orangeStageHits");
 		yellowStageHits = nbt.getInt("yellowStageHits");
 		purpleStageHits = nbt.getInt("purpleStageHits");
+		strawStageHits = nbt.getInt("strawStageHits");
+		blueStageHits = nbt.getInt("blueStageHits");
+		brownStageHits = nbt.getInt("brownStageHits");
+		greyStageHits = nbt.getInt("greyStageHits");
 
 		fastMarkerIndices.clear();
 		if (nbt.contains("fastMarkerIndices")) {
@@ -444,6 +458,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				orangeStageHits = itemNbt.getInt("orangeStageHits");
 				yellowStageHits = itemNbt.getInt("yellowStageHits");
 				purpleStageHits = itemNbt.getInt("purpleStageHits");
+				strawStageHits = itemNbt.getInt("strawStageHits");
+				blueStageHits = itemNbt.getInt("blueStageHits");
+				brownStageHits = itemNbt.getInt("brownStageHits");
+				greyStageHits = itemNbt.getInt("greyStageHits");
 			}
 		} else {
 			this.markerHitsCount = 0;
@@ -576,8 +594,17 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	}
 
 	public void processMarkerAttempt(boolean hit) {
+		processMarkerAttempt(hit, true);
+	}
+
+	public void processMarkerAttempt(boolean hit, boolean wasPlayerAttempt) {
 		if (markerHitsCount >= TOTAL_MARKERS) return;
-		markerAttempts++;
+
+		// Only increment attempts if this was an actual player attempt, not a timeout
+		if (wasPlayerAttempt) {
+			markerAttempts++;
+		}
+
 		ItemStack stack = simpleInventory.getStack(0);
 		if (hit) {
 			markerHitsCount++;
@@ -597,9 +624,18 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				yellowStageHits++;
 			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInPurpleStage(temperature, maxTemp)) {
 				purpleStageHits++;
+			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInStrawStage(temperature, maxTemp)) {
+				strawStageHits++;
+			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInBlueStage(temperature, maxTemp)) {
+				blueStageHits++;
+			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInBrownStage(temperature, maxTemp)) {
+				brownStageHits++;
+			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInGreyStage(temperature, maxTemp)) {
+				greyStageHits++;
 			}
 
-		} else {
+		} else if (wasPlayerAttempt) {
+			// Only reduce temperature on actual player misses, not timeouts
 			// Remove 15 temperature on misshit
 			int temperature = TemperatureUtils.getTemperature(stack);
 			int minTemp = 0;
@@ -726,7 +762,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		} else {
 			markerTimeout--;
 			if (markerTimeout <= 0) {
-				processMarkerAttempt(false);
+				processMarkerAttempt(false, false); // timeout is not a player attempt
 			}
 		}
 	}
@@ -978,8 +1014,18 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 						context = context.put(MinecraftContextKeys.ORANGE_STAGE_HITS, orangeStageHits);
 						context = context.put(MinecraftContextKeys.YELLOW_STAGE_HITS, yellowStageHits);
 						context = context.put(MinecraftContextKeys.PURPLE_STAGE_HITS, purpleStageHits);
-						context = context.put(MinecraftContextKeys.STARTING_STAGE_HITS, startingStageHits);
+						context = context.put(MinecraftContextKeys.STRAW_STAGE_HITS, strawStageHits);
+						context = context.put(MinecraftContextKeys.BLUE_STAGE_HITS, blueStageHits);
+						context = context.put(MinecraftContextKeys.BROWN_STAGE_HITS, brownStageHits);
+						context = context.put(MinecraftContextKeys.GREY_STAGE_HITS, greyStageHits);
 						context = context.put(MinecraftContextKeys.TOTAL_HITS, markerHitsCount);
+
+						// Add accuracy and performance tracking data to context
+						context = context.put(MinecraftContextKeys.TOTAL_ATTEMPTS, markerAttempts);
+						int missHits = markerAttempts - markerHitsCount;
+						context = context.put(MinecraftContextKeys.MISS_HITS, missHits);
+						double accuracyRate = markerAttempts > 0 ? (double) markerHitsCount / markerAttempts : 0.0;
+						context = context.put(MinecraftContextKeys.ACCURACY_RATE, accuracyRate);
 
 						// Check for direct condition assignment using predicates
 						com.sigmundgranaas.forgero.core.condition.NamedCondition directCondition = PredicateConditionLootRegistry.getCondition(context);

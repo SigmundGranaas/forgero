@@ -20,6 +20,14 @@ public class MinecraftContextKeys {
 	public static final ContextKey<Integer> ORANGE_STAGE_HITS = ContextKey.of("orange_stage_hits", Integer.class);
 	public static final ContextKey<Integer> YELLOW_STAGE_HITS = ContextKey.of("yellow_stage_hits", Integer.class);
 	public static final ContextKey<Integer> PURPLE_STAGE_HITS = ContextKey.of("purple_stage_hits", Integer.class);
-	public static final ContextKey<Integer> STARTING_STAGE_HITS = ContextKey.of("starting_stage_hits", Integer.class);
+	public static final ContextKey<Integer> STRAW_STAGE_HITS = ContextKey.of("straw_stage_hits", Integer.class);
+	public static final ContextKey<Integer> BLUE_STAGE_HITS = ContextKey.of("blue_stage_hits", Integer.class);
+	public static final ContextKey<Integer> BROWN_STAGE_HITS = ContextKey.of("brown_stage_hits", Integer.class);
+	public static final ContextKey<Integer> GREY_STAGE_HITS = ContextKey.of("grey_stage_hits", Integer.class);
 	public static final ContextKey<Integer> TOTAL_HITS = ContextKey.of("total_hits", Integer.class);
+
+	// Accuracy and performance tracking
+	public static final ContextKey<Integer> TOTAL_ATTEMPTS = ContextKey.of("total_attempts", Integer.class);
+	public static final ContextKey<Integer> MISS_HITS = ContextKey.of("miss_hits", Integer.class);
+	public static final ContextKey<Double> ACCURACY_RATE = ContextKey.of("accuracy_rate", Double.class);
 }

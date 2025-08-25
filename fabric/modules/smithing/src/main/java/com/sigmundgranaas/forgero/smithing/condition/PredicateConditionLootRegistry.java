@@ -9,6 +9,7 @@ import java.util.function.Predicate;
 import com.sigmundgranaas.forgero.core.condition.Conditions;
 import com.sigmundgranaas.forgero.core.condition.NamedCondition;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys;
 
 public class PredicateConditionLootRegistry {
 	private static final Map<Predicate<MatchContext>, List<NamedCondition>> PREDICATE_LOOT_MAP = new HashMap<>();
@@ -46,24 +47,86 @@ public class PredicateConditionLootRegistry {
 	}
 
 	private static void registerTemperaturePredicates() {
-		// Hot working predicates - for items forged with high heat
-		registerCondition(TemperaturePredicates.hotWorkingPredicate(), Conditions.INSTANCE.of("forgero:tempered").orElse(null));
-		registerCondition(TemperaturePredicates.majorityRedStageHits(), Conditions.INSTANCE.of("forgero:sharp").orElse(null));
-		registerCondition(TemperaturePredicates.majorityOrangeStageHits(), Conditions.INSTANCE.of("forgero:hardened").orElse(null));
-		registerCondition(TemperaturePredicates.majorityYellowStageHits(), Conditions.INSTANCE.of("forgero:honed").orElse(null));
+		// === TIER 1: PERFECT PERFORMANCE CONDITIONS ===
+		// Perfect accuracy gets the best condition
+		registerCondition(TemperaturePredicates.perfectAccuracy(), Conditions.INSTANCE.of("forgero:unbreakable").orElse(null));
 
-		// Cold working predicates - for items worked at lower temperatures
-		registerCondition(TemperaturePredicates.coldWorkingPredicate(), Conditions.INSTANCE.of("forgero:sturdy").orElse(null));
-		registerCondition(TemperaturePredicates.majorityPurpleStageHits(), Conditions.INSTANCE.of("forgero:reinforced").orElse(null));
-		registerCondition(TemperaturePredicates.majorityStartingStageHits(), Conditions.INSTANCE.of("forgero:lightweight").orElse(null));
+		// === TIER 2: EXCELLENT PERFORMANCE CONDITIONS ===
+		// Excellent accuracy with good temperature control
+		registerCondition(TemperaturePredicates.excellentAccuracy(), Conditions.INSTANCE.of("forgero:rare").orElse(null));
+		registerCondition(TemperaturePredicates.perfectTemperatureControl(), Conditions.INSTANCE.of("forgero:lucky").orElse(null));
 
-		// Perfect temperature control predicate
-		registerCondition(TemperaturePredicates.perfectTemperatureControl(), Conditions.INSTANCE.of("forgero:rare").orElse(null));
+		// === TIER 3: GOOD TEMPERATURE-SPECIFIC CONDITIONS ===
+		// Each temperature stage gets a specific positive condition when majority hits
+		registerCondition(TemperaturePredicates.majorityYellowStageHits(), Conditions.INSTANCE.of("forgero:sharp").orElse(null));
+		registerCondition(TemperaturePredicates.majorityOrangeStageHits(), Conditions.INSTANCE.of("forgero:tempered").orElse(null));
+		registerCondition(TemperaturePredicates.majorityRedStageHits(), Conditions.INSTANCE.of("forgero:hardened").orElse(null));
+		registerCondition(TemperaturePredicates.majorityGreyStageHits(), Conditions.INSTANCE.of("forgero:sturdy").orElse(null));
+		registerCondition(TemperaturePredicates.majorityBlueStageHits(), Conditions.INSTANCE.of("forgero:reinforced").orElse(null));
+		registerCondition(TemperaturePredicates.majorityPurpleStageHits(), Conditions.INSTANCE.of("forgero:honed").orElse(null));
+		registerCondition(TemperaturePredicates.majorityStrawStageHits(), Conditions.INSTANCE.of("forgero:lightweight").orElse(null));
+		registerCondition(TemperaturePredicates.majorityBrownStageHits(), Conditions.INSTANCE.of("forgero:nimble").orElse(null));
 
-		// Minimum hit count predicates for specific effects
-		registerCondition(TemperaturePredicates.minRedStageHits(7), Conditions.INSTANCE.of("forgero:mighty").orElse(null));
-		registerCondition(TemperaturePredicates.minYellowStageHits(8), Conditions.INSTANCE.of("forgero:swift").orElse(null));
-		registerCondition(TemperaturePredicates.minOrangeStageHits(6), Conditions.INSTANCE.of("forgero:quick").orElse(null));
+		// === TIER 4: GOOD ACCURACY CONDITIONS ===
+		registerCondition(TemperaturePredicates.goodAccuracy(), Conditions.INSTANCE.of("forgero:trimmed").orElse(null));
+		registerCondition(TemperaturePredicates.skilledHotWorking(), Conditions.INSTANCE.of("forgero:mighty").orElse(null));
+		registerCondition(TemperaturePredicates.expertColdWorking(), Conditions.INSTANCE.of("forgero:engraved").orElse(null));
+
+		// === TIER 5: DECENT WORKING CONDITIONS ===
+		registerCondition(TemperaturePredicates.hotWorkingPredicate(), Conditions.INSTANCE.of("forgero:quick").orElse(null));
+		registerCondition(TemperaturePredicates.coldWorkingPredicate(), Conditions.INSTANCE.of("forgero:swift").orElse(null));
+		registerCondition(TemperaturePredicates.minRedStageHits(6), Conditions.INSTANCE.of("forgero:rapid").orElse(null));
+		registerCondition(TemperaturePredicates.minYellowStageHits(7), Conditions.INSTANCE.of("forgero:guarded").orElse(null));
+
+		// === TIER 6: POOR ACCURACY CONDITIONS (NEGATIVE) ===
+		registerCondition(TemperaturePredicates.terribleAccuracy(), Conditions.INSTANCE.of("forgero:cursed").orElse(null));
+		registerCondition(TemperaturePredicates.excessiveMissCount(), Conditions.INSTANCE.of("forgero:brittle").orElse(null));
+		registerCondition(TemperaturePredicates.poorAccuracy(), Conditions.INSTANCE.of("forgero:flawed").orElse(null));
+		registerCondition(TemperaturePredicates.highMissCount(), Conditions.INSTANCE.of("forgero:cracked").orElse(null));
+
+		// === TIER 7: POOR TECHNIQUE CONDITIONS (NEGATIVE) ===
+		registerCondition(TemperaturePredicates.rushedWork(), Conditions.INSTANCE.of("forgero:unstable").orElse(null));
+		registerCondition(TemperaturePredicates.sloppyHotWorking(), Conditions.INSTANCE.of("forgero:blunt").orElse(null));
+		registerCondition(TemperaturePredicates.inconsistentWorking(), Conditions.INSTANCE.of("forgero:dull").orElse(null));
+
+		// === TIER 8: SPECIFIC POOR PERFORMANCE CONDITIONS ===
+		registerCondition(context -> {
+			// Very high miss rate with poor temperature control
+			Double accuracyRate = context.get(MinecraftContextKeys.ACCURACY_RATE).orElse(0.0);
+			Integer missHits = context.get(MinecraftContextKeys.MISS_HITS).orElse(0);
+			return missHits >= 8 && accuracyRate < 0.3;
+		}, Conditions.INSTANCE.of("forgero:fragile").orElse(null));
+
+		registerCondition(context -> {
+			// Too much work done at very low brown temperatures
+			Integer brownHits = context.get(MinecraftContextKeys.BROWN_STAGE_HITS).orElse(0);
+			Integer totalHits = context.get(MinecraftContextKeys.TOTAL_HITS).orElse(0);
+			return totalHits > 0 && (double) brownHits / totalHits > 0.7;
+		}, Conditions.INSTANCE.of("forgero:sluggish").orElse(null));
+
+		registerCondition(context -> {
+			// Many misses with poor overall performance
+			Integer missHits = context.get(MinecraftContextKeys.MISS_HITS).orElse(0);
+			Double accuracyRate = context.get(MinecraftContextKeys.ACCURACY_RATE).orElse(0.0);
+			return missHits >= 6 && accuracyRate < 0.4;
+		}, Conditions.INSTANCE.of("forgero:weak").orElse(null));
+
+		registerCondition(context -> {
+			// Poor accuracy with inconsistent work
+			Double accuracyRate = context.get(MinecraftContextKeys.ACCURACY_RATE).orElse(0.0);
+			Integer strawHits = context.get(MinecraftContextKeys.STRAW_STAGE_HITS).orElse(0);
+			Integer totalHits = context.get(MinecraftContextKeys.TOTAL_HITS).orElse(0);
+			boolean poorAccuracy = accuracyRate < 0.5;
+			boolean tooMuchStrawWork = totalHits > 0 && (double) strawHits / totalHits > 0.6;
+			return poorAccuracy && tooMuchStrawWork;
+		}, Conditions.INSTANCE.of("forgero:chipped").orElse(null));
+
+		registerCondition(context -> {
+			// Moderate miss count
+			Integer missHits = context.get(MinecraftContextKeys.MISS_HITS).orElse(0);
+			Double accuracyRate = context.get(MinecraftContextKeys.ACCURACY_RATE).orElse(0.0);
+			return missHits >= 4 && missHits < 7 && accuracyRate < 0.6;
+		}, Conditions.INSTANCE.of("forgero:worn").orElse(null));
 	}
 
 	/**

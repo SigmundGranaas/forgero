@@ -99,38 +99,44 @@ public class TemperatureColorProvider {
 
 
 
-    // Checks if temperature is hot enough for smithing work (above minimum threshold)
+
     public static boolean isHotEnoughForWork(int temperature, int maxTemp) {
-        // Work requires temperature above the straw color range (around 445+ in base scale)
-        int minWorkingTemp = maxTemp >= 2000 ? 445 : (int)(445 / 2000.0 * maxTemp);
+        int minWorkingTemp = maxTemp >= 2000 ? 390 : (int)(390 / 2000.0 * maxTemp);
         return temperature >= minWorkingTemp;
     }
 
-    // Checks if temperature is in any of the red color stages (bright red, red, medium red, dull red, slight red)
     public static boolean isInRedStage(int temperature, int maxTemp) {
-        // Red stages: 1500 (bright red), 1400 (red), 1300 (medium red), 1200 (dull red), 1100 (slight red)
         return isInStage(temperature, maxTemp, 1100, 1500);
     }
 
-    // Checks if temperature is in any of the orange color stages (orange-yellow, orange, orange-red)
     public static boolean isInOrangeStage(int temperature, int maxTemp) {
-        // Orange stages: 1600 (orange red), 1700 (orange), 1800 (orange yellow)
         return isInStage(temperature, maxTemp, 1600, 1800);
     }
 
-    // Checks if temperature is in any of the yellow color stages (bright yellow, dark yellow)
     public static boolean isInYellowStage(int temperature, int maxTemp) {
-        // Yellow stages: 1900 (dark yellow), 2000 (bright yellow)
         return isInStage(temperature, maxTemp, 1900, 2000);
     }
 
-    // Checks if temperature is in any of the purple color stages (purple, dark purple)
     public static boolean isInPurpleStage(int temperature, int maxTemp) {
-        // Purple stages: 520 (purple), 540 (dark purple)
-        return isInStage(temperature, maxTemp, 520, 540);
+        return isInStage(temperature, maxTemp, 520, 575);
     }
 
-    // Helper to check if temperature is in a scaled stage
+    public static boolean isInStrawStage(int temperature, int maxTemp) {
+        return isInStage(temperature, maxTemp, 390, 520);
+    }
+
+    public static boolean isInBlueStage(int temperature, int maxTemp) {
+        return isInStage(temperature, maxTemp, 575, 800);
+    }
+
+    public static boolean isInBrownStage(int temperature, int maxTemp) {
+        return isInStage(temperature, maxTemp, 465, 520);
+    }
+
+    public static boolean isInGreyStage(int temperature, int maxTemp) {
+        return isInStage(temperature, maxTemp, 800, 1100);
+    }
+
     private static boolean isInStage(int temperature, int maxTemp, int min, int max) {
         if (maxTemp >= 2000) {
             return temperature >= min && temperature < max;
