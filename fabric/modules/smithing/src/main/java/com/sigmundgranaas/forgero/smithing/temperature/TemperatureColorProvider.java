@@ -99,9 +99,11 @@ public class TemperatureColorProvider {
 
 
 
-    // Checks if temperature is in the stage starting from 390 up to maxTemp
-    public static boolean isInStartingStage(int temperature, int maxTemp) {
-        return isInStage(temperature, maxTemp, 390, maxTemp);
+    // Checks if temperature is hot enough for smithing work (above minimum threshold)
+    public static boolean isHotEnoughForWork(int temperature, int maxTemp) {
+        // Work requires temperature above the straw color range (around 445+ in base scale)
+        int minWorkingTemp = maxTemp >= 2000 ? 445 : (int)(445 / 2000.0 * maxTemp);
+        return temperature >= minWorkingTemp;
     }
 
     // Checks if temperature is in any of the red color stages (bright red, red, medium red, dull red, slight red)

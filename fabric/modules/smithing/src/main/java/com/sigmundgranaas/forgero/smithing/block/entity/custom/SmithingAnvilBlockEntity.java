@@ -59,7 +59,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
-// TODO it seems its just randomly adding conditions not based on any loottable? Or maybe because there is not loottable for 10 hits currently. Probably better to register misshits and base the loottables around that.
+// TODO isInStartingStage fails after 1200 max temp or something?
 
 @Getter
 public class SmithingAnvilBlockEntity extends BlockEntity {
@@ -209,7 +209,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		if (anvilItem.getItem() instanceof MorphedItem) {
 			int temperature = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getTemperature(anvilItem);
 			int maxTemp = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getMaxTemp(anvilItem);
-			if (!com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInStartingStage(temperature, maxTemp)) {
+			if (!com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isHotEnoughForWork(temperature, maxTemp)) {
 				player.sendMessage(net.minecraft.text.Text.of("That needs to be heaten up first!"), true);
 				return ActionResult.FAIL;
 			}
@@ -218,7 +218,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		if (ingotCrafting && plannedProductId == null && !(anvilItem.getItem() instanceof MorphedItem)) {
 			int temperature = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getTemperature(anvilItem);
 			int maxTemp = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getMaxTemp(anvilItem);
-			if (!com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInStartingStage(temperature, maxTemp)) {
+			if (!com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isHotEnoughForWork(temperature, maxTemp)) {
 				player.sendMessage(net.minecraft.text.Text.of("That needs to be heaten up first!"), true);
 				return ActionResult.FAIL;
 			}
@@ -367,7 +367,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		nbt.putInt("orangeStageHits", orangeStageHits);
 		nbt.putInt("yellowStageHits", yellowStageHits);
 		nbt.putInt("purpleStageHits", purpleStageHits);
-		nbt.putInt("startingStageHits", startingStageHits);
 
 		nbt.putIntArray("fastMarkerIndices", fastMarkerIndices.stream().mapToInt(Integer::intValue).toArray());
 		ItemStack stack = simpleInventory.getStack(0);
@@ -381,7 +380,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			itemNbt.putInt("orangeStageHits", orangeStageHits);
 			itemNbt.putInt("yellowStageHits", yellowStageHits);
 			itemNbt.putInt("purpleStageHits", purpleStageHits);
-			itemNbt.putInt("startingStageHits", startingStageHits);
 		}
 
 		// Ingot crafting state
@@ -422,7 +420,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		orangeStageHits = nbt.getInt("orangeStageHits");
 		yellowStageHits = nbt.getInt("yellowStageHits");
 		purpleStageHits = nbt.getInt("purpleStageHits");
-		startingStageHits = nbt.getInt("startingStageHits");
 
 		fastMarkerIndices.clear();
 		if (nbt.contains("fastMarkerIndices")) {
@@ -447,7 +444,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				orangeStageHits = itemNbt.getInt("orangeStageHits");
 				yellowStageHits = itemNbt.getInt("yellowStageHits");
 				purpleStageHits = itemNbt.getInt("purpleStageHits");
-				startingStageHits = itemNbt.getInt("startingStageHits");
 			}
 		} else {
 			this.markerHitsCount = 0;
@@ -601,9 +597,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				yellowStageHits++;
 			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInPurpleStage(temperature, maxTemp)) {
 				purpleStageHits++;
-			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInStartingStage(temperature, maxTemp)) {
-				startingStageHits++;
 			}
+
 		} else {
 			// Remove 15 temperature on misshit
 			int temperature = TemperatureUtils.getTemperature(stack);
@@ -703,9 +698,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		// Temperature gating for marker spawning
 		int temperature = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getTemperature(stackForMarker);
 		int maxTemp = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getMaxTemp(stackForMarker);
-		boolean inStartingStage = com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInStartingStage(temperature, maxTemp);
-		if (!inStartingStage) {
-			// Do not spawn markers if not in correct temperature
+		boolean hotEnoughForWork = com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isHotEnoughForWork(temperature, maxTemp);
+		if (!hotEnoughForWork) {
+			// Do not spawn markers if not hot enough
 			return;
 		}
 
