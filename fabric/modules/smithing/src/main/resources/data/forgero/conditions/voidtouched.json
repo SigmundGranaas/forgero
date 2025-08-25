@@ -1,0 +1,21 @@
+{
+  "id": "forgero:voidtouched",
+  "priority": 5,
+  "target": {
+    "types": [
+      "PART",
+      "TOOL",
+      "WEAPON"
+    ],
+    "ids": [],
+    "incompatibilities": [
+    ]
+  },
+  "chance": 0.004,
+  "properties": {
+    "attributes": [
+    ],
+    "features": [
+    ]
+  }
+}

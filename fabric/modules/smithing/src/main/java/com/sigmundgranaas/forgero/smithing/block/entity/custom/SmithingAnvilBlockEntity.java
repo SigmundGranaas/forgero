@@ -6,8 +6,11 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
+import com.sigmundgranaas.forgero.smithing.condition.PredicateConditionLootRegistry;
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
@@ -807,10 +810,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 		ItemStack morphed = new ItemStack(morphedItem, 1);
 
-		// Set NBT if recipe started in Nether
-		if (world != null && world.getRegistryKey() == net.minecraft.world.World.NETHER) {
-			morphed.getOrCreateNbt().putBoolean("started_in_nether", true);
-		}
+		// NBT no longer needed - predicate system handles nether detection automatically
 
 		// Initialize morph NBT (start -> ingot id, result -> selected product item id)
 		ItemStack resultStack = createProductFromPlanned(plannedProductId);
@@ -865,14 +865,23 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				Item resultItem = MorphedItem.getResultItem(stack);
 				if (resultItem != null) {
 					ItemStack resultStack = new ItemStack(resultItem, stack.getCount());
-					// --- Apply condition to result item of morphed item ---
+					// --- Apply condition to result item of morphed item using predicates ---
 					var stateOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert(resultStack);
 					if (stateOpt.isPresent() && stateOpt.get() instanceof com.sigmundgranaas.forgero.core.condition.Conditional<?>) {
 						var state = stateOpt.get();
 						com.sigmundgranaas.forgero.core.condition.Conditional<?> conditional = (com.sigmundgranaas.forgero.core.condition.Conditional<?>) stateOpt.get();
-						NbtCompound nbt = stack.getOrCreateNbt();
-						// Check for direct condition assignment
-						com.sigmundgranaas.forgero.core.condition.NamedCondition directCondition = com.sigmundgranaas.forgero.smithing.condition.NbtConditionLootRegistry.getCondition(nbt);
+
+						// Create MatchContext for predicate evaluation
+						MatchContext context = MatchContext.of();
+						if (world != null) {
+							context = context.put(MinecraftContextKeys.WORLD, world);
+							context = context.put(MinecraftContextKeys.BLOCK_TARGET, pos);
+						}
+						// Add the ItemStack to context for potential predicate use
+						context = context.put(MinecraftContextKeys.STACK, stack);
+
+						// Check for direct condition assignment using predicates
+						com.sigmundgranaas.forgero.core.condition.NamedCondition directCondition = PredicateConditionLootRegistry.getCondition(context);
 						if (directCondition != null) {
 							var conditioned = conditional.applyCondition(directCondition);
 							var newStackOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert((com.sigmundgranaas.forgero.core.state.State) conditioned);
@@ -880,9 +889,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 								resultStack = newStackOpt.get();
 							}
 						} else {
-							var lootTable = com.sigmundgranaas.forgero.smithing.condition.NbtConditionLootRegistry.getLootTable(nbt);
+							var lootTable = PredicateConditionLootRegistry.getLootTable(context);
 							if (lootTable.isEmpty()) {
-								lootTable = com.sigmundgranaas.forgero.smithing.condition.NbtConditionLootRegistry.NEUTRAL;
+								lootTable = PredicateConditionLootRegistry.NEUTRAL;
 							}
 							// Filter lootTable to only include conditions whose target matches the state
 							List<com.sigmundgranaas.forgero.core.condition.NamedCondition> applicableConditions = lootTable.stream()
