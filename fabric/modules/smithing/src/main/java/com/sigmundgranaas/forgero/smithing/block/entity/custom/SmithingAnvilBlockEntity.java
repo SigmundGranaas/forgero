@@ -110,7 +110,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 	private final Random random = new Random();
 
-	private static final int ANVIL_INVENTORY_COOL_TICK_INTERVAL = 1; // Reduced from 20 to 5 ticks (0.25 seconds)
+	private static final int ANVIL_INVENTORY_COOL_TICK_INTERVAL = 3; // 6 times per second
 	private int anvilInventoryCoolTickCounter = 0;
 
 	private static final String HITS_NBT_KEY = "forgero_markerHitsCount";
@@ -611,8 +611,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			// Track temperature at the time of successful hit
 			int temperature = TemperatureUtils.getTemperature(stack);
 			int maxTemp = TemperatureUtils.getMaxTemp(stack);
-			// Add 30 temperature on successful hit
-			TemperatureUtils.setTemperature(stack, Math.min(temperature + 30, maxTemp));
+			// Add temperature on successful hit
+			int markerIndex = markerAttempts - 1;
+			int tempIncrease = fastMarkerIndices.contains(markerIndex) ? 10 : 30;
+			TemperatureUtils.setTemperature(stack, Math.min(temperature + tempIncrease, maxTemp));
 			hitTemperatures.add(TemperatureUtils.getTemperature(stack));
 
 			// Update temperature stage counters using TemperatureColorProvider
@@ -762,6 +764,11 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		} else {
 			markerTimeout--;
 			if (markerTimeout <= 0) {
+				// If this was a fast marker, remove its index so it won't come back as fast
+				if (fastMarkerIndices.contains(markerAttempts)) {
+					fastMarkerIndices.remove(Integer.valueOf(markerAttempts));
+					markDirty();
+				}
 				processMarkerAttempt(false, false); // timeout is not a player attempt
 			}
 		}
