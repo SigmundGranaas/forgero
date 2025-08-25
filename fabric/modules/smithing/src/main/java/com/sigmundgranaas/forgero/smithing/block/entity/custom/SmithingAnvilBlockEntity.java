@@ -807,6 +807,11 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 		ItemStack morphed = new ItemStack(morphedItem, 1);
 
+		// Set NBT if recipe started in Nether
+		if (world != null && world.getRegistryKey() == net.minecraft.world.World.NETHER) {
+			morphed.getOrCreateNbt().putBoolean("started_in_nether", true);
+		}
+
 		// Initialize morph NBT (start -> ingot id, result -> selected product item id)
 		ItemStack resultStack = createProductFromPlanned(plannedProductId);
 		if (!resultStack.isEmpty()) {
@@ -865,25 +870,23 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 					if (stateOpt.isPresent() && stateOpt.get() instanceof com.sigmundgranaas.forgero.core.condition.Conditional<?>) {
 						var state = stateOpt.get();
 						com.sigmundgranaas.forgero.core.condition.Conditional<?> conditional = (com.sigmundgranaas.forgero.core.condition.Conditional<?>) stateOpt.get();
-						if (TemperatureUtils.hasMaxTemperature(resultStack)) {
-							int hits = getMarkerHitsCount();
-							java.util.List<com.sigmundgranaas.forgero.core.condition.NamedCondition> lootTable;
-							if (hits == 3) {
-								lootTable = com.sigmundgranaas.forgero.smithing.condition.ConditionLootTables.BEST;
-							} else if (hits == 2) {
-								lootTable = com.sigmundgranaas.forgero.smithing.condition.ConditionLootTables.GOOD;
-							} else if (hits == 1) {
-								lootTable = com.sigmundgranaas.forgero.smithing.condition.ConditionLootTables.NEUTRAL;
-							} else if (hits == 0) {
-								lootTable = com.sigmundgranaas.forgero.smithing.condition.ConditionLootTables.BAD;
-							} else {
-								lootTable = com.sigmundgranaas.forgero.core.condition.Conditions.INSTANCE.all().stream()
-										.filter(c -> c instanceof com.sigmundgranaas.forgero.core.condition.NamedCondition)
-										.map(c -> (com.sigmundgranaas.forgero.core.condition.NamedCondition) c)
-										.collect(java.util.stream.Collectors.toList());
+						NbtCompound nbt = stack.getOrCreateNbt();
+						// Check for direct condition assignment
+						com.sigmundgranaas.forgero.core.condition.NamedCondition directCondition = com.sigmundgranaas.forgero.smithing.condition.NbtConditionLootRegistry.getCondition(nbt);
+						if (directCondition != null) {
+							var conditioned = conditional.applyCondition(directCondition);
+							var newStackOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert((com.sigmundgranaas.forgero.core.state.State) conditioned);
+							if (newStackOpt.isPresent()) {
+								resultStack = newStackOpt.get();
 							}
+						} else {
+							var lootTable = com.sigmundgranaas.forgero.smithing.condition.NbtConditionLootRegistry.getLootTable(nbt);
+							if (lootTable.isEmpty()) {
+								lootTable = com.sigmundgranaas.forgero.smithing.condition.NbtConditionLootRegistry.NEUTRAL;
+							}
+							// Apply a random condition from the lootTable if available
 							if (!lootTable.isEmpty()) {
-								var randomCondition = com.sigmundgranaas.forgero.smithing.condition.ConditionLootTables.getRandomCondition(lootTable);
+								com.sigmundgranaas.forgero.core.condition.NamedCondition randomCondition = lootTable.get(new Random().nextInt(lootTable.size()));
 								var conditioned = conditional.applyCondition(randomCondition);
 								var newStackOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert((com.sigmundgranaas.forgero.core.state.State) conditioned);
 								if (newStackOpt.isPresent()) {

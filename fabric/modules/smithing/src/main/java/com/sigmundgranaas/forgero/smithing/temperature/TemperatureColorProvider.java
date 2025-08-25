@@ -22,28 +22,28 @@ public class TemperatureColorProvider {
     public static int getHeatColor(int temperature, int maxTemp) {
         // Colors are in 0xRRGGBB format
         final int[][] baseScale = {
-            {2000, 0xFFFF00}, // Bright Yellow
-            {1900, 0xFFD700}, // Dark Yellow
-            {1800, 0xFFC800}, // Orange Yellow
-            {1700, 0xFF9900}, // Orange
-            {1600, 0xFF5500}, // Orange Red
-            {1500, 0xFF2222}, // Bright Red
-            {1400, 0xFF0000}, // Red
-            {1300, 0xCC0000}, // Medium Red
-            {1200, 0x990000}, // Dull Red
-            {1100, 0x882222}, // Slight Red
-            {1000, 0x555555}, // Very Slightly Red, Mostly Grey
-            {800,  0x222222}, // Dark Grey
-            {575,  0x222288}, // Blue
-            {540,  0x220055}, // Dark Purple
-            {520,  0x660088}, // Purple
-            {500,  0x442233}, // Brown/Purple
-            {480,  0x664422}, // Brown
-            {465,  0xBBAA44}, // Dark Straw
-            {445,  0xFFFACD}, // Light Straw
-            {390,  0xFFF8DC}, // Faint Straw
-            {0,    0xCCCCCC}  // Default cold (grey)
-        };
+				{2000, 0xFFFF00}, // Bright Yellow
+				{1900, 0xFFD700}, // Dark Yellow
+				{1800, 0xFFC800}, // Orange Yellow
+				{1700, 0xFF9900}, // Orange
+				{1600, 0xFF5500}, // Orange Red
+				{1500, 0xFF2222}, // Bright Red
+				{1400, 0xFF0000}, // Red
+				{1300, 0xCC0000}, // Medium Red
+				{1200, 0x990000}, // Dull Red
+				{1100, 0x882222}, // Slight Red
+				{1000, 0x555555}, // Very Slightly Red, Mostly Grey
+				{800,  0x222222}, // Dark Grey
+				{575,  0x222288}, // Blue
+				{540,  0x220055}, // Dark Purple
+				{520,  0x660088}, // Purple
+				{500,  0x442233}, // Brown/Purple
+				{480,  0x664422}, // Brown
+				{465,  0xBBAA44}, // Dark Straw
+				{445,  0xFFFACD}, // Light Straw
+				{390,  0xFFF8DC}, // Faint Straw
+				{0,    0xCCCCCC}  // Default cold (
+		};
 
 
 
@@ -98,15 +98,6 @@ public class TemperatureColorProvider {
     }
 
 
-
-    // --- Stage checker for orange-red, orange, and orange-yellow combined ---
-    public static boolean inFirstStageSmithing(int temperature, int maxTemp) {
-        return isInStage(temperature, maxTemp, 1500, 1800);
-    }
-
-	public static boolean inSecondStageSmithing(int temperature, int maxTemp) {
-		return isInStage(temperature, maxTemp, 1100, 1300);
-	}
 
     // Checks if temperature is in the stage starting from 390 up to maxTemp
     public static boolean isInStartingStage(int temperature, int maxTemp) {

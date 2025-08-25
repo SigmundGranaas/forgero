@@ -88,9 +88,10 @@ public class MorphedItemRenderer implements BuiltinItemRendererRegistry.DynamicI
 				matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(90.0F));
 			}
 			case  FIRST_PERSON_LEFT_HAND -> {
-				matrices.translate(0F, 0F, 0F); // vanilla left hand baseline
-				matrices.scale(1f, 1f, 1f);
-				// No rotation, keep upright
+				matrices.translate(-0.3F, 1.0F, 0.65F);
+				matrices.scale(0.60f, 0.60f, 0.60f);
+				matrices.multiply(net.minecraft.util.math.RotationAxis.POSITIVE_X.rotationDegrees(-65.0F));
+				matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(-90.0F));
 			}
 			case THIRD_PERSON_RIGHT_HAND, THIRD_PERSON_LEFT_HAND -> {
 
