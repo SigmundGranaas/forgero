@@ -3,5 +3,11 @@
   "id": "forgero:upgrade/leather-binding",
   "target": "forgero:leather",
   "context": "tool_binding",
-  "texture": "forgero:item/upgrade/binding"
+  "texture": "forgero:item/upgrade/binding",
+  "mountPoints": [
+    {
+      "name": "center",
+      "position": [ 8, 8 ]
+    }
+  ]
 }

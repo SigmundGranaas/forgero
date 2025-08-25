@@ -145,7 +145,7 @@ public class ModelGeneratorImpl implements ModelGenerator {
 		}
 
 
-		return new ModelDTO(resolvedId.toString(), template.type(), finalLayers, template.slots(), null, textures, target, modelContext, template.parent(), template.display());
+		return new ModelDTO(resolvedId.toString(), template.type(), finalLayers, template.slots(), template.mountPoints(), null, textures, target, modelContext, template.parent(), template.display());
 	}
 
 	private List<LayerDTO> processLayerTemplates(List<TemplateModelDTO.TemplateLayerDTO> layerTemplates, Map<String, Component> context, List<TextureGenerationTask> tasks) {

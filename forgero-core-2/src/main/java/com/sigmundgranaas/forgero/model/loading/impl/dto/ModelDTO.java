@@ -12,6 +12,7 @@ public record ModelDTO(
 		@Nullable String type,
 		@Nullable List<LayerDTO> layers,
 		@Nullable List<SlotDTO> slots,
+		@Nullable List<MountPointDTO> mountPoints,
 		@Nullable String texture,
 		@Nullable TexturesDTO textures,
 		@Nullable String target,
@@ -25,6 +26,10 @@ public record ModelDTO(
 
 	public Optional<List<SlotDTO>> getSlots() {
 		return Optional.ofNullable(slots);
+	}
+
+	public Optional<List<MountPointDTO>> getMountPoints() {
+		return Optional.ofNullable(mountPoints);
 	}
 
 	public Optional<String> getTexture() {

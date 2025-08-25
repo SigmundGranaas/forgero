@@ -8,13 +8,14 @@ import com.sigmundgranaas.forgero.model.api.item.Model;
 import com.sigmundgranaas.forgero.model.api.ModelLayer;
 import com.sigmundgranaas.forgero.model.api.ModelSlot;
 import com.sigmundgranaas.forgero.model.api.ModelVariant;
+import com.sigmundgranaas.forgero.model.api.MountPoint;
 import com.sigmundgranaas.forgero.model.api.Offset;
 import com.sigmundgranaas.forgero.model.api.item.TextureModel;
+import com.sigmundgranaas.forgero.model.loading.impl.dto.*;
 import com.sigmundgranaas.forgero.model.match.Predicate;
 import com.sigmundgranaas.forgero.model.match.predicate.BowPullPredicate;
 import com.sigmundgranaas.forgero.model.match.predicate.ChildTagPredicate;
 import com.sigmundgranaas.forgero.model.match.predicate.RootTagPredicate;
-import com.sigmundgranaas.forgero.model.loading.impl.dto.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,10 +23,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
-
- Translates DTO (Data Transfer Object) representations of models, loaded from JSON,
-
- into the main Forgero domain model classes.
+ * Translates DTO (Data Transfer Object) representations of models, loaded from JSON,
+ * into the main Forgero domain model classes.
  */
 public class ModelTranslator {
 
@@ -54,12 +53,18 @@ public class ModelTranslator {
 				.map(this::toModelSlot)
 				.toList();
 
+		List<MountPoint> mountPoints = Optional.ofNullable(dto.mountPoints())
+				.orElse(Collections.emptyList())
+				.stream()
+				.map(this::toMountPoint)
+				.toList();
+
 		Optional<OpenIdentifier> target = dto.getTarget().map(OpenIdentifier::new);
 		Optional<String> context = dto.getContext();
 		Optional<OpenIdentifier> parent = dto.getParent().map(OpenIdentifier::new);
 		Optional<JsonElement> display = dto.getDisplay();
 
-		return new CompositeModel(id, layers, slots, target, context, parent, display);
+		return new CompositeModel(id, layers, slots, mountPoints, target, context, parent, display);
 	}
 
 	private ModelLayer toModelLayer(LayerDTO dto) {
@@ -79,7 +84,7 @@ public class ModelTranslator {
 	private ModelSlot toModelSlot(SlotDTO dto) {
 		RendererDTO renderer = dto.renderer();
 		Optional<String> context = Optional.ofNullable(renderer.context());
-		return new ModelSlot(dto.id(), dto.order(), context);
+		return new ModelSlot(dto.id(), dto.order(), context, dto.getTargetMount(), dto.getChildMount());
 	}
 
 	private TextureModel toTextureModel(OpenIdentifier id, ModelDTO dto) {
@@ -88,6 +93,12 @@ public class ModelTranslator {
 		Optional<OpenIdentifier> parent = dto.getParent().map(OpenIdentifier::new);
 		Optional<JsonElement> display = dto.getDisplay();
 
+		List<MountPoint> mountPoints = Optional.ofNullable(dto.mountPoints())
+				.orElse(Collections.emptyList())
+				.stream()
+				.map(this::toMountPoint)
+				.toList();
+
 		TexturesDTO textures = dto.textures();
 		if (textures != null) {
 			List<ModelVariant> variants = Optional.ofNullable(textures.variants())
@@ -95,10 +106,28 @@ public class ModelTranslator {
 					.stream()
 					.map(this::toModelVariant)
 					.toList();
-			return new TextureModel(id, textures.defaultTexture(), variants, Optional.empty(), target, context, parent, display);
+			return new TextureModel(id, textures.defaultTexture(), variants, Optional.empty(), mountPoints, target, context, parent, display);
 		} else {
-			return new TextureModel(id, dto.texture(), Collections.emptyList(), Optional.empty(), target, context, parent, display);
+			return new TextureModel(id, dto.texture(), Collections.emptyList(), Optional.empty(), mountPoints, target, context, parent, display);
 		}
+	}
+
+	private MountPoint toMountPoint(MountPointDTO dto) {
+		List<Integer> pos = dto.position();
+		if (pos == null || pos.size() < 2) {
+			return new MountPoint(dto.name(), 0, 0);
+		}
+		int x = pos.get(0);
+		int y = pos.get(1);
+
+		// Invert the Y-coordinate to switch from a bottom-left definition
+		// to the top-left system used by image processing.
+		// We assume a 16x16 canvas for coordinate definition.
+		// A user-defined Y=0 (bottom) becomes pixel Y=15 (top).
+		// A user-defined Y=15 (top) becomes pixel Y=0 (top).
+		int invertedY = 16 - 1 - y;
+
+		return new MountPoint(dto.name(), x, invertedY);
 	}
 
 	private ModelVariant toModelVariant(VariantDTO dto) {

@@ -18,7 +18,6 @@ import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import java.util.*;
@@ -26,15 +25,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
-
- A specialized renderer that bakes a Forgero Component into an efficient, non-overlapping BakedModel.
- <p>
-
- This combines multiple texture layers into a single composite view before generating geometry.
-
- It creates front-facing quads only for the visible pixels of each layer and side-facing quads only for the
-
- final silhouette of the model, eliminating Z-fighting and reducing the polygon count for optimal performance.
+ * A specialized renderer that bakes a Forgero Component into an efficient, non-overlapping BakedModel.
+ * This combines multiple texture layers into a single composite view before generating geometry.
+ * It creates front-facing quads only for the visible pixels of each layer and side-facing quads only for the
+ * final silhouette of the model, eliminating Z-fighting and reducing the polygon count for optimal performance.
  */
 public class ForgeroModelRenderer {
 	private static final BakedQuadFactory QUAD_FACTORY = new BakedQuadFactory();
@@ -59,146 +53,131 @@ public class ForgeroModelRenderer {
 			return null;
 		}
 
-
-		// Step 1: Composite all layers into a single, flattened representation.
 		CompositeModel composite = compositeLayers(textures);
 		if (composite == null) {
 			return new BasicBakedModel(List.of(), Map.of(), true, false, true, particleSprite, transformation, ModelOverrideList.EMPTY);
 		}
 
-		// Step 2: Generate the minimal required geometry from the composite model.
 		List<ModelElement> elements = new ArrayList<>();
-		elements.addAll(generateMainElements(composite)); // Front and back faces
-		elements.addAll(generateSideElements(composite)); // Depth and edge faces
+		elements.addAll(generateMainElements(composite));
+		elements.addAll(generateSideElements(composite));
 
-		// Step 3: Bake the generated model elements into vanilla BakedQuads.
 		List<BakedQuad> quads = new ArrayList<>();
 		for (ModelElement element : elements) {
 			for (Map.Entry<Direction, ModelElementFace> entry : element.faces.entrySet()) {
 				ModelElementFace face = entry.getValue();
-				// Use the textureId string on the face to look up the correct sprite from our map.
 				Sprite sprite = composite.spriteData().get(face.textureId);
-
 				BakedQuad quad = QUAD_FACTORY.bake(element.from, element.to, face, sprite, entry.getKey(), settings, element.rotation, element.shade, modelId);
 				quads.add(quad);
 			}
 		}
 
-		// Step 4: Construct the final BakedModel.
 		Map<Direction, List<BakedQuad>> faceQuads = new EnumMap<>(Direction.class);
 		for (Direction dir : Direction.values()) {
 			faceQuads.put(dir, new ArrayList<>());
 		}
 
 		return new BasicBakedModel(quads, faceQuads, true, isSideLit, true, particleSprite, this.transformation, ModelOverrideList.EMPTY);
-
 	}
 
-	/**
-
-	 A record to hold the results of the compositing process.
-
-	 @param visibleLayerMap A 2D array indicating which texture layer is visible at each pixel.
-
-	 @param spriteData A map from a texture path String to its corresponding Sprite object for easy lookup.
-
-	 @param width The width of the composite model in pixels.
-
-	 @param height The height of the composite model in pixels.
-	 */
 	private record CompositeModel(
 			RenderableTexture[][] visibleLayerMap,
 			Map<String, Sprite> spriteData,
-			int width,
-			int height
+			int canvasWidth,
+			int canvasHeight,
+			int globalOffsetX,
+			int globalOffsetY,
+			int baseFrameWidth,
+			int baseFrameHeight
 	) {
 	}
 
-	/**
-
-	 Composites multiple texture layers into a single 2D representation.
-
-	 It iterates through layers from top to bottom, "painting" pixels onto a grid.
-
-	 The first opaque pixel found for a coordinate determines the visible layer at that point.
-
-	 @param textures The list of texture layers to composite.
-
-	 @return A CompositeModel containing the flattened view, or null if no valid sprites are found.
-	 */
 	@Nullable
 	private CompositeModel compositeLayers(List<RenderableTexture> textures) {
-		// The key is now the texture path string, for lookup using ModelElementFace.textureId
 		Map<String, Sprite> spriteData = textures.stream()
 				.collect(Collectors.toMap(
-						RenderableTexture::texture, // Use the string path as the key
+						RenderableTexture::texture,
 						texture -> textureGetter.apply(new SpriteIdentifier(net.minecraft.client.texture.SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier(texture.texture()))),
-						(a, b) -> b, // In case of duplicate texture paths, keep the latter
+						(a, b) -> b,
 						LinkedHashMap::new
 				));
 
-		// We need to map the texture object to its sprite for the compositing part
-		Map<RenderableTexture, Sprite> tempSpriteMap = textures.stream()
-				.collect(Collectors.toMap(t -> t, t -> spriteData.get(t.texture()), (a, b) -> b));
-
-		Sprite firstSprite = spriteData.values().stream().findFirst().orElse(null);
-		if (firstSprite == null || firstSprite.getContents().getWidth() == 0 || firstSprite.getContents().getHeight() == 0) {
+		if (spriteData.isEmpty() || spriteData.values().stream().allMatch(s -> s.getContents().getWidth() == 0)) {
 			return null;
 		}
 
-		int width = firstSprite.getContents().getWidth();
-		int height = firstSprite.getContents().getHeight();
+		// Step 1: Establish the base frame using the texture with the lowest order.
+		RenderableTexture baseTexture = textures.stream()
+				.min(Comparator.comparingInt(RenderableTexture::order))
+				.orElse(textures.get(0));
+		Sprite baseSprite = spriteData.get(baseTexture.texture());
+		int baseFrameWidth = baseSprite.getContents().getWidth();
+		int baseFrameHeight = baseSprite.getContents().getHeight();
 
-		RenderableTexture[][] visibleLayerMap = new RenderableTexture[height][width];
+
+		// Step 2: Determine the bounds of the virtual canvas based on all textures and their offsets.
+		int minX = 0, minY = 0, maxX = baseFrameWidth, maxY = baseFrameHeight;
+		for (RenderableTexture texture : textures) {
+			Sprite sprite = spriteData.get(texture.texture());
+			if (sprite == null) continue;
+			minX = Math.min(minX, texture.offset().x());
+			minY = Math.min(minY, texture.offset().y());
+			maxX = Math.max(maxX, texture.offset().x() + sprite.getContents().getWidth());
+			maxY = Math.max(maxY, texture.offset().y() + sprite.getContents().getHeight());
+		}
+
+		int canvasWidth = maxX - minX;
+		int canvasHeight = maxY - minY;
+		int globalOffsetX = -minX;
+		int globalOffsetY = -minY;
+
+		// Step 3: "Paint" textures onto the virtual canvas.
+		RenderableTexture[][] visibleLayerMap = new RenderableTexture[canvasHeight][canvasWidth];
 		List<RenderableTexture> sortedTextures = textures.stream()
 				.sorted(Comparator.comparingInt(RenderableTexture::order).reversed())
 				.toList();
 
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				for (RenderableTexture texture : sortedTextures) {
-					Sprite sprite = tempSpriteMap.get(texture);
-					if (sprite != null && !isPixelTransparent(sprite.getContents(), x, y)) {
-						visibleLayerMap[y][x] = texture;
-						break; // Move to the next pixel once the top-most layer is found
+		for (RenderableTexture texture : sortedTextures) {
+			Sprite sprite = spriteData.get(texture.texture());
+			if (sprite == null) continue;
+			int spriteWidth = sprite.getContents().getWidth();
+			int spriteHeight = sprite.getContents().getHeight();
+
+			for (int y = 0; y < spriteHeight; y++) {
+				for (int x = 0; x < spriteWidth; x++) {
+					int canvasX = x + texture.offset().x() + globalOffsetX;
+					int canvasY = y + texture.offset().y() + globalOffsetY;
+
+					if (canvasX >= 0 && canvasX < canvasWidth && canvasY >= 0 && canvasY < canvasHeight) {
+						if (visibleLayerMap[canvasY][canvasX] == null && !isPixelTransparent(sprite.getContents(), x, y)) {
+							visibleLayerMap[canvasY][canvasX] = texture;
+						}
 					}
 				}
 			}
 		}
-		return new CompositeModel(visibleLayerMap, spriteData, width, height);
+
+		return new CompositeModel(visibleLayerMap, spriteData, canvasWidth, canvasHeight, globalOffsetX, globalOffsetY, baseFrameWidth, baseFrameHeight);
 	}
 
-	/**
-
-	 Generates the main front and back faces for the composite model.
-
-	 It uses a greedy meshing algorithm to combine adjacent pixels of the same layer into
-
-	 the largest possible rectangular quads, minimizing the total polygon count.
-
-	 @param composite The composite model data.
-
-	 @return A list of ModelElements representing the main faces.
-	 */
 	private List<ModelElement> generateMainElements(CompositeModel composite) {
 		List<ModelElement> elements = new ArrayList<>();
-		boolean[][] visited = new boolean[composite.height][composite.width];
+		boolean[][] visited = new boolean[composite.canvasHeight][composite.canvasWidth];
 
-		for (int y = 0; y < composite.height; y++) {
-			for (int x = 0; x < composite.width; x++) {
+		for (int y = 0; y < composite.canvasHeight; y++) {
+			for (int x = 0; x < composite.canvasWidth; x++) {
 				if (visited[y][x] || composite.visibleLayerMap[y][x] == null) {
 					continue;
 				}
 
 				RenderableTexture currentLayer = composite.visibleLayerMap[y][x];
-
 				int width;
-				for (width = 1; x + width < composite.width && !visited[y][x + width] && composite.visibleLayerMap[y][x + width] == currentLayer; width++) {
+				for (width = 1; x + width < composite.canvasWidth && !visited[y][x + width] && composite.visibleLayerMap[y][x + width] == currentLayer; width++) {
 				}
 
 				int height;
 				outer:
-				for (height = 1; y + height < composite.height; height++) {
+				for (height = 1; y + height < composite.canvasHeight; height++) {
 					for (int k = 0; k < width; k++) {
 						if (visited[y + height][x + k] || composite.visibleLayerMap[y + height][x + k] != currentLayer) {
 							break outer;
@@ -218,40 +197,42 @@ public class ForgeroModelRenderer {
 		return elements;
 	}
 
-	/**
-
-	 Creates a single front-and-back ModelElement for a given rectangular area.
-	 */
-	private ModelElement createMainElementForRect(int x, int y, int w, int h, RenderableTexture layer, CompositeModel composite) {
+	private ModelElement createMainElementForRect(int canvasX, int canvasY, int w, int h, RenderableTexture layer, CompositeModel composite) {
 		float zOffset = 0.001f * layer.order();
-		Vector2f customOffset = layer.offset() != null ? new Vector2f(layer.offset().x(), layer.offset().y()) : new Vector2f(0, 0);
 
-		float modelScaleX = 16.0f / composite.width;
-		float modelScaleY = 16.0f / composite.height;
+		// Geometry is relative to the canvas. Convert to model space (0-16) using the base frame dimensions.
+		float modelScaleX = 16.0f / composite.baseFrameWidth;
+		float modelScaleY = 16.0f / composite.baseFrameHeight;
 
-		float fromX = x * modelScaleX;
-		float fromY = 16.0f - (y + h) * modelScaleY;
-		float toX = (x + w) * modelScaleX;
-		float toY = 16.0f - y * modelScaleY;
+		float fromX = (canvasX - composite.globalOffsetX) * modelScaleX;
+		float fromY = (canvasY - composite.globalOffsetY) * modelScaleY;
+		float toX = fromX + (w * modelScaleX);
+		float toY = fromY + (h * modelScaleY);
 
-		float[] uv = {x * modelScaleX, y * modelScaleY, (x + w) * modelScaleX, (y + h) * modelScaleY};
-		float[] uvFlipped = {(x + w) * modelScaleX, y * modelScaleY, x * modelScaleX, (y + h) * modelScaleY};
+		// UV coordinates are relative to the original sprite.
+		Sprite sprite = composite.spriteData.get(layer.texture());
+		float spriteW = sprite.getContents().getWidth();
+		float spriteH = sprite.getContents().getHeight();
+
+		float u_from = (canvasX - (layer.offset().x() + composite.globalOffsetX)) / spriteW * 16.0f;
+		float v_from = (canvasY - (layer.offset().y() + composite.globalOffsetY)) / spriteH * 16.0f;
+		float u_to = u_from + (w / spriteW * 16.0f);
+		float v_to = v_from + (h / spriteH * 16.0f);
 
 		Map<Direction, ModelElementFace> faces = new EnumMap<>(Direction.class);
-		// Pass the layer's texture path string as the textureId. This is the key change.
-		faces.put(Direction.SOUTH, new ModelElementFace(null, -1, layer.texture(), new ModelElementTexture(uv, 0)));
-		faces.put(Direction.NORTH, new ModelElementFace(null, -1, layer.texture(), new ModelElementTexture(uvFlipped, 0)));
+		faces.put(Direction.SOUTH, new ModelElementFace(null, -1, layer.texture(), new ModelElementTexture(new float[]{u_from, v_from, u_to, v_to}, 0)));
+		faces.put(Direction.NORTH, new ModelElementFace(null, -1, layer.texture(), new ModelElementTexture(new float[]{u_to, v_from, u_from, v_to}, 0)));
 
-		Vector3f from = new Vector3f(fromX + customOffset.x(), fromY - customOffset.y(), 7.5f - zOffset);
-		Vector3f to = new Vector3f(toX + customOffset.x(), toY - customOffset.y(), 8.5f - zOffset);
+		// Y-inversion for model space
+		float finalFromY = 16.0f - toY;
+		float finalToY = 16.0f - fromY;
+
+		Vector3f from = new Vector3f(fromX, finalFromY, 7.5f - zOffset);
+		Vector3f to = new Vector3f(toX, finalToY, 8.5f - zOffset);
 
 		return new ModelElement(from, to, faces, null, true);
 	}
 
-	/**
-
-	 Generates side quads for the model's final silhouette.
-	 */
 	private List<ModelElement> generateSideElements(CompositeModel composite) {
 		List<ModelElement> elements = new ArrayList<>();
 		Map<Side, List<Frame>> framesBySide = new EnumMap<>(Side.class);
@@ -259,8 +240,8 @@ public class ForgeroModelRenderer {
 			framesBySide.put(side, new ArrayList<>());
 		}
 
-		for (int y = 0; y < composite.height; y++) {
-			for (int x = 0; x < composite.width; x++) {
+		for (int y = 0; y < composite.canvasHeight; y++) {
+			for (int x = 0; x < composite.canvasWidth; x++) {
 				RenderableTexture currentLayer = composite.visibleLayerMap[y][x];
 				if (currentLayer == null) continue;
 
@@ -271,7 +252,6 @@ public class ForgeroModelRenderer {
 					}
 				}
 			}
-
 		}
 
 		for (List<Frame> frameList : framesBySide.values()) {
@@ -298,10 +278,9 @@ public class ForgeroModelRenderer {
 	private ModelElement createModelElementFromFrame(Frame frame, CompositeModel composite) {
 		RenderableTexture layer = frame.getLayer();
 		float zOffset = 0.001f * layer.order();
-		Vector2f customOffset = layer.offset() != null ? new Vector2f(layer.offset().x(), layer.offset().y()) : new Vector2f(0, 0);
 
-		float modelScaleX = 16.0f / composite.width;
-		float modelScaleY = 16.0f / composite.height;
+		float modelScaleX = 16.0f / composite.baseFrameWidth;
+		float modelScaleY = 16.0f / composite.baseFrameHeight;
 
 		float fromX, fromY, toX, toY;
 		float u1, v1, u2, v2;
@@ -312,37 +291,43 @@ public class ForgeroModelRenderer {
 
 		switch (side) {
 			case UP -> {
-				fromX = min; toX = max + 1.0f; fromY = level; toY = level;
+				fromX = min - composite.globalOffsetX; toX = max + 1.0f - composite.globalOffsetX; fromY = level - composite.globalOffsetY; toY = level - composite.globalOffsetY;
 				u1 = min; u2 = max + 1.0f; v1 = level; v2 = level + 1.0f;
 			}
 			case DOWN -> {
-				fromX = min; toX = max + 1.0f; fromY = level + 1.0f; toY = level + 1.0f;
+				fromX = min - composite.globalOffsetX; toX = max + 1.0f - composite.globalOffsetX; fromY = level + 1.0f - composite.globalOffsetY; toY = level + 1.0f - composite.globalOffsetY;
 				u1 = min; u2 = max + 1.0f; v1 = level; v2 = level + 1.0f;
 			}
 			case LEFT -> {
-				fromX = level; toX = level; fromY = min; toY = max + 1.0f;
+				fromX = level - composite.globalOffsetX; toX = level - composite.globalOffsetX; fromY = min - composite.globalOffsetY; toY = max + 1.0f - composite.globalOffsetY;
 				u1 = level; u2 = level + 1.0f; v1 = min; v2 = max + 1.0f;
 			}
 			default -> { // RIGHT
-				fromX = level + 1.0f; toX = level + 1.0f; fromY = min; toY = max + 1.0f;
+				fromX = level + 1.0f - composite.globalOffsetX; toX = level + 1.0f - composite.globalOffsetX; fromY = min - composite.globalOffsetY; toY = max + 1.0f - composite.globalOffsetY;
 				u1 = level; u2 = level + 1.0f; v1 = min; v2 = max + 1.0f;
 			}
 		}
 
 		fromX *= modelScaleX; toX *= modelScaleX; fromY *= modelScaleY; toY *= modelScaleY;
-		u1 *= modelScaleX; u2 *= modelScaleX; v1 *= modelScaleY; v2 *= modelScaleY;
 
-		fromY = 16.0f - fromY;
-		toY = 16.0f - toY;
-		if (fromY > toY) { float temp = fromY; fromY = toY; toY = temp; }
+		Sprite sprite = composite.spriteData.get(layer.texture());
+		float spriteW = sprite.getContents().getWidth();
+		float spriteH = sprite.getContents().getHeight();
+		float u_from = (u1 - (layer.offset().x() + composite.globalOffsetX)) / spriteW * 16.0f;
+		float v_from = (v1 - (layer.offset().y() + composite.globalOffsetY)) / spriteH * 16.0f;
+		float u_to = (u2 - (layer.offset().x() + composite.globalOffsetX)) / spriteW * 16.0f;
+		float v_to = (v2 - (layer.offset().y() + composite.globalOffsetY)) / spriteH * 16.0f;
+
+		float finalFromY = 16.0f - toY;
+		float finalToY = 16.0f - fromY;
+		if (finalFromY > finalToY) { float temp = finalFromY; finalFromY = finalToY; finalToY = temp; }
 
 		Map<Direction, ModelElementFace> faces = new EnumMap<>(Direction.class);
-		// Here too, we pass the layer's texture path string as the textureId.
-		ModelElementTexture texture = new ModelElementTexture(new float[]{u1, v1, u2, v2}, 0);
+		ModelElementTexture texture = new ModelElementTexture(new float[]{u_from, v_from, u_to, v_to}, 0);
 		faces.put(side.getDirection(), new ModelElementFace(null, -1, layer.texture(), texture));
 
-		Vector3f from = new Vector3f(fromX + customOffset.x(), fromY - customOffset.y(), 7.5f - zOffset);
-		Vector3f to = new Vector3f(toX + customOffset.x(), toY - customOffset.y(), 8.5f - zOffset);
+		Vector3f from = new Vector3f(fromX, finalFromY, 7.5f - zOffset);
+		Vector3f to = new Vector3f(toX, finalToY, 8.5f - zOffset);
 
 		return new ModelElement(from, to, faces, null, true);
 	}
@@ -351,7 +336,7 @@ public class ForgeroModelRenderer {
 	private RenderableTexture getNeighborLayer(int x, int y, Side side, CompositeModel composite) {
 		int nX = x + side.getOffsetX();
 		int nY = y + side.getOffsetY();
-		if (nX < 0 || nX >= composite.width || nY < 0 || nY >= composite.height) {
+		if (nX < 0 || nX >= composite.canvasWidth || nY < 0 || nY >= composite.canvasHeight) {
 			return null;
 		}
 		return composite.visibleLayerMap[nY][nX];
@@ -384,7 +369,6 @@ public class ForgeroModelRenderer {
 		public int getOffsetX() { return this.offsetX; }
 		public int getOffsetY() { return this.offsetY; }
 		public boolean isVertical() { return this == DOWN || this == UP; }
-
 	}
 
 	private static class Frame {
@@ -393,7 +377,6 @@ public class ForgeroModelRenderer {
 		private final int level;
 		private int min;
 		private int max;
-
 
 		public Frame(Side side, int value, int level, RenderableTexture layer) {
 			this.side = side;

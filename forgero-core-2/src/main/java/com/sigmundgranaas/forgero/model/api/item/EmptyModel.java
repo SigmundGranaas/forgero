@@ -3,7 +3,10 @@ package com.sigmundgranaas.forgero.model.api.item;
 import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.model.api.ModelResolutionContext;
+import com.sigmundgranaas.forgero.model.api.MountPoint;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -42,6 +45,11 @@ public non-sealed class EmptyModel implements Model {
 	@Override
 	public Optional<JsonElement> getDisplay() {
 		return Optional.empty();
+	}
+
+	@Override
+	public List<MountPoint> getMountPoints() {
+		return Collections.emptyList();
 	}
 
 	@Override

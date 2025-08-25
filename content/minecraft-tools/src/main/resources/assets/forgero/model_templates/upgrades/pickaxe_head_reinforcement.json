@@ -16,6 +16,12 @@
           "palette": "forgero:palette/{target.name}",
           "output": "forgero:item/upgrade/{target.name}-pickaxe_tip_reinforcement"
         }
+      ],
+      "mountPoints": [
+        {
+          "name": "attachment_point",
+          "position": [ 12, 12 ]
+        }
       ]
     }
   ]

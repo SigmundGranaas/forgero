@@ -3,5 +3,11 @@
   "id": "forgero:upgrade/leather-grip",
   "target": "forgero:leather",
   "context": "handle_grip",
-  "texture": "forgero:item/upgrade/grip"
+  "texture": "forgero:item/upgrade/grip",
+  "mountPoints": [
+    {
+      "name": "center",
+      "position": [ 8, 8 ]
+    }
+  ]
 }

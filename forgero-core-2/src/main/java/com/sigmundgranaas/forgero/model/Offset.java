@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.model.api;
+package com.sigmundgranaas.forgero.model;
 
 /**
  * Represents a 2D offset for positioning textures.
