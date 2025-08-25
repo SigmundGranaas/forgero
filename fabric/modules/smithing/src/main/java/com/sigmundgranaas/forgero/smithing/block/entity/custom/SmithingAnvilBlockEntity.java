@@ -205,6 +205,16 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			return ActionResult.FAIL;
 		}
 
+		// Temperature gating for morphed items as well
+		if (anvilItem.getItem() instanceof MorphedItem) {
+			int temperature = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getTemperature(anvilItem);
+			int maxTemp = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getMaxTemp(anvilItem);
+			if (!com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInStartingStage(temperature, maxTemp)) {
+				player.sendMessage(net.minecraft.text.Text.of("That needs to be heaten up first!"), true);
+				return ActionResult.FAIL;
+			}
+		}
+
 		if (ingotCrafting && plannedProductId == null && !(anvilItem.getItem() instanceof MorphedItem)) {
 			int temperature = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getTemperature(anvilItem);
 			int maxTemp = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getMaxTemp(anvilItem);
@@ -687,6 +697,15 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 				clearMarkerProgress();
 				markDirty();
 			}
+			return;
+		}
+
+		// Temperature gating for marker spawning
+		int temperature = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getTemperature(stackForMarker);
+		int maxTemp = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getMaxTemp(stackForMarker);
+		boolean inStartingStage = com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInStartingStage(temperature, maxTemp);
+		if (!inStartingStage) {
+			// Do not spawn markers if not in correct temperature
 			return;
 		}
 
