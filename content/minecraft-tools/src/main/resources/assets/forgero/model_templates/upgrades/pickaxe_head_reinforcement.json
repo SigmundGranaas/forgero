@@ -17,7 +17,7 @@
           "output": "forgero:item/upgrade/{target.name}-pickaxe_tip_reinforcement"
         }
       ],
-      "mountPoints": [
+      "mount_points": [
         {
           "name": "attachment_point",
           "position": [ 12, 12 ]

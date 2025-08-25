@@ -10,7 +10,7 @@
       }
     }
   ],
-  "mountPoints": [
+  "mount_points": [
     {
       "name": "binding",
       "position": [ 11, 10 ]
@@ -28,8 +28,7 @@
     {
       "id": "binding_slot",
       "order": 25,
-      "targetMount": "binding",
-      "childMount": "center",
+      "mount": "binding",
       "renderer": {
         "type": "forgero:component",
         "context": "tool_binding"
@@ -38,8 +37,7 @@
     {
       "id": "handle_grip_slot",
       "order": 20,
-      "targetMount": "grip",
-      "childMount": "center",
+      "mount": "grip",
       "renderer": {
         "type": "forgero:component",
         "context": "handle_grip"
@@ -48,8 +46,8 @@
     {
       "id": "tip_reinforcement_slot",
       "order": 25,
-      "targetMount": "tip",
-      "childMount": "attachment_point",
+      "mount": "tip",
+      "child_mount": "attachment_point",
       "renderer": {
         "type": "forgero:component",
         "context": "pickaxe_head_reinforcement"

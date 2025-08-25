@@ -129,12 +129,12 @@ public class RecursiveModelResolver implements ItemModelResolver {
 	}
 
 	private Offset calculateMountOffset(ModelSlot slot, Model parentModel, Model childModel) {
-		if (slot.targetMount().isEmpty() || slot.childMount().isEmpty()) {
+		if (slot.targetMount().isEmpty()) {
 			return Offset.ZERO;
 		}
 
 		String targetMountName = slot.targetMount().get();
-		String childMountName = slot.childMount().get();
+		String childMountName = slot.childMount().orElse("center");
 
 		Offset parentOffset = parentModel.getMountPoints().stream()
 				.filter(mp -> mp.name().equals(targetMountName))

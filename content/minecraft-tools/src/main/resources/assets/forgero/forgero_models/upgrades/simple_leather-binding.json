@@ -1,10 +1,10 @@
 {
   "type": "forgero:texture_model",
-  "id": "forgero:upgrade/leather-binding",
+  "id": "forgero:upgrade/simple-leather-binding",
   "target": "forgero:leather",
   "context": "tool_binding",
   "texture": "forgero:item/upgrade/binding",
-  "mountPoints": [
+  "mount_points": [
     {
       "name": "center",
       "position": [ 8, 8 ]

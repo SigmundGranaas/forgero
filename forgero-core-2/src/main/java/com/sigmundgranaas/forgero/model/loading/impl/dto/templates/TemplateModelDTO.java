@@ -1,4 +1,3 @@
-// /home/sigmund/Documents/projects/forgero/1-20/forgero-core-2/src/main/java/com/sigmundgranaas/forgero/model/loading/impl/dto/templates/TemplateModelDTO.java
 package com.sigmundgranaas.forgero.model.loading.impl.dto.templates;
 
 import com.google.gson.JsonElement;
@@ -13,9 +12,12 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * DTO for the "model" block inside an item template file.
- * This DTO now consistently uses a 'layers' list for all textures, unifying its structure.
- * A "simple texture model" is now just a model with a single layer.
+
+ DTO for the "model" block inside an item template file.
+
+ This DTO now consistently uses a 'layers' list for all textures, unifying its structure.
+
+ A "simple texture model" is now just a model with a single layer.
  */
 public record TemplateModelDTO(
 		@Nullable String id,
@@ -30,8 +32,10 @@ public record TemplateModelDTO(
 ) {
 
 	/**
-	 * A unified DTO for a layer within any model template.
-	 * It directly contains texture generation information. This can be shared by item and armor models.
+
+	 A unified DTO for a layer within any model template.
+
+	 It directly contains texture generation information. This can be shared by item and armor models.
 	 */
 	public record TemplateLayerDTO(
 			int order,
@@ -52,7 +56,7 @@ public record TemplateModelDTO(
 			Codec.STRING.fieldOf("type").forGetter(TemplateModelDTO::type),
 			Codec.list(TemplateLayerDTO.CODEC).optionalFieldOf("layers").forGetter(dto -> Optional.ofNullable(dto.layers)),
 			Codec.list(SlotDTO.CODEC).optionalFieldOf("slots").forGetter(dto -> Optional.ofNullable(dto.slots)),
-			Codec.list(MountPointDTO.CODEC).optionalFieldOf("mountPoints").forGetter(dto -> Optional.ofNullable(dto.mountPoints)),
+			Codec.list(MountPointDTO.CODEC).optionalFieldOf("mount_points").forGetter(dto -> Optional.ofNullable(dto.mountPoints)),
 			Codec.STRING.optionalFieldOf("target").forGetter(dto -> Optional.ofNullable(dto.target)),
 			Codec.STRING.optionalFieldOf("context").forGetter(dto -> Optional.ofNullable(dto.context)),
 			Codec.STRING.optionalFieldOf("parent").forGetter(dto -> Optional.ofNullable(dto.parent)),

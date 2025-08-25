@@ -22,13 +22,12 @@ public class ModelCodecs {
 
 	public static final Codec<SlotDTO> SLOT_DTO_CODEC = SlotDTO.CODEC;
 
-
 	public static final Codec<ModelDTO> MODEL_DTO_CODEC_DISPATCHER = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.STRING.optionalFieldOf("id").forGetter(ModelDTO::getId),
 			Codec.STRING.fieldOf("type").forGetter(ModelDTO::type),
 			Codec.list(LAYER_DTO_CODEC).optionalFieldOf("layers").forGetter(ModelDTO::getLayers),
 			Codec.list(SLOT_DTO_CODEC).optionalFieldOf("slots").forGetter(ModelDTO::getSlots),
-			Codec.list(MountPointDTO.CODEC).optionalFieldOf("mountPoints").forGetter(ModelDTO::getMountPoints),
+			Codec.list(MountPointDTO.CODEC).optionalFieldOf("mount_points").forGetter(ModelDTO::getMountPoints),
 			Codec.STRING.optionalFieldOf("texture").forGetter(ModelDTO::getTexture),
 			TEXTURES_DTO_CODEC.optionalFieldOf("textures").forGetter(ModelDTO::getTextures),
 			Codec.STRING.optionalFieldOf("target").forGetter(ModelDTO::getTarget),

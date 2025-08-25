@@ -26,7 +26,7 @@ public record SlotDTO(
 			Codec.STRING.fieldOf("id").forGetter(SlotDTO::id),
 			Codec.INT.fieldOf("order").forGetter(SlotDTO::order),
 			RendererDTO.CODEC.fieldOf("renderer").forGetter(SlotDTO::renderer),
-			Codec.STRING.optionalFieldOf("targetMount").forGetter(SlotDTO::getTargetMount),
-			Codec.STRING.optionalFieldOf("childMount").forGetter(SlotDTO::getChildMount)
+			Codec.STRING.optionalFieldOf("mount").forGetter(SlotDTO::getTargetMount),
+			Codec.STRING.optionalFieldOf("child_mount").forGetter(SlotDTO::getChildMount)
 	).apply(instance, (id, order, renderer, target, child) -> new SlotDTO(id, order, renderer, target.orElse(null), child.orElse(null))));
 }
