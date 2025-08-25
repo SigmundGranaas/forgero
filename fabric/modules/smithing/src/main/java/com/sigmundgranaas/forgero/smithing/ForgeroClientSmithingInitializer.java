@@ -19,6 +19,7 @@ import com.sigmundgranaas.forgero.smithing.block.renderer.MoldBlockEntityRendere
 import com.sigmundgranaas.forgero.smithing.block.renderer.SmithingAnvilBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.item.ModItems;
 import com.sigmundgranaas.forgero.smithing.item.renderer.MorphedItemRenderer;
+import com.sigmundgranaas.forgero.smithing.minigame.MinigameHudOverlay;
 import com.sigmundgranaas.forgero.smithing.model.BellowsModel;
 import com.sigmundgranaas.forgero.smithing.networking.C2S.AnvilUseC2SPacket;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
@@ -32,6 +33,7 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 
 public class ForgeroClientSmithingInitializer implements ClientModInitializer {
     private static com.sigmundgranaas.forgero.core.texture.V2.TextureService textureService;
@@ -71,6 +73,8 @@ public class ForgeroClientSmithingInitializer implements ClientModInitializer {
 		BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.HEARTH, RenderLayer.getCutout());
 
 		ModMessages.registerS2CPackets();
+
+		HudRenderCallback.EVENT.register(new MinigameHudOverlay());
 
 
 		// Initialize and store the TextureService and TextureGenerator for smithing
