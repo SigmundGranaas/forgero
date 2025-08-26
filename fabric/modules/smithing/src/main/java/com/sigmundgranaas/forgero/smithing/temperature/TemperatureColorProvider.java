@@ -20,6 +20,11 @@ public class TemperatureColorProvider {
 
     // Change getHeatColor to public so it can be accessed from other classes
     public static int getHeatColor(int temperature, int maxTemp) {
+        // If temperature is at or below 20, return -1 (no overlay)
+        if (temperature <= 20) {
+            return -1;
+        }
+
         // Colors are in 0xRRGGBB format
         final int[][] baseScale = {
 				{1600, 0xFFFF99}, // Very bright yellow-orange (upper forging limit)
@@ -34,7 +39,8 @@ public class TemperatureColorProvider {
 				{700,  0x660000}, // Very dark red
 				{600,  0x330000}, // Faint red
 				{500,  0x220000}, // Barely glowing red
-				{0,    0xCCCCCC}  // Cold metal (neutral grey)
+				{300,  0x3399FF}, // Light blue (transition)
+				{20,   0x00000000}  // Transparent (no overlay for coldest)
 		};
 
 
@@ -138,4 +144,29 @@ public class TemperatureColorProvider {
 			return temperature >= scaledMin && temperature < scaledMax;
 		}
 	}
+
+    // New: scaled stage boundaries (Cold|Tempering|Critical|Shaping|Forging|Welding|Overheated)
+    // Base boundaries are defined for a 0..1600 range and scaled for lower max temps.
+    public static int[] getStageBoundaries(int maxTemp) {
+        int[] base = new int[]{20, 500, 700, 900, 1100, 1300, 1500, 1600};
+        if (maxTemp >= 1600) {
+            return base;
+        }
+        int[] scaled = new int[base.length];
+        for (int i = 0; i < base.length; i++) {
+            scaled[i] = (int) (base[i] / 1600.0 * maxTemp);
+        }
+        // Deduplicate after scaling to avoid overlapping ticks
+        java.util.ArrayList<Integer> uniq = new java.util.ArrayList<>(scaled.length);
+        int prev = Integer.MIN_VALUE;
+        for (int v : scaled) {
+            if (uniq.isEmpty() || v != prev) {
+                uniq.add(v);
+                prev = v;
+            }
+        }
+        int[] out = new int[uniq.size()];
+        for (int i = 0; i < uniq.size(); i++) out[i] = uniq.get(i);
+        return out;
+    }
 }

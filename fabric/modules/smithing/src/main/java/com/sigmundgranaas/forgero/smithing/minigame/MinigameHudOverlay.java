@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.smithing.minigame;
 
+import java.util.Arrays;
+
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider;
@@ -14,7 +16,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-
 
 // TODO create our own texture for the outside of the bar. Including arrow and ticks.
 public class MinigameHudOverlay implements HudRenderCallback {
@@ -42,7 +43,7 @@ public class MinigameHudOverlay implements HudRenderCallback {
         int max = Math.max(TemperatureUtils.getMaxTemp(stack), 1);
 
         // Compute a 300-degree sliding window around current temperature.
-        final int window = 300;
+        final int window = 700;
         int half = window / 2;
         int minWindow = Math.max(0, Math.min(temp - half, Math.max(0, max - window)));
         int maxWindow = Math.min(max, minWindow + window);
@@ -50,18 +51,31 @@ public class MinigameHudOverlay implements HudRenderCallback {
 
         // Horizontal bar placement and dimensions (center top, slightly larger)
         int screenW = ctx.getScaledWindowWidth();
-        int barWidth = 180; // slightly larger than before
+        int barWidth = 140; // reduced width for a less wide bar
         int barHeight = 10;
         int barLeft = (screenW - barWidth) / 2;
         int barTop = 10;
 
+        int[] boundaries = TemperatureColorProvider.getStageBoundaries(max);
+        // Precompute segment indices for each stage using scaled midpoints
+        int idxTempering  = segmentIndex(scaleToMax(600,  max), boundaries);
+        int idxCritical   = segmentIndex(scaleToMax(800,  max), boundaries);
+        int idxShaping    = segmentIndex(scaleToMax(1000, max), boundaries);
+        int idxForging    = segmentIndex(scaleToMax(1200, max), boundaries);
+        int idxWelding    = segmentIndex(scaleToMax(1400, max), boundaries);
+        int idxOverheated = segmentIndex(scaleToMax(1550, max), boundaries);
+
+        // Only show bar from tempering and up
+        int minStageBoundary = boundaries[idxTempering];
+        minWindow = Math.max(minStageBoundary, minWindow);
+        if (maxWindow <= minWindow) return;
         float unitsPerPixelX = (float) (maxWindow - minWindow) / (float) barWidth;
 
-        // Temperature-colored bar fill (simple rectangle)
+        // Hardcoded stage colors per segment (no blending)
         for (int x = 0; x < barWidth; x++) {
             int valueAtX = minWindow + Math.round(x * unitsPerPixelX);
-            int rgb = TemperatureColorProvider.getHeatColor(valueAtX, max);
-            int argb = 0xFF000000 | rgb;
+            int segIdx = segmentIndex(valueAtX, boundaries);
+            int argb = colorForSegment(segIdx, idxTempering, idxCritical, idxShaping, idxForging, idxWelding, idxOverheated);
             fill(ctx, barLeft + x, barTop, barLeft + x + 1, barTop + barHeight, argb);
         }
 
@@ -72,45 +86,16 @@ public class MinigameHudOverlay implements HudRenderCallback {
         fill(ctx, barLeft, barTop, barLeft + 1, barTop + barHeight, border); // left
         fill(ctx, barLeft + barWidth - 1, barTop, barLeft + barWidth, barTop + barHeight, border); // right
 
-        // Minor ticks every 50 degrees rendered INSIDE the bar as shorter vertical lines
-        int minorStep = 50;
-        for (int t = nearestMultiple(minWindow, minorStep); t <= maxWindow; t += minorStep) {
-            if (t % 100 == 0) continue; // skip where major ticks will be drawn
+        // Stage boundary ticks (straight borders between stages)
+        for (int t : boundaries) {
+            if (t < minWindow || t > maxWindow) continue;
             int x = valueToX(t, minWindow, unitsPerPixelX, barLeft, barWidth);
-            int yStart = barTop + 2;                      // shorter inside bar
-            int yEnd = barTop + barHeight - 2;
-            if (yEnd > yStart) {
-                fill(ctx, x, yStart, x + 1, yEnd, 0x88FFFFFF);
+            // Only draw ticks strictly inside the bar, not on the border
+            if (x > barLeft && x < barLeft + barWidth - 1) {
+                int yStart = barTop + 1;
+                int yEnd = barTop + barHeight - 1;
+                fill(ctx, x, yStart, x + 1, yEnd, 0xFFFFFFFF); // fully opaque white
             }
-        }
-
-        // Major ticks every 100 degrees rendered INSIDE the bar as full-height vertical lines
-        int tickStep = 100;
-        for (int t = nearestMultiple(minWindow, tickStep); t <= maxWindow; t += tickStep) {
-            int x = valueToX(t, minWindow, unitsPerPixelX, barLeft, barWidth);
-            int yStart = barTop + 1;                      // inside border
-            int yEnd = barTop + barHeight - 1;
-            if (yEnd > yStart) {
-                fill(ctx, x, yStart, x + 1, yEnd, 0xCCFFFFFF);
-            }
-        }
-
-        // Degree labels centered ABOVE each 100-degree tick
-        var tr = MinecraftClient.getInstance().textRenderer;
-        float labelScale = 0.7f;
-        int fontHeight = 9; // Minecraft default font height
-        int scaledTextHeight = Math.round(fontHeight * labelScale);
-        for (int t = nearestMultiple(minWindow, 100); t <= maxWindow; t += 100) {
-            int x = valueToX(t, minWindow, unitsPerPixelX, barLeft, barWidth);
-            String s = Integer.toString(t);
-            int textW = tr.getWidth(s);
-            int textX = x - Math.round(textW * labelScale / 2f);
-            int textY = barTop - scaledTextHeight - 2; // above the bar
-            ctx.getMatrices().push();
-            ctx.getMatrices().translate(textX, textY, 0);
-            ctx.getMatrices().scale(labelScale, labelScale, 1.0f);
-            ctx.drawText(tr, s, 0, 0, 0xFFFFFFFF, false);
-            ctx.getMatrices().pop();
         }
 
         // Current temperature arrow just below the bar, pointing down
@@ -191,5 +176,39 @@ public class MinigameHudOverlay implements HudRenderCallback {
 
     private void fill(DrawContext ctx, int x1, int y1, int x2, int y2, int argb) {
         ctx.fill(x1, y1, x2, y2, argb);
+    }
+
+    // Correctly map a temperature value to the segment index defined by 'boundaries'
+    private int segmentIndex(int value, int[] boundaries) {
+        int idx = Arrays.binarySearch(boundaries, value);
+        if (idx >= 0) {
+            // Boundary values belong to the right-hand segment, except the last boundary
+            return Math.min(idx, boundaries.length - 2);
+        }
+        int insertionPoint = -(idx + 1);
+        return Math.max(0, insertionPoint - 1);
+    }
+
+    // Map segment index to hardcoded colors based on stage indices
+    private int colorForSegment(int segIdx,
+                                int idxTempering, int idxCritical,
+                                int idxShaping, int idxForging, int idxWelding, int idxOverheated) {
+        final int BLUE   = 0xFF0077FF; // tempering (and cold)
+        final int YELLOW = 0xFFFFCC00; // shaping and welding
+        final int GREEN  = 0xFF00CC00; // forging
+        final int RED    = 0xFFCC0000; // critical and overheated
+
+        if (segIdx == idxForging) return GREEN;
+        if (segIdx == idxShaping || segIdx == idxWelding) return YELLOW;
+        if (segIdx == idxCritical || segIdx == idxOverheated) return RED;
+        if (segIdx == idxTempering) return BLUE;
+        // Fallback
+        return YELLOW;
+    }
+
+    // Scale a base (0..1600) temperature to current max
+    private int scaleToMax(int base, int maxTemp) {
+        if (maxTemp >= 1600) return base;
+        return Math.round(base / 1600f * maxTemp);
     }
 }
