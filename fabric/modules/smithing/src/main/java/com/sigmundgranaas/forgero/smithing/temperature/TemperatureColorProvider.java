@@ -21,23 +21,23 @@ public class TemperatureColorProvider {
     public static int getHeatColor(int temperature, int maxTemp) {
 
         final int[][] baseScale = {
-            {1600, 0xFFFF_FF99}, // Very bright yellow-orange (upper forging limit)
-            {1500, 0xFFFF_FF66}, // Bright yellow
-            {1400, 0xFFFF_CC33}, // Yellow-orange
-            {1300, 0xFFFF_9900}, // Orange
-            {1200, 0xFFFF_6600}, // Deep orange
-            {1100, 0xFFFF_3300}, // Bright red-orange
-            {1000, 0xFFFF_0000}, // Bright red
-            {900,  0xFFCC_0000}, // Red
-            {800,  0xFF99_0000}, // Dark red
-            {700,  0xFF66_0000}, // Very dark red
-            {600,  0xFF33_0000}, // Faint red
-            {500,  0xFF22_0000}, // Barely glowing red
+            {10000, 0xFFFF_FF99}, // Very bright yellow-orange (upper forging limit)
+            {9375, 0xFFFF_FF66}, // Bright yellow
+            {8750, 0xFFFF_CC33}, // Yellow-orange
+            {8125, 0xFFFF_9900}, // Orange
+            {7500, 0xFFFF_6600}, // Deep orange
+            {6875, 0xFFFF_3300}, // Bright red-orange
+            {6250, 0xFFFF_0000}, // Bright red
+            {5625,  0xFFCC_0000}, // Red
+            {5000,  0xFF99_0000}, // Dark red
+            {4375,  0xFF66_0000}, // Very dark red
+            {3750,  0xFF33_0000}, // Faint red
+            {3125,  0xFF22_0000}, // Barely glowing red
             {20,   0x00FFFFFF}  // Fully transparent
         };
 
-        // If maxTemp >= 1600, use the original scale
-        if (maxTemp >= 1600) {
+        // If maxTemp >= 10000, use the original scale
+        if (maxTemp >= 10000) {
             for (int i = 0; i < baseScale.length - 1; i++) {
                 int tHigh = baseScale[i][0];
                 int tLow = baseScale[i + 1][0];
@@ -55,7 +55,7 @@ public class TemperatureColorProvider {
         int[][] scaledScale = new int[baseScale.length][2];
         for (int i = 0; i < baseScale.length; i++) {
             int origTemp = baseScale[i][0];
-            int scaledTemp = (int)(origTemp / 1600.0 * maxTemp);
+            int scaledTemp = (int)(origTemp / 10000.0 * maxTemp);
             scaledScale[i][0] = scaledTemp;
             scaledScale[i][1] = baseScale[i][1];
         }
@@ -89,66 +89,121 @@ public class TemperatureColorProvider {
         return (a << 24) | (r << 16) | (g << 8) | b;
     }
 
+	public static int getTooltipColor(int temperature, int maxTemp) {
+
+		final int[][] baseScale = {
+				{10000, 0xFFFF_FF99}, // Very bright yellow-orange (upper forging limit)
+				{9375, 0xFFFF_FF66}, // Bright yellow
+				{8750, 0xFFFF_CC33}, // Yellow-orange
+				{8125, 0xFFFF_9900}, // Orange
+				{7500, 0xFFFF_6600}, // Deep orange
+				{6875, 0xFFFF_3300}, // Bright red-orange
+				{6250, 0xFFFF_0000}, // Bright red
+				{5625,  0xFFCC_0000}, // Red
+				{5000,  0xFF99_0000}, // Dark red
+				{4375,  0xFF66_0000}, // Very dark red
+				{3750,  0xFF33_0000}, // Faint red
+				{3125,  0xFF22_0000}, // Barely glowing red
+				{20,   0x00FFFFFF}  // Fully transparent
+		};
+
+		// If maxTemp >= 10000, use the original scale
+		if (maxTemp >= 10000) {
+			for (int i = 0; i < baseScale.length - 1; i++) {
+				int tHigh = baseScale[i][0];
+				int tLow = baseScale[i + 1][0];
+				int cHigh = baseScale[i][1];
+				int cLow = baseScale[i + 1][1];
+				if (temperature >= tLow && temperature <= tHigh) {
+					float t = (temperature - tLow) / (float)(tHigh - tLow);
+					return lerpColor(cLow, cHigh, t);
+				}
+			}
+			return baseScale[baseScale.length - 1][1];
+		}
+
+		// Scale the stops to fit maxTemp
+		int[][] scaledScale = new int[baseScale.length][2];
+		for (int i = 0; i < baseScale.length; i++) {
+			int origTemp = baseScale[i][0];
+			int scaledTemp = (int)(origTemp / 10000.0 * maxTemp);
+			scaledScale[i][0] = scaledTemp;
+			scaledScale[i][1] = baseScale[i][1];
+		}
+		for (int i = 0; i < scaledScale.length - 1; i++) {
+			int tHigh = scaledScale[i][0];
+			int tLow = scaledScale[i + 1][0];
+			int cHigh = scaledScale[i][1];
+			int cLow = scaledScale[i + 1][1];
+			if (temperature >= tLow && temperature <= tHigh) {
+				float t = (temperature - tLow) / (float)(tHigh - tLow);
+				return lerpColor(cLow, cHigh, t);
+			}
+		}
+		return scaledScale[scaledScale.length - 1][1];
+	}
+
+
 
 
 
     public static boolean isHotEnoughForWork(int temperature, int maxTemp) {
-        int minWorkingTemp = maxTemp >= 1600 ? 500 : (int)(500 / 1600.0 * maxTemp);
+        int minWorkingTemp = maxTemp >= 10000 ? 3125 : (int)(3125 / 10000.0 * maxTemp);
         return temperature >= minWorkingTemp;
     }
 
 	public static boolean isInOverheatedStage(int temperature, int maxTemp) {
-		return isInStage(temperature, maxTemp, 1500, 1601); // 1500+ is liquid
+		return isInStage(temperature, maxTemp, 9375, 10001); // 9375+ is liquid
 	}
 
 	public static boolean isInWeldingStage(int temperature, int maxTemp) {
-		return isInStage(temperature, maxTemp, 1300, 1500); // 1300–1500
+		return isInStage(temperature, maxTemp, 8125, 9375); // 8125–9375
 	}
 
 	public static boolean isInForgingStage(int temperature, int maxTemp) {
-		return isInStage(temperature, maxTemp, 1100, 1300); // 1100–1300
+		return isInStage(temperature, maxTemp, 6875, 8125); // 6875–8125
 	}
 
 	public static boolean isInShapingStage(int temperature, int maxTemp) {
-		return isInStage(temperature, maxTemp, 900, 1100); // 900–1100
+		return isInStage(temperature, maxTemp, 5625, 6875); // 5625–6875
 	}
 
 	public static boolean isInCriticalStage(int temperature, int maxTemp) {
-		return isInStage(temperature, maxTemp, 700, 900); // 700–900
+		return isInStage(temperature, maxTemp, 4375, 5625); // 4375–5625
 	}
 
 	public static boolean isInTemperingStage(int temperature, int maxTemp) {
-		return isInStage(temperature, maxTemp, 500, 700); // 500–700
+		return isInStage(temperature, maxTemp, 3125, 4375); // 3125–4375
 	}
 
 	public static boolean isInColdStage(int temperature, int maxTemp) {
-		return isInStage(temperature, maxTemp, 0, 500); // <500
+		return isInStage(temperature, maxTemp, 0, 3125); // <3125
 	}
 
 	public static boolean isInPerfectStage(int temperature, int maxTemp) {
-		return isInStage(temperature, maxTemp, 1150, 1250); // 1100–1300
+		return isInStage(temperature, maxTemp, 8125, 8750); // 8125–9375
 	}
 
 	private static boolean isInStage(int temperature, int maxTemp, int min, int max) {
-		if (maxTemp >= 1600) {
+		if (maxTemp >= 10000) {
 			return temperature >= min && temperature < max;
 		} else {
-			int scaledMin = (int)(min / 1600.0 * maxTemp);
-			int scaledMax = (int)(max / 1600.0 * maxTemp);
+			int scaledMin = (int)(min / 10000.0 * maxTemp);
+			int scaledMax = (int)(max / 10000.0 * maxTemp);
 			return temperature >= scaledMin && temperature < scaledMax;
 		}
 	}
 
     // New: scaled stage boundaries (Cold|Tempering|Critical|Shaping|Forging|Welding|Overheated)
-    // Base boundaries are defined for a 0..1600 range and scaled for lower max temps.
+    // Base boundaries are defined for a 0..10000 range and scaled for lower max temps.
     public static int[] getStageBoundaries(int maxTemp) {
-        int[] base = new int[]{20, 500, 700, 900, 1100, 1300, 1500, 1600};
-        if (maxTemp >= 1600) {
+        int[] base = new int[]{20, 3125, 4375, 5625, 6875, 8125, 9375, 10000};
+        if (maxTemp >= 10000) {
             return base;
         }
         int[] scaled = new int[base.length];
         for (int i = 0; i < base.length; i++) {
-            scaled[i] = (int) (base[i] / 1600.0 * maxTemp);
+            scaled[i] = (int) (base[i] / 10000.0 * maxTemp);
         }
         // Deduplicate after scaling to avoid overlapping ticks
         java.util.ArrayList<Integer> uniq = new java.util.ArrayList<>(scaled.length);

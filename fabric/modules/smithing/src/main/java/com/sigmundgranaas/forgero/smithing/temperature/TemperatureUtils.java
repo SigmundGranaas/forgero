@@ -35,7 +35,7 @@ public class TemperatureUtils {
             return nbt.getInt(MAX_TEMPERATURE_KEY);
         }
         Optional<State> stateOpt = StateService.INSTANCE.convert(stack);
-        int maxTemp = 1600; // Default max temperature if attribute is not present
+        int maxTemp = 10000; // Default max temperature if attribute is not present
         Optional<State> state = StateService.INSTANCE.convert(stack);
         if (state.isPresent()) {
             int attr = ComputedAttribute.of(state.get(), MAX_TEMPERATURE).asInt();

@@ -57,13 +57,13 @@ public class MinigameHudOverlay implements HudRenderCallback {
         int barTop = 10;
 
         int[] boundaries = TemperatureColorProvider.getStageBoundaries(max);
-        // Precompute segment indices for each stage using scaled midpoints
-        int idxTempering  = segmentIndex(scaleToMax(600,  max), boundaries);
-        int idxCritical   = segmentIndex(scaleToMax(800,  max), boundaries);
-        int idxShaping    = segmentIndex(scaleToMax(1000, max), boundaries);
-        int idxForging    = segmentIndex(scaleToMax(1200, max), boundaries);
-        int idxWelding    = segmentIndex(scaleToMax(1400, max), boundaries);
-        int idxOverheated = segmentIndex(scaleToMax(1550, max), boundaries);
+        // Precompute segment indices for each stage using scaled midpoints (new reference)
+        int idxTempering  = segmentIndex(scaleToMax(3750,  max), boundaries);
+        int idxCritical   = segmentIndex(scaleToMax(5000,  max), boundaries);
+        int idxShaping    = segmentIndex(scaleToMax(6250,  max), boundaries);
+        int idxForging    = segmentIndex(scaleToMax(7500,  max), boundaries);
+        int idxWelding    = segmentIndex(scaleToMax(8750,  max), boundaries);
+        int idxOverheated = segmentIndex(scaleToMax(9687,  max), boundaries);
 
         // Only show bar from tempering and up
         int minStageBoundary = boundaries[idxTempering];
@@ -206,9 +206,9 @@ public class MinigameHudOverlay implements HudRenderCallback {
         return YELLOW;
     }
 
-    // Scale a base (0..1600) temperature to current max
+    // Scale a base (0..10000) temperature to current max
     private int scaleToMax(int base, int maxTemp) {
-        if (maxTemp >= 1600) return base;
-        return Math.round(base / 1600f * maxTemp);
+        if (maxTemp >= 10000) return base;
+        return Math.round(base / 10000f * maxTemp);
     }
 }
