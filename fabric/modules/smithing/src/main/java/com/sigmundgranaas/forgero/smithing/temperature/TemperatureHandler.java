@@ -24,7 +24,6 @@ public class TemperatureHandler {
 
     public static void register() {
         ServerTickEvents.END_WORLD_TICK.register(TemperatureHandler::onWorldTick);
-        // Removed END_PLAYER_TICK, not available in Fabric API
     }
 
     private static void onWorldTick(ServerWorld world) {
@@ -32,7 +31,6 @@ public class TemperatureHandler {
         if (tickCounter % TICK_INTERVAL != 0) {
             return;
         }
-        // Cool down items in player inventories
         for (ServerPlayerEntity player : world.getPlayers()) {
             boolean tookHeatDamage = false;
             for (int i = 0; i < player.getInventory().size(); i++) {
@@ -42,23 +40,18 @@ public class TemperatureHandler {
                 }
                 int temp = TemperatureUtils.getTemperature(stack);
                 int prevTemp = temp;
-                // Damage player if holding or carrying hot item
                 if (temp > 100) {
-                    // Check if in hand
                     if (player.getMainHandStack() == stack || player.getOffHandStack() == stack) {
                         tookHeatDamage = true;
                     } else {
-                        // Also damage if anywhere in inventory
                         tookHeatDamage = true;
                     }
                 }
-                // Log every time the inventory cooling logic is checked
                 if (tickCounter % 20 == 0) { // Changed to every 20 ticks
                     if (temp > 20) {
                         temp = Math.max(20, temp - INVENTORY_COOL_PER_TICK);
                         TemperatureUtils.setTemperature(stack, temp);
                     }
-                    LOGGER.debug("Inventory cooling checked for {}: {} -> {}", stack.getName().getString(), prevTemp, temp);
                 }
             }
             if (tookHeatDamage) {
@@ -68,8 +61,6 @@ public class TemperatureHandler {
         for (var entity : world.iterateEntities()) {
             if (!(entity instanceof ItemEntity itemEntity)) continue;
             ItemStack stack = itemEntity.getStack();
-            LOGGER.debug("Checking item entity: {} at {}", stack.getItem().getTranslationKey(), itemEntity.getBlockPos());
-            // Apply cooling to any item with hasMaxTemperature (including ingots and diamonds)
             if (!TemperatureUtils.hasMaxTemperature(stack)) {
                 continue;
             }
@@ -80,16 +71,13 @@ public class TemperatureHandler {
                     temp = Math.max(20, temp - INVENTORY_COOL_PER_TICK);
                     TemperatureUtils.setTemperature(stack, temp);
                 }
-                LOGGER.debug("Entity cooling checked for {}: {} -> {}", stack.getName().getString(), prevTemp, temp);
             }
             BlockPos pos = itemEntity.getBlockPos();
             var blockState = world.getBlockState(pos);
-            LOGGER.info("[Forgero] Item at {}: blockAt registry={} class={}", pos, blockState.getBlock().getTranslationKey(), blockState.getBlock().getClass().getName());
             boolean changed = false;
             boolean isWaterCauldron = blockState.isOf(net.minecraft.block.Blocks.WATER_CAULDRON);
             int cauldronLevel = isWaterCauldron && blockState.contains(Properties.LEVEL_3) ? blockState.get(Properties.LEVEL_3) : 0;
             boolean inFilledCauldron = isWaterCauldron && cauldronLevel == 3;
-            LOGGER.info("[Forgero] Checking for filled water cauldron at item pos {}: isWaterCauldron={} level={}", pos, isWaterCauldron, cauldronLevel);
             if (inFilledCauldron) {
                 if (temp > 100) {
                     world.spawnParticles(net.minecraft.particle.ParticleTypes.CLOUD, itemEntity.getX(), itemEntity.getY() + 0.2, itemEntity.getZ(), 8, 0.2, 0.1, 0.2, 0.01);
@@ -99,10 +87,7 @@ public class TemperatureHandler {
                     temp = Math.max(20, temp - FLUID_COOL_PER_TICK);
                     TemperatureUtils.setTemperature(stack, temp);
                     changed = true;
-                    LOGGER.info("[Forgero] Cooling down item at {}: {} -> {} (filled water cauldron)", pos, prevTemp, temp);
                 }
-            } else {
-                LOGGER.info("[Forgero] No heating/cooling at {}: block={} (no effect)", pos, blockState.getBlock().getTranslationKey());
             }
         }
     }

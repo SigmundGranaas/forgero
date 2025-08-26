@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 public class TemperatureTooltipMixin {
 	@Inject(method = "appendTooltip", at = @At("TAIL"))
 	private void forgero$addTemperatureTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext, CallbackInfo ci) {
-		if (!com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.hasMaxTemperature(itemStack)) {
+		if (!TemperatureUtils.hasMaxTemperature(itemStack)) {
 			return;
 		}
 		int temp = TemperatureUtils.getTemperature(itemStack);
