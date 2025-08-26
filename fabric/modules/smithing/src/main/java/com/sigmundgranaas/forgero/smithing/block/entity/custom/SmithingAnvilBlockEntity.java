@@ -6,19 +6,16 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import com.sigmundgranaas.forgero.core.util.match.MatchContext;
-import com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
-import com.sigmundgranaas.forgero.smithing.condition.PredicateConditionLootRegistry;
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
+import com.sigmundgranaas.forgero.smithing.minigame.MinigameLogic;
+import com.sigmundgranaas.forgero.smithing.minigame.MinigamePositioning;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
-import com.sigmundgranaas.forgero.smithing.util.MinigamePositioningUtil;
 import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
 import com.sigmundgranaas.forgero.smithing.util.SchematicResultUtil;
 import lombok.Getter;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,7 +55,7 @@ import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 @Getter
-public class SmithingAnvilBlockEntity extends BlockEntity {
+public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLogic.MinigameCallback {
 	private static final @NotNull String INVENTORY_NBT_KEY = "inventory";
 
 	private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1, ItemStack.EMPTY);
@@ -75,50 +72,13 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		}
 	};
 
-	private List<Vec2f> markerPositions = new ArrayList<>();
-	private List<Boolean> markerHits = new ArrayList<>();
-	private List<Integer> hitTemperatures = new ArrayList<>();
-	private int overheatedStageHits = 0;
-	private int weldingStageHits = 0;
-	private int forgingStageHits = 0;
-	private int shapingStageHits = 0;
-	private int criticalStageHits = 0;
-	private int temperingStageHits = 0;
-	private int coldStageHits = 0;
-	private int perfectStageHits = 0;
-
-	// New: track number of fast markers that were successfully hit
-	private int fastMarkerHits = 0;
-
-	@Setter
-	private int markerAttempts = 0;
-	@Setter
-	private int markerHitsCount = 0;
-
-	private int markerTimeout = 0;
-	private int markerSpawnDelay = 0;
-
-	public static final int INITIAL_MARKER_DELAY_TICKS = 25;
-	public static final int SUBSEQUENT_MARKER_DELAY_TICKS = 20;
-	public static final int MARKER_LIFETIME_TICKS_NORMAL = 35;
-	public static final int MARKER_LIFETIME_TICKS_FAST = 20;
-
-	private static final double MARKER_HIT_RADIUS_SQ = 0.0075d;
+	// Minigame logic instance
+	private final MinigameLogic minigameLogic = new MinigameLogic();
 
 	private final Random random = new Random();
 
 	private static final int ANVIL_INVENTORY_COOL_TICK_INTERVAL = 4;
 	private int anvilInventoryCoolTickCounter = 0;
-
-	private static final String HITS_NBT_KEY = "forgero_markerHitsCount";
-	private static final String ATTEMPTS_NBT_KEY = "forgero_markerAttempts";
-	private static final int TOTAL_MARKERS = 10;
-	private static final int FAST_MARKERS = 5;
-
-	// Persist fast marker hits count
-	private static final String FAST_MARKER_HITS_NBT_KEY = "forgero_fastMarkerHits";
-
-	private final List<Integer> fastMarkerIndices = new ArrayList<>();
 
 	private static final float ANVIL_TOP_Y = 0.9375f;
 	private static final float Y_FIGHTING_OFFSET = 0.001f;
@@ -141,11 +101,61 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	private transient boolean showFinalMorphOnce = false;
 	private boolean pendingFinalMorphNotify = false;
 
-	private double morphProgress = 0.0;
-
 	public SmithingAnvilBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.SMITHING_ANVIL, pos, state);
-		this.markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
+	}
+
+	// =================================
+	// MinigameCallback Implementation
+	// =================================
+
+	@Override
+	public void playHitEffect(Vec2f markerLocalPos) {
+		if (world instanceof ServerWorld serverWorld) {
+			float particleY = serverParticleY();
+			Vec2f offsetVec = resolveOffsetVec(currentStack());
+			net.minecraft.util.math.Vec3d worldParticlePos = MinigamePositioning.itemLocalToWorld(
+					markerLocalPos, getPos(), getCachedState(), offsetVec, particleY
+			);
+			serverWorld.spawnParticles(ParticleTypes.FLAME, worldParticlePos.x, worldParticlePos.y, worldParticlePos.z, 4, 0.001, 0.001, 0.001, 0.05);
+			serverWorld.spawnParticles(ParticleTypes.LAVA, worldParticlePos.x, worldParticlePos.y, worldParticlePos.z, 2, 0.01, 0.01, 0.01, 0.02);
+			serverWorld.playSound(null, getPos(), SoundEvents.BLOCK_ANVIL_PLACE, SoundCategory.BLOCKS, 1f, 1f);
+		}
+	}
+
+	@Override
+	public void playMissEffect() {
+		if (world instanceof ServerWorld serverWorld) {
+			serverWorld.playSound(null, getPos(), SoundEvents.ITEM_AXE_SCRAPE, SoundCategory.BLOCKS, 1f, 1.0f);
+			serverWorld.spawnParticles(ParticleTypes.SMOKE, getPos().getX() + 0.5, getPos().getY() + 1.0, getPos().getZ() + 0.5, 10, 0.3, 0.1, 0.3, 0.05);
+		}
+	}
+
+	@Override
+	public void spawnMarkerAppearanceEffect(Vec2f markerLocalPos, ItemStack itemStack) {
+		if (world instanceof ServerWorld serverWorld) {
+			float particleY = serverParticleY();
+			Vec2f offsetVec = resolveOffsetVec(itemStack);
+			net.minecraft.util.math.Vec3d worldParticlePos = MinigamePositioning.itemLocalToWorld(
+					markerLocalPos, getPos(), getCachedState(), offsetVec, particleY
+			);
+			serverWorld.playSound(null, getPos(), SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.BLOCKS, 0.5f, 1.0f);
+		}
+	}
+
+	@Override
+	public World getWorld() {
+		return world;
+	}
+
+	@Override
+	public ItemStack getCurrentStack() {
+		return currentStack();
+	}
+
+	@Override
+	public void replaceWithResult(ItemStack resultStack) {
+		getInventory().setStack(0, resultStack);
 	}
 
 	// =================================
@@ -163,34 +173,17 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 	private Vec2f resolveOffsetVec(ItemStack stack) {
 		boolean morphedOrPlanned = (ingotCrafting && plannedProductId != null) || stack.getItem() instanceof MorphedItem;
 		return morphedOrPlanned
-				? MinigamePositioningUtil.getMorphedTextureOffsetVec2f(this)
-				: MinigamePositioningUtil.getItemTextureOffsetVec2f(stack);
+				? MinigamePositioning.getMorphedTextureOffsetVec2f(this)
+				: MinigamePositioning.getItemTextureOffsetVec2f(stack);
 	}
 
 	private float serverParticleY() {
 		return ANVIL_TOP_Y + Y_FIGHTING_OFFSET + MARKER_VISUAL_Y_OFFSET;
 	}
 
-	private boolean isMorphingActive(ItemStack stack) {
-		return stack.getItem() instanceof MorphedItem && MorphedItem.getMorphProgress(stack) < 1.0;
-	}
-
-	private void clearActiveMarker() {
-		markerPositions.clear();
-		markerHits.clear();
-	}
-
 	private void resetCraftingState() {
 		ingotCrafting = false;
 		plannedProductId = null;
-	}
-
-	private Vec2f nextMarkerPosition(ItemStack stackForMarker) {
-		Vec2f marker = MinigamePositioningUtil.getRandomMarkerPositionMorphed(this);
-		if (marker.equals(Vec2f.ZERO)) {
-			marker = MinigamePositioningUtil.getRandomMarkerPosition(stackForMarker, getCachedState());
-		}
-		return marker;
 	}
 
 	// =================================
@@ -209,8 +202,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 		// Temperature gating for morphed items as well
 		if (anvilItem.getItem() instanceof MorphedItem) {
-			int temperature = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getTemperature(anvilItem);
-			int maxTemp = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getMaxTemp(anvilItem);
+			int temperature = TemperatureUtils.getTemperature(anvilItem);
+			int maxTemp = TemperatureUtils.getMaxTemp(anvilItem);
 			if (!com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isHotEnoughForWork(temperature, maxTemp)) {
 				player.sendMessage(net.minecraft.text.Text.of("That needs to be heaten up first!"), true);
 				return ActionResult.FAIL;
@@ -218,8 +211,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		}
 
 		if (ingotCrafting && plannedProductId == null && !(anvilItem.getItem() instanceof MorphedItem)) {
-			int temperature = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getTemperature(anvilItem);
-			int maxTemp = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getMaxTemp(anvilItem);
+			int temperature = TemperatureUtils.getTemperature(anvilItem);
+			int maxTemp = TemperatureUtils.getMaxTemp(anvilItem);
 			if (!com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isHotEnoughForWork(temperature, maxTemp)) {
 				player.sendMessage(net.minecraft.text.Text.of("That needs to be heaten up first!"), true);
 				return ActionResult.FAIL;
@@ -229,28 +222,21 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		}
 
 		Vec2f offsetVec = resolveOffsetVec(anvilItem);
-		Vec2f itemLocalHit = MinigamePositioningUtil.worldHitToItemLocal(hitResult, getCachedState(), offsetVec);
+		Vec2f itemLocalHit = MinigamePositioning.worldHitToItemLocal(hitResult, getCachedState(), offsetVec);
 
-		boolean hit = false;
-		if (markerPositions.size() == 1) {
-			Vec2f marker = markerPositions.get(0);
-			if (marker.distanceSquared(itemLocalHit) < MARKER_HIT_RADIUS_SQ) {
-				setMarkerHit(0);
-				hit = true;
-			}
-		}
+		boolean hit = minigameLogic.processHit(itemLocalHit, this);
 
 		if (!hit) {
 			playMissEffect();
 		}
-		processMarkerAttempt(hit);
+		minigameLogic.processMarkerAttempt(hit, this);
 
-		if (getMarkerHitsCount() >= TOTAL_MARKERS) {
+		if (minigameLogic.isComplete()) {
 			if (anvilItem.getItem() instanceof MorphedItem) {
-				setMorphProgress(1.0);
-				resetMarkerProgress();
+				minigameLogic.setMorphProgress(1.0, this, plannedProductId);
+				minigameLogic.resetMarkerProgress(this);
 			} else {
-				resetMarkerProgress();
+				minigameLogic.resetMarkerProgress(this);
 			}
 		}
 		return ActionResult.SUCCESS;
@@ -266,12 +252,12 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		}
 		ItemStack anvilItem = currentStack();
 		if (!anvilItem.isEmpty()) {
-			saveProgressToItem();
+			minigameLogic.saveProgressToItem(anvilItem);
 			player.getInventory().offerOrDrop(anvilItem.copy());
 			getInventory().setStack(0, ItemStack.EMPTY);
 			resetCraftingState();
 			markDirty();
-			resetMarkers();
+			minigameLogic.resetMarkerProgress(this);
 			guiBlockCooldownUntil = world.getTime() + 20; // 1s
 		}
 		return ActionResult.SUCCESS;
@@ -286,7 +272,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 		if (anvilItem.isEmpty()) {
 			// Accept any item with hasMaxTemperature OR MorphedItem
-			if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.hasMaxTemperature(stackInHand)){
+			if (TemperatureUtils.hasMaxTemperature(stackInHand)){
 				ItemStack toPlace = stackInHand.copy();
 				toPlace.setCount(1);
 				getInventory().setStack(0, toPlace);
@@ -298,22 +284,13 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 				if (stackInHand.getItem() instanceof MorphedItem) {
 					// Restore progress from NBT for MorphedItem
-					NbtCompound nbt = toPlace.getOrCreateNbt();
-					this.markerHitsCount = nbt.getInt(HITS_NBT_KEY);
-					this.markerAttempts = nbt.getInt(ATTEMPTS_NBT_KEY);
-					this.fastMarkerIndices.clear();
-					if (nbt.contains("fastMarkerIndices")) {
-						int[] arr = nbt.getIntArray("fastMarkerIndices");
-						for (int idx : arr) {
-							this.fastMarkerIndices.add(idx);
-						}
-					}
-					this.morphProgress = nbt.getDouble("morphProgress");
+					minigameLogic.restoreFromItemNbt(toPlace);
 					// Do NOT reset marker progress, just clear active marker
-					clearActiveMarker();
+					minigameLogic.getMarkerPositions().clear();
+					minigameLogic.getMarkerHits().clear();
 				} else {
 					// Reset progress for new items
-					resetMarkerProgress();
+					minigameLogic.resetMarkerProgress(this);
 				}
 				markDirty();
 				return ActionResult.SUCCESS;
@@ -321,7 +298,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		}
 		return ActionResult.SUCCESS;
 	}
-
 
 	// =================================
 	// NBT and Syncing
@@ -351,45 +327,24 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		super.writeNbt(nbt);
 		Inventories.writeNbt(nbt, this.inventory);
 
-		// Store marker positions
-		NbtCompound markersNbt = new NbtCompound();
-		for (int i = 0; i < markerPositions.size(); i++) {
-			Vec2f pos = markerPositions.get(i);
-			NbtCompound markerNbt = new NbtCompound();
-			markerNbt.putFloat("x", pos.x);
-			markerNbt.putFloat("y", pos.y);
-			markerNbt.putBoolean("hit", markerHits.size() > i && markerHits.get(i));
-			markersNbt.put("marker_" + i, markerNbt);
-		}
-		nbt.put("markers", markersNbt);
+		// Write minigame data
+		minigameLogic.writeNbt(nbt);
 
-		// Store temperature tracking data
-		nbt.putIntArray("hitTemperatures", hitTemperatures.stream().mapToInt(Integer::intValue).toArray());
-		nbt.putInt("overheatedStageHits", overheatedStageHits);
-		nbt.putInt("weldingStageHits", weldingStageHits);
-		nbt.putInt("forgingStageHits", forgingStageHits);
-		nbt.putInt("shapingStageHits", shapingStageHits);
-		nbt.putInt("criticalStageHits", criticalStageHits);
-		nbt.putInt("temperingStageHits", temperingStageHits);
-		nbt.putInt("coldStageHits", coldStageHits);
-		nbt.putInt("perfectStageHits", perfectStageHits);
-
-		nbt.putIntArray("fastMarkerIndices", fastMarkerIndices.stream().mapToInt(Integer::intValue).toArray());
 		ItemStack stack = simpleInventory.getStack(0);
 		if (!stack.isEmpty()) {
 			NbtCompound itemNbt = stack.getOrCreateNbt();
-			itemNbt.putInt(HITS_NBT_KEY, markerHitsCount);
-			itemNbt.putInt(ATTEMPTS_NBT_KEY, markerAttempts);
+			itemNbt.putInt("forgero_markerHitsCount", minigameLogic.getMarkerHitsCount());
+			itemNbt.putInt("forgero_markerAttempts", minigameLogic.getMarkerAttempts());
 			// Store temperature data on the item as well
-			itemNbt.putIntArray("hitTemperatures", hitTemperatures.stream().mapToInt(Integer::intValue).toArray());
-			itemNbt.putInt("overheatedStageHits", overheatedStageHits);
-			itemNbt.putInt("weldingStageHits", weldingStageHits);
-			itemNbt.putInt("forgingStageHits", forgingStageHits);
-			itemNbt.putInt("shapingStageHits", shapingStageHits);
-			itemNbt.putInt("criticalStageHits", criticalStageHits);
-			itemNbt.putInt("temperingStageHits", temperingStageHits);
-			itemNbt.putInt("coldStageHits", coldStageHits);
-			itemNbt.putInt("perfectStageHits", perfectStageHits);
+			itemNbt.putIntArray("hitTemperatures", minigameLogic.getHitTemperatures().stream().mapToInt(Integer::intValue).toArray());
+			itemNbt.putInt("overheatedStageHits", minigameLogic.getOverheatedStageHits());
+			itemNbt.putInt("weldingStageHits", minigameLogic.getWeldingStageHits());
+			itemNbt.putInt("forgingStageHits", minigameLogic.getForgingStageHits());
+			itemNbt.putInt("shapingStageHits", minigameLogic.getShapingStageHits());
+			itemNbt.putInt("criticalStageHits", minigameLogic.getCriticalStageHits());
+			itemNbt.putInt("temperingStageHits", minigameLogic.getTemperingStageHits());
+			itemNbt.putInt("coldStageHits", minigameLogic.getColdStageHits());
+			itemNbt.putInt("perfectStageHits", minigameLogic.getPerfectStageHits());
 		}
 
 		// Ingot crafting state
@@ -397,7 +352,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		if (plannedProductId != null) {
 			nbt.putString("plannedProductId", plannedProductId.toString());
 		}
-		nbt.putDouble("morphProgress", morphProgress);
 	}
 
 	@Override
@@ -405,72 +359,15 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		super.readNbt(nbt);
 		Inventories.readNbt(nbt, this.inventory);
 
-		markerPositions.clear();
-		markerHits.clear();
-		if (nbt.contains("markers", NbtCompound.COMPOUND_TYPE)) {
-			NbtCompound markersNbt = nbt.getCompound("markers");
-			for (int i = 0; i < TOTAL_MARKERS; i++) {
-				if (markersNbt.contains("marker_" + i)) {
-					NbtCompound markerNbt = markersNbt.getCompound("marker_" + i);
-					markerPositions.add(new Vec2f(markerNbt.getFloat("x"), markerNbt.getFloat("y")));
-					markerHits.add(markerNbt.getBoolean("hit"));
-				}
-			}
-		}
-
-		// Restore temperature tracking data
-		hitTemperatures.clear();
-		if (nbt.contains("hitTemperatures")) {
-			int[] temps = nbt.getIntArray("hitTemperatures");
-			for (int temp : temps) {
-				hitTemperatures.add(temp);
-			}
-		}
-		overheatedStageHits = nbt.getInt("overheatedStageHits");
-		weldingStageHits = nbt.getInt("weldingStageHits");
-		forgingStageHits = nbt.getInt("forgingStageHits");
-		shapingStageHits = nbt.getInt("shapingStageHits");
-		criticalStageHits = nbt.getInt("criticalStageHits");
-		temperingStageHits = nbt.getInt("temperingStageHits");
-		coldStageHits = nbt.getInt("coldStageHits");
-		perfectStageHits = nbt.getInt("perfectStageHits");
-
-		fastMarkerIndices.clear();
-		if (nbt.contains("fastMarkerIndices")) {
-			int[] arr = nbt.getIntArray("fastMarkerIndices");
-			for (int idx : arr) {
-				fastMarkerIndices.add(idx);
-			}
-		}
+		// Read minigame data
+		minigameLogic.readNbt(nbt);
 
 		ItemStack stack = simpleInventory.getStack(0);
 		if (!stack.isEmpty()) {
-			NbtCompound itemNbt = stack.getOrCreateNbt();
-			this.markerHitsCount = itemNbt.getInt(HITS_NBT_KEY);
-			this.markerAttempts = itemNbt.getInt(ATTEMPTS_NBT_KEY);
-			// Restore temperature data from item if available
-			if (itemNbt.contains("hitTemperatures") && hitTemperatures.isEmpty()) {
-				int[] temps = itemNbt.getIntArray("hitTemperatures");
-				for (int temp : temps) {
-					hitTemperatures.add(temp);
-				}
-				overheatedStageHits = itemNbt.getInt("overheatedStageHits");
-				weldingStageHits = itemNbt.getInt("weldingStageHits");
-				forgingStageHits = itemNbt.getInt("forgingStageHits");
-				shapingStageHits = itemNbt.getInt("shapingStageHits");
-				criticalStageHits = itemNbt.getInt("criticalStageHits");
-				temperingStageHits = itemNbt.getInt("temperingStageHits");
-				coldStageHits = itemNbt.getInt("coldStageHits");
-				perfectStageHits = itemNbt.getInt("perfectStageHits");
-			}
-			// Restore fast marker hits if present
-			if (itemNbt.contains(FAST_MARKER_HITS_NBT_KEY)) {
-				fastMarkerHits = itemNbt.getInt(FAST_MARKER_HITS_NBT_KEY);
-			}
+			minigameLogic.restoreFromItemNbt(stack);
 		} else {
-			this.markerHitsCount = 0;
-			this.markerAttempts = 0;
-			this.fastMarkerHits = 0;
+			minigameLogic.setMarkerHitsCount(0);
+			minigameLogic.setMarkerAttempts(0);
 		}
 
 		// Ingot crafting state
@@ -483,9 +380,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			}
 		} else {
 			this.plannedProductId = null;
-		}
-		if (nbt.contains("morphProgress")) {
-			morphProgress = nbt.getDouble("morphProgress");
 		}
 	}
 
@@ -506,24 +400,24 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		}
 
 		// Marker positions and hits
-		data.writeInt(markerPositions.size());
-		for (int i = 0; i < markerPositions.size(); i++) {
-			Vec2f pos = markerPositions.get(i);
+		data.writeInt(minigameLogic.getMarkerPositions().size());
+		for (int i = 0; i < minigameLogic.getMarkerPositions().size(); i++) {
+			Vec2f pos = minigameLogic.getMarkerPositions().get(i);
 			data.writeFloat(pos.x);
 			data.writeFloat(pos.y);
-			boolean hit = markerHits.size() > i && markerHits.get(i);
+			boolean hit = minigameLogic.getMarkerHits().size() > i && minigameLogic.getMarkerHits().get(i);
 			data.writeBoolean(hit);
 		}
 
 		// Fast marker indices
-		data.writeInt(fastMarkerIndices.size());
-		for (int idx : fastMarkerIndices) {
+		data.writeInt(minigameLogic.getFastMarkerIndices().size());
+		for (int idx : minigameLogic.getFastMarkerIndices()) {
 			data.writeInt(idx);
 		}
 
 		// Progress counters
-		data.writeInt(markerAttempts);
-		data.writeInt(markerHitsCount);
+		data.writeInt(minigameLogic.getMarkerAttempts());
+		data.writeInt(minigameLogic.getMarkerHitsCount());
 
 		// Ingot crafting state
 		data.writeBoolean(ingotCrafting);
@@ -542,162 +436,20 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		pendingFinalMorphNotify = false;
 	}
 
-
 	// =================================
-	// Minigame Logic
+	// Delegated Methods to MinigameLogic
 	// =================================
 
 	public void resetMarkerProgress() {
-		markerPositions.clear();
-		markerHits.clear();
-		markerAttempts = 0;
-		markerHitsCount = 0;
-		markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
-		fastMarkerIndices.clear();
-		while (fastMarkerIndices.size() < FAST_MARKERS) {
-			int idx = random.nextInt(TOTAL_MARKERS);
-			if (!fastMarkerIndices.contains(idx)) {
-				fastMarkerIndices.add(idx);
-			}
-		}
-		// Reset fast marker hit count unless restoring from NBT for a MorphedItem
-		ItemStack stack = getInventory().getStack(0);
-		if (!stack.isEmpty() && stack.getItem() instanceof MorphedItem) {
-			NbtCompound nbt = stack.getOrCreateNbt();
-			if (nbt.contains(HITS_NBT_KEY) || nbt.contains(ATTEMPTS_NBT_KEY)) {
-				this.markerHitsCount = nbt.getInt(HITS_NBT_KEY);
-				this.markerAttempts = nbt.getInt(ATTEMPTS_NBT_KEY);
-				this.morphProgress = nbt.getDouble("morphProgress");
-				this.fastMarkerHits = nbt.getInt(FAST_MARKER_HITS_NBT_KEY);
-				// Do not reset morph progress, just clear markers
-			} else {
-				this.morphProgress = 0.0;
-				this.fastMarkerHits = 0;
-			}
-		} else {
-			this.morphProgress = 0.0;
-			this.fastMarkerHits = 0;
-		}
-		updateMorphProgressOnItem();
-		// --- Fetch starting item image and planned product image ---
-		if (world != null && world.isClient) {
-			startingItemImage = RuntimeModelUtil.getFirstQuadTextureImage(stack, MinecraftClient.getInstance());
-			if (plannedProductId != null) {
-				ItemStack plannedStack = createProductFromPlanned(plannedProductId);
-				plannedProductImage = RuntimeModelUtil.getFirstQuadTextureImage(plannedStack, MinecraftClient.getInstance());
-			} else {
-				plannedProductImage = null;
-			}
-		}
-		markDirty();
+		minigameLogic.resetMarkerProgress(this);
 	}
 
 	public void clearMarkerProgress() {
-		markerPositions.clear();
-		markerHits.clear();
-		markerAttempts = 0;
-		markerHitsCount = 0;
-		markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS; // Reset to initial delay
-		fastMarkerIndices.clear(); // Clear fast marker indices, will be regenerated on next start
-		fastMarkerHits = 0;
-	}
-
-	public void processMarkerAttempt(boolean hit) {
-		processMarkerAttempt(hit, true);
-	}
-
-	public void processMarkerAttempt(boolean hit, boolean wasPlayerAttempt) {
-		if (markerHitsCount >= TOTAL_MARKERS) return;
-
-		// Only increment attempts if this was an actual player attempt, not a timeout
-		if (wasPlayerAttempt) {
-			markerAttempts++;
-		}
-
-		ItemStack stack = simpleInventory.getStack(0);
-		if (hit) {
-			markerHitsCount++;
-			// Track temperature at the time of successful hit
-			int temperature = TemperatureUtils.getTemperature(stack);
-			int maxTemp = TemperatureUtils.getMaxTemp(stack);
-			// Changed: fast marker now removes 10 temperature, normal adds 30
-			int markerIndex = markerAttempts - 1;
-			int tempChange = fastMarkerIndices.contains(markerIndex) ? -10 : 30;
-			TemperatureUtils.setTemperature(stack, Math.max(0, Math.min(temperature + tempChange, maxTemp)));
-			// Count fast marker hit
-			if (fastMarkerIndices.contains(markerIndex)) {
-				fastMarkerHits++;
-			}
-			hitTemperatures.add(TemperatureUtils.getTemperature(stack));
-
-			// Update temperature stage counters using TemperatureColorProvider
-			if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInPerfectStage(temperature, maxTemp)) {
-				perfectStageHits++;
-			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInOverheatedStage(temperature, maxTemp)) {
-				overheatedStageHits++;
-			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInWeldingStage(temperature, maxTemp)) {
-				weldingStageHits++;
-			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInForgingStage(temperature, maxTemp)) {
-				forgingStageHits++;
-			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInShapingStage(temperature, maxTemp)) {
-				shapingStageHits++;
-			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInCriticalStage(temperature, maxTemp)) {
-				criticalStageHits++;
-			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInTemperingStage(temperature, maxTemp)) {
-				temperingStageHits++;
-			} else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInColdStage(temperature, maxTemp)) {
-				coldStageHits++;
-			}
-
-		}
-		updateMorphProgressOnItem();
-		markDirty();
-		clearActiveMarker(); // wait for next spawn
-		markerSpawnDelay = SUBSEQUENT_MARKER_DELAY_TICKS;
-	}
-
-	public void setMarkerHit(int index) {
-		if (world != null && !world.isClient && index >= 0 && index < markerHits.size()) {
-			markerHits.set(index, true);
-			playHitEffect(markerPositions.get(index));
-			clearActiveMarker();
-			markDirty();
-		}
-	}
-
-	private void playHitEffect(Vec2f markerLocalPos) {
-		if (world instanceof ServerWorld serverWorld) {
-			float particleY = serverParticleY();
-			Vec2f offsetVec = resolveOffsetVec(currentStack());
-			net.minecraft.util.math.Vec3d worldParticlePos = MinigamePositioningUtil.itemLocalToWorld(
-					markerLocalPos, getPos(), getCachedState(), offsetVec, particleY
-			);
-			serverWorld.spawnParticles(ParticleTypes.FLAME, worldParticlePos.x, worldParticlePos.y, worldParticlePos.z, 4, 0.001, 0.001, 0.001, 0.05);
-			serverWorld.spawnParticles(ParticleTypes.LAVA, worldParticlePos.x, worldParticlePos.y, worldParticlePos.z, 2, 0.01, 0.01, 0.01, 0.02);
-			serverWorld.playSound(null, getPos(), SoundEvents.BLOCK_ANVIL_PLACE, SoundCategory.BLOCKS, 1f, 1f);
-		}
-	}
-
-	private void playMissEffect() {
-		if (world instanceof ServerWorld serverWorld) {
-			serverWorld.playSound(null, getPos(), SoundEvents.ITEM_AXE_SCRAPE, SoundCategory.BLOCKS, 1f, 1.0f);
-			serverWorld.spawnParticles(ParticleTypes.SMOKE, getPos().getX() + 0.5, getPos().getY() + 1.0, getPos().getZ() + 0.5, 10, 0.3, 0.1, 0.3, 0.05);
-		}
-	}
-
-	private void spawnMarkerAppearanceEffect(Vec2f markerLocalPos, ItemStack itemStack) {
-		if (world instanceof ServerWorld serverWorld) {
-			float particleY = serverParticleY();
-			Vec2f offsetVec = resolveOffsetVec(itemStack);
-			net.minecraft.util.math.Vec3d worldParticlePos = MinigamePositioningUtil.itemLocalToWorld(
-					markerLocalPos, getPos(), getCachedState(), offsetVec, particleY
-			);
-			serverWorld.playSound(null, getPos(), SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.BLOCKS, 0.5f, 1.0f);
-		}
+		minigameLogic.clearMarkerProgress();
 	}
 
 	public void resetMarkers() {
-		resetMarkerProgress();
+		minigameLogic.resetMarkerProgress(this);
 	}
 
 	public void tick() {
@@ -715,72 +467,22 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		if (anvilInventoryCoolTickCounter >= ANVIL_INVENTORY_COOL_TICK_INTERVAL) {
 			anvilInventoryCoolTickCounter = 0;
 			ItemStack stack = currentStack();
-			if (!stack.isEmpty() && (stack.getItem() instanceof com.sigmundgranaas.forgero.minecraft.common.item.StateItem || stack.getItem() instanceof com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem)) {
-				if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.hasMaxTemperature(stack)) {
-					int temp = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getTemperature(stack);
+			if (!stack.isEmpty() && (stack.getItem() instanceof com.sigmundgranaas.forgero.minecraft.common.item.StateItem || stack.getItem() instanceof MorphedItem)) {
+				if (TemperatureUtils.hasMaxTemperature(stack)) {
+					int temp = TemperatureUtils.getTemperature(stack);
 					int prevTemp = temp;
 					if (temp > 20) {
 						temp = Math.max(20, temp - 1); // Cool by 1 per interval
-						com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.setTemperature(stack, temp);
+						TemperatureUtils.setTemperature(stack, temp);
 					}
 				}
 			}
 			markDirty();
 		}
 
-		ItemStack stackForMarker = currentStack();
-		boolean activeMorph = isMorphingActive(stackForMarker);
-
-		// Only run minigame if MorphedItem and morph not complete
-		if (!activeMorph || stackForMarker.isEmpty()) {
-			if (!markerPositions.isEmpty() || markerSpawnDelay > 0) {
-				clearMarkerProgress();
-				markDirty();
-			}
-			return;
-		}
-
-		// Temperature gating for marker spawning
-		int temperature = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getTemperature(stackForMarker);
-		int maxTemp = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getMaxTemp(stackForMarker);
-		boolean hotEnoughForWork = com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isHotEnoughForWork(temperature, maxTemp);
-		if (!hotEnoughForWork) {
-			// Do not spawn markers if not hot enough
-			return;
-		}
-
-		// Marker lifecycle
-		if (markerPositions.isEmpty()) {
-			if (markerSpawnDelay > 0) {
-				markerSpawnDelay--;
-			}
-			if (markerSpawnDelay == 0) {
-				Vec2f marker = nextMarkerPosition(stackForMarker);
-				if (marker.equals(Vec2f.ZERO)) {
-					markerSpawnDelay = SUBSEQUENT_MARKER_DELAY_TICKS;
-					return;
-				}
-				markerPositions.add(marker);
-				markerHits.add(false);
-				markerTimeout = fastMarkerIndices.contains(markerAttempts)
-						? MARKER_LIFETIME_TICKS_FAST
-						: MARKER_LIFETIME_TICKS_NORMAL;
-				markDirty();
-				spawnMarkerAppearanceEffect(marker, stackForMarker);
-			}
-		} else {
-			markerTimeout--;
-			if (markerTimeout <= 0) {
-				// If this was a fast marker, remove its index so it won't come back as fast
-				if (fastMarkerIndices.contains(markerAttempts)) {
-					fastMarkerIndices.remove(Integer.valueOf(markerAttempts));
-					markDirty();
-				}
-				processMarkerAttempt(false, false); // timeout is not a player attempt
-			}
-		}
+		// Delegate minigame tick to MinigameLogic
+		minigameLogic.tick(this);
 	}
-
 
 	// =================================
 	// Data Persistence on Item
@@ -788,17 +490,55 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 
 	public void saveProgressToItem() {
 		ItemStack stack = simpleInventory.getStack(0);
-		if (!stack.isEmpty()) {
-			NbtCompound itemNbt = stack.getOrCreateNbt();
-			itemNbt.putInt(HITS_NBT_KEY, markerHitsCount);
-			itemNbt.putInt(ATTEMPTS_NBT_KEY, markerAttempts);
-			itemNbt.putIntArray("fastMarkerIndices", fastMarkerIndices.stream().mapToInt(Integer::intValue).toArray());
-			itemNbt.putInt(FAST_MARKER_HITS_NBT_KEY, fastMarkerHits);
-		}
+		minigameLogic.saveProgressToItem(stack);
 	}
 
 	public SimpleInventory getInventory() {
 		return simpleInventory;
+	}
+
+	// =================================
+	// Getter methods for compatibility
+	// =================================
+
+	public List<Vec2f> getMarkerPositions() {
+		return minigameLogic.getMarkerPositions();
+	}
+
+	public List<Boolean> getMarkerHits() {
+		return minigameLogic.getMarkerHits();
+	}
+
+	public int getMarkerAttempts() {
+		return minigameLogic.getMarkerAttempts();
+	}
+
+	public int getMarkerHitsCount() {
+		return minigameLogic.getMarkerHitsCount();
+	}
+
+	public void setMarkerAttempts(int attempts) {
+		minigameLogic.setMarkerAttempts(attempts);
+	}
+
+	public void setMarkerHitsCount(int count) {
+		minigameLogic.setMarkerHitsCount(count);
+	}
+
+	public double getMorphProgress() {
+		return minigameLogic.getMorphProgress();
+	}
+
+	public void setMorphProgress(double progress) {
+		minigameLogic.setMorphProgress(progress, this, plannedProductId);
+	}
+
+	public List<Integer> getFastMarkerIndices() {
+		return minigameLogic.getFastMarkerIndices();
+	}
+
+	public MinigameLogic getMinigameLogic() {
+		return minigameLogic;
 	}
 
 	// ---------------------------------
@@ -820,7 +560,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 		// Replace the ingot with the MorphedItem now that a result has been chosen
 		replaceIngotWithMorphed();
 		// Reset the mini-game so it starts fresh after selection
-		resetMarkerProgress();
+		minigameLogic.resetMarkerProgress(this);
 		// --- Fetch planned product image ---
 		if (world != null && world.isClient) {
 			ItemStack plannedStack = createProductFromPlanned(productId);
@@ -984,96 +724,5 @@ public class SmithingAnvilBlockEntity extends BlockEntity {
 			}
 		}
 		return null;
-	}
-
-	// Synchronize the current minigame progress to the MorphedItem stack's NBT
-	private void updateMorphProgressOnItem() {
-		ItemStack stack = simpleInventory.getStack(0);
-		if (stack.isEmpty()) return;
-		if (stack.getItem() instanceof MorphedItem) {
-			stack.getOrCreateNbt().putDouble(MorphedItem.PROGRESS_KEY, getMorphProgress());
-		}
-	}
-
-
-	public double getMorphProgress() {
-		if (TOTAL_MARKERS <= 0) return 0.0;
-		return Math.min(1.0, (double) markerHitsCount / TOTAL_MARKERS);
-	}
-
-	public void setMorphProgress(double progress) {
-		this.morphProgress = progress;
-		if (progress >= 1.0) {
-			ItemStack stack = getInventory().getStack(0);
-			if (!stack.isEmpty() && stack.getItem() instanceof MorphedItem) {
-				Item resultItem = MorphedItem.getResultItem(stack);
-				if (resultItem != null) {
-					ItemStack resultStack = new ItemStack(resultItem, stack.getCount());
-					// --- Apply condition to result item of morphed item using predicates ---
-					var stateOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert(resultStack);
-					if (stateOpt.isPresent() && stateOpt.get() instanceof com.sigmundgranaas.forgero.core.condition.Conditional<?>) {
-						var state = stateOpt.get();
-						com.sigmundgranaas.forgero.core.condition.Conditional<?> conditional = (com.sigmundgranaas.forgero.core.condition.Conditional<?>) stateOpt.get();
-
-						// Create MatchContext for predicate evaluation
-						MatchContext context = MatchContext.of();
-						if (world != null) {
-							context = context.put(MinecraftContextKeys.WORLD, world);
-							context = context.put(MinecraftContextKeys.BLOCK_TARGET, pos);
-						}
-						// Add the ItemStack to context for potential predicate use
-						context = context.put(MinecraftContextKeys.STACK, stack);
-
-						// Add temperature tracking data to context
-						context = context.put(MinecraftContextKeys.OVERHEATED_STAGE_HITS, overheatedStageHits);
-						context = context.put(MinecraftContextKeys.WELDING_STAGE_HITS, weldingStageHits);
-						context = context.put(MinecraftContextKeys.FORGING_STAGE_HITS, forgingStageHits);
-						context = context.put(MinecraftContextKeys.SHAPING_STAGE_HITS, shapingStageHits);
-						context = context.put(MinecraftContextKeys.CRITICAL_STAGE_HITS, criticalStageHits);
-						context = context.put(MinecraftContextKeys.TEMPERING_STAGE_HITS, temperingStageHits);
-						context = context.put(MinecraftContextKeys.COLD_STAGE_HITS, coldStageHits);
-						context = context.put(MinecraftContextKeys.PERFECT_STAGE_HITS, perfectStageHits);
-						context = context.put(MinecraftContextKeys.TOTAL_HITS, markerHitsCount);
-						context = context.put(MinecraftContextKeys.MISS_HITS, markerAttempts - markerHitsCount);
-						context = context.put(MinecraftContextKeys.FAST_MARKER_HITS, fastMarkerHits);
-
-						// Check for direct condition assignment using predicates
-						com.sigmundgranaas.forgero.core.condition.NamedCondition directCondition = PredicateConditionLootRegistry.getCondition(context);
-						if (directCondition != null) {
-							var conditioned = conditional.applyCondition(directCondition);
-							var newStackOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert((com.sigmundgranaas.forgero.core.state.State) conditioned);
-							if (newStackOpt.isPresent()) {
-								resultStack = newStackOpt.get();
-							}
-						} else {
-							var lootTable = PredicateConditionLootRegistry.getLootTable(context);
-							if (lootTable.isEmpty()) {
-								lootTable = PredicateConditionLootRegistry.NEUTRAL;
-							}
-							// Filter lootTable to only include conditions whose target matches the state
-							List<com.sigmundgranaas.forgero.core.condition.NamedCondition> applicableConditions = lootTable.stream()
-									.filter(cond -> cond.matches(state))
-									.collect(Collectors.toList());
-							if (!applicableConditions.isEmpty()) {
-								com.sigmundgranaas.forgero.core.condition.NamedCondition randomCondition = applicableConditions.get(new Random().nextInt(applicableConditions.size()));
-								var conditioned = conditional.applyCondition(randomCondition);
-								var newStackOpt = com.sigmundgranaas.forgero.minecraft.common.service.StateService.INSTANCE.convert((com.sigmundgranaas.forgero.core.state.State) conditioned);
-								if (newStackOpt.isPresent()) {
-									resultStack = newStackOpt.get();
-								}
-							}
-						}
-					}
-					// --- Copy temperature from morphed item to result item ---
-					double currentTemp = TemperatureUtils.getTemperature(stack);
-					TemperatureUtils.setTemperature(resultStack, (int) Math.round(currentTemp));
-					getInventory().setStack(0, resultStack);
-					if (world != null && !world.isClient) {
-						world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 1.0f, 1.0f);
-					}
-				}
-			}
-		}
-		markDirty();
 	}
 }

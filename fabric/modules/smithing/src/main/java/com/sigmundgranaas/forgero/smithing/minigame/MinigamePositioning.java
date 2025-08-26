@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.smithing.util;
+package com.sigmundgranaas.forgero.smithing.minigame;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
@@ -7,6 +7,10 @@ import java.util.Random;
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
 import com.sigmundgranaas.forgero.smithing.block.renderer.SmithingAnvilBlockEntityRenderer;
 
+import com.sigmundgranaas.forgero.smithing.util.BoundingBoxUtil;
+import com.sigmundgranaas.forgero.smithing.util.MorphingItemUtil;
+import com.sigmundgranaas.forgero.smithing.util.PositionPreservingMorpher;
+import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.ItemStack;
@@ -20,7 +24,7 @@ import net.minecraft.util.shape.VoxelShapes;
 
 
 
-public class MinigamePositioningUtil {
+public class MinigamePositioning {
 	private static final BoundingBoxUtil boundingBoxUtil = new BoundingBoxUtil();
 	private static final Random random = new Random();
 	private static final PositionPreservingMorpher MORPHER = new PositionPreservingMorpher();

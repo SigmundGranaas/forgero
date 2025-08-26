@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.smithing.block.renderer;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
-import com.sigmundgranaas.forgero.smithing.util.MinigamePositioningUtil;
+import com.sigmundgranaas.forgero.smithing.minigame.MinigamePositioning;
 
 import net.minecraft.block.AnvilBlock;
 import net.minecraft.client.MinecraftClient;
@@ -34,7 +34,8 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 	private static final float Y_FIGHTING_OFFSET = 0.001f;
 	private static final float MARKER_RENDER_OFFSET_Y = 0.025f;
 
-	public SmithingAnvilBlockEntityRenderer(BlockEntityRendererFactory.Context context) {
+	public SmithingAnvilBlockEntityRenderer(@SuppressWarnings("unused") BlockEntityRendererFactory.Context context) {
+		// Context parameter required by interface but not used
 	}
 
 	@Override
@@ -62,14 +63,11 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(anvilAngleDegrees));
 		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
 
-		Vec2f normOffset = MinigamePositioningUtil.getMorphedTextureOffsetVec2f(entity);
+		Vec2f normOffset = MinigamePositioning.getMorphedTextureOffsetVec2f(entity);
 		matrices.translate(normOffset.x, 0, normOffset.y);
 		matrices.scale(RENDER_SCALE_FACTOR, RENDER_SCALE_FACTOR, RENDER_SCALE_FACTOR);
 
 		renderMarker(matrices, vertexConsumers, entity);
-		if (MinecraftClient.getInstance().options.debugEnabled) {
-
-		}
 
 		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
 
@@ -96,10 +94,12 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 
 			matrices.translate(markerPos.x, MARKER_RENDER_OFFSET_Y, markerPos.y);
 
+			// Access fast marker indices through the entity's getter method
 			boolean isFast = entity.getFastMarkerIndices().contains(entity.getMarkerAttempts());
-			float r = isFast ? 1.0f : 1.0f;
-			float g = isFast ? 0.2f : 1.0f;
-			float b = isFast ? 0.2f : 0.0f;
+			// Fast markers are orange (red + some green), normal markers are red
+			float r = 1.0f;  // Red component - same for both
+			float g = isFast ? 0.5f : 0.0f;  // Green component - orange for fast, pure red for normal
+			float b = 0.0f;  // Blue component - none for both
 			float size = 0.0350f;
 
 			VertexConsumer lineConsumer = vertexConsumers.getBuffer(RenderLayer.getLines());

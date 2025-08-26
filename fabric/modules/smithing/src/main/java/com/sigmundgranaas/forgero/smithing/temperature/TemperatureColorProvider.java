@@ -9,7 +9,7 @@ public class TemperatureColorProvider {
         Registries.ITEM.forEach(item -> {
             ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
                 if (!TemperatureUtils.hasMaxTemperature(stack)) {
-                    return 0xFFFFFF; // Default color (white) for items without temperature
+                    return 0xFFFFFF;
                 }
                 int temp = TemperatureUtils.getTemperature(stack);
                 int max = TemperatureUtils.getMaxTemp(stack);
@@ -18,32 +18,23 @@ public class TemperatureColorProvider {
         });
     }
 
-    // Change getHeatColor to public so it can be accessed from other classes
     public static int getHeatColor(int temperature, int maxTemp) {
-        // If temperature is at or below 20, return -1 (no overlay)
-        if (temperature <= 20) {
-            return -1;
-        }
 
-        // Colors are in 0xRRGGBB format
         final int[][] baseScale = {
-				{1600, 0xFFFF99}, // Very bright yellow-orange (upper forging limit)
-				{1500, 0xFFFF66}, // Bright yellow
-				{1400, 0xFFCC33}, // Yellow-orange
-				{1300, 0xFF9900}, // Orange
-				{1200, 0xFF6600}, // Deep orange
-				{1100, 0xFF3300}, // Bright red-orange
-				{1000, 0xFF0000}, // Bright red
-				{900,  0xCC0000}, // Red
-				{800,  0x990000}, // Dark red
-				{700,  0x660000}, // Very dark red
-				{600,  0x330000}, // Faint red
-				{500,  0x220000}, // Barely glowing red
-				{300,  0x3399FF}, // Light blue (transition)
-				{20,   0x00000000}  // Transparent (no overlay for coldest)
-		};
-
-
+            {1600, 0xFFFF_FF99}, // Very bright yellow-orange (upper forging limit)
+            {1500, 0xFFFF_FF66}, // Bright yellow
+            {1400, 0xFFFF_CC33}, // Yellow-orange
+            {1300, 0xFFFF_9900}, // Orange
+            {1200, 0xFFFF_6600}, // Deep orange
+            {1100, 0xFFFF_3300}, // Bright red-orange
+            {1000, 0xFFFF_0000}, // Bright red
+            {900,  0xFFCC_0000}, // Red
+            {800,  0xFF99_0000}, // Dark red
+            {700,  0xFF66_0000}, // Very dark red
+            {600,  0xFF33_0000}, // Faint red
+            {500,  0xFF22_0000}, // Barely glowing red
+            {20,   0x00FFFFFF}  // Fully transparent
+        };
 
         // If maxTemp >= 1600, use the original scale
         if (maxTemp >= 1600) {
@@ -81,18 +72,21 @@ public class TemperatureColorProvider {
         return scaledScale[scaledScale.length - 1][1];
     }
 
-    // Linear interpolation between two RGB colors
+    // Linear interpolation between two ARGB colors
     private static int lerpColor(int colorA, int colorB, float t) {
+        int aA = (colorA >> 24) & 0xFF;
         int aR = (colorA >> 16) & 0xFF;
         int aG = (colorA >> 8) & 0xFF;
         int aB = colorA & 0xFF;
+        int bA = (colorB >> 24) & 0xFF;
         int bR = (colorB >> 16) & 0xFF;
         int bG = (colorB >> 8) & 0xFF;
         int bB = colorB & 0xFF;
+        int a = (int)(aA + (bA - aA) * t);
         int r = (int)(aR + (bR - aR) * t);
         int g = (int)(aG + (bG - aG) * t);
         int b = (int)(aB + (bB - aB) * t);
-        return (r << 16) | (g << 8) | b;
+        return (a << 24) | (r << 16) | (g << 8) | b;
     }
 
 

@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 
 public class AnvilSyncS2CPacket {
-	public static void receive(@NotNull MinecraftClient client, ClientPlayNetworkHandler handler, @NotNull PacketByteBuf buf, PacketSender responseSender) {
+	public static void receive(@NotNull MinecraftClient client, @SuppressWarnings("unused") ClientPlayNetworkHandler handler, @NotNull PacketByteBuf buf, @SuppressWarnings("unused") PacketSender responseSender) {
 		// Read data in the same order it was written by the server
 		BlockPos position = buf.readBlockPos();
 		int inventorySize = buf.readInt();
@@ -62,7 +62,7 @@ public class AnvilSyncS2CPacket {
 				anvilEntity.getInventory().setStack(i, itemStacks[i]);
 			}
 
-			// Update marker state
+			// Update marker state through the block entity's getter methods
 			anvilEntity.getMarkerPositions().clear();
 			anvilEntity.getMarkerHits().clear();
 			for (int i = 0; i < markerCount; i++) {
@@ -70,7 +70,7 @@ public class AnvilSyncS2CPacket {
 				anvilEntity.getMarkerHits().add(markerHits[i]);
 			}
 
-			// Update fast marker indices
+			// Update fast marker indices through the block entity
 			anvilEntity.getFastMarkerIndices().clear();
 			for (int index : fastMarkerIndices) {
 				anvilEntity.getFastMarkerIndices().add(index);
