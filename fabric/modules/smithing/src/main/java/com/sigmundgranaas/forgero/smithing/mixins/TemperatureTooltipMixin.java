@@ -26,7 +26,6 @@ public class TemperatureTooltipMixin {
 		int temp = TemperatureUtils.getTemperature(itemStack);
 		int maxTemp = TemperatureUtils.getMaxTemp(itemStack);
 		int argb = TemperatureColorProvider.getHeatColor(temp, maxTemp);
-		// Compose a single line: 'Temperature: ' in white, value in color
 		Text label = Text.literal("Temperature:").styled(style -> style.withColor(TextColor.fromRgb(0xFFFFFF)));
 		Text value = Text.literal(" " + temp + "°C").styled(style -> style.withColor(TextColor.fromRgb(argb)));
 		tooltip.add(label.copy().append(value));

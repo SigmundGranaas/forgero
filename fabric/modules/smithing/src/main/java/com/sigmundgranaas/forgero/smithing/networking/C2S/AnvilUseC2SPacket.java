@@ -1,15 +1,16 @@
 package com.sigmundgranaas.forgero.smithing.networking.C2S;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
+import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 
 import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.item.ItemStack;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
@@ -58,8 +59,8 @@ public class AnvilUseC2SPacket {
                     ItemStack anvilItem = anvilEntity.getInventory().getStack(0);
                     if (stackInHand.isEmpty() && !anvilItem.isEmpty()) {
                         anvilEntity.tryPickupItem(player);
-                    } else if (anvilItem.isEmpty() && (anvilEntity.isIngot(stackInHand)
-                        || stackInHand.getItem() instanceof com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem
+                    } else if (anvilItem.isEmpty() && (
+                        stackInHand.getItem() instanceof MorphedItem
                         || com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.hasMaxTemperature(stackInHand))) {
                         anvilEntity.tryPlaceItem(player, hand);
                     }
