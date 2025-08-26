@@ -78,7 +78,10 @@ public class MinigameHudOverlay implements HudRenderCallback {
         for (int x = 0; x < barWidth; x++) {
             int valueAtX = minWindow + Math.round(x * unitsPerPixelX);
             int segIdx = segmentIndex(valueAtX, boundaries);
-            int argb = colorForSegment(segIdx, idxCold, idxCool, idxMild, idxWarm, idxExtreme, idxVeryHot, idxMolten);
+            int argb = TemperatureColorProvider.getHudColorForTemperature(
+                valueAtX, max, boundaries,
+                idxCold, idxCool, idxMild, idxWarm, idxExtreme, idxVeryHot, idxMolten, segIdx
+            );
             fill(ctx, barLeft + x, barTop, barLeft + x + 1, barTop + barHeight, argb);
         }
 
@@ -192,28 +195,6 @@ public class MinigameHudOverlay implements HudRenderCallback {
         return Math.max(0, insertionPoint - 1);
     }
 
-    // Map segment index to hardcoded colors based on stage indices
-    private int colorForSegment(int segIdx,
-                                int idxCold, int idxCool, int idxMild, int idxWarm,
-                                int idxExtreme, int idxVeryHot, int idxMolten) {
-        final int BLUE     = 0xFF0000FF; // Cold
-        final int CYAN     = 0xFF00FFFF; // Cool/Ambient
-        final int TEAL     = 0xFF00FF80; // Mild/Warm
-        final int YELLOW   = 0xFFFFFF00; // Warm/Hot
-        final int GREEN    = 0xFF00FF00; // Extreme/Unusual
-        final int ORANGE   = 0xFFFFA500; // Very Hot/Near Molten
-        final int RED      = 0xFFFF0000; // Molten
-
-        if (segIdx == idxCold)    return BLUE;
-        if (segIdx == idxCool)    return CYAN;
-        if (segIdx == idxMild)    return TEAL;
-        if (segIdx == idxWarm)    return YELLOW;
-        if (segIdx == idxExtreme) return GREEN;
-        if (segIdx == idxVeryHot) return ORANGE;
-        if (segIdx == idxMolten)  return RED;
-        // Fallback
-        return YELLOW;
-    }
 
     // Scale a base (0..10000) temperature to current max
     private int scaleToMax(int base, int maxTemp) {

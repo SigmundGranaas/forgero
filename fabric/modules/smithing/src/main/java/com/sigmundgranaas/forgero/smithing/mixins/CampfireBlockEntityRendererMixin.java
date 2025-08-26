@@ -3,9 +3,11 @@ package com.sigmundgranaas.forgero.smithing.mixins;
 import java.util.List;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -34,7 +36,22 @@ public class CampfireBlockEntityRendererMixin {
 			ItemStack stack = items.get(i);
 			if (!stack.isEmpty()) {
 				int temperature = TemperatureUtils.getTemperature(stack);
+				int maxTemp = TemperatureUtils.getMaxTemp(stack);
 				String tempText = temperature + "°";
+
+				int[] bounds = TemperatureColorProvider.getStageBoundaries(maxTemp);
+				int stageIdx = segmentIndex(temperature, bounds);
+				int idxCold     = segmentIndex(scaleToMax(1572,  maxTemp), bounds);
+				int idxCool     = segmentIndex(scaleToMax(3750,  maxTemp), bounds);
+				int idxMild     = segmentIndex(scaleToMax(5000,  maxTemp), bounds);
+				int idxWarm     = segmentIndex(scaleToMax(6250,  maxTemp), bounds);
+				int idxExtreme  = segmentIndex(scaleToMax(7500,  maxTemp), bounds);
+				int idxVeryHot  = segmentIndex(scaleToMax(8750,  maxTemp), bounds);
+				int idxMolten   = segmentIndex(scaleToMax(9687,  maxTemp), bounds);
+				int color = TemperatureColorProvider.getHudColorForTemperature(
+					temperature, maxTemp, bounds,
+					idxCold, idxCool, idxMild, idxWarm, idxExtreme, idxVeryHot, idxMolten, stageIdx
+				);
 
 				matrices.push();
 				matrices.translate(0.5, 1.5, 0.5 + i * 0.25); // raised above campfire a bit more
@@ -50,21 +67,36 @@ public class CampfireBlockEntityRendererMixin {
 				// Ensure drawn above blocks
 				RenderSystem.disableDepthTest();
 				textRenderer.draw(
-						tempText,
-						-textRenderer.getWidth(tempText) / 2f,
-						0,
-						0xFFFFFF,
-						false,
-						matrix4f,
-						vertexConsumers,
-						TextRenderer.TextLayerType.SEE_THROUGH,
-						0,
-						light
+					tempText,
+					-textRenderer.getWidth(tempText) / 2f,
+					0,
+					color,
+					false,
+					matrix4f,
+					vertexConsumers,
+					TextRenderer.TextLayerType.SEE_THROUGH,
+					0,
+					light
 				);
 				RenderSystem.enableDepthTest();
 
 				matrices.pop();
 			}
 		}
+	}
+
+	@Unique
+	private int segmentIndex(int value, int[] boundaries) {
+		int idx = java.util.Arrays.binarySearch(boundaries, value);
+		if (idx >= 0) {
+			return Math.min(idx, boundaries.length - 2);
+		}
+		int insertionPoint = -(idx + 1);
+		return Math.max(0, insertionPoint - 1);
+	}
+	@Unique
+	private int scaleToMax(int base, int maxTemp) {
+		if (maxTemp >= 10000) return base;
+		return Math.round(base / 10000f * maxTemp);
 	}
 }

@@ -214,4 +214,24 @@ public class TemperatureColorProvider {
         return out;
     }
 
+    /**
+     * Returns HUD color for the given temperature and stage indices.
+     */
+    public static int getHudColorForTemperature(int temp, int maxTemp, int[] bounds, int idxCold, int idxCool, int idxMild, int idxWarm, int idxExtreme, int idxVeryHot, int idxMolten, int stageIdx) {
+        final int BLUE     = 0xFF0000FF; // Cold
+        final int CYAN     = 0xFF00FFFF; // Cool/Ambient
+        final int TEAL     = 0xFF00FF80; // Mild/Warm
+        final int YELLOW   = 0xFFFFFF00; // Warm/Hot
+        final int GREEN    = 0xFF00FF00; // Extreme/Unusual
+        final int ORANGE   = 0xFFFFA500; // Very Hot/Near Molten
+        final int RED      = 0xFFFF0000; // Molten
+        if (stageIdx == idxCold)    return BLUE;
+        else if (stageIdx == idxCool)    return CYAN;
+        else if (stageIdx == idxMild)    return TEAL;
+        else if (stageIdx == idxWarm)    return YELLOW;
+        else if (stageIdx == idxExtreme) return GREEN;
+        else if (stageIdx == idxVeryHot) return ORANGE;
+        else if (stageIdx == idxMolten)  return RED;
+        else return YELLOW; // fallback
+    }
 }

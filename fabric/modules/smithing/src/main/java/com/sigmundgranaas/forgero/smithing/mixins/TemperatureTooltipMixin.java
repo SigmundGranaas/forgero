@@ -40,23 +40,8 @@ public class TemperatureTooltipMixin {
 		// Determine stage index for current temperature
 		int stageIdx = segmentIndex(temp, bounds);
 
-		// HUD color mapping
-		final int BLUE     = 0xFF0000FF; // Cold
-		final int CYAN     = 0xFF00FFFF; // Cool/Ambient
-		final int TEAL     = 0xFF00FF80; // Mild/Warm
-		final int YELLOW   = 0xFFFFFF00; // Warm/Hot
-		final int GREEN    = 0xFF00FF00; // Extreme/Unusual
-		final int ORANGE   = 0xFFFFA500; // Very Hot/Near Molten
-		final int RED      = 0xFFFF0000; // Molten
-		int color;
-		if (stageIdx == idxCold)    color = BLUE;
-		else if (stageIdx == idxCool)    color = CYAN;
-		else if (stageIdx == idxMild)    color = TEAL;
-		else if (stageIdx == idxWarm)    color = YELLOW;
-		else if (stageIdx == idxExtreme) color = GREEN;
-		else if (stageIdx == idxVeryHot) color = ORANGE;
-		else if (stageIdx == idxMolten)  color = RED;
-		else color = YELLOW; // fallback
+		// Use helper method for HUD color mapping
+		int color = TemperatureColorProvider.getHudColorForTemperature(temp, maxTemp, bounds, idxCold, idxCool, idxMild, idxWarm, idxExtreme, idxVeryHot, idxMolten, stageIdx);
 
 		// Forging stage is now the Extreme stage
 		int extremeMin = bounds[4]; // Extreme stage lower bound
@@ -64,7 +49,7 @@ public class TemperatureTooltipMixin {
 
 		Text label = Text.literal("Temperature: ").styled(style -> style.withColor(TextColor.fromRgb(0xFFFFFF)));
 		Text forgingRange = Text.literal(String.format("(%d–%d°C)", extremeMin, extremeMax))
-			.styled(style -> style.withColor(TextColor.fromRgb(GREEN)));
+			.styled(style -> style.withColor(TextColor.fromRgb(0xFF00FF00)));
 		Text value = Text.literal(String.format("%d°C ", temp))
 			.styled(style -> style.withColor(TextColor.fromRgb(color)));
 
