@@ -32,9 +32,12 @@ public class TemperatureTooltipMixin {
 		int forgingMax = bounds[5];
 
 		Text label = Text.literal("Temperature: ").styled(style -> style.withColor(TextColor.fromRgb(0xFFFFFF)));
-		Text value = Text.literal(String.format("%d°C (%d–%d°C)", temp, forgingMin, forgingMax))
+		// Use orange for forging stage min/max
+		Text forgingRange = Text.literal(String.format("(%d–%d°C)", forgingMin, forgingMax))
+			.styled(style -> style.withColor(TextColor.fromRgb(0xFFFF9900)));
+		Text value = Text.literal(String.format("%d°C ", temp))
 			.styled(style -> style.withColor(TextColor.fromRgb(argb)));
 
-		tooltip.add(label.copy().append(value));
+		tooltip.add(label.copy().append(value).append(forgingRange));
 	}
 }

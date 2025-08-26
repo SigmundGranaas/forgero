@@ -48,7 +48,7 @@ public class PredicateConditionLootRegistry {
 	private static void registerTemperaturePredicates() {
 		// Register the new isinPerfectstage predicate
 		registerCondition(TemperaturePredicates.isinPerfectstage(),
-			Conditions.INSTANCE.of("forgero:perfect_stage").orElse(null));
+			Conditions.INSTANCE.of("forgero:voidtouched").orElse(null));
 
 
 		register(TemperaturePredicates.MostHitsInForgingStage(), NEUTRAL);
