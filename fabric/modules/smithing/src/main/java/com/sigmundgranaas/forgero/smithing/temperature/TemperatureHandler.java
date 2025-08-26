@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.smithing.temperature;
 
+import com.sigmundgranaas.forgero.smithing.networking.S2C.TemperatureSyncS2CPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,6 +89,10 @@ public class TemperatureHandler {
                     TemperatureUtils.setTemperature(stack, temp);
                     changed = true;
                 }
+            }
+            if (changed) {
+                // Send temperature sync packet to all tracking clients
+                TemperatureSyncS2CPacket.sendToClient(itemEntity, temp);
             }
         }
     }
