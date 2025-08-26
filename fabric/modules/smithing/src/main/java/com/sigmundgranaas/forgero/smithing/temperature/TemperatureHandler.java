@@ -28,9 +28,7 @@ public class TemperatureHandler {
 
     private static void onWorldTick(ServerWorld world) {
         tickCounter++;
-        if (tickCounter % TICK_INTERVAL != 0) {
-            return;
-        }
+        // Remove tick interval for world items, always update
         for (ServerPlayerEntity player : world.getPlayers()) {
             boolean tookHeatDamage = false;
             for (int i = 0; i < player.getInventory().size(); i++) {
@@ -39,7 +37,6 @@ public class TemperatureHandler {
                     continue;
                 }
                 int temp = TemperatureUtils.getTemperature(stack);
-                int prevTemp = temp;
                 if (temp > 100) {
                     if (player.getMainHandStack() == stack || player.getOffHandStack() == stack) {
                         tookHeatDamage = true;
@@ -47,7 +44,8 @@ public class TemperatureHandler {
                         tookHeatDamage = true;
                     }
                 }
-                if (tickCounter % 20 == 0) { // Changed to every 20 ticks
+                // Keep inventory cooling at 20 tick interval for performance
+                if (tickCounter % 20 == 0) {
                     if (temp > 20) {
                         temp = Math.max(20, temp - INVENTORY_COOL_PER_TICK);
                         TemperatureUtils.setTemperature(stack, temp);
@@ -58,6 +56,7 @@ public class TemperatureHandler {
                 player.damage(world.getDamageSources().hotFloor(), 1.0F);
             }
         }
+        // Always update world item temperature every tick
         for (var entity : world.iterateEntities()) {
             if (!(entity instanceof ItemEntity itemEntity)) continue;
             ItemStack stack = itemEntity.getStack();
@@ -65,16 +64,14 @@ public class TemperatureHandler {
                 continue;
             }
             int temp = TemperatureUtils.getTemperature(stack);
-            int prevTemp = temp;
-            if (tickCounter % 20 == 0) {
-                if (temp > 20) {
-                    temp = Math.max(20, temp - INVENTORY_COOL_PER_TICK);
-                    TemperatureUtils.setTemperature(stack, temp);
-                }
+            boolean changed = false;
+            if (temp > 20) {
+                temp = Math.max(20, temp - INVENTORY_COOL_PER_TICK);
+                TemperatureUtils.setTemperature(stack, temp);
+                changed = true;
             }
             BlockPos pos = itemEntity.getBlockPos();
             var blockState = world.getBlockState(pos);
-            boolean changed = false;
             boolean isWaterCauldron = blockState.isOf(net.minecraft.block.Blocks.WATER_CAULDRON);
             int cauldronLevel = isWaterCauldron && blockState.contains(Properties.LEVEL_3) ? blockState.get(Properties.LEVEL_3) : 0;
             boolean inFilledCauldron = isWaterCauldron && cauldronLevel == 3;
@@ -87,6 +84,15 @@ public class TemperatureHandler {
                     temp = Math.max(20, temp - FLUID_COOL_PER_TICK);
                     TemperatureUtils.setTemperature(stack, temp);
                     changed = true;
+                }
+            }
+            // Force NBT sync to client if temperature changed
+            if (changed) {
+                itemEntity.setStack(stack);
+                itemEntity.setVelocity(itemEntity.getVelocity()); // Mark entity as dirty to force update
+                // Set tracked temperature for real-time sync
+                if (itemEntity instanceof com.sigmundgranaas.forgero.smithing.temperature.TemperatureTracked tracked) {
+                    tracked.forgero$setTrackedTemperature(TemperatureUtils.getTemperature(stack));
                 }
             }
         }

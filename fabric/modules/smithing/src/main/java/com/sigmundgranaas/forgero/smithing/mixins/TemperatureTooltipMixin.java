@@ -26,8 +26,15 @@ public class TemperatureTooltipMixin {
 		int temp = TemperatureUtils.getTemperature(itemStack);
 		int maxTemp = TemperatureUtils.getMaxTemp(itemStack);
 		int argb = TemperatureColorProvider.getHeatColor(temp, maxTemp);
-		Text label = Text.literal("Temperature:").styled(style -> style.withColor(TextColor.fromRgb(0xFFFFFF)));
-		Text value = Text.literal(" " + temp + "°C").styled(style -> style.withColor(TextColor.fromRgb(argb)));
+
+		int[] bounds = TemperatureColorProvider.getStageBoundaries(maxTemp);
+		int forgingMin = bounds[4];
+		int forgingMax = bounds[5];
+
+		Text label = Text.literal("Temperature: ").styled(style -> style.withColor(TextColor.fromRgb(0xFFFFFF)));
+		Text value = Text.literal(String.format("%d°C (%d–%d°C)", temp, forgingMin, forgingMax))
+			.styled(style -> style.withColor(TextColor.fromRgb(argb)));
+
 		tooltip.add(label.copy().append(value));
 	}
 }

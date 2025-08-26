@@ -7,7 +7,10 @@
     "AnvilBlockMixin",
     "AnvilBlockUseMixin",
     "CampfireBlockEntityMixin",
-    "CampfireBlockMixin"
+    "CampfireBlockMixin",
+    "CampfireBlockEntityRendererMixin",
+    "CauldronItemTemperatureMixin",
+    "ItemEntityTemperatureMixin"
   ],
   "injectors": {
     "defaultRequire": 1
