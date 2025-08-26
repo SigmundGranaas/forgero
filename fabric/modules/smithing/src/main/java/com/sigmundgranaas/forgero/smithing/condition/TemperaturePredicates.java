@@ -10,7 +10,7 @@ import com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys;
  */
 public class TemperaturePredicates {
 
-    public static Predicate<MatchContext> isinPerfectstage() {
+    public static Predicate<MatchContext> IsInPerfectStage() {
         return context -> {
             Integer perfectHits = context.get(MinecraftContextKeys.PERFECT_STAGE_HITS).orElse(0);
             Integer totalHits = context.get(MinecraftContextKeys.TOTAL_HITS).orElse(0);
@@ -24,23 +24,5 @@ public class TemperaturePredicates {
             return allHitsPerfectStage && allFastMarkersHit && noMisses;
         };
     }
-
-    public static Predicate<MatchContext> MostHitsInForgingStage() {
-        return context -> {
-            Integer forgingHits = context.get(MinecraftContextKeys.FORGING_STAGE_HITS).orElse(0);
-            Integer totalHits = context.get(MinecraftContextKeys.TOTAL_HITS).orElse(0);
-            return totalHits > 0 && forgingHits > totalHits / 2;
-        };
-    }
-
-    public static Predicate<MatchContext> MostHitsInOverheatedStage() {
-        return context -> {
-            Integer overheatedHits = context.get(MinecraftContextKeys.OVERHEATED_STAGE_HITS).orElse(0);
-            Integer totalHits = context.get(MinecraftContextKeys.TOTAL_HITS).orElse(0);
-            return totalHits > 0 && overheatedHits > totalHits / 2;
-        };
-    }
-
-
 
 }

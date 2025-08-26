@@ -9,6 +9,7 @@ import java.util.function.Predicate;
 import com.sigmundgranaas.forgero.core.condition.Conditions;
 import com.sigmundgranaas.forgero.core.condition.NamedCondition;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
+import com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys;
 
 public class PredicateConditionLootRegistry {
 	private static final Map<Predicate<MatchContext>, List<NamedCondition>> PREDICATE_LOOT_MAP = new LinkedHashMap<>();
@@ -46,13 +47,9 @@ public class PredicateConditionLootRegistry {
 	}
 
 	private static void registerTemperaturePredicates() {
-		// Register the new isinPerfectstage predicate
-		registerCondition(TemperaturePredicates.isinPerfectstage(),
+		registerCondition(TemperaturePredicates.IsInPerfectStage(),
 			Conditions.INSTANCE.of("forgero:voidtouched").orElse(null));
 
-
-		register(TemperaturePredicates.MostHitsInForgingStage(), NEUTRAL);
-		register(TemperaturePredicates.MostHitsInForgingStage(), NEUTRAL);
 	}
 
 	public static List<NamedCondition> getLootTable(MatchContext context) {
@@ -99,7 +96,7 @@ public class PredicateConditionLootRegistry {
 					.map(entity -> entity.getWorld().getRegistryKey().getValue().toString().equals(dimensionId))
 					.orElse(false);
 
-			Integer forgingHits = context.get(com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.FORGING_STAGE_HITS).orElse(0);
+			Integer forgingHits = context.get(MinecraftContextKeys.EXTREME_STAGE_HITS).orElse(0);
 			Integer totalHits = context.get(com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.TOTAL_HITS).orElse(0);
 			boolean mostHitsInForgingStage = totalHits > 0 && forgingHits > totalHits / 2;
 

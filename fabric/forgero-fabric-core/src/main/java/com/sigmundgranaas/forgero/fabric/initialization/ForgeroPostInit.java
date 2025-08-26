@@ -52,15 +52,13 @@ import com.sigmundgranaas.forgero.minecraft.common.registry.registrar.Attributes
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.minecraft.common.toolhandler.HungerHandler;
 import com.sigmundgranaas.forgero.minecraft.common.tooltip.v2.TooltipAttributeRegistry;
-
-import net.minecraft.util.Identifier;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.resource.ResourceType;
+import net.minecraft.util.Identifier;
 
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;

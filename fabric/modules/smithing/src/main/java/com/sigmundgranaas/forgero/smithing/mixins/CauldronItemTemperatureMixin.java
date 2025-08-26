@@ -10,8 +10,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.block.LeveledCauldronBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.Camera;
@@ -39,9 +37,7 @@ public class CauldronItemTemperatureMixin {
 
 		// Find all items in full water cauldrons
 		List<ItemEntity> items = world.getEntitiesByClass(ItemEntity.class, client.player.getBoundingBox().expand(16), item -> {
-			var pos = item.getBlockPos();
-			var state = world.getBlockState(pos);
-			return state.isOf(Blocks.WATER_CAULDRON) && state.get(LeveledCauldronBlock.LEVEL) == 3;
+			return TemperatureUtils.isItemInFilledWaterCauldron(item, world);
 		});
 
 		// Use the engine's entity vertex consumers and flush after drawing

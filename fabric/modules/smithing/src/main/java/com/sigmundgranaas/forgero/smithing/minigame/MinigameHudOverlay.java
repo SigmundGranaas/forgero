@@ -18,6 +18,8 @@ import net.minecraft.util.math.Vec3d;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 
 // TODO create our own texture for the outside of the bar. Including arrow and ticks.
+
+// TODO BLUE, CYAN LIGHT BLUE,
 public class MinigameHudOverlay implements HudRenderCallback {
     // Small, always-on client registration if class is loaded.
     static {
@@ -57,16 +59,17 @@ public class MinigameHudOverlay implements HudRenderCallback {
         int barTop = 10;
 
         int[] boundaries = TemperatureColorProvider.getStageBoundaries(max);
-        // Precompute segment indices for each stage using scaled midpoints (new reference)
-        int idxTempering  = segmentIndex(scaleToMax(3750,  max), boundaries);
-        int idxCritical   = segmentIndex(scaleToMax(5000,  max), boundaries);
-        int idxShaping    = segmentIndex(scaleToMax(6250,  max), boundaries);
-        int idxForging    = segmentIndex(scaleToMax(7500,  max), boundaries);
-        int idxWelding    = segmentIndex(scaleToMax(8750,  max), boundaries);
-        int idxOverheated = segmentIndex(scaleToMax(9687,  max), boundaries);
+        // Precompute segment indices for each stage using scaled midpoints
+        int idxCold     = segmentIndex(scaleToMax(1572,  max), boundaries);      // (20 + 3125) / 2
+        int idxCool     = segmentIndex(scaleToMax(3750,  max), boundaries);      // (3125 + 4375) / 2
+        int idxMild     = segmentIndex(scaleToMax(5000,  max), boundaries);      // (4375 + 5625) / 2
+        int idxWarm     = segmentIndex(scaleToMax(6250,  max), boundaries);      // (5625 + 6875) / 2
+        int idxExtreme  = segmentIndex(scaleToMax(7500,  max), boundaries);      // (6875 + 8125) / 2
+        int idxVeryHot  = segmentIndex(scaleToMax(8750,  max), boundaries);      // (8125 + 9375) / 2
+        int idxMolten   = segmentIndex(scaleToMax(9687,  max), boundaries);      // (9375 + 10000) / 2
 
-        // Only show bar from tempering and up
-        int minStageBoundary = boundaries[idxTempering];
+        // Only show bar from cold and up
+        int minStageBoundary = boundaries[idxCold];
         minWindow = Math.max(minStageBoundary, minWindow);
         if (maxWindow <= minWindow) return;
         float unitsPerPixelX = (float) (maxWindow - minWindow) / (float) barWidth;
@@ -75,7 +78,7 @@ public class MinigameHudOverlay implements HudRenderCallback {
         for (int x = 0; x < barWidth; x++) {
             int valueAtX = minWindow + Math.round(x * unitsPerPixelX);
             int segIdx = segmentIndex(valueAtX, boundaries);
-            int argb = colorForSegment(segIdx, idxTempering, idxCritical, idxShaping, idxForging, idxWelding, idxOverheated);
+            int argb = colorForSegment(segIdx, idxCold, idxCool, idxMild, idxWarm, idxExtreme, idxVeryHot, idxMolten);
             fill(ctx, barLeft + x, barTop, barLeft + x + 1, barTop + barHeight, argb);
         }
 
@@ -191,17 +194,23 @@ public class MinigameHudOverlay implements HudRenderCallback {
 
     // Map segment index to hardcoded colors based on stage indices
     private int colorForSegment(int segIdx,
-                                int idxTempering, int idxCritical,
-                                int idxShaping, int idxForging, int idxWelding, int idxOverheated) {
-        final int BLUE   = 0xFF0077FF; // tempering (and cold)
-        final int YELLOW = 0xFFFFCC00; // shaping and welding
-        final int GREEN  = 0xFF00CC00; // forging
-        final int RED    = 0xFFCC0000; // critical and overheated
+                                int idxCold, int idxCool, int idxMild, int idxWarm,
+                                int idxExtreme, int idxVeryHot, int idxMolten) {
+        final int BLUE     = 0xFF0000FF; // Cold
+        final int CYAN     = 0xFF00FFFF; // Cool/Ambient
+        final int TEAL     = 0xFF00FF80; // Mild/Warm
+        final int YELLOW   = 0xFFFFFF00; // Warm/Hot
+        final int GREEN    = 0xFF00FF00; // Extreme/Unusual
+        final int ORANGE   = 0xFFFFA500; // Very Hot/Near Molten
+        final int RED      = 0xFFFF0000; // Molten
 
-        if (segIdx == idxForging) return GREEN;
-        if (segIdx == idxShaping || segIdx == idxWelding) return YELLOW;
-        if (segIdx == idxCritical || segIdx == idxOverheated) return RED;
-        if (segIdx == idxTempering) return BLUE;
+        if (segIdx == idxCold)    return BLUE;
+        if (segIdx == idxCool)    return CYAN;
+        if (segIdx == idxMild)    return TEAL;
+        if (segIdx == idxWarm)    return YELLOW;
+        if (segIdx == idxExtreme) return GREEN;
+        if (segIdx == idxVeryHot) return ORANGE;
+        if (segIdx == idxMolten)  return RED;
         // Fallback
         return YELLOW;
     }

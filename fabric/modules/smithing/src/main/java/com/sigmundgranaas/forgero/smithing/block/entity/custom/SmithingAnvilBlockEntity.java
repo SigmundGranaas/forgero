@@ -335,14 +335,13 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 			itemNbt.putInt("forgero_markerHitsCount", minigameLogic.getMarkerHitsCount());
 			itemNbt.putInt("forgero_markerAttempts", minigameLogic.getMarkerAttempts());
 			itemNbt.putIntArray("hitTemperatures", minigameLogic.getHitTemperatures().stream().mapToInt(Integer::intValue).toArray());
-			itemNbt.putInt("overheatedStageHits", minigameLogic.getOverheatedStageHits());
-			itemNbt.putInt("weldingStageHits", minigameLogic.getWeldingStageHits());
-			itemNbt.putInt("forgingStageHits", minigameLogic.getForgingStageHits());
-			itemNbt.putInt("shapingStageHits", minigameLogic.getShapingStageHits());
-			itemNbt.putInt("criticalStageHits", minigameLogic.getCriticalStageHits());
-			itemNbt.putInt("temperingStageHits", minigameLogic.getTemperingStageHits());
 			itemNbt.putInt("coldStageHits", minigameLogic.getColdStageHits());
-			itemNbt.putInt("perfectStageHits", minigameLogic.getPerfectStageHits());
+			itemNbt.putInt("warmStageHits", minigameLogic.getWarmStageHits());
+			itemNbt.putInt("hotStageHits", minigameLogic.getHotStageHits());
+			itemNbt.putInt("veryHotStageHits", minigameLogic.getVeryHotStageHits());
+			itemNbt.putInt("extremeStageHits", minigameLogic.getExtremeStageHits());
+			itemNbt.putInt("nearMeltStageHits", minigameLogic.getNearMeltStageHits());
+			itemNbt.putInt("moltenStageHits", minigameLogic.getMoltenStageHits());
 		}
 
 		// Ingot crafting state

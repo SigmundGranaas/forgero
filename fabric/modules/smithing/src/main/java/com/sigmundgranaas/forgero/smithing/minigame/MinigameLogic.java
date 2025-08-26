@@ -48,14 +48,13 @@ public class MinigameLogic {
     private final List<Integer> fastMarkerIndices = new ArrayList<>();
     private final Random random = new Random();
 
-    private int overheatedStageHits = 0;
-    private int weldingStageHits = 0;
-    private int forgingStageHits = 0;
-    private int shapingStageHits = 0;
-    private int criticalStageHits = 0;
-    private int temperingStageHits = 0;
     private int coldStageHits = 0;
-    private int perfectStageHits = 0;
+    private int warmStageHits = 0;
+    private int hotStageHits = 0;
+    private int veryHotStageHits = 0;
+    private int extremeStageHits = 0;
+    private int nearMeltStageHits = 0;
+    private int moltenStageHits = 0;
     private int fastMarkerHits = 0;
 
     @Setter
@@ -185,22 +184,20 @@ public class MinigameLogic {
     }
 
     private void updateTemperatureStageHits(int temperature, int maxTemp) {
-        if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInPerfectStage(temperature, maxTemp)) {
-            perfectStageHits++;
-        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInOverheatedStage(temperature, maxTemp)) {
-            overheatedStageHits++;
-        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInWeldingStage(temperature, maxTemp)) {
-            weldingStageHits++;
-        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInForgingStage(temperature, maxTemp)) {
-            forgingStageHits++;
-        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInShapingStage(temperature, maxTemp)) {
-            shapingStageHits++;
-        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInCriticalStage(temperature, maxTemp)) {
-            criticalStageHits++;
-        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInTemperingStage(temperature, maxTemp)) {
-            temperingStageHits++;
-        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInColdStage(temperature, maxTemp)) {
+        if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInCold(temperature, maxTemp)) {
             coldStageHits++;
+        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInWarm(temperature, maxTemp)) {
+            warmStageHits++;
+        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInHot(temperature, maxTemp)) {
+            hotStageHits++;
+        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInVeryHot(temperature, maxTemp)) {
+            veryHotStageHits++;
+        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInExtreme(temperature, maxTemp)) {
+            extremeStageHits++;
+        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInNearMelt(temperature, maxTemp)) {
+            nearMeltStageHits++;
+        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInMolten(temperature, maxTemp)) {
+            moltenStageHits++;
         }
     }
 
@@ -336,14 +333,13 @@ public class MinigameLogic {
             context = context.put(MinecraftContextKeys.BLOCK_TARGET, callback.getPos());
         }
         context = context.put(MinecraftContextKeys.STACK, stack);
-        context = context.put(MinecraftContextKeys.OVERHEATED_STAGE_HITS, overheatedStageHits);
-        context = context.put(MinecraftContextKeys.WELDING_STAGE_HITS, weldingStageHits);
-        context = context.put(MinecraftContextKeys.FORGING_STAGE_HITS, forgingStageHits);
-        context = context.put(MinecraftContextKeys.SHAPING_STAGE_HITS, shapingStageHits);
-        context = context.put(MinecraftContextKeys.CRITICAL_STAGE_HITS, criticalStageHits);
-        context = context.put(MinecraftContextKeys.TEMPERING_STAGE_HITS, temperingStageHits);
         context = context.put(MinecraftContextKeys.COLD_STAGE_HITS, coldStageHits);
-        context = context.put(MinecraftContextKeys.PERFECT_STAGE_HITS, perfectStageHits);
+        context = context.put(MinecraftContextKeys.WARM_STAGE_HITS, warmStageHits);
+        context = context.put(MinecraftContextKeys.HOT_STAGE_HITS, hotStageHits);
+        context = context.put(MinecraftContextKeys.VERY_HOT_STAGE_HITS, veryHotStageHits);
+        context = context.put(MinecraftContextKeys.EXTREME_STAGE_HITS, extremeStageHits);
+        context = context.put(MinecraftContextKeys.NEAR_MELT_STAGE_HITS, nearMeltStageHits);
+        context = context.put(MinecraftContextKeys.MOLTEN_STAGE_HITS, moltenStageHits);
         context = context.put(MinecraftContextKeys.TOTAL_HITS, markerHitsCount);
         context = context.put(MinecraftContextKeys.MISS_HITS, markerAttempts - markerHitsCount);
         context = context.put(MinecraftContextKeys.FAST_MARKER_HITS, fastMarkerHits);
@@ -375,14 +371,13 @@ public class MinigameLogic {
 
         // Store temperature tracking data
         nbt.putIntArray("hitTemperatures", hitTemperatures.stream().mapToInt(Integer::intValue).toArray());
-        nbt.putInt("overheatedStageHits", overheatedStageHits);
-        nbt.putInt("weldingStageHits", weldingStageHits);
-        nbt.putInt("forgingStageHits", forgingStageHits);
-        nbt.putInt("shapingStageHits", shapingStageHits);
-        nbt.putInt("criticalStageHits", criticalStageHits);
-        nbt.putInt("temperingStageHits", temperingStageHits);
         nbt.putInt("coldStageHits", coldStageHits);
-        nbt.putInt("perfectStageHits", perfectStageHits);
+        nbt.putInt("warmStageHits", warmStageHits);
+        nbt.putInt("hotStageHits", hotStageHits);
+        nbt.putInt("veryHotStageHits", veryHotStageHits);
+        nbt.putInt("extremeStageHits", extremeStageHits);
+        nbt.putInt("nearMeltStageHits", nearMeltStageHits);
+        nbt.putInt("moltenStageHits", moltenStageHits);
         nbt.putIntArray("fastMarkerIndices", fastMarkerIndices.stream().mapToInt(Integer::intValue).toArray());
         nbt.putDouble("morphProgress", morphProgress);
     }
@@ -410,14 +405,13 @@ public class MinigameLogic {
                 hitTemperatures.add(temp);
             }
         }
-        overheatedStageHits = nbt.getInt("overheatedStageHits");
-        weldingStageHits = nbt.getInt("weldingStageHits");
-        forgingStageHits = nbt.getInt("forgingStageHits");
-        shapingStageHits = nbt.getInt("shapingStageHits");
-        criticalStageHits = nbt.getInt("criticalStageHits");
-        temperingStageHits = nbt.getInt("temperingStageHits");
         coldStageHits = nbt.getInt("coldStageHits");
-        perfectStageHits = nbt.getInt("perfectStageHits");
+        warmStageHits = nbt.getInt("warmStageHits");
+        hotStageHits = nbt.getInt("hotStageHits");
+        veryHotStageHits = nbt.getInt("veryHotStageHits");
+        extremeStageHits = nbt.getInt("extremeStageHits");
+        nearMeltStageHits = nbt.getInt("nearMeltStageHits");
+        moltenStageHits = nbt.getInt("moltenStageHits");
 
         fastMarkerIndices.clear();
         if (nbt.contains("fastMarkerIndices")) {
@@ -444,14 +438,13 @@ public class MinigameLogic {
                 for (int temp : temps) {
                     hitTemperatures.add(temp);
                 }
-                overheatedStageHits = itemNbt.getInt("overheatedStageHits");
-                weldingStageHits = itemNbt.getInt("weldingStageHits");
-                forgingStageHits = itemNbt.getInt("forgingStageHits");
-                shapingStageHits = itemNbt.getInt("shapingStageHits");
-                criticalStageHits = itemNbt.getInt("criticalStageHits");
-                temperingStageHits = itemNbt.getInt("temperingStageHits");
                 coldStageHits = itemNbt.getInt("coldStageHits");
-                perfectStageHits = itemNbt.getInt("perfectStageHits");
+                warmStageHits = itemNbt.getInt("warmStageHits");
+                hotStageHits = itemNbt.getInt("hotStageHits");
+                veryHotStageHits = itemNbt.getInt("veryHotStageHits");
+                extremeStageHits = itemNbt.getInt("extremeStageHits");
+                nearMeltStageHits = itemNbt.getInt("nearMeltStageHits");
+                moltenStageHits = itemNbt.getInt("moltenStageHits");
             }
 
             // Restore fast marker hits if present

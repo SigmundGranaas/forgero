@@ -10,8 +10,11 @@ import com.sigmundgranaas.forgero.minecraft.common.item.ToolStateItem;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.state.property.Properties;
 
 public class TemperatureUtils {
     public static final String TEMPERATURE_KEY = "forgero_temperature";
@@ -61,5 +64,20 @@ public class TemperatureUtils {
 
     public static int clamp(int temperature, ItemStack stack) {
         return Math.max(MIN_TEMPERATURE, Math.min(getMaxTemp(stack), temperature));
+    }
+
+
+    public static boolean isBlockFilledWaterCauldron(BlockState state) {
+        return state != null
+            && state.isOf(Blocks.WATER_CAULDRON)
+            && state.contains(Properties.LEVEL_3)
+            && state.get(Properties.LEVEL_3) == 3;
+    }
+
+
+    public static boolean isItemInFilledWaterCauldron(net.minecraft.entity.ItemEntity itemEntity, net.minecraft.world.World world) {
+        if (itemEntity == null || world == null) return false;
+        BlockState state = world.getBlockState(itemEntity.getBlockPos());
+        return isBlockFilledWaterCauldron(state);
     }
 }

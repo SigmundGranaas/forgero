@@ -8,7 +8,6 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -76,9 +75,7 @@ public class TemperatureHandler {
             BlockPos pos = itemEntity.getBlockPos();
             var blockState = world.getBlockState(pos);
             boolean changed = false;
-            boolean isWaterCauldron = blockState.isOf(net.minecraft.block.Blocks.WATER_CAULDRON);
-            int cauldronLevel = isWaterCauldron && blockState.contains(Properties.LEVEL_3) ? blockState.get(Properties.LEVEL_3) : 0;
-            boolean inFilledCauldron = isWaterCauldron && cauldronLevel == 3;
+            boolean inFilledCauldron = TemperatureUtils.isItemInFilledWaterCauldron(itemEntity, world);
             if (inFilledCauldron) {
                 if (temp > 100) {
                     world.spawnParticles(net.minecraft.particle.ParticleTypes.CLOUD, itemEntity.getX(), itemEntity.getY() + 0.2, itemEntity.getZ(), 8, 0.2, 0.1, 0.2, 0.01);
