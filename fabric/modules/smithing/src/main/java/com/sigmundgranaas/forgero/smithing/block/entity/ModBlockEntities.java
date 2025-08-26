@@ -4,11 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sigmundgranaas.forgero.core.Forgero;
-import com.sigmundgranaas.forgero.smithing.block.ModBlocks;
-
-import com.sigmundgranaas.forgero.smithing.block.entity.custom.BellowsBlockEntity;
-import com.sigmundgranaas.forgero.smithing.block.entity.custom.HearthBlockEntity;
-import com.sigmundgranaas.forgero.smithing.block.entity.custom.MoldBlockEntity;
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
 
 import net.minecraft.block.Block;
@@ -23,13 +18,6 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 public class ModBlockEntities {
 	public static BlockEntityType<SmithingAnvilBlockEntity> SMITHING_ANVIL;
 
-	public static BlockEntityType<BellowsBlockEntity> BELLOWS;
-
-	public static BlockEntityType<MoldBlockEntity> MOLD;
-
-	public static BlockEntityType<HearthBlockEntity> HEARTH;
-
-	// Track all mold blocks to potentially recreate the block entity type
 	private static final List<Block> moldBlocks = new ArrayList<>();
 
 	public static void registerBlockEntities() {
@@ -39,59 +27,5 @@ public class ModBlockEntities {
 						Blocks.CHIPPED_ANVIL, Blocks.DAMAGED_ANVIL, Blocks.ANVIL)
 						.build(null));
 
-		BELLOWS = Registry.register(Registries.BLOCK_ENTITY_TYPE,
-				new Identifier(Forgero.NAMESPACE, "bellows"),
-				FabricBlockEntityTypeBuilder.create(BellowsBlockEntity::new,
-						ModBlocks.BELLOWS).build(null));
-
-		HEARTH = Registry.register(Registries.BLOCK_ENTITY_TYPE,
-				new Identifier(Forgero.NAMESPACE, "hearth"),
-				FabricBlockEntityTypeBuilder.create(HearthBlockEntity::new,
-						ModBlocks.HEARTH).build(null));
-
-		// Initialize MOLD BlockEntityType with any already registered mold blocks
-		rebuildMoldBlockEntityType();
-	}
-
-	/**
-	 * Registers a new mold block to use the MoldBlockEntity type.
-	 * This method should be called for every mold block, including those generated at runtime.
-	 * It only adds the block to the list; call rebuildMoldBlockEntityType() after all molds are registered.
-	 * @param moldBlock The mold block to register
-	 */
-	public static void registerMoldBlock(Block moldBlock) {
-		if (!moldBlocks.contains(moldBlock)) {
-			moldBlocks.add(moldBlock);
-		}
-	}
-
-	/**
-	 * (Re)registers the MOLD BlockEntityType with all currently registered mold blocks.
-	 * Call this after all molds have been registered.
-	 */
-	public static void rebuildMoldBlockEntityType() {
-		if (!moldBlocks.isEmpty()) {
-			Block[] blockArray = moldBlocks.toArray(new Block[0]);
-			try {
-				// If MOLD is already registered, unregister it to avoid conflicts
-				if (MOLD != null && Registries.BLOCK_ENTITY_TYPE.containsId(new Identifier(Forgero.NAMESPACE, "mold"))) {
-					Forgero.LOGGER.info("MOLD BlockEntityType already exists, attempting to replace it");
-				}
-
-				MOLD = Registry.register(Registries.BLOCK_ENTITY_TYPE,
-						new Identifier(Forgero.NAMESPACE, "mold"),
-						FabricBlockEntityTypeBuilder.create(MoldBlockEntity::new, blockArray).build(null));
-				Forgero.LOGGER.info("(Re)registered mold block entity type for {} blocks", blockArray.length);
-			} catch (Exception e) {
-				Forgero.LOGGER.error("Failed to register MOLD BlockEntityType: {}", e.getMessage(), e);
-			}
-		} else {
-			Forgero.LOGGER.warn("Cannot register MOLD BlockEntityType: no mold blocks registered");
-		}
-
-		// Double-check registration was successful
-		if (MOLD == null) {
-			Forgero.LOGGER.error("MOLD BlockEntityType is still null after attempted registration");
-		}
 	}
 }
