@@ -43,7 +43,7 @@ public class MinigameHudOverlay implements HudRenderCallback {
         int max = Math.max(TemperatureUtils.getMaxTemp(stack), 1);
 
         // Compute a 300-degree sliding window around current temperature.
-        final int window = 700;
+        final int window = 600;
         int half = window / 2;
         int minWindow = Math.max(0, Math.min(temp - half, Math.max(0, max - window)));
         int maxWindow = Math.min(max, minWindow + window);
