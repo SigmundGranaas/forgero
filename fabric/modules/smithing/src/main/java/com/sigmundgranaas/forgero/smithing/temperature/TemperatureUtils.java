@@ -6,7 +6,9 @@ import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
 import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.minecraft.common.item.ToolStateItem;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -51,7 +53,7 @@ public class TemperatureUtils {
 
     public static boolean hasMaxTemperature(ItemStack stack) {
         // Exclude full tools, but allow MorphedItem
-        if (stack.getItem() instanceof com.sigmundgranaas.forgero.minecraft.common.item.ToolStateItem && !(stack.getItem() instanceof com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem)) {
+        if (stack.getItem() instanceof ToolStateItem && !(stack.getItem() instanceof MorphedItem)) {
             return false;
         }
         return getMaxTemp(stack) > 0;

@@ -96,10 +96,10 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 
 			// Access fast marker indices through the entity's getter method
 			boolean isFast = entity.getFastMarkerIndices().contains(entity.getMarkerAttempts());
-			// Fast markers are orange (red + some green), normal markers are red
-			float r = 1.0f;  // Red component - same for both
-			float g = isFast ? 0.5f : 0.0f;  // Green component - orange for fast, pure red for normal
-			float b = 0.0f;  // Blue component - none for both
+			// Fast markers are red (r=1.0, g=0.0, b=0.0), normal markers are yellow (r=1.0, g=1.0, b=0.0)
+			float r = 1.0f;  // Red component - always 1.0f
+			float g = isFast ? 0.0f : 1.0f;  // Green component - 0 for fast (red), 1 for normal (yellow)
+			float b = 0.0f;  // Blue component - always 0.0f
 			float size = 0.0350f;
 
 			VertexConsumer lineConsumer = vertexConsumers.getBuffer(RenderLayer.getLines());
