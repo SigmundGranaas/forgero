@@ -76,7 +76,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 
 	private final Random random = new Random();
 
-	private static final int ANVIL_INVENTORY_COOL_TICK_INTERVAL = 4;
+	private static final int ANVIL_INVENTORY_COOL_TICK_INTERVAL = 1;
+	public int anvilInventoryCoolAmountPerTick = 1; // Changeable cooling amount per tick
 	private int anvilInventoryCoolTickCounter = 0;
 
 	private static final float ANVIL_TOP_Y = 0.9375f;
@@ -339,7 +340,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 			itemNbt.putInt("warmStageHits", minigameLogic.getWarmStageHits());
 			itemNbt.putInt("hotStageHits", minigameLogic.getHotStageHits());
 			itemNbt.putInt("veryHotStageHits", minigameLogic.getVeryHotStageHits());
-			itemNbt.putInt("extremeStageHits", minigameLogic.getExtremeStageHits());
 			itemNbt.putInt("nearMeltStageHits", minigameLogic.getNearMeltStageHits());
 			itemNbt.putInt("moltenStageHits", minigameLogic.getMoltenStageHits());
 		}
@@ -467,10 +467,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 			if (!stack.isEmpty() && (stack.getItem() instanceof com.sigmundgranaas.forgero.minecraft.common.item.StateItem || stack.getItem() instanceof MorphedItem)) {
 				if (TemperatureUtils.hasMaxTemperature(stack)) {
 					int temp = TemperatureUtils.getTemperature(stack);
-					int prevTemp = temp;
 					if (temp > 20) {
-						temp = Math.max(20, temp - 1); // Cool by 1 per interval
-						TemperatureUtils.setTemperature(stack, temp);
+						int newTemp = Math.max(20, temp - anvilInventoryCoolAmountPerTick); // Use configurable cooling amount
+						TemperatureUtils.setTemperature(stack, newTemp);
 					}
 				}
 			}

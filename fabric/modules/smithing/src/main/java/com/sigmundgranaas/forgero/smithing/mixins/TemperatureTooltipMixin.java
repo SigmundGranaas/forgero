@@ -28,27 +28,26 @@ public class TemperatureTooltipMixin {
 		int maxTemp = TemperatureUtils.getMaxTemp(itemStack);
 
 		int[] bounds = TemperatureColorProvider.getStageBoundaries(maxTemp);
-		// Stage indices for HUD colors
-		int idxCold     = segmentIndex(scaleToMax(1572,  maxTemp), bounds);      // (20 + 3125) / 2
-		int idxCool     = segmentIndex(scaleToMax(3750,  maxTemp), bounds);      // (3125 + 4375) / 2
-		int idxMild     = segmentIndex(scaleToMax(5000,  maxTemp), bounds);      // (4375 + 5625) / 2
-		int idxWarm     = segmentIndex(scaleToMax(6250,  maxTemp), bounds);      // (5625 + 6875) / 2
-		int idxExtreme  = segmentIndex(scaleToMax(7500,  maxTemp), bounds);      // (6875 + 8125) / 2
-		int idxVeryHot  = segmentIndex(scaleToMax(8750,  maxTemp), bounds);      // (8125 + 9375) / 2
-		int idxMolten   = segmentIndex(scaleToMax(9687,  maxTemp), bounds);      // (9375 + 10000) / 2
+		// Stage indices for HUD colors (6 stages)
+		int idxCold     = 0;
+		int idxWarm     = 1;
+		int idxHot      = 2;
+		int idxVeryHot  = 3;
+		int idxNearMelt = 4;
+		int idxMolten   = 5;
 
 		// Determine stage index for current temperature
 		int stageIdx = segmentIndex(temp, bounds);
 
 		// Use helper method for HUD color mapping
-		int color = TemperatureColorProvider.getHudColorForTemperature(temp, maxTemp, bounds, idxCold, idxCool, idxMild, idxWarm, idxExtreme, idxVeryHot, idxMolten, stageIdx);
+		int color = TemperatureColorProvider.getHudColorForTemperature(temp, maxTemp, bounds, idxCold, idxWarm, idxHot, idxVeryHot, idxNearMelt, idxMolten, stageIdx);
 
-		// Forging stage is now the Extreme stage
-		int extremeMin = bounds[4]; // Extreme stage lower bound
-		int extremeMax = bounds[5]; // Extreme stage upper bound
+		// Forging stage is now the Very Hot stage (green)
+		int forgingMin = bounds[idxVeryHot];
+		int forgingMax = bounds[idxNearMelt];
 
 		Text label = Text.literal("Temperature: ").styled(style -> style.withColor(TextColor.fromRgb(0xFFFFFF)));
-		Text forgingRange = Text.literal(String.format("(%d–%d°C)", extremeMin, extremeMax))
+		Text forgingRange = Text.literal(String.format("(%d–%d°C)", forgingMin, forgingMax))
 			.styled(style -> style.withColor(TextColor.fromRgb(0xFF00FF00)));
 		Text value = Text.literal(String.format("%d°C ", temp))
 			.styled(style -> style.withColor(TextColor.fromRgb(color)));

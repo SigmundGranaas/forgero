@@ -192,8 +192,6 @@ public class MinigameLogic {
             hotStageHits++;
         } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInVeryHot(temperature, maxTemp)) {
             veryHotStageHits++;
-        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInExtreme(temperature, maxTemp)) {
-            extremeStageHits++;
         } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInNearMelt(temperature, maxTemp)) {
             nearMeltStageHits++;
         } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInMolten(temperature, maxTemp)) {
@@ -337,7 +335,6 @@ public class MinigameLogic {
         context = context.put(MinecraftContextKeys.WARM_STAGE_HITS, warmStageHits);
         context = context.put(MinecraftContextKeys.HOT_STAGE_HITS, hotStageHits);
         context = context.put(MinecraftContextKeys.VERY_HOT_STAGE_HITS, veryHotStageHits);
-        context = context.put(MinecraftContextKeys.EXTREME_STAGE_HITS, extremeStageHits);
         context = context.put(MinecraftContextKeys.NEAR_MELT_STAGE_HITS, nearMeltStageHits);
         context = context.put(MinecraftContextKeys.MOLTEN_STAGE_HITS, moltenStageHits);
         context = context.put(MinecraftContextKeys.TOTAL_HITS, markerHitsCount);

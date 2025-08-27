@@ -19,11 +19,8 @@ public class MinecraftContextKeys {
 	public static final ContextKey<Integer> WARM_STAGE_HITS = ContextKey.of("warm_stage_hits", Integer.class);
 	public static final ContextKey<Integer> HOT_STAGE_HITS = ContextKey.of("hot_stage_hits", Integer.class);
 	public static final ContextKey<Integer> VERY_HOT_STAGE_HITS = ContextKey.of("very_hot_stage_hits", Integer.class);
-	public static final ContextKey<Integer> EXTREME_STAGE_HITS = ContextKey.of("extreme_stage_hits", Integer.class);
 	public static final ContextKey<Integer> NEAR_MELT_STAGE_HITS = ContextKey.of("near_melt_stage_hits", Integer.class);
 	public static final ContextKey<Integer> MOLTEN_STAGE_HITS = ContextKey.of("molten_stage_hits", Integer.class);
-	public static final ContextKey<Integer> PERFECT_STAGE_HITS = ContextKey.of("perfect_stage_hits", Integer.class);
-
 
 	public static final ContextKey<Integer> TOTAL_HITS = ContextKey.of("total_hits", Integer.class);
 	public static final ContextKey<Integer> MISS_HITS = ContextKey.of("miss_hits", Integer.class);

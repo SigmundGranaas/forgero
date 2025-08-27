@@ -111,15 +111,14 @@ public class TemperatureColorProvider {
 
 	// BASELINE GROUP TEMPS
 
-	// Stage boundaries for base max 1600
+	// Stage boundaries for base max 1600 (6 stages, 7 boundaries)
     private static final int[] BASE_STAGE_BOUNDS = new int[]{
         0,    // Cold start
-        500,  // Cold end, Warm start
-        700, // Warm end, Hot start
-        900, // Hot end, Very Hot start
-        1100, // Very Hot end, Extreme start
-        1400, // Extreme end, Near Melt start
-        1500, // Near Melt end, Molten start
+        320,  // Cold end, Warm start
+        640,  // Warm end, Hot start
+        1120, // Hot end, Very Hot start
+        1440, // Very Hot end, Near Melt start
+        1550, // Near Melt end, Molten start
         1600  // Molten end
     };
 
@@ -156,35 +155,35 @@ public class TemperatureColorProvider {
     public static boolean isInVeryHot(int temperature, int maxTemp) {
         return isInStage(temperature, maxTemp, 3);
     }
-    public static boolean isInExtreme(int temperature, int maxTemp) {
+    public static boolean isInNearMelt(int temperature, int maxTemp) {
         return isInStage(temperature, maxTemp, 4);
     }
-    public static boolean isInNearMelt(int temperature, int maxTemp) {
+    public static boolean isInMolten(int temperature, int maxTemp) {
         return isInStage(temperature, maxTemp, 5);
     }
-    public static boolean isInMolten(int temperature, int maxTemp) {
-        return isInStage(temperature, maxTemp, 6);
-    }
 
 
-    /**
-     * Returns HUD color for the given temperature and stage indices.
-     */
-    public static int getHudColorForTemperature(int temp, int maxTemp, int[] bounds, int idxCold, int idxCool, int idxMild, int idxWarm, int idxExtreme, int idxVeryHot, int idxMolten, int stageIdx) {
-        final int BLUE     = 0xFF0000FF; // Cold
-        final int CYAN     = 0xFF00FFFF; // Cool/Ambient
-        final int TEAL     = 0xFF00FF80; // Mild/Warm
-        final int YELLOW   = 0xFFFFFF00; // Warm/Hot
-        final int GREEN    = 0xFF00FF00; // Extreme/Unusual
-        final int ORANGE   = 0xFFFFA500; // Very Hot/Near Molten
-        final int RED      = 0xFFFF0000; // Molten
-        if (stageIdx == idxCold)    return BLUE;
-        else if (stageIdx == idxCool)    return CYAN;
-        else if (stageIdx == idxMild)    return TEAL;
-        else if (stageIdx == idxWarm)    return YELLOW;
-        else if (stageIdx == idxExtreme) return GREEN;
-        else if (stageIdx == idxVeryHot) return ORANGE;
-        else if (stageIdx == idxMolten)  return RED;
-        else return YELLOW; // fallback
-    }
+	public static int getHudColorForTemperature(int temp, int maxTemp, int[] bounds, int idxCold, int idxWarm, int idxHot, int idxVeryHot, int idxNearMelt, int idxMolten, int stageIdx) {
+		// Original colors:
+		// Cold:      0xFF0000FF (blue)
+		// Warm:      0xFF00FFFF (cyan)
+		// Hot:       0xFFFFFF00 (yellow)
+		// Very Hot:  0xFF00FF00 (green)
+		// Near Melt: 0xFFFF8000 (orange)
+		// Molten:    0xFFFF0000 (red)
+		// Darker versions (RGB * 0.6):
+		final int DARK_BLUE   = 0xFF000099; // 0xFF0000FF * 0.6 = 0xFF000099
+		final int DARK_CYAN   = 0xFF00CCCC; // 0xFF00FFFF * 0.6 = 0xFF00CCCC
+		final int DARK_YELLOW = 0xFFCCCC00; // 0xFFFFFF00 * 0.6 = 0xFFCCCC00
+		final int DARK_GREEN  = 0xFF00CC00; // 0xFF00FF00 * 0.6 = 0xFF00CC00
+		final int DARK_ORANGE = 0xFFCC6600; // 0xFFFF8000 * 0.6 = 0xFFCC6600
+		final int DARK_RED    = 0xFFCC0000; // 0xFFFF0000 * 0.6 = 0xFFCC0000
+		if (stageIdx == idxCold)    return DARK_BLUE;
+		else if (stageIdx == idxWarm)    return DARK_CYAN;
+		else if (stageIdx == idxHot)     return DARK_YELLOW;
+		else if (stageIdx == idxVeryHot) return DARK_GREEN;
+		else if (stageIdx == idxNearMelt) return DARK_ORANGE;
+		else if (stageIdx == idxMolten)  return DARK_RED;
+		else return DARK_YELLOW; // fallback
+	}
 }

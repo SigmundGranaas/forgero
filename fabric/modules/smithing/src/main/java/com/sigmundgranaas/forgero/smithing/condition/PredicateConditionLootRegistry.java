@@ -47,8 +47,6 @@ public class PredicateConditionLootRegistry {
 	}
 
 	private static void registerTemperaturePredicates() {
-		registerCondition(TemperaturePredicates.IsInPerfectStage(),
-			Conditions.INSTANCE.of("forgero:voidtouched").orElse(null));
 
 	}
 
@@ -96,7 +94,7 @@ public class PredicateConditionLootRegistry {
 					.map(entity -> entity.getWorld().getRegistryKey().getValue().toString().equals(dimensionId))
 					.orElse(false);
 
-			Integer forgingHits = context.get(MinecraftContextKeys.EXTREME_STAGE_HITS).orElse(0);
+			Integer forgingHits = context.get(MinecraftContextKeys.VERY_HOT_STAGE_HITS).orElse(0);
 			Integer totalHits = context.get(com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.TOTAL_HITS).orElse(0);
 			boolean mostHitsInForgingStage = totalHits > 0 && forgingHits > totalHits / 2;
 

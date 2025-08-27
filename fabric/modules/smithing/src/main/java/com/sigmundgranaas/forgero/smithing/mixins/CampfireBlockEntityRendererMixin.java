@@ -41,16 +41,16 @@ public class CampfireBlockEntityRendererMixin {
 
 				int[] bounds = TemperatureColorProvider.getStageBoundaries(maxTemp);
 				int stageIdx = segmentIndex(temperature, bounds);
-				int idxCold     = segmentIndex(scaleToMax(1572,  maxTemp), bounds);
-				int idxCool     = segmentIndex(scaleToMax(3750,  maxTemp), bounds);
-				int idxMild     = segmentIndex(scaleToMax(5000,  maxTemp), bounds);
-				int idxWarm     = segmentIndex(scaleToMax(6250,  maxTemp), bounds);
-				int idxExtreme  = segmentIndex(scaleToMax(7500,  maxTemp), bounds);
-				int idxVeryHot  = segmentIndex(scaleToMax(8750,  maxTemp), bounds);
-				int idxMolten   = segmentIndex(scaleToMax(9687,  maxTemp), bounds);
+				// 6 stages: cold, warm, hot, very hot, near melt, molten
+				int idxCold     = 0;
+				int idxWarm     = 1;
+				int idxHot      = 2;
+				int idxVeryHot  = 3;
+				int idxNearMelt = 4;
+				int idxMolten   = 5;
 				int color = TemperatureColorProvider.getHudColorForTemperature(
 					temperature, maxTemp, bounds,
-					idxCold, idxCool, idxMild, idxWarm, idxExtreme, idxVeryHot, idxMolten, stageIdx
+					idxCold, idxWarm, idxHot, idxVeryHot, idxNearMelt, idxMolten, stageIdx
 				);
 
 				matrices.push();

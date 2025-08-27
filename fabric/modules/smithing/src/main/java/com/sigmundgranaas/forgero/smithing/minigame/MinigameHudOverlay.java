@@ -62,14 +62,15 @@ public class MinigameHudOverlay implements HudRenderCallback {
         int barTop = 10;
 
         int[] boundaries = TemperatureColorProvider.getStageBoundaries(max);
-        // Stage indices based on boundaries array
+        // Stage indices based on boundaries array (6 stages)
         int idxCold     = 0;
         int idxWarm     = 1;
         int idxHot      = 2;
         int idxVeryHot  = 3;
-        int idxExtreme  = 4;
-        int idxNearMelt = 5;
-        int idxMolten   = 6;
+        int idxNearMelt = 4;
+        int idxMolten   = 5;
+
+
 
         // Only show bar from cold and up
         int minStageBoundary = boundaries[idxCold];
@@ -83,32 +84,98 @@ public class MinigameHudOverlay implements HudRenderCallback {
             int segIdx = segmentIndex(valueAtX, boundaries);
             int argb = TemperatureColorProvider.getHudColorForTemperature(
                 valueAtX, max, boundaries,
-                idxCold, idxWarm, idxHot, idxVeryHot, idxExtreme, idxNearMelt, idxMolten, segIdx
+                idxCold, idxWarm, idxHot, idxVeryHot, idxNearMelt, idxMolten, segIdx
             );
             fill(ctx, barLeft + x, barTop, barLeft + x + 1, barTop + barHeight, argb);
         }
 
         // 1px square border
-        int border = 0xFF000000;
+		int border = 0xFF222222;
         fill(ctx, barLeft, barTop, barLeft + barWidth, barTop + 1, border); // top
         fill(ctx, barLeft, barTop + barHeight - 1, barLeft + barWidth, barTop + barHeight, border); // bottom
         fill(ctx, barLeft, barTop, barLeft + 1, barTop + barHeight, border); // left
         fill(ctx, barLeft + barWidth - 1, barTop, barLeft + barWidth, barTop + barHeight, border); // right
 
         // Stage boundary ticks (straight borders between stages)
-        for (int t : boundaries) {
+        for (int i = 0; i < boundaries.length; i++) {
+            int t = boundaries[i];
             if (t < minWindow || t > maxWindow) continue;
             int x = valueToX(t, minWindow, unitsPerPixelX, barLeft, barWidth);
+            // Clamp x so ticks never overlap the right border
+            int rightBorder = barLeft + barWidth - 1;
+            if (x >= rightBorder) {
+                x = rightBorder - 1;
+            }
             // Only draw ticks strictly inside the bar, not on the border
-            if (x > barLeft && x < barLeft + barWidth - 1) {
-                int yStart = barTop + 1;
-                int yEnd = barTop + barHeight - 1;
-                fill(ctx, x, yStart, x + 1, yEnd, 0xFFFFFFFF); // fully opaque white
+            int yStart = barTop + 1; // Start below the top pixel
+            int yEnd = barTop + barHeight - 1;
+			fill(ctx, x, yStart, x + 1, yEnd, 0xFFFFFFFF); // fully opaque white
+
+            // Draw temperature value above the tick (larger font, just above the bar)
+            String tempText = String.valueOf(t);
+            ctx.getMatrices().push();
+            float scale = 0.5f; // Boundary tick temperature value: half size
+            ctx.getMatrices().translate(x + 1, barTop - 4, 0); // Move text 1px right
+            ctx.getMatrices().scale(scale, scale, 1.0f);
+            int textWidth = MinecraftClient.getInstance().textRenderer.getWidth(tempText);
+            int textX = -textWidth / 2;
+            int textY = 0;
+            ctx.drawText(MinecraftClient.getInstance().textRenderer, tempText, textX, textY, 0xFFFFFFFF, false);
+            ctx.getMatrices().pop();
+        }
+
+        // Draw two ticks between each stage: one normal, one shorter
+        for (int i = 0; i < boundaries.length - 1; i++) {
+            // Skip inbetween ticks for the molten stage (last segment)
+            if (i == boundaries.length - 2) continue;
+            int start = boundaries[i];
+            int end = boundaries[i + 1];
+            int interval = end - start;
+
+            // Midpoint tick (normal small tick)
+            int midValue = start + interval / 2;
+            if (midValue > minWindow && midValue < maxWindow) {
+                int x = valueToX(midValue, minWindow, unitsPerPixelX, barLeft, barWidth);
+                int rightBorder = barLeft + barWidth - 1;
+                if (x >= rightBorder) x = rightBorder - 1;
+                int yStart = barTop + 2;
+                int yEnd = barTop + barHeight - 2;
+                fill(ctx, x, yStart, x + 1, yEnd, 0xFFFFFFFF); // normal small tick
+
+                // Draw temperature value above the tick (smaller font for midpoint)
+                String tempText = String.valueOf(midValue);
+                ctx.getMatrices().push();
+                float scale = 0.33f; // Midpoint tick temperature value: smaller than boundary
+                ctx.getMatrices().translate(x + 1, barTop - 3, 0); // Move text 1px right, just above bar
+                ctx.getMatrices().scale(scale, scale, 1.0f);
+                int textWidth = MinecraftClient.getInstance().textRenderer.getWidth(tempText);
+                int textX = -textWidth / 2;
+                int textY = 0;
+                ctx.drawText(MinecraftClient.getInstance().textRenderer, tempText, textX, textY, 0xFFFFFFFF, false);
+                ctx.getMatrices().pop();
+            }
+
+            // Quarter ticks (shorter)
+            int quarterValue = start + interval / 4;
+            int threeQuarterValue = start + 3 * interval / 4;
+            for (int tickValue : new int[]{quarterValue, threeQuarterValue}) {
+                if (tickValue > minWindow && tickValue < maxWindow) {
+                    int x = valueToX(tickValue, minWindow, unitsPerPixelX, barLeft, barWidth);
+                    int rightBorder = barLeft + barWidth - 1;
+                    if (x >= rightBorder) x = rightBorder - 1;
+                    int yStart = barTop + 3; // shorter tick
+                    int yEnd = barTop + barHeight - 3;
+                    fill(ctx, x, yStart, x + 1, yEnd, 0xFFFFFFFF); // shorter tick
+                }
             }
         }
 
         // Current temperature arrow just below the bar, pointing down
         int tempX = valueToX(temp, minWindow, unitsPerPixelX, barLeft, barWidth);
+        int rightBorder = barLeft + barWidth - 1;
+        if (tempX >= rightBorder) {
+            tempX = rightBorder - 1;
+        }
         int arrowBottomY = barTop + barHeight + 1;
         drawDownArrow(ctx, tempX, arrowBottomY, 0xFFFFFFFF);
     }

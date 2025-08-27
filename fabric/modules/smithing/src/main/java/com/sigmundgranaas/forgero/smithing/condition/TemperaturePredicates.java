@@ -10,19 +10,5 @@ import com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys;
  */
 public class TemperaturePredicates {
 
-    public static Predicate<MatchContext> IsInPerfectStage() {
-        return context -> {
-            Integer perfectHits = context.get(MinecraftContextKeys.PERFECT_STAGE_HITS).orElse(0);
-            Integer totalHits = context.get(MinecraftContextKeys.TOTAL_HITS).orElse(0);
-            Integer fastMarkerHits = context.get(MinecraftContextKeys.FAST_MARKER_HITS).orElse(0);
-            Integer missHits = context.get(MinecraftContextKeys.MISS_HITS).orElse(0);
-
-            boolean allHitsPerfectStage = totalHits > 0 && perfectHits.equals(totalHits);
-            boolean allFastMarkersHit = fastMarkerHits >= 5;
-            boolean noMisses = missHits == 0;
-
-            return allHitsPerfectStage && allFastMarkersHit && noMisses;
-        };
-    }
 
 }
