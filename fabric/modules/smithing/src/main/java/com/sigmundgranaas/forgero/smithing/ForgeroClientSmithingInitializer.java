@@ -12,6 +12,8 @@ import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider;
 
 
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureHud;
+
 import net.fabricmc.api.ClientModInitializer;
 
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
@@ -28,6 +30,7 @@ public class ForgeroClientSmithingInitializer implements ClientModInitializer {
 		AnvilUseC2SPacket.register();
 		HudRenderCallback.EVENT.register(new MinigameHudOverlay());
         TemperatureColorProvider.register();
+		TemperatureHud.register();
 
 
     }

@@ -132,7 +132,7 @@ public class TemperatureColorProvider {
         }
         int[] scaled = new int[BASE_STAGE_BOUNDS.length];
         for (int i = 0; i < BASE_STAGE_BOUNDS.length; i++) {
-            scaled[i] = (int) (BASE_STAGE_BOUNDS[i] / (float)BASE_MAX * effectiveMax);
+            scaled[i] = Math.round(BASE_STAGE_BOUNDS[i] / (float)BASE_MAX * effectiveMax);
         }
         return scaled;
     }

@@ -12,6 +12,7 @@ import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import com.sigmundgranaas.forgero.smithing.minigame.MinigameLogic;
 import com.sigmundgranaas.forgero.smithing.minigame.MinigamePositioning;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
 import com.sigmundgranaas.forgero.smithing.util.SchematicResultUtil;
@@ -76,8 +77,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 
 	private final Random random = new Random();
 
-	private static final int ANVIL_INVENTORY_COOL_TICK_INTERVAL = 1;
-	public int anvilInventoryCoolAmountPerTick = 1; // Changeable cooling amount per tick
+	private static final int ANVIL_INVENTORY_COOL_TICK_INTERVAL = 4;
+	public int anvilInventoryCoolAmountPerTick = 4; // Changeable cooling amount per tick
 	private int anvilInventoryCoolTickCounter = 0;
 
 	private static final float ANVIL_TOP_Y = 0.9375f;
@@ -467,9 +468,27 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 			if (!stack.isEmpty() && (stack.getItem() instanceof com.sigmundgranaas.forgero.minecraft.common.item.StateItem || stack.getItem() instanceof MorphedItem)) {
 				if (TemperatureUtils.hasMaxTemperature(stack)) {
 					int temp = TemperatureUtils.getTemperature(stack);
+					int maxTemp = TemperatureUtils.getMaxTemp(stack);
 					if (temp > 20) {
 						int newTemp = Math.max(20, temp - anvilInventoryCoolAmountPerTick); // Use configurable cooling amount
 						TemperatureUtils.setTemperature(stack, newTemp);
+					}
+					// --- Fire particle logic for veryHot stage ---
+					if (stack.getItem() instanceof MorphedItem && MorphedItem.getMorphProgress(stack) < 1.0) {
+						if (TemperatureColorProvider.isInVeryHot(temp, maxTemp)) { // Use proper stage detection
+							if (world instanceof ServerWorld serverWorld) {
+								// Spawn a few critical hit particles with wider spread around the item
+								for (int i = 0; i < 2; i++) {
+									double xOffset = 0.4 * (random.nextDouble() - 0.5); // wider spread
+									double zOffset = 0.4 * (random.nextDouble() - 0.5);
+									double yOffset = 0.1 + 0.1 * random.nextDouble();
+									double x = getPos().getX() + 0.5 + xOffset;
+									double y = getPos().getY() + 0.95 + yOffset;
+									double z = getPos().getZ() + 0.5 + zOffset;
+									serverWorld.spawnParticles(ParticleTypes.CRIT, x, y, z, 1, 0, 0, 0, 0.01);
+								}
+							}
+						}
 					}
 				}
 			}

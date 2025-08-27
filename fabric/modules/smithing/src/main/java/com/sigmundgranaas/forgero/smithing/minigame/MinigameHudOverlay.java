@@ -130,10 +130,10 @@ public class MinigameHudOverlay implements HudRenderCallback {
             if (i == boundaries.length - 2) continue;
             int start = boundaries[i];
             int end = boundaries[i + 1];
-            int interval = end - start;
+            float interval = (float)(end - start);
 
             // Midpoint tick (normal small tick)
-            int midValue = start + interval / 2;
+            int midValue = Math.round(start + interval / 2.0f);
             if (midValue > minWindow && midValue < maxWindow) {
                 int x = valueToX(midValue, minWindow, unitsPerPixelX, barLeft, barWidth);
                 int rightBorder = barLeft + barWidth - 1;
@@ -156,8 +156,8 @@ public class MinigameHudOverlay implements HudRenderCallback {
             }
 
             // Quarter ticks (shorter)
-            int quarterValue = start + interval / 4;
-            int threeQuarterValue = start + 3 * interval / 4;
+            int quarterValue = Math.round(start + interval / 4.0f);
+            int threeQuarterValue = Math.round(start + 3.0f * interval / 4.0f);
             for (int tickValue : new int[]{quarterValue, threeQuarterValue}) {
                 if (tickValue > minWindow && tickValue < maxWindow) {
                     int x = valueToX(tickValue, minWindow, unitsPerPixelX, barLeft, barWidth);
@@ -223,11 +223,13 @@ public class MinigameHudOverlay implements HudRenderCallback {
         return MorphedItem.getMorphProgress(stack) < 1.0;
     }
 
-    // Convert a value in [minWindow, minWindow+range] to a X coordinate along the bar (left-to-right)
+    // Convert a value in [minWindow, maxWindow] to a X coordinate along the bar (left-to-right)
     private int valueToX(int value, int minWindow, float unitsPerPixelX, int barLeft, int barWidth) {
-        float clamped = Math.max(minWindow, value);
-        int rel = Math.round((clamped - minWindow) / unitsPerPixelX);
-        int x = barLeft + rel;
+        // Don't clamp the value here - calculate the exact pixel position first
+        float exactPixelOffset = (value - minWindow) / unitsPerPixelX;
+        int x = barLeft + Math.round(exactPixelOffset);
+
+        // Only clamp the final pixel position to bar bounds
         if (x < barLeft) x = barLeft;
         if (x > barLeft + barWidth - 1) x = barLeft + barWidth - 1;
         return x;
