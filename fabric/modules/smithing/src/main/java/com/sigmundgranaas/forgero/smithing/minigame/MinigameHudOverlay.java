@@ -43,12 +43,15 @@ public class MinigameHudOverlay implements HudRenderCallback {
 
         int temp = TemperatureUtils.getTemperature(stack);
         int max = Math.max(TemperatureUtils.getMaxTemp(stack), 1);
+        int effectiveMax = Math.min(max, 10000);
 
-        // Compute a 300-degree sliding window around current temperature.
-        final int window = 600;
+        // Compute a scaled window around current temperature (base: 600 for 1600 max)
+        final int BASE_MAX = 1600;
+        final int BASE_WINDOW = 500;
+        int window = (int)(BASE_WINDOW / (float)BASE_MAX * effectiveMax);
         int half = window / 2;
-        int minWindow = Math.max(0, Math.min(temp - half, Math.max(0, max - window)));
-        int maxWindow = Math.min(max, minWindow + window);
+        int minWindow = Math.max(0, Math.min(temp - half, Math.max(0, effectiveMax - window)));
+        int maxWindow = Math.min(effectiveMax, minWindow + window);
         if (maxWindow <= minWindow) return;
 
         // Horizontal bar placement and dimensions (center top, slightly larger)
@@ -59,14 +62,14 @@ public class MinigameHudOverlay implements HudRenderCallback {
         int barTop = 10;
 
         int[] boundaries = TemperatureColorProvider.getStageBoundaries(max);
-        // Precompute segment indices for each stage using scaled midpoints
-        int idxCold     = segmentIndex(scaleToMax(1572,  max), boundaries);      // (20 + 3125) / 2
-        int idxCool     = segmentIndex(scaleToMax(3750,  max), boundaries);      // (3125 + 4375) / 2
-        int idxMild     = segmentIndex(scaleToMax(5000,  max), boundaries);      // (4375 + 5625) / 2
-        int idxWarm     = segmentIndex(scaleToMax(6250,  max), boundaries);      // (5625 + 6875) / 2
-        int idxExtreme  = segmentIndex(scaleToMax(7500,  max), boundaries);      // (6875 + 8125) / 2
-        int idxVeryHot  = segmentIndex(scaleToMax(8750,  max), boundaries);      // (8125 + 9375) / 2
-        int idxMolten   = segmentIndex(scaleToMax(9687,  max), boundaries);      // (9375 + 10000) / 2
+        // Stage indices based on boundaries array
+        int idxCold     = 0;
+        int idxWarm     = 1;
+        int idxHot      = 2;
+        int idxVeryHot  = 3;
+        int idxExtreme  = 4;
+        int idxNearMelt = 5;
+        int idxMolten   = 6;
 
         // Only show bar from cold and up
         int minStageBoundary = boundaries[idxCold];
@@ -80,7 +83,7 @@ public class MinigameHudOverlay implements HudRenderCallback {
             int segIdx = segmentIndex(valueAtX, boundaries);
             int argb = TemperatureColorProvider.getHudColorForTemperature(
                 valueAtX, max, boundaries,
-                idxCold, idxCool, idxMild, idxWarm, idxExtreme, idxVeryHot, idxMolten, segIdx
+                idxCold, idxWarm, idxHot, idxVeryHot, idxExtreme, idxNearMelt, idxMolten, segIdx
             );
             fill(ctx, barLeft + x, barTop, barLeft + x + 1, barTop + barHeight, argb);
         }
