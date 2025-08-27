@@ -78,7 +78,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	private final Random random = new Random();
 
 	private static final int ANVIL_INVENTORY_COOL_TICK_INTERVAL = 4;
-	public int anvilInventoryCoolAmountPerTick = 4; // Changeable cooling amount per tick
+	public int anvilInventoryCoolAmountPerTick = 2; // Changeable cooling amount per tick
 	private int anvilInventoryCoolTickCounter = 0;
 
 	private static final float ANVIL_TOP_Y = 0.9375f;
@@ -460,33 +460,40 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 			guiBlockCooldownUntil = 0;
 		}
 
-		// Periodic dirty to ensure cooling/etc. visuals
+		// Only cool when schematic selection has been made (do not stop in between)
+		boolean shouldCool = false;
+		ItemStack stack = currentStack();
+		if (!stack.isEmpty() && (stack.getItem() instanceof com.sigmundgranaas.forgero.minecraft.common.item.StateItem || stack.getItem() instanceof MorphedItem)) {
+			// Schematic selection made: plannedProductId != null (for smithing) or is MorphedItem
+			boolean schematicSelected = (isSmithing && plannedProductId != null) || stack.getItem() instanceof MorphedItem;
+			if (schematicSelected && TemperatureUtils.hasMaxTemperature(stack)) {
+				shouldCool = true;
+			}
+		}
+
 		anvilInventoryCoolTickCounter++;
 		if (anvilInventoryCoolTickCounter >= ANVIL_INVENTORY_COOL_TICK_INTERVAL) {
 			anvilInventoryCoolTickCounter = 0;
-			ItemStack stack = currentStack();
-			if (!stack.isEmpty() && (stack.getItem() instanceof com.sigmundgranaas.forgero.minecraft.common.item.StateItem || stack.getItem() instanceof MorphedItem)) {
-				if (TemperatureUtils.hasMaxTemperature(stack)) {
-					int temp = TemperatureUtils.getTemperature(stack);
-					int maxTemp = TemperatureUtils.getMaxTemp(stack);
-					if (temp > 20) {
-						int newTemp = Math.max(20, temp - anvilInventoryCoolAmountPerTick); // Use configurable cooling amount
-						TemperatureUtils.setTemperature(stack, newTemp);
-					}
-					// --- Fire particle logic for veryHot stage ---
-					if (stack.getItem() instanceof MorphedItem && MorphedItem.getMorphProgress(stack) < 1.0) {
-						if (TemperatureColorProvider.isInVeryHot(temp, maxTemp)) { // Use proper stage detection
-							if (world instanceof ServerWorld serverWorld) {
-								// Spawn a few critical hit particles with wider spread around the item
-								for (int i = 0; i < 2; i++) {
-									double xOffset = 0.4 * (random.nextDouble() - 0.5); // wider spread
-									double zOffset = 0.4 * (random.nextDouble() - 0.5);
-									double yOffset = 0.1 + 0.1 * random.nextDouble();
-									double x = getPos().getX() + 0.5 + xOffset;
-									double y = getPos().getY() + 0.95 + yOffset;
-									double z = getPos().getZ() + 0.5 + zOffset;
-									serverWorld.spawnParticles(ParticleTypes.CRIT, x, y, z, 1, 0, 0, 0, 0.01);
-								}
+			if (shouldCool) {
+				int temp = TemperatureUtils.getTemperature(stack);
+				int maxTemp = TemperatureUtils.getMaxTemp(stack);
+				if (temp > 20) {
+					int newTemp = Math.max(20, temp - anvilInventoryCoolAmountPerTick);
+					TemperatureUtils.setTemperature(stack, newTemp);
+				}
+				// --- Fire particle logic for veryHot stage ---
+				if (stack.getItem() instanceof MorphedItem && MorphedItem.getMorphProgress(stack) < 1.0) {
+					if (TemperatureColorProvider.isInVeryHot(temp, maxTemp)) { // Use proper stage detection
+						if (world instanceof ServerWorld serverWorld) {
+							// Spawn a few critical hit particles with wider spread around the item
+							for (int i = 0; i < 2; i++) {
+								double xOffset = 0.4 * (random.nextDouble() - 0.5); // wider spread
+								double zOffset = 0.4 * (random.nextDouble() - 0.5);
+								double yOffset = 0.1 + 0.1 * random.nextDouble();
+								double x = getPos().getX() + 0.5 + xOffset;
+								double y = getPos().getY() + 0.95 + yOffset;
+								double z = getPos().getZ() + 0.5 + zOffset;
+
 							}
 						}
 					}

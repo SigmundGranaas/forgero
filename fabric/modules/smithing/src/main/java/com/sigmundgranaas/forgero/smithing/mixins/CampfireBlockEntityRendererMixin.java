@@ -15,14 +15,25 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.block.entity.CampfireBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.LightmapTextureManager;
+import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.block.entity.CampfireBlockEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.RotationAxis;
 
 @Mixin(CampfireBlockEntityRenderer.class)
 public class CampfireBlockEntityRendererMixin {
+	@Unique
+	private static final Identifier THERMOMETER = new Identifier("forgero", "textures/gui/thermometer.png");
+	@Unique
+	private static final Identifier THERMOMETER_UP = new Identifier("forgero", "textures/gui/thermometer_up.png");
+
 	@Inject(
 			method = "render(Lnet/minecraft/block/entity/CampfireBlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;II)V",
 			at = @At("TAIL")
@@ -36,48 +47,73 @@ public class CampfireBlockEntityRendererMixin {
 			ItemStack stack = items.get(i);
 			if (!stack.isEmpty()) {
 				int temperature = TemperatureUtils.getTemperature(stack);
-				int maxTemp = TemperatureUtils.getMaxTemp(stack);
 				String tempText = temperature + "°";
 
-				int[] bounds = TemperatureColorProvider.getStageBoundaries(maxTemp);
-				int stageIdx = segmentIndex(temperature, bounds);
-				// 6 stages: cold, warm, hot, very hot, near melt, molten
-				int idxCold     = 0;
-				int idxWarm     = 1;
-				int idxHot      = 2;
-				int idxVeryHot  = 3;
-				int idxNearMelt = 4;
-				int idxMolten   = 5;
-				int color = TemperatureColorProvider.getHudColorForTemperature(
-					temperature, maxTemp, bounds,
-					idxCold, idxWarm, idxHot, idxVeryHot, idxNearMelt, idxMolten, stageIdx
-				);
+				int maxTemp = TemperatureUtils.getMaxTemp(stack);
+				int tempColor = TemperatureColorProvider.getInterpolatedHudColor(temperature, maxTemp);
+
+				// Choose icon
+				Identifier icon;
+				if (TemperatureUtils.isAtMaxTemperature(stack)) {
+					icon = THERMOMETER;
+				} else if (TemperatureUtils.isHeating(stack)) {
+					icon = THERMOMETER_UP;
+				} else {
+					icon = THERMOMETER; // fallback
+				}
 
 				matrices.push();
-				matrices.translate(0.5, 1.5, 0.5 + i * 0.25); // raised above campfire a bit more
+				matrices.translate(0.5, 1.5, 0.5 + i * 0.25);
 
 				float yaw = client.getEntityRenderDispatcher().camera.getYaw();
 				float pitch = client.getEntityRenderDispatcher().camera.getPitch();
 				matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-yaw));
 				matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(pitch));
-				matrices.scale(-0.015f, -0.015f, 0.015f); // smaller text, keep flip
+				matrices.scale(-0.015f, -0.015f, 0.015f);
 
 				Matrix4f matrix4f = matrices.peek().getPositionMatrix();
 
-				// Ensure drawn above blocks
 				RenderSystem.disableDepthTest();
+
+				// --- Draw icon ---
+				RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+				RenderSystem.setShaderTexture(0, icon);
+
+				int iconSize = 6;
+				Tessellator tessellator = Tessellator.getInstance();
+				BufferBuilder buffer = tessellator.getBuffer();
+				buffer.begin(VertexFormat.DrawMode.QUADS, net.minecraft.client.render.VertexFormats.POSITION_TEXTURE);
+
+				buffer.vertex(matrix4f, -iconSize / 2f, 0, 0).texture(0f, 0f).next();
+				buffer.vertex(matrix4f, -iconSize / 2f, iconSize, 0).texture(0f, 1f).next();
+				buffer.vertex(matrix4f, iconSize / 2f, iconSize, 0).texture(1f, 1f).next();
+				buffer.vertex(matrix4f, iconSize / 2f, 0, 0).texture(1f, 0f).next();
+
+				tessellator.draw();
+
+				// --- Draw temperature text smaller ---
+				matrices.push();
+				float textScale = 0.7f;
+				matrices.scale(textScale, textScale, textScale);
+
 				textRenderer.draw(
 					tempText,
-					-textRenderer.getWidth(tempText) / 2f,
+					(iconSize / 2f + 2) / textScale,
 					0,
-					color,
+					tempColor,
 					false,
-					matrix4f,
+					matrices.peek().getPositionMatrix(),
 					vertexConsumers,
 					TextRenderer.TextLayerType.SEE_THROUGH,
 					0,
-					light
+					LightmapTextureManager.pack(15, 15)
 				);
+				matrices.pop();
+
+				// Fix: Only call draw() if vertexConsumers is Immediate
+				if (vertexConsumers instanceof VertexConsumerProvider.Immediate immediate) {
+					immediate.draw();
+				}
 				RenderSystem.enableDepthTest();
 
 				matrices.pop();

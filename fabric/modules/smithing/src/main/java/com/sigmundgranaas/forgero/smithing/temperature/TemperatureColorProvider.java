@@ -164,16 +164,8 @@ public class TemperatureColorProvider {
 
 
 	public static int getHudColorForTemperature(int temp, int maxTemp, int[] bounds, int idxCold, int idxWarm, int idxHot, int idxVeryHot, int idxNearMelt, int idxMolten, int stageIdx) {
-		// Original colors:
-		// Cold:      0xFF0000FF (blue)
-		// Warm:      0xFF00FFFF (cyan)
-		// Hot:       0xFFFFFF00 (yellow)
-		// Very Hot:  0xFF00FF00 (green)
-		// Near Melt: 0xFFFF8000 (orange)
-		// Molten:    0xFFFF0000 (red)
-		// Darker versions (RGB * 0.6):
 		final int DARK_BLUE   = 0xFF000099; // 0xFF0000FF * 0.6 = 0xFF000099
-		final int DARK_CYAN   = 0xFF00CCCC; // 0xFF00FFFF * 0.6 = 0xFF00CCCC
+		final int DARK_CYAN   = 0xFF3399FF; // 0xFF00FFFF * 0.6 = 0xFF00CCCC
 		final int DARK_YELLOW = 0xFFCCCC00; // 0xFFFFFF00 * 0.6 = 0xFFCCCC00
 		final int DARK_GREEN  = 0xFF00CC00; // 0xFF00FF00 * 0.6 = 0xFF00CC00
 		final int DARK_ORANGE = 0xFFCC6600; // 0xFFFF8000 * 0.6 = 0xFFCC6600
@@ -186,4 +178,36 @@ public class TemperatureColorProvider {
 		else if (stageIdx == idxMolten)  return DARK_RED;
 		else return DARK_YELLOW; // fallback
 	}
+
+    // HUD stage colors (ARGB)
+    private static final int[] HUD_STAGE_COLORS = new int[] {
+        0xFF000099, // Cold: dark blue
+        0xFF3399FF, // Warm: dark cyan
+        0xFFCCCC00, // Hot: dark yellow
+        0xFF00CC00, // Very Hot: dark green
+        0xFFCC6600, // Near Melt: dark orange
+        0xFFCC0000  // Molten: dark red
+    };
+
+    /**
+     * Interpolates HUD stage colors for a temperature value.
+     * Returns a color smoothly interpolated within each stage, but with sharp transitions at stage boundaries.
+     */
+    public static int getInterpolatedHudColor(int temperature, int maxTemp) {
+        int[] bounds = getStageBoundaries(maxTemp);
+        int stageIdx = 0;
+        for (int i = 0; i < bounds.length - 1; i++) {
+            if (temperature >= bounds[i] && temperature < bounds[i + 1]) {
+                stageIdx = i;
+                break;
+            }
+        }
+        // If at last boundary, use last color
+        if (stageIdx >= HUD_STAGE_COLORS.length - 1 || bounds[stageIdx + 1] == bounds[stageIdx]) {
+            return HUD_STAGE_COLORS[HUD_STAGE_COLORS.length - 1];
+        }
+        // Interpolate within stage
+        float t = (float)(temperature - bounds[stageIdx]) / (float)(bounds[stageIdx + 1] - bounds[stageIdx]);
+        return lerpColor(HUD_STAGE_COLORS[stageIdx], HUD_STAGE_COLORS[stageIdx + 1], t);
+    }
 }

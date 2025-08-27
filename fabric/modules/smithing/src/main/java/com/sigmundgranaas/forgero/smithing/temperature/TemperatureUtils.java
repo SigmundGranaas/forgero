@@ -12,11 +12,9 @@ import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.state.property.Properties;
-import net.minecraft.world.World;
 
 public class TemperatureUtils {
     public static final String TEMPERATURE_KEY = "forgero_temperature";
@@ -76,27 +74,29 @@ public class TemperatureUtils {
             && state.get(Properties.LEVEL_3) == 3;
     }
 
-    // Client/server-safe campfire check (campfire or soul campfire)
-    public static boolean isBlockCampfire(BlockState state) {
-        return state != null && (state.isOf(Blocks.CAMPFIRE) || state.isOf(Blocks.SOUL_CAMPFIRE));
-    }
-
     public static boolean isItemInFilledWaterCauldron(net.minecraft.entity.ItemEntity itemEntity, net.minecraft.world.World world) {
         if (itemEntity == null || world == null) return false;
         BlockState state = world.getBlockState(itemEntity.getBlockPos());
         return isBlockFilledWaterCauldron(state);
     }
+	
 
-    // New: check if an item entity is on a campfire or soul campfire
-    public static boolean isItemOnCampfire(ItemEntity itemEntity, World world) {
-        if (itemEntity == null || world == null) return false;
+    public static boolean isCooling(ItemStack stack) {
+        int temperature = getTemperature(stack);
 
-        // Check the block at the item's position
-        BlockState state = world.getBlockState(itemEntity.getBlockPos());
-        if (isBlockCampfire(state)) return true;
+        return temperature > DEFAULT_TEMPERATURE;
+    }
 
-        // Also check the block below the item (items sit above campfires)
-        BlockState stateBelow = world.getBlockState(itemEntity.getBlockPos().down());
-        return isBlockCampfire(stateBelow);
+    public static boolean isHeating(ItemStack stack) {
+        int temperature = getTemperature(stack);
+        return temperature > DEFAULT_TEMPERATURE;
+    }
+
+    public static boolean isAtDefaultTemperature(ItemStack stack) {
+        return getTemperature(stack) == DEFAULT_TEMPERATURE;
+    }
+
+    public static boolean isAtMaxTemperature(ItemStack stack) {
+        return getTemperature(stack) == getMaxTemp(stack);
     }
 }

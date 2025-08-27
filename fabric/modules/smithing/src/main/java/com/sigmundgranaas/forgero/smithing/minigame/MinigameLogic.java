@@ -34,7 +34,7 @@ public class MinigameLogic {
     public static final int MARKER_LIFETIME_TICKS_NORMAL = 35;
     public static final int MARKER_LIFETIME_TICKS_FAST = 20;
     public static final int TOTAL_MARKERS = 10;
-    public static final int FAST_MARKERS = 5;
+    public static final int FAST_MARKERS = 3; // Changed from 5 to 3
 
     private static final double MARKER_HIT_RADIUS_SQ = 0.0075d;
 
@@ -94,8 +94,9 @@ public class MinigameLogic {
         markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
         fastMarkerIndices.clear();
 
+        // Ensure first marker (index 0) is never a fast marker
         while (fastMarkerIndices.size() < FAST_MARKERS) {
-            int idx = random.nextInt(TOTAL_MARKERS);
+            int idx = 1 + random.nextInt(TOTAL_MARKERS - 1); // Only indices 1..TOTAL_MARKERS-1
             if (!fastMarkerIndices.contains(idx)) {
                 fastMarkerIndices.add(idx);
             }
@@ -165,7 +166,7 @@ public class MinigameLogic {
 
             // Fast marker removes 10 temperature, normal adds 30
             int markerIndex = markerAttempts - 1;
-            int tempChange = fastMarkerIndices.contains(markerIndex) ? -10 : 30;
+            int tempChange = fastMarkerIndices.contains(markerIndex) ? -10 : 40;
             TemperatureUtils.setTemperature(stack, Math.max(0, Math.min(temperature + tempChange, maxTemp)));
 
             // Count fast marker hit
