@@ -136,17 +136,19 @@ public class MinigameHudOverlay implements HudRenderCallback {
                 fill(ctx, x, yStart, x + 1, yEnd, 0xCCFFFFFF);
             }
 
-            // Quarter ticks (shorter)
-            int quarterValue = Math.round(start + interval / 4.0f);
-            int threeQuarterValue = Math.round(start + 3.0f * interval / 4.0f);
-            for (int tickValue : new int[]{quarterValue, threeQuarterValue}) {
-                if (tickValue > minWindow && tickValue < maxWindow) {
-                    int x = valueToX(tickValue, minWindow, unitsPerPixelX, innerLeft, innerWidth);
-                    int rightBorder = innerLeft + innerWidth;
-                    if (x >= rightBorder) x = rightBorder - 1;
-                    int yStart = innerTop + 2;
-                    int yEnd = innerTop + innerHeight - 2;
-                    fill(ctx, x, yStart, x + 1, yEnd, 0x88FFFFFF);
+            // Quarter ticks (shorter), skip for near melt stage (i == 4)
+            if (i != 4) {
+                int quarterValue = Math.round(start + interval / 4.0f);
+                int threeQuarterValue = Math.round(start + 3.0f * interval / 4.0f);
+                for (int tickValue : new int[]{quarterValue, threeQuarterValue}) {
+                    if (tickValue > minWindow && tickValue < maxWindow) {
+                        int x = valueToX(tickValue, minWindow, unitsPerPixelX, innerLeft, innerWidth);
+                        int rightBorder = innerLeft + innerWidth;
+                        if (x >= rightBorder) x = rightBorder - 1;
+                        int yStart = innerTop + 2;
+                        int yEnd = innerTop + innerHeight - 2;
+                        fill(ctx, x, yStart, x + 1, yEnd, 0x88FFFFFF);
+                    }
                 }
             }
         }

@@ -50,7 +50,18 @@ public class CampfireBlockEntityRendererMixin {
 				String tempText = temperature + "°";
 
 				int maxTemp = TemperatureUtils.getMaxTemp(stack);
-				int tempColor = TemperatureColorProvider.getInterpolatedHudColor(temperature, maxTemp);
+				int[] boundaries = TemperatureColorProvider.getStageBoundaries(maxTemp);
+				// Use MinigameHudOverlay stage colors (copy here for reuse)
+				int[] stageColors = new int[] {
+					0xFF000099, // Cold: dark blue
+					0xFF3399FF, // Warm: dark cyan
+					0xFFCCCC00, // Hot: dark yellow
+					0xFF00CC00, // Very Hot: dark green
+					0xFFCC6600, // Near Melt: dark orange
+					0xFFCC0000  // Molten: dark red
+				};
+				int segIdx = segmentIndex(temperature, boundaries);
+				int tempColor = stageColors[segIdx];
 
 				// Choose icon
 				Identifier icon;
