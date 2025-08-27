@@ -23,8 +23,8 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 // TODO BLUE, CYAN LIGHT BLUE,
 public class MinigameHudOverlay implements HudRenderCallback {
 
-	private static final Identifier THERMOMETER_UP = new Identifier("forgero", "textures/gui/thermometer_up.png");
 	private static final Identifier BAR_TEXTURE = new Identifier("forgero", "textures/gui/bar_texture.png");
+	private static final Identifier THERMOMETER_ARROW = new Identifier("forgero", "textures/gui/thermometer_arrow.png");
 
     @Override
     public void onHudRender(DrawContext ctx, float tickDelta) {
@@ -56,9 +56,14 @@ public class MinigameHudOverlay implements HudRenderCallback {
         int screenW = ctx.getScaledWindowWidth();
         int barWidth = 156; // match texture width
         int barHeight = 26; // match texture height
-        int borderSize = 0; // 1px border on all sides
         int barLeft = (screenW - barWidth) / 2;
         int barTop = 10;
+
+        // Inner area for temperature bar
+        int innerWidth = 141;
+        int innerHeight = 10;
+        int innerLeft = barLeft + 7;
+        int innerTop = barTop + 8;
 
         int[] boundaries = TemperatureColorProvider.getStageBoundaries(max);
         // Stage indices based on boundaries array (6 stages)
@@ -75,7 +80,7 @@ public class MinigameHudOverlay implements HudRenderCallback {
         int minStageBoundary = boundaries[idxCold];
         minWindow = Math.max(minStageBoundary, minWindow);
         if (maxWindow <= minWindow) return;
-        float unitsPerPixelX = (float) (maxWindow - minWindow) / (float) (barWidth - 2 * borderSize);
+        float unitsPerPixelX = (float) (maxWindow - minWindow) / (float) (innerWidth);
 
         // Hardcoded stage colors per segment (no blending)
         // Fill the inside of the bar with stage colors
@@ -87,54 +92,34 @@ public class MinigameHudOverlay implements HudRenderCallback {
             0xFFCC6600, // Near Melt: dark orange
             0xFFCC0000  // Molten: dark red
         };
-        for (int x = borderSize; x < barWidth - borderSize; x++) {
-            int tempValue = Math.round(minWindow + (x - borderSize) * unitsPerPixelX);
+        for (int x = 0; x < innerWidth; x++) {
+            int tempValue = Math.round(minWindow + x * unitsPerPixelX);
             int segIdx = segmentIndex(tempValue, boundaries);
             int color = stageColors[segIdx];
-            fill(ctx, barLeft + x, barTop + borderSize, barLeft + x + 1, barTop + barHeight - borderSize, color);
+            fill(ctx, innerLeft + x, innerTop, innerLeft + x + 1, innerTop + innerHeight, color);
         }
 
         // Draw the border using the texture (full size)
         ctx.drawTexture(BAR_TEXTURE, barLeft, barTop, 0, 0, barWidth, barHeight, barWidth, barHeight);
 
-        // 1px square border (optional, if you want to keep it)
-        int border = 0xFF222222;
-        fill(ctx, barLeft, barTop, barLeft + barWidth, barTop + borderSize, border); // top
-        fill(ctx, barLeft, barTop + barHeight - borderSize, barLeft + barWidth, barTop + barHeight, border); // bottom
-        fill(ctx, barLeft, barTop, barLeft + borderSize, barTop + barHeight, border); // left
-        fill(ctx, barLeft + barWidth - borderSize, barTop, barLeft + barWidth, barTop + barHeight, border); // right
-
         // Stage boundary ticks (straight borders between stages)
         for (int i = 0; i < boundaries.length; i++) {
             int t = boundaries[i];
             if (t < minWindow || t > maxWindow) continue;
-            int x = valueToX(t, minWindow, unitsPerPixelX, barLeft + borderSize, barWidth - 2 * borderSize);
-            // Clamp x so ticks never overlap the right border
-            int rightBorder = barLeft + barWidth - borderSize;
+            // Don't render the min stick at minimum temperature or the max stick at maximum temperature
+            if ((i == 0 && t == minWindow) || (i == boundaries.length - 1 && t == maxWindow)) continue;
+            int x = valueToX(t, minWindow, unitsPerPixelX, innerLeft, innerWidth);
+            int rightBorder = innerLeft + innerWidth;
             if (x >= rightBorder) {
                 x = rightBorder - 1;
             }
-            // Only draw ticks strictly inside the bar, not on the border
-            int yStart = barTop + borderSize; // Start below the top pixel
-            int yEnd = barTop + barHeight - borderSize;
+            int yStart = innerTop; // Start at top of inner area
+            int yEnd = innerTop + innerHeight;
             fill(ctx, x, yStart, x + 1, yEnd, 0xFFFFFFFF); // fully opaque white
-
-            // Draw temperature value above the tick (larger font, just above the bar)
-            String tempText = String.valueOf(t);
-            ctx.getMatrices().push();
-            float scale = 0.5f; // Boundary tick temperature value: half size
-            ctx.getMatrices().translate(x + 1, barTop - 4, 0); // Move text 1px right
-            ctx.getMatrices().scale(scale, scale, 1.0f);
-            int textWidth = MinecraftClient.getInstance().textRenderer.getWidth(tempText);
-            int textX = -textWidth / 2;
-            int textY = 0;
-            ctx.drawText(MinecraftClient.getInstance().textRenderer, tempText, textX, textY, 0xFFFFFFFF, false);
-            ctx.getMatrices().pop();
         }
 
-        // Draw two ticks between each stage: one normal, one shorter
+        // Two ticks between each stage: one normal, one shorter
         for (int i = 0; i < boundaries.length - 1; i++) {
-            // Skip inbetween ticks for the molten stage (last segment)
             if (i == boundaries.length - 2) continue;
             int start = boundaries[i];
             int end = boundaries[i + 1];
@@ -143,24 +128,12 @@ public class MinigameHudOverlay implements HudRenderCallback {
             // Midpoint tick (normal small tick)
             int midValue = Math.round(start + interval / 2.0f);
             if (midValue > minWindow && midValue < maxWindow) {
-                int x = valueToX(midValue, minWindow, unitsPerPixelX, barLeft + borderSize, barWidth - 2 * borderSize);
-                int rightBorder = barLeft + barWidth - borderSize;
+                int x = valueToX(midValue, minWindow, unitsPerPixelX, innerLeft, innerWidth);
+                int rightBorder = innerLeft + innerWidth;
                 if (x >= rightBorder) x = rightBorder - 1;
-                int yStart = barTop + borderSize + 1;
-                int yEnd = barTop + barHeight - borderSize - 1;
-                fill(ctx, x, yStart, x + 1, yEnd, 0xCCFFFFFF); // less see-through (midpoint)
-
-                // Draw temperature value above the tick (smaller font for midpoint)
-                String tempText = String.valueOf(midValue);
-                ctx.getMatrices().push();
-                float scale = 0.33f; // Midpoint tick temperature value: smaller than boundary
-                ctx.getMatrices().translate(x + 1, barTop - 3, 0); // Move text 1px right, just above bar
-                ctx.getMatrices().scale(scale, scale, 1.0f);
-                int textWidth = MinecraftClient.getInstance().textRenderer.getWidth(tempText);
-                int textX = -textWidth / 2;
-                int textY = 0;
-                ctx.drawText(MinecraftClient.getInstance().textRenderer, tempText, textX, textY, 0xFFFFFFFF, false);
-                ctx.getMatrices().pop();
+                int yStart = innerTop + 1;
+                int yEnd = innerTop + innerHeight - 1;
+                fill(ctx, x, yStart, x + 1, yEnd, 0xCCFFFFFF);
             }
 
             // Quarter ticks (shorter)
@@ -168,23 +141,23 @@ public class MinigameHudOverlay implements HudRenderCallback {
             int threeQuarterValue = Math.round(start + 3.0f * interval / 4.0f);
             for (int tickValue : new int[]{quarterValue, threeQuarterValue}) {
                 if (tickValue > minWindow && tickValue < maxWindow) {
-                    int x = valueToX(tickValue, minWindow, unitsPerPixelX, barLeft + borderSize, barWidth - 2 * borderSize);
-                    int rightBorder = barLeft + barWidth - borderSize;
+                    int x = valueToX(tickValue, minWindow, unitsPerPixelX, innerLeft, innerWidth);
+                    int rightBorder = innerLeft + innerWidth;
                     if (x >= rightBorder) x = rightBorder - 1;
-                    int yStart = barTop + borderSize + 2; // shorter tick
-                    int yEnd = barTop + barHeight - borderSize - 2;
-                    fill(ctx, x, yStart, x + 1, yEnd, 0x88FFFFFF); // more see-through (quarter)
+                    int yStart = innerTop + 2;
+                    int yEnd = innerTop + innerHeight - 2;
+                    fill(ctx, x, yStart, x + 1, yEnd, 0x88FFFFFF);
                 }
             }
         }
 
         // Current temperature arrow just below the bar, pointing down
-        int tempX = valueToX(temp, minWindow, unitsPerPixelX, barLeft + borderSize, barWidth - 2 * borderSize);
-        int rightBorder = barLeft + barWidth - borderSize;
+        int tempX = valueToX(temp, minWindow, unitsPerPixelX, innerLeft, innerWidth);
+        int rightBorder = innerLeft + innerWidth;
         if (tempX >= rightBorder) {
             tempX = rightBorder - 1;
         }
-        int arrowBottomY = barTop + barHeight + 1;
+        int arrowBottomY = innerTop + innerHeight + 1;
         drawDownArrow(ctx, tempX, arrowBottomY, 0xFFFFFFFF);
     }
 
@@ -248,13 +221,12 @@ public class MinigameHudOverlay implements HudRenderCallback {
 
     // Draw a small down-pointing arrow; bottomY is the tip's Y
     private void drawDownArrow(DrawContext ctx, int centerX, int bottomY, int color) {
-        int half = 3; // half-width
-        for (int i = 0; i <= 4; i++) {
-            int extent = Math.max(0, half - i + 1);
-            int x1 = centerX - extent;
-            int x2 = centerX + extent + 1;
-            fill(ctx, x1, bottomY - i, x2, bottomY - i + 1, color);
-        }
+        // Draw the custom arrow texture centered at (centerX, bottomY)
+        int arrowWidth = 16; // Adjust to match your texture size
+        int arrowHeight = 16; // Adjust to match your texture size
+        int x = centerX - arrowWidth / 2;
+        int y = bottomY - arrowHeight + 1;
+        ctx.drawTexture(THERMOMETER_ARROW, x, y, 0, 0, arrowWidth, arrowHeight, arrowWidth, arrowHeight);
     }
 
     private void fill(DrawContext ctx, int x1, int y1, int x2, int y2, int argb) {

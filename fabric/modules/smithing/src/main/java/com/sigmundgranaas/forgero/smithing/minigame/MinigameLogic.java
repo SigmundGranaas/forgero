@@ -30,7 +30,7 @@ import net.minecraft.world.World;
 @Getter
 public class MinigameLogic {
     public static final int INITIAL_MARKER_DELAY_TICKS = 25;
-    public static final int SUBSEQUENT_MARKER_DELAY_TICKS = 20;
+    public static final int SUBSEQUENT_MARKER_DELAY_TICKS = 15;
     public static final int MARKER_LIFETIME_TICKS_NORMAL = 35;
     public static final int MARKER_LIFETIME_TICKS_FAST = 20;
     public static final int TOTAL_MARKERS = 10;

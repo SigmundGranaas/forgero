@@ -77,8 +77,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 
 	private final Random random = new Random();
 
-	private static final int ANVIL_INVENTORY_COOL_TICK_INTERVAL = 4;
-	public int anvilInventoryCoolAmountPerTick = 2; // Changeable cooling amount per tick
+	private static final int ANVIL_INVENTORY_COOL_TICK_INTERVAL = 10;
+	public int anvilInventoryCoolAmountPerTick = 4; // Changeable cooling amount per tick
 	private int anvilInventoryCoolTickCounter = 0;
 
 	private static final float ANVIL_TOP_Y = 0.9375f;
