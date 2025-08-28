@@ -1,0 +1,45 @@
+{
+  "type": "forgero:shaped_recipe",
+  "group": "forgero:pickaxes",
+  "category": "equipment",
+  "pattern": [
+    " H ",
+    " B ",
+    " S "
+  ],
+  "key": {
+    "H": {
+      "item": "minecraft:diamond"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "B": {
+      "item": "minecraft:leather"
+    }
+  },
+  "result": {
+    "item": "minecraft:diamond-pickaxe",
+    "upgrades": [
+      {
+        "slot": "forgero:binding_slot",
+        "component": "forgero:leather"
+      }
+    ],
+    "properties": {
+      "forgero:attributes": [
+        {
+          "type": "forgero:mining_speed",
+          "operator": "mul",
+          "value": 1.1
+        }
+      ],
+      "forgero:tooltip_sections": [
+        {
+          "key": "forgero:description",
+          "value": "tooltip.forgero.reinforced_craft"
+        }
+      ]
+    }
+  }
+}
