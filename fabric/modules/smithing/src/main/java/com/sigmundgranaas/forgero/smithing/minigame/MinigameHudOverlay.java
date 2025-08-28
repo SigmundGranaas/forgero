@@ -20,7 +20,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 
 // TODO create our own texture for the outside of the bar. Including arrow and ticks.
 
-// TODO BLUE, CYAN LIGHT BLUE,
+// TODO Bar animating / Instead of item different bars based on the temperature stage.
 public class MinigameHudOverlay implements HudRenderCallback {
 
 	private static final Identifier BAR_TEXTURE = new Identifier("forgero", "textures/gui/bar_texture.png");

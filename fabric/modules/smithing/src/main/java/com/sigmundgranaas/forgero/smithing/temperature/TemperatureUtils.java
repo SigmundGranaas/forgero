@@ -12,9 +12,11 @@ import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.state.property.Properties;
+import net.minecraft.world.World;
 
 public class TemperatureUtils {
     public static final String TEMPERATURE_KEY = "forgero_temperature";
@@ -99,4 +101,22 @@ public class TemperatureUtils {
     public static boolean isAtMaxTemperature(ItemStack stack) {
         return getTemperature(stack) == getMaxTemp(stack);
     }
+
+	// New: check if an item entity is on a campfire or soul campfire
+	public static boolean isItemOnCampfire(ItemEntity itemEntity, World world) {
+		if (itemEntity == null || world == null) return false;
+
+		// Check the block at the item's position
+		BlockState state = world.getBlockState(itemEntity.getBlockPos());
+		if (isBlockCampfire(state)) return true;
+
+		// Also check the block below the item (items sit above campfires)
+		BlockState stateBelow = world.getBlockState(itemEntity.getBlockPos().down());
+		return isBlockCampfire(stateBelow);
+	}
+
+	// Client/server-safe campfire check (campfire or soul campfire)
+	public static boolean isBlockCampfire(BlockState state) {
+		return state != null && (state.isOf(Blocks.CAMPFIRE) || state.isOf(Blocks.SOUL_CAMPFIRE));
+	}
 }
