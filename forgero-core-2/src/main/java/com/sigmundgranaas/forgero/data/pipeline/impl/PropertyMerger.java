@@ -31,7 +31,7 @@ public class PropertyMerger {
 	}
 
 	public PropertyMerger(Map<PropertyKey<?>, Codec<? extends List<?>>> propertyCodecs) {
-		this.propertyCodecs = propertyCodecs.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey().key(), Map.Entry::getValue));
+		this.propertyCodecs = propertyCodecs.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey().key(), entry -> entry.getValue()));
 	}
 
 	public MergedResult merge(List<Object> dtoList) {

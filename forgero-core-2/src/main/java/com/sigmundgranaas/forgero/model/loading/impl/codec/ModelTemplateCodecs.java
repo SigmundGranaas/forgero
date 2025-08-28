@@ -74,13 +74,13 @@ public class ModelTemplateCodecs {
 			).apply(instance, PartModelTemplateDTO::new));
 
 
-	public static final Codec<ContextualModelTemplateDTO> CONTEXTUAL_MODEL_TEMPLATE_CODEC = RecordCodecBuilder.create(instance ->
+	public static final Codec<UpgradeModelTemplateDTO> UPGRADE_MODEL_TEMPLATE_CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(
-					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(ContextualModelTemplateDTO::type),
-					Codec.STRING.fieldOf("context").forGetter(ContextualModelTemplateDTO::context),
-					TARGET_DTO_CODEC.fieldOf("target").forGetter(ContextualModelTemplateDTO::target),
-					ITEM_MODELS_MAP_CODEC.forGetter(ContextualModelTemplateDTO::models)
-			).apply(instance, ContextualModelTemplateDTO::new));
+					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(UpgradeModelTemplateDTO::type),
+					Codec.STRING.fieldOf("context").forGetter(UpgradeModelTemplateDTO::context),
+					TARGET_DTO_CODEC.fieldOf("target").forGetter(UpgradeModelTemplateDTO::target),
+					ITEM_MODELS_MAP_CODEC.forGetter(UpgradeModelTemplateDTO::models)
+			).apply(instance, UpgradeModelTemplateDTO::new));
 
 	public static final Codec<EquipmentModelTemplateDTO> EQUIPMENT_MODEL_TEMPLATE_CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(

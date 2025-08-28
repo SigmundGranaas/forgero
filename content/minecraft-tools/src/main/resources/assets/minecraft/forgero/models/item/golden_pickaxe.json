@@ -1,0 +1,39 @@
+{
+  "type": "forgero:composite_model",
+  "id": "minecraft:item/golden_pickaxe",
+  "target": "minecraft:golden-pickaxe",
+  "layers": [
+    {
+      "order": 10,
+      "textures": {
+        "default": "minecraft:item/golden_pickaxe"
+      }
+    }
+  ],
+  "slots": [
+    {
+      "id": "binding_slot",
+      "order": 15,
+      "renderer": {
+        "type": "forgero:component",
+        "context": "tool_binding"
+      }
+    },
+    {
+      "id": "handle_grip_slot",
+      "order": 20,
+      "renderer": {
+        "type": "forgero:component",
+        "context": "tool_grip"
+      }
+    },
+    {
+      "id": "tip_reinforcement_slot",
+      "order": 25,
+      "renderer": {
+        "type": "forgero:component",
+        "context": "tool_tip"
+      }
+    }
+  ]
+}

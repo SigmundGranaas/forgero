@@ -1,3 +1,4 @@
+// FILE: forgero-core-2/src/main/java/com/sigmundgranaas/forgero/model/pipeline/api/ModelDataInitializer.java
 package com.sigmundgranaas.forgero.model.pipeline.api;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
@@ -9,7 +10,8 @@ import com.sigmundgranaas.forgero.model.generation.api.ModelGenerationResult;
 import com.sigmundgranaas.forgero.model.generation.api.ModelGenerator;
 import com.sigmundgranaas.forgero.model.generation.impl.ModelGeneratorImpl;
 import com.sigmundgranaas.forgero.model.loading.api.item.ModelTemplateProvider;
-import com.sigmundgranaas.forgero.model.loading.impl.FileModelTemplateProvider;
+import com.sigmundgranaas.forgero.model.loading.impl.ModelFileLoader;
+import com.sigmundgranaas.forgero.model.loading.impl.StaticModelTemplateProvider;
 import com.sigmundgranaas.forgero.model.loading.impl.ModelTranslator;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.ArmorModelTranslator;
 import com.sigmundgranaas.forgero.model.registry.api.armor.ArmorModelRegistry;
@@ -18,44 +20,47 @@ import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceProvider;
 
 import java.util.Map;
 
-/**
- * Orchestrates the entire model data initialization process.
- * 1. Loads all model templates (item, armor, etc.).
- * 2. Runs the generation logic to produce model DTOs and texture tasks.
- * 3. Translates the generated DTOs into domain models and populates the provided registries.
- */
 public class ModelDataInitializer {
 	private final ResourceProvider resourceProvider;
-	private final String namespace;
 
-	public ModelDataInitializer(ResourceProvider resourceProvider, String namespace) {
+	public ModelDataInitializer(ResourceProvider resourceProvider) {
 		this.resourceProvider = resourceProvider;
-		this.namespace = namespace;
 	}
 
 	public ModelInitializationResult initialize(Map<OpenIdentifier, Component> components, TagGraph tagGraph, ItemModelRegistry itemModelRegistry, ArmorModelRegistry armorModelRegistry) {
-		// 1. Load templates for all model types
-		ModelTemplateProvider templateProvider = new FileModelTemplateProvider(resourceProvider, namespace);
+		// 1. Load all files using the unified loader
+		ModelFileLoader fileLoader = new ModelFileLoader(resourceProvider);
+		fileLoader.load();
 
-		// 2. Run generator with final components
+		// 2. Register all manually defined models immediately
+		fileLoader.getManualItemModels().forEach(itemModelRegistry::register);
+		fileLoader.getManualArmorModels().forEach(armorModelRegistry::register);
+
+		// 3. Create a static template provider from the loaded templates
+		ModelTemplateProvider templateProvider = new StaticModelTemplateProvider(
+				fileLoader.getItemTemplates(),
+				fileLoader.getUpgradeTemplates(),
+				fileLoader.getArmorTemplates()
+		);
+
+		// 4. Run generator with the loaded templates
 		ModelGenerator modelGenerator = new ModelGeneratorImpl(tagGraph);
 		ModelGenerationResult generationResult = modelGenerator.generate(components, templateProvider);
 
-		// 3a. Translate and register generated item models
+		// 5a. Translate and register generated item models
 		ModelTranslator itemTranslator = new ModelTranslator();
 		generationResult.generatedModels().forEach((id, dto) -> {
 			Model model = itemTranslator.toDomain(id, dto);
 			itemModelRegistry.register(model);
 		});
 
-		// 3b. Translate and register generated armor models
+		// 5b. Translate and register generated armor models
 		ArmorModelTranslator armorTranslator = new ArmorModelTranslator();
 		generationResult.generatedArmorModels().forEach((id, dto) -> {
 			ArmorModel armorModel = armorTranslator.toDomain(id, dto);
 			armorModelRegistry.register(armorModel);
 		});
 
-		// 4. Return the populated registries and the generation results for optional processing (like file writing)
 		return new ModelInitializationResult(itemModelRegistry, armorModelRegistry, generationResult);
 	}
 }

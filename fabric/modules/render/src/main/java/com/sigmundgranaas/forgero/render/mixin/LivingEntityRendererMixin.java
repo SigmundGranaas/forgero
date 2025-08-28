@@ -2,10 +2,6 @@ package com.sigmundgranaas.forgero.render.mixin;
 
 import com.sigmundgranaas.forgero.render.ForgeroClient;
 import com.sigmundgranaas.forgero.render.model.armor.ForgeroArmorFeatureRenderer;
-import com.sigmundgranaas.forgero.render.model.armor.ForgeroArmorModelManager;
-import com.sigmundgranaas.forgero.render.model.armor.ForgeroArmorTextureManager;
-import com.sigmundgranaas.forgero.model.registry.api.armor.ArmorModelRegistry;
-import com.sigmundgranaas.forgero.model.registry.api.item.ItemModelRegistry;
 import com.sigmundgranaas.forgero.model.resolution.api.armor.ArmorModelResolver;
 import com.sigmundgranaas.forgero.model.resolution.impl.RecursiveArmorModelResolver;
 
@@ -21,6 +17,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.concurrent.ExecutionException;
+
 @Mixin(LivingEntityRenderer.class)
 public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends BipedEntityModel<T>> {
 	/**
@@ -34,21 +32,20 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
 	protected abstract boolean callAddFeature(FeatureRenderer<T, M> feature);
 
 	@Inject(method = "<init>", at = @At("RETURN"))
-	private void onInit(EntityRendererFactory.Context ctx, EntityModel model, float shadowRadius, CallbackInfo ci) {
-		// No need to cast 'this' to LivingEntityRenderer anymore.
-		// We can directly call the invoker on 'this'.
-
-		ItemModelRegistry itemModelRegistry = ForgeroClient.modelRegistry;
-		ArmorModelRegistry armorModelRegistry = ForgeroClient.armorModelRegistry;
-
-		ArmorModelResolver armorModelResolver = new RecursiveArmorModelResolver(armorModelRegistry);
-		ForgeroArmorTextureManager textureManager = new ForgeroArmorTextureManager(itemModelRegistry);
-		ForgeroArmorModelManager modelManager = new ForgeroArmorModelManager(ctx.getModelLoader());
+	private void onInit(EntityRendererFactory.Context ctx, EntityModel model, float shadowRadius, CallbackInfo ci) throws ExecutionException, InterruptedException {
+		// Armor services are now fetched from the central ForgeroClient container.
+		// These services are replaced during a resource reload, ensuring their caches are cleared.
+		ArmorModelResolver armorModelResolver = new RecursiveArmorModelResolver(ForgeroClient.services.armorModelRegistry());
 
 		@SuppressWarnings("unchecked")
-		ForgeroArmorFeatureRenderer<T, M> forgeroArmorRenderer = new ForgeroArmorFeatureRenderer<>((LivingEntityRenderer<T, M>) (Object) this, ForgeroClient.itemToComponent, armorModelResolver, textureManager, modelManager);
+		ForgeroArmorFeatureRenderer<T, M> forgeroArmorRenderer = new ForgeroArmorFeatureRenderer<>(
+				(LivingEntityRenderer<T, M>) (Object) this,
+				ForgeroClient.services.itemToComponent(),
+				armorModelResolver,
+				ForgeroClient.services.armorTextureManager(),
+				ForgeroClient.services.armorModelManager()
+		);
 
-		// Call the invoker instead of the original protected method
 		this.callAddFeature(forgeroArmorRenderer);
 	}
 }

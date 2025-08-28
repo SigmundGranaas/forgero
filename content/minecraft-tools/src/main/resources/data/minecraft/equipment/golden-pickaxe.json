@@ -1,0 +1,54 @@
+{
+  "type": "forgero:static_part",
+  "name": "Golden Pickaxe",
+  "tags": ["forgero:tool/pickaxe"],
+  "host": {
+    "identifiers": [
+      { "type": "item", "id": "minecraft:golden_pickaxe" }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:durability",
+      "type": "forgero:durability",
+      "computation": { "add": 32 }
+    },
+    {
+      "id": "forgero:base_attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": { "add": 2.0 }
+    },
+    {
+      "id": "forgero:base_attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": { "add": 1.2 }
+    },
+    {
+      "id": "forgero:mining_speed",
+      "type": "forgero:mining_speed",
+      "computation": { "add": 12.0 }
+    },
+    {
+      "id": "forgero:mining_level",
+      "type": "forgero:mining_level",
+      "computation": { "add": 0 }
+    }
+  ],
+  "upgrades": [
+    {
+      "id": "binding_slot",
+      "type": "forgero:binding",
+      "tags": ["forgero:parts/binding_type"]
+    },
+    {
+      "id": "handle_grip_slot",
+      "type": "forgero:grip",
+      "tags": ["forgero:parts/grip_type"]
+    },
+    {
+      "id": "tip_reinforcement_slot",
+      "type": "forgero:tip",
+      "tags": ["forgero:parts/tip_type"]
+    }
+  ]
+}

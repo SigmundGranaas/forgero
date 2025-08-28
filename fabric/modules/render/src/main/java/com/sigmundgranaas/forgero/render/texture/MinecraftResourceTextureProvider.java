@@ -16,11 +16,9 @@ import java.util.Optional;
 
 public class MinecraftResourceTextureProvider implements TextureProvider {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MinecraftResourceTextureProvider.class);
-	private final ResourceManager resourceManager;
 
 	public MinecraftResourceTextureProvider() {
-		// It is safe to get the Minecraft instance here as  code is client-only.
-		this.resourceManager = MinecraftClient.getInstance().getResourceManager();
+		// Constructor is now empty. We no longer cache the resource manager.
 	}
 
 	@Override
@@ -30,7 +28,10 @@ public class MinecraftResourceTextureProvider implements TextureProvider {
 			return Optional.empty();
 		}
 
-		return this.resourceManager.getResource(resourceIdentifier).flatMap(resource -> {
+		// Fetch the resource manager just-in-time to ensure it's always the most current one.
+		ResourceManager resourceManager = MinecraftClient.getInstance().getResourceManager();
+
+		return resourceManager.getResource(resourceIdentifier).flatMap(resource -> {
 			try (InputStream inputStream = resource.getInputStream()) {
 				BufferedImage image = ImageIO.read(inputStream);
 				if (image == null) {

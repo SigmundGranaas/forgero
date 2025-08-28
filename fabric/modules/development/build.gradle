@@ -12,7 +12,7 @@ dependencies {
 	runtimeOnly(project(path: ":fabric:modules:render",  configuration: 'namedElements'))
 	runtimeOnly(project(path: ":fabric:modules:properties",  configuration: 'namedElements'))
 
-	// Materials
+	// Resources
 	runtimeOnly(project(path: ":content:minecraft-vanilla-materials"))
 	runtimeOnly(project(path: ":content:forgero-tools"))
 	runtimeOnly(project(path: ":content:forgero-armor"))
@@ -34,6 +34,29 @@ sourceSets {
 		runtimeClasspath += main.runtimeClasspath
 	}
 }
+
+// Configure runClient to pass all source resource paths as a system property
+tasks.named('runClient', JavaExec) {
+	def resourceDirs = []
+	// Add this module's own resources
+	sourceSets.main.resources.srcDirs.each { resourceDirs.add(it.absolutePath) }
+
+	// Iterate through all project dependencies on the runtime classpath
+	configurations.runtimeClasspath.allDependencies.each { dep ->
+		if (dep instanceof ProjectDependency) {
+			def dependentProject = project(dep.dependencyProject.path)
+			dependentProject.sourceSets.main.resources.srcDirs.each { resourceDirs.add(it.absolutePath) }
+		}
+	}
+
+	// Join unique paths with the system's path separator (e.g., ';' on Windows, ':' on Linux/macOS)
+	def resourcePathsString = resourceDirs.unique().join(File.pathSeparator)
+
+	// Set system properties for the running game
+	systemProperty 'forgero.dev.hotReload', 'true'
+	systemProperty 'forgero.dev.resourcePaths', resourcePathsString
+}
+
 
 test {
 	useJUnitPlatform()

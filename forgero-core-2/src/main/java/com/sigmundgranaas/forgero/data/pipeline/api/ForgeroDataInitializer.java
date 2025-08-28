@@ -6,11 +6,9 @@ import com.sigmundgranaas.forgero.cof.dto.CofComponent;
 import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
-import com.sigmundgranaas.forgero.common.tags.engine.TagLoadingService;
 import com.sigmundgranaas.forgero.common.tags.engine.TaggedRegistry;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
-import com.sigmundgranaas.forgero.core.condition.api.ConditionCodec;
 import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
@@ -34,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ForgeroDataInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(ForgeroDataInitializer.class);
@@ -46,6 +43,7 @@ public class ForgeroDataInitializer {
 	 *
 	 * @param defaultNamespace      The default namespace for identifiers.
 	 * @param resourceProvider      The provider for loading raw data files.
+	 * @param tagGraph              The pre-loaded and merged TagGraph.
 	 * @param propertyCodecs        A map of all property codecs to be used for parsing.
 	 * @param staticConditionCodecs A map of codecs for custom static conditions.
 	 * @param dynamicConditionCodecs A map of codecs for custom dynamic conditions.
@@ -53,6 +51,7 @@ public class ForgeroDataInitializer {
 	public record Config(
 			String defaultNamespace,
 			ResourceProvider resourceProvider,
+			TagGraph tagGraph,
 			Map<PropertyKey<?>, Codec<? extends List<?>>> propertyCodecs,
 			Map<String, Codec<? extends StaticCondition>> staticConditionCodecs,
 			Map<String, Codec<? extends DynamicCondition>> dynamicConditionCodecs
@@ -66,7 +65,9 @@ public class ForgeroDataInitializer {
 
 		// 1. SETUP: Factories, Codecs, and Graphs
 		IdentifierFactory identifierFactory = new IdentifierFactory.Builder().defaultNamespace(config.defaultNamespace()).build();
-		Codec<Condition> conditionCodec = new ConditionCodec(config.staticConditionCodecs(), config.dynamicConditionCodecs());
+		// Use the pre-loaded TagGraph from the config
+		TagGraph tagGraph = config.tagGraph();
+		Codec<Condition> conditionCodec = new com.sigmundgranaas.forgero.core.condition.api.ConditionCodec(config.staticConditionCodecs(), config.dynamicConditionCodecs());
 		Codec<List<AttributeData>> attributeDataListCodec = Codec.list(AttributeCodecs.create(conditionCodec));
 		Codec<List<UpgradeSlotData>> upgradeSlotDataListCodec = Codec.list(PartTemplateCodecs.UPGRADE_SLOT_DATA_CODEC);
 
@@ -74,19 +75,18 @@ public class ForgeroDataInitializer {
 		ResourceConverter<RawDefinition> converter = new RawDefinitionConverter(identifierFactory, rawDtoCodecs::codecFor);
 		ResourceLoader<RawDefinition> dataLoader = new ResourceLoader<>(config.resourceProvider(), converter);
 
+		// Prepare for multi-namespace loading
+		List<String> namespaces = List.of(config.defaultNamespace(), "minecraft");
+		List<String> definitionDirs = List.of("materials", "shapes", "parts", "equipment", "schematics");
 
-		// 2. LOAD RAW DEFINITIONS
-		Map<OpenIdentifier, RawDefinition> rawDefinitions = Stream.of("materials", "shapes", "parts", "equipment", "schematics")
-				.flatMap(dir -> dataLoader.load(new OpenIdentifier(identifierFactory.defaultNamespace(), dir), true))
+		// 2. LOAD RAW DEFINITIONS from all configured namespaces
+		Map<OpenIdentifier, RawDefinition> rawDefinitions = namespaces.stream()
+				.flatMap(ns -> definitionDirs.stream().map(dir -> new OpenIdentifier(ns, dir)))
+				.flatMap(path -> dataLoader.load(path, true))
 				.collect(Collectors.toMap(RawDefinition::id, Function.identity(), (existing, replacement) -> {
 					LOGGER.warn("Duplicate definition ID found: [{}]. The existing entry will be kept.", existing.id());
 					return existing;
 				}));
-
-
-		// 3. LOAD TAGS
-		TagGraph tagGraph = new TagLoadingService(identifierFactory).loadTags(new OpenIdentifier(config.defaultNamespace(), "tags"));
-
 
 		// 4. INSTANTIATE SERVICES
 		IncludeResolver includeResolver = new IncludeResolver(rawDefinitions);

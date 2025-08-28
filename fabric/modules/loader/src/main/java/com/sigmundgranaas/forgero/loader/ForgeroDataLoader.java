@@ -18,20 +18,20 @@ import com.sigmundgranaas.forgero.common.tooltip.ForgeroTooltipRenderer;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeCodec;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.condition.api.Condition;
+import com.sigmundgranaas.forgero.core.condition.api.ConditionCodec;
+import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
+import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 import com.sigmundgranaas.forgero.core.component.mutation.api.ComponentMutater;
 import com.sigmundgranaas.forgero.core.component.mutation.impl.ComponentMutaterImpl;
 import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.api.codec.KeyMapDispatchCodec;
 import com.sigmundgranaas.forgero.core.property.api.codec.ListCodecWrapper;
-import com.sigmundgranaas.forgero.core.condition.api.Condition;
-import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
-import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 import com.sigmundgranaas.forgero.core.property.engine.ResolverEngine;
 import com.sigmundgranaas.forgero.core.recipe.ForgeroEnvironment;
 import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
 import com.sigmundgranaas.forgero.core.registry.impl.MapBackedComponentRegistry;
-import com.sigmundgranaas.forgero.core.condition.api.ConditionCodec;
 import com.sigmundgranaas.forgero.data.pipeline.api.ForgeroDataBundle;
 import com.sigmundgranaas.forgero.data.pipeline.api.ForgeroDataInitializer;
 import com.sigmundgranaas.forgero.loader.api.*;
@@ -73,7 +73,7 @@ public class ForgeroDataLoader implements ModInitializer {
 	private final DataLoadingContextImpl context;
 	private final Map<Identifier, Item> registeredItems;
 	private boolean initialized = false;
-	private TagGraph tagGraph = null;
+	private TagGraph tagGraph = TagGraph.empty();
 
 	public ForgeroDataLoader() {
 		this.pluginRegistry = new PluginRegistry();
@@ -95,32 +95,36 @@ public class ForgeroDataLoader implements ModInitializer {
 			// Phase 1: Collect all plugins
 			collectPlugins();
 
-			// Phase 2: Register plugin requirements
+			// Phase 2: Load the TagGraph BEFORE anything else
+			this.tagGraph = loadTagGraph();
+
+			// Phase 3: Register plugin requirements, now with a valid TagGraph
 			PluginRegistrationContextImpl registrationContext = registerPluginRequirements(() -> this.tagGraph);
 
-			// Phase 3: Create configuration for the data initializer
-			ForgeroDataInitializer.Config dataConfig = createDataConfig(registrationContext);
+			// Phase 4: Create configuration for the data initializer
+			ForgeroDataInitializer.Config dataConfig = createDataConfig(registrationContext, this.tagGraph);
 
-			// Phase 4: Load data using the configuration
+			// Phase 5: Load data using the configuration
 			ForgeroDataBundle bundle = loadData(dataConfig);
-			this.tagGraph = bundle.tagGraph();
 
-			// Phase 5: Initialize core systems
+			// Phase 6: Initialize core systems
 			initializeCoreServices(bundle, registrationContext);
 
-			// Phase 6: Setup item registration callbacks
+			// Phase 7: Setup item registration callbacks
 			ItemRegistrar itemRegistrar = setupItemRegistration();
 
-			// Phase 7: Process and register items
+			// Phase 8: Process and register items
 			List<ItemRegistrar.RegisteredItem> items = processItems(bundle, registrationContext.getItemCreators(), itemRegistrar);
 
 			// Store registered items for lookup
 			items.forEach(item -> registeredItems.put(item.id(), item.item()));
 
+			// Phase 9: Notify post-load plugins
+			notifyPostLoadPlugins();
+
+			// Phase 10: Initialize recipe serializers
 			initializeRecipes(dataConfig);
 
-			// Phase 8: Notify post-load plugins
-			notifyPostLoadPlugins();
 
 			initialized = true;
 			ForgeroTooltipRenderer.initialize(context.getConverter(), context.getResolver());
@@ -146,6 +150,18 @@ public class ForgeroDataLoader implements ModInitializer {
 				dataPlugins + itemRegPlugins + postLoadPlugins, dataPlugins, itemRegPlugins, postLoadPlugins);
 	}
 
+	private TagGraph loadTagGraph() {
+		LOGGER.info("Loading TagGraph from all namespaces...");
+		List<String> namespaces = List.of(MOD_NAMESPACE, "minecraft");
+		IdentifierFactory idFactory = new IdentifierFactory.Builder().defaultNamespace(MOD_NAMESPACE).build();
+		TagLoadingService tagLoader = new TagLoadingService(idFactory);
+
+		return namespaces.stream()
+				.map(ns -> tagLoader.loadTags(new com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier(ns, "tags")))
+				.reduce(TagGraph.empty(), TagGraph::merge);
+	}
+
+
 	private PluginRegistrationContextImpl registerPluginRequirements(Supplier<TagGraph> tagGraphSupplier) {
 		PluginRegistrationContextImpl registrationContext = new PluginRegistrationContextImpl(tagGraphSupplier);
 		for (DataPlugin plugin : pluginRegistry.getDataPlugins()) {
@@ -159,7 +175,7 @@ public class ForgeroDataLoader implements ModInitializer {
 		return registrationContext;
 	}
 
-	private ForgeroDataInitializer.Config createDataConfig(PluginRegistrationContextImpl registrationContext) {
+	private ForgeroDataInitializer.Config createDataConfig(PluginRegistrationContextImpl registrationContext, TagGraph tagGraph) {
 		Map<String, Codec<? extends StaticCondition>> staticConditionCodecs = registrationContext.getStaticConditionCodecs();
 		Map<String, Codec<? extends DynamicCondition>> dynamicConditionCodecs = registrationContext.getDynamicConditionCodecs();
 
@@ -181,6 +197,7 @@ public class ForgeroDataLoader implements ModInitializer {
 		return new ForgeroDataInitializer.Config(
 				MOD_NAMESPACE,
 				new ClassPathResourceProvider("data"),
+				tagGraph,
 				propertyCodecs,
 				staticConditionCodecs,
 				dynamicConditionCodecs
@@ -225,7 +242,7 @@ public class ForgeroDataLoader implements ModInitializer {
 
 		context.initialize(
 				componentRegistry,
-				bundle.componentRegistry(), // This is the TaggedRegistry
+				bundle.componentRegistry(),
 				resolver,
 				componentConverter,
 				nbtConverter,

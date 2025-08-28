@@ -6,10 +6,10 @@ import com.sigmundgranaas.forgero.model.generation.impl.TemplateDataProvider;
 import java.util.List;
 
 /**
- * DTO for `forgero:context_model_template` files.
+ * DTO for `forgero:upgrade_model_template` files.
  * Defines a model for a component when it is used in a specific context (e.g., an upgrade slot).
  */
-public record ContextualModelTemplateDTO(
+public record UpgradeModelTemplateDTO(
 		OpenIdentifier type,
 		String context,
 		TargetDTO target,

@@ -13,6 +13,7 @@ import java.nio.file.*;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public class ClassPathResourceProvider implements ResourceProvider {
@@ -24,31 +25,33 @@ public class ClassPathResourceProvider implements ResourceProvider {
 
 	/**
 	 * Constructor for Classpath-based loading.
-	 * Scans the entire classpath for a given top-level directory.
 	 *
-	 * @param topLevelDirectory The root directory within the classpath (e.g., "data" or "assets").
+	 * @param topLevelDirectory The root directory within the classpath (e.g., "/assets").
 	 */
 	public ClassPathResourceProvider(String topLevelDirectory) {
-		this.topLevelDirectory = topLevelDirectory.startsWith("/") ? topLevelDirectory.substring(1) : topLevelDirectory;
+		this.topLevelDirectory = topLevelDirectory.replaceAll("^/|/$", "");
 		this.classLoader = Thread.currentThread().getContextClassLoader();
 		this.rootPath = null;
 	}
 
 	/**
 	 * Constructor for FileSystem-based loading.
-	 * Scans only from the provided root path. Ideal for testing.
 	 *
-	 * @param rootPath The absolute path to the root directory to scan.
+	 * @param rootPath The absolute path to the root directory to scan (e.g., ".../src/main/resources").
 	 */
 	public ClassPathResourceProvider(Path rootPath) {
 		this.rootPath = rootPath;
-		this.topLevelDirectory = null;
+		this.topLevelDirectory = ""; // The root path already points to the resource root, no need to add anything.
 		this.classLoader = null;
 	}
 
 	@Override
+	public Set<String> getNamespaces() {
+		return Set.of("forgero", "minecraft");
+	}
+
+	@Override
 	public Stream<OpenIdentifier> list(OpenIdentifier path, boolean recursive) {
-		// Switch between FileSystem mode and Classpath mode
 		if (this.rootPath != null) {
 			return listFromFileSystemRoot(path, recursive);
 		} else {
@@ -58,29 +61,39 @@ public class ClassPathResourceProvider implements ResourceProvider {
 
 	@Override
 	public Optional<InputStream> read(OpenIdentifier identifier) {
-		// Switch between FileSystem mode and Classpath mode
+		String relativePath = topLevelDirectory.isEmpty() ?
+				identifier.namespace() + "/" + identifier.path() :
+				topLevelDirectory + "/" + identifier.namespace() + "/" + identifier.path();
+
 		if (this.rootPath != null) {
-			Path resourcePath = this.rootPath.resolve(identifier.namespace()).resolve(identifier.path());
+			Path resourcePath = this.rootPath.resolve(relativePath);
 			try {
 				return Optional.of(Files.newInputStream(resourcePath));
 			} catch (IOException e) {
-				LOGGER.trace("Resource not found or could not be read from path: {}", resourcePath);
+				LOGGER.trace("Resource not found or could not be read from file system path: {}", resourcePath);
 				return Optional.empty();
 			}
 		} else {
-			String fullPath = topLevelDirectory + "/" + identifier.namespace() + "/" + identifier.path();
-			InputStream stream = classLoader.getResourceAsStream(fullPath);
+			InputStream stream = classLoader.getResourceAsStream(relativePath);
 			if (stream == null) {
-				LOGGER.trace("Resource not found on classpath: {}", fullPath);
+				LOGGER.trace("Resource not found on classpath: {}", relativePath);
 			}
 			return Optional.ofNullable(stream);
 		}
 	}
 
+	private Path getSearchRoot(OpenIdentifier path) {
+		Path searchRoot = this.rootPath;
+		if (!topLevelDirectory.isEmpty()) {
+			searchRoot = searchRoot.resolve(topLevelDirectory);
+		}
+		return searchRoot.resolve(path.namespace());
+	}
+
 	private Stream<OpenIdentifier> listFromFileSystemRoot(OpenIdentifier path, boolean recursive) {
 		try {
-			Path namespaceRoot = this.rootPath.resolve(path.namespace());
-			URL rootUrl = namespaceRoot.toUri().toURL();
+			Path searchRoot = getSearchRoot(path);
+			URL rootUrl = searchRoot.toUri().toURL();
 			return listResourcesFromUrl(rootUrl, path.path(), path.namespace(), recursive);
 		} catch (Exception e) {
 			LOGGER.error("Failed to list resources from file system path: {}", rootPath, e);
@@ -89,7 +102,7 @@ public class ClassPathResourceProvider implements ResourceProvider {
 	}
 
 	private Stream<OpenIdentifier> listFromClasspath(OpenIdentifier path, boolean recursive) {
-		String baseClasspathPath = topLevelDirectory + "/" + path.namespace() + "/";
+		String baseClasspathPath = (topLevelDirectory.isEmpty() ? "" : topLevelDirectory + "/") + path.namespace() + "/";
 		try {
 			Enumeration<URL> urls = classLoader.getResources(baseClasspathPath);
 			if (urls == null || !urls.hasMoreElements()) {
@@ -130,7 +143,7 @@ public class ClassPathResourceProvider implements ResourceProvider {
 		try (Stream<Path> walk = Files.walk(startPath, maxDepth)) {
 			return walk
 					.filter(Files::isRegularFile)
-					.filter(p -> p.toString().endsWith(".json")) // Ensure we only read json files
+					.filter(p -> p.toString().endsWith(".json"))
 					.map(filePath -> {
 						Path relativePath = namespaceRootPath.relativize(filePath);
 						String relativePathString = relativePath.toString().replace('\\', '/');
@@ -141,33 +154,32 @@ public class ClassPathResourceProvider implements ResourceProvider {
 	}
 
 	private Stream<OpenIdentifier> listResourcesFromJar(URI namespaceRootUri, String targetDirectory, String namespace, boolean recursive) throws Exception {
-		try (FileSystem fs = getFileSystem(namespaceRootUri)) {
-			String[] uriParts = namespaceRootUri.toString().split("!");
-			if (uriParts.length < 2) {
-				LOGGER.warn("Malformed JAR URI, cannot find internal path: {}", namespaceRootUri);
-				return Stream.empty();
-			}
-			String internalPathStr = uriParts[1].startsWith("/") ? uriParts[1].substring(1) : uriParts[1];
+		FileSystem fs = getFileSystem(namespaceRootUri);
+		String[] uriParts = namespaceRootUri.toString().split("!");
+		if (uriParts.length < 2) {
+			LOGGER.warn("Malformed JAR URI, cannot find internal path: {}", namespaceRootUri);
+			return Stream.empty();
+		}
+		String internalPathStr = uriParts[1].startsWith("/") ? uriParts[1].substring(1) : uriParts[1];
 
-			Path namespaceRootInJar = fs.getPath(internalPathStr);
-			Path startPathInJar = namespaceRootInJar.resolve(targetDirectory);
+		Path namespaceRootInJar = fs.getPath(internalPathStr);
+		Path startPathInJar = namespaceRootInJar.resolve(targetDirectory);
 
-			if (!Files.exists(startPathInJar) || !Files.isDirectory(startPathInJar)) {
-				return Stream.empty();
-			}
+		if (!Files.exists(startPathInJar) || !Files.isDirectory(startPathInJar)) {
+			return Stream.empty();
+		}
 
-			int maxDepth = recursive ? Integer.MAX_VALUE : 1;
-			try (Stream<Path> walk = Files.walk(startPathInJar, maxDepth)) {
-				return walk
-						.filter(Files::isRegularFile)
-						.filter(p -> p.toString().endsWith(".json"))
-						.map(filePath -> {
-							Path relativePath = namespaceRootInJar.relativize(filePath);
-							String relativePathString = relativePath.toString().replace('\\', '/');
-							return new OpenIdentifier(namespace, relativePathString);
-						})
-						.toList().stream();
-			}
+		int maxDepth = recursive ? Integer.MAX_VALUE : 1;
+		try (Stream<Path> walk = Files.walk(startPathInJar, maxDepth)) {
+			return walk
+					.filter(Files::isRegularFile)
+					.filter(p -> p.toString().endsWith(".json"))
+					.map(filePath -> {
+						Path relativePath = namespaceRootInJar.relativize(filePath);
+						String relativePathString = relativePath.toString().replace('\\', '/');
+						return new OpenIdentifier(namespace, relativePathString);
+					})
+					.toList().stream();
 		}
 	}
 
