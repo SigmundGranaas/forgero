@@ -12,7 +12,9 @@ import com.sigmundgranaas.forgero.common.convert.IdMapper;
 import com.sigmundgranaas.forgero.common.convert.StatefulConverter;
 import com.sigmundgranaas.forgero.common.convert.TypeConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.nbt.ComponentNbtConverter;
+import com.sigmundgranaas.forgero.common.recipe.ForgeroShapedRecipeSerializer;
 import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
 import com.sigmundgranaas.forgero.common.tags.engine.TagLoadingService;
 import com.sigmundgranaas.forgero.common.tooltip.ForgeroTooltipRenderer;
@@ -23,11 +25,14 @@ import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.condition.api.ConditionCodec;
 import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
+import com.sigmundgranaas.forgero.core.component.mutation.api.ComponentMutater;
+import com.sigmundgranaas.forgero.core.component.mutation.impl.ComponentMutaterImpl;
 import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.api.codec.KeyMapDispatchCodec;
 import com.sigmundgranaas.forgero.core.property.api.codec.ListCodecWrapper;
 import com.sigmundgranaas.forgero.core.property.engine.ResolverEngine;
+import com.sigmundgranaas.forgero.core.recipe.ForgeroEnvironment;
 import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
 import com.sigmundgranaas.forgero.core.registry.impl.MapBackedComponentRegistry;
 import com.sigmundgranaas.forgero.data.pipeline.api.ForgeroDataBundle;
@@ -38,10 +43,11 @@ import com.sigmundgranaas.forgero.loader.impl.ItemRegistrar;
 import com.sigmundgranaas.forgero.loader.impl.PluginRegistrationContextImpl;
 import com.sigmundgranaas.forgero.loader.impl.PluginRegistry;
 import com.sigmundgranaas.forgero.loader.plugin.ForgeroDefaultsPlugin;
-import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceProvider;
 import com.sigmundgranaas.forgero.utility.resource.loader.implementation.ClassPathResourceProvider;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,6 +125,10 @@ public class ForgeroDataLoader implements ModInitializer {
 			// Phase 9: Notify post-load plugins
 			notifyPostLoadPlugins();
 
+			// Phase 10: Initialize recipe serializers
+			initializeRecipes(dataConfig);
+
+
 			initialized = true;
 			ForgeroTooltipRenderer.initialize(context.getConverter(), context.getResolver());
 
@@ -150,7 +160,7 @@ public class ForgeroDataLoader implements ModInitializer {
 		TagLoadingService tagLoader = new TagLoadingService(idFactory);
 
 		return namespaces.stream()
-				.map(ns -> tagLoader.loadTags(new com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier(ns, "tags")))
+				.map(ns -> tagLoader.loadTags(new OpenIdentifier(ns, "tags")))
 				.reduce(TagGraph.empty(), TagGraph::merge);
 	}
 
@@ -197,6 +207,13 @@ public class ForgeroDataLoader implements ModInitializer {
 		);
 	}
 
+	private void initializeRecipes(ForgeroDataInitializer.Config dataConfig) {
+		// Instantiate and register the serializer
+		ForgeroShapedRecipeSerializer.INSTANCE = new ForgeroShapedRecipeSerializer(dataConfig.propertyCodecs());
+		Registry.register(Registries.RECIPE_SERIALIZER, ForgeroShapedRecipeSerializer.ID, ForgeroShapedRecipeSerializer.INSTANCE);
+		LOGGER.info("Registered Forgero shaped recipe serializer.");
+	}
+
 	private ForgeroDataBundle loadData(ForgeroDataInitializer.Config config) {
 		LOGGER.info("Loading Forgero data bundle...");
 		ForgeroDataInitializer dataInitializer = new ForgeroDataInitializer(config);
@@ -237,6 +254,12 @@ public class ForgeroDataLoader implements ModInitializer {
 
 		AttributeManager.initialize(componentConverter, resolver);
 		LOGGER.debug("Forgero Attribute Manager initialized.");
+
+		// Initialize the environment for recipes
+		ComponentMutater mutater = new ComponentMutaterImpl();
+		ForgeroEnvironment.initialize(componentRegistry, componentConverter, mutater);
+		LOGGER.debug("Forgero Environment initialized for crafting.");
+
 
 		LOGGER.debug("Core services initialized");
 	}

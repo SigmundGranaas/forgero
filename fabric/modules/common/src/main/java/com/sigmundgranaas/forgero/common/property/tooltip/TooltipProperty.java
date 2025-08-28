@@ -26,6 +26,7 @@ public record TooltipProperty(
 		String format,
 		@Nullable Condition condition
 ) implements ConditionalProperty {
+
 	public static final OpenIdentifier KEY_ID = new OpenIdentifier("forgero:tooltip_sections");
 	public static final ResolutionKey<List<TooltipProperty>> KEY = new ResolutionKey<>(KEY_ID);
 	public static final PropertyKey<TooltipProperty> PROPERTY_KEY = new PropertyKey<>(TooltipProperty.class, KEY_ID.toString());

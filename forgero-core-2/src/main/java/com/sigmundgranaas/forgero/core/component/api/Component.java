@@ -7,6 +7,7 @@ import com.sigmundgranaas.forgero.core.property.api.PropertyHolder;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The base interface for all blueprints, defining identity, tags, and direct properties.
@@ -23,4 +24,13 @@ public interface Component extends Identifiable, Taggable, PropertyHolder {
 	default List<Component> getChildren() {
 		return Collections.emptyList();
 	}
+
+	/**
+	 * Creates a new instance of this component with the given properties merged
+	 * into its existing properties. The merge strategy should combine lists of properties.
+	 *
+	 * @param newProperties The properties to merge.
+	 * @return A new component instance with the merged properties.
+	 */
+	Component withProperties(Map<String, List<?>> newProperties);
 }

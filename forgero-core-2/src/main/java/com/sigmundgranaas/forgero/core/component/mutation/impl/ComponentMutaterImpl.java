@@ -21,6 +21,28 @@ import java.util.stream.Collectors;
 public class ComponentMutaterImpl implements ComponentMutater {
 
 	@Override
+	public Component apply(Component base, Mutation mutation) {
+		Component current = base;
+
+		// 1. Apply properties first, letting the component reconstruct itself.
+		if (!mutation.properties().isEmpty()) {
+			current = current.withProperties(mutation.properties());
+		}
+
+		// 2. Apply structure changes using the existing low-level API.
+		for (Map.Entry<OpenIdentifier, Component> entry : mutation.structure().entrySet()) {
+			current = setSlot(current, entry.getKey(), entry.getValue());
+		}
+
+		// 3. Apply upgrade changes.
+		for (Map.Entry<OpenIdentifier, Component> entry : mutation.upgrades().entrySet()) {
+			current = setSlot(current, entry.getKey(), entry.getValue());
+		}
+
+		return current;
+	}
+
+	@Override
 	public Component setSlot(Component target, OpenIdentifier slotId, Component newContent) {
 		Slot targetSlot = findSlot(target, slotId)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid slot ID: " + slotId));

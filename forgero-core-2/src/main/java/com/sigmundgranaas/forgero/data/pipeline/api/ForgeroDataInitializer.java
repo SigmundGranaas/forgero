@@ -88,8 +88,6 @@ public class ForgeroDataInitializer {
 					return existing;
 				}));
 
-		// 3. TAGS are already loaded, just use the one from config.
-
 		// 4. INSTANTIATE SERVICES
 		IncludeResolver includeResolver = new IncludeResolver(rawDefinitions);
 		PropertyMerger propertyMerger = new PropertyMerger(config.propertyCodecs());
