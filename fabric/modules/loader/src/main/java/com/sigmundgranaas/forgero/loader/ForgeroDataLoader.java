@@ -11,9 +11,12 @@ import com.sigmundgranaas.forgero.common.convert.ComponentConverterImpl;
 import com.sigmundgranaas.forgero.common.convert.IdMapper;
 import com.sigmundgranaas.forgero.common.convert.StatefulConverter;
 import com.sigmundgranaas.forgero.common.convert.TypeConverter;
+import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.nbt.ComponentNbtConverter;
 import com.sigmundgranaas.forgero.common.recipe.ForgeroShapedRecipeSerializer;
 import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
+import com.sigmundgranaas.forgero.common.tags.engine.TagLoadingService;
 import com.sigmundgranaas.forgero.common.tooltip.ForgeroTooltipRenderer;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeCodec;
@@ -157,7 +160,7 @@ public class ForgeroDataLoader implements ModInitializer {
 		TagLoadingService tagLoader = new TagLoadingService(idFactory);
 
 		return namespaces.stream()
-				.map(ns -> tagLoader.loadTags(new com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier(ns, "tags")))
+				.map(ns -> tagLoader.loadTags(new OpenIdentifier(ns, "tags")))
 				.reduce(TagGraph.empty(), TagGraph::merge);
 	}
 
