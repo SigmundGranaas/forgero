@@ -111,7 +111,7 @@ public class ForgeroDataLoader implements ModInitializer {
 			ForgeroDataBundle bundle = loadData(dataConfig);
 
 			// Phase 6: Initialize core systems
-			initializeCoreServices(bundle, registrationContext);
+			initializeCoreServices(bundle, registrationContext, dataConfig);
 
 			// Phase 7: Setup item registration callbacks
 			ItemRegistrar itemRegistrar = setupItemRegistration();
@@ -187,6 +187,7 @@ public class ForgeroDataLoader implements ModInitializer {
 
 		// Build the full map of property codecs from plugin-provided builders
 		Map<PropertyKey<?>, Codec<? extends List<?>>> propertyCodecs = new HashMap<>();
+
 		// Add Forgero's default attribute codec
 		propertyCodecs.put(Attribute.KEY, ListCodecWrapper.of(new AttributeCodec(conditionCodecSupplier.get())));
 
@@ -222,7 +223,7 @@ public class ForgeroDataLoader implements ModInitializer {
 		return bundle;
 	}
 
-	private void initializeCoreServices(ForgeroDataBundle bundle, PluginRegistrationContextImpl registrationContext) {
+	private void initializeCoreServices(ForgeroDataBundle bundle, PluginRegistrationContextImpl registrationContext, ForgeroDataInitializer.Config dataConfig) {
 		LOGGER.debug("Initializing core services...");
 
 		ComponentRegistry componentRegistry = new MapBackedComponentRegistry(
@@ -232,7 +233,7 @@ public class ForgeroDataLoader implements ModInitializer {
 
 		ComponentConstructor constructorRegistry = ComponentConstructor.defaults();
 
-		Codec<Component> componentCodec = createComponentCodec(componentRegistry, constructorRegistry, registrationContext);
+		Codec<Component> componentCodec = createComponentCodec(componentRegistry, constructorRegistry, new KeyMapDispatchCodec(dataConfig.propertyCodecs()).codec());
 
 		ComponentNbtConverter nbtConverter = new ComponentNbtConverter(componentCodec);
 
@@ -265,15 +266,7 @@ public class ForgeroDataLoader implements ModInitializer {
 	}
 
 
-	private Codec<Component> createComponentCodec(ComponentRegistry componentRegistry, ComponentConstructor constructorRegistry, PluginRegistrationContextImpl registrationContext) {
-		// TODO: This method is now redundant as property codecs are handled in createDataConfig.
-		// It could be simplified or removed if component codec creation logic is also moved.
-		// For now, we recreate a minimal version for the COF codec.
-		Map<PropertyKey<?>, Codec<? extends List<?>>> propertyCodecs = new HashMap<>();
-		propertyCodecs.put(Attribute.KEY, ListCodecWrapper.of(new AttributeCodec(new ConditionCodec(Collections.emptyMap(), Collections.emptyMap()))));
-
-		Codec<Map<String, List<?>>> propertyMapCodec = new KeyMapDispatchCodec(propertyCodecs).codec();
-
+	private Codec<Component> createComponentCodec(ComponentRegistry componentRegistry, ComponentConstructor constructorRegistry, Codec<Map<String, List<?>>> propertyMapCodec) {
 		Codec<CofComponent> cofComponentCodec = CofCodecs.create(propertyMapCodec);
 
 		return new ComponentCofCodec(

@@ -17,11 +17,13 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
 public class ForgeroShapedRecipe extends ShapedRecipe {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ForgeroShapedRecipe.class);
 	final Map<Character, RecipeIngredient> forgeroKey;
 	final RecipeOutput forgeroResult;
 
@@ -43,7 +45,7 @@ public class ForgeroShapedRecipe extends ShapedRecipe {
 			return ForgeroEnvironment.getComponentConverter().toStack(finalComponent).orElse(ItemStack.EMPTY);
 		} catch (Exception e) {
 			// Log error and return empty to prevent crash
-			LoggerFactory.getLogger(ForgeroShapedRecipe.class).error("Error crafting Forgero item for recipe " + this.getId(), e);
+            LOGGER.error("Error crafting Forgero item for recipe {}", this.getId(), e);
 			return ItemStack.EMPTY;
 		}
 	}

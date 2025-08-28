@@ -1,4 +1,3 @@
-// FILE: forgero-core-2/src/main/java/com/sigmundgranaas/forgero/model/generation/impl/ModelGeneratorImpl.java
 package com.sigmundgranaas.forgero.model.generation.impl;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;

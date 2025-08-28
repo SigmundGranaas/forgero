@@ -1,6 +1,7 @@
 {
   "type": "forgero:composite_model",
   "target": "minecraft:diamond-pickaxe",
+  "parent": "minecraft:item/handheld",
   "layers": [
     {
       "order": 10,

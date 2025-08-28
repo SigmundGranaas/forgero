@@ -35,9 +35,11 @@ public class ResolutionContext {
 	public ResolutionContext(Component self, Component root) {
 		this.self = self;
 		this.root = root;
-		this.slotMap = new HashMap<>();
-		this.parentMap = new HashMap<>();
-		this.depthMap = new HashMap<>();
+		// Use IdentityHashMap to distinguish between component instances, not just their values.
+		// This is crucial for correctly handling identical components in different slots.
+		this.slotMap = new IdentityHashMap<>();
+		this.parentMap = new IdentityHashMap<>();
+		this.depthMap = new IdentityHashMap<>();
 		buildContextMaps(root, null, 0);
 	}
 
