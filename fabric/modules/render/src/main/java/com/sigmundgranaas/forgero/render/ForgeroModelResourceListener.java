@@ -45,10 +45,8 @@ public class ForgeroModelResourceListener implements IdentifiableResourceReloadL
 
 	@Override
 	public CompletableFuture<Void> reload(Synchronizer synchronizer, ResourceManager manager, Profiler prepareProfiler, Profiler applyProfiler, Executor prepareExecutor, Executor applyExecutor) {
-		// This listener is now exclusively for hot reloads.
 		return CompletableFuture.supplyAsync(() -> {
 					LOGGER.info("Hot reload detected. Reloading Forgero models...");
-					// Use Minecraft's resource manager to respect resource packs.
 					ResourceProvider resourceProvider = new MinecraftResourceProvider(manager);
 					DataLoadingContext dataContext = ForgeroDataLoader.getContext();
 
@@ -67,12 +65,6 @@ public class ForgeroModelResourceListener implements IdentifiableResourceReloadL
 					generateTextures(result.generationResult().textureGenerationTasks(), manager);
 					generateAtlasConfig(result.generationResult().textureGenerationTasks());
 
-					return result;
-				}, prepareExecutor)
-				.thenCompose(synchronizer::whenPrepared)
-				.thenAcceptAsync(result -> {
-					// Atomically swap the new services into place on the client thread.
-					DataLoadingContext dataContext = ForgeroDataLoader.getContext();
 					ForgeroClient.services = new ForgeroClient.ClientServices(
 							result.itemModelRegistry(),
 							result.armorModelRegistry(),
@@ -82,6 +74,11 @@ public class ForgeroModelResourceListener implements IdentifiableResourceReloadL
 							new ForgeroArmorModelManager(MinecraftClient.getInstance().getEntityModelLoader())
 					);
 					LOGGER.info("Forgero models reloaded successfully. {} item models available.", result.itemModelRegistry().models().size());
+
+					return result;
+				}, prepareExecutor)
+				.thenCompose(synchronizer::whenPrepared)
+				.thenAcceptAsync(result -> {
 				}, applyExecutor);
 	}
 

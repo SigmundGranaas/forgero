@@ -29,7 +29,6 @@ public class MinecraftResourceProvider implements ResourceProvider {
 
 	@Override
 	public Stream<OpenIdentifier> list(OpenIdentifier path, boolean recursive) {
-		// This method now correctly assumes it's given a valid, specific namespace.
 		return resourceManager.findResources(path.path(), id -> id.getPath().endsWith(".json"))
 				.keySet()
 				.stream()
