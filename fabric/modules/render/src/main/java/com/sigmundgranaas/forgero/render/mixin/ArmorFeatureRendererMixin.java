@@ -15,6 +15,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.concurrent.ExecutionException;
+
 @Mixin(net.minecraft.client.render.entity.feature.ArmorFeatureRenderer.class)
 public class ArmorFeatureRendererMixin<T extends LivingEntity, M extends BipedEntityModel<T>, A extends BipedEntityModel<T>> {
 
@@ -25,7 +27,7 @@ public class ArmorFeatureRendererMixin<T extends LivingEntity, M extends BipedEn
 	 */
 	@Inject(method = "renderArmor", at = @At("HEAD"), cancellable = true)
 	private void onRenderArmor(MatrixStack matrices, VertexConsumerProvider vertexConsumers, T entity, EquipmentSlot armorSlot, int light, A model, CallbackInfo ci) {
-		if (ForgeroClient.itemToComponent.apply(entity.getEquippedStack(armorSlot)).flatMap(comp -> ForgeroClient.armorModelRegistry.find(comp.id())).isPresent()) {
+		if (ForgeroClient.services.itemToComponent().apply(entity.getEquippedStack(armorSlot)).flatMap(comp -> ForgeroClient.services.armorModelRegistry().find(comp.id())).isPresent()) {
 			ci.cancel();
 		}
 	}

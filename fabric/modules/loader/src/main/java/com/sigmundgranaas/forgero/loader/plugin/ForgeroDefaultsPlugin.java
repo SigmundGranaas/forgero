@@ -21,17 +21,17 @@ public class ForgeroDefaultsPlugin implements DataPlugin {
 
 	private void registerPropertyCodecs(PluginRegistrationContext context) {
 		context.registerPropertyCodec(
-				TooltipProperty.KEY_ID.toString(),
+				TooltipProperty.PROPERTY_KEY,
 				conditionCodecSupplier -> ListCodecWrapper.of(TooltipProperty.codec(conditionCodecSupplier.get()))
 		);
 
 		context.registerPropertyCodec(
-				NameReplacementProperty.KEY_ID.toString(),
+				NameReplacementProperty.PROPERTY_KEY,
 				conditionCodecSupplier -> ListCodecWrapper.of(NameReplacementProperty.codec(conditionCodecSupplier.get()))
 		);
 
 		context.registerPropertyCodec(
-				BetterCombatIdentifierProperty.KEY_ID.toString(),
+				BetterCombatIdentifierProperty.PROPERTY_KEY,
 				conditionCodecSupplier -> ListCodecWrapper.of(BetterCombatIdentifierProperty.codec(conditionCodecSupplier.get()))
 		);
 	}

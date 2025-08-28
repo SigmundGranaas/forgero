@@ -1,4 +1,4 @@
-// FILE: /home/sigmund/Documents/projects/forgero/1-20/forgero-core-2/src/main/java/com/sigmundgranaas/forgero/model/generation/impl/ModelGeneratorImpl.java
+// FILE: forgero-core-2/src/main/java/com/sigmundgranaas/forgero/model/generation/impl/ModelGeneratorImpl.java
 package com.sigmundgranaas.forgero.model.generation.impl;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
@@ -36,11 +36,11 @@ public class ModelGeneratorImpl implements ModelGenerator {
 		Map<OpenIdentifier, ArmorModelDTO> generatedArmorModels = new HashMap<>();
 		List<TextureGenerationTask> textureTasks = new ArrayList<>();
 
-		// Process Item Models
-		Predicate<Component> partFilter = c -> !(c instanceof StructuredComponent sc) || sc.structure().slots().isEmpty();
-		processItemTemplates(templateProvider.getPartTemplates(), components, generatedItemModels, textureTasks, partFilter);
-		processItemTemplates(templateProvider.getContextualTemplates(), components, generatedItemModels, textureTasks, c -> true);
-		processItemTemplates(templateProvider.getEquipmentTemplates(), components, generatedItemModels, textureTasks, c -> true);
+		// Process unified Item Models (parts and equipment)
+		processItemTemplates(templateProvider.getItemTemplates(), components, generatedItemModels, textureTasks, c -> true);
+
+		// Process Upgrade Models
+		processItemTemplates(templateProvider.getUpgradeTemplates(), components, generatedItemModels, textureTasks, c -> true);
 
 		// Process Armor Models
 		processArmorTemplates(templateProvider.getArmorTemplates(), components, generatedArmorModels, textureTasks, c -> true);
@@ -114,11 +114,21 @@ public class ModelGeneratorImpl implements ModelGenerator {
 	}
 
 	private ModelDTO mapTemplateToModel(TemplateModelDTO template, Map<String, Component> context, List<TextureGenerationTask> tasks) {
-		String rawId = template.id() != null ? placeholderResolver.resolve(template.id(), context) : null;
-		OpenIdentifier resolvedId = (rawId != null && !rawId.isEmpty()) ? new OpenIdentifier(rawId) : null;
-		if (resolvedId == null) {
-			throw new IllegalStateException("Generated model template missing explicit 'id' field after resolution. Template type: " + template.type());
+		String target = template.target() != null ? placeholderResolver.resolve(template.target(), context) : null;
+		String modelContext = template.context() != null ? placeholderResolver.resolve(template.context(), context) : null;
+
+		String rawId;
+		if (template.id() != null) {
+			rawId = placeholderResolver.resolve(template.id(), context);
+		} else if (target != null && modelContext != null) {
+			rawId = target + "-" + modelContext;
+		} else if (target != null) {
+			rawId = target;
+		} else {
+			throw new IllegalStateException("Generated model template could not resolve to a valid ID. It needs an 'id' or 'target' field. Template type: " + template.type());
 		}
+
+		OpenIdentifier resolvedId = new OpenIdentifier(rawId);
 
 		// Process layers, which is now the only source of textures
 		List<LayerDTO> finalLayers = processLayerTemplates(template.layers(), context, tasks);
@@ -135,10 +145,8 @@ public class ModelGeneratorImpl implements ModelGenerator {
 			}
 		}
 
-		String target = template.target() != null ? placeholderResolver.resolve(template.target(), context) : null;
-		String modelContext = template.context() != null ? placeholderResolver.resolve(template.context(), context) : null;
 
-		return new ModelDTO(resolvedId.toString(), template.type(), finalLayers, template.slots(), null, textures, target, modelContext, template.parent(), template.display());
+		return new ModelDTO(resolvedId.toString(), template.type(), finalLayers, template.slots(), template.mountPoints(), null, textures, target, modelContext, template.parent(), template.display());
 	}
 
 	private List<LayerDTO> processLayerTemplates(List<TemplateModelDTO.TemplateLayerDTO> layerTemplates, Map<String, Component> context, List<TextureGenerationTask> tasks) {

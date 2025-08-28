@@ -7,6 +7,7 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.attribute.api.CompositeAttributeComponent;
 import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
+import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 import com.sigmundgranaas.forgero.data.loading.api.data.*;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.HostData;
@@ -29,8 +30,8 @@ public class PropertyMerger {
 	public record MergedResult(Set<OpenIdentifier> tags, Map<String, List<?>> properties, @Nullable HostData host) {
 	}
 
-	public PropertyMerger(Map<String, Codec<? extends List<?>>> propertyCodecs) {
-		this.propertyCodecs = propertyCodecs;
+	public PropertyMerger(Map<PropertyKey<?>, Codec<? extends List<?>>> propertyCodecs) {
+		this.propertyCodecs = propertyCodecs.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey().key(), entry -> entry.getValue()));
 	}
 
 	public MergedResult merge(List<Object> dtoList) {

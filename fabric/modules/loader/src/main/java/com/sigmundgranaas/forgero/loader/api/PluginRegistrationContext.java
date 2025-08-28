@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
+import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 
 import java.util.List;
 import java.util.function.Function;
@@ -45,5 +46,5 @@ public interface PluginRegistrationContext {
 	 * @param key          The JSON key for the property (e.g., "forgero:attributes").
 	 * @param codecBuilder A function that takes a ConditionCodec supplier and returns a complete codec for your property list.
 	 */
-	void registerPropertyCodec(String key, Function<Supplier<Codec<Condition>>, Codec<? extends List<?>>> codecBuilder);
+	void registerPropertyCodec(PropertyKey<?> key, Function<Supplier<Codec<Condition>>, Codec<? extends List<?>>> codecBuilder);
 }

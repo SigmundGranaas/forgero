@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.model.loading.api.item;
 
-import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.ContextualModelTemplateDTO;
+import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.UpgradeModelTemplateDTO;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.EquipmentModelTemplateDTO;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.PartModelTemplateDTO;
 
@@ -22,7 +22,7 @@ public interface ItemModelTemplateProvider {
 	/**
 	 * @return A list of all loaded Contextual Model Templates.
 	 */
-	List<ContextualModelTemplateDTO> getContextualTemplates();
+	List<UpgradeModelTemplateDTO> getContextualTemplates();
 
 	/**
 	 * @return A list of all loaded Equipment Model Templates.

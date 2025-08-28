@@ -1,44 +1,46 @@
+// FILE: /home/sigmund/Documents/projects/forgero/1-20/fabric/modules/render/src/main/java/com/sigmundgranaas/forgero/render/model/item/ForgeroModelProvider.java
 package com.sigmundgranaas.forgero.render.model.item;
 
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.model.registry.api.item.ItemModelRegistry;
+import com.sigmundgranaas.forgero.model.api.item.Model;
+import com.sigmundgranaas.forgero.render.ForgeroClient;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelResolver;
 import net.minecraft.client.render.model.UnbakedModel;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
-/**
- * A general-purpose model resolver for Forgero items.
- * This class is responsible for intercepting model load requests for specific items
- * and providing a custom UnbakedModel. It is configured with a map of baseline components
- * and all necessary dependencies during initialization.
- */
 public class ForgeroModelProvider implements ModelResolver {
-	private final Map<Identifier, UnbakedModel> unbakedModelMap;
-
-	/**
-	 * Constructs a new model provider.
-	 *
-	 * @param componentMap              A map from an item's Identifier to its baseline Forgero Component.
-	 * @param itemToComponentConverter  A function to resolve a Component from an ItemStack.
-	 * @param modelRegistry             The model registry needed for the resolver pipeline.
-	 */
-	public ForgeroModelProvider(Map<Identifier, Component> componentMap, Function<ItemStack, Optional<Component>> itemToComponentConverter, ItemModelRegistry modelRegistry) {
-		this.unbakedModelMap = componentMap.entrySet().stream()
-				.collect(Collectors.toMap(
-						Map.Entry::getKey,
-						entry -> new UnbakedForgeroModel(entry.getValue(), itemToComponentConverter, modelRegistry)
-				));
-	}
 
 	@Override
 	public @Nullable UnbakedModel resolveModel(Context context) {
-		return unbakedModelMap.get(context.id());
+		final ForgeroClient.ClientServices services = ForgeroClient.services;
+
+		Identifier requestedId = context.id();
+		String path = requestedId.getPath();
+
+		if (path.startsWith("item/")) {
+			path = path.substring("item/".length());
+		}
+		OpenIdentifier forgeroId = new OpenIdentifier(requestedId.getNamespace(), path);
+		OpenIdentifier forgeroIdNormalized = new OpenIdentifier(requestedId.getNamespace(), path.replace("_", "-"));
+
+		Optional<Model> modelOpt = services.modelRegistry().find(forgeroId).or(() -> services.modelRegistry().find(forgeroIdNormalized));
+
+		if (modelOpt.isPresent()) {
+			OpenIdentifier componentId = modelOpt.get().getTarget().orElse(modelOpt.get().getIdentifier());
+			Optional<Component> baselineComponentOpt = services.componentRegistry().get(componentId);
+
+			if (baselineComponentOpt.isPresent()) {
+				return new UnbakedForgeroModel(
+						baselineComponentOpt.get(),
+						services.itemToComponent(),
+						services.modelRegistry()
+				);
+			}
+		}
+		return null;
 	}
 }

@@ -67,15 +67,28 @@ public class DefaultTextureGenerator implements TextureGenerator {
 	}
 
 	private Optional<BufferedImage> loadImage(String identifier) {
-		// Ensure the identifier correctly resolves to a .png file path
-		String resourceIdentifier = identifier.endsWith(".png") ? identifier : identifier + ".png";
-		OpenIdentifier imageId = new OpenIdentifier(resourceIdentifier);
+		String[] parts = identifier.split(":", 2);
+		if (parts.length != 2) {
+			System.err.printf("ERROR: Invalid texture identifier format: '%s'. Expected 'namespace:path'.%n", identifier);
+			return Optional.empty();
+		}
+		String namespace = parts[0];
+		String path = parts[1];
+
+		// Handle inconsistent root directory for templates/palettes.
+		// Standard textures are expected to be in the "textures" directory.
+		if (!path.startsWith("textures/") && !path.startsWith("texture_template/")) {
+			path = "textures/" + path;
+		}
+
+		String fullPath = path.endsWith(".png") ? path : path + ".png";
+		OpenIdentifier imageId = new OpenIdentifier(namespace, fullPath);
 
 		try {
 			Optional<InputStream> streamOpt = resourceProvider.read(imageId);
 
 			if (streamOpt.isEmpty()) {
-				System.err.printf("ERROR: Image resource not found at path '%s'%n", imageId);
+				System.err.printf("ERROR: Image resource not found at path '%s' from original identifier '%s'%n", imageId, identifier);
 				return Optional.empty();
 			}
 

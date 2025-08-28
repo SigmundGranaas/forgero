@@ -3,7 +3,9 @@ package com.sigmundgranaas.forgero.model.api.item;
 import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.model.api.ModelResolutionContext;
+import com.sigmundgranaas.forgero.model.api.MountPoint;
 
+import java.util.List;
 import java.util.Optional;
 
 public sealed interface Model permits CompositeModel, TextureModel, EmptyModel {
@@ -37,6 +39,13 @@ public sealed interface Model permits CompositeModel, TextureModel, EmptyModel {
 	 * @return An optional containing the display properties as a JsonElement.
 	 */
 	Optional<JsonElement> getDisplay();
+
+	/**
+	 * Gets the list of mount points defined for this model.
+	 *
+	 * @return A list of MountPoint objects.
+	 */
+	List<MountPoint> getMountPoints();
 
 	/**
 	 * Applies the given context to the model, resolving any variants or predicates.

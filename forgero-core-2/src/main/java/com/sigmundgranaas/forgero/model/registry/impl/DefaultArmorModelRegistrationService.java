@@ -1,3 +1,4 @@
+// FILE: forgero-core-2/src/main/java/com/sigmundgranaas/forgero/model/registry/impl/DefaultArmorModelRegistrationService.java
 package com.sigmundgranaas.forgero.model.registry.impl;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
@@ -11,6 +12,7 @@ import com.sigmundgranaas.forgero.utility.resource.loader.implementation.Resourc
 public class DefaultArmorModelRegistrationService implements ArmorModelRegistrationService {
 	private final ArmorModelRegistry registry;
 	private final ResourceProvider resourceProvider;
+	private static final String FORGERO_MODELS_ARMOR_DIRECTORY = "forgero/models/armor";
 
 	public DefaultArmorModelRegistrationService(ArmorModelRegistry registry, ResourceProvider resourceProvider) {
 		this.registry = registry;
@@ -18,12 +20,14 @@ public class DefaultArmorModelRegistrationService implements ArmorModelRegistrat
 	}
 
 	@Override
-	public void registerModels(String namespace) {
+	public void registerModels() {
 		FileArmorModelProvider modelConverter = new FileArmorModelProvider(resourceProvider);
 		ResourceLoader<ArmorModel> modelLoader = new ResourceLoader<>(resourceProvider, modelConverter);
-		OpenIdentifier modelsRootPath = new OpenIdentifier(namespace, "forgero_models/armor");
 
-		modelLoader.load(modelsRootPath, true)
+		resourceProvider.getNamespaces().stream()
+				.map(namespace -> new OpenIdentifier(namespace, FORGERO_MODELS_ARMOR_DIRECTORY))
+				.flatMap(root -> modelLoader.load(root, true))
+				.filter(model -> model.context().isEmpty() && model.target().isEmpty()) // Filter out templates
 				.forEach(registry::register);
 	}
 }

@@ -11,6 +11,7 @@ import com.sigmundgranaas.forgero.utility.resource.loader.implementation.Resourc
 public class DefaultModelRegistrationService implements ItemModelRegistrationService {
 	private final ItemModelRegistry registry;
 	private final ResourceProvider resourceProvider;
+	private static final String FORGERO_MODELS_DIRECTORY = "forgero/models";
 
 	public DefaultModelRegistrationService(ItemModelRegistry registry, ResourceProvider resourceProvider) {
 		this.registry = registry;
@@ -18,23 +19,14 @@ public class DefaultModelRegistrationService implements ItemModelRegistrationSer
 	}
 
 	@Override
-	public void registerModels(String namespace) {
-		// Create the FileModelProvider which now acts as a ResourceConverter<Model>
-		FileModelProvider modelConverter = new FileModelProvider(resourceProvider);
-
-		// Create a generic ResourceLoader specifically for Model types
+	public void registerModels() {
+		FileModelProvider modelConverter = new FileModelProvider();
 		ResourceLoader<Model> modelLoader = new ResourceLoader<>(resourceProvider, modelConverter);
 
-		// Define the root path for models within the namespace's assets
-		OpenIdentifier modelsRootPath = new OpenIdentifier(namespace, "forgero_models");
-
-		// Load and register all models
-		// The `modelLoader.load` method will return a stream of Model objects,
-		// and each Model object will already have its normalized OpenIdentifier
-		// thanks to the changes in FileModelProvider.convert().
-		// Simply register the model. Its ID is already correct.
-		// Corrected: only pass the Model object
-		modelLoader.load(modelsRootPath, true) // Recursively load all models
+		resourceProvider.getNamespaces().stream()
+				.map(namespace -> new OpenIdentifier(namespace, FORGERO_MODELS_DIRECTORY))
+				.flatMap(root -> modelLoader.load(root, true))
+				.filter(model -> model.getContext().isEmpty()) // Filter out templates
 				.forEach(registry::register);
 	}
 }

@@ -74,7 +74,7 @@ public class RecursiveModelResolver implements ItemModelResolver {
 			for (ModelSlot modelSlot : composite.slots()) {
 				Component childComponent = filledSlots.get(modelSlot.id());
 				if (childComponent != null) {
-					textures.addAll(resolveSlot(modelSlot, childComponent, context, baseOrder));
+					textures.addAll(resolveSlot(modelSlot, childComponent, context, baseOrder, composite));
 				}
 			}
 		}
@@ -86,7 +86,7 @@ public class RecursiveModelResolver implements ItemModelResolver {
 
 			for (ModelSlot modelSlot : composite.slots().stream().toList()) {
 				if(slots.containsKey(modelSlot.id())) {
-					slots.get(modelSlot.id()).ifPresent(childComponent -> textures.addAll(resolveSlot(modelSlot, childComponent, context, baseOrder)));
+					slots.get(modelSlot.id()).ifPresent(childComponent -> textures.addAll(resolveSlot(modelSlot, childComponent, context, baseOrder, composite)));
 				}else{
 					LOGGER.warn("No upgrade slot found in component found for slot {} in component {}",  modelSlot.id(), customizable.id());
 				}
@@ -95,27 +95,62 @@ public class RecursiveModelResolver implements ItemModelResolver {
 		return textures;
 	}
 
-	private List<RenderableTexture> resolveSlot(ModelSlot slot, Component child, ModelResolutionContext parentContext, int baseOrder) {
+	private List<RenderableTexture> resolveSlot(ModelSlot slot, Component child, ModelResolutionContext parentContext, int baseOrder, CompositeModel parentModel) {
 		ModelResolutionContext childContext = parentContext.with(child);
 
-		// Chain of fallbacks for model resolution:
-		// 1. Try to find a model for the child's ID in the slot's specific context.
-		// 2. If that fails, try to find a model for the child's ID in the default context.
-		// 3. If that also fails, fall back to resolving the child component's own model definition directly.
-
+		// 1. Find the model for the child component
 		Optional<Model> modelOpt = slot.context()
-				.flatMap(ctx -> modelRegistry.find(child.id(), ctx)); // 1. Contextual lookup
+				.flatMap(ctx -> modelRegistry.find(child.id(), ctx))
+				.or(() -> modelRegistry.find(child.id()));
 
 		if (modelOpt.isEmpty()) {
-			modelOpt = modelRegistry.find(child.id()); // 2. Default lookup
+			// Fallback: If no model is found for the child, resolve it independently. Mount points won't apply.
+			return resolveComponent(child, childContext).stream()
+					.map(tex -> tex.withOrder(baseOrder + slot.order() + tex.order()))
+					.toList();
 		}
 
-		return modelOpt
-				.map(model -> collectTexturesFromKnownModel(model, child, baseOrder + slot.order(), childContext))
-				.orElseGet(() -> resolveComponent(child, childContext).stream() // 3. Fallback to child's own model
-						.map(tex -> tex.withOrder(baseOrder + slot.order() + tex.order()))
-						.toList());
+		Model childModel = modelOpt.get();
+
+		// 2. Calculate the mount offset
+		Offset mountOffset = calculateMountOffset(slot, parentModel, childModel);
+
+		// 3. Collect textures from the resolved child model
+		List<RenderableTexture> childTextures = collectTexturesFromKnownModel(childModel, child, baseOrder + slot.order(), childContext);
+
+		// 4. Apply the mount offset to all collected textures
+		if (mountOffset != Offset.ZERO) {
+			return childTextures.stream()
+					.map(texture -> new RenderableTexture(texture.texture(), texture.order(), texture.offset().add(mountOffset)))
+					.collect(Collectors.toList());
+		} else {
+			return childTextures;
+		}
 	}
+
+	private Offset calculateMountOffset(ModelSlot slot, Model parentModel, Model childModel) {
+		if (slot.targetMount().isEmpty()) {
+			return Offset.ZERO;
+		}
+
+		String targetMountName = slot.targetMount().get();
+		String childMountName = slot.childMount().orElse("center");
+
+		Offset parentOffset = parentModel.getMountPoints().stream()
+				.filter(mp -> mp.name().equals(targetMountName))
+				.findFirst()
+				.map(MountPoint::getOffset)
+				.orElse(Offset.ZERO);
+
+		Offset childOffset = childModel.getMountPoints().stream()
+				.filter(mp -> mp.name().equals(childMountName))
+				.findFirst()
+				.map(MountPoint::getOffset)
+				.orElse(Offset.ZERO);
+
+		return new Offset(parentOffset.x() - childOffset.x(), parentOffset.y() - childOffset.y());
+	}
+
 
 	private RenderableTexture getLayerTexture(ModelLayer layer, ModelResolutionContext context, int baseOrder) {
 		return layer.getActiveVariant(context)
