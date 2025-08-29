@@ -1,0 +1,41 @@
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection DependencyNotationArgument
+
+subprojects {
+
+}
+
+subprojects {
+	processResources {
+		inputs.property "version", project.version
+
+		filesMatching("fabric.mod.json") {
+			expand "version": project.version
+		}
+	}
+
+	jar {
+		from("LICENSE") {
+			rename { "${it}_${archivesBaseName}" }
+		}
+	}
+	java {
+		withSourcesJar()
+	}
+}
+
+subprojects {
+	dependencies {
+		implementation 'org.jetbrains:annotations:23.0.0'
+		testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
+	}
+
+	test {
+		useJUnitPlatform()
+	}
+
+	java {
+		withSourcesJar()
+	}
+}

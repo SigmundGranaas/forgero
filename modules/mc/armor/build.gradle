@@ -1,0 +1,12 @@
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection DependencyNotationArgument
+
+dependencies {
+	implementation(project(":modules:core"))
+	implementation(project(path: ":modules:mc:loader", configuration: 'namedElements'))
+	implementation(project(path: ":modules:mc:common", configuration: 'namedElements'))
+
+	// Fabric Loader
+	modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
+}
