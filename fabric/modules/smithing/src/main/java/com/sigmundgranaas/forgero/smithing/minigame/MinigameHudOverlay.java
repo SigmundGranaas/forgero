@@ -19,8 +19,9 @@ import net.minecraft.util.math.Vec3d;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 
 // TODO create our own texture for the outside of the bar. Including arrow and ticks.
-
 // TODO Bar animating / Instead of item different bars based on the temperature stage.
+
+
 public class MinigameHudOverlay implements HudRenderCallback {
 
 	private static final Identifier BAR_TEXTURE = new Identifier("forgero", "textures/gui/bar_texture.png");
@@ -85,18 +86,38 @@ public class MinigameHudOverlay implements HudRenderCallback {
         // Hardcoded stage colors per segment (no blending)
         // Fill the inside of the bar with stage colors
         int[] stageColors = new int[] {
-            0xFF000099, // Cold: dark blue
-            0xFF3399FF, // Warm: dark cyan
-            0xFFCCCC00, // Hot: dark yellow
-            0xFF00CC00, // Very Hot: dark green
-            0xFFCC6600, // Near Melt: dark orange
-            0xFFCC0000  // Molten: dark red
+				0xFF000099, // Cold: dark blue
+				0xFF3399FF, // Warm: dark cyan
+				0xFFCCCC00, // Hot: dark yellow
+				0xFF00CC00, // Very Hot: dark green
+				0xFFCC6600, // Near Melt: dark orange
+				0xFFCC0000  // Molten: dark red
         };
         for (int x = 0; x < innerWidth; x++) {
             int tempValue = Math.round(minWindow + x * unitsPerPixelX);
             int segIdx = segmentIndex(tempValue, boundaries);
             int color = stageColors[segIdx];
             fill(ctx, innerLeft + x, innerTop, innerLeft + x + 1, innerTop + innerHeight, color);
+        }
+
+        // Tessellation effect: diagonal lines overlay
+        int tessellationSpacing = 4;
+        int tessellationColor = 0x40FFFFFF; // semi-transparent white
+        for (int y = 0; y < innerHeight; y += tessellationSpacing) {
+            for (int x = 0; x < innerWidth; x += tessellationSpacing) {
+                int startX = innerLeft + x;
+                int startY = innerTop + y;
+                int endX = Math.min(startX + tessellationSpacing, innerLeft + innerWidth);
+                int endY = Math.min(startY + tessellationSpacing, innerTop + innerHeight);
+                // Draw diagonal line from (startX, startY) to (endX, endY)
+                for (int i = 0; i < tessellationSpacing; i++) {
+                    int dx = startX + i;
+                    int dy = startY + i;
+                    if (dx < innerLeft + innerWidth && dy < innerTop + innerHeight) {
+                        fill(ctx, dx, dy, dx + 1, dy + 1, tessellationColor);
+                    }
+                }
+            }
         }
 
         // Draw the border using the texture (full size)
@@ -115,7 +136,7 @@ public class MinigameHudOverlay implements HudRenderCallback {
             }
             int yStart = innerTop; // Start at top of inner area
             int yEnd = innerTop + innerHeight;
-            fill(ctx, x, yStart, x + 1, yEnd, 0xFFFFFFFF); // fully opaque white
+            fill(ctx, x, yStart, x + 1, yEnd, 0xFFad9474); // fully opaque #ad9474
         }
 
         // Two ticks between each stage: one normal, one shorter
@@ -133,10 +154,10 @@ public class MinigameHudOverlay implements HudRenderCallback {
                 if (x >= rightBorder) x = rightBorder - 1;
                 int yStart = innerTop + 1;
                 int yEnd = innerTop + innerHeight - 1;
-                fill(ctx, x, yStart, x + 1, yEnd, 0xCCFFFFFF);
+                fill(ctx, x, yStart, x + 1, yEnd, 0xFFad9474); // #ad9474, fully opaque
             }
 
-            // Quarter ticks (shorter), skip for near melt stage (i == 4)
+            // Quarter ticks (shorter), skip for near melt stage (i != 4)
             if (i != 4) {
                 int quarterValue = Math.round(start + interval / 4.0f);
                 int threeQuarterValue = Math.round(start + 3.0f * interval / 4.0f);
@@ -147,7 +168,7 @@ public class MinigameHudOverlay implements HudRenderCallback {
                         if (x >= rightBorder) x = rightBorder - 1;
                         int yStart = innerTop + 2;
                         int yEnd = innerTop + innerHeight - 2;
-                        fill(ctx, x, yStart, x + 1, yEnd, 0x88FFFFFF);
+                        fill(ctx, x, yStart, x + 1, yEnd, 0xFFad9474); // #ad9474, fully opaque
                     }
                 }
             }
