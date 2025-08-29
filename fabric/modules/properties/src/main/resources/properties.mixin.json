@@ -8,13 +8,13 @@
     "WorldRenderBlockBreakingMixin"
   ],
   "server": [
-    "playerInteractionManagerMixin"
+    "PlayerServerInteractionManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "mixins": [
     "AbstractBlockMixin",
-    "PlayerServerInteractionManagerMixin"
+    "PlayerEntityMixin"
   ]
 }

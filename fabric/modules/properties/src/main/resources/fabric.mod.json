@@ -17,10 +17,13 @@
   },
   "entrypoints": {
     "forgero:data_plugin": [
-      "com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.BlockBreakingPropertiesPlugin"
+      "com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.BlockBreakingPropertiesPlugin",
+      "com.sigmundgranaas.forgero.properties.minecraft.onhit.OnHitPropertiesPlugin"
+
     ],
     "forgero:post_load_plugin": [
-      "com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.BlockBreakingPropertiesPlugin"
+      "com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.BlockBreakingPropertiesPlugin",
+      "com.sigmundgranaas.forgero.properties.minecraft.onhit.OnHitPropertiesPlugin"
     ]
   },
   "mixins": [

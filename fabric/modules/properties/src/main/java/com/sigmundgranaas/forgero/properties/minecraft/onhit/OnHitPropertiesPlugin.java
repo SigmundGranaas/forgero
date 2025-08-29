@@ -1,0 +1,52 @@
+package com.sigmundgranaas.forgero.properties.minecraft.onhit;
+
+import com.mojang.serialization.Codec;
+import com.sigmundgranaas.forgero.core.property.api.codec.ListCodecWrapper;
+import com.sigmundgranaas.forgero.loader.api.DataLoadingContext;
+import com.sigmundgranaas.forgero.loader.api.DataPlugin;
+import com.sigmundgranaas.forgero.loader.api.PluginRegistrationContext;
+import com.sigmundgranaas.forgero.loader.api.PostLoadPlugin;
+import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.ExplosionHandler;
+import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.FireHandler;
+import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.OnHitHandler;
+import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.StatusEffectHandler;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+public class OnHitPropertiesPlugin implements DataPlugin, PostLoadPlugin {
+
+	private static final Map<String, Codec<? extends OnHitHandler>> HANDLERS = new ConcurrentHashMap<>();
+
+	static {
+		register(FireHandler.TYPE, FireHandler.CODEC);
+		register(ExplosionHandler.TYPE, ExplosionHandler.CODEC);
+		register(StatusEffectHandler.TYPE, StatusEffectHandler.CODEC);
+	}
+
+	public static void register(String type, Codec<? extends OnHitHandler> codec) {
+		HANDLERS.put(type, codec);
+	}
+
+	public static Codec<? extends OnHitHandler> getHandlerCodec(String type) {
+		return HANDLERS.get(type);
+	}
+
+	@Override
+	public void register(PluginRegistrationContext context) {
+		context.registerPropertyCodec(
+				OnHitProperty.PROPERTY_KEY,
+				conditionCodecSupplier -> ListCodecWrapper.of(OnHitProperty.codec(conditionCodecSupplier.get()))
+		);
+	}
+
+	@Override
+	public void onDataLoaded(DataLoadingContext context) {
+		OnHitManager.initialize(context.getConverter(), context.getResolver());
+	}
+
+	@Override
+	public String getId() {
+		return "forgero:on-hit-properties";
+	}
+}
