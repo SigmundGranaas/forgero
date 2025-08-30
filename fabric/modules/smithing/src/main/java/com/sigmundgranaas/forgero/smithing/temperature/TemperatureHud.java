@@ -20,7 +20,7 @@ public class TemperatureHud {
 	private static final Identifier ARROW_MAX = new Identifier("forgero", "textures/gui/arrow_max.png");
 
 	private static int coolingArrowTick = 0;
-	private static int coolingArrowFrame = 0;
+	private	static int coolingArrowFrame = 0;
 	private static int heatingArrowTick = 0;
 	private static int heatingArrowFrame = 0;
 
@@ -135,6 +135,32 @@ public class TemperatureHud {
 		int connectorW = 1;
 		int offset = 2;
 		int firstOffset = 2;
+		int specialOffset1 = -2; // special offset for first 7 pixels of stage 1
+		int specialOffset2 = 0;  // special offset for next 2 pixels of stage 2
+		int specialOffset3 = -2; // special offset for next 3 pixels of stage 2
+
+		// Render the first 7 pixels of the first stage with a special offset
+		{
+			int a = boundaries[0];
+			int b = boundaries[1];
+			float ra = a / (float) max;
+			float rb = b / (float) max;
+			int yA = y + barY + (barHeight - 1) - (int) Math.floor(barHeight * ra);
+			int yB = y + barY + (barHeight - 1) - (int) Math.floor(barHeight * rb);
+			int top = Math.min(yA, yB);
+			int bottom = Math.max(yA, yB);
+			int stage1Top = top;
+			int stage1Bottom = Math.min(top + 7, bottom + 1);
+			int stage1Color = TemperatureColorProvider.getHudColorForTemperature(
+				(a + b) / 2,
+				max,
+				boundaries,
+				0, 1, 2, 3, 4, 5,
+				0
+			);
+			ctx.fill(x + barX + specialOffset1, stage1Top, x + barX + specialOffset1 + connectorW, stage1Bottom, stage1Color);
+		}
+
 		for (int i = 1; i < boundaries.length - 1; i++) {
 			int a = boundaries[i];
 			int b = boundaries[i + 1];
@@ -162,6 +188,30 @@ public class TemperatureHud {
 				if (i == 1) {
 					int limitedBottom = Math.min(top + 10, bottom);
 					ctx.fill(connectorX, top, connectorX + connectorW, limitedBottom + 1, stageColor);
+
+					// Render the next 2 pixels of stage 2 with a special offset (moved 5 left)
+					int specialTop2 = limitedBottom + 1;
+					int specialBottom2 = Math.min(specialTop2 + 2, bottom + 1);
+					int specialColor2 = TemperatureColorProvider.getHudColorForTemperature(
+						(a + b) / 2,
+						max,
+						boundaries,
+						0, 1, 2, 3, 4, 5,
+						i
+					);
+					ctx.fill(x + barX + specialOffset2, specialTop2, x + barX + specialOffset2 + connectorW, specialBottom2, specialColor2);
+
+					// Render the next 3 pixels of stage 2 with another special offset (moved 7 left)
+					int specialTop3 = specialBottom2;
+					int specialBottom3 = Math.min(specialTop3 + 3, bottom + 1);
+					int specialColor3 = TemperatureColorProvider.getHudColorForTemperature(
+						(a + b) / 2,
+						max,
+						boundaries,
+						0, 1, 2, 3, 4, 5,
+						i
+					);
+					ctx.fill(x + barX + specialOffset3, specialTop3, x + barX + specialOffset3 + connectorW, specialBottom3, specialColor3);
 				} else {
 					ctx.fill(connectorX, top, connectorX + connectorW, bottom + 1, stageColor);
 				}
