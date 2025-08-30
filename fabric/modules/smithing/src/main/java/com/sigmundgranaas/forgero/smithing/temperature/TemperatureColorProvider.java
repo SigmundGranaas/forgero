@@ -115,10 +115,10 @@ public class TemperatureColorProvider {
     private static final int[] BASE_STAGE_BOUNDS = new int[]{
         0,    // Cold start
         320,  // Cold end, Warm start
-        640,  // Warm end, Hot start
+        750,  // Warm end, Hot start
         1050, // Hot end, Very Hot start
-        1250, // Very Hot end, Near Melt start
-        1450, // Near Melt end, Molten start
+        1200, // Very Hot end, Near Melt start
+        1400, // Near Melt end, Molten start
         1600  // Molten end
     };
 

@@ -25,9 +25,7 @@ public class TemperatureHud {
 	private static int heatingArrowFrame = 0;
 
 	public static void onHudRender(DrawContext ctx, float tickDelta) {
-		// use tickDelta in a no-op to avoid unused parameter warnings
 		if (tickDelta != tickDelta) {
-			// no-op
 		}
 
 		MinecraftClient client = MinecraftClient.getInstance();
@@ -72,17 +70,14 @@ public class TemperatureHud {
 		int temp = TemperatureUtils.getTemperature(targetStack);
 		int max = TemperatureUtils.getMaxTemp(targetStack);
 
-		// Only show cooling arrow if item is actually cooling (temp > 0)
 		boolean isCooling = coolingBlock && temp > 20;
 		boolean isHeating = heatingBlock && temp < max;
 
-		// Animate cooling arrow frame (slow down: every 25 ticks)
 		coolingArrowTick++;
 		if (coolingArrowTick >= 25) {
 			coolingArrowFrame = (coolingArrowFrame + 1) % 4;
 			coolingArrowTick = 0;
 		}
-		// Animate heating arrow frame (slow down: every 25 ticks)
 		heatingArrowTick++;
 		if (heatingArrowTick >= 25) {
 			heatingArrowFrame = (heatingArrowFrame + 1) % 4;
@@ -114,7 +109,6 @@ public class TemperatureHud {
 			arrowTexture = ARROW_COOLING;
 		}
 
-		// Fill the bar using heat colormap; force opaque alpha so low temps are visible
 		float ratio = Math.max(0f, Math.min(1f, temp / (float) max));
 		int filled = Math.round(barHeight * ratio);
 		for (int row = 0; row < filled; row++) {
@@ -126,10 +120,8 @@ public class TemperatureHud {
 			ctx.fill(x + barX, rowY, x + barX + barWidth, rowY + 1, color);
 		}
 
-		// Draw overlay
 		ctx.drawTexture(texture, x, y, 0, 0, textureWidth, textureHeight, textureWidth, textureHeight);
 
-		// Draw extra PNG (arrow) overlapped with thermometer
 		if (arrowTexture != null) {
 			int arrowY = y;
 			if (arrowTexture == ARROW_COOLING) {
@@ -140,11 +132,10 @@ public class TemperatureHud {
 			ctx.drawTexture(arrowTexture, x, arrowY, 0, 0, 60, 66, 60, 66);
 		}
 
-		// Draw connectors on the left side (same spot as normal stage ticks)
 		int connectorW = 1;
 		int offset = 2;
 		int firstOffset = 2;
-		for (int i = 1; i < boundaries.length - 1; i++) { // skip first connector (index 0)
+		for (int i = 1; i < boundaries.length - 1; i++) {
 			int a = boundaries[i];
 			int b = boundaries[i + 1];
 			float ra = a / (float) max;
@@ -154,7 +145,6 @@ public class TemperatureHud {
 			int top = Math.min(yA, yB);
 			int bottom = Math.max(yA, yB);
 
-			// Fix: last stage connector should start 1 pixel lower
 			if (i == boundaries.length - 2) {
 				top += 1;
 			}
@@ -178,12 +168,11 @@ public class TemperatureHud {
 			}
 		}
 
-		// Draw main boundary ticks on the left
 		int mainW = 3;
 		int mainH = 2;
 		int offset2 = 2;
 		int firstOffset2 = -2;
-		int tickColor = 0xFF2E2D4B; // #2e2d4b
+		int tickColor = 0xFF2E2D4B;
 		for (int i = 1; i < boundaries.length - 1; i++) {
 			int b = boundaries[i];
 			float r = b / (float) max;
