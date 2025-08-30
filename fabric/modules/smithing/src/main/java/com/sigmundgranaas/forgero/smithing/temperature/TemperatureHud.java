@@ -15,9 +15,6 @@ import net.minecraft.util.math.Box;
 
 public class TemperatureHud {
 	private static final Identifier HUD_TEXTURE_DEFAULT = new Identifier("forgero", "textures/gui/thermometer_scaled.png");
-	private static final Identifier HUD_TEXTURE_MAX = new Identifier("forgero", "textures/gui/thermometer_scaled.png");
-	private static final Identifier HUD_TEXTURE_HEATING = new Identifier("forgero", "textures/gui/thermometer_scaled.png");
-	private static final Identifier HUD_TEXTURE_COOLING = new Identifier("forgero", "textures/gui/thermometer_scaled.png");
 	private static final Identifier ARROW_HEATING = new Identifier("forgero", "textures/gui/arrow_heating.png");
 	private static final Identifier ARROW_COOLING = new Identifier("forgero", "textures/gui/arrow_cooling.png");
 	private static final Identifier ARROW_MAX = new Identifier("forgero", "textures/gui/arrow_max.png");
@@ -110,13 +107,10 @@ public class TemperatureHud {
 		Identifier texture = HUD_TEXTURE_DEFAULT;
 		Identifier arrowTexture = null;
 		if (temp >= max) {
-			texture = HUD_TEXTURE_MAX;
 			arrowTexture = ARROW_MAX;
 		} else if (heatingBlock) {
-			texture = HUD_TEXTURE_HEATING;
 			arrowTexture = ARROW_HEATING;
 		} else if (coolingBlock) {
-			texture = HUD_TEXTURE_COOLING;
 			arrowTexture = ARROW_COOLING;
 		}
 
