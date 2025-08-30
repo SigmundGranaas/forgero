@@ -11,4 +11,7 @@ import com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys;
 public class TemperaturePredicates {
 
 
+	public static Predicate<MatchContext> veryHotStageHitPredicate() {
+		return context -> context.get(MinecraftContextKeys.VERY_HOT_STAGE_HITS).orElse(0) >= 6;
+	}
 }

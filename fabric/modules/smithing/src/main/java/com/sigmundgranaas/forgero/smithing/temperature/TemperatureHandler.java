@@ -14,13 +14,10 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 
 public class TemperatureHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger("ForgeroTemperature");
-    private static final int HEAT_PER_TICK = 1;
-    private static final int COOL_PER_TICK = 2;
-    private static final int INVENTORY_COOL_PER_TICK = 1; // Slower cooling in inventory
-    private static final int INVENTORY_COOL_TICK_INTERVAL = 20; // Only cool every 20 ticks
+    private static final int FLUID_COOL_PER_TICK = 20;
     private static int tickCounter = 0;
-    private static final int TICK_INTERVAL = 20; // Only update every 20 ticks
-    private static final int FLUID_COOL_PER_TICK = 20; // Cooling rate in fluid
+    private static final int TICK_INTERVAL = 20;
+    private static final int INVENTORY_COOL_PER_TICK = 1;
 
     public static void register() {
         ServerTickEvents.END_WORLD_TICK.register(TemperatureHandler::onWorldTick);
@@ -39,19 +36,12 @@ public class TemperatureHandler {
                     continue;
                 }
                 int temp = TemperatureUtils.getTemperature(stack);
-                int prevTemp = temp;
                 if (temp > 100) {
-                    if (player.getMainHandStack() == stack || player.getOffHandStack() == stack) {
-                        tookHeatDamage = true;
-                    } else {
-                        tookHeatDamage = true;
-                    }
+                    tookHeatDamage = true;
                 }
-                if (tickCounter % 20 == 0) { // Changed to every 20 ticks
-                    if (temp > 20) {
-                        temp = Math.max(20, temp - INVENTORY_COOL_PER_TICK);
-                        TemperatureUtils.setTemperature(stack, temp);
-                    }
+                if (temp > 20) {
+                    temp = Math.max(20, temp - INVENTORY_COOL_PER_TICK);
+                    TemperatureUtils.setTemperature(stack, temp);
                 }
             }
             if (tookHeatDamage) {
@@ -65,15 +55,11 @@ public class TemperatureHandler {
                 continue;
             }
             int temp = TemperatureUtils.getTemperature(stack);
-            int prevTemp = temp;
-            if (tickCounter % 20 == 0) {
-                if (temp > 20) {
-                    temp = Math.max(20, temp - INVENTORY_COOL_PER_TICK);
-                    TemperatureUtils.setTemperature(stack, temp);
-                }
+            if (temp > 20) {
+                temp = Math.max(20, temp - INVENTORY_COOL_PER_TICK);
+                TemperatureUtils.setTemperature(stack, temp);
             }
             BlockPos pos = itemEntity.getBlockPos();
-            var blockState = world.getBlockState(pos);
             boolean changed = false;
             boolean inFilledCauldron = TemperatureUtils.isItemInFilledWaterCauldron(itemEntity, world);
             if (inFilledCauldron) {
@@ -88,7 +74,6 @@ public class TemperatureHandler {
                 }
             }
             if (changed) {
-                // Send temperature sync packet to all tracking clients
                 TemperatureSyncS2CPacket.sendToClient(itemEntity, temp);
             }
         }

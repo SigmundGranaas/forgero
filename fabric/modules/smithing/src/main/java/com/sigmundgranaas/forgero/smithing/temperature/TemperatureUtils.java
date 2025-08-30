@@ -39,8 +39,6 @@ public class TemperatureUtils {
         if (nbt.contains(MAX_TEMPERATURE_KEY)) {
             return nbt.getInt(MAX_TEMPERATURE_KEY);
         }
-        Optional<State> stateOpt = StateService.INSTANCE.convert(stack);
-        int maxTemp = 10000; // Default max temperature if attribute is not present
         Optional<State> state = StateService.INSTANCE.convert(stack);
         if (state.isPresent()) {
             int attr = ComputedAttribute.of(state.get(), MAX_TEMPERATURE).asInt();
@@ -57,7 +55,6 @@ public class TemperatureUtils {
     }
 
     public static boolean hasMaxTemperature(ItemStack stack) {
-        // Exclude full tools, but allow MorphedItem
         if (stack.getItem() instanceof ToolStateItem && !(stack.getItem() instanceof MorphedItem)) {
             return false;
         }
@@ -68,7 +65,6 @@ public class TemperatureUtils {
         return Math.max(MIN_TEMPERATURE, Math.min(getMaxTemp(stack), temperature));
     }
 
-
     public static boolean isBlockFilledWaterCauldron(BlockState state) {
         return state != null
             && state.isOf(Blocks.WATER_CAULDRON)
@@ -76,47 +72,21 @@ public class TemperatureUtils {
             && state.get(Properties.LEVEL_3) == 3;
     }
 
-    public static boolean isItemInFilledWaterCauldron(net.minecraft.entity.ItemEntity itemEntity, net.minecraft.world.World world) {
+    public static boolean isItemInFilledWaterCauldron(ItemEntity itemEntity, World world) {
         if (itemEntity == null || world == null) return false;
         BlockState state = world.getBlockState(itemEntity.getBlockPos());
         return isBlockFilledWaterCauldron(state);
     }
-	
 
-    public static boolean isCooling(ItemStack stack) {
-        int temperature = getTemperature(stack);
-
-        return temperature > DEFAULT_TEMPERATURE;
+    public static boolean isItemOnCampfire(ItemEntity itemEntity, World world) {
+        if (itemEntity == null || world == null) return false;
+        BlockState state = world.getBlockState(itemEntity.getBlockPos());
+        if (isBlockCampfire(state)) return true;
+        BlockState stateBelow = world.getBlockState(itemEntity.getBlockPos().down());
+        return isBlockCampfire(stateBelow);
     }
 
-    public static boolean isHeating(ItemStack stack) {
-        int temperature = getTemperature(stack);
-        return temperature > DEFAULT_TEMPERATURE;
+    public static boolean isBlockCampfire(BlockState state) {
+        return state != null && (state.isOf(Blocks.CAMPFIRE) || state.isOf(Blocks.SOUL_CAMPFIRE));
     }
-
-    public static boolean isAtDefaultTemperature(ItemStack stack) {
-        return getTemperature(stack) == DEFAULT_TEMPERATURE;
-    }
-
-    public static boolean isAtMaxTemperature(ItemStack stack) {
-        return getTemperature(stack) == getMaxTemp(stack);
-    }
-
-	// New: check if an item entity is on a campfire or soul campfire
-	public static boolean isItemOnCampfire(ItemEntity itemEntity, World world) {
-		if (itemEntity == null || world == null) return false;
-
-		// Check the block at the item's position
-		BlockState state = world.getBlockState(itemEntity.getBlockPos());
-		if (isBlockCampfire(state)) return true;
-
-		// Also check the block below the item (items sit above campfires)
-		BlockState stateBelow = world.getBlockState(itemEntity.getBlockPos().down());
-		return isBlockCampfire(stateBelow);
-	}
-
-	// Client/server-safe campfire check (campfire or soul campfire)
-	public static boolean isBlockCampfire(BlockState state) {
-		return state != null && (state.isOf(Blocks.CAMPFIRE) || state.isOf(Blocks.SOUL_CAMPFIRE));
-	}
 }

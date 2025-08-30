@@ -52,7 +52,6 @@ public class MinigameLogic {
     private int warmStageHits = 0;
     private int hotStageHits = 0;
     private int veryHotStageHits = 0;
-    private int extremeStageHits = 0;
     private int nearMeltStageHits = 0;
     private int moltenStageHits = 0;
     private int fastMarkerHits = 0;
@@ -373,7 +372,6 @@ public class MinigameLogic {
         nbt.putInt("warmStageHits", warmStageHits);
         nbt.putInt("hotStageHits", hotStageHits);
         nbt.putInt("veryHotStageHits", veryHotStageHits);
-        nbt.putInt("extremeStageHits", extremeStageHits);
         nbt.putInt("nearMeltStageHits", nearMeltStageHits);
         nbt.putInt("moltenStageHits", moltenStageHits);
         nbt.putIntArray("fastMarkerIndices", fastMarkerIndices.stream().mapToInt(Integer::intValue).toArray());
@@ -407,7 +405,6 @@ public class MinigameLogic {
         warmStageHits = nbt.getInt("warmStageHits");
         hotStageHits = nbt.getInt("hotStageHits");
         veryHotStageHits = nbt.getInt("veryHotStageHits");
-        extremeStageHits = nbt.getInt("extremeStageHits");
         nearMeltStageHits = nbt.getInt("nearMeltStageHits");
         moltenStageHits = nbt.getInt("moltenStageHits");
 
@@ -440,7 +437,6 @@ public class MinigameLogic {
                 warmStageHits = itemNbt.getInt("warmStageHits");
                 hotStageHits = itemNbt.getInt("hotStageHits");
                 veryHotStageHits = itemNbt.getInt("veryHotStageHits");
-                extremeStageHits = itemNbt.getInt("extremeStageHits");
                 nearMeltStageHits = itemNbt.getInt("nearMeltStageHits");
                 moltenStageHits = itemNbt.getInt("moltenStageHits");
             }

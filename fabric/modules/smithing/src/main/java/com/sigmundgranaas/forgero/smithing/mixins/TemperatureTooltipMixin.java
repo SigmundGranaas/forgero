@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.smithing.mixins;
 
+import static com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.hasMaxTemperature;
+
 import java.util.List;
 
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider;
@@ -21,14 +23,13 @@ import net.minecraft.world.World;
 public class TemperatureTooltipMixin {
 	@Inject(method = "appendTooltip", at = @At("TAIL"))
 	private void forgero$addTemperatureTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext, CallbackInfo ci) {
-		if (!TemperatureUtils.hasMaxTemperature(itemStack)) {
+		if (!hasMaxTemperature(itemStack)) {
 			return;
 		}
 		int temp = TemperatureUtils.getTemperature(itemStack);
 		int maxTemp = TemperatureUtils.getMaxTemp(itemStack);
 
 		int[] bounds = TemperatureColorProvider.getStageBoundaries(maxTemp);
-		// Stage indices for HUD colors (6 stages)
 		int idxCold     = 0;
 		int idxWarm     = 1;
 		int idxHot      = 2;
@@ -36,13 +37,10 @@ public class TemperatureTooltipMixin {
 		int idxNearMelt = 4;
 		int idxMolten   = 5;
 
-		// Determine stage index for current temperature
 		int stageIdx = segmentIndex(temp, bounds);
 
-		// Use helper method for HUD color mapping
 		int color = TemperatureColorProvider.getHudColorForTemperature(temp, maxTemp, bounds, idxCold, idxWarm, idxHot, idxVeryHot, idxNearMelt, idxMolten, stageIdx);
 
-		// Forging stage is now the Very Hot stage (green)
 		int forgingMin = bounds[idxVeryHot];
 		int forgingMax = bounds[idxNearMelt];
 

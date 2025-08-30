@@ -22,7 +22,6 @@ public class ModMessages {
 	public static final Identifier ANVIL_SHIFT_USE = new Identifier(Forgero.NAMESPACE, "anvil_shift_use");
 	public static final Identifier TEMPERATURE_SYNC = new Identifier(Forgero.NAMESPACE, "temperature_sync");
 
-	// Register C2S on class load (server + client). Safeguard with a flag to avoid duplicate registrations.
 	private static volatile boolean C2S_REGISTERED = false;
 	static {
 		registerC2SPackets();
@@ -33,8 +32,6 @@ public class ModMessages {
 		ClientPlayNetworking.registerGlobalReceiver(ITEM_SYNC, AnvilSyncS2CPacket::receive);
 		ClientPlayNetworking.registerGlobalReceiver(OPEN_SCHEMATIC_SELECTION, SchematicSelectionS2CPacket::receive);
 		ClientPlayNetworking.registerGlobalReceiver(TEMPERATURE_SYNC, TemperatureSyncS2CPacket::receive);
-
-
 	}
 
 	public static void registerC2SPackets() {

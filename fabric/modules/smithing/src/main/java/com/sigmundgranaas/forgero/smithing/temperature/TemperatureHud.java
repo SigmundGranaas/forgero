@@ -160,7 +160,7 @@ public class TemperatureHud {
 
 			if (top < bottom) {
 				if (i == 1) {
-					int limitedBottom = Math.min(top + 6, bottom);
+					int limitedBottom = Math.min(top + 10, bottom);
 					ctx.fill(connectorX, top, connectorX + connectorW, limitedBottom + 1, stageColor);
 				} else {
 					ctx.fill(connectorX, top, connectorX + connectorW, bottom + 1, stageColor);

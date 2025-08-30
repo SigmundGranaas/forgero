@@ -118,7 +118,7 @@ public class TemperatureColorProvider {
         750,  // Warm end, Hot start
         1050, // Hot end, Very Hot start
         1200, // Very Hot end, Near Melt start
-        1400, // Near Melt end, Molten start
+        1500, // Near Melt end, Molten start
         1600  // Molten end
     };
 

@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.smithing.mixins;
 
+import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,15 +28,13 @@ public abstract class AnvilBlockUseMixin {
 			BlockHitResult hit,
 			CallbackInfoReturnable<ActionResult> cir
 	) {
-		if (world.getBlockEntity(pos) instanceof com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity smithingAnvilBlockEntity) {
+		if (world.getBlockEntity(pos) instanceof SmithingAnvilBlockEntity smithingAnvilBlockEntity) {
 			if (smithingAnvilBlockEntity.isGuiBlocked(world)) {
 				cir.setReturnValue(ActionResult.SUCCESS);
 				return;
 			}
 			if (!smithingAnvilBlockEntity.getInventory().getStack(0).isEmpty()) {
-				// Block vanilla UI if item is present
 				cir.setReturnValue(ActionResult.SUCCESS);
-				// --- Hammering Logic for vanilla anvil ---
 				if (!world.isClient) {
 					ItemStack stackInHand = player.getStackInHand(hand);
 					if (stackInHand.getItem().getTranslationKey().contains("smithing_hammer")) {
