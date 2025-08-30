@@ -10,6 +10,7 @@ import com.sigmundgranaas.forgero.core.condition.Conditions;
 import com.sigmundgranaas.forgero.core.condition.NamedCondition;
 import com.sigmundgranaas.forgero.core.util.match.MatchContext;
 import com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys;
+import com.sigmundgranaas.forgero.smithing.condition.custom.TemperaturePredicates;
 
 public class PredicateConditionLootRegistry {
 	private static final Map<Predicate<MatchContext>, List<NamedCondition>> PREDICATE_LOOT_MAP = new LinkedHashMap<>();

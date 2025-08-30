@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.smithing.condition;
+package com.sigmundgranaas.forgero.smithing.condition.custom;
 
 import java.util.function.Predicate;
 

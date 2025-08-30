@@ -26,7 +26,11 @@ public class TemperatureUtils {
 
     public static int getTemperature(ItemStack stack) {
         NbtCompound nbt = stack.getOrCreateNbt();
-        return nbt.contains(TEMPERATURE_KEY) ? nbt.getInt(TEMPERATURE_KEY) : DEFAULT_TEMPERATURE;
+        if (!nbt.contains(TEMPERATURE_KEY)) {
+            return DEFAULT_TEMPERATURE;
+        }
+        int stored = nbt.getInt(TEMPERATURE_KEY);
+        return clamp(stored, stack);
     }
 
     public static void setTemperature(ItemStack stack, int temperature) {
@@ -37,21 +41,19 @@ public class TemperatureUtils {
     public static int getMaxTemp(ItemStack stack) {
         NbtCompound nbt = stack.getOrCreateNbt();
         if (nbt.contains(MAX_TEMPERATURE_KEY)) {
-            return nbt.getInt(MAX_TEMPERATURE_KEY);
+            return Math.max(0, nbt.getInt(MAX_TEMPERATURE_KEY));
         }
         Optional<State> state = StateService.INSTANCE.convert(stack);
         if (state.isPresent()) {
             int attr = ComputedAttribute.of(state.get(), MAX_TEMPERATURE).asInt();
-            if (attr > 0) {
-                return attr;
-            }
+            return Math.max(0, attr);
         }
         return 0;
     }
 
     public static void setMaxTemperature(ItemStack stack, int maxTemperature) {
         NbtCompound nbt = stack.getOrCreateNbt();
-        nbt.putInt(MAX_TEMPERATURE_KEY, maxTemperature);
+        nbt.putInt(MAX_TEMPERATURE_KEY, Math.max(0, maxTemperature));
     }
 
     public static boolean hasMaxTemperature(ItemStack stack) {
@@ -62,7 +64,8 @@ public class TemperatureUtils {
     }
 
     public static int clamp(int temperature, ItemStack stack) {
-        return Math.max(MIN_TEMPERATURE, Math.min(getMaxTemp(stack), temperature));
+        int max = Math.max(getMaxTemp(stack), DEFAULT_TEMPERATURE);
+        return Math.max(MIN_TEMPERATURE, Math.min(max, temperature));
     }
 
     public static boolean isBlockFilledWaterCauldron(BlockState state) {
