@@ -7,13 +7,14 @@
     "id": "minecraft:diamond"
   },
   "properties": {
-    "grouped_attributes": [
+    "attributes": [
       {
-        "context": "COMPOSITE",
-        "order": "BASE",
-        "attributes": [
-        ]
-      },
+        "id": "mineral-max_temperature-composite",
+        "type": "forgero:max_temperature",
+        "value": 5000
+      }
+    ],
+    "grouped_attributes": [
       {
         "context": "UPGRADE",
         "attributes": [

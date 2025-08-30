@@ -1,35 +1,31 @@
 {
-  "id": "forgero:light",
+  "id": "forgero:reinforced",
   "priority": 5,
   "target": {
     "types": [
       "PART",
+      "TOOL",
+      "WEAPON",
       "SCHEMATIC"
     ],
     "ids": [],
     "incompatibilities": [
     ]
   },
-  "chance": 0.06,
+  "chance": 0.1,
   "properties": {
     "attributes": [
       {
-        "type": "WEIGHT",
+        "type": "DURABILITY",
         "order": "BASE",
-        "operation": "MULTIPLICATION",
-        "value": 0.8
+        "operation": "ADDITION",
+        "value": 50
       },
       {
         "type": "RARITY",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 17
-      },
-      {
-        "type": "DURABILITY",
-        "order": "END",
-        "operation": "MULTIPLICATION",
-        "value": 0.95
+        "value": 5
       }
     ],
     "features": [

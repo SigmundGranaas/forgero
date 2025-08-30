@@ -1,23 +1,23 @@
 {
-  "id": "forgero:carved",
+  "id": "forgero:guarded",
   "priority": 5,
   "target": {
     "types": [
-      "HANDLE",
-      "HANDLE_SCHEMATIC"
+      "SWORD_GUARD",
+      "SWORD_GUARD_SCHEMATIC"
     ],
     "ids": [],
     "incompatibilities": [
     ]
   },
-  "chance": 0.1,
+  "chance": 0.06,
   "properties": {
     "attributes": [
       {
-        "type": "ATTACK_SPEED",
+        "type": "ARMOR",
         "order": "BASE",
         "operation": "ADDITION",
-        "value": 0.1
+        "value": 3
       },
       {
         "type": "RARITY",

@@ -13,6 +13,9 @@ dependencies {
 	// Trade
 	localRuntime(project(path: ":fabric:modules:trade", configuration: 'namedElements'))
 
+	// Smithing
+	localRuntime(project(path: ":fabric:modules:smithing", configuration: 'namedElements'))
+
 
 	// Fabric Loader
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"

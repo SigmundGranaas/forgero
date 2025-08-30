@@ -39,7 +39,8 @@ public class TextureService {
 		if (paletteCache.containsKey(name)) {
 			return Optional.ofNullable(paletteCache.get(name));
 		}
-		var paletteTexture = loader.load(PALETTE_PATH + name);
+		String palettePath = PALETTE_PATH + name;
+		var paletteTexture = loader.load(palettePath);
 		var paletteOpt = paletteTexture.map(Palette::new);
 		if (paletteOpt.isPresent()) {
 			var palette = paletteOpt.get();
@@ -47,8 +48,10 @@ public class TextureService {
 				paletteCache.put(name, palette);
 				return Optional.of(palette);
 			} else {
-				Forgero.LOGGER.error("Encountered Palette texture: {} with a limited number of color values: {}. This palette will not be processed.", PALETTE_PATH + name, palette.getColourValues(0).size());
+				Forgero.LOGGER.error("Encountered Palette texture: {} with a limited number of color values: {}. This palette will not be processed.", palettePath, palette.getColourValues(0).size());
 			}
+		} else {
+			Forgero.LOGGER.warn("[TextureService] Palette '{}' could not be loaded from path: {}", name, palettePath);
 		}
 		return Optional.empty();
 	}
@@ -99,5 +102,9 @@ public class TextureService {
 
 		}
 		return Optional.empty();
+	}
+
+	public Map<String, Palette> getPaletteCache() {
+		return paletteCache;
 	}
 }

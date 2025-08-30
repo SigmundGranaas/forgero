@@ -18,7 +18,7 @@ import com.sigmundgranaas.forgero.core.util.Identifiers;
 /**
  * POJO used for parsing all properties from JSON files.
  */
-public class PropertyPojo {
+public class PropertyPojo implements com.sigmundgranaas.forgero.core.property.Property {
 	@SerializedName(value = "features")
 	public List<JsonObject> features;
 	@SerializedName("attributes")
@@ -66,5 +66,10 @@ public class PropertyPojo {
 					", context=" + context +
 					'}';
 		}
+	}
+
+	@Override
+	public String type() {
+		return "pojo";
 	}
 }
