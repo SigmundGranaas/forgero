@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+	id "fabric-loom" version "1.10-SNAPSHOT" apply true
+}
+
+group = 'com.sigmundgranaas'
+version = '0.13.2+1.20.1-40-g5b9f9a5a7-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:$project.minecraft_version"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+
+	implementation(project(path: ":modules:core"))
+	implementation(project(path: ":modules:mc:common", configuration: 'namedElements'))
+	implementation(project(path: ":modules:mc:loader", configuration: 'namedElements'))
+
+	runtimeOnly(project(path: ":modules:mc:render",  configuration: 'namedElements'))
+	runtimeOnly(project(path: ":modules:mc:properties",  configuration: 'namedElements'))
+
+	// Resources
+	runtimeOnly(project(path: ":content:minecraft-vanilla-materials"))
+	runtimeOnly(project(path: ":content:minecraft-tools"))
+
+	// Fabric
+	modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
+	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
+
+	// ARRP
+	include modRuntimeOnly("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
+
+}

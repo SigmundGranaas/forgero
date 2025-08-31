@@ -9,8 +9,21 @@ rootProject.name = "${mod_id}"
 
 // Core
 include("${mod_id}-core")
-// This is the new Code for the new architecture
-include("${mod_id}-core-2")
+
+// Modules
+include ("modules")
+include("modules:core")
+
+// MC modules
+include("modules:mc")
+include "modules:mc:armor"
+include "modules:mc:tools"
+include "modules:mc:common"
+include "modules:mc:render"
+include "modules:mc:loader"
+include "modules:mc:properties"
+include "modules:mc:predicate"
+include "modules:mc:development"
 
 // Content
 include("content")
@@ -25,22 +38,20 @@ include("content:${mod_id}-compat")
 include("content:${mod_id}-structures")
 include("content:${mod_id}-deprecated")
 
+// Mods
+include 'mods:vanilla-upgrades'
+
+// LEGACY
 // Fabric
 include "fabric"
 include "fabric:${mod_id}-fabric-core"
 include "fabric:${mod_id}-fabric-compat"
 include "fabric:minecraft-common"
 
-// Modules
+// Old Modules
+include 'mods'
 include "fabric:modules"
 include "fabric:modules:bows"
 include "fabric:modules:trade"
 include "fabric:modules:generator"
-include "fabric:modules:predicate"
-include "fabric:modules:armor"
-include "fabric:modules:tools"
-include "fabric:modules:common"
-include "fabric:modules:render"
-include "fabric:modules:loader"
-include "fabric:modules:properties"
-include "fabric:modules:development"
+

@@ -1,0 +1,69 @@
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection DependencyNotationArgument
+
+dependencies {
+	implementation(project(":modules:core"))
+	implementation(project(path: ":modules:mc:common", configuration: 'namedElements'))
+	implementation(project(path: ":modules:mc:loader", configuration: 'namedElements'))
+
+	runtimeOnly(project(path: ":modules:mc:armor",  configuration: 'namedElements'))
+	runtimeOnly(project(path: ":modules:mc:tools",  configuration: 'namedElements'))
+	runtimeOnly(project(path: ":modules:mc:render",  configuration: 'namedElements'))
+	runtimeOnly(project(path: ":modules:mc:properties",  configuration: 'namedElements'))
+
+	// Resources
+	runtimeOnly(project(path: ":content:minecraft-vanilla-materials"))
+	runtimeOnly(project(path: ":content:forgero-tools"))
+	runtimeOnly(project(path: ":content:forgero-armor"))
+	runtimeOnly(project(path: ":content:minecraft-tools"))
+
+	// Fabric
+	modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
+	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
+
+	// ARRP
+	modRuntimeOnly("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
+
+	// Testing
+	testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
+	testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
+}
+
+sourceSets {
+	test {
+		compileClasspath += main.compileClasspath
+		runtimeClasspath += main.runtimeClasspath
+	}
+}
+
+// Configure runClient to pass all source resource paths as a system property
+tasks.named('runClient', JavaExec) {
+	def resourceDirs = []
+	// Add this module's own resources
+	sourceSets.main.resources.srcDirs.each { resourceDirs.add(it.absolutePath) }
+
+	// Iterate through all project dependencies on the runtime classpath
+	configurations.runtimeClasspath.allDependencies.each { dep ->
+		if (dep instanceof ProjectDependency) {
+			def dependentProject = project(dep.dependencyProject.path)
+			dependentProject.sourceSets.main.resources.srcDirs.each { resourceDirs.add(it.absolutePath) }
+		}
+	}
+
+	// Join unique paths with the system's path separator
+	def resourcePathsString = resourceDirs.unique().join(File.pathSeparator)
+
+	// Set system properties for the running game
+	systemProperty 'forgero.dev.hotReload', 'true'
+	systemProperty 'forgero.dev.resourcePaths', resourcePathsString
+}
+
+
+test {
+	useJUnitPlatform()
+	maxParallelForks = 32
+	testLogging.events("failed")
+	testLogging.info.events = ["failed", "skipped"]
+}
