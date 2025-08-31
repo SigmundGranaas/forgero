@@ -23,8 +23,6 @@ dependencies {
 
 	// Resources
 	runtimeOnly(project(path: ":content:minecraft-vanilla-materials"))
-	runtimeOnly(project(path: ":content:forgero-tools"))
-	runtimeOnly(project(path: ":content:forgero-armor"))
 	runtimeOnly(project(path: ":content:minecraft-tools"))
 
 	// Fabric
@@ -32,6 +30,6 @@ dependencies {
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
 
 	// ARRP
-	include runtimeOnly("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
+	include modRuntimeOnly("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
 
 }

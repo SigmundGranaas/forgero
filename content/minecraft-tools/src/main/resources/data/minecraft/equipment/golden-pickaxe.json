@@ -1,7 +1,7 @@
 {
   "type": "forgero:static_part",
   "name": "Golden Pickaxe",
-  "tags": ["forgero:tool/pickaxe"],
+  "tags": ["minecraft:tool/pickaxe"],
   "host": {
     "identifiers": [
       { "type": "item", "id": "minecraft:golden_pickaxe" }

@@ -52,7 +52,7 @@ tasks.named('runClient', JavaExec) {
 		}
 	}
 
-	// Join unique paths with the system's path separator (e.g., ';' on Windows, ':' on Linux/macOS)
+	// Join unique paths with the system's path separator
 	def resourcePathsString = resourceDirs.unique().join(File.pathSeparator)
 
 	// Set system properties for the running game
