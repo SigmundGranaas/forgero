@@ -42,6 +42,15 @@ public class MinigameLogic {
     private static final String ATTEMPTS_NBT_KEY = "forgero_markerAttempts";
     private static final String FAST_MARKER_HITS_NBT_KEY = "forgero_fastMarkerHits";
 
+    // New NBT keys for continuous temperature stage tracking
+    private static final String TOTAL_STAGE_TICKS_KEY = "forgero_totalStageTicks";
+    private static final String COLD_STAGE_TICKS_KEY = "forgero_coldStageTicks";
+    private static final String WARM_STAGE_TICKS_KEY = "forgero_warmStageTicks";
+    private static final String HOT_STAGE_TICKS_KEY = "forgero_hotStageTicks";
+    private static final String VERY_HOT_STAGE_TICKS_KEY = "forgero_veryHotStageTicks";
+    private static final String NEAR_MELT_STAGE_TICKS_KEY = "forgero_nearMeltStageTicks";
+    private static final String MOLTEN_STAGE_TICKS_KEY = "forgero_moltenStageTicks";
+
     private final List<Vec2f> markerPositions = new ArrayList<>();
     private final List<Boolean> markerHits = new ArrayList<>();
     private final List<Integer> hitTemperatures = new ArrayList<>();
@@ -55,6 +64,15 @@ public class MinigameLogic {
     private int nearMeltStageHits = 0;
     private int moltenStageHits = 0;
     private int fastMarkerHits = 0;
+
+    // Continuous stage time tracking (ticks while morphing is active)
+    private int totalStageTicks = 0;
+    private int coldStageTicks = 0;
+    private int warmStageTicks = 0;
+    private int hotStageTicks = 0;
+    private int veryHotStageTicks = 0;
+    private int nearMeltStageTicks = 0;
+    private int moltenStageTicks = 0;
 
     @Setter
     private int markerAttempts = 0;
@@ -93,6 +111,9 @@ public class MinigameLogic {
         markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
         fastMarkerIndices.clear();
 
+        // Do not reset continuous stage ticks here unconditionally; restore from item NBT if present below.
+        // This ensures continuity when the minigame resumes on the same item.
+
         // Ensure first marker (index 0) is never a fast marker
         while (fastMarkerIndices.size() < FAST_MARKERS) {
             int idx = 1 + random.nextInt(TOTAL_MARKERS - 1); // Only indices 1..TOTAL_MARKERS-1
@@ -113,9 +134,25 @@ public class MinigameLogic {
                 this.morphProgress = 0.0;
                 this.fastMarkerHits = 0;
             }
+            // Restore continuous stage ticks if present; otherwise keep current values or reset to 0
+            this.totalStageTicks = nbt.contains(TOTAL_STAGE_TICKS_KEY) ? nbt.getInt(TOTAL_STAGE_TICKS_KEY) : 0;
+            this.coldStageTicks = nbt.contains(COLD_STAGE_TICKS_KEY) ? nbt.getInt(COLD_STAGE_TICKS_KEY) : 0;
+            this.warmStageTicks = nbt.contains(WARM_STAGE_TICKS_KEY) ? nbt.getInt(WARM_STAGE_TICKS_KEY) : 0;
+            this.hotStageTicks = nbt.contains(HOT_STAGE_TICKS_KEY) ? nbt.getInt(HOT_STAGE_TICKS_KEY) : 0;
+            this.veryHotStageTicks = nbt.contains(VERY_HOT_STAGE_TICKS_KEY) ? nbt.getInt(VERY_HOT_STAGE_TICKS_KEY) : 0;
+            this.nearMeltStageTicks = nbt.contains(NEAR_MELT_STAGE_TICKS_KEY) ? nbt.getInt(NEAR_MELT_STAGE_TICKS_KEY) : 0;
+            this.moltenStageTicks = nbt.contains(MOLTEN_STAGE_TICKS_KEY) ? nbt.getInt(MOLTEN_STAGE_TICKS_KEY) : 0;
         } else {
             this.morphProgress = 0.0;
             this.fastMarkerHits = 0;
+            // New item or non-morphed item: reset continuous stage ticks
+            this.totalStageTicks = 0;
+            this.coldStageTicks = 0;
+            this.warmStageTicks = 0;
+            this.hotStageTicks = 0;
+            this.veryHotStageTicks = 0;
+            this.nearMeltStageTicks = 0;
+            this.moltenStageTicks = 0;
         }
 
         updateMorphProgressOnItem(stack);
@@ -131,6 +168,7 @@ public class MinigameLogic {
         markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
         fastMarkerIndices.clear();
         fastMarkerHits = 0;
+        // Do not clear stage ticks here; they represent continuous tracking for the ongoing item
     }
 
     public boolean processHit(Vec2f itemLocalHit, MinigameCallback callback) {
@@ -199,6 +237,23 @@ public class MinigameLogic {
         }
     }
 
+    private void updateTemperatureStageTicks(int temperature, int maxTemp) {
+        totalStageTicks++;
+        if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInCold(temperature, maxTemp)) {
+            coldStageTicks++;
+        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInWarm(temperature, maxTemp)) {
+            warmStageTicks++;
+        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInHot(temperature, maxTemp)) {
+            hotStageTicks++;
+        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInVeryHot(temperature, maxTemp)) {
+            veryHotStageTicks++;
+        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInNearMelt(temperature, maxTemp)) {
+            nearMeltStageTicks++;
+        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInMolten(temperature, maxTemp)) {
+            moltenStageTicks++;
+        }
+    }
+
     public void setMarkerHit(int index, MinigameCallback callback) {
         World world = callback.getWorld();
         if (world != null && !world.isClient && index >= 0 && index < markerHits.size()) {
@@ -221,9 +276,13 @@ public class MinigameLogic {
             return;
         }
 
-        // Temperature gating for marker spawning
+        // Continuous temperature stage ticking occurs whenever morphing is active,
+        // regardless of whether the item is currently hot enough for work.
         int temperature = TemperatureUtils.getTemperature(stackForMarker);
         int maxTemp = TemperatureUtils.getMaxTemp(stackForMarker);
+        updateTemperatureStageTicks(temperature, maxTemp);
+
+        // Temperature gating for marker spawning
         boolean hotEnoughForWork = com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isHotEnoughForWork(temperature, maxTemp);
         if (!hotEnoughForWork) {
             return;
@@ -340,6 +399,23 @@ public class MinigameLogic {
         context = context.put(MinecraftContextKeys.TOTAL_HITS, markerHitsCount);
         context = context.put(MinecraftContextKeys.MISS_HITS, markerAttempts - markerHitsCount);
         context = context.put(MinecraftContextKeys.FAST_MARKER_HITS, fastMarkerHits);
+
+        // Add continuous stage tick data and fractions
+        context = context.put(MinecraftContextKeys.TOTAL_STAGE_TICKS, totalStageTicks);
+        context = context.put(MinecraftContextKeys.COLD_STAGE_TICKS, coldStageTicks);
+        context = context.put(MinecraftContextKeys.WARM_STAGE_TICKS, warmStageTicks);
+        context = context.put(MinecraftContextKeys.HOT_STAGE_TICKS, hotStageTicks);
+        context = context.put(MinecraftContextKeys.VERY_HOT_STAGE_TICKS, veryHotStageTicks);
+        context = context.put(MinecraftContextKeys.NEAR_MELT_STAGE_TICKS, nearMeltStageTicks);
+        context = context.put(MinecraftContextKeys.MOLTEN_STAGE_TICKS, moltenStageTicks);
+
+        double denom = Math.max(1, totalStageTicks);
+        context = context.put(MinecraftContextKeys.COLD_STAGE_FRACTION, coldStageTicks / denom);
+        context = context.put(MinecraftContextKeys.WARM_STAGE_FRACTION, warmStageTicks / denom);
+        context = context.put(MinecraftContextKeys.HOT_STAGE_FRACTION, hotStageTicks / denom);
+        context = context.put(MinecraftContextKeys.VERY_HOT_STAGE_FRACTION, veryHotStageTicks / denom);
+        context = context.put(MinecraftContextKeys.NEAR_MELT_STAGE_FRACTION, nearMeltStageTicks / denom);
+        context = context.put(MinecraftContextKeys.MOLTEN_STAGE_FRACTION, moltenStageTicks / denom);
         return context;
     }
 
@@ -350,6 +426,15 @@ public class MinigameLogic {
             itemNbt.putInt(ATTEMPTS_NBT_KEY, markerAttempts);
             itemNbt.putIntArray("fastMarkerIndices", fastMarkerIndices.stream().mapToInt(Integer::intValue).toArray());
             itemNbt.putInt(FAST_MARKER_HITS_NBT_KEY, fastMarkerHits);
+
+            // Save continuous stage ticks
+            itemNbt.putInt(TOTAL_STAGE_TICKS_KEY, totalStageTicks);
+            itemNbt.putInt(COLD_STAGE_TICKS_KEY, coldStageTicks);
+            itemNbt.putInt(WARM_STAGE_TICKS_KEY, warmStageTicks);
+            itemNbt.putInt(HOT_STAGE_TICKS_KEY, hotStageTicks);
+            itemNbt.putInt(VERY_HOT_STAGE_TICKS_KEY, veryHotStageTicks);
+            itemNbt.putInt(NEAR_MELT_STAGE_TICKS_KEY, nearMeltStageTicks);
+            itemNbt.putInt(MOLTEN_STAGE_TICKS_KEY, moltenStageTicks);
         }
     }
 
@@ -376,6 +461,15 @@ public class MinigameLogic {
         nbt.putInt("moltenStageHits", moltenStageHits);
         nbt.putIntArray("fastMarkerIndices", fastMarkerIndices.stream().mapToInt(Integer::intValue).toArray());
         nbt.putDouble("morphProgress", morphProgress);
+
+        // Store continuous stage ticks
+        nbt.putInt(TOTAL_STAGE_TICKS_KEY, totalStageTicks);
+        nbt.putInt(COLD_STAGE_TICKS_KEY, coldStageTicks);
+        nbt.putInt(WARM_STAGE_TICKS_KEY, warmStageTicks);
+        nbt.putInt(HOT_STAGE_TICKS_KEY, hotStageTicks);
+        nbt.putInt(VERY_HOT_STAGE_TICKS_KEY, veryHotStageTicks);
+        nbt.putInt(NEAR_MELT_STAGE_TICKS_KEY, nearMeltStageTicks);
+        nbt.putInt(MOLTEN_STAGE_TICKS_KEY, moltenStageTicks);
     }
 
     public void readNbt(NbtCompound nbt) {
@@ -419,6 +513,15 @@ public class MinigameLogic {
         if (nbt.contains("morphProgress")) {
             morphProgress = nbt.getDouble("morphProgress");
         }
+
+        // Restore continuous stage ticks
+        totalStageTicks = nbt.getInt(TOTAL_STAGE_TICKS_KEY);
+        coldStageTicks = nbt.getInt(COLD_STAGE_TICKS_KEY);
+        warmStageTicks = nbt.getInt(WARM_STAGE_TICKS_KEY);
+        hotStageTicks = nbt.getInt(HOT_STAGE_TICKS_KEY);
+        veryHotStageTicks = nbt.getInt(VERY_HOT_STAGE_TICKS_KEY);
+        nearMeltStageTicks = nbt.getInt(NEAR_MELT_STAGE_TICKS_KEY);
+        moltenStageTicks = nbt.getInt(MOLTEN_STAGE_TICKS_KEY);
     }
 
     public void restoreFromItemNbt(ItemStack stack) {
@@ -445,10 +548,28 @@ public class MinigameLogic {
             if (itemNbt.contains(FAST_MARKER_HITS_NBT_KEY)) {
                 fastMarkerHits = itemNbt.getInt(FAST_MARKER_HITS_NBT_KEY);
             }
+
+            // Restore continuous stage tick counters if present
+            if (itemNbt.contains(TOTAL_STAGE_TICKS_KEY)) {
+                totalStageTicks = itemNbt.getInt(TOTAL_STAGE_TICKS_KEY);
+                coldStageTicks = itemNbt.getInt(COLD_STAGE_TICKS_KEY);
+                warmStageTicks = itemNbt.getInt(WARM_STAGE_TICKS_KEY);
+                hotStageTicks = itemNbt.getInt(HOT_STAGE_TICKS_KEY);
+                veryHotStageTicks = itemNbt.getInt(VERY_HOT_STAGE_TICKS_KEY);
+                nearMeltStageTicks = itemNbt.getInt(NEAR_MELT_STAGE_TICKS_KEY);
+                moltenStageTicks = itemNbt.getInt(MOLTEN_STAGE_TICKS_KEY);
+            }
         } else {
             this.markerHitsCount = 0;
             this.markerAttempts = 0;
             this.fastMarkerHits = 0;
+            this.totalStageTicks = 0;
+            this.coldStageTicks = 0;
+            this.warmStageTicks = 0;
+            this.hotStageTicks = 0;
+            this.veryHotStageTicks = 0;
+            this.nearMeltStageTicks = 0;
+            this.moltenStageTicks = 0;
         }
     }
 

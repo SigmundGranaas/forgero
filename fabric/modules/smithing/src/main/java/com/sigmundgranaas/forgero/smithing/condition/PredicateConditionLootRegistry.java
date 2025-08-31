@@ -49,6 +49,12 @@ public class PredicateConditionLootRegistry {
 
 	private static void registerTemperaturePredicates() {
 		register(TemperaturePredicates.veryHotStageHitPredicate(), NEUTRAL);
+		// New continuous-time based registrations
+		register(TemperaturePredicates.veryHotAllTimePredicate(), NEUTRAL);
+		register(TemperaturePredicates.coldStageFractionAtLeast(0.30), NEUTRAL);
+		// Stage transition and chain registrations
+		register(TemperaturePredicates.veryHotToMoltenOnce(), NEUTRAL);
+		register(TemperaturePredicates.veryHotToHotToColdChain(), NEUTRAL);
 	}
 
 	public static List<NamedCondition> getLootTable(MatchContext context) {
