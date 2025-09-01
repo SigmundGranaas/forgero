@@ -56,7 +56,7 @@ public class MinigameHudOverlay implements HudRenderCallback {
         // Horizontal bar placement and dimensions (center top, match texture size)
         int screenW = ctx.getScaledWindowWidth();
         int barWidth = 156; // match texture width
-        int barHeight = 26; // match texture height
+        int barHeight = 32; // match texture height
         int barLeft = (screenW - barWidth) / 2;
         int barTop = 10;
 
@@ -86,12 +86,12 @@ public class MinigameHudOverlay implements HudRenderCallback {
         // Hardcoded stage colors per segment (no blending)
         // Fill the inside of the bar with stage colors
         int[] stageColors = new int[] {
-				0xFF000099, // Cold: dark blue
-				0xFF3399FF, // Warm: dark cyan
-				0xFFCCCC00, // Hot: dark yellow
-				0xFF00CC00, // Very Hot: dark green
-				0xFFCC6600, // Near Melt: dark orange
-				0xFFCC0000  // Molten: dark red
+                0xFF000099, // Cold: dark blue
+                0xFF3399FF, // Warm: dark cyan
+                0xFFCCCC00, // Hot: dark yellow
+                0xFF00CC00, // Very Hot: dark green
+                0xFFCC6600, // Near Melt: dark orange
+                0xFFCC0000  // Molten: dark red
         };
         for (int x = 0; x < innerWidth; x++) {
             int tempValue = Math.round(minWindow + x * unitsPerPixelX);
@@ -100,27 +100,32 @@ public class MinigameHudOverlay implements HudRenderCallback {
             fill(ctx, innerLeft + x, innerTop, innerLeft + x + 1, innerTop + innerHeight, color);
         }
 
-        // Tessellation effect: diagonal lines overlay
-        int tessellationSpacing = 4;
-        int tessellationColor = 0x40FFFFFF; // semi-transparent white
-        for (int y = 0; y < innerHeight; y += tessellationSpacing) {
-            for (int x = 0; x < innerWidth; x += tessellationSpacing) {
-                int startX = innerLeft + x;
-                int startY = innerTop + y;
-                int endX = Math.min(startX + tessellationSpacing, innerLeft + innerWidth);
-                int endY = Math.min(startY + tessellationSpacing, innerTop + innerHeight);
-                // Draw diagonal line from (startX, startY) to (endX, endY)
-                for (int i = 0; i < tessellationSpacing; i++) {
-                    int dx = startX + i;
-                    int dy = startY + i;
-                    if (dx < innerLeft + innerWidth && dy < innerTop + innerHeight) {
-                        fill(ctx, dx, dy, dx + 1, dy + 1, tessellationColor);
-                    }
-                }
-            }
+
+        // --- Progress Bar ---
+        // Move the progress bar 4 pixels to the right and 1 pixel down
+        int progressBarWidth = 134;
+        int progressBarHeight = 3;
+        int progressBarLeft = barLeft + 7 + 4; // original + 4px right
+        int progressBarTop = barTop + 22 + 1; // original + 1px down
+
+        // Draw static black background for the bar
+        fill(ctx, progressBarLeft, progressBarTop, progressBarLeft + progressBarWidth, progressBarTop + progressBarHeight, 0xFF000000); // black
+
+        // Draw filled portion (gold/yellow) for progress
+        int filledWidth = (int) Math.round(progressBarWidth * progress);
+        if (filledWidth > 0) {
+            fill(ctx, progressBarLeft, progressBarTop, progressBarLeft + filledWidth, progressBarTop + progressBarHeight, 0xFFFFD700); // gold
         }
 
-        // Draw the border using the texture (full size)
+        // Draw 10 ticks for each segment
+        int numSegments = 10;
+        for (int i = 1; i < numSegments; i++) {
+            int tickX = progressBarLeft + (int) Math.round(i * (progressBarWidth / (float) numSegments));
+            fill(ctx, tickX, progressBarTop, tickX + 1, progressBarTop + progressBarHeight, 0xFFad9474); // same tick color as temp bar
+        }
+        // No border or sides, as those are included in the PNG
+
+        // Draw the border using the texture (full size) AFTER the progress bar so the PNG overlaps
         ctx.drawTexture(BAR_TEXTURE, barLeft, barTop, 0, 0, barWidth, barHeight, barWidth, barHeight);
 
         // Stage boundary ticks (straight borders between stages)
