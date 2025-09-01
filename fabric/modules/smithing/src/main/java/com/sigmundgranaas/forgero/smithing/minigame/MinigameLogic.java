@@ -54,6 +54,8 @@ public class MinigameLogic {
     private final List<Vec2f> markerPositions = new ArrayList<>();
     private final List<Boolean> markerHits = new ArrayList<>();
     private final List<Integer> hitTemperatures = new ArrayList<>();
+    // New: stage index per successful hit (0..5)
+    private final List<Integer> hitStageIndices = new ArrayList<>();
     private final List<Integer> fastMarkerIndices = new ArrayList<>();
     private final Random random = new Random();
 
@@ -169,6 +171,9 @@ public class MinigameLogic {
         fastMarkerIndices.clear();
         fastMarkerHits = 0;
         // Do not clear stage ticks here; they represent continuous tracking for the ongoing item
+        // Also clear per-hit stage indices and temperatures for a fresh run
+        hitStageIndices.clear();
+        hitTemperatures.clear();
     }
 
     public boolean processHit(Vec2f itemLocalHit, MinigameCallback callback) {
@@ -197,9 +202,10 @@ public class MinigameLogic {
         if (hit) {
             markerHitsCount++;
 
-            // Track temperature at the time of successful hit
+            // Track temperature and stage at the time of successful hit (pre-change)
             int temperature = TemperatureUtils.getTemperature(stack);
             int maxTemp = TemperatureUtils.getMaxTemp(stack);
+            hitStageIndices.add(stageIndexFor(temperature, maxTemp));
 
             // Fast marker removes 10 temperature, normal adds 30
             int markerIndex = markerAttempts - 1;
@@ -219,6 +225,16 @@ public class MinigameLogic {
         callback.markDirty();
         clearActiveMarker();
         markerSpawnDelay = SUBSEQUENT_MARKER_DELAY_TICKS;
+    }
+
+    // Map temp to stage index [0..5]
+    private int stageIndexFor(int temperature, int maxTemp) {
+        if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInCold(temperature, maxTemp)) return 0;
+        if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInWarm(temperature, maxTemp)) return 1;
+        if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInHot(temperature, maxTemp)) return 2;
+        if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInVeryHot(temperature, maxTemp)) return 3;
+        if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInNearMelt(temperature, maxTemp)) return 4;
+        return 5; // molten fallback
     }
 
     private void updateTemperatureStageHits(int temperature, int maxTemp) {
@@ -426,6 +442,8 @@ public class MinigameLogic {
             itemNbt.putInt(ATTEMPTS_NBT_KEY, markerAttempts);
             itemNbt.putIntArray("fastMarkerIndices", fastMarkerIndices.stream().mapToInt(Integer::intValue).toArray());
             itemNbt.putInt(FAST_MARKER_HITS_NBT_KEY, fastMarkerHits);
+            // Persist per-hit stage indices for HUD coloring on resume
+            itemNbt.putIntArray("hitStageIndices", hitStageIndices.stream().mapToInt(Integer::intValue).toArray());
 
             // Save continuous stage ticks
             itemNbt.putInt(TOTAL_STAGE_TICKS_KEY, totalStageTicks);
@@ -453,6 +471,8 @@ public class MinigameLogic {
 
         // Store temperature tracking data
         nbt.putIntArray("hitTemperatures", hitTemperatures.stream().mapToInt(Integer::intValue).toArray());
+        // Persist per-hit stage indices
+        nbt.putIntArray("hitStageIndices", hitStageIndices.stream().mapToInt(Integer::intValue).toArray());
         nbt.putInt("coldStageHits", coldStageHits);
         nbt.putInt("warmStageHits", warmStageHits);
         nbt.putInt("hotStageHits", hotStageHits);
@@ -494,6 +514,12 @@ public class MinigameLogic {
             for (int temp : temps) {
                 hitTemperatures.add(temp);
             }
+        }
+        // Restore per-hit stage indices (optional, fallback computed HUD-side if missing)
+        hitStageIndices.clear();
+        if (nbt.contains("hitStageIndices")) {
+            int[] arr = nbt.getIntArray("hitStageIndices");
+            for (int v : arr) hitStageIndices.add(v);
         }
         coldStageHits = nbt.getInt("coldStageHits");
         warmStageHits = nbt.getInt("warmStageHits");
@@ -542,6 +568,13 @@ public class MinigameLogic {
                 veryHotStageHits = itemNbt.getInt("veryHotStageHits");
                 nearMeltStageHits = itemNbt.getInt("nearMeltStageHits");
                 moltenStageHits = itemNbt.getInt("moltenStageHits");
+            }
+
+            // Restore per-hit stage indices if present
+            if (itemNbt.contains("hitStageIndices")) {
+                hitStageIndices.clear();
+                int[] arr = itemNbt.getIntArray("hitStageIndices");
+                for (int v : arr) hitStageIndices.add(v);
             }
 
             // Restore fast marker hits if present

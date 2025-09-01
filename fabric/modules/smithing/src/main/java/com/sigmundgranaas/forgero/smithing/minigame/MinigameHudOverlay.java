@@ -111,10 +111,26 @@ public class MinigameHudOverlay implements HudRenderCallback {
         // Draw static black background for the bar
         fill(ctx, progressBarLeft, progressBarTop, progressBarLeft + progressBarWidth, progressBarTop + progressBarHeight, 0xFF000000); // black
 
-        // Draw filled portion (gold/yellow) for progress
-        int filledWidth = (int) Math.round(progressBarWidth * progress);
-        if (filledWidth > 0) {
-            fill(ctx, progressBarLeft, progressBarTop, progressBarLeft + filledWidth, progressBarTop + progressBarHeight, 0xFFFFD700); // gold
+        // Draw filled portion for progress as discrete segments, colored by hit stage
+        int totalSegments = MinigameLogic.TOTAL_MARKERS;
+        int hits = Math.min(be.getMinigameLogic().getMarkerHitsCount(), totalSegments);
+        float segWidth = progressBarWidth / (float) totalSegments;
+        var hitStages = be.getMinigameLogic().getHitStageIndices();
+        var hitTemps = be.getMinigameLogic().getHitTemperatures();
+        for (int i = 0; i < hits; i++) {
+            int startX = progressBarLeft + Math.round(i * segWidth);
+            int endX = progressBarLeft + Math.round((i + 1) * segWidth);
+            int colorIdx;
+            if (i < hitStages.size()) {
+                colorIdx = clamp(hitStages.get(i), 0, stageColors.length - 1);
+            } else if (i < hitTemps.size()) {
+                colorIdx = segmentIndex(hitTemps.get(i), boundaries);
+            } else {
+                // Fallback: use current temp stage (unlikely)
+                colorIdx = segmentIndex(temp, boundaries);
+            }
+            int color = stageColors[colorIdx];
+            fill(ctx, startX, progressBarTop, endX, progressBarTop + progressBarHeight, color);
         }
 
         // Draw 10 ticks for each segment
@@ -241,10 +257,10 @@ public class MinigameHudOverlay implements HudRenderCallback {
         return x;
     }
 
-    private int nearestMultiple(int n, int step) {
-        if (step <= 0) return n;
-        int r = n % step;
-        return r == 0 ? n : (n - r + step);
+    private int clamp(int v, int lo, int hi) {
+        if (v < lo) return lo;
+        if (v > hi) return hi;
+        return v;
     }
 
     // Draw a small down-pointing arrow; bottomY is the tip's Y
@@ -270,12 +286,5 @@ public class MinigameHudOverlay implements HudRenderCallback {
         }
         int insertionPoint = -(idx + 1);
         return Math.max(0, insertionPoint - 1);
-    }
-
-
-    // Scale a base (0..10000) temperature to current max
-    private int scaleToMax(int base, int maxTemp) {
-        if (maxTemp >= 10000) return base;
-        return Math.round(base / 10000f * maxTemp);
     }
 }
