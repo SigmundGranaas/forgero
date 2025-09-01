@@ -1,10 +1,11 @@
 {
   "schemaVersion": 1,
-  "id": "forgero-trades",
+  "id": "forgero-predicates",
   "version": "${version}",
-  "name": "Forgero property",
-  "description": "Trade support for Forgero.",
+  "name": "Forgero Minecraft Predicates",
+  "description": "Provides Minecraft-specific predicates for Forgero's condition system.",
   "authors": [
+    "Sigmund Granaas",
     "JorisDeBeer"
   ],
   "contributors": [
@@ -14,6 +15,11 @@
     "homepage": "https://sigmundgranaas.com",
     "sources": "https://github.com/sigmundgranaas/forgero",
     "issues": "https://github.com/sigmundgranaas/forgero/issues"
+  },
+  "entrypoints": {
+    "forgero:data_plugin": [
+      "com.sigmundgranaas.forgero.predicate.minecraft.MinecraftPredicatePlugin"
+    ]
   },
   "license": "MIT",
   "icon": "assets/forgero/icon.png",
