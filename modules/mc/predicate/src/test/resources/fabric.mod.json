@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "predicate-gametest",
+  "version": "${version}",
+  "environment": "*",
+  "description": "Forgero game tests",
+  "license": "MIT",
+  "authors": [
+    "SigmundGranaas"
+  ],
+  "mixins": [],
+  "entrypoints": {
+    "fabric-gametest": [
+      "com.sigmundgranaas.forgero.gametest.BiomePredicateGametest",
+      "com.sigmundgranaas.forgero.gametest.BlockPredicateGametest",
+      "com.sigmundgranaas.forgero.gametest.BlockTypePredicateGametest",
+      "com.sigmundgranaas.forgero.gametest.EntityFlagPredicateGametest",
+      "com.sigmundgranaas.forgero.gametest.EntityPredicateGametest",
+      "com.sigmundgranaas.forgero.gametest.EntityStatsPredicateGametest",
+      "com.sigmundgranaas.forgero.gametest.EquipmentPredicateGametest",
+      "com.sigmundgranaas.forgero.gametest.ItemPredicateGametest",
+      "com.sigmundgranaas.forgero.gametest.LocationPredicateGametest",
+      "com.sigmundgranaas.forgero.gametest.RelationalPredicateGametest",
+      "com.sigmundgranaas.forgero.gametest.StatusEffectPredicateGametest"
+    ]
+  }
+}

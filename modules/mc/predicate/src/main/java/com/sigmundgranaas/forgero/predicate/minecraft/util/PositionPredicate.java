@@ -27,7 +27,8 @@ public record PositionPredicate(
 	);
 
 	public boolean test(BlockPos pos) {
-		return test(pos.getX(), pos.getY(), pos.getZ());
+		// A BlockPos represents a 1x1x1 volume. Test against the center of this volume for robust checks.
+		return test(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
 	}
 
 	public boolean test(Vec3d pos) {

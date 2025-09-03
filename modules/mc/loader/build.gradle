@@ -7,6 +7,6 @@ dependencies {
 	api(project(path: ":modules:mc:common", configuration: 'namedElements'))
 
 	// Fabric
-	modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
-	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
+	modCompileOnly("net.fabricmc:fabric-loader:${project.loader_version}")
+	modCompileOnly("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
 }
