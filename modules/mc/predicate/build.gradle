@@ -4,4 +4,51 @@
 
 dependencies {
 	implementation(project(":modules:core"))
+	implementation(project(path: ":modules:mc:loader", configuration: 'namedElements'))
+
+	// Testing
+	testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
+
+	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
+}
+
+loom {
+	runs {
+		testServer {
+			server()
+			name = "Test Server"
+			source sourceSets.test
+		}
+		gameTest {
+			inherit testServer
+			name "Game Test"
+			// Enable the gametest runner
+			vmArg "-Dfabric-api.gametest"
+			runDir "build/gameTest"
+		}
+		testClient {
+			client()
+			name = "Test Client"
+			vmArg "-Dfabric-api.gametest.structures.output-dir=${file("src/test/resources/data/${mod_id}/gametest/structures")}"
+
+			source sourceSets.test
+		}
+	}
+}
+
+sourceSets {
+	test {
+		compileClasspath += main.compileClasspath
+		runtimeClasspath += main.runtimeClasspath
+	}
+}
+
+test {
+	useJUnitPlatform()
+	maxParallelForks = 32
+	testLogging.events("failed")
+	testLogging.info.events = ["failed", "skipped"]
 }
