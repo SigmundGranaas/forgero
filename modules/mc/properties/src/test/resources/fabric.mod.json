@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-properties-gametest",
+  "version": "1.0.0",
+  "environment": "*",
+  "description": "GameTests for the Forgero Properties module.",
+  "license": "MIT",
+  "authors": [
+    "SigmundGranaas"
+  ],
+  "entrypoints": {
+    "fabric-gametest": [
+      "com.sigmundgranaas.forgero.properties.gametest.BlockFilterGametest",
+      "com.sigmundgranaas.forgero.properties.gametest.BlockSelectorGametest",
+      "com.sigmundgranaas.forgero.properties.gametest.OnHitHandlerGametest"
+    ]
+  }
+}
