@@ -10,6 +10,10 @@ import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.ExplosionHa
 import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.FireHandler;
 import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.OnHitHandler;
 import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.StatusEffectHandler;
+import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.KnockbackHandler;
+import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.LifeStealHandler;
+import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.LightningHandler;
+
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,6 +26,9 @@ public class OnHitPropertiesPlugin implements DataPlugin, PostLoadPlugin {
 		register(FireHandler.TYPE, FireHandler.CODEC);
 		register(ExplosionHandler.TYPE, ExplosionHandler.CODEC);
 		register(StatusEffectHandler.TYPE, StatusEffectHandler.CODEC);
+		register(KnockbackHandler.TYPE, KnockbackHandler.CODEC);
+		register(LifeStealHandler.TYPE, LifeStealHandler.CODEC);
+		register(LightningHandler.TYPE, LightningHandler.CODEC);
 	}
 
 	public static void register(String type, Codec<? extends OnHitHandler> codec) {
