@@ -3,8 +3,7 @@ package com.sigmundgranaas.forgero.render;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.loader.ForgeroDataLoader;
-import com.sigmundgranaas.forgero.loader.api.DataLoadingContext;
+import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
 import com.sigmundgranaas.forgero.model.generation.api.TextureGenerationTask;
 import com.sigmundgranaas.forgero.model.pipeline.api.ModelDataInitializer;
 import com.sigmundgranaas.forgero.model.pipeline.api.ModelInitializationResult;
@@ -56,15 +55,14 @@ public class RenderInitializer implements ClientModInitializer {
 		try {
 			LOGGER.info("Starting synchronous model pre-load...");
 			ResourceProvider preloadProvider = new ClassPathResourceProvider("assets");
-			DataLoadingContext dataContext = ForgeroDataLoader.getContext();
 
 			ItemModelRegistry itemModelRegistry = new MapBackedModelRegistry();
 			ArmorModelRegistry armorModelRegistry = new MapBackedArmorModelRegistry();
 			ModelDataInitializer modelInitializer = new ModelDataInitializer(preloadProvider);
 
 			ModelInitializationResult initialResult = modelInitializer.initialize(
-					dataContext.getComponentRegistry().all().stream().collect(Collectors.toMap(Component::id, Function.identity())),
-					dataContext.getDataBundle().tagGraph(),
+					ForgeroApi.components().all().stream().collect(Collectors.toMap(Component::id, Function.identity())),
+					ForgeroApi.tagGraph(),
 					itemModelRegistry,
 					armorModelRegistry
 			);
@@ -83,8 +81,8 @@ public class RenderInitializer implements ClientModInitializer {
 			ForgeroClient.services = new ForgeroClient.ClientServices(
 					initialResult.itemModelRegistry(),
 					initialResult.armorModelRegistry(),
-					dataContext::getComponent,
-					dataContext.getComponentRegistry(),
+					ForgeroApi.converter()::toComponent,
+					ForgeroApi.defaultComponents(),
 					new ForgeroArmorTextureManager(initialResult.itemModelRegistry()),
 					new ForgeroArmorModelManager(MinecraftClient.getInstance().getEntityModelLoader())
 			);

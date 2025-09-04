@@ -1,11 +1,9 @@
-// FILE: /home/sigmund/Documents/projects/forgero/1-20/fabric/modules/render/src/main/java/com/sigmundgranaas/forgero/render/ForgeroModelResourceListener.java
 package com.sigmundgranaas.forgero.render;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.loader.ForgeroDataLoader;
-import com.sigmundgranaas.forgero.loader.api.DataLoadingContext;
+import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
 import com.sigmundgranaas.forgero.model.generation.api.TextureGenerationTask;
 import com.sigmundgranaas.forgero.model.pipeline.api.ModelDataInitializer;
 import com.sigmundgranaas.forgero.model.pipeline.api.ModelInitializationResult;
@@ -48,15 +46,14 @@ public class ForgeroModelResourceListener implements IdentifiableResourceReloadL
 		return CompletableFuture.supplyAsync(() -> {
 					LOGGER.info("Hot reload detected. Reloading Forgero models...");
 					ResourceProvider resourceProvider = new MinecraftResourceProvider(manager);
-					DataLoadingContext dataContext = ForgeroDataLoader.getContext();
 
 					ItemModelRegistry itemModelRegistry = new MapBackedModelRegistry();
 					ArmorModelRegistry armorModelRegistry = new MapBackedArmorModelRegistry();
 					ModelDataInitializer modelInitializer = new ModelDataInitializer(resourceProvider);
 
 					ModelInitializationResult result = modelInitializer.initialize(
-							dataContext.getComponentRegistry().all().stream().collect(Collectors.toMap(Component::id, Function.identity())),
-							dataContext.getDataBundle().tagGraph(),
+							ForgeroApi.components().all().stream().collect(Collectors.toMap(Component::id, Function.identity())),
+							ForgeroApi.tagGraph(),
 							itemModelRegistry,
 							armorModelRegistry
 					);
@@ -68,8 +65,8 @@ public class ForgeroModelResourceListener implements IdentifiableResourceReloadL
 					ForgeroClient.services = new ForgeroClient.ClientServices(
 							result.itemModelRegistry(),
 							result.armorModelRegistry(),
-							dataContext::getComponent,
-							dataContext.getComponentRegistry(),
+							ForgeroApi.converter()::toComponent,
+							ForgeroApi.defaultComponents(),
 							new ForgeroArmorTextureManager(result.itemModelRegistry()),
 							new ForgeroArmorModelManager(MinecraftClient.getInstance().getEntityModelLoader())
 					);

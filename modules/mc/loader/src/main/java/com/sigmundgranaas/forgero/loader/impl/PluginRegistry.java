@@ -62,7 +62,7 @@ public class PluginRegistry {
 				}
 
 				dataPlugins.add(plugin);
-				registeredPluginIds.add(pluginId(pluginId, DATA_PLUGIN_ENTRYPOINT));
+				registeredPluginIds.add(pluginId);
 
 				LOGGER.debug("Registered data plugin '{}' from mod '{}'",
 						pluginId, container.getProvider().getMetadata().getId());
@@ -72,10 +72,6 @@ public class PluginRegistry {
 						container.getProvider().getMetadata().getId(), e);
 			}
 		}
-	}
-
-	private String pluginId(String pluginId, String type) {
-		return type + "_" + pluginId;
 	}
 
 	private void discoverPostLoadPlugins() {
@@ -94,7 +90,7 @@ public class PluginRegistry {
 				}
 
 				postLoadPlugins.add(plugin);
-				registeredPluginIds.add(pluginId(pluginId, POST_LOAD_PLUGIN_ENTRYPOINT));
+				registeredPluginIds.add(pluginId);
 
 				LOGGER.debug("Registered post-load plugin '{}' from mod '{}'",
 						pluginId, container.getProvider().getMetadata().getId());
@@ -122,7 +118,7 @@ public class PluginRegistry {
 				}
 
 				itemRegistrationPlugins.add(plugin);
-				registeredPluginIds.add(pluginId(pluginId, ITEM_REGISTRATION_PLUGIN_ENTRYPOINT));
+				registeredPluginIds.add(pluginId);
 
 				LOGGER.debug("Registered item registration plugin '{}' from mod '{}'",
 						pluginId, container.getProvider().getMetadata().getId());

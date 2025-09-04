@@ -132,6 +132,10 @@ public class ForgeroDataLoader implements ModInitializer {
 			initialized = true;
 			ForgeroTooltipRenderer.initialize(context.getConverter(), context.getResolver());
 
+			// Phase 11: Finalize and expose the public API
+			ForgeroApi.initialize(context);
+			LOGGER.info("Forgero Public API is now available.");
+
 			long endTime = System.currentTimeMillis();
 			LOGGER.info("Forgero data loading complete. Registered {} items in {}ms",
 					registeredItems.size(), endTime - startTime);
@@ -319,7 +323,10 @@ public class ForgeroDataLoader implements ModInitializer {
 		return Collections.unmodifiableMap(registeredItems);
 	}
 
-	@Deprecated
+	/**
+	 * @deprecated Use {@link ForgeroApi#converter()} or other methods on {@link ForgeroApi} instead. This method will be removed in a future version.
+	 */
+	@Deprecated(forRemoval = true)
 	public static DataLoadingContext getContext() {
 		if (INSTANCE == null || !INSTANCE.initialized) {
 			throw new IllegalStateException("ForgeroDataLoader not initialized");
@@ -327,7 +334,10 @@ public class ForgeroDataLoader implements ModInitializer {
 		return INSTANCE.context;
 	}
 
-	@Deprecated
+	/**
+	 * @deprecated This method is for internal use and will be removed.
+	 */
+	@Deprecated(forRemoval = true)
 	public static Map<Identifier, Item> getItems() {
 		if (INSTANCE == null || !INSTANCE.initialized) {
 			throw new IllegalStateException("ForgeroDataLoader not initialized");
