@@ -1,5 +1,7 @@
 package com.sigmundgranaas.forgero.properties.gametest;
 
+import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.ConvertHandler;
+import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.DisarmHandler;
 import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.FireHandler;
 import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.KnockbackHandler;
 import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.LifeStealHandler;
@@ -9,8 +11,12 @@ import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.passive.VillagerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -133,5 +139,36 @@ public class OnHitHandlerGametest {
 
 		context.expectEntity(EntityType.LIGHTNING_BOLT);
 		context.complete();
+	}
+
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
+	public void testConvertHandler(TestContext context) {
+		ConvertHandler handler = new ConvertHandler(new Identifier("minecraft", "zombie"));
+		LivingEntity source = context.createMockCreativeServerPlayerInWorld();
+		VillagerEntity target = context.spawnEntity(EntityType.VILLAGER, new BlockPos(2, 1, 1));
+
+		handler.onHit(source, target);
+
+		context.expectEntity(EntityType.ZOMBIE);
+		context.dontExpectEntity(target.getType());
+		context.complete();
+	}
+
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
+	public void testDisarmHandler(TestContext context) {
+		DisarmHandler handler = new DisarmHandler();
+		LivingEntity source = context.createMockCreativeServerPlayerInWorld();
+		LivingEntity target = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(2, 1, 1));
+
+		target.setStackInHand(Hand.MAIN_HAND, new ItemStack(Items.DIAMOND_SWORD));
+		context.assertTrue(!target.getMainHandStack().isEmpty(), "Target should be holding a sword before disarm");
+
+		handler.onHit(source, target);
+
+		context.expectEntity(EntityType.ITEM);
+		context.waitAndRun(1, () -> {
+			context.assertTrue(target.getMainHandStack().isEmpty(), "Target should have an empty main hand after disarm");
+			context.complete();
+		});
 	}
 }
