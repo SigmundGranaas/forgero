@@ -24,186 +24,209 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 
 public class MinigameHudOverlay implements HudRenderCallback {
 
-	private static final Identifier BAR_TEXTURE = new Identifier("forgero", "textures/gui/bar_texture.png");
+	private static final Identifier BAR_TEXTURE = new Identifier("forgero", "textures/gui/bar_texture_new.png");
 	private static final Identifier THERMOMETER_ARROW = new Identifier("forgero", "textures/gui/thermometer_arrow.png");
 
     @Override
     public void onHudRender(DrawContext ctx, float tickDelta) {
-        var mc = MinecraftClient.getInstance();
-        if (mc == null || mc.player == null || mc.world == null || mc.options.hudHidden) return;
+		var mc = MinecraftClient.getInstance();
+		if (mc == null || mc.player == null || mc.world == null || mc.options.hudHidden) return;
 
-        SmithingAnvilBlockEntity be = findNearestActiveAnvil(mc);
-        if (be == null) return;
+		SmithingAnvilBlockEntity be = findNearestActiveAnvil(mc);
+		if (be == null) return;
 
-        ItemStack stack = be.getInventory().getStack(0);
-        if (stack.isEmpty() || !(stack.getItem() instanceof MorphedItem)) return;
-        double progress = MorphedItem.getMorphProgress(stack);
-        if (progress >= 1.0) return;
+		ItemStack stack = be.getInventory().getStack(0);
+		if (stack.isEmpty() || !(stack.getItem() instanceof MorphedItem)) return;
+		double progress = MorphedItem.getMorphProgress(stack);
+		if (progress >= 1.0) return;
 
-        int temp = TemperatureUtils.getTemperature(stack);
-        int max = Math.max(TemperatureUtils.getMaxTemp(stack), 1);
-        int effectiveMax = Math.min(max, 10000);
+		int temp = TemperatureUtils.getTemperature(stack);
+		int max = Math.max(TemperatureUtils.getMaxTemp(stack), 1);
+		int effectiveMax = Math.min(max, 10000);
 
-        // Compute a scaled window around current temperature (base: 600 for 1600 max)
-        final int BASE_MAX = 1600;
-        final int BASE_WINDOW = 700;
-        int window = (int)(BASE_WINDOW / (float)BASE_MAX * effectiveMax);
-        int half = window / 2;
-        int minWindow = Math.max(0, Math.min(temp - half, Math.max(0, effectiveMax - window)));
-        int maxWindow = Math.min(effectiveMax, minWindow + window);
-        if (maxWindow <= minWindow) return;
+		// Compute a scaled window around current temperature (base: 600 for 1600 max)
+		final int BASE_MAX = 1600;
+		final int BASE_WINDOW = 700;
+		int window = (int) (BASE_WINDOW / (float) BASE_MAX * effectiveMax);
+		int half = window / 2;
+		int minWindow = Math.max(0, Math.min(temp - half, Math.max(0, effectiveMax - window)));
+		int maxWindow = Math.min(effectiveMax, minWindow + window);
+		if (maxWindow <= minWindow) return;
 
-        // Horizontal bar placement and dimensions (center top, match texture size)
-        int screenW = ctx.getScaledWindowWidth();
-        int barWidth = 156; // match texture width
-        int barHeight = 32; // match texture height
-        int barLeft = (screenW - barWidth) / 2;
-        int barTop = 10;
+		// Horizontal bar placement and dimensions (center top, match texture size)
+		int screenW = ctx.getScaledWindowWidth();
+		int barWidth = 165; // updated texture width
+		int barHeight = 29; // updated texture height
+		int barLeft = (screenW - barWidth) / 2;
+		int barTop = 10;
 
-        // Inner area for temperature bar
-        int innerWidth = 141;
-        int innerHeight = 10;
-        int innerLeft = barLeft + 7;
-        int innerTop = barTop + 8;
+		// Inner area for temperature bar (rendered at 140 x 7)
+		int innerWidth = 140; // temperature bar width
+		int innerHeight = 7;  // temperature bar height
+		int innerLeft = barLeft + 8; // x offset inside PNG (moved 1px right)
+		int innerTop = barTop + 8;   // y offset inside PNG
 
-        int[] boundaries = TemperatureColorProvider.getStageBoundaries(max);
-        // Stage indices based on boundaries array (6 stages)
-        int idxCold     = 0;
-        int idxWarm     = 1;
-        int idxHot      = 2;
-        int idxVeryHot  = 3;
-        int idxNearMelt = 4;
-        int idxMolten   = 5;
-
-
-
-        // Only show bar from cold and up
-        int minStageBoundary = boundaries[idxCold];
-        minWindow = Math.max(minStageBoundary, minWindow);
-        if (maxWindow <= minWindow) return;
-        float unitsPerPixelX = (float) (maxWindow - minWindow) / (float) (innerWidth);
-
-        // Hardcoded stage colors per segment (no blending)
-        // Fill the inside of the bar with stage colors
-        int[] stageColors = new int[] {
-                0xFF000099, // Cold: dark blue
-                0xFF3399FF, // Warm: dark cyan
-                0xFFCCCC00, // Hot: dark yellow
-                0xFF00CC00, // Very Hot: dark green
-                0xFFCC6600, // Near Melt: dark orange
-                0xFFCC0000  // Molten: dark red
-        };
-        for (int x = 0; x < innerWidth; x++) {
-            int tempValue = Math.round(minWindow + x * unitsPerPixelX);
-            int segIdx = segmentIndex(tempValue, boundaries);
-            int color = stageColors[segIdx];
-            fill(ctx, innerLeft + x, innerTop, innerLeft + x + 1, innerTop + innerHeight, color);
-        }
+		int[] boundaries = TemperatureColorProvider.getStageBoundaries(max);
+		// Stage indices based on boundaries array (6 stages)
+		int idxCold = 0;
+		int idxWarm = 1;
+		int idxHot = 2;
+		int idxVeryHot = 3;
+		int idxNearMelt = 4;
+		int idxMolten = 5;
 
 
-        // --- Progress Bar ---
-        // Move the progress bar 4 pixels to the right and 1 pixel down
-        int progressBarWidth = 134;
-        int progressBarHeight = 3;
-        int progressBarLeft = barLeft + 7 + 4; // original + 4px right
-        int progressBarTop = barTop + 22 + 1; // original + 1px down
+		// Only show bar from cold and up
+		int minStageBoundary = boundaries[idxCold];
+		minWindow = Math.max(minStageBoundary, minWindow);
+		if (maxWindow <= minWindow) return;
+		float unitsPerPixelX = (float) (maxWindow - minWindow) / (float) (innerWidth);
 
-        // Draw static black background for the bar
-        fill(ctx, progressBarLeft, progressBarTop, progressBarLeft + progressBarWidth, progressBarTop + progressBarHeight, 0xFF000000); // black
+		// Hardcoded stage colors per segment (no blending)
+		// Fill the inside of the bar with stage colors
+		int[] stageColors = new int[]{
+				0xFF000099, // Cold: dark blue
+				0xFF3399FF, // Warm: dark cyan
+				0xFFCCCC00, // Hot: dark yellow
+				0xFF00CC00, // Very Hot: dark green
+				0xFFCC6600, // Near Melt: dark orange
+				0xFFCC0000  // Molten: dark red
+		};
+		for (int x = 0; x < innerWidth; x++) {
+			int tempValue = Math.round(minWindow + x * unitsPerPixelX);
+			int segIdx = segmentIndex(tempValue, boundaries);
+			int color = stageColors[segIdx];
+			fill(ctx, innerLeft + x, innerTop, innerLeft + x + 1, innerTop + innerHeight, color);
+		}
 
-        // Draw filled portion for progress as discrete segments, colored by hit stage
-        int totalSegments = MinigameLogic.TOTAL_MARKERS;
-        int hits = Math.min(be.getMinigameLogic().getMarkerHitsCount(), totalSegments);
-        float segWidth = progressBarWidth / (float) totalSegments;
-        var hitStages = be.getMinigameLogic().getHitStageIndices();
-        var hitTemps = be.getMinigameLogic().getHitTemperatures();
-        for (int i = 0; i < hits; i++) {
-            int startX = progressBarLeft + Math.round(i * segWidth);
-            int endX = progressBarLeft + Math.round((i + 1) * segWidth);
-            int colorIdx;
-            if (i < hitStages.size()) {
-                colorIdx = clamp(hitStages.get(i), 0, stageColors.length - 1);
-            } else if (i < hitTemps.size()) {
-                colorIdx = segmentIndex(hitTemps.get(i), boundaries);
-            } else {
-                // Fallback: use current temp stage (unlikely)
-                colorIdx = segmentIndex(temp, boundaries);
-            }
-            int color = stageColors[colorIdx];
-            fill(ctx, startX, progressBarTop, endX, progressBarTop + progressBarHeight, color);
-        }
 
-        // Draw 10 ticks for each segment
-        int numSegments = 10;
-        for (int i = 1; i < numSegments; i++) {
-            int tickX = progressBarLeft + (int) Math.round(i * (progressBarWidth / (float) numSegments));
-            fill(ctx, tickX, progressBarTop, tickX + 1, progressBarTop + progressBarHeight, 0xFFad9474); // same tick color as temp bar
-        }
-        // No border or sides, as those are included in the PNG
+		// --- Progress Bar ---
+		// Marker/progress bar: 134 x 3 at fixed offset inside PNG
+		int progressBarWidth = 134;
+		int progressBarHeight = 3;
+		int progressBarLeft = barLeft + 11; // x offset inside PNG
+		int progressBarTop = barTop + 20;   // y offset inside PNG (moved 1px up)
 
-        // Draw the border using the texture (full size) AFTER the progress bar so the PNG overlaps
-        ctx.drawTexture(BAR_TEXTURE, barLeft, barTop, 0, 0, barWidth, barHeight, barWidth, barHeight);
+		// Draw static black background for the bar
+		fill(ctx, progressBarLeft, progressBarTop, progressBarLeft + progressBarWidth, progressBarTop + progressBarHeight, 0xFF000000); // black
 
-        // Stage boundary ticks (straight borders between stages)
-        for (int i = 0; i < boundaries.length; i++) {
-            int t = boundaries[i];
-            if (t < minWindow || t > maxWindow) continue;
-            // Don't render the min stick at minimum temperature or the max stick at maximum temperature
-            if ((i == 0 && t == minWindow) || (i == boundaries.length - 1 && t == maxWindow)) continue;
-            int x = valueToX(t, minWindow, unitsPerPixelX, innerLeft, innerWidth);
-            int rightBorder = innerLeft + innerWidth;
-            if (x >= rightBorder) {
-                x = rightBorder - 1;
-            }
-            int yStart = innerTop; // Start at top of inner area
-            int yEnd = innerTop + innerHeight;
-            fill(ctx, x, yStart, x + 1, yEnd, 0xFFad9474); // fully opaque #ad9474
-        }
+		// Draw filled portion for progress as discrete segments, colored by hit stage
+		int totalSegments = MinigameLogic.TOTAL_MARKERS;
+		int hits = Math.min(be.getMinigameLogic().getMarkerHitsCount(), totalSegments);
+		float segWidth = progressBarWidth / (float) totalSegments;
+		var hitStages = be.getMinigameLogic().getHitStageIndices();
+		var hitTemps = be.getMinigameLogic().getHitTemperatures();
+		for (int i = 0; i < hits; i++) {
+			int startX = progressBarLeft + Math.round(i * segWidth);
+			int endX = progressBarLeft + Math.round((i + 1) * segWidth);
+			int colorIdx;
+			if (i < hitStages.size()) {
+				colorIdx = clamp(hitStages.get(i), 0, stageColors.length - 1);
+			} else if (i < hitTemps.size()) {
+				colorIdx = segmentIndex(hitTemps.get(i), boundaries);
+			} else {
+				// Fallback: use current temp stage (unlikely)
+				colorIdx = segmentIndex(temp, boundaries);
+			}
+			int color = stageColors[colorIdx];
+			fill(ctx, startX, progressBarTop, endX, progressBarTop + progressBarHeight, color);
+		}
 
-        // Two ticks between each stage: one normal, one shorter
-        for (int i = 0; i < boundaries.length - 1; i++) {
-            if (i == boundaries.length - 2) continue;
-            int start = boundaries[i];
-            int end = boundaries[i + 1];
-            float interval = (float)(end - start);
+		// Draw 10 ticks for each segment
+		int numSegments = 10;
+		for (int i = 1; i < numSegments; i++) {
+			int tickX = progressBarLeft + (int) Math.round(i * (progressBarWidth / (float) numSegments));
+			fill(ctx, tickX, progressBarTop, tickX + 1, progressBarTop + progressBarHeight, 0xFFad9474); // same tick color as temp bar
+		}
+		// No border or sides, as those are included in the PNG
 
-            // Midpoint tick (normal small tick)
-            int midValue = Math.round(start + interval / 2.0f);
-            if (midValue > minWindow && midValue < maxWindow) {
-                int x = valueToX(midValue, minWindow, unitsPerPixelX, innerLeft, innerWidth);
-                int rightBorder = innerLeft + innerWidth;
-                if (x >= rightBorder) x = rightBorder - 1;
-                int yStart = innerTop + 1;
-                int yEnd = innerTop + innerHeight - 1;
-                fill(ctx, x, yStart, x + 1, yEnd, 0xFFad9474); // #ad9474, fully opaque
-            }
+		// Draw the border using the texture (full size) AFTER the progress bar so the PNG overlaps
+		ctx.drawTexture(BAR_TEXTURE, barLeft, barTop, 0, 0, barWidth, barHeight, barWidth, barHeight);
 
-            // Quarter ticks (shorter), skip for near melt stage (i != 4)
-            if (i != 4) {
-                int quarterValue = Math.round(start + interval / 4.0f);
-                int threeQuarterValue = Math.round(start + 3.0f * interval / 4.0f);
-                for (int tickValue : new int[]{quarterValue, threeQuarterValue}) {
-                    if (tickValue > minWindow && tickValue < maxWindow) {
-                        int x = valueToX(tickValue, minWindow, unitsPerPixelX, innerLeft, innerWidth);
-                        int rightBorder = innerLeft + innerWidth;
-                        if (x >= rightBorder) x = rightBorder - 1;
-                        int yStart = innerTop + 2;
-                        int yEnd = innerTop + innerHeight - 2;
-                        fill(ctx, x, yStart, x + 1, yEnd, 0xFFad9474); // #ad9474, fully opaque
-                    }
-                }
-            }
-        }
+		// Stage boundary ticks (straight borders between stages)
+		for (int i = 0; i < boundaries.length; i++) {
+			int t = boundaries[i];
+			if (t < minWindow || t > maxWindow) continue;
+			// Don't render the min stick at minimum temperature or the max stick at maximum temperature
+			if ((i == 0 && t == minWindow) || (i == boundaries.length - 1 && t == maxWindow)) continue;
+			int x = valueToX(t, minWindow, unitsPerPixelX, innerLeft, innerWidth);
+			int rightBorder = innerLeft + innerWidth;
+			if (x >= rightBorder) {
+				x = rightBorder - 1;
+			}
+			int yStart = innerTop; // Start at top of inner area
+			int yEnd = innerTop + innerHeight;
+			fill(ctx, x, yStart, x + 1, yEnd, 0xFFad9474); // fully opaque #ad9474
+		}
 
-        // Current temperature arrow just below the bar, pointing down
-        int tempX = valueToX(temp, minWindow, unitsPerPixelX, innerLeft, innerWidth);
-        int rightBorder = innerLeft + innerWidth;
-        if (tempX >= rightBorder) {
-            tempX = rightBorder - 1;
-        }
-        int arrowBottomY = innerTop + innerHeight + 1;
-        drawDownArrow(ctx, tempX, arrowBottomY, 0xFFFFFFFF);
-    }
+		// Two ticks between each stage: one normal, one shorter
+		for (int i = 0; i < boundaries.length - 1; i++) {
+			if (i == boundaries.length - 2) continue;
+			int start = boundaries[i];
+			int end = boundaries[i + 1];
+			float interval = (float) (end - start);
+
+			// Midpoint tick (normal small tick)
+			int midValue = Math.round(start + interval / 2.0f);
+			if (midValue > minWindow && midValue < maxWindow) {
+				int x = valueToX(midValue, minWindow, unitsPerPixelX, innerLeft, innerWidth);
+				int rightBorder = innerLeft + innerWidth;
+				if (x >= rightBorder) x = rightBorder - 1;
+				int yStart = innerTop + 1;
+				int yEnd = innerTop + innerHeight - 1;
+				fill(ctx, x, yStart, x + 1, yEnd, 0xFFad9474); // #ad9474, fully opaque
+			}
+
+			// Quarter ticks (shorter), skip for near melt stage (i != 4)
+			if (i != 4) {
+				int quarterValue = Math.round(start + interval / 4.0f);
+				int threeQuarterValue = Math.round(start + 3.0f * interval / 4.0f);
+				for (int tickValue : new int[]{quarterValue, threeQuarterValue}) {
+					if (tickValue > minWindow && tickValue < maxWindow) {
+						int x = valueToX(tickValue, minWindow, unitsPerPixelX, innerLeft, innerWidth);
+						int rightBorder = innerLeft + innerWidth;
+						if (x >= rightBorder) x = rightBorder - 1;
+						int yStart = innerTop + 2;
+						int yEnd = innerTop + innerHeight - 2;
+						fill(ctx, x, yStart, x + 1, yEnd, 0xFFad9474); // #ad9474, fully opaque
+					}
+				}
+			}
+		}
+
+		// Current temperature arrow just below the bar, pointing down
+		int tempX = valueToX(temp, minWindow, unitsPerPixelX, innerLeft, innerWidth);
+		int rightBorder = innerLeft + innerWidth;
+		if (tempX >= rightBorder) {
+			tempX = rightBorder - 1;
+		}
+		int arrowBottomY = innerTop + innerHeight + 1;
+		drawDownArrow(ctx, tempX, arrowBottomY, 0xFFFFFFFF);
+
+		// --- Miss-hit crosses (5 boxes of size 3x3) ---
+		// Draw only the red "X" for each miss, in the PNG boxes stacked vertically (3x3, 1px gap)
+		final int missBaseX = barLeft + 155;
+		final int missBaseY = barTop + 5;
+		final int boxStep = 4; // 3px box + 1px gap
+		final int maxBoxes = 5;
+		int misses = be.getMinigameLogic().getMissMarkerHits();
+		int toRender = Math.min(Math.max(0, misses), maxBoxes);
+		final int crossColor = 0xFFFF0000; // opaque red
+		for (int i = 0; i < toRender; i++) {
+			int x = missBaseX;
+			int y = missBaseY + i * boxStep;
+			// diagonal TL -> BR
+			fill(ctx, x, y, x + 1, y + 1, crossColor);
+			fill(ctx, x + 1, y + 1, x + 2, y + 2, crossColor);
+			fill(ctx, x + 2, y + 2, x + 3, y + 3, crossColor);
+			// diagonal TR -> BL
+			fill(ctx, x + 2, y, x + 3, y + 1, crossColor);
+			fill(ctx, x + 1, y + 1, x + 2, y + 2, crossColor); // center (already drawn, idempotent)
+			fill(ctx, x, y + 2, x + 1, y + 3, crossColor);
+		}
+	}
+
+
 
     private SmithingAnvilBlockEntity findNearestActiveAnvil(MinecraftClient mc) {
         // 1) Prefer the anvil the player is looking at
