@@ -71,16 +71,10 @@ public record PatternSelector(
 
 	@NotNull
 	public Set<BlockPos> selectPattern(BlockPos rootPos, Entity source) {
-		Direction facing = source.getHorizontalFacing();
-		Direction[] primaryFacing = Direction.getEntityFacingOrder(source);
+		Direction horizontalFacing = source.getHorizontalFacing();
+		Direction primaryLookDirection = Direction.getEntityFacingOrder(source)[0];
 		Set<BlockPos> blocks = new HashSet<>();
-		//iterate through the pattern list, and find all the blocks that match the pattern
-		for (Direction direction : primaryFacing) {
-			if (source.getWorld().getBlockState(rootPos.offset(direction.getOpposite())).isAir()) {
-				facing = direction;
-				break;
-			}
-		}
+
 
 		boolean vertical;
 		//determine if the pattern should be applied horizontally or vertically based on player facing direction and direction variable
@@ -89,10 +83,10 @@ public record PatternSelector(
 		} else if (direction.equals("vertical")) {
 			vertical = true;
 		} else {
-			vertical = facing != Direction.DOWN && facing != Direction.UP;
+			vertical = primaryLookDirection != Direction.DOWN && primaryLookDirection != Direction.UP;
 		}
 
-		//iterate through the pattern and check if the blocks match the pattern
+		//iterate through the pattern and check if the blocks match
 		for (int i = 0; i < pattern.size(); i++) {
 			for (int j = 0; j < pattern.get(i).length(); j++) {
 				var slice = pattern.get(i);
@@ -112,8 +106,8 @@ public record PatternSelector(
 					if (!vertical) {
 						pos = rotate(pos, 1, Direction.Axis.X);
 					}
-					//Rotate the block based on the player's facing direction
-					pos = rotate(pos, rotationAmount(facing), Direction.Axis.Y);
+					//Rotate the block based on the player's HORIZONTAL facing direction
+					pos = rotate(pos, rotationAmount(horizontalFacing), Direction.Axis.Y);
 
 					//Apply absolute position
 					pos = rootPos.add(pos);

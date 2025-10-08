@@ -9,10 +9,14 @@
     "SigmundGranaas"
   ],
   "entrypoints": {
+    "main": [
+    ],
     "fabric-gametest": [
       "com.sigmundgranaas.forgero.properties.gametest.BlockFilterGametest",
+      "com.sigmundgranaas.forgero.properties.gametest.BlockHardnessGametest",
       "com.sigmundgranaas.forgero.properties.gametest.BlockSelectorGametest",
-      "com.sigmundgranaas.forgero.properties.gametest.OnHitHandlerGametest"
+      "com.sigmundgranaas.forgero.properties.gametest.OnHitHandlerGametest",
+      "com.sigmundgranaas.forgero.properties.gametest.MixinIntegrationGametest"
     ]
   }
 }

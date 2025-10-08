@@ -4,6 +4,7 @@ import com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.filter.Same
 import com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.selector.ColumnSelector;
 import com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.selector.PatternSelector;
 import com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.selector.RadiusVeinSelector;
+import com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.selector.SingleSelector;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
@@ -73,6 +74,21 @@ public class BlockSelectorGametest {
 		Set<BlockPos> selected = selector.select(context.getAbsolutePos(center), player);
 
 		context.assertTrue(selected.size() == 4, "RadiusVeinSelector should select 4 connected ore blocks, but selected " + selected.size());
+		context.complete();
+	}
+
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
+	public void testSingleSelector(TestContext context) {
+		SingleSelector selector = new SingleSelector();
+		BlockPos targetPos = new BlockPos(1, 1, 1);
+		context.setBlockState(targetPos, Blocks.STONE);
+
+		PlayerEntity player = context.createMockCreativeServerPlayerInWorld();
+		BlockPos absolutePos = context.getAbsolutePos(targetPos);
+		Set<BlockPos> selected = selector.select(absolutePos, player);
+
+		context.assertTrue(selected.size() == 1, "SingleSelector should select exactly 1 block, but selected " + selected.size());
+		context.assertTrue(selected.contains(absolutePos), "SingleSelector should select the target position.");
 		context.complete();
 	}
 }

@@ -2,25 +2,14 @@ package com.sigmundgranaas.forgero.properties.minecraft.onhit;
 
 import com.mojang.serialization.Codec;
 import com.sigmundgranaas.forgero.core.property.api.codec.ListCodecWrapper;
-import com.sigmundgranaas.forgero.loader.api.DataLoadingContext;
 import com.sigmundgranaas.forgero.loader.api.DataPlugin;
 import com.sigmundgranaas.forgero.loader.api.PluginRegistrationContext;
-import com.sigmundgranaas.forgero.loader.api.PostLoadPlugin;
-import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.ConvertHandler;
-import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.DisarmHandler;
-import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.ExplosionHandler;
-import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.FireHandler;
-import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.OnHitHandler;
-import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.StatusEffectHandler;
-import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.KnockbackHandler;
-import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.LifeStealHandler;
-import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.LightningHandler;
-
+import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.*;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class OnHitPropertiesPlugin implements DataPlugin, PostLoadPlugin {
+public class OnHitPropertiesPlugin implements DataPlugin {
 
 	private static final Map<String, Codec<? extends OnHitHandler>> HANDLERS = new ConcurrentHashMap<>();
 
@@ -50,11 +39,6 @@ public class OnHitPropertiesPlugin implements DataPlugin, PostLoadPlugin {
 				OnHitProperty.PROPERTY_KEY,
 				conditionCodecSupplier -> ListCodecWrapper.of(OnHitProperty.codec(conditionCodecSupplier.get()))
 		);
-	}
-
-	@Override
-	public void onDataLoaded(DataLoadingContext context) {
-		OnHitManager.initialize(context.getConverter(), context.getResolver());
 	}
 
 	@Override
