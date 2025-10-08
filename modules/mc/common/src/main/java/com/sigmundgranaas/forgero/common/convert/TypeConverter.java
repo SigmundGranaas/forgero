@@ -10,6 +10,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Handles stateless, type-level conversions between default Forgero Components and Minecraft Items.
@@ -18,17 +19,20 @@ import java.util.Optional;
 public class TypeConverter {
 	private final IdMapper idMapper;
 	private final ComponentRegistry componentRegistry;
+	private final Item dynamicItem;
+	private final Item dynamicToolItem;
+	private final Item dynamicSwordItem;
 
-	public TypeConverter(IdMapper idMapper, ComponentRegistry componentRegistry) {
+	public TypeConverter(IdMapper idMapper, ComponentRegistry componentRegistry, Item dynamicItem, Item dynamicToolItem, Item dynamicSwordItem) {
 		this.idMapper = idMapper;
 		this.componentRegistry = componentRegistry;
+		this.dynamicItem = dynamicItem;
+		this.dynamicToolItem = dynamicToolItem;
+		this.dynamicSwordItem = dynamicSwordItem;
 	}
 
 	/**
 	 * Gets the default component for a given item type.
-	 *
-	 * @param item The item type.
-	 * @return The default component, if a mapping exists.
 	 */
 	public Optional<Component> toComponent(Item item) {
 		if (item == null || item == Items.AIR) {
@@ -41,9 +45,6 @@ public class TypeConverter {
 
 	/**
 	 * Gets the default component for a given item ID.
-	 *
-	 * @param itemId The Identifier of the item type.
-	 * @return The default component, if a mapping exists.
 	 */
 	public Optional<Component> toComponent(Identifier itemId) {
 		Item item = Registries.ITEM.get(itemId);
@@ -51,22 +52,49 @@ public class TypeConverter {
 	}
 
 	/**
-	 * Gets the default item for a given component.
+	 * Gets the item for a given component.
+	 * This is the primary conversion method that supports dynamic components.
+	 * It first checks for a data-driven mapping. If none exists, it falls back
+	 * to selecting a dynamic container item based on the component's tags.
 	 *
-	 * @param component The component.
-	 * @return The default item, if a mapping exists.
+	 * @param component The component instance to convert.
+	 * @return An Optional containing the mapped item or a dynamic item.
 	 */
 	public Optional<Item> toItem(Component component) {
-		return idMapper.toItem(component.id());
+		// Priority 1: Check for an explicit mapping in data files.
+		return idMapper.toItem(component.id())
+				// Priority 2: Fallback to a dynamic container item.
+				// This uses the component object directly, which is crucial for
+				// in-memory components that don't exist in the registry.
+				.or(() -> Optional.of(getDynamicItemForComponent(component)));
 	}
 
 	/**
-	 * Gets the default item for a given component ID.
+	 * Gets the item for a given component ID.
+	 * This method is for scenarios where only the ID is available. It relies on the component
+	 * being present in the registry to determine the appropriate dynamic item.
 	 *
 	 * @param componentId The ID of the component.
-	 * @return The default item, if a mapping exists.
+	 * @return An Optional containing the mapped item or a dynamic item.
 	 */
 	public Optional<Item> toItem(OpenIdentifier componentId) {
-		return idMapper.toItem(componentId);
+		// Priority 1: Check for an explicit mapping in data files.
+		return idMapper.toItem(componentId)
+				// Priority 2: Fallback by looking up the component in the registry.
+				.or(() -> componentRegistry.get(componentId).map(this::getDynamicItemForComponent));
+	}
+
+	/**
+	 * Selects the appropriate dynamic item (tool, sword, or generic) based on the component's tags.
+	 */
+	private Item getDynamicItemForComponent(Component component) {
+		Set<OpenIdentifier> tags = component.getTags();
+		if (tags.stream().anyMatch(tag -> tag.name().equals("sword"))) {
+			return dynamicSwordItem;
+		}
+		if (tags.stream().anyMatch(tag -> tag.name().equals("tool"))) {
+			return dynamicToolItem;
+		}
+		return dynamicItem;
 	}
 }

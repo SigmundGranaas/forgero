@@ -13,7 +13,7 @@ public record FireHandler(int duration) implements OnHitHandler {
 
 	@Override
 	public void onHit(Entity source, Entity target) {
-		target.setFireTicks(duration * 20); // duration in seconds
+		target.setOnFireFor(duration);
 	}
 
 	@Override

@@ -15,6 +15,6 @@
   },
   "mixins": [
     "AbstractBlockMixin",
-    "PlayerEntityMixin"
+    "LivingEntityOnHitMixin"
   ]
 }

@@ -14,6 +14,9 @@ import com.sigmundgranaas.forgero.common.convert.TypeConverter;
 import com.sigmundgranaas.forgero.common.env.ForgeroEnvironment;
 import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.item.DynamicItem;
+import com.sigmundgranaas.forgero.common.item.DynamicSwordItem;
+import com.sigmundgranaas.forgero.common.item.DynamicToolItem;
 import com.sigmundgranaas.forgero.common.nbt.ComponentNbtConverter;
 import com.sigmundgranaas.forgero.common.recipe.ForgeroShapedRecipeSerializer;
 import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
@@ -78,6 +81,8 @@ public class ForgeroDataLoader implements ModInitializer {
 	private boolean initialized = false;
 	private TagGraph tagGraph = TagGraph.empty();
 
+	private record DynamicItems(Item item, Item tool, Item sword) {}
+
 	public ForgeroDataLoader() {
 		this.pluginRegistry = new PluginRegistry();
 		this.context = new DataLoadingContextImpl();
@@ -95,6 +100,9 @@ public class ForgeroDataLoader implements ModInitializer {
 		LOGGER.info("Starting Forgero data loading process...");
 
 		try {
+			// Phase 0: Register dynamic items
+			DynamicItems dynamicItems = registerDynamicItems();
+
 			// Phase 1: Collect all plugins
 			collectPlugins();
 
@@ -111,7 +119,7 @@ public class ForgeroDataLoader implements ModInitializer {
 			ForgeroDataBundle bundle = loadData(dataConfig);
 
 			// Phase 6: Initialize core systems
-			initializeCoreServices(bundle, registrationContext, dataConfig);
+			initializeCoreServices(bundle, registrationContext, dataConfig, dynamicItems);
 
 			// Phase 7: Setup item registration callbacks
 			ItemRegistrar itemRegistrar = setupItemRegistration();
@@ -144,6 +152,15 @@ public class ForgeroDataLoader implements ModInitializer {
 			LOGGER.error("Critical error during Forgero data loading", e);
 			throw new RuntimeException("Failed to initialize Forgero", e);
 		}
+	}
+
+	private DynamicItems registerDynamicItems() {
+		Item.Settings settings = new Item.Settings();
+		Item dynamicItem = Registry.register(Registries.ITEM, new Identifier(MOD_NAMESPACE, "dynamic_item"), new DynamicItem(settings));
+		Item dynamicToolItem = Registry.register(Registries.ITEM, new Identifier(MOD_NAMESPACE, "dynamic_tool"), new DynamicToolItem(settings));
+		Item dynamicSwordItem = Registry.register(Registries.ITEM, new Identifier(MOD_NAMESPACE, "dynamic_sword"), new DynamicSwordItem(settings));
+		LOGGER.info("Registered dynamic items for NBT-driven component wrapping.");
+		return new DynamicItems(dynamicItem, dynamicToolItem, dynamicSwordItem);
 	}
 
 	private void collectPlugins() {
@@ -227,7 +244,7 @@ public class ForgeroDataLoader implements ModInitializer {
 		return bundle;
 	}
 
-	private void initializeCoreServices(ForgeroDataBundle bundle, PluginRegistrationContextImpl registrationContext, ForgeroDataInitializer.Config dataConfig) {
+	private void initializeCoreServices(ForgeroDataBundle bundle, PluginRegistrationContextImpl registrationContext, ForgeroDataInitializer.Config dataConfig, DynamicItems dynamicItems) {
 		LOGGER.debug("Initializing core services...");
 
 		ComponentRegistry componentRegistry = new MapBackedComponentRegistry(
@@ -242,7 +259,7 @@ public class ForgeroDataLoader implements ModInitializer {
 		ComponentNbtConverter nbtConverter = new ComponentNbtConverter(componentCodec);
 
 		IdMapper idMapper = new IdMapper(bundle.hostItemMap());
-		TypeConverter typeConverter = new TypeConverter(idMapper, componentRegistry);
+		TypeConverter typeConverter = new TypeConverter(idMapper, componentRegistry, dynamicItems.item(), dynamicItems.tool(), dynamicItems.sword());
 		StatefulConverter statefulConverter = new StatefulConverter(nbtConverter, typeConverter);
 		ComponentConverter componentConverter = new ComponentConverterImpl(statefulConverter, typeConverter, idMapper, componentRegistry);
 

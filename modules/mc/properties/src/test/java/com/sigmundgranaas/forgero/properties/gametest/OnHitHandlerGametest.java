@@ -2,12 +2,14 @@ package com.sigmundgranaas.forgero.properties.gametest;
 
 import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.ConvertHandler;
 import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.DisarmHandler;
+import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.ExplosionHandler;
 import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.FireHandler;
 import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.KnockbackHandler;
 import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.LifeStealHandler;
 import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.LightningHandler;
 import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.StatusEffectHandler;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffects;
@@ -20,6 +22,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 public class OnHitHandlerGametest {
 
@@ -27,7 +30,7 @@ public class OnHitHandlerGametest {
 	public void testFireHandler(TestContext context) {
 		FireHandler handler = new FireHandler(5); // 5 seconds
 		LivingEntity target = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
-		LivingEntity source = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(0, 1, 1));
+		LivingEntity source = context.spawnEntity(EntityType.PIG, new BlockPos(0, 1, 1));
 
 		handler.onHit(source, target);
 
@@ -168,6 +171,24 @@ public class OnHitHandlerGametest {
 		context.expectEntity(EntityType.ITEM);
 		context.waitAndRun(1, () -> {
 			context.assertTrue(target.getMainHandStack().isEmpty(), "Target should have an empty main hand after disarm");
+			context.complete();
+		});
+	}
+
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
+	public void testExplosionHandler(TestContext context) {
+		ExplosionHandler handler = new ExplosionHandler(2.0f, false, World.ExplosionSourceType.BLOCK);
+		LivingEntity source = context.createMockCreativeServerPlayerInWorld();
+		LivingEntity target = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(2, 1, 1));
+
+		BlockPos dirtPos = new BlockPos(2, 1, 2);
+		context.setBlockState(dirtPos, Blocks.DIRT);
+
+		handler.onHit(source, target);
+
+		context.waitAndRun(1, () -> {
+			context.expectBlock(Blocks.AIR, dirtPos);
+			context.assertTrue(target.isRemoved() || target.getHealth() < target.getMaxHealth(), "Target should be damaged or killed by the explosion.");
 			context.complete();
 		});
 	}
