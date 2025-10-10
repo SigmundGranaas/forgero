@@ -6,10 +6,13 @@ import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.mutation.api.ComponentMutater;
 import com.sigmundgranaas.forgero.core.component.mutation.impl.ComponentMutaterImpl;
+import com.sigmundgranaas.forgero.core.property.api.Resolver;
+import com.sigmundgranaas.forgero.core.property.engine.ResolverEngine;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.entity.player.PlayerInventory;
@@ -76,6 +79,16 @@ public class ComponentUpgradeScreen extends Screen {
 	protected void init() {
 		super.init();
 		filterAvailableUpgrades();
+
+		this.addDrawableChild(ButtonWidget.builder(Text.translatable("forgero.dev.inspector.button"), button -> {
+					Resolver resolver = new ResolverEngine();
+					ComponentInspector inspector = new ComponentInspector();
+					String report = inspector.generateReport(this.component, resolver);
+					this.client.setScreen(new ComponentStructureScreen(report, this));
+				})
+				.position(5, 5)
+				.size(60, 20)
+				.build());
 	}
 
 	private void filterAvailableUpgrades() {
