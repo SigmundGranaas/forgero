@@ -38,7 +38,7 @@ public class DevResourcePackProvider implements ResourcePackProvider {
 		for (String pathString : resourcePaths.split(File.pathSeparator)) {
 			Path resourcePath = Paths.get(pathString);
 			if (Files.exists(resourcePath) && Files.isDirectory(resourcePath)) {
-				String packName = "forgero_dev_" + packCounter++; // Use a machine-friendly name
+				String packName = "forgero_dev_" + packCounter++;
 
 				ResourcePackProfile.PackFactory packFactory = (name) -> new DirectoryResourcePack(name, resourcePath, true);
 

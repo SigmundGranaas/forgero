@@ -6,6 +6,10 @@ import com.sigmundgranaas.forgero.loader.api.PostLoadPlugin;
 
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.Hand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +18,7 @@ public class DevPlugin implements PostLoadPlugin {
 
 	@Override
 	public String getId() {
-		return "forgero:tools-plugin";
+		return "forgero:development-post-plugin";
 	}
 
 	@Override
@@ -22,5 +26,21 @@ public class DevPlugin implements PostLoadPlugin {
 		ComponentSlottingHandler slottingHandler = new ComponentSlottingHandler(context.getConverter());
 		UseItemCallback.EVENT.register(slottingHandler::handle);
 		LOGGER.info("Registered component slotting handler for item use events.");
+
+		ServerPlayNetworking.registerGlobalReceiver(UpgradeComponentPacket.ID, (server, player, handler, buf, responseSender) -> {
+			Hand hand = UpgradeComponentPacket.readHand(buf);
+			NbtCompound newNbt = UpgradeComponentPacket.readNbt(buf);
+
+			server.execute(() -> {
+				ItemStack stackInHand = player.getStackInHand(hand);
+
+				if (!stackInHand.isEmpty() && context.getConverter().toComponent(stackInHand).isPresent()) {
+					ItemStack newStack = stackInHand.copy();
+					newStack.setNbt(newNbt);
+					player.setStackInHand(hand, newStack);
+				}
+			});
+		});
+		LOGGER.info("Registered component upgrade packet handler.");
 	}
 }

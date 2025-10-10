@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "forgero-development-module",
   "version": "${version}",
-  "name": "Forgero tools",
+  "name": "Forgero development module",
   "description": "Development module for Forgero.",
   "authors": [
     "JorisDeBeer",

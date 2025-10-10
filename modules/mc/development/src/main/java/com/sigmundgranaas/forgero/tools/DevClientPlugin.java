@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
 import org.lwjgl.glfw.GLFW;
 
 public class DevClientPlugin implements ClientModInitializer {
@@ -38,7 +39,7 @@ public class DevClientPlugin implements ClientModInitializer {
 						.map(CustomizableComponent.class::cast)
 						.ifPresent(component -> {
 							if (!component.getUpgradeSlots().isEmpty()) {
-								client.setScreen(new ComponentUpgradeScreen(component, ForgeroApi.converter()));
+								client.setScreen(new ComponentUpgradeScreen(component, ForgeroApi.converter(), Hand.MAIN_HAND));
 							}
 						});
 			}
