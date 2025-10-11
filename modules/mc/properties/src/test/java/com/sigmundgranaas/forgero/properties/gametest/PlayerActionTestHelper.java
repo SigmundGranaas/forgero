@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.properties.gametest;
 
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.test.TestContext;
@@ -31,8 +32,21 @@ public class PlayerActionTestHelper {
 		// Simulate starting to break the block. The direction doesn't strictly matter for this test.
 		interactionManager.processBlockBreakingAction(pos, PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, Direction.UP, world.getHeight(), 1);
 
-		// For an "instant" break, as defined by the property, we don't need to tick.
-		// We can immediately send the stop action.
+		// For an "instant" break, as defined by the property, we can immediately send the stop action.
 		interactionManager.processBlockBreakingAction(pos, PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, Direction.UP, world.getHeight(), 1);
+	}
+
+	/**
+	 * Simulates a player killing a living entity in one hit.
+	 *
+	 * @param target The entity to kill.
+	 */
+	public void killEntity(LivingEntity target) {
+		player.teleport(target.getX(), target.getY(), target.getZ());
+		// Set health very low to ensure a one-hit kill
+		target.setHealth(0.1f);
+		player.attack(target);
+
+		context.assertTrue(target.isDead(), "Target should be dead after attack.");
 	}
 }

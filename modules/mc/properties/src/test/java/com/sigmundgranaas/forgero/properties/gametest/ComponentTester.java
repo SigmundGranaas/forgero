@@ -6,6 +6,7 @@ import com.sigmundgranaas.forgero.core.component.impl.StaticComponent;
 import com.sigmundgranaas.forgero.core.property.api.Property;
 import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
 import com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.BlockBreakingProperty;
+import com.sigmundgranaas.forgero.properties.minecraft.loot.LootProperty;
 import com.sigmundgranaas.forgero.properties.minecraft.onhit.OnHitProperty;
 import net.minecraft.item.ItemStack;
 
@@ -39,6 +40,8 @@ public class ComponentTester {
 								return BlockBreakingProperty.PROPERTY_KEY.key();
 							} else if (p instanceof OnHitProperty) {
 								return OnHitProperty.PROPERTY_KEY.key();
+							} else if (p instanceof LootProperty) {
+								return LootProperty.PROPERTY_KEY.key();
 							}
 							throw new IllegalArgumentException("Unsupported property type for testing: " + p.getClass().getName());
 						}),
