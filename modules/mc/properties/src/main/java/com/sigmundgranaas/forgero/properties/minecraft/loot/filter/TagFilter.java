@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.properties.minecraft.loot.filter;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
@@ -19,7 +20,7 @@ public record TagFilter(Identifier tag) implements ItemFilter {
 
 	@Override
 	public boolean test(ItemStack stack) {
-		TagKey<net.minecraft.item.Item> tagKey = TagKey.of(RegistryKeys.ITEM, tag);
+		TagKey<Item> tagKey = TagKey.of(RegistryKeys.ITEM, tag);
 		return stack.isIn(tagKey);
 	}
 

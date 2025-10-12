@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  *         "type": "forgero:auto_smelt",
  *         "filter": {
  *           "type": "forgero:tag",
- *           "tag": "forgero:smeltable_ores"
+ *           "tag": "c:raw_ores"
  *         }
  *       },
  *       {
