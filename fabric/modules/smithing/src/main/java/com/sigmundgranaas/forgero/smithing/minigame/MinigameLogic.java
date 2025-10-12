@@ -165,44 +165,50 @@ public class MinigameLogic {
     public void processMarkerAttempt(boolean hit, boolean wasPlayerAttempt, MinigameCallback callback) {
         if (markerHitsCount >= TOTAL_MARKERS) return;
 
+        // Count attempts only when initiated by player
         if (wasPlayerAttempt) {
             markerAttempts++;
         }
 
         ItemStack stack = callback.getCurrentStack();
-        boolean markDirtyCalled = false;
+
         if (hit) {
+            // Successful hit
             markerHitsCount++;
 
-            // Track temperature and stage at the time of successful hit (pre-change)
+            // Record stage index at time of hit
             int temperature = TemperatureUtils.getTemperature(stack);
             int maxTemp = TemperatureUtils.getMaxTemp(stack);
             hitStageIndices.add(stageIndexFor(temperature, maxTemp));
 
-            // Fast marker removes 10 temperature, normal adds 30
+            // Apply temperature change based on marker type
             int markerIndex = markerAttempts - 1;
-            int tempChange = fastMarkerIndices.contains(markerIndex) ? -10 : 40;
+            boolean fast = fastMarkerIndices.contains(markerIndex);
+            int tempChange = fast ? -10 : 40;
             TemperatureUtils.setTemperature(stack, Math.max(0, Math.min(temperature + tempChange, maxTemp)));
 
-            // Count fast marker hit
-            if (fastMarkerIndices.contains(markerIndex)) {
+            if (fast) {
                 fastMarkerHits++;
             }
-        } else if (wasPlayerAttempt) {
-            // Count only actual player miss attempts
-            missMarkerHits++;
+        } else {
+            // Miss: only count visible player attempts
             if (wasPlayerAttempt) {
                 missMarkerHits++;
-        // Update morph + write counters to item NBT before syncing
-
+            }
         }
 
-        // Clear current marker so next can spawn
+        // Clear current marker so next can spawn after a short delay
+        clearActiveMarker();
+        markerSpawnDelay = SUBSEQUENT_MARKER_DELAY_TICKS;
+
+        // Update morph progress on the item so client HUD has up-to-date data
+        updateMorphProgressOnItem(stack);
+
+        // Persist counters to item NBT (optional but helps with consistency if picked up immediately)
+        saveProgressToItem(stack);
+
+        // Trigger BE sync to clients so HUD updates right away
         callback.markDirty();
-    }
-        // Trigger BE sync to client (HUD reads missMarkerHits from logic)
-    // Map temp to stage index [0..5]
-            callback.markDirty();
     }
 
     // Map temp to stage index [0..5]
