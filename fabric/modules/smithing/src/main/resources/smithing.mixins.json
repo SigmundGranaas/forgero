@@ -7,7 +7,8 @@
     "AnvilBlockMixin",
     "AnvilBlockUseMixin",
     "CampfireBlockEntityMixin",
-    "CampfireBlockMixin"
+    "CampfireBlockMixin",
+    "CampfireBlockEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
