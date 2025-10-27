@@ -18,6 +18,7 @@ public class TemperatureHandler {
     private static int tickCounter = 0;
     private static final int TICK_INTERVAL = 20;
     private static final int INVENTORY_COOL_PER_TICK = 1;
+    private static final int FLAME_SOUND_INTERVAL = 2; // Play sound every 2 world ticks (~0.1s)
 
     public static void register() {
         ServerTickEvents.END_WORLD_TICK.register(TemperatureHandler::onWorldTick);
@@ -62,6 +63,21 @@ public class TemperatureHandler {
             BlockPos pos = itemEntity.getBlockPos();
             boolean changed = false;
             boolean inFilledCauldron = TemperatureUtils.isItemInFilledWaterCauldron(itemEntity, world);
+
+            // Emit flames when in very hot stage
+            int maxTemp = TemperatureUtils.getMaxTemp(stack);
+            if (TemperatureColorProvider.isInVeryHot(temp, maxTemp)) {
+                world.spawnParticles(net.minecraft.particle.ParticleTypes.FLAME,
+                    itemEntity.getX(), itemEntity.getY() + 0.3, itemEntity.getZ(),
+                    3, 0.1, 0.2, 0.1, 0.05);
+
+                // Play sizzling sound periodically
+                if (tickCounter % FLAME_SOUND_INTERVAL == 0) {
+                    world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_NOTE_BLOCK_PLING.value(),
+                        net.minecraft.sound.SoundCategory.BLOCKS, 1.0F, 0.9F + (float)Math.random() * 0.3F);
+                }
+            }
+
             if (inFilledCauldron) {
                 if (temp > 100) {
                     world.spawnParticles(net.minecraft.particle.ParticleTypes.CLOUD, itemEntity.getX(), itemEntity.getY() + 0.2, itemEntity.getZ(), 8, 0.2, 0.1, 0.2, 0.01);
