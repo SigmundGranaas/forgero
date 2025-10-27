@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -18,7 +19,6 @@ public class TemperatureHandler {
     private static int tickCounter = 0;
     private static final int TICK_INTERVAL = 20;
     private static final int INVENTORY_COOL_PER_TICK = 1;
-    private static final int FLAME_SOUND_INTERVAL = 2; // Play sound every 2 world ticks (~0.1s)
 
     public static void register() {
         ServerTickEvents.END_WORLD_TICK.register(TemperatureHandler::onWorldTick);
@@ -64,19 +64,8 @@ public class TemperatureHandler {
             boolean changed = false;
             boolean inFilledCauldron = TemperatureUtils.isItemInFilledWaterCauldron(itemEntity, world);
 
-            // Emit flames when in very hot stage
             int maxTemp = TemperatureUtils.getMaxTemp(stack);
-            if (TemperatureColorProvider.isInVeryHot(temp, maxTemp)) {
-                world.spawnParticles(net.minecraft.particle.ParticleTypes.FLAME,
-                    itemEntity.getX(), itemEntity.getY() + 0.3, itemEntity.getZ(),
-                    3, 0.1, 0.2, 0.1, 0.05);
-
-                // Play sizzling sound periodically
-                if (tickCounter % FLAME_SOUND_INTERVAL == 0) {
-                    world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_NOTE_BLOCK_PLING.value(),
-                        net.minecraft.sound.SoundCategory.BLOCKS, 1.0F, 0.9F + (float)Math.random() * 0.3F);
-                }
-            }
+            emitTemperatureEffects(world, itemEntity, pos, temp, maxTemp);
 
             if (inFilledCauldron) {
                 if (temp > 100) {
@@ -91,6 +80,69 @@ public class TemperatureHandler {
             }
             if (changed) {
                 TemperatureSyncS2CPacket.sendToClient(itemEntity, temp);
+            }
+        }
+    }
+
+    private static void emitTemperatureEffects(ServerWorld world, ItemEntity itemEntity, BlockPos pos, int temp, int maxTemp) {
+        double x = itemEntity.getX();
+        double y = itemEntity.getY() + 0.3;
+        double z = itemEntity.getZ();
+        int entityId = itemEntity.getId();
+        long randomSeed = (long) entityId * 31 + world.getTime();
+
+        if (TemperatureColorProvider.isInCold(temp, maxTemp)) {
+        } else if (TemperatureColorProvider.isInWarm(temp, maxTemp)) {
+            // Unique: smoke and happy villager for gentle warmth
+            if ((tickCounter + randomSeed) % 2 == 0) {
+                world.spawnParticles(net.minecraft.particle.ParticleTypes.SMOKE,
+                    x, y, z, 2, 0.03, 0.06, 0.03, 0.001);
+            }
+        } else if (TemperatureColorProvider.isInHot(temp, maxTemp)) {
+            // Mild flames, more pronounced small flames, close to item
+            if ((tickCounter + randomSeed * 2) % 3 == 0) {
+                world.spawnParticles(net.minecraft.particle.ParticleTypes.SMALL_FLAME,
+                    x, y + 0.04, z, 4, 0.025, 0.025, 0.025, 0.003);
+            }
+            if ((tickCounter + randomSeed * 3) % 3 == 0) {
+                world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_FIRE_AMBIENT,
+                    net.minecraft.sound.SoundCategory.BLOCKS, 0.5F, 0.8F + (float)Math.random() * 0.4F);
+            }
+        } else if (TemperatureColorProvider.isInVeryHot(temp, maxTemp)) {
+            // Stronger flames, more particles, still close to item
+            if ((tickCounter + randomSeed * 2) % 2 == 0) {
+                world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME,
+                    x, y, z, 6, 0.03, 0.04, 0.03, 0.002);
+            }
+            if ((tickCounter + randomSeed * 3) % 2 == 0) {
+                world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_FIRE_AMBIENT,
+                    net.minecraft.sound.SoundCategory.BLOCKS, 0.8F, 0.9F + (float)Math.random() * 0.3F);
+            }
+        } else if (TemperatureColorProvider.isInNearMelt(temp, maxTemp)) {
+            // Intense flames, even more particles, still close to item
+            if ((tickCounter + randomSeed * 2) % 2 == 0) {
+                world.spawnParticles(ParticleTypes.FLAME,
+                    x, y, z, 10, 0.04, 0.05, 0.04, 0.003);
+            }
+            if ((tickCounter + randomSeed * 3) % 2 == 0) {
+                world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_LAVA_AMBIENT,
+                    net.minecraft.sound.SoundCategory.BLOCKS, 1.0F, 0.7F + (float)Math.random() * 0.3F);
+            }
+        } else if (TemperatureColorProvider.isInMolten(temp, maxTemp)) {
+            // Maximum intensity: many flames, still close to item
+            if ((tickCounter + randomSeed * 2) % 1 == 0) {
+                world.spawnParticles(net.minecraft.particle.ParticleTypes.FLAME,
+                    x, y, z, 18, 0.06, 0.07, 0.06, 0.004);
+                world.spawnParticles(net.minecraft.particle.ParticleTypes.SMALL_FLAME,
+                    x, y + 0.04, z, 12, 0.06, 0.07, 0.06, 0.006);
+            }
+            if ((tickCounter + randomSeed * 4) % 2 == 0) {
+                world.spawnParticles(net.minecraft.particle.ParticleTypes.SMOKE,
+                    x, y, z, 4, 0.04, 0.04, 0.04, 0.002);
+            }
+            if ((tickCounter + randomSeed * 3) % 2 == 0) {
+                world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_LAVA_AMBIENT,
+                    net.minecraft.sound.SoundCategory.BLOCKS, 1.2F, 0.6F + (float)Math.random() * 0.3F);
             }
         }
     }

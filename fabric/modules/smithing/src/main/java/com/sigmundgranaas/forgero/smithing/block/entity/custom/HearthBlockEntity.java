@@ -156,7 +156,7 @@ public class HearthBlockEntity extends BlockEntity implements Inventory {
 		if (lit && !slotStack.isEmpty() && TemperatureUtils.hasMaxTemperature(slotStack)) {
 			int temp = TemperatureUtils.getTemperature(slotStack);
 			int maxTemp = TemperatureUtils.getMaxTemp(slotStack);
-			int heatRate = 20;
+			int heatRate = 2;
 			if (temp < maxTemp) {
 				TemperatureUtils.setTemperature(slotStack, Math.min(maxTemp, temp + heatRate));
 				blockEntity.markDirtyAndSync();
