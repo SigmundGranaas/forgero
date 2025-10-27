@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.smithing.block.ModBlocks;
+import com.sigmundgranaas.forgero.smithing.block.entity.custom.HearthBlockEntity;
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
 
 import net.minecraft.block.Block;
@@ -17,6 +19,7 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 
 public class ModBlockEntities {
 	public static BlockEntityType<SmithingAnvilBlockEntity> SMITHING_ANVIL;
+	public static BlockEntityType<HearthBlockEntity> HEARTH;
 
 	private static final List<Block> moldBlocks = new ArrayList<>();
 
@@ -26,6 +29,11 @@ public class ModBlockEntities {
 				FabricBlockEntityTypeBuilder.create(SmithingAnvilBlockEntity::new,
 						Blocks.CHIPPED_ANVIL, Blocks.DAMAGED_ANVIL, Blocks.ANVIL)
 						.build(null));
+
+		HEARTH = Registry.register(Registries.BLOCK_ENTITY_TYPE,
+				new Identifier(Forgero.NAMESPACE, "hearth"),
+				FabricBlockEntityTypeBuilder.create(HearthBlockEntity::new,
+						ModBlocks.HEARTH).build(null));
 
 	}
 }

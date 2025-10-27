@@ -6,9 +6,7 @@
     "TemperatureTooltipMixin",
     "AnvilBlockMixin",
     "AnvilBlockUseMixin",
-    "CampfireBlockEntityMixin",
-    "CampfireBlockMixin",
-    "CampfireBlockEntityRendererMixin"
+    "CampfireBlockMixin"
   ],
   "injectors": {
     "defaultRequire": 1
