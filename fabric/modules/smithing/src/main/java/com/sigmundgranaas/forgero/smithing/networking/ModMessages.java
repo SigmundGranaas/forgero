@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.smithing.networking.C2S.AnvilUseC2SPacket;
 import com.sigmundgranaas.forgero.smithing.networking.C2S.SchematicSelectionC2SPacket;
 import com.sigmundgranaas.forgero.smithing.networking.S2C.AnvilSyncS2CPacket;
+import com.sigmundgranaas.forgero.smithing.networking.S2C.CampfireSyncS2CPacket;
 import com.sigmundgranaas.forgero.smithing.networking.S2C.SchematicSelectionS2CPacket;
 import com.sigmundgranaas.forgero.smithing.networking.S2C.TemperatureSyncS2CPacket;
 
@@ -21,6 +22,7 @@ public class ModMessages {
 	public static final Identifier SCHEMATIC_SELECTED = new Identifier(Forgero.NAMESPACE, "schematic_selected");
 	public static final Identifier ANVIL_SHIFT_USE = new Identifier(Forgero.NAMESPACE, "anvil_shift_use");
 	public static final Identifier TEMPERATURE_SYNC = new Identifier(Forgero.NAMESPACE, "temperature_sync");
+	public static final Identifier CAMPFIRE_EXTRA_SLOT_SYNC = new Identifier(Forgero.NAMESPACE, "campfire_extra_slot_sync");
 
 	private static volatile boolean C2S_REGISTERED = false;
 	static {
@@ -32,6 +34,7 @@ public class ModMessages {
 		ClientPlayNetworking.registerGlobalReceiver(ITEM_SYNC, AnvilSyncS2CPacket::receive);
 		ClientPlayNetworking.registerGlobalReceiver(OPEN_SCHEMATIC_SELECTION, SchematicSelectionS2CPacket::receive);
 		ClientPlayNetworking.registerGlobalReceiver(TEMPERATURE_SYNC, TemperatureSyncS2CPacket::receive);
+		ClientPlayNetworking.registerGlobalReceiver(CAMPFIRE_EXTRA_SLOT_SYNC, CampfireSyncS2CPacket::receive);
 	}
 
 	public static void registerC2SPackets() {

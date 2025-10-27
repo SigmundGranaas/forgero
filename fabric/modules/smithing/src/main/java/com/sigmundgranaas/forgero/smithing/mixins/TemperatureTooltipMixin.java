@@ -46,7 +46,7 @@ public class TemperatureTooltipMixin {
 
 		Text label = Text.literal("Temperature: ").styled(style -> style.withColor(TextColor.fromRgb(0xFFFFFF)));
 		Text forgingRange = Text.literal(String.format("(%d–%d°C)", forgingMin, forgingMax))
-			.styled(style -> style.withColor(TextColor.fromRgb(0xFF00FF00)));
+			.styled(style -> style.withColor(TextColor.fromRgb(0x00FF00)));
 		Text value = Text.literal(String.format("%d°C ", temp))
 			.styled(style -> style.withColor(TextColor.fromRgb(color)));
 
@@ -61,11 +61,5 @@ public class TemperatureTooltipMixin {
 		}
 		int insertionPoint = -(idx + 1);
 		return Math.max(0, insertionPoint - 1);
-	}
-
-	@Unique
-	private int scaleToMax(int base, int maxTemp) {
-		if (maxTemp >= 10000) return base;
-		return Math.round(base / 10000f * maxTemp);
 	}
 }
