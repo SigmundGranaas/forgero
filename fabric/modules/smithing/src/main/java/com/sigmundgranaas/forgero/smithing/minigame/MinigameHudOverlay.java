@@ -67,13 +67,19 @@ public class MinigameHudOverlay implements HudRenderCallback {
 		int innerTop = barTop + 8;   // y offset inside PNG
 
 		int[] boundaries = TemperatureColorProvider.getStageBoundaries(max);
-		// Stage indices based on boundaries array (6 stages)
+		// Check if item has workable temperature range and update boundaries
+		if (TemperatureUtils.hasWorkableTemperatureRange(stack)) {
+			int workableStart = TemperatureUtils.getWorkableTemperatureStart(stack);
+			int workableEnd = TemperatureUtils.getWorkableTemperatureEnd(stack);
+			boundaries = TemperatureColorProvider.getStageBoundariesWithWorkableRange(max, workableStart, workableEnd);
+		}
+
+		// Stage indices based on boundaries array (5 stages)
 		int idxCold = 0;
 		int idxWarm = 1;
 		int idxHot = 2;
-		int idxVeryHot = 3;
-		int idxNearMelt = 4;
-		int idxMolten = 5;
+		int idxBrightHot = 3;
+		int idxOverheated = 4;
 
 
 		// Only show bar from cold and up
@@ -88,9 +94,8 @@ public class MinigameHudOverlay implements HudRenderCallback {
 				0xFF000099, // Cold: dark blue
 				0xFF3399FF, // Warm: dark cyan
 				0xFFCCCC00, // Hot: dark yellow
-				0xFF00CC00, // Very Hot: dark green
-				0xFFCC6600, // Near Melt: dark orange
-				0xFFCC0000  // Molten: dark red
+				0xFFCC6600, // Bright Hot: dark orange
+				0xFFCC0000  // Overheated: dark red
 		};
 		for (int x = 0; x < innerWidth; x++) {
 			int tempValue = Math.round(minWindow + x * unitsPerPixelX);

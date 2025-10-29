@@ -1,8 +1,6 @@
 package com.sigmundgranaas.forgero.smithing.temperature;
 
 import com.sigmundgranaas.forgero.smithing.networking.S2C.TemperatureSyncS2CPacket;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
@@ -14,7 +12,6 @@ import net.minecraft.util.math.BlockPos;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 
 public class TemperatureHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger("ForgeroTemperature");
     private static final int FLUID_COOL_PER_TICK = 20;
     private static int tickCounter = 0;
     private static final int TICK_INTERVAL = 20;
@@ -65,7 +62,7 @@ public class TemperatureHandler {
             boolean inFilledCauldron = TemperatureUtils.isItemInFilledWaterCauldron(itemEntity, world);
 
             int maxTemp = TemperatureUtils.getMaxTemp(stack);
-            emitTemperatureEffects(world, itemEntity, pos, temp, maxTemp);
+            emitTemperatureEffects(world, itemEntity, pos, temp, maxTemp, stack);
 
             if (inFilledCauldron) {
                 if (temp > 100) {
@@ -84,7 +81,7 @@ public class TemperatureHandler {
         }
     }
 
-    private static void emitTemperatureEffects(ServerWorld world, ItemEntity itemEntity, BlockPos pos, int temp, int maxTemp) {
+    private static void emitTemperatureEffects(ServerWorld world, ItemEntity itemEntity, BlockPos pos, int temp, int maxTemp, ItemStack stack) {
         double x = itemEntity.getX();
         double y = itemEntity.getY() + 0.3;
         double z = itemEntity.getZ();
@@ -92,14 +89,15 @@ public class TemperatureHandler {
         long randomSeed = (long) entityId * 31 + world.getTime();
 
         if (TemperatureColorProvider.isInCold(temp, maxTemp)) {
+            // No effects for cold
         } else if (TemperatureColorProvider.isInWarm(temp, maxTemp)) {
-            // Unique: smoke and happy villager for gentle warmth
+            // Smoke for gentle warmth
             if ((tickCounter + randomSeed) % 2 == 0) {
                 world.spawnParticles(net.minecraft.particle.ParticleTypes.SMOKE,
                     x, y, z, 2, 0.03, 0.06, 0.03, 0.001);
             }
         } else if (TemperatureColorProvider.isInHot(temp, maxTemp)) {
-            // Mild flames, more pronounced small flames, close to item
+            // Small flames for hot
             if ((tickCounter + randomSeed * 2) % 3 == 0) {
                 world.spawnParticles(net.minecraft.particle.ParticleTypes.SMALL_FLAME,
                     x, y + 0.04, z, 4, 0.025, 0.025, 0.025, 0.003);
@@ -108,28 +106,20 @@ public class TemperatureHandler {
                 world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_FIRE_AMBIENT,
                     net.minecraft.sound.SoundCategory.BLOCKS, 0.5F, 0.8F + (float)Math.random() * 0.4F);
             }
-        } else if (TemperatureColorProvider.isInVeryHot(temp, maxTemp)) {
-            // Stronger flames, more particles, still close to item
+        } else if (TemperatureColorProvider.isInBrightHot(temp, maxTemp)) {
+            // Bright flames and soul fire for bright hot
             if ((tickCounter + randomSeed * 2) % 2 == 0) {
                 world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME,
-                    x, y, z, 6, 0.03, 0.04, 0.03, 0.002);
+                    x, y, z, 8, 0.04, 0.05, 0.04, 0.003);
+                world.spawnParticles(ParticleTypes.SMALL_FLAME,
+                    x, y + 0.04, z, 6, 0.03, 0.04, 0.03, 0.002);
             }
             if ((tickCounter + randomSeed * 3) % 2 == 0) {
                 world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_FIRE_AMBIENT,
                     net.minecraft.sound.SoundCategory.BLOCKS, 0.8F, 0.9F + (float)Math.random() * 0.3F);
             }
-        } else if (TemperatureColorProvider.isInNearMelt(temp, maxTemp)) {
-            // Intense flames, even more particles, still close to item
-            if ((tickCounter + randomSeed * 2) % 2 == 0) {
-                world.spawnParticles(ParticleTypes.FLAME,
-                    x, y, z, 10, 0.04, 0.05, 0.04, 0.003);
-            }
-            if ((tickCounter + randomSeed * 3) % 2 == 0) {
-                world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_LAVA_AMBIENT,
-                    net.minecraft.sound.SoundCategory.BLOCKS, 1.0F, 0.7F + (float)Math.random() * 0.3F);
-            }
-        } else if (TemperatureColorProvider.isInMolten(temp, maxTemp)) {
-            // Maximum intensity: many flames, still close to item
+        } else if (TemperatureColorProvider.isInOverheated(temp, maxTemp)) {
+            // Maximum intensity: intense flames and smoke
             if ((tickCounter + randomSeed * 2) % 1 == 0) {
                 world.spawnParticles(net.minecraft.particle.ParticleTypes.FLAME,
                     x, y, z, 18, 0.06, 0.07, 0.06, 0.004);

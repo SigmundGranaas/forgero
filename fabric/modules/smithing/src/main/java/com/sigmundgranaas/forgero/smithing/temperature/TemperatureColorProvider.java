@@ -99,7 +99,6 @@ public class TemperatureColorProvider {
         0,
         320,
         750,
-        1050,
         1200,
         1500,
         1600
@@ -119,6 +118,15 @@ public class TemperatureColorProvider {
         return scaled;
     }
 
+    public static int[] getStageBoundariesWithWorkableRange(int maxTemp, int workableStart, int workableEnd) {
+        int[] bounds = getStageBoundaries(maxTemp);
+        if (workableStart > 0 && workableEnd > workableStart) {
+            bounds[2] = workableStart;
+            bounds[3] = workableEnd;
+        }
+        return bounds;
+    }
+
     private static boolean isInStage(int temperature, int maxTemp, int stageIdx) {
         int[] bounds = getStageBoundaries(maxTemp);
         return temperature >= bounds[stageIdx] && temperature < bounds[stageIdx + 1];
@@ -133,29 +141,24 @@ public class TemperatureColorProvider {
     public static boolean isInHot(int temperature, int maxTemp) {
         return isInStage(temperature, maxTemp, 2);
     }
-    public static boolean isInVeryHot(int temperature, int maxTemp) {
+    public static boolean isInBrightHot(int temperature, int maxTemp) {
         return isInStage(temperature, maxTemp, 3);
     }
-    public static boolean isInNearMelt(int temperature, int maxTemp) {
+    public static boolean isInOverheated(int temperature, int maxTemp) {
         return isInStage(temperature, maxTemp, 4);
     }
-    public static boolean isInMolten(int temperature, int maxTemp) {
-        return isInStage(temperature, maxTemp, 5);
-    }
 
-    public static int getHudColorForTemperature(int temp, int maxTemp, int[] bounds, int idxCold, int idxWarm, int idxHot, int idxVeryHot, int idxNearMelt, int idxMolten, int stageIdx) {
+    public static int getHudColorForTemperature(int temp, int maxTemp, int[] bounds, int idxCold, int idxWarm, int idxHot, int idxBrightHot, int idxOverheated, int stageIdx) {
         final int DARK_BLUE   = 0xFF000099;
         final int DARK_CYAN   = 0xFF3399FF;
         final int DARK_YELLOW = 0xFFCCCC00;
-        final int DARK_GREEN  = 0xFF00CC00;
         final int DARK_ORANGE = 0xFFCC6600;
         final int DARK_RED    = 0xFFCC0000;
-        if (stageIdx == idxCold)    return DARK_BLUE;
-        else if (stageIdx == idxWarm)    return DARK_CYAN;
-        else if (stageIdx == idxHot)     return DARK_YELLOW;
-        else if (stageIdx == idxVeryHot) return DARK_GREEN;
-        else if (stageIdx == idxNearMelt) return DARK_ORANGE;
-        else if (stageIdx == idxMolten)  return DARK_RED;
+        if (stageIdx == idxCold)       return DARK_BLUE;
+        else if (stageIdx == idxWarm)       return DARK_CYAN;
+        else if (stageIdx == idxHot)        return DARK_YELLOW;
+        else if (stageIdx == idxBrightHot) return DARK_ORANGE;
+        else if (stageIdx == idxOverheated) return DARK_RED;
         else return DARK_YELLOW;
     }
 }

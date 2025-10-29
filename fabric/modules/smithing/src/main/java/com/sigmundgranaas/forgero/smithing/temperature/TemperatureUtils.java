@@ -21,6 +21,8 @@ import net.minecraft.world.World;
 public class TemperatureUtils {
     public static final String TEMPERATURE_KEY = "forgero_temperature";
     public static final String MAX_TEMPERATURE_KEY = "forgero_max_temperature";
+    public static final String WORKABLE_TEMPERATURE_START_KEY = "forgero_workable_temperature_start";
+    public static final String WORKABLE_TEMPERATURE_END_KEY = "forgero_workable_temperature_end";
     public static final int DEFAULT_TEMPERATURE = 20;
     public static final int MIN_TEMPERATURE = 0;
 
@@ -81,15 +83,51 @@ public class TemperatureUtils {
         return isBlockFilledWaterCauldron(state);
     }
 
-    public static boolean isItemOnCampfire(ItemEntity itemEntity, World world) {
-        if (itemEntity == null || world == null) return false;
-        BlockState state = world.getBlockState(itemEntity.getBlockPos());
-        if (isBlockCampfire(state)) return true;
-        BlockState stateBelow = world.getBlockState(itemEntity.getBlockPos().down());
-        return isBlockCampfire(stateBelow);
+    public static int getWorkableTemperatureStart(ItemStack stack) {
+        NbtCompound nbt = stack.getOrCreateNbt();
+        if (nbt.contains(WORKABLE_TEMPERATURE_START_KEY)) {
+            return Math.max(0, nbt.getInt(WORKABLE_TEMPERATURE_START_KEY));
+        }
+        Optional<State> state = StateService.INSTANCE.convert(stack);
+        if (state.isPresent()) {
+            int attr = ComputedAttribute.of(state.get(), "forgero:workable_temperature_start").asInt();
+            return Math.max(0, attr);
+        }
+        return 0;
     }
 
-    public static boolean isBlockCampfire(BlockState state) {
-        return state != null && (state.isOf(Blocks.CAMPFIRE) || state.isOf(Blocks.SOUL_CAMPFIRE));
+    public static int getWorkableTemperatureEnd(ItemStack stack) {
+        NbtCompound nbt = stack.getOrCreateNbt();
+        if (nbt.contains(WORKABLE_TEMPERATURE_END_KEY)) {
+            return Math.max(0, nbt.getInt(WORKABLE_TEMPERATURE_END_KEY));
+        }
+        Optional<State> state = StateService.INSTANCE.convert(stack);
+        if (state.isPresent()) {
+            int attr = ComputedAttribute.of(state.get(), "forgero:workable_temperature_end").asInt();
+            return Math.max(0, attr);
+        }
+        return 0;
+    }
+
+    public static boolean hasWorkableTemperatureStart(ItemStack stack) {
+        return getWorkableTemperatureStart(stack) > 0;
+    }
+
+    public static boolean hasWorkableTemperatureEnd(ItemStack stack) {
+        return getWorkableTemperatureEnd(stack) > 0;
+    }
+
+    public static boolean hasWorkableTemperatureRange(ItemStack stack) {
+        return hasWorkableTemperatureStart(stack) && hasWorkableTemperatureEnd(stack);
+    }
+
+    public static void setWorkableTemperatureStart(ItemStack stack, int temperature) {
+        NbtCompound nbt = stack.getOrCreateNbt();
+        nbt.putInt(WORKABLE_TEMPERATURE_START_KEY, Math.max(0, temperature));
+    }
+
+    public static void setWorkableTemperatureEnd(ItemStack stack, int temperature) {
+        NbtCompound nbt = stack.getOrCreateNbt();
+        nbt.putInt(WORKABLE_TEMPERATURE_END_KEY, Math.max(0, temperature));
     }
 }

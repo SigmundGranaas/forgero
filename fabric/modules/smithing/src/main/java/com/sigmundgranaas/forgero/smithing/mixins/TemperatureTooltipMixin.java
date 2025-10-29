@@ -33,16 +33,15 @@ public class TemperatureTooltipMixin {
 		int idxCold     = 0;
 		int idxWarm     = 1;
 		int idxHot      = 2;
-		int idxVeryHot  = 3;
-		int idxNearMelt = 4;
-		int idxMolten   = 5;
+		int idxBrightHot  = 3;
+		int idxOverheated = 4;
 
 		int stageIdx = segmentIndex(temp, bounds);
 
-		int color = TemperatureColorProvider.getHudColorForTemperature(temp, maxTemp, bounds, idxCold, idxWarm, idxHot, idxVeryHot, idxNearMelt, idxMolten, stageIdx);
+		int color = TemperatureColorProvider.getHudColorForTemperature(temp, maxTemp, bounds, idxCold, idxWarm, idxHot, idxBrightHot, idxOverheated, stageIdx);
 
-		int forgingMin = bounds[idxVeryHot];
-		int forgingMax = bounds[idxNearMelt];
+		int forgingMin = bounds[idxHot];
+		int forgingMax = bounds[idxBrightHot];
 
 		Text label = Text.literal("Temperature: ").styled(style -> style.withColor(TextColor.fromRgb(0xFFFFFF)));
 		Text forgingRange = Text.literal(String.format("(%d–%d°C)", forgingMin, forgingMax))

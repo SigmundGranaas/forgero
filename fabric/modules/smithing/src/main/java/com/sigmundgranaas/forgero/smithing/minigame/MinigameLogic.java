@@ -216,8 +216,8 @@ public class MinigameLogic {
         if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInCold(temperature, maxTemp)) return 0;
         if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInWarm(temperature, maxTemp)) return 1;
         if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInHot(temperature, maxTemp)) return 2;
-        if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInVeryHot(temperature, maxTemp)) return 3;
-        if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInNearMelt(temperature, maxTemp)) return 4;
+        if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInBrightHot(temperature, maxTemp)) return 3;
+        if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInOverheated(temperature, maxTemp)) return 4;
         return 5; // molten fallback
     }
 
@@ -228,11 +228,11 @@ public class MinigameLogic {
             warmStageHits++;
         } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInHot(temperature, maxTemp)) {
             hotStageHits++;
-        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInVeryHot(temperature, maxTemp)) {
+        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInHot(temperature, maxTemp)) {
             veryHotStageHits++;
-        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInNearMelt(temperature, maxTemp)) {
+        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInBrightHot(temperature, maxTemp)) {
             nearMeltStageHits++;
-        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInMolten(temperature, maxTemp)) {
+        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInOverheated(temperature, maxTemp)) {
             moltenStageHits++;
         }
     }

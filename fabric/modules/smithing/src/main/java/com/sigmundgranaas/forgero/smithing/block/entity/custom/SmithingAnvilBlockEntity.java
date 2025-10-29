@@ -12,7 +12,6 @@ import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import com.sigmundgranaas.forgero.smithing.minigame.MinigameLogic;
 import com.sigmundgranaas.forgero.smithing.minigame.MinigamePositioning;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
-import com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
 import com.sigmundgranaas.forgero.smithing.util.SchematicResultUtil;
@@ -480,23 +479,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 				if (temp > 20) {
 					int newTemp = Math.max(20, temp - anvilInventoryCoolAmountPerTick);
 					TemperatureUtils.setTemperature(stack, newTemp);
-				}
-				// --- Fire particle logic for veryHot stage ---
-				if (stack.getItem() instanceof MorphedItem && MorphedItem.getMorphProgress(stack) < 1.0) {
-					if (TemperatureColorProvider.isInVeryHot(temp, maxTemp)) { // Use proper stage detection
-						if (world instanceof ServerWorld serverWorld) {
-							// Spawn a few critical hit particles with wider spread around the item
-							for (int i = 0; i < 2; i++) {
-								double xOffset = 0.4 * (random.nextDouble() - 0.5); // wider spread
-								double zOffset = 0.4 * (random.nextDouble() - 0.5);
-								double yOffset = 0.1 + 0.1 * random.nextDouble();
-								double x = getPos().getX() + 0.5 + xOffset;
-								double y = getPos().getY() + 0.95 + yOffset;
-								double z = getPos().getZ() + 0.5 + zOffset;
-
-							}
-						}
-					}
 				}
 			}
 			markDirty();
