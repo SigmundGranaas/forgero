@@ -132,6 +132,10 @@ public class TemperatureColorProvider {
         return temperature >= bounds[stageIdx] && temperature < bounds[stageIdx + 1];
     }
 
+    private static boolean isInStageWithBounds(int temperature, int[] bounds, int stageIdx) {
+        return temperature >= bounds[stageIdx] && temperature < bounds[stageIdx + 1];
+    }
+
     public static boolean isInCold(int temperature, int maxTemp) {
         return isInStage(temperature, maxTemp, 0);
     }

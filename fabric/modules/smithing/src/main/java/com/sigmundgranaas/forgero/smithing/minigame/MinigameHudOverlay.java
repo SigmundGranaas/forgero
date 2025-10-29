@@ -44,7 +44,15 @@ public class MinigameHudOverlay implements HudRenderCallback {
 		int max = Math.max(TemperatureUtils.getMaxTemp(stack), 1);
 		int effectiveMax = Math.min(max, 10000);
 
-		// Compute a scaled window around current temperature (base: 600 for 1600 max)
+		// Compute boundaries with workable range if available
+		int[] boundaries = TemperatureColorProvider.getStageBoundaries(max);
+		if (TemperatureUtils.hasWorkableTemperatureRange(stack)) {
+			int workableStart = TemperatureUtils.getWorkableTemperatureStart(stack);
+			int workableEnd = TemperatureUtils.getWorkableTemperatureEnd(stack);
+			boundaries = TemperatureColorProvider.getStageBoundariesWithWorkableRange(max, workableStart, workableEnd);
+		}
+
+		// Compute a scaled window around current temperature based on Hot stage bounds
 		final int BASE_MAX = 1600;
 		final int BASE_WINDOW = 700;
 		int window = (int) (BASE_WINDOW / (float) BASE_MAX * effectiveMax);
@@ -66,13 +74,6 @@ public class MinigameHudOverlay implements HudRenderCallback {
 		int innerLeft = barLeft + 8; // x offset inside PNG (moved 1px right)
 		int innerTop = barTop + 8;   // y offset inside PNG
 
-		int[] boundaries = TemperatureColorProvider.getStageBoundaries(max);
-		// Check if item has workable temperature range and update boundaries
-		if (TemperatureUtils.hasWorkableTemperatureRange(stack)) {
-			int workableStart = TemperatureUtils.getWorkableTemperatureStart(stack);
-			int workableEnd = TemperatureUtils.getWorkableTemperatureEnd(stack);
-			boundaries = TemperatureColorProvider.getStageBoundariesWithWorkableRange(max, workableStart, workableEnd);
-		}
 
 		// Stage indices based on boundaries array (5 stages)
 		int idxCold = 0;

@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.smithing.temperature;
 
-import static com.sigmundgranaas.forgero.smithing.Attributes.MAX_TEMPERATURE;
+import static com.sigmundgranaas.forgero.smithing.Attributes.*;
 
 import java.util.Optional;
 
@@ -90,7 +90,7 @@ public class TemperatureUtils {
         }
         Optional<State> state = StateService.INSTANCE.convert(stack);
         if (state.isPresent()) {
-            int attr = ComputedAttribute.of(state.get(), "forgero:workable_temperature_start").asInt();
+			int attr = ComputedAttribute.of(state.get(), WORKABLE_TEMPERATURE_START).asInt();
             return Math.max(0, attr);
         }
         return 0;
@@ -103,7 +103,7 @@ public class TemperatureUtils {
         }
         Optional<State> state = StateService.INSTANCE.convert(stack);
         if (state.isPresent()) {
-            int attr = ComputedAttribute.of(state.get(), "forgero:workable_temperature_end").asInt();
+			int attr = ComputedAttribute.of(state.get(), WORKABLE_TEMPERATURE_END).asInt();
             return Math.max(0, attr);
         }
         return 0;
