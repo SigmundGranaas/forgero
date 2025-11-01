@@ -29,10 +29,20 @@ import net.fabricmc.api.Environment;
 @Environment(EnvType.CLIENT)
 public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<SmithingAnvilBlockEntity> {
 	public static final float RENDER_SCALE_FACTOR = 0.5f;
+	private static final float ITEM_RENDER_Y = 1.0f + 0.001f + 0.01f;
+	private static final float BASE_ANVIL_ANGLE = 180.0f;
 
-	private static final float ANVIL_TOP_Y = 1;
-	private static final float Y_FIGHTING_OFFSET = 0.001f;
+	// Marker rendering constants
 	private static final float MARKER_RENDER_OFFSET_Y = 0.025f;
+	private static final float MARKER_SIZE = 0.0350f;
+	private static final float MARKER_RED = 1.0f;
+	private static final float MARKER_YELLOW_GREEN = 1.0f;
+	private static final float MARKER_NO_BLUE = 0.0f;
+	private static final float MARKER_FAST_GREEN = 0.0f;
+	private static final float MARKER_ALPHA = 1.0f;
+
+	// Lighting constants
+	private static final int DEFAULT_LIGHT_LEVEL = 15728880;
 
 	public SmithingAnvilBlockEntityRenderer(@SuppressWarnings("unused") BlockEntityRendererFactory.Context context) {
 		// Context parameter required by interface but not used
@@ -48,70 +58,88 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 		}
 
 		matrices.push();
+		setupItemTransforms(matrices, entity);
+		renderMarker(matrices, vertexConsumers, entity, overlay);
+		renderItem(matrices, vertexConsumers, entity, itemStack, light, overlay);
+		matrices.pop();
+	}
 
-		float itemRenderY = ANVIL_TOP_Y + Y_FIGHTING_OFFSET + 0.01f;
-		matrices.translate(0.5f, itemRenderY, 0.5f);
+	private void setupItemTransforms(MatrixStack matrices, SmithingAnvilBlockEntity entity) {
+		matrices.translate(0.5f, ITEM_RENDER_Y, 0.5f);
 
 		Direction facing = entity.getCachedState().get(AnvilBlock.FACING);
-		float anvilAngleDegrees = 0.0f;
-		switch (facing) {
-			case EAST -> anvilAngleDegrees = -180.0f;
-			case SOUTH -> anvilAngleDegrees = 90.0f;
-			case WEST -> anvilAngleDegrees = 0.0f;
-			case NORTH -> anvilAngleDegrees = -90.0f;
-		}
-		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(anvilAngleDegrees));
-		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+		applyAnvilFacingRotation(matrices, facing);
+		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(BASE_ANVIL_ANGLE));
 
 		Vec2f normOffset = MinigamePositioning.getMorphedTextureOffsetVec2f(entity);
 		matrices.translate(normOffset.x, 0, normOffset.y);
 		matrices.scale(RENDER_SCALE_FACTOR, RENDER_SCALE_FACTOR, RENDER_SCALE_FACTOR);
+	}
 
-		renderMarker(matrices, vertexConsumers, entity);
+	private void applyAnvilFacingRotation(MatrixStack matrices, Direction facing) {
+		float rotationDegrees = getRotationForFacing(facing);
+		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(rotationDegrees));
+	}
 
-		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
+	private float getRotationForFacing(Direction facing) {
+		return switch (facing) {
+			case EAST -> -180.0f;
+			case SOUTH -> 90.0f;
+			case WEST -> 0.0f;
+			case NORTH -> -90.0f;
+			default -> 0.0f;
+		};
+	}
 
-		int lightLevel = getLightLevel(entity.getWorld(), entity.getPos());
+	private void renderMarker(MatrixStack matrices, VertexConsumerProvider vertexConsumers,
+			SmithingAnvilBlockEntity entity, int overlay) {
+		if (entity.getMarkerPositions().isEmpty()) {
+			return;
+		}
 
-		ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
-		itemRenderer.renderItem(itemStack, ModelTransformationMode.NONE, lightLevel, overlay,
-					matrices, vertexConsumers, entity.getWorld(), (int) entity.getPos().asLong());
+		matrices.push();
+		applyMarkerFacingAdjustment(matrices, entity);
+
+		Vec2f markerPos = entity.getMarkerPositions().get(0);
+		matrices.translate(markerPos.x, MARKER_RENDER_OFFSET_Y, markerPos.y);
+
+		boolean isFastMarker = entity.getFastMarkerIndices().contains(entity.getMarkerAttempts());
+		drawMarkerBox(matrices, vertexConsumers, isFastMarker);
 
 		matrices.pop();
 	}
 
-	private void renderMarker(MatrixStack matrices, VertexConsumerProvider vertexConsumers, SmithingAnvilBlockEntity entity) {
-		if (!entity.getMarkerPositions().isEmpty()) {
-			matrices.push();
-
-			// Apply extra 180° rotation for North and South facings
-			Direction facing = entity.getCachedState().get(AnvilBlock.FACING);
-			if (facing == Direction.NORTH || facing == Direction.SOUTH) {
-				matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
-			}
-
-			Vec2f markerPos = entity.getMarkerPositions().get(0);
-
-			matrices.translate(markerPos.x, MARKER_RENDER_OFFSET_Y, markerPos.y);
-
-			// Access fast marker indices through the entity's getter method
-			boolean isFast = entity.getFastMarkerIndices().contains(entity.getMarkerAttempts());
-			// Fast markers are red (r=1.0, g=0.0, b=0.0), normal markers are yellow (r=1.0, g=1.0, b=0.0)
-			float r = 1.0f;  // Red component - always 1.0f
-			float g = isFast ? 0.0f : 1.0f;  // Green component - 0 for fast (red), 1 for normal (yellow)
-			float b = 0.0f;  // Blue component - always 0.0f
-			float size = 0.0350f;
-
-			VertexConsumer lineConsumer = vertexConsumers.getBuffer(RenderLayer.getLines());
-			WorldRenderer.drawBox(matrices, lineConsumer, -size, 0, -size, size, 0, size, r, g, b, 1.0f);
-
-			matrices.pop();
+	private void applyMarkerFacingAdjustment(MatrixStack matrices, SmithingAnvilBlockEntity entity) {
+		Direction facing = entity.getCachedState().get(AnvilBlock.FACING);
+		if (facing == Direction.NORTH || facing == Direction.SOUTH) {
+			matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
 		}
+	}
+
+	private void drawMarkerBox(MatrixStack matrices, VertexConsumerProvider vertexConsumers, boolean isFastMarker) {
+		float greenComponent = isFastMarker ? MARKER_FAST_GREEN : MARKER_YELLOW_GREEN;
+
+		VertexConsumer lineConsumer = vertexConsumers.getBuffer(RenderLayer.getLines());
+		WorldRenderer.drawBox(matrices, lineConsumer,
+			-MARKER_SIZE, 0, -MARKER_SIZE,
+			MARKER_SIZE, 0, MARKER_SIZE,
+			MARKER_RED, greenComponent, MARKER_NO_BLUE, MARKER_ALPHA);
+	}
+
+	private void renderItem(MatrixStack matrices, VertexConsumerProvider vertexConsumers,
+			SmithingAnvilBlockEntity entity, ItemStack itemStack, int light, int overlay) {
+		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
+
+		int lightLevel = getLightLevel(entity.getWorld(), entity.getPos());
+		ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
+
+		itemRenderer.renderItem(itemStack, ModelTransformationMode.NONE, lightLevel, overlay,
+				matrices, vertexConsumers, entity.getWorld(), (int) entity.getPos().asLong());
 	}
 
 	private int getLightLevel(World world, BlockPos pos) {
 		if (world == null) {
-			return 15728880;
+			return DEFAULT_LIGHT_LEVEL;
 		}
 
 		int blockLight = world.getLightLevel(LightType.BLOCK, pos.up());

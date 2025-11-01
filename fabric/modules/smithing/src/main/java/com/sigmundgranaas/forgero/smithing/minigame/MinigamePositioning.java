@@ -51,7 +51,6 @@ public class MinigamePositioning {
 		float xBeforeItemRot = (float) -xAfterAnvilRot;
 		float zBeforeItemRot = (float) -zAfterAnvilRot;
 
-		// Invert offset for NORTH/SOUTH facings to match marker and renderer logic
 		if (facing == Direction.NORTH || facing == Direction.SOUTH) {
 			itemTextureOffset = new Vec2f(-itemTextureOffset.x, -itemTextureOffset.y);
 		}
@@ -96,54 +95,10 @@ public class MinigamePositioning {
 		return new Vec3d(worldX, worldY, worldZ);
 	}
 
-	private static boolean isInsideAnvilTopLayer(float itemLocalX, float itemLocalZ, BlockState anvilState, ItemStack anvilItemStack) {
-		Direction facing = anvilState.get(net.minecraft.block.AnvilBlock.FACING);
-		VoxelShape shape = VoxelShapes.fullCube();
-
-		Vec2f itemTextureOffset = new Vec2f(getItemTextureOffset(anvilItemStack)[0] / 16.0f, getItemTextureOffset(anvilItemStack)[1] / 16.0f);
-
-		float transformedX_preScale = itemLocalX + itemTextureOffset.x;
-		float transformedZ_preScale = itemLocalZ + itemTextureOffset.y;
-
-		float transformedX_scaled = transformedX_preScale * SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
-		float transformedZ_scaled = transformedZ_preScale * SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
-
-		float transformedX_afterItemRot = -transformedX_scaled;
-		float transformedZ_afterItemRot = -transformedZ_scaled;
-
-		Direction anvilFacing = anvilState.get(net.minecraft.block.AnvilBlock.FACING);
-		float anvilAngleDegrees = switch (anvilFacing) {
-			case EAST -> -180.0f;
-			case SOUTH -> 90.0f;
-			case WEST -> 0.0f;
-			case NORTH -> -90.0f;
-			default -> 0.0f;
-		};
-		float angleRadians = (float) Math.toRadians(anvilAngleDegrees);
-		float cos = (float) Math.cos(angleRadians);
-		float sin = (float) Math.sin(angleRadians);
-
-		float finalX_block_center = transformedX_afterItemRot * cos - transformedZ_afterItemRot * sin;
-		float finalZ_block_center = transformedX_afterItemRot * sin + transformedZ_afterItemRot * cos;
-
-		double testX = finalX_block_center + 0.5;
-		double testZ = finalZ_block_center + 0.5;
-		double testY = 1.0 - 1e-6;
-
-		for (net.minecraft.util.math.Box box : shape.getBoundingBoxes()) {
-			if (box.contains(testX, testY, testZ)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	// NEW: Overload using an explicit texture offset (used for morphed offset)
 	private static boolean isInsideAnvilTopLayer(float itemLocalX, float itemLocalZ, BlockState anvilState, Vec2f textureOffset) {
 		Direction anvilFacing = anvilState.get(net.minecraft.block.AnvilBlock.FACING);
 		VoxelShape shape = VoxelShapes.fullCube();
 
-		// Apply offset and scale identical to renderer pipeline
 		float transformedX_preScale = itemLocalX + textureOffset.x;
 		float transformedZ_preScale = itemLocalZ + textureOffset.y;
 
@@ -179,7 +134,6 @@ public class MinigamePositioning {
 		return false;
 	}
 
-	// NEW: normalized offset (item-local units) for an ItemStack using its texture size
 	public static Vec2f getItemTextureOffsetVec2f(ItemStack stack) {
 		if (stack.isEmpty()) return Vec2f.ZERO;
 		try {
@@ -224,22 +178,6 @@ public class MinigamePositioning {
 		}
 	}
 
-	public static int[] getItemTextureOffset(ItemStack stack) {
-		if (stack.isEmpty()) {
-			return new int[]{0, 0};
-		}
-		try {
-			MinecraftClient client = MinecraftClient.getInstance();
-			BufferedImage image = RuntimeModelUtil.getFirstQuadTextureImage(stack, client);
-			if (image != null) {
-				return BoundingBoxUtil.getItemTextureOffsetFromImage(image);
-			}
-		} catch (Exception e) {
-		}
-		return new int[]{0, 0};
-	}
-
-	// NEW: center-pad two images to identical canvas
 	private static BufferedImage[] centerPadToSameSize(BufferedImage a, BufferedImage b) {
 		int w = Math.max(a.getWidth(), b.getWidth());
 		int h = Math.max(a.getHeight(), b.getHeight());
@@ -257,7 +195,7 @@ public class MinigamePositioning {
 		return new BufferedImage[]{aa, bb};
 	}
 
-	// NEW: normalized offset (item-local units) based on the current morphed image size
+
 	public static Vec2f getMorphedTextureOffsetVec2f(SmithingAnvilBlockEntity entity) {
 		try {
 			ItemStack base = entity.getInventory().getStack(0);
@@ -267,14 +205,11 @@ public class MinigamePositioning {
 			BufferedImage start = null;
 			BufferedImage result = null;
 
-			// Check if this is a MorphedItem with NBT data
 			if (base.getItem() instanceof com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem) {
-				// Extract start and result from MorphedItem NBT
 				start = MorphingItemUtil.getStartImage(base);
 				result = MorphingItemUtil.getResultImage(base);
 			}
 
-			// Fallback to planned product workflow if no NBT data or if NBT extraction failed
 			if ((start == null || result == null) && entity.getPlannedProductId() != null) {
 				start = RuntimeModelUtil.getFirstQuadTextureImage(base, client);
 				ItemStack planned = entity.createProductFromPlanned(entity.getPlannedProductId());
@@ -283,7 +218,6 @@ public class MinigamePositioning {
 				}
 			}
 
-			// Final fallback to regular item texture if we still don't have both images
 			if (start == null || result == null) {
 				return getItemTextureOffsetVec2f(base);
 			}
@@ -300,31 +234,6 @@ public class MinigamePositioning {
 		}
 	}
 
-	// Existing int[] version retained for compatibility (used elsewhere)
-	public static int[] getMorphedTextureOffset(SmithingAnvilBlockEntity entity) {
-		try {
-			ItemStack base = entity.getInventory().getStack(0);
-			if (base.isEmpty()) return new int[]{0, 0};
-
-			MinecraftClient client = MinecraftClient.getInstance();
-			BufferedImage start = RuntimeModelUtil.getFirstQuadTextureImage(base, client);
-			if (start == null || entity.getPlannedProductId() == null) {
-				return getItemTextureOffset(base);
-			}
-			ItemStack planned = entity.createProductFromPlanned(entity.getPlannedProductId());
-			if (planned.isEmpty()) return getItemTextureOffset(base);
-			BufferedImage result = RuntimeModelUtil.getFirstQuadTextureImage(planned, client);
-			if (result == null) return getItemTextureOffset(base);
-
-			double weight = entity.getMorphProgress();
-			BufferedImage[] padded = centerPadToSameSize(start, result);
-			BufferedImage morph = MORPHER.morphStep(padded[0], padded[1], weight);
-			return BoundingBoxUtil.getItemTextureOffsetFromImage(morph);
-		} catch (Throwable t) {
-			return new int[]{0, 0};
-		}
-	}
-
 	public static Vec2f getRandomMarkerPositionMorphed(SmithingAnvilBlockEntity entity) {
 		try {
 			ItemStack base = entity.getInventory().getStack(0);
@@ -334,14 +243,11 @@ public class MinigamePositioning {
 			BufferedImage start = null;
 			BufferedImage result = null;
 
-			// Check if this is a MorphedItem with NBT data
 			if (base.getItem() instanceof com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem) {
-				// Extract start and result from MorphedItem NBT
 				start = MorphingItemUtil.getStartImage(base);
 				result = MorphingItemUtil.getResultImage(base);
 			}
 
-			// Fallback to planned product workflow if no NBT data or if NBT extraction failed
 			if ((start == null || result == null) && entity.getPlannedProductId() != null) {
 				start = RuntimeModelUtil.getFirstQuadTextureImage(base, client);
 				ItemStack planned = entity.createProductFromPlanned(entity.getPlannedProductId());
@@ -350,7 +256,6 @@ public class MinigamePositioning {
 				}
 			}
 
-			// Return zero if we still don't have both images
 			if (start == null || result == null) return Vec2f.ZERO;
 
 			double weight = entity.getMorphProgress();
@@ -372,7 +277,6 @@ public class MinigamePositioning {
 				float markerX_local = (p.x + 0.5f) / texW - 0.5f;
 				float markerZ_local = (p.y + 0.5f) / texH - 0.5f;
 
-				// Apply 180° rotation for NORTH and SOUTH facings to match renderer
 				if (facing == Direction.NORTH || facing == Direction.SOUTH) {
 					markerX_local = -markerX_local;
 					markerZ_local = -markerZ_local;

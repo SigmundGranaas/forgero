@@ -11,13 +11,18 @@ import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.RotationAxis;
-import net.minecraft.world.World;
 
 public class HearthBlockEntityRenderer implements BlockEntityRenderer<HearthBlockEntity> {
-	private static int particleCounter = 0;
-	private static final int TICK_INTERVAL = 20;
+	private static final int ITEM_SLOT = 0;
+	private static final float ITEM_CENTER_X = 0.5f;
+	private static final float ITEM_CENTER_Y = 0.519f;
+	private static final float ITEM_CENTER_Z = 0.5f;
+	private static final float ITEM_SCALE = 0.6f;
+	private static final float ITEM_ROTATION_X = 90.0f;
 
-	public HearthBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {}
+	public HearthBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {
+		// Context parameter required by interface
+	}
 
 	@Override
 	public void render(
@@ -28,15 +33,26 @@ public class HearthBlockEntityRenderer implements BlockEntityRenderer<HearthBloc
 			int light,
 			int overlay
 	) {
-		ItemStack stack = entity.getStack(0);
-		if (stack.isEmpty()) return;
+		ItemStack stack = entity.getStack(ITEM_SLOT);
+		if (stack.isEmpty()) {
+			return;
+		}
 
-		ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
 		matrices.push();
+		setupItemTransforms(matrices);
+		renderItem(matrices, vertexConsumers, entity, stack, light, overlay);
+		matrices.pop();
+	}
 
-		matrices.translate(0.5, 0.519, 0.5);
-		matrices.scale(0.6f, 0.6f, 0.6f);
-		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
+	private void setupItemTransforms(MatrixStack matrices) {
+		matrices.translate(ITEM_CENTER_X, ITEM_CENTER_Y, ITEM_CENTER_Z);
+		matrices.scale(ITEM_SCALE, ITEM_SCALE, ITEM_SCALE);
+		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(ITEM_ROTATION_X));
+	}
+
+	private void renderItem(MatrixStack matrices, VertexConsumerProvider vertexConsumers,
+			HearthBlockEntity entity, ItemStack stack, int light, int overlay) {
+		ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
 
 		itemRenderer.renderItem(
 				stack,
@@ -48,18 +64,5 @@ public class HearthBlockEntityRenderer implements BlockEntityRenderer<HearthBloc
 				entity.getWorld(),
 				0
 		);
-
-		matrices.pop();
-	}
-
-
-
-	private void spawnRandomizedParticles(World world, double centerX, double centerY, double centerZ, net.minecraft.particle.ParticleEffect particleType, int count) {
-		for (int i = 0; i < count; i++) {
-			double randomOffsetX = (Math.random() - 0.5) * 0.3;
-			double randomOffsetY = (Math.random() - 0.5) * 0.3;
-			double randomOffsetZ = (Math.random() - 0.5) * 0.3;
-			world.addParticle(particleType, centerX + randomOffsetX, centerY + randomOffsetY, centerZ + randomOffsetZ, 0, 0.01, 0);
-		}
 	}
 }

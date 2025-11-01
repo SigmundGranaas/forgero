@@ -1,9 +1,11 @@
 package com.sigmundgranaas.forgero.smithing.block.entity.custom;
 
+import com.sigmundgranaas.forgero.smithing.block.custom.HearthBlock;
 import com.sigmundgranaas.forgero.smithing.networking.S2C.HearthBlockSyncS2CPacket;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.CampfireBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.inventory.Inventories;
@@ -19,6 +21,11 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
 public class HearthBlockEntity extends BlockEntity implements Inventory {
+	private static final int ITEM_SLOT = 0;
+	private static final int HEAT_RATE = 2;
+	private static final float SMOKE_SPAWN_CHANCE = 0.11F;
+	private static final double Y_OFFSET = 1.0;
+
 	private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1, ItemStack.EMPTY);
 
 	public HearthBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -28,8 +35,6 @@ public class HearthBlockEntity extends BlockEntity implements Inventory {
 	public HearthBlockEntity(BlockPos pos, BlockState state) {
 		this(com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities.HEARTH, pos, state);
 	}
-
-	public static final int ITEM_SLOT = 0;
 
 	// Inventory methods
 	@Override
@@ -106,7 +111,6 @@ public class HearthBlockEntity extends BlockEntity implements Inventory {
 		Inventories.writeNbt(nbt, inventory);
 	}
 
-	// Sync to client when the inventory changes
 	@Override
 	public Packet<ClientPlayPacketListener> toUpdatePacket() {
 		return BlockEntityUpdateS2CPacket.create(this);
@@ -131,36 +135,44 @@ public class HearthBlockEntity extends BlockEntity implements Inventory {
 		}
 	}
 
-	// Spawns smoke particles and heats temperature items
 	public static void tick(World world, BlockPos pos, BlockState state, HearthBlockEntity blockEntity) {
 		if (world.isClient) {
-			Random random = world.random;
-			double yOffset = 1.0;
-			if (state.get(com.sigmundgranaas.forgero.smithing.block.custom.HearthBlock.LIT) && random.nextFloat() < 0.11F) {
-				for (int i = 0; i < random.nextInt(2) + 2; i++) {
-					net.minecraft.block.CampfireBlock.spawnSmokeParticle(
-							world,
-							new BlockPos(pos.getX(), pos.getY() + (int)(yOffset - 1.0), pos.getZ()),
-							state.get(net.minecraft.block.CampfireBlock.SIGNAL_FIRE),
-							false
-					);
-				}
-			}
+			clientTick(world, pos, state);
 			return;
 		}
 
-		// Server-side: heat temperature items
-		boolean lit = state.get(com.sigmundgranaas.forgero.smithing.block.custom.HearthBlock.LIT);
-		ItemStack slotStack = blockEntity.getStack(ITEM_SLOT);
+		serverTick(state, blockEntity);
+	}
 
-		if (lit && !slotStack.isEmpty() && TemperatureUtils.hasMaxTemperature(slotStack)) {
-			int temp = TemperatureUtils.getTemperature(slotStack);
-			int maxTemp = TemperatureUtils.getMaxTemp(slotStack);
-			int heatRate = 2;
-			if (temp < maxTemp) {
-				TemperatureUtils.setTemperature(slotStack, Math.min(maxTemp, temp + heatRate));
-				blockEntity.markDirtyAndSync();
+	private static void clientTick(World world, BlockPos pos, BlockState state) {
+		Random random = world.random;
+		if (state.get(HearthBlock.LIT) && random.nextFloat() < SMOKE_SPAWN_CHANCE) {
+			for (int i = 0; i < random.nextInt(2) + 2; i++) {
+				CampfireBlock.spawnSmokeParticle(
+						world,
+						new BlockPos(pos.getX(), (int)(pos.getY() + Y_OFFSET - 1.0), pos.getZ()),
+						state.get(CampfireBlock.SIGNAL_FIRE),
+						false
+				);
 			}
+		}
+	}
+
+	private static void serverTick(BlockState state, HearthBlockEntity blockEntity) {
+		if (!state.get(HearthBlock.LIT)) {
+			return;
+		}
+
+		ItemStack slotStack = blockEntity.getStack(ITEM_SLOT);
+		if (slotStack.isEmpty() || !TemperatureUtils.hasMaxTemperature(slotStack)) {
+			return;
+		}
+
+		int temp = TemperatureUtils.getTemperature(slotStack);
+		int maxTemp = TemperatureUtils.getMaxTemp(slotStack);
+		if (temp < maxTemp) {
+			TemperatureUtils.setTemperature(slotStack, Math.min(maxTemp, temp + HEAT_RATE));
+			blockEntity.markDirtyAndSync();
 		}
 	}
 }
