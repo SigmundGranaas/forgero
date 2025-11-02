@@ -132,8 +132,9 @@ public class MorphedItemRenderer implements BuiltinItemRendererRegistry.DynamicI
 			return 0xFFFFFF;
 		}
 		int temp = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getTemperature(stack);
-		int max = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getMaxTemp(stack);
-		return com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.getHeatColor(temp, max);
+		com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem.TemperatureStages stages =
+			com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem.calculateStages(stack);
+		return com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem.getTemperatureColor(temp, stages);
 	}
 
 	private boolean renderMorphed3D(ItemStack morphedStack, double progress, MatrixStack matrices,

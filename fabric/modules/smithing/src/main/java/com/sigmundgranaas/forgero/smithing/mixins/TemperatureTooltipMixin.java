@@ -4,10 +4,10 @@ import static com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.h
 
 import java.util.List;
 
-import com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
+import com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem;
+import com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem.TemperatureStages;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -27,38 +27,17 @@ public class TemperatureTooltipMixin {
 			return;
 		}
 		int temp = TemperatureUtils.getTemperature(itemStack);
-		int maxTemp = TemperatureUtils.getMaxTemp(itemStack);
 
-		int[] bounds = TemperatureColorProvider.getStageBoundaries(maxTemp);
-		int idxCold     = 0;
-		int idxWarm     = 1;
-		int idxHot      = 2;
-		int idxBrightHot  = 3;
-		int idxOverheated = 4;
-
-		int stageIdx = segmentIndex(temp, bounds);
-
-		int color = TemperatureColorProvider.getHudColorForTemperature(temp, maxTemp, bounds, idxCold, idxWarm, idxHot, idxBrightHot, idxOverheated, stageIdx);
-
-		int forgingMin = bounds[idxHot];
-		int forgingMax = bounds[idxBrightHot];
+		TemperatureStages stages = DynamicTemperatureSystem.calculateStages(itemStack);
+		boolean isWorkable = DynamicTemperatureSystem.isWorkable(temp, stages);
+		int tempColor = isWorkable ? 0x00FF00 : 0xFFFFFF;
 
 		Text label = Text.literal("Temperature: ").styled(style -> style.withColor(TextColor.fromRgb(0xFFFFFF)));
-		Text forgingRange = Text.literal(String.format("(%d–%d°C)", forgingMin, forgingMax))
-			.styled(style -> style.withColor(TextColor.fromRgb(0x00FF00)));
 		Text value = Text.literal(String.format("%d°C ", temp))
-			.styled(style -> style.withColor(TextColor.fromRgb(color)));
+			.styled(style -> style.withColor(TextColor.fromRgb(tempColor)));
+		Text forgingRange = Text.literal(String.format("(%d–%d°C)", stages.hotStart, stages.hotEnd))
+			.styled(style -> style.withColor(TextColor.fromRgb(0x00FF00)));
 
 		tooltip.add(label.copy().append(value).append(forgingRange));
-	}
-
-	@Unique
-	private int segmentIndex(int value, int[] boundaries) {
-		int idx = java.util.Arrays.binarySearch(boundaries, value);
-		if (idx >= 0) {
-			return Math.min(idx, boundaries.length - 2);
-		}
-		int insertionPoint = -(idx + 1);
-		return Math.max(0, insertionPoint - 1);
 	}
 }

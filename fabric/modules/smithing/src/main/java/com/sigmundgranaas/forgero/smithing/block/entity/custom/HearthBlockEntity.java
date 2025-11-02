@@ -36,7 +36,6 @@ public class HearthBlockEntity extends BlockEntity implements Inventory {
 		this(com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities.HEARTH, pos, state);
 	}
 
-	// Inventory methods
 	@Override
 	public int size() {
 		return inventory.size();

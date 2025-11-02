@@ -115,17 +115,24 @@ public class MinigameLogic {
                 this.morphProgress = nbt.getDouble("morphProgress");
                 this.fastMarkerHits = nbt.getInt(FAST_MARKER_HITS_NBT_KEY);
                 this.missMarkerHits = nbt.contains(MISS_MARKER_NBT_KEY) ? nbt.getInt(MISS_MARKER_NBT_KEY) : 0;
+
+                // Restore hit stage indices from the item to preserve colors on HUD
+                hitStageIndices.clear();
+                if (nbt.contains("hitStageIndices")) {
+                    int[] arr = nbt.getIntArray("hitStageIndices");
+                    for (int v : arr) hitStageIndices.add(v);
+                }
             } else {
                 this.morphProgress = 0.0;
                 this.fastMarkerHits = 0;
                 this.missMarkerHits = 0;
+                hitStageIndices.clear();
             }
-            // Removed restoration of continuous stage ticks from item NBT.
         } else {
             this.morphProgress = 0.0;
             this.fastMarkerHits = 0;
             this.missMarkerHits = 0;
-            // Removed resets for continuous stage ticks (they no longer exist).
+            hitStageIndices.clear();
         }
 
         updateMorphProgressOnItem(stack);
@@ -176,16 +183,18 @@ public class MinigameLogic {
             // Successful hit
             markerHitsCount++;
 
-            // Record stage index at time of hit
-            int temperature = TemperatureUtils.getTemperature(stack);
-            int maxTemp = TemperatureUtils.getMaxTemp(stack);
-            hitStageIndices.add(stageIndexFor(temperature, maxTemp));
+            // Record stage index at time of hit using actual workable range
+            int temperature = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getTemperature(stack);
+            int maxTemp = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getMaxTemp(stack);
+            int workableStart = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getWorkableTemperatureStart(stack);
+            int workableEnd = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getWorkableTemperatureEnd(stack);
+            hitStageIndices.add(stageIndexFor(temperature, maxTemp, workableStart, workableEnd));
 
             // Apply temperature change based on marker type
             int markerIndex = markerAttempts - 1;
             boolean fast = fastMarkerIndices.contains(markerIndex);
             int tempChange = fast ? -10 : 40;
-            TemperatureUtils.setTemperature(stack, Math.max(0, Math.min(temperature + tempChange, maxTemp)));
+            com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.setTemperature(stack, Math.max(0, Math.min(temperature + tempChange, maxTemp)));
 
             if (fast) {
                 fastMarkerHits++;
@@ -211,14 +220,19 @@ public class MinigameLogic {
         callback.markDirty();
     }
 
-    // Map temp to stage index [0..5]
-    private int stageIndexFor(int temperature, int maxTemp) {
-        if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInCold(temperature, maxTemp)) return 0;
-        if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInWarm(temperature, maxTemp)) return 1;
-        if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInHot(temperature, maxTemp)) return 2;
-        if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInBrightHot(temperature, maxTemp)) return 3;
-        if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInOverheated(temperature, maxTemp)) return 4;
-        return 5; // molten fallback
+    // Map temp to stage index [0..3] for the new dynamic system using workable range
+    private int stageIndexFor(int temperature, int maxTemp, int workableStart, int workableEnd) {
+        com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem.TemperatureStages stages =
+            com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem.calculateStages(maxTemp, workableStart, workableEnd);
+        com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem.TemperatureStage stage =
+            com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem.getStage(temperature, stages);
+
+        return switch (stage) {
+            case COLD -> 0;
+            case WARM -> 1;
+            case HOT -> 2;
+            case OVERHEATED -> 3;
+        };
     }
 
     private void updateTemperatureStageHits(int temperature, int maxTemp) {
@@ -263,9 +277,14 @@ public class MinigameLogic {
         int temperature = TemperatureUtils.getTemperature(stackForMarker);
         int maxTemp = TemperatureUtils.getMaxTemp(stackForMarker);
         boolean hotEnoughForWork = com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isHotEnoughForWork(temperature, maxTemp);
-        if (!hotEnoughForWork) {
-            return;
-        }
+        // TEMPORARILY DISABLED: allow markers to spawn regardless of temperature for testing.
+        // If you want to re-enable temperature gating later, restore the logic below:
+        // int temperature = TemperatureUtils.getTemperature(stackForMarker);
+        // int maxTemp = TemperatureUtils.getMaxTemp(stackForMarker);
+        // boolean hotEnoughForWork = com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isHotEnoughForWork(temperature, maxTemp);
+        // if (!hotEnoughForWork) {
+        //     return;
+        // }
 
         // Marker lifecycle
         if (markerPositions.isEmpty()) {

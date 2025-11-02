@@ -15,8 +15,6 @@ public class MorphedItem extends Item {
 		super(settings);
 	}
 
-	// --- Setters ---
-
 	public static void setMorphProgress(ItemStack stack, double progress) {
 		stack.getOrCreateNbt().putDouble(PROGRESS_KEY, progress);
 	}
@@ -30,8 +28,6 @@ public class MorphedItem extends Item {
 		Identifier id = Registries.ITEM.getId(result);
 		stack.getOrCreateNbt().putString(RESULT_KEY, id.toString());
 	}
-
-	// --- Getters ---
 
 	public static double getMorphProgress(ItemStack stack) {
 		if (!stack.hasNbt()) return 0.0;

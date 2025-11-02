@@ -4,8 +4,10 @@ import java.util.Arrays;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
-import com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
+import com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem;
+import com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem.TemperatureStage;
+import com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem.TemperatureStages;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -44,74 +46,58 @@ public class MinigameHudOverlay implements HudRenderCallback {
 		int max = Math.max(TemperatureUtils.getMaxTemp(stack), 1);
 		int effectiveMax = Math.min(max, 10000);
 
-		// Compute boundaries with workable range if available
-		int[] boundaries = TemperatureColorProvider.getStageBoundaries(max);
-		if (TemperatureUtils.hasWorkableTemperatureRange(stack)) {
-			int workableStart = TemperatureUtils.getWorkableTemperatureStart(stack);
-			int workableEnd = TemperatureUtils.getWorkableTemperatureEnd(stack);
-			boundaries = TemperatureColorProvider.getStageBoundariesWithWorkableRange(max, workableStart, workableEnd);
-		}
+		// Calculate stages using dynamic system
+		TemperatureStages stages = DynamicTemperatureSystem.calculateStages(stack);
 
-		// Compute a scaled window around current temperature based on Hot stage bounds
+		// Compute a scaled window around current temperature based on workable range
 		final int BASE_MAX = 1600;
 		final int BASE_WINDOW = 700;
 		int window = (int) (BASE_WINDOW / (float) BASE_MAX * effectiveMax);
 		int half = window / 2;
-		int minWindow = Math.max(0, Math.min(temp - half, Math.max(0, effectiveMax - window)));
+		int minWindow = Math.max(stages.ambient, Math.min(temp - half, Math.max(0, effectiveMax - window)));
 		int maxWindow = Math.min(effectiveMax, minWindow + window);
 		if (maxWindow <= minWindow) return;
 
+		// Stage boundary ticks (defined early for use in progress bar)
+		int[] stageBoundaries = {stages.coldEnd, stages.warmEnd, stages.hotStart, stages.hotEnd, stages.overheatedStart};
+
 		// Horizontal bar placement and dimensions (center top, match texture size)
 		int screenW = ctx.getScaledWindowWidth();
-		int barWidth = 165; // updated texture width
-		int barHeight = 29; // updated texture height
+		int barWidth = 165;
+		int barHeight = 29;
 		int barLeft = (screenW - barWidth) / 2;
 		int barTop = 10;
 
-		// Inner area for temperature bar (rendered at 140 x 7)
-		int innerWidth = 140; // temperature bar width
-		int innerHeight = 7;  // temperature bar height
-		int innerLeft = barLeft + 8; // x offset inside PNG (moved 1px right)
-		int innerTop = barTop + 8;   // y offset inside PNG
+		// Inner area for temperature bar
+		int innerWidth = 140;
+		int innerHeight = 7;
+		int innerLeft = barLeft + 8;
+		int innerTop = barTop + 8;
 
-
-		// Stage indices based on boundaries array (5 stages)
-		int idxCold = 0;
-		int idxWarm = 1;
-		int idxHot = 2;
-		int idxBrightHot = 3;
-		int idxOverheated = 4;
-
-
-		// Only show bar from cold and up
-		int minStageBoundary = boundaries[idxCold];
-		minWindow = Math.max(minStageBoundary, minWindow);
-		if (maxWindow <= minWindow) return;
 		float unitsPerPixelX = (float) (maxWindow - minWindow) / (float) (innerWidth);
 
-		// Hardcoded stage colors per segment (no blending)
-		// Fill the inside of the bar with stage colors
+		// Stage colors matching HUD colors
 		int[] stageColors = new int[]{
-				0xFF000099, // Cold: dark blue
-				0xFF3399FF, // Warm: dark cyan
-				0xFFCCCC00, // Hot: dark yellow
-				0xFFCC6600, // Bright Hot: dark orange
-				0xFFCC0000  // Overheated: dark red
+			DynamicTemperatureSystem.getHudColor(TemperatureStage.COLD),
+			DynamicTemperatureSystem.getHudColor(TemperatureStage.WARM),
+			DynamicTemperatureSystem.getHudColor(TemperatureStage.HOT),
+			DynamicTemperatureSystem.getHudColor(TemperatureStage.OVERHEATED)
 		};
+
+		// Fill the inside of the bar with stage colors
 		for (int x = 0; x < innerWidth; x++) {
 			int tempValue = Math.round(minWindow + x * unitsPerPixelX);
-			int segIdx = segmentIndex(tempValue, boundaries);
-			int color = stageColors[segIdx];
+			TemperatureStage stage = DynamicTemperatureSystem.getStage(tempValue, stages);
+			int color = DynamicTemperatureSystem.getHudColor(stage);
 			fill(ctx, innerLeft + x, innerTop, innerLeft + x + 1, innerTop + innerHeight, color);
 		}
 
 
 		// --- Progress Bar ---
-		// Marker/progress bar: 134 x 3 at fixed offset inside PNG
 		int progressBarWidth = 134;
 		int progressBarHeight = 3;
-		int progressBarLeft = barLeft + 11; // x offset inside PNG
-		int progressBarTop = barTop + 20;   // y offset inside PNG (moved 1px up)
+		int progressBarLeft = barLeft + 11;
+		int progressBarTop = barTop + 20;
 
 		// Draw static black background for the bar
 		fill(ctx, progressBarLeft, progressBarTop, progressBarLeft + progressBarWidth, progressBarTop + progressBarHeight, 0xFF000000); // black
@@ -120,21 +106,20 @@ public class MinigameHudOverlay implements HudRenderCallback {
 		int totalSegments = MinigameLogic.TOTAL_MARKERS;
 		int hits = Math.min(be.getMinigameLogic().getMarkerHitsCount(), totalSegments);
 		float segWidth = progressBarWidth / (float) totalSegments;
-		var hitStages = be.getMinigameLogic().getHitStageIndices();
-		var hitTemps = be.getMinigameLogic().getHitTemperatures();
+		var hitStageIndices = be.getMinigameLogic().getHitStageIndices();
+
 		for (int i = 0; i < hits; i++) {
 			int startX = progressBarLeft + Math.round(i * segWidth);
 			int endX = progressBarLeft + Math.round((i + 1) * segWidth);
-			int colorIdx;
-			if (i < hitStages.size()) {
-				colorIdx = clamp(hitStages.get(i), 0, stageColors.length - 1);
-			} else if (i < hitTemps.size()) {
-				colorIdx = segmentIndex(hitTemps.get(i), boundaries);
-			} else {
-				// Fallback: use current temp stage (unlikely)
-				colorIdx = segmentIndex(temp, boundaries);
+
+			// Get stage index for this hit
+			int stageIdx = 0;
+			if (i < hitStageIndices.size()) {
+				stageIdx = hitStageIndices.get(i);
 			}
-			int color = stageColors[colorIdx];
+
+			// Map stage index to color
+			int color = stageColors[clamp(stageIdx, 0, stageColors.length - 1)];
 			fill(ctx, startX, progressBarTop, endX, progressBarTop + progressBarHeight, color);
 		}
 
@@ -149,30 +134,29 @@ public class MinigameHudOverlay implements HudRenderCallback {
 		// Draw the border using the texture (full size) AFTER the progress bar so the PNG overlaps
 		ctx.drawTexture(BAR_TEXTURE, barLeft, barTop, 0, 0, barWidth, barHeight, barWidth, barHeight);
 
-		// Stage boundary ticks (straight borders between stages)
-		for (int i = 0; i < boundaries.length; i++) {
-			int t = boundaries[i];
-			if (t < minWindow || t > maxWindow) continue;
-			// Don't render the min stick at minimum temperature or the max stick at maximum temperature
-			if ((i == 0 && t == minWindow) || (i == boundaries.length - 1 && t == maxWindow)) continue;
-			int x = valueToX(t, minWindow, unitsPerPixelX, innerLeft, innerWidth);
+		// Stage boundary ticks
+		for (int boundary : stageBoundaries) {
+			if (boundary < minWindow || boundary > maxWindow) continue;
+			if ((boundary == minWindow) || (boundary == maxWindow)) continue;
+			int x = valueToX(boundary, minWindow, unitsPerPixelX, innerLeft, innerWidth);
 			int rightBorder = innerLeft + innerWidth;
 			if (x >= rightBorder) {
 				x = rightBorder - 1;
 			}
-			int yStart = innerTop; // Start at top of inner area
+			int yStart = innerTop;
 			int yEnd = innerTop + innerHeight;
-			fill(ctx, x, yStart, x + 1, yEnd, 0xFFad9474); // fully opaque #ad9474
+			fill(ctx, x, yStart, x + 1, yEnd, 0xFFad9474);
 		}
 
-		// Two ticks between each stage: one normal, one shorter
+		// Two ticks between each boundary
+		int[] boundaries = stageBoundaries;
 		for (int i = 0; i < boundaries.length - 1; i++) {
 			if (i == boundaries.length - 2) continue;
 			int start = boundaries[i];
 			int end = boundaries[i + 1];
 			float interval = (float) (end - start);
 
-			// Midpoint tick (normal small tick)
+			// Midpoint tick
 			int midValue = Math.round(start + interval / 2.0f);
 			if (midValue > minWindow && midValue < maxWindow) {
 				int x = valueToX(midValue, minWindow, unitsPerPixelX, innerLeft, innerWidth);
@@ -180,11 +164,11 @@ public class MinigameHudOverlay implements HudRenderCallback {
 				if (x >= rightBorder) x = rightBorder - 1;
 				int yStart = innerTop + 1;
 				int yEnd = innerTop + innerHeight - 1;
-				fill(ctx, x, yStart, x + 1, yEnd, 0xFFad9474); // #ad9474, fully opaque
+				fill(ctx, x, yStart, x + 1, yEnd, 0xFFad9474);
 			}
 
-			// Quarter ticks (shorter), skip for near melt stage (i != 4)
-			if (i != 4) {
+			// Quarter ticks (skip for overheated)
+			if (i != boundaries.length - 2) {
 				int quarterValue = Math.round(start + interval / 4.0f);
 				int threeQuarterValue = Math.round(start + 3.0f * interval / 4.0f);
 				for (int tickValue : new int[]{quarterValue, threeQuarterValue}) {
@@ -194,13 +178,13 @@ public class MinigameHudOverlay implements HudRenderCallback {
 						if (x >= rightBorder) x = rightBorder - 1;
 						int yStart = innerTop + 2;
 						int yEnd = innerTop + innerHeight - 2;
-						fill(ctx, x, yStart, x + 1, yEnd, 0xFFad9474); // #ad9474, fully opaque
+						fill(ctx, x, yStart, x + 1, yEnd, 0xFFad9474);
 					}
 				}
 			}
 		}
 
-		// Current temperature arrow just below the bar, pointing down
+		// Current temperature arrow
 		int tempX = valueToX(temp, minWindow, unitsPerPixelX, innerLeft, innerWidth);
 		int rightBorder = innerLeft + innerWidth;
 		if (tempX >= rightBorder) {
@@ -277,43 +261,47 @@ public class MinigameHudOverlay implements HudRenderCallback {
         return MorphedItem.getMorphProgress(stack) < 1.0;
     }
 
-    // Convert a value in [minWindow, maxWindow] to a X coordinate along the bar (left-to-right)
-    private int valueToX(int value, int minWindow, float unitsPerPixelX, int barLeft, int barWidth) {
-        float exactPixelOffset = (value - minWindow) / unitsPerPixelX;
-        int x = barLeft + Math.round(exactPixelOffset);
-        if (x < barLeft) x = barLeft;
-        if (x > barLeft + barWidth - 1) x = barLeft + barWidth - 1;
-        return x;
-    }
+	private int clamp(int v, int lo, int hi) {
+		if (v < lo) return lo;
+		if (v > hi) return hi;
+		return v;
+	}
 
-    private int clamp(int v, int lo, int hi) {
-        if (v < lo) return lo;
-        if (v > hi) return hi;
-        return v;
-    }
+	// Convert a value in [minWindow, maxWindow] to a X coordinate along the bar (left-to-right)
+	private int valueToX(int value, int minWindow, float unitsPerPixelX, int barLeft, int barWidth) {
+		float exactPixelOffset = (value - minWindow) / unitsPerPixelX;
+		int x = barLeft + Math.round(exactPixelOffset);
+		if (x < barLeft) x = barLeft;
+		if (x > barLeft + barWidth - 1) x = barLeft + barWidth - 1;
+		return x;
+	}
 
-    // Draw a small down-pointing arrow; bottomY is the tip's Y
-    private void drawDownArrow(DrawContext ctx, int centerX, int bottomY, int color) {
-        // Draw the custom arrow texture centered at (centerX, bottomY)
-        int arrowWidth = 16; // Adjust to match your texture size
-        int arrowHeight = 16; // Adjust to match your texture size
-        int x = centerX - arrowWidth / 2;
-        int y = bottomY - arrowHeight + 1;
-        ctx.drawTexture(THERMOMETER_ARROW, x, y, 0, 0, arrowWidth, arrowHeight, arrowWidth, arrowHeight);
-    }
+	// Draw a small down-pointing arrow; bottomY is the tip's Y
+	private void drawDownArrow(DrawContext ctx, int centerX, int bottomY, int color) {
+		// Draw the custom arrow texture centered at (centerX, bottomY)
+		int arrowWidth = 16; // Adjust to match your texture size
+		int arrowHeight = 16; // Adjust to match your texture size
+		int x = centerX - arrowWidth / 2;
+		int y = bottomY - arrowHeight + 1;
+		ctx.drawTexture(THERMOMETER_ARROW, x, y, 0, 0, arrowWidth, arrowHeight, arrowWidth, arrowHeight);
+	}
 
-    private void fill(DrawContext ctx, int x1, int y1, int x2, int y2, int argb) {
-        ctx.fill(x1, y1, x2, y2, argb);
-    }
+	private void fill(DrawContext ctx, int x1, int y1, int x2, int y2, int argb) {
+		ctx.fill(x1, y1, x2, y2, argb);
+	}
 
     // Correctly map a temperature value to the segment index defined by 'boundaries'
     private int segmentIndex(int value, int[] boundaries) {
         int idx = Arrays.binarySearch(boundaries, value);
+        int maxSeg = Math.max(0, boundaries.length - 2);
         if (idx >= 0) {
             // Boundary values belong to the right-hand segment, except the last boundary
-            return Math.min(idx, boundaries.length - 2);
+            return Math.min(idx, maxSeg);
         }
         int insertionPoint = -(idx + 1);
-        return Math.max(0, insertionPoint - 1);
+        int seg = Math.max(0, insertionPoint - 1);
+        // Ensure segment index never exceeds maxSeg
+        if (seg > maxSeg) seg = maxSeg;
+        return seg;
     }
 }

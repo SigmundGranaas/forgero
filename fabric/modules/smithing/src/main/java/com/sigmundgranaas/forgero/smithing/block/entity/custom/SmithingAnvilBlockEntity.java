@@ -13,7 +13,6 @@ import com.sigmundgranaas.forgero.smithing.minigame.MinigameLogic;
 import com.sigmundgranaas.forgero.smithing.minigame.MinigamePositioning;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
-import com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider;
 import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
 import com.sigmundgranaas.forgero.smithing.util.SchematicResultUtil;
 import lombok.Getter;
@@ -101,10 +100,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		super(ModBlockEntities.SMITHING_ANVIL, pos, state);
 	}
 
-	// =================================
-	// MinigameCallback Implementation
-	// =================================
-
 	@Override
 	public void playHitEffect(Vec2f markerLocalPos) {
 		if (!(world instanceof ServerWorld serverWorld)) return;
@@ -154,10 +149,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		getInventory().setStack(0, resultStack);
 	}
 
-	// =================================
-	// Utilities
-	// =================================
-
 	private boolean isServer() {
 		return world != null && !world.isClient;
 	}
@@ -182,19 +173,15 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		plannedProductId = null;
 	}
 
-	private boolean isHotEnoughForWork(ItemStack stack) {
-		int temperature = TemperatureUtils.getTemperature(stack);
-		int maxTemp = TemperatureUtils.getMaxTemp(stack);
-		return TemperatureColorProvider.isHotEnoughForWork(temperature, maxTemp);
-	}
+	//private boolean isHotEnoughForWork(ItemStack stack) {
+	//	int temperature = TemperatureUtils.getTemperature(stack);
+	//	int maxTemp = TemperatureUtils.getMaxTemp(stack);
+	//	return TemperatureColorProvider.isHotEnoughForWork(temperature, maxTemp);
+	//}
 
 	private void informPlayerHeatRequired(PlayerEntity player) {
 		player.sendMessage(net.minecraft.text.Text.of("That needs to be heaten up first!"), true);
 	}
-
-	// =================================
-	// Main Interaction Logic
-	// =================================
 
 	public ActionResult onHammerHit(PlayerEntity player, BlockHitResult hitResult) {
 		if (!isServer()) {
@@ -207,25 +194,22 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 			return ActionResult.FAIL;
 		}
 
-		// Temperature gating for morphed items
 		if (anvilItem.getItem() instanceof MorphedItem) {
-			if (!isHotEnoughForWork(anvilItem)) {
-				informPlayerHeatRequired(player);
-				return ActionResult.FAIL;
-			}
+			//if (!isHotEnoughForWork(anvilItem)) {
+			//	informPlayerHeatRequired(player);
+			//	return ActionResult.FAIL;
+			//}
 		}
 
-		// Open schematic selection if applicable
 		if (shouldOpenSchematicSelection(anvilItem)) {
-			if (!isHotEnoughForWork(anvilItem)) {
-				informPlayerHeatRequired(player);
-				return ActionResult.FAIL;
-			}
+			//if (!isHotEnoughForWork(anvilItem)) {
+			//	informPlayerHeatRequired(player);
+			//	return ActionResult.FAIL;
+			//}
 			openSchematicSelection(player);
 			return ActionResult.FAIL;
 		}
 
-		// Process hammer hit
 		Vec2f offsetVec = resolveOffsetVec(anvilItem);
 		Vec2f itemLocalHit = MinigamePositioning.worldHitToItemLocal(hitResult, getCachedState(), offsetVec);
 
@@ -302,10 +286,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		markDirty();
 		return ActionResult.SUCCESS;
 	}
-
-	// =================================
-	// NBT and Syncing
-	// =================================
 
 	@Override
 	public void markDirty() {
@@ -389,13 +369,11 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		PacketByteBuf data = PacketByteBufs.create();
 		data.writeBlockPos(getPos());
 
-		// Inventory
 		data.writeInt(simpleInventory.size());
 		for (int i = 0; i < simpleInventory.size(); i++) {
 			data.writeItemStack(simpleInventory.getStack(i));
 		}
 
-		// Marker positions and hits
 		data.writeInt(minigameLogic.getMarkerPositions().size());
 		for (int i = 0; i < minigameLogic.getMarkerPositions().size(); i++) {
 			Vec2f pos = minigameLogic.getMarkerPositions().get(i);
@@ -405,17 +383,14 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 			data.writeBoolean(hit);
 		}
 
-		// Fast marker indices
 		data.writeInt(minigameLogic.getFastMarkerIndices().size());
 		for (int idx : minigameLogic.getFastMarkerIndices()) {
 			data.writeInt(idx);
 		}
 
-		// Progress counters
 		data.writeInt(minigameLogic.getMarkerAttempts());
 		data.writeInt(minigameLogic.getMarkerHitsCount());
 
-		// Ingot crafting state
 		data.writeBoolean(isSmithing);
 		data.writeBoolean(plannedProductId != null);
 		if (plannedProductId != null) {
@@ -430,10 +405,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 
 		pendingFinalMorphNotify = false;
 	}
-
-	// =================================
-	// Delegated Methods to MinigameLogic
-	// =================================
 
 	public void resetMarkerProgress() {
 		minigameLogic.resetMarkerProgress(this);
@@ -493,10 +464,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		}
 	}
 
-	// =================================
-	// Data Persistence on Item
-	// =================================
-
 	public void saveProgressToItem() {
 		ItemStack stack = simpleInventory.getStack(0);
 		minigameLogic.saveProgressToItem(stack);
@@ -505,10 +472,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	public SimpleInventory getInventory() {
 		return simpleInventory;
 	}
-
-	// =================================
-	// Getter methods for compatibility
-	// =================================
 
 	public List<Vec2f> getMarkerPositions() {
 		return minigameLogic.getMarkerPositions();
@@ -549,10 +512,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	public MinigameLogic getMinigameLogic() {
 		return minigameLogic;
 	}
-
-	// ---------------------------------
-	// Schematic selection helpers / API
-	// ---------------------------------
 
 	public void openSchematicSelection(PlayerEntity player) {
 		if (world == null || world.isClient) return;
@@ -608,7 +567,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 				}
 			}
 		} catch (Throwable ignored) {
-			// Fall through
 		}
 		return ItemStack.EMPTY;
 	}
@@ -692,6 +650,12 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		ItemStack current = getInventory().getStack(0);
 		if (current.isEmpty()) return;
 
+		// Read temperature BEFORE creating new stack
+		int currentTemp = TemperatureUtils.getTemperature(current);
+		int maxTemp = TemperatureUtils.getMaxTemp(current);
+		int workableStart = TemperatureUtils.getWorkableTemperatureStart(current);
+		int workableEnd = TemperatureUtils.getWorkableTemperatureEnd(current);
+
 		Item morphedItem = findMorphedItem();
 		if (morphedItem == null) return;
 
@@ -706,8 +670,19 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 
 		MorphedItem.setStartItem(morphed, current.getItem());
 		MorphedItem.setMorphProgress(morphed, 0.0);
-		TemperatureUtils.setMaxTemperature(morphed, TemperatureUtils.getMaxTemp(current));
-		TemperatureUtils.setTemperature(morphed, TemperatureUtils.getTemperature(current));
+
+		// Copy ALL temperature-related data to morphed item
+		TemperatureUtils.setTemperature(morphed, currentTemp);
+		TemperatureUtils.setMaxTemperature(morphed, maxTemp);
+		TemperatureUtils.setWorkableTemperatureStart(morphed, workableStart);
+		TemperatureUtils.setWorkableTemperatureEnd(morphed, workableEnd);
+
+		// Verify temperature was set correctly
+		int verifyTemp = TemperatureUtils.getTemperature(morphed);
+		if (verifyTemp != currentTemp) {
+			// Fallback: manually set NBT if setter didn't work
+			morphed.getOrCreateNbt().putInt(TemperatureUtils.TEMPERATURE_KEY, currentTemp);
+		}
 
 		getInventory().setStack(0, morphed);
 		markDirty();
