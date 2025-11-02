@@ -1,6 +1,4 @@
-package com.sigmundgranaas.forgero.smithing.temperature2;
-
-import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
+package com.sigmundgranaas.forgero.smithing.temperature;
 
 import net.minecraft.item.ItemStack;
 
@@ -8,9 +6,6 @@ public class DynamicTemperatureSystem {
     private static final int AMBIENT_TEMP = 20;
     private static final int REAL_CAP = 10000;
 
-    /**
-     * Represents temperature stages: [ambient, cold_end, warm_end, hot_start, hot_end, overheated_start, max]
-     */
     public static class TemperatureStages {
         public final int ambient;
         public final int coldEnd;

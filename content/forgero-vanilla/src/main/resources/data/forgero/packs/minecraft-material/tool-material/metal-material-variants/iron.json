@@ -16,12 +16,12 @@
       {
         "id": "metal-workable_temperature_start-composite",
         "type": "forgero:workable_temperature_start",
-        "value": 100
+        "value": 900
       },
       {
         "id": "metal-workable_temperature_end-composite",
         "type": "forgero:workable_temperature_end",
-        "value": 200
+        "value": 1200
       }
     ]
   },

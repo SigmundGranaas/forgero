@@ -5,9 +5,9 @@ import java.util.Arrays;
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
-import com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem;
-import com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem.TemperatureStage;
-import com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem.TemperatureStages;
+import com.sigmundgranaas.forgero.smithing.temperature.DynamicTemperatureSystem;
+import com.sigmundgranaas.forgero.smithing.temperature.DynamicTemperatureSystem.TemperatureStage;
+import com.sigmundgranaas.forgero.smithing.temperature.DynamicTemperatureSystem.TemperatureStages;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -49,17 +49,40 @@ public class MinigameHudOverlay implements HudRenderCallback {
 		// Calculate stages using dynamic system
 		TemperatureStages stages = DynamicTemperatureSystem.calculateStages(stack);
 
-		// Compute a scaled window around current temperature based on workable range
-		final int BASE_MAX = 1600;
-		final int BASE_WINDOW = 700;
-		int window = (int) (BASE_WINDOW / (float) BASE_MAX * effectiveMax);
-		int half = window / 2;
-		int minWindow = Math.max(stages.ambient, Math.min(temp - half, Math.max(0, effectiveMax - window)));
-		int maxWindow = Math.min(effectiveMax, minWindow + window);
+		// Find which stage the current temperature is in
+		TemperatureStage currentStage = DynamicTemperatureSystem.getStage(temp, stages);
+
+		// Build stage boundaries for snapping
+		int[] stageBoundaries = {0, stages.coldEnd, stages.warmEnd, stages.hotStart, stages.hotEnd, stages.overheatedStart, effectiveMax};
+
+		// Find the segment index for current temp
+		int currentSegmentIdx = findSegmentIndex(temp, stageBoundaries);
+
+		// Snap to include current segment plus one before and after for context
+		int minBoundaryIdx = Math.max(0, currentSegmentIdx - 1);
+		int maxBoundaryIdx = Math.min(stageBoundaries.length - 1, currentSegmentIdx + 2);
+
+		int minWindow = stageBoundaries[minBoundaryIdx];
+		int maxWindow = stageBoundaries[maxBoundaryIdx];
+
+		// Enforce minimum window width for clarity (at least 600 units)
+		int minWindowWidth = 600;
+		int currentWidth = maxWindow - minWindow;
+		if (currentWidth < minWindowWidth) {
+			int diff = minWindowWidth - currentWidth;
+			minWindow = Math.max(0, minWindow - diff / 2);
+			maxWindow = Math.min(effectiveMax, maxWindow + diff / 2 + (diff % 2));
+		}
+
+		// Add small margin to the window (5% of width)
+		int margin = Math.max(50, (maxWindow - minWindow) / 20);
+		minWindow = Math.max(0, minWindow - margin);
+		maxWindow = Math.min(effectiveMax, maxWindow + margin);
+
 		if (maxWindow <= minWindow) return;
 
 		// Stage boundary ticks (defined early for use in progress bar)
-		int[] stageBoundaries = {stages.coldEnd, stages.warmEnd, stages.hotStart, stages.hotEnd, stages.overheatedStart};
+		int[] stageBoundariesForTicks = {stages.coldEnd, stages.warmEnd, stages.hotStart, stages.hotEnd, stages.overheatedStart};
 
 		// Horizontal bar placement and dimensions (center top, match texture size)
 		int screenW = ctx.getScaledWindowWidth();
@@ -135,7 +158,7 @@ public class MinigameHudOverlay implements HudRenderCallback {
 		ctx.drawTexture(BAR_TEXTURE, barLeft, barTop, 0, 0, barWidth, barHeight, barWidth, barHeight);
 
 		// Stage boundary ticks
-		for (int boundary : stageBoundaries) {
+		for (int boundary : stageBoundariesForTicks) {
 			if (boundary < minWindow || boundary > maxWindow) continue;
 			if ((boundary == minWindow) || (boundary == maxWindow)) continue;
 			int x = valueToX(boundary, minWindow, unitsPerPixelX, innerLeft, innerWidth);
@@ -148,15 +171,22 @@ public class MinigameHudOverlay implements HudRenderCallback {
 			fill(ctx, x, yStart, x + 1, yEnd, 0xFFad9474);
 		}
 
-		// Two ticks between each boundary
-		int[] boundaries = stageBoundaries;
+		// Two ticks between each boundary (only for workable range for clarity)
+		int workableStart = TemperatureUtils.getWorkableTemperatureStart(stack);
+		int workableEnd = TemperatureUtils.getWorkableTemperatureEnd(stack);
+
+		int[] boundaries = stageBoundariesForTicks;
 		for (int i = 0; i < boundaries.length - 1; i++) {
-			if (i == boundaries.length - 2) continue;
 			int start = boundaries[i];
 			int end = boundaries[i + 1];
+
+			// Only draw subdivision ticks for stages within or near the workable range
+			boolean inWorkableContext = !(end < workableStart || start > workableEnd);
+			if (!inWorkableContext) continue;
+
 			float interval = (float) (end - start);
 
-			// Midpoint tick
+			// Midpoint tick (always shown for active stages)
 			int midValue = Math.round(start + interval / 2.0f);
 			if (midValue > minWindow && midValue < maxWindow) {
 				int x = valueToX(midValue, minWindow, unitsPerPixelX, innerLeft, innerWidth);
@@ -167,8 +197,8 @@ public class MinigameHudOverlay implements HudRenderCallback {
 				fill(ctx, x, yStart, x + 1, yEnd, 0xFFad9474);
 			}
 
-			// Quarter ticks (skip for overheated)
-			if (i != boundaries.length - 2) {
+			// Quarter ticks (reduced density - skip for very small stages)
+			if (interval > 150) {
 				int quarterValue = Math.round(start + interval / 4.0f);
 				int threeQuarterValue = Math.round(start + 3.0f * interval / 4.0f);
 				for (int tickValue : new int[]{quarterValue, threeQuarterValue}) {
@@ -182,6 +212,16 @@ public class MinigameHudOverlay implements HudRenderCallback {
 					}
 				}
 			}
+		}
+
+		// Edge indicators: subtle marks if stages exist outside the window
+		if (minWindow > 0) {
+			// Left edge: stage exists below minimum
+			fill(ctx, innerLeft - 1, innerTop + innerHeight - 2, innerLeft, innerTop + innerHeight, 0xFF666666);
+		}
+		if (maxWindow < effectiveMax) {
+			// Right edge: stage exists above maximum
+			fill(ctx, innerLeft + innerWidth, innerTop + innerHeight - 2, innerLeft + innerWidth + 1, innerTop + innerHeight, 0xFF666666);
 		}
 
 		// Current temperature arrow
@@ -265,6 +305,16 @@ public class MinigameHudOverlay implements HudRenderCallback {
 		if (v < lo) return lo;
 		if (v > hi) return hi;
 		return v;
+	}
+
+	// Find which segment a temperature value falls into based on boundaries
+	private int findSegmentIndex(int value, int[] boundaries) {
+		for (int i = 0; i < boundaries.length - 1; i++) {
+			if (value >= boundaries[i] && value < boundaries[i + 1]) {
+				return i;
+			}
+		}
+		return Math.max(0, boundaries.length - 2);
 	}
 
 	// Convert a value in [minWindow, maxWindow] to a X coordinate along the bar (left-to-right)

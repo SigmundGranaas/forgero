@@ -10,6 +10,7 @@ import com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.smithing.condition.PredicateConditionLootRegistry;
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
+import com.sigmundgranaas.forgero.smithing.temperature.DynamicTemperatureSystem;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
 import lombok.Getter;
@@ -34,7 +35,7 @@ public class MinigameLogic {
     public static final int MARKER_LIFETIME_TICKS_NORMAL = 35;
     public static final int MARKER_LIFETIME_TICKS_FAST = 20;
     public static final int TOTAL_MARKERS = 10;
-    public static final int FAST_MARKERS = 3; // Changed from 5 to 3
+    public static final int FAST_MARKERS = 3;
 
     private static final double MARKER_HIT_RADIUS_SQ = 0.0075d;
 
@@ -45,18 +46,10 @@ public class MinigameLogic {
 
     private final List<Vec2f> markerPositions = new ArrayList<>();
     private final List<Boolean> markerHits = new ArrayList<>();
-    private final List<Integer> hitTemperatures = new ArrayList<>();
-    // New: stage index per successful hit (0..5)
     private final List<Integer> hitStageIndices = new ArrayList<>();
     private final List<Integer> fastMarkerIndices = new ArrayList<>();
     private final Random random = new Random();
 
-    private int coldStageHits = 0;
-    private int warmStageHits = 0;
-    private int hotStageHits = 0;
-    private int veryHotStageHits = 0;
-    private int nearMeltStageHits = 0;
-    private int moltenStageHits = 0;
     private int fastMarkerHits = 0;
     private int missMarkerHits = 0;
 
@@ -69,7 +62,6 @@ public class MinigameLogic {
     private int markerSpawnDelay;
     private double morphProgress = 0.0;
 
-    // Cached images for morphing/minigame
     private transient BufferedImage startingItemImage = null;
     private transient BufferedImage plannedProductImage = null;
 
@@ -100,7 +92,7 @@ public class MinigameLogic {
 
         // Ensure first marker (index 0) is never a fast marker
         while (fastMarkerIndices.size() < FAST_MARKERS) {
-            int idx = 1 + random.nextInt(TOTAL_MARKERS - 1); // Only indices 1..TOTAL_MARKERS-1
+            int idx = 1 + random.nextInt(TOTAL_MARKERS - 1);
             if (!fastMarkerIndices.contains(idx)) {
                 fastMarkerIndices.add(idx);
             }
@@ -116,7 +108,7 @@ public class MinigameLogic {
                 this.fastMarkerHits = nbt.getInt(FAST_MARKER_HITS_NBT_KEY);
                 this.missMarkerHits = nbt.contains(MISS_MARKER_NBT_KEY) ? nbt.getInt(MISS_MARKER_NBT_KEY) : 0;
 
-                // Restore hit stage indices from the item to preserve colors on HUD
+                // Restore hit stage indices
                 hitStageIndices.clear();
                 if (nbt.contains("hitStageIndices")) {
                     int[] arr = nbt.getIntArray("hitStageIndices");
@@ -151,7 +143,6 @@ public class MinigameLogic {
         missMarkerHits = 0;
         // Do not clear per-hit stage indices and temperatures for a fresh run
         hitStageIndices.clear();
-        hitTemperatures.clear();
     }
 
     public boolean processHit(Vec2f itemLocalHit, MinigameCallback callback) {
@@ -172,7 +163,6 @@ public class MinigameLogic {
     public void processMarkerAttempt(boolean hit, boolean wasPlayerAttempt, MinigameCallback callback) {
         if (markerHitsCount >= TOTAL_MARKERS) return;
 
-        // Count attempts only when initiated by player
         if (wasPlayerAttempt) {
             markerAttempts++;
         }
@@ -180,52 +170,40 @@ public class MinigameLogic {
         ItemStack stack = callback.getCurrentStack();
 
         if (hit) {
-            // Successful hit
             markerHitsCount++;
 
-            // Record stage index at time of hit using actual workable range
-            int temperature = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getTemperature(stack);
-            int maxTemp = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getMaxTemp(stack);
-            int workableStart = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getWorkableTemperatureStart(stack);
-            int workableEnd = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getWorkableTemperatureEnd(stack);
+            int temperature = TemperatureUtils.getTemperature(stack);
+            int maxTemp = TemperatureUtils.getMaxTemp(stack);
+            int workableStart = TemperatureUtils.getWorkableTemperatureStart(stack);
+            int workableEnd = TemperatureUtils.getWorkableTemperatureEnd(stack);
             hitStageIndices.add(stageIndexFor(temperature, maxTemp, workableStart, workableEnd));
 
-            // Apply temperature change based on marker type
             int markerIndex = markerAttempts - 1;
             boolean fast = fastMarkerIndices.contains(markerIndex);
             int tempChange = fast ? -10 : 40;
-            com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.setTemperature(stack, Math.max(0, Math.min(temperature + tempChange, maxTemp)));
+            TemperatureUtils.setTemperature(stack, Math.max(0, Math.min(temperature + tempChange, maxTemp)));
 
             if (fast) {
                 fastMarkerHits++;
             }
         } else {
-            // Miss: only count visible player attempts
             if (wasPlayerAttempt) {
                 missMarkerHits++;
             }
         }
 
-        // Clear current marker so next can spawn after a short delay
         clearActiveMarker();
         markerSpawnDelay = SUBSEQUENT_MARKER_DELAY_TICKS;
-
-        // Update morph progress on the item so client HUD has up-to-date data
         updateMorphProgressOnItem(stack);
-
-        // Persist counters to item NBT (optional but helps with consistency if picked up immediately)
         saveProgressToItem(stack);
-
-        // Trigger BE sync to clients so HUD updates right away
         callback.markDirty();
     }
 
-    // Map temp to stage index [0..3] for the new dynamic system using workable range
     private int stageIndexFor(int temperature, int maxTemp, int workableStart, int workableEnd) {
-        com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem.TemperatureStages stages =
-            com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem.calculateStages(maxTemp, workableStart, workableEnd);
-        com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem.TemperatureStage stage =
-            com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem.getStage(temperature, stages);
+        DynamicTemperatureSystem.TemperatureStages stages =
+            DynamicTemperatureSystem.calculateStages(maxTemp, workableStart, workableEnd);
+        DynamicTemperatureSystem.TemperatureStage stage =
+            DynamicTemperatureSystem.getStage(temperature, stages);
 
         return switch (stage) {
             case COLD -> 0;
@@ -233,22 +211,6 @@ public class MinigameLogic {
             case HOT -> 2;
             case OVERHEATED -> 3;
         };
-    }
-
-    private void updateTemperatureStageHits(int temperature, int maxTemp) {
-        if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInCold(temperature, maxTemp)) {
-            coldStageHits++;
-        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInWarm(temperature, maxTemp)) {
-            warmStageHits++;
-        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInHot(temperature, maxTemp)) {
-            hotStageHits++;
-        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInHot(temperature, maxTemp)) {
-            veryHotStageHits++;
-        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInBrightHot(temperature, maxTemp)) {
-            nearMeltStageHits++;
-        } else if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isInOverheated(temperature, maxTemp)) {
-            moltenStageHits++;
-        }
     }
 
     public void setMarkerHit(int index, MinigameCallback callback) {
@@ -388,12 +350,6 @@ public class MinigameLogic {
             context = context.put(MinecraftContextKeys.BLOCK_TARGET, callback.getPos());
         }
         context = context.put(MinecraftContextKeys.STACK, stack);
-        context = context.put(MinecraftContextKeys.COLD_STAGE_HITS, coldStageHits);
-        context = context.put(MinecraftContextKeys.WARM_STAGE_HITS, warmStageHits);
-        context = context.put(MinecraftContextKeys.HOT_STAGE_HITS, hotStageHits);
-        context = context.put(MinecraftContextKeys.VERY_HOT_STAGE_HITS, veryHotStageHits);
-        context = context.put(MinecraftContextKeys.NEAR_MELT_STAGE_HITS, nearMeltStageHits);
-        context = context.put(MinecraftContextKeys.MOLTEN_STAGE_HITS, moltenStageHits);
         context = context.put(MinecraftContextKeys.TOTAL_HITS, markerHitsCount);
         context = context.put(MinecraftContextKeys.MISS_HITS, missMarkerHits);
         context = context.put(MinecraftContextKeys.FAST_MARKER_HITS, fastMarkerHits);
@@ -411,10 +367,7 @@ public class MinigameLogic {
             itemNbt.putInt(MISS_MARKER_NBT_KEY, missMarkerHits);
             itemNbt.putIntArray("fastMarkerIndices", fastMarkerIndices.stream().mapToInt(Integer::intValue).toArray());
             itemNbt.putInt(FAST_MARKER_HITS_NBT_KEY, fastMarkerHits);
-            // Persist per-hit stage indices for HUD coloring on resume
             itemNbt.putIntArray("hitStageIndices", hitStageIndices.stream().mapToInt(Integer::intValue).toArray());
-
-            // Removed saving of continuous stage ticks.
         }
     }
 
@@ -431,21 +384,10 @@ public class MinigameLogic {
         }
         nbt.put("markers", markersNbt);
 
-        // Store temperature tracking data
-        nbt.putIntArray("hitTemperatures", hitTemperatures.stream().mapToInt(Integer::intValue).toArray());
-        // Persist per-hit stage indices
         nbt.putIntArray("hitStageIndices", hitStageIndices.stream().mapToInt(Integer::intValue).toArray());
-        nbt.putInt("coldStageHits", coldStageHits);
-        nbt.putInt("warmStageHits", warmStageHits);
-        nbt.putInt("hotStageHits", hotStageHits);
-        nbt.putInt("veryHotStageHits", veryHotStageHits);
-        nbt.putInt("nearMeltStageHits", nearMeltStageHits);
-        nbt.putInt("moltenStageHits", moltenStageHits);
         nbt.putInt("missHits", missMarkerHits);
         nbt.putIntArray("fastMarkerIndices", fastMarkerIndices.stream().mapToInt(Integer::intValue).toArray());
         nbt.putDouble("morphProgress", morphProgress);
-
-        // Removed storage of continuous stage ticks.
     }
 
     public void readNbt(NbtCompound nbt) {
@@ -463,28 +405,11 @@ public class MinigameLogic {
             }
         }
 
-        // Restore temperature tracking data
-        hitTemperatures.clear();
-        if (nbt.contains("hitTemperatures")) {
-            int[] temps = nbt.getIntArray("hitTemperatures");
-            for (int temp : temps) {
-                hitTemperatures.add(temp);
-            }
-        }
-        // Restore per-hit stage indices (optional, fallback computed HUD-side if missing)
         hitStageIndices.clear();
         if (nbt.contains("hitStageIndices")) {
             int[] arr = nbt.getIntArray("hitStageIndices");
             for (int v : arr) hitStageIndices.add(v);
         }
-        coldStageHits = nbt.getInt("coldStageHits");
-        warmStageHits = nbt.getInt("warmStageHits");
-        hotStageHits = nbt.getInt("hotStageHits");
-        veryHotStageHits = nbt.getInt("veryHotStageHits");
-        nearMeltStageHits = nbt.getInt("nearMeltStageHits");
-        moltenStageHits = nbt.getInt("moltenStageHits");
-
-        // restore miss hits if stored in world nbt
         missMarkerHits = nbt.contains("missHits") ? nbt.getInt("missHits") : 0;
 
         fastMarkerIndices.clear();
@@ -498,8 +423,6 @@ public class MinigameLogic {
         if (nbt.contains("morphProgress")) {
             morphProgress = nbt.getDouble("morphProgress");
         }
-
-        // Removed restoration of continuous stage ticks.
     }
 
     public void restoreFromItemNbt(ItemStack stack) {
@@ -509,39 +432,20 @@ public class MinigameLogic {
             this.markerAttempts = itemNbt.getInt(ATTEMPTS_NBT_KEY);
             this.missMarkerHits = itemNbt.contains(MISS_MARKER_NBT_KEY) ? itemNbt.getInt(MISS_MARKER_NBT_KEY) : 0;
 
-            // Restore temperature data from item if available
-            if (itemNbt.contains("hitTemperatures") && hitTemperatures.isEmpty()) {
-                int[] temps = itemNbt.getIntArray("hitTemperatures");
-                for (int temp : temps) {
-                    hitTemperatures.add(temp);
-                }
-                coldStageHits = itemNbt.getInt("coldStageHits");
-                warmStageHits = itemNbt.getInt("warmStageHits");
-                hotStageHits = itemNbt.getInt("hotStageHits");
-                veryHotStageHits = itemNbt.getInt("veryHotStageHits");
-                nearMeltStageHits = itemNbt.getInt("nearMeltStageHits");
-                moltenStageHits = itemNbt.getInt("moltenStageHits");
-            }
-
-            // Restore per-hit stage indices if present
             if (itemNbt.contains("hitStageIndices")) {
                 hitStageIndices.clear();
                 int[] arr = itemNbt.getIntArray("hitStageIndices");
                 for (int v : arr) hitStageIndices.add(v);
             }
 
-            // Restore fast marker hits if present
             if (itemNbt.contains(FAST_MARKER_HITS_NBT_KEY)) {
                 fastMarkerHits = itemNbt.getInt(FAST_MARKER_HITS_NBT_KEY);
             }
-
-            // Removed restoration of continuous stage tick counters.
         } else {
             this.markerHitsCount = 0;
             this.markerAttempts = 0;
             this.fastMarkerHits = 0;
             this.missMarkerHits = 0;
-            // Removed resets for continuous stage tick counters.
         }
     }
 

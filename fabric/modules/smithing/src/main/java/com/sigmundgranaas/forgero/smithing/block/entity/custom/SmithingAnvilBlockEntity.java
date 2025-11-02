@@ -327,13 +327,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		NbtCompound itemNbt = stack.getOrCreateNbt();
 		itemNbt.putInt("forgero_markerHitsCount", logic.getMarkerHitsCount());
 		itemNbt.putInt("forgero_markerAttempts", logic.getMarkerAttempts());
-		itemNbt.putIntArray("hitTemperatures", logic.getHitTemperatures().stream().mapToInt(Integer::intValue).toArray());
-		itemNbt.putInt("coldStageHits", logic.getColdStageHits());
-		itemNbt.putInt("warmStageHits", logic.getWarmStageHits());
-		itemNbt.putInt("hotStageHits", logic.getHotStageHits());
-		itemNbt.putInt("veryHotStageHits", logic.getVeryHotStageHits());
-		itemNbt.putInt("nearMeltStageHits", logic.getNearMeltStageHits());
-		itemNbt.putInt("moltenStageHits", logic.getMoltenStageHits());
 	}
 
 	@Override

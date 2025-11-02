@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
+import com.sigmundgranaas.forgero.smithing.temperature.DynamicTemperatureSystem;
 import com.sigmundgranaas.forgero.smithing.util.PositionPreservingMorpher;
 import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
 import org.apache.logging.log4j.LogManager;
@@ -132,9 +133,9 @@ public class MorphedItemRenderer implements BuiltinItemRendererRegistry.DynamicI
 			return 0xFFFFFF;
 		}
 		int temp = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getTemperature(stack);
-		com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem.TemperatureStages stages =
-			com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem.calculateStages(stack);
-		return com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem.getTemperatureColor(temp, stages);
+		DynamicTemperatureSystem.TemperatureStages stages =
+			DynamicTemperatureSystem.calculateStages(stack);
+		return DynamicTemperatureSystem.getTemperatureColor(temp, stages);
 	}
 
 	private boolean renderMorphed3D(ItemStack morphedStack, double progress, MatrixStack matrices,
@@ -145,32 +146,41 @@ public class MorphedItemRenderer implements BuiltinItemRendererRegistry.DynamicI
 			return false;
 		}
 		double progressClamped = MathHelper.clamp(progress, 0.0, 1.0);
-		double stepProgress = Math.round(progressClamped * 10.0) / 10.0;
-		String cacheKey = String.format("%s_%s_%.1f",
+
+		// Use finer-grained progress steps to reduce cache misses
+		double stepProgress = Math.round(progressClamped * 20.0) / 20.0;
+		String cacheKey = String.format("%s_%s_%.2f",
 			startId != null ? startId.toString() : "null",
 			resultId != null ? resultId.toString() : "null",
 			stepProgress);
+
 		MorphTextureCache cached = morphTextureCache.get(cacheKey);
-		if (cached != null && Math.abs(cached.lastProgress - stepProgress) < 0.001) {
+		if (cached != null && Math.abs(cached.lastProgress - stepProgress) < 0.01) {
 			renderMorphAs3DExtrudedPixels(matrices, vertexConsumers, cached.textureId, light, overlay, cached.morphImage, morphedStack);
 			return true;
 		}
+
 		try {
 			BufferedImage startImage = getItemImage(startId);
 			BufferedImage resultImage = getItemImage(resultId);
 			if (startImage == null || resultImage == null) {
 				return false;
 			}
+
 			BufferedImage morphedImage = MORPHER.morphStep(startImage, resultImage, stepProgress);
 			if (morphedImage != null) {
 				NativeImage nativeImage = bufferedImageToNativeImage(morphedImage);
 				NativeImageBackedTexture dynamicTexture = new NativeImageBackedTexture(nativeImage);
 				Identifier textureId = new Identifier("forgero", "morphed_item_" + Math.abs(cacheKey.hashCode()));
 				MinecraftClient.getInstance().getTextureManager().registerTexture(textureId, dynamicTexture);
+
+				// Clean up old cache entry if it exists
 				if (cached != null) {
 					cached.cleanup();
 				}
-				morphTextureCache.put(cacheKey, new MorphTextureCache(dynamicTexture, textureId, morphedImage, stepProgress));
+
+				MorphTextureCache newCache = new MorphTextureCache(dynamicTexture, textureId, morphedImage, stepProgress);
+				morphTextureCache.put(cacheKey, newCache);
 				renderMorphAs3DExtrudedPixels(matrices, vertexConsumers, textureId, light, overlay, morphedImage, morphedStack);
 				return true;
 			}
@@ -299,38 +309,67 @@ public class MorphedItemRenderer implements BuiltinItemRendererRegistry.DynamicI
 		// Clamp progress between 0.0 and 1.0
 		double progressClamped = MathHelper.clamp(progress, 0.0, 1.0);
 
-		// Progressive transition: 0-30% start item, 30-70% transition, 70-100% result item
-		if (progressClamped <= 0.3) {
-			// 0-30%: Show start item
+		// Progressive transition: 0-40% start item, 40-60% transition, 60-100% result item
+		if (progressClamped <= 0.4) {
+			// 0-40%: Show start item
 			if (startId != null) {
 				Item startItem = Registries.ITEM.get(startId);
-				return startItem != null ? new ItemStack(startItem) : ItemStack.EMPTY;
+				if (startItem != null) {
+					ItemStack stack = new ItemStack(startItem);
+					// Copy temperature data to fallback
+					copyTemperatureData(morphedStack, stack);
+					return stack;
+				}
 			}
-		} else if (progressClamped >= 0.7) {
-			// 70-100%: Show result item
+		} else if (progressClamped >= 0.6) {
+			// 60-100%: Show result item
 			if (resultId != null) {
 				Item resultItem = Registries.ITEM.get(resultId);
-				return resultItem != null ? new ItemStack(resultItem) : ItemStack.EMPTY;
+				if (resultItem != null) {
+					ItemStack stack = new ItemStack(resultItem);
+					// Copy temperature data to fallback
+					copyTemperatureData(morphedStack, stack);
+					return stack;
+				}
 			}
-		} else {
-			// 30-70%: Alternate based on discrete progress steps to show morphing
-			int step = (int) Math.floor(progressClamped * 10); // 0-9 steps
-			boolean showResult = (step % 2) == 1;
+		}
 
-			Identifier chosenId = showResult && resultId != null ? resultId : startId;
-			if (chosenId != null) {
-				Item item = Registries.ITEM.get(chosenId);
-				return item != null ? new ItemStack(item) : ItemStack.EMPTY;
+		// 40-60%: Alternate between start and result for transition effect
+		int step = (int) Math.floor(progressClamped * 10);
+		boolean showResult = (step % 2) == 1;
+
+		Identifier chosenId = (showResult && resultId != null) ? resultId : startId;
+		if (chosenId != null) {
+			Item item = Registries.ITEM.get(chosenId);
+			if (item != null) {
+				ItemStack stack = new ItemStack(item);
+				// Copy temperature data to fallback
+				copyTemperatureData(morphedStack, stack);
+				return stack;
 			}
 		}
 
 		// Final fallback to start item
 		if (startId != null) {
 			Item startItem = Registries.ITEM.get(startId);
-			return startItem != null ? new ItemStack(startItem) : ItemStack.EMPTY;
+			if (startItem != null) {
+				ItemStack stack = new ItemStack(startItem);
+				// Copy temperature data to fallback
+				copyTemperatureData(morphedStack, stack);
+				return stack;
+			}
 		}
 
 		return ItemStack.EMPTY;
+	}
+
+	private void copyTemperatureData(ItemStack source, ItemStack target) {
+		if (com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.hasMaxTemperature(source)) {
+			int temp = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getTemperature(source);
+			int maxTemp = com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.getMaxTemp(source);
+			com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.setTemperature(target, temp);
+			com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.setMaxTemperature(target, maxTemp);
+		}
 	}
 
 	private NativeImage bufferedImageToNativeImage(BufferedImage bufferedImage) {

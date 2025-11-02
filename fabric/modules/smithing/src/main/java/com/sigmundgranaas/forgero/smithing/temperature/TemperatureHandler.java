@@ -1,9 +1,8 @@
 package com.sigmundgranaas.forgero.smithing.temperature;
 
 import com.sigmundgranaas.forgero.smithing.networking.S2C.TemperatureSyncS2CPacket;
-import com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem;
-import com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem.TemperatureStage;
-import com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem.TemperatureStages;
+import com.sigmundgranaas.forgero.smithing.temperature.DynamicTemperatureSystem.TemperatureStage;
+import com.sigmundgranaas.forgero.smithing.temperature.DynamicTemperatureSystem.TemperatureStages;
 
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
@@ -69,7 +68,7 @@ public class TemperatureHandler {
 
             if (inFilledCauldron) {
                 if (temp > 100) {
-                    world.spawnParticles(net.minecraft.particle.ParticleTypes.CLOUD, itemEntity.getX(), itemEntity.getY() + 0.2, itemEntity.getZ(), 8, 0.2, 0.1, 0.2, 0.01);
+                    world.spawnParticles(ParticleTypes.CLOUD, itemEntity.getX(), itemEntity.getY() + 0.2, itemEntity.getZ(), 8, 0.2, 0.1, 0.2, 0.01);
                     world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_FIRE_EXTINGUISH, net.minecraft.sound.SoundCategory.BLOCKS, 0.7F, 1.2F);
                 }
                 if (temp > 20) {
@@ -98,13 +97,13 @@ public class TemperatureHandler {
         } else if (stage == TemperatureStage.WARM) {
             // Smoke for gentle warmth
             if ((tickCounter + randomSeed) % 2 == 0) {
-                world.spawnParticles(net.minecraft.particle.ParticleTypes.SMOKE,
+                world.spawnParticles(ParticleTypes.SMOKE,
                     x, y, z, 2, 0.03, 0.06, 0.03, 0.001);
             }
         } else if (stage == TemperatureStage.HOT) {
             // Small flames for hot
             if ((tickCounter + randomSeed * 2) % 3 == 0) {
-                world.spawnParticles(net.minecraft.particle.ParticleTypes.SMALL_FLAME,
+                world.spawnParticles(ParticleTypes.SMALL_FLAME,
                     x, y + 0.04, z, 4, 0.025, 0.025, 0.025, 0.003);
             }
             if ((tickCounter + randomSeed * 3) % 3 == 0) {
@@ -124,9 +123,9 @@ public class TemperatureHandler {
                     net.minecraft.sound.SoundCategory.BLOCKS, 0.8F, 0.9F + (float)Math.random() * 0.3F);
             }
             if ((tickCounter + randomSeed * 4) % 2 == 0) {
-                world.spawnParticles(net.minecraft.particle.ParticleTypes.FLAME,
+                world.spawnParticles(ParticleTypes.FLAME,
                     x, y, z, 18, 0.06, 0.07, 0.06, 0.004);
-                world.spawnParticles(net.minecraft.particle.ParticleTypes.SMOKE,
+                world.spawnParticles(ParticleTypes.SMOKE,
                     x, y, z, 4, 0.04, 0.04, 0.04, 0.002);
             }
             if ((tickCounter + randomSeed * 5) % 2 == 0) {

@@ -5,8 +5,8 @@ import static com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.h
 import java.util.List;
 
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
-import com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem;
-import com.sigmundgranaas.forgero.smithing.temperature2.DynamicTemperatureSystem.TemperatureStages;
+import com.sigmundgranaas.forgero.smithing.temperature.DynamicTemperatureSystem;
+import com.sigmundgranaas.forgero.smithing.temperature.DynamicTemperatureSystem.TemperatureStages;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
