@@ -30,8 +30,7 @@ public class MorphedItem extends Item {
 	}
 
 	public static double getMorphProgress(ItemStack stack) {
-		if (!stack.hasNbt()) return 0.0;
-		return stack.getNbt().getDouble(PROGRESS_KEY);
+		return stack.hasNbt() ? stack.getNbt().getDouble(PROGRESS_KEY) : 0.0;
 	}
 
 	public static Identifier getStartItemId(ItemStack stack) {
@@ -45,10 +44,9 @@ public class MorphedItem extends Item {
 	}
 
 	public static Item getResultItem(ItemStack stack) {
-		if (!stack.hasNbt() || !stack.getNbt().contains(RESULT_KEY)) return null;
-		String resultIdStr = stack.getNbt().getString(RESULT_KEY);
+		Identifier resultId = getResultItemId(stack);
+		if (resultId == null) return null;
 		try {
-			Identifier resultId = new Identifier(resultIdStr);
 			return Registries.ITEM.get(resultId);
 		} catch (Exception e) {
 			return null;

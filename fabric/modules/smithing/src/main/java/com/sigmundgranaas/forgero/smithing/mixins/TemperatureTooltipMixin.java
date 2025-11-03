@@ -35,9 +35,15 @@ public class TemperatureTooltipMixin {
 		Text label = Text.literal("Temperature: ").styled(style -> style.withColor(TextColor.fromRgb(0xFFFFFF)));
 		Text value = Text.literal(String.format("%d°C ", temp))
 			.styled(style -> style.withColor(TextColor.fromRgb(tempColor)));
-		Text forgingRange = Text.literal(String.format("(%d–%d°C)", stages.hotStart, stages.hotEnd))
-			.styled(style -> style.withColor(TextColor.fromRgb(0x00FF00)));
 
-		tooltip.add(label.copy().append(value).append(forgingRange));
+		Text workingRange;
+		if (stages.workableStart > 0 && stages.workableEnd > 0) {
+			workingRange = Text.literal(String.format("(%d–%d°C)", stages.workableStart, stages.workableEnd))
+				.styled(style -> style.withColor(TextColor.fromRgb(0x00FF00)));
+		} else {
+			workingRange = Text.literal("");
+		}
+
+		tooltip.add(label.copy().append(value).append(workingRange));
 	}
 }

@@ -110,6 +110,16 @@ public class TemperatureHandler {
                 world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_FIRE_AMBIENT,
                     net.minecraft.sound.SoundCategory.BLOCKS, 0.5F, 0.8F + (float)Math.random() * 0.4F);
             }
+        } else if (stage == TemperatureStage.WORKABLE) {
+            // Bright flames for workable range
+            if ((tickCounter + randomSeed * 2) % 2 == 0) {
+                world.spawnParticles(ParticleTypes.FLAME,
+                    x, y, z, 6, 0.03, 0.04, 0.03, 0.003);
+            }
+            if ((tickCounter + randomSeed * 3) % 4 == 0) {
+                world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_FIRE_AMBIENT,
+                    net.minecraft.sound.SoundCategory.BLOCKS, 0.6F, 1.0F + (float)Math.random() * 0.2F);
+            }
         } else if (stage == TemperatureStage.OVERHEATED) {
             // Maximum intensity: intense flames and smoke
             if ((tickCounter + randomSeed * 2) % 2 == 0) {

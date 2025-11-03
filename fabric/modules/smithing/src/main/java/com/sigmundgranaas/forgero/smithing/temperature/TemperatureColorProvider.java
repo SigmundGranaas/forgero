@@ -28,7 +28,7 @@ public class TemperatureColorProvider {
 
     public static int[] getStageBoundariesWithWorkableRange(int maxTemp, int workableStart, int workableEnd) {
         TemperatureStages stages = DynamicTemperatureSystem.calculateStages(maxTemp, workableStart, workableEnd);
-        return new int[]{stages.ambient, stages.coldEnd, stages.warmEnd, stages.hotStart, stages.hotEnd, stages.overheatedStart};
+        return new int[]{stages.ambient, stages.coldEnd, stages.warmEnd, stages.hotStart, stages.hotEnd, stages.overheatedStart, stages.workableStart, stages.workableEnd};
     }
 
     public static boolean isInCold(int temperature, int maxTemp) {
@@ -46,6 +46,11 @@ public class TemperatureColorProvider {
         return DynamicTemperatureSystem.getStage(temperature, stages) == DynamicTemperatureSystem.TemperatureStage.HOT;
     }
 
+    public static boolean isInWorkable(int temperature, int maxTemp, int workableStart, int workableEnd) {
+        TemperatureStages stages = DynamicTemperatureSystem.calculateStages(maxTemp, workableStart, workableEnd);
+        return DynamicTemperatureSystem.getStage(temperature, stages) == DynamicTemperatureSystem.TemperatureStage.WORKABLE;
+    }
+
     public static boolean isInBrightHot(int temperature, int maxTemp) {
         TemperatureStages stages = DynamicTemperatureSystem.calculateStages(maxTemp, 0, 0);
         return DynamicTemperatureSystem.getStage(temperature, stages) == DynamicTemperatureSystem.TemperatureStage.HOT;
@@ -56,8 +61,8 @@ public class TemperatureColorProvider {
         return DynamicTemperatureSystem.getStage(temperature, stages) == DynamicTemperatureSystem.TemperatureStage.OVERHEATED;
     }
 
-    public static boolean isHotEnoughForWork(int temperature, int maxTemp) {
-        TemperatureStages stages = DynamicTemperatureSystem.calculateStages(maxTemp, 0, 0);
+    public static boolean isHotEnoughForWork(int temperature, int maxTemp, int workableStart, int workableEnd) {
+        TemperatureStages stages = DynamicTemperatureSystem.calculateStages(maxTemp, workableStart, workableEnd);
         return DynamicTemperatureSystem.isWorkable(temperature, stages);
     }
 }

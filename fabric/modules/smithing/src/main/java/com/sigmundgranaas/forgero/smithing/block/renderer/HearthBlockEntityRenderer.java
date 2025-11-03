@@ -18,10 +18,32 @@ public class HearthBlockEntityRenderer implements BlockEntityRenderer<HearthBloc
 	private static final float ITEM_CENTER_Y = 0.519f;
 	private static final float ITEM_CENTER_Z = 0.5f;
 	private static final float ITEM_SCALE = 0.6f;
+	// Rotate X after Y rotation so the item lays flat facing the correct direction
 	private static final float ITEM_ROTATION_X = 90.0f;
 
+	@SuppressWarnings("unused")
 	public HearthBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {
-		// Context parameter required by interface
+	}
+
+	private void setupItemTransforms(MatrixStack matrices, HearthBlockEntity entity) {
+		matrices.translate(ITEM_CENTER_X, ITEM_CENTER_Y, ITEM_CENTER_Z);
+
+		var blockState = entity.getCachedState();
+		if (blockState.contains(net.minecraft.state.property.Properties.HORIZONTAL_FACING)) {
+			float yRotation = switch (blockState.get(net.minecraft.state.property.Properties.HORIZONTAL_FACING)) {
+				case NORTH -> 180.0f;
+				case SOUTH -> 0f;
+				case EAST -> 90.0f;
+				case WEST -> 270.0f;
+				default -> 180.0f;
+			};
+			matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(yRotation));
+		}
+
+		// Rotate around X to lay the item flat with the correct face up/down
+		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(ITEM_ROTATION_X));
+
+		matrices.scale(ITEM_SCALE, ITEM_SCALE, ITEM_SCALE);
 	}
 
 	@Override
@@ -39,15 +61,9 @@ public class HearthBlockEntityRenderer implements BlockEntityRenderer<HearthBloc
 		}
 
 		matrices.push();
-		setupItemTransforms(matrices);
+		setupItemTransforms(matrices, entity);
 		renderItem(matrices, vertexConsumers, entity, stack, light, overlay);
 		matrices.pop();
-	}
-
-	private void setupItemTransforms(MatrixStack matrices) {
-		matrices.translate(ITEM_CENTER_X, ITEM_CENTER_Y, ITEM_CENTER_Z);
-		matrices.scale(ITEM_SCALE, ITEM_SCALE, ITEM_SCALE);
-		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(ITEM_ROTATION_X));
 	}
 
 	private void renderItem(MatrixStack matrices, VertexConsumerProvider vertexConsumers,

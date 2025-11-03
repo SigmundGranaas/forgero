@@ -55,23 +55,15 @@ public class MinigameHudOverlay implements HudRenderCallback {
 		// Build stage boundaries for snapping
 		int[] stageBoundaries = {0, stages.coldEnd, stages.warmEnd, stages.hotStart, stages.hotEnd, stages.overheatedStart, effectiveMax};
 
-		// Find the segment index for current temp
-		int currentSegmentIdx = findSegmentIndex(temp, stageBoundaries);
-
-		// Snap to include current segment plus one before and after for context
-		int minBoundaryIdx = Math.max(0, currentSegmentIdx - 1);
-		int maxBoundaryIdx = Math.min(stageBoundaries.length - 1, currentSegmentIdx + 2);
-
-		int minWindow = stageBoundaries[minBoundaryIdx];
-		int maxWindow = stageBoundaries[maxBoundaryIdx];
-
-		// Enforce minimum window width for clarity (at least 600 units)
+		// Calculate window centered on current temperature with context
 		int minWindowWidth = 600;
-		int currentWidth = maxWindow - minWindow;
-		if (currentWidth < minWindowWidth) {
-			int diff = minWindowWidth - currentWidth;
-			minWindow = Math.max(0, minWindow - diff / 2);
-			maxWindow = Math.min(effectiveMax, maxWindow + diff / 2 + (diff % 2));
+		int halfWindow = minWindowWidth / 2;
+		int minWindow = Math.max(0, temp - halfWindow);
+		int maxWindow = Math.min(effectiveMax, minWindow + minWindowWidth);
+
+		// If we hit the upper bound, shift back to keep full window width
+		if (maxWindow == effectiveMax && maxWindow - minWindow < minWindowWidth) {
+			minWindow = Math.max(0, maxWindow - minWindowWidth);
 		}
 
 		// Add small margin to the window (5% of width)
@@ -104,6 +96,7 @@ public class MinigameHudOverlay implements HudRenderCallback {
 			DynamicTemperatureSystem.getHudColor(TemperatureStage.COLD),
 			DynamicTemperatureSystem.getHudColor(TemperatureStage.WARM),
 			DynamicTemperatureSystem.getHudColor(TemperatureStage.HOT),
+			DynamicTemperatureSystem.getHudColor(TemperatureStage.WORKABLE),
 			DynamicTemperatureSystem.getHudColor(TemperatureStage.OVERHEATED)
 		};
 
@@ -114,7 +107,6 @@ public class MinigameHudOverlay implements HudRenderCallback {
 			int color = DynamicTemperatureSystem.getHudColor(stage);
 			fill(ctx, innerLeft + x, innerTop, innerLeft + x + 1, innerTop + innerHeight, color);
 		}
-
 
 		// --- Progress Bar ---
 		int progressBarWidth = 134;
@@ -224,12 +216,8 @@ public class MinigameHudOverlay implements HudRenderCallback {
 			fill(ctx, innerLeft + innerWidth, innerTop + innerHeight - 2, innerLeft + innerWidth + 1, innerTop + innerHeight, 0xFF666666);
 		}
 
-		// Current temperature arrow
-		int tempX = valueToX(temp, minWindow, unitsPerPixelX, innerLeft, innerWidth);
-		int rightBorder = innerLeft + innerWidth;
-		if (tempX >= rightBorder) {
-			tempX = rightBorder - 1;
-		}
+		// Current temperature arrow (now fixed in the middle)
+		int tempX = innerLeft + innerWidth / 2;
 		int arrowBottomY = innerTop + innerHeight + 1;
 		drawDownArrow(ctx, tempX, arrowBottomY, 0xFFFFFFFF);
 

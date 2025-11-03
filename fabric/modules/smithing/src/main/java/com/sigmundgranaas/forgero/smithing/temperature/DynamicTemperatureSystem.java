@@ -13,21 +13,25 @@ public class DynamicTemperatureSystem {
         public final int hotStart;
         public final int hotEnd;
         public final int overheatedStart;
+        public final int workableStart;
+        public final int workableEnd;
         public final int max;
 
-        public TemperatureStages(int ambient, int coldEnd, int warmEnd, int hotStart, int hotEnd, int overheatedStart, int max) {
+        public TemperatureStages(int ambient, int coldEnd, int warmEnd, int hotStart, int hotEnd, int overheatedStart, int workableStart, int workableEnd, int max) {
             this.ambient = ambient;
             this.coldEnd = coldEnd;
             this.warmEnd = warmEnd;
             this.hotStart = hotStart;
             this.hotEnd = hotEnd;
             this.overheatedStart = overheatedStart;
+            this.workableStart = workableStart;
+            this.workableEnd = workableEnd;
             this.max = max;
         }
     }
 
     public enum TemperatureStage {
-        COLD, WARM, HOT, OVERHEATED
+        COLD, WARM, HOT, WORKABLE, OVERHEATED
     }
 
     /**
@@ -44,23 +48,23 @@ public class DynamicTemperatureSystem {
 
         if (workableStart <= 0 || workableEnd <= 0) {
             // No custom workable range; use proportional stages
-            int coldEnd = (int) (effectiveMax * 0.2);
-            int warmEnd = (int) (effectiveMax * 0.5);
+            int coldEnd = (int) (effectiveMax * 0.25);
+            int warmEnd = (int) (effectiveMax * 0.55);
             int hotEnd = (int) (effectiveMax * 0.85);
             int overheatedStart = hotEnd;
 
-            return new TemperatureStages(AMBIENT_TEMP, coldEnd, warmEnd, warmEnd, hotEnd, overheatedStart, effectiveMax);
+            return new TemperatureStages(AMBIENT_TEMP, coldEnd, warmEnd, warmEnd, hotEnd, overheatedStart, 0, 0, effectiveMax);
         }
 
-        // Custom workable range provided
+        // Custom workable range provided - decouple from hot stage
         int range = workableEnd - workableStart;
-        int coldEnd = Math.max(AMBIENT_TEMP + 1, workableStart - (int) (range * 0.5));
-        int warmEnd = workableStart;
-        int hotStart = workableStart;
-        int hotEnd = workableEnd;
-        int overheatedStart = workableEnd;
+        int coldEnd = (int) (effectiveMax * 0.25);
+        int warmEnd = (int) (effectiveMax * 0.55);
+        int hotStart = (int) (effectiveMax * 0.55);
+        int hotEnd = (int) (effectiveMax * 0.85);
+        int overheatedStart = (int) (effectiveMax * 0.85);
 
-        return new TemperatureStages(AMBIENT_TEMP, coldEnd, warmEnd, hotStart, hotEnd, overheatedStart, effectiveMax);
+        return new TemperatureStages(AMBIENT_TEMP, coldEnd, warmEnd, hotStart, hotEnd, overheatedStart, workableStart, workableEnd, effectiveMax);
     }
 
     /**
@@ -77,13 +81,23 @@ public class DynamicTemperatureSystem {
      * Determine which stage the current temperature falls into.
      */
     public static TemperatureStage getStage(int temperature, TemperatureStages stages) {
-        if (temperature < stages.warmEnd) {
-            return temperature < stages.coldEnd ? TemperatureStage.COLD : TemperatureStage.WARM;
+        // Check WORKABLE first (highest priority)
+        if (isWorkable(temperature, stages)) {
+            return TemperatureStage.WORKABLE;
         }
-        if (temperature < stages.overheatedStart) {
+        if (temperature < stages.coldEnd) {
+            return TemperatureStage.COLD;
+        }
+        if (temperature < stages.warmEnd) {
+            return TemperatureStage.WARM;
+        }
+        if (temperature < stages.hotEnd) {
             return TemperatureStage.HOT;
         }
-        return TemperatureStage.OVERHEATED;
+        if (temperature >= stages.overheatedStart) {
+            return TemperatureStage.OVERHEATED;
+        }
+        return TemperatureStage.HOT;
     }
 
     /**
@@ -140,7 +154,7 @@ public class DynamicTemperatureSystem {
      * Check if temperature is in workable range.
      */
     public static boolean isWorkable(int temperature, TemperatureStages stages) {
-        return temperature >= stages.hotStart && temperature <= stages.hotEnd;
+        return stages.workableStart > 0 && stages.workableEnd > 0 && temperature >= stages.workableStart && temperature <= stages.workableEnd;
     }
 
     /**
@@ -173,6 +187,7 @@ public class DynamicTemperatureSystem {
             case COLD -> 0xFF000099;       // Dark blue
             case WARM -> 0xFFCCCC00;       // Dark yellow
             case HOT -> 0xFFCC6600;        // Dark orange
+            case WORKABLE -> 0xFF00CC00;   // Dark green
             case OVERHEATED -> 0xFFCC0000; // Dark red
         };
     }
