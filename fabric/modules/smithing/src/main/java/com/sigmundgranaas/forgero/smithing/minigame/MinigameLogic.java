@@ -236,18 +236,6 @@ public class MinigameLogic {
             return;
         }
 
-        // Temperature gating for marker spawning
-       // int temperature = TemperatureUtils.getTemperature(stackForMarker);
-        //int maxTemp = TemperatureUtils.getMaxTemp(stackForMarker);
-        //boolean hotEnoughForWork = com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isHotEnoughForWork(temperature, maxTemp);
-        // TEMPORARILY DISABLED: allow markers to spawn regardless of temperature for testing.
-        // If you want to re-enable temperature gating later, restore the logic below:
-        // int temperature = TemperatureUtils.getTemperature(stackForMarker);
-        // int maxTemp = TemperatureUtils.getMaxTemp(stackForMarker);
-        // boolean hotEnoughForWork = com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider.isHotEnoughForWork(temperature, maxTemp);
-        // if (!hotEnoughForWork) {
-        //     return;
-        // }
 
         // Marker lifecycle
         if (markerPositions.isEmpty()) {

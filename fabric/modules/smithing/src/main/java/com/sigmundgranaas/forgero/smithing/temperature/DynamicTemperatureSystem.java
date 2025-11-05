@@ -34,20 +34,15 @@ public class DynamicTemperatureSystem {
         COLD, WARM, HOT, WORKABLE, OVERHEATED
     }
 
-    /**
-     * Calculate temperature stages dynamically based on max temp and workable range.
-     */
     public static TemperatureStages calculateStages(int maxTemp, int workableStart, int workableEnd) {
         int effectiveMax = Math.min(Math.max(maxTemp, 1), REAL_CAP);
 
-        // Validate workable range
         if (workableStart <= AMBIENT_TEMP || workableEnd <= workableStart || workableEnd > effectiveMax) {
             workableStart = 0;
             workableEnd = 0;
         }
 
         if (workableStart <= 0 || workableEnd <= 0) {
-            // No custom workable range; use proportional stages
             int coldEnd = (int) (effectiveMax * 0.25);
             int warmEnd = (int) (effectiveMax * 0.55);
             int hotEnd = (int) (effectiveMax * 0.85);
@@ -56,8 +51,6 @@ public class DynamicTemperatureSystem {
             return new TemperatureStages(AMBIENT_TEMP, coldEnd, warmEnd, warmEnd, hotEnd, overheatedStart, 0, 0, effectiveMax);
         }
 
-        // Custom workable range provided - decouple from hot stage
-        int range = workableEnd - workableStart;
         int coldEnd = (int) (effectiveMax * 0.25);
         int warmEnd = (int) (effectiveMax * 0.55);
         int hotStart = (int) (effectiveMax * 0.55);
@@ -67,9 +60,6 @@ public class DynamicTemperatureSystem {
         return new TemperatureStages(AMBIENT_TEMP, coldEnd, warmEnd, hotStart, hotEnd, overheatedStart, workableStart, workableEnd, effectiveMax);
     }
 
-    /**
-     * Calculate stages from an ItemStack using stored values.
-     */
     public static TemperatureStages calculateStages(ItemStack stack) {
         int maxTemp = TemperatureUtils.getMaxTemp(stack);
         int workableStart = TemperatureUtils.getWorkableTemperatureStart(stack);
@@ -77,11 +67,7 @@ public class DynamicTemperatureSystem {
         return calculateStages(maxTemp, workableStart, workableEnd);
     }
 
-    /**
-     * Determine which stage the current temperature falls into.
-     */
     public static TemperatureStage getStage(int temperature, TemperatureStages stages) {
-        // Check WORKABLE first (highest priority)
         if (isWorkable(temperature, stages)) {
             return TemperatureStage.WORKABLE;
         }
@@ -100,66 +86,106 @@ public class DynamicTemperatureSystem {
         return TemperatureStage.HOT;
     }
 
-    /**
-     * Get color for a temperature with smooth interpolation using legacy color scale.
-     */
     public static int getTemperatureColor(int temperature, TemperatureStages stages) {
-        final int[][] colorScale = {
-            {1600, 0xFFFFFF99},
-            {1500, 0xFFFFFF66},
-            {1400, 0xFFFFCC33},
-            {1300, 0xFFFF9900},
-            {1200, 0xFFFF6600},
-            {1100, 0xFFFF3300},
-            {1000, 0xFFFF0000},
-            {900,  0xFFCC0000},
-            {800,  0xFF990000},
-            {700,  0xFF660000},
-            {600,  0xFF330000},
-            {500,  0xFF220000},
-            {20,   0x00FFFFFF}
-        };
+        final int COLOR_RED = 0xFFFF0000;
+        final int COLOR_ORANGE_RED = 0xFFFF3300;
+        final int COLOR_ORANGE = 0xFFFF9900;
+        final int COLOR_YELLOW = 0xFFFFCC33;
+        final int COLOR_PALE = 0xFFFFFF99;
+        final int COLOR_AMBIENT = 0x00FFFFFF;
 
-        final int BASE_MAX = 1600;
-        int effectiveMax = stages.max;
+        if (stages.workableStart > 0 && stages.workableEnd > 0) {
+            // Build dynamic scale with orange only in workable range
+            int[][] colorScale = {
+                {stages.max, COLOR_RED},
+                {stages.workableEnd, COLOR_ORANGE_RED},
+                {stages.workableStart, COLOR_YELLOW},
+                {stages.warmEnd, COLOR_YELLOW},
+                {stages.coldEnd, COLOR_PALE},
+                {stages.ambient, COLOR_AMBIENT}
+            };
 
-        int mappedMax = Math.round(colorScale[0][0] / (float) BASE_MAX * effectiveMax);
-        if (temperature >= mappedMax) {
-            return colorScale[0][1];
-        }
+            if (temperature >= colorScale[0][0]) {
+                return colorScale[0][1];
+            }
 
-        int mappedMin = Math.round(colorScale[colorScale.length - 1][0] / (float) BASE_MAX * effectiveMax);
-        if (temperature <= mappedMin) {
+            if (temperature <= colorScale[colorScale.length - 1][0]) {
+                return colorScale[colorScale.length - 1][1];
+            }
+
+            if (temperature >= stages.workableStart && temperature <= stages.workableEnd) {
+                float workableProgress = (temperature - stages.workableStart) / (float) (stages.workableEnd - stages.workableStart);
+                workableProgress = Math.max(0f, Math.min(1f, workableProgress));
+
+                if (workableProgress < 0.5f) {
+                    float t = workableProgress * 2;
+                    return lerpColor(COLOR_YELLOW, COLOR_ORANGE, t);
+                } else {
+                    float t = (workableProgress - 0.5f) * 2;
+                    return lerpColor(COLOR_ORANGE, COLOR_ORANGE_RED, t);
+                }
+            }
+
+            for (int i = 0; i < colorScale.length - 1; i++) {
+                int tHigh = colorScale[i][0];
+                int tLow = colorScale[i + 1][0];
+                int cHigh = colorScale[i][1];
+                int cLow = colorScale[i + 1][1];
+
+                if (tHigh != tLow && temperature >= tLow && temperature <= tHigh) {
+                    float t = (temperature - tLow) / (float) (tHigh - tLow);
+                    t = Math.max(0f, Math.min(1f, t));
+                    return lerpColor(cLow, cHigh, t);
+                }
+            }
+        } else {
+            int[][] colorScale = {
+                {1600, 0xFFFFFF99},
+                {1500, 0xFFFFFF66},
+                {1400, 0xFFFFCC33},
+                {1300, 0xFFFF9900},
+                {1200, 0xFFFF6600},
+                {1100, 0xFFFF3300},
+                {1000, 0xFFFF0000},
+                {900,  0xFFCC0000},
+                {800,  0xFF990000},
+                {700,  0xFF660000},
+                {600,  0xFF330000},
+                {500,  0xFF220000},
+                {20,   0x00FFFFFF}
+            };
+
+            if (temperature >= colorScale[0][0]) {
+                return colorScale[0][1];
+            }
+
+            if (temperature <= colorScale[colorScale.length - 1][0]) {
+                return colorScale[colorScale.length - 1][1];
+            }
+
+            for (int i = 0; i < colorScale.length - 1; i++) {
+                int tHigh = colorScale[i][0];
+                int tLow = colorScale[i + 1][0];
+                int cHigh = colorScale[i][1];
+                int cLow = colorScale[i + 1][1];
+
+                if (tHigh != tLow && temperature >= tLow && temperature <= tHigh) {
+                    float t = (temperature - tLow) / (float) (tHigh - tLow);
+                    t = Math.max(0f, Math.min(1f, t));
+                    return lerpColor(cLow, cHigh, t);
+                }
+            }
+
             return colorScale[colorScale.length - 1][1];
         }
 
-        for (int i = 0; i < colorScale.length - 1; i++) {
-            int tHigh = Math.round(colorScale[i][0] / (float) BASE_MAX * effectiveMax);
-            int tLow = Math.round(colorScale[i + 1][0] / (float) BASE_MAX * effectiveMax);
-            int cHigh = colorScale[i][1];
-            int cLow = colorScale[i + 1][1];
-
-            if (tHigh == tLow) continue;
-            if (temperature >= tLow && temperature <= tHigh) {
-                float t = (temperature - tLow) / (float) (tHigh - tLow);
-                t = Math.max(0f, Math.min(1f, t));
-                return lerpColor(cLow, cHigh, t);
-            }
-        }
-
-        return colorScale[colorScale.length - 1][1];
+        return COLOR_AMBIENT;
     }
 
-    /**
-     * Check if temperature is in workable range.
-     */
     public static boolean isWorkable(int temperature, TemperatureStages stages) {
         return stages.workableStart > 0 && stages.workableEnd > 0 && temperature >= stages.workableStart && temperature <= stages.workableEnd;
     }
 
-    /**
-     * Linearly interpolate between two colors.
-     */
     private static int lerpColor(int colorA, int colorB, float t) {
         t = Math.max(0f, Math.min(1f, t));
         int aA = (colorA >> 24) & 0xFF;
@@ -179,16 +205,13 @@ public class DynamicTemperatureSystem {
         return (a << 24) | (r << 16) | (g << 8) | b;
     }
 
-    /**
-     * Get HUD color based on temperature stage.
-     */
     public static int getHudColor(TemperatureStage stage) {
         return switch (stage) {
-            case COLD -> 0xFF000099;       // Dark blue
-            case WARM -> 0xFFCCCC00;       // Dark yellow
-            case HOT -> 0xFFCC6600;        // Dark orange
-            case WORKABLE -> 0xFF00CC00;   // Dark green
-            case OVERHEATED -> 0xFFCC0000; // Dark red
+			case COLD -> 0xFF2196F3;
+			case WARM -> 0xFFFFEB3B;
+			case HOT -> 0xFFFF9800;
+			case WORKABLE -> 0xFF4CAF50;
+			case OVERHEATED -> 0xFFF44336;
         };
     }
 }
