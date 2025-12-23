@@ -17,6 +17,7 @@
     "AbstractBlockMixin",
     "BlockLootMixin",
     "LivingEntityLootMixin",
-    "LivingEntityOnHitMixin"
+    "LivingEntityOnHitMixin",
+    "LivingEntityTickMixin"
   ]
 }

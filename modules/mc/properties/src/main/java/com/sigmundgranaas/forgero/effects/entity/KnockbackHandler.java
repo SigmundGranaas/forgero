@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.properties.minecraft.onhit.handler;
+package com.sigmundgranaas.forgero.effects.entity;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -8,7 +8,7 @@ import net.minecraft.util.math.Vec3d;
 
 import java.util.Locale;
 
-public record KnockbackHandler(float force, Direction direction) implements OnHitHandler {
+public record KnockbackHandler(float force, Direction direction) implements ContextualEffectHandler {
 	public static final String TYPE = "forgero:knockback";
 	public static final Codec<KnockbackHandler> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.FLOAT.fieldOf("force").forGetter(KnockbackHandler::force),
@@ -16,7 +16,7 @@ public record KnockbackHandler(float force, Direction direction) implements OnHi
 	).apply(instance, KnockbackHandler::new));
 
 	@Override
-	public void onHit(Entity source, Entity target) {
+	public void apply(Entity source, Entity target) {
 		Vec3d vec = target.getPos().subtract(source.getPos()).normalize();
 		if (direction == Direction.PULL) {
 			vec = vec.multiply(-1);

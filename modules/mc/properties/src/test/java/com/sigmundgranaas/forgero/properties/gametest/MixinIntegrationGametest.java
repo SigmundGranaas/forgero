@@ -1,13 +1,13 @@
 package com.sigmundgranaas.forgero.properties.gametest;
 
 import com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.BlockBreakingProperty;
-import com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.filter.CanMineFilter;
 import com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.filter.FilterWrapper;
 import com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.filter.SameBlockFilter;
 import com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.hardness.Instant;
 import com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.selector.PatternSelector;
 import com.sigmundgranaas.forgero.properties.minecraft.onhit.OnHitProperty;
-import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.FireHandler;
+import com.sigmundgranaas.forgero.effects.entity.FireHandler;
+import com.sigmundgranaas.forgero.properties.minecraft.entityselector.SingleTargetSelector;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
@@ -74,9 +74,10 @@ public class MixinIntegrationGametest {
 
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
 	public void testOnHitFireEffect(TestContext context) {
-		// 1. Create the dynamic item
-		var fireHandler = new FireHandler(5);
-		var swordProperty = new OnHitProperty(fireHandler, null);
+		// 1. Create the dynamic item using the new OnHitProperty structure
+		var fireEffect = new FireHandler(5);
+		var selector = new SingleTargetSelector(List.of());
+		var swordProperty = new OnHitProperty(selector, List.of(fireEffect), null);
 
 		ItemStack swordStack = ComponentTester.createStack(
 				"test_sword_fire",
@@ -90,7 +91,7 @@ public class MixinIntegrationGametest {
 		player.setStackInHand(Hand.MAIN_HAND, swordStack);
 		LivingEntity target = context.spawnEntity(EntityType.PIG, new BlockPos(1, 1, 1));
 
-		// 3. Perfom the action
+		// 3. Perform the action
 		player.attack(target);
 
 		// 4. Assert the outcome

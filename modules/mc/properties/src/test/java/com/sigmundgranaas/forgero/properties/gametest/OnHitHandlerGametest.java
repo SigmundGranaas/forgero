@@ -1,13 +1,14 @@
 package com.sigmundgranaas.forgero.properties.gametest;
 
-import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.ConvertHandler;
-import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.DisarmHandler;
-import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.ExplosionHandler;
-import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.FireHandler;
-import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.KnockbackHandler;
-import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.LifeStealHandler;
-import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.LightningHandler;
-import com.sigmundgranaas.forgero.properties.minecraft.onhit.handler.StatusEffectHandler;
+import com.sigmundgranaas.forgero.effects.entity.ConvertHandler;
+import com.sigmundgranaas.forgero.effects.entity.DisarmHandler;
+import com.sigmundgranaas.forgero.effects.entity.ExplosionHandler;
+import com.sigmundgranaas.forgero.effects.entity.FireHandler;
+import com.sigmundgranaas.forgero.effects.entity.KnockbackHandler;
+import com.sigmundgranaas.forgero.effects.entity.LifeStealHandler;
+import com.sigmundgranaas.forgero.effects.entity.LightningHandler;
+import com.sigmundgranaas.forgero.effects.entity.StatusEffectHandler;
+
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
@@ -30,9 +31,8 @@ public class OnHitHandlerGametest {
 	public void testFireHandler(TestContext context) {
 		FireHandler handler = new FireHandler(5); // 5 seconds
 		LivingEntity target = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
-		LivingEntity source = context.spawnEntity(EntityType.PIG, new BlockPos(0, 1, 1));
 
-		handler.onHit(source, target);
+		handler.apply(target);
 
 		context.assertTrue(target.isOnFire(), "Target should be on fire");
 		context.assertTrue(target.getFireTicks() == 100, "Target should have 100 fire ticks (5 seconds), but had " + target.getFireTicks());
@@ -43,14 +43,12 @@ public class OnHitHandlerGametest {
 	public void testStatusEffectHandler(TestContext context) {
 		StatusEffectHandler handler = new StatusEffectHandler(new Identifier("minecraft", "slowness"), 100, 2);
 		LivingEntity target = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
-		LivingEntity source = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(0, 1, 1));
 
-		handler.onHit(source, target);
+		handler.apply(target);
 
 		context.assertTrue(target.hasStatusEffect(StatusEffects.SLOWNESS), "Target should have slowness effect");
 		var effectInstance = target.getStatusEffect(StatusEffects.SLOWNESS);
 		context.assertTrue(effectInstance != null, "Status effect instance should not be null");
-		// GameTest will fail on the line above if null, so this next check is safe.
 		context.assertTrue(effectInstance.getAmplifier() == 2, "Slowness amplifier should be 2, but was " + effectInstance.getAmplifier());
 
 		context.complete();
@@ -65,7 +63,7 @@ public class OnHitHandlerGametest {
 		target.setVelocity(Vec3d.ZERO);
 		context.assertTrue(target.getVelocity().lengthSquared() == 0, "Target should have zero velocity before knockback");
 
-		handler.onHit(source, target);
+		handler.apply(source, target);
 
 		context.waitAndRun(1, () -> {
 			context.assertTrue(target.getVelocity().lengthSquared() > 0.1, "Target should have velocity after being pushed");
@@ -83,7 +81,7 @@ public class OnHitHandlerGametest {
 		target.setVelocity(Vec3d.ZERO);
 		context.assertTrue(target.getVelocity().lengthSquared() == 0, "Target should have zero velocity before knockback");
 
-		handler.onHit(source, target);
+		handler.apply(source, target);
 
 		context.waitAndRun(1, () -> {
 			context.assertTrue(target.getVelocity().lengthSquared() > 0.1, "Target should have velocity after being pulled");
@@ -102,7 +100,7 @@ public class OnHitHandlerGametest {
 		float initialSourceHealth = source.getHealth();
 		float initialTargetHealth = target.getHealth();
 
-		handler.onHit(source, target);
+		handler.apply(source, target);
 
 		context.assertTrue(target.getHealth() < initialTargetHealth, "Target's health should decrease");
 		context.assertTrue(source.getHealth() > initialSourceHealth, "Source's health should increase");
@@ -124,7 +122,7 @@ public class OnHitHandlerGametest {
 		float initialSourceHealth = source.getHealth();
 		float healthToSteal = target.getHealth();
 
-		handler.onHit(source, target);
+		handler.apply(source, target);
 
 		context.assertTrue(target.getHealth() <= 0, "Target's health should be 0 or less");
 		context.assertTrue(source.getHealth() == initialSourceHealth + healthToSteal, "Source should only gain the health the target had");
@@ -135,10 +133,9 @@ public class OnHitHandlerGametest {
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
 	public void testLightningHandler(TestContext context) {
 		LightningHandler handler = new LightningHandler();
-		LivingEntity source = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(0, 1, 1));
 		LivingEntity target = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(2, 1, 1));
 
-		handler.onHit(source, target);
+		handler.apply(target);
 
 		context.expectEntity(EntityType.LIGHTNING_BOLT);
 		context.complete();
@@ -150,7 +147,7 @@ public class OnHitHandlerGametest {
 		LivingEntity source = context.createMockCreativeServerPlayerInWorld();
 		VillagerEntity target = context.spawnEntity(EntityType.VILLAGER, new BlockPos(2, 1, 1));
 
-		handler.onHit(source, target);
+		handler.apply(source, target);
 
 		context.expectEntity(EntityType.ZOMBIE);
 		context.dontExpectEntity(target.getType());
@@ -166,7 +163,7 @@ public class OnHitHandlerGametest {
 		target.setStackInHand(Hand.MAIN_HAND, new ItemStack(Items.DIAMOND_SWORD));
 		context.assertTrue(!target.getMainHandStack().isEmpty(), "Target should be holding a sword before disarm");
 
-		handler.onHit(source, target);
+		handler.apply(source, target);
 
 		context.expectEntity(EntityType.ITEM);
 		context.waitAndRun(1, () -> {
@@ -184,7 +181,7 @@ public class OnHitHandlerGametest {
 		BlockPos dirtPos = new BlockPos(2, 1, 2);
 		context.setBlockState(dirtPos, Blocks.DIRT);
 
-		handler.onHit(source, target);
+		handler.apply(source, target);
 
 		context.waitAndRun(1, () -> {
 			context.expectBlock(Blocks.AIR, dirtPos);

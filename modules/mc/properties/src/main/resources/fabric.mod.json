@@ -17,6 +17,7 @@
   },
   "entrypoints": {
     "forgero:data_plugin": [
+      "com.sigmundgranaas.forgero.properties.minecraft.ontick.OnTickPropertiesPlugin",
       "com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.BlockBreakingPropertiesPlugin",
       "com.sigmundgranaas.forgero.properties.minecraft.onhit.OnHitPropertiesPlugin",
       "com.sigmundgranaas.forgero.properties.minecraft.loot.LootPropertiesPlugin"

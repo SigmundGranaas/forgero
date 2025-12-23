@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.properties.minecraft.onhit.handler;
+package com.sigmundgranaas.forgero.effects.entity;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -9,14 +9,14 @@ import net.minecraft.util.Identifier;
 
 import java.util.Optional;
 
-public record ConvertHandler(Identifier convertTo) implements OnHitHandler {
+public record ConvertHandler(Identifier convertTo) implements ContextualEffectHandler {
 	public static final String TYPE = "forgero:convert";
 	public static final Codec<ConvertHandler> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Identifier.CODEC.fieldOf("convert_to").forGetter(ConvertHandler::convertTo)
 	).apply(instance, ConvertHandler::new));
 
 	@Override
-	public void onHit(Entity source, Entity target) {
+	public void apply(Entity source, Entity target) {
 		if (!target.getWorld().isClient) {
 			Optional<EntityType<?>> entityType = Registries.ENTITY_TYPE.getOrEmpty(convertTo);
 

@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.properties.minecraft.onhit;
+package com.sigmundgranaas.forgero.properties.minecraft.ontick;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -19,45 +19,52 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * The Orchestrator property for On-Hit events. It defines the "when" (on entity hit),
+ * The Orchestrator property for On-Tick events. It defines the "when" (periodically),
  * the "who" (via a selector with filters), and the "what" (via a list of effects).
+ * This property is checked for any entity wearing or holding an item with it.
  *
  * <h3>JSON Configuration Example:</h3>
  * <pre>
  * {
  *   "selector": {
  *     "type": "forgero:aoe",
- *     "radius": 2,
+ *     "radius": 5,
  *     "filters": [
- *       { "type": "forgero:is_hostile" },
- *       { "type": "forgero:health_threshold", "threshold": 0.5, "comparator": "less_than" }
+ *       { "type": "forgero:is_hostile" }
  *     ]
  *   },
  *   "effects": [
- *     { "type": "forgero:lightning" },
- *     { "type": "forgero:life_steal", "amount": 1 }
+ *     {
+ *       "type": "forgero:status_effect",
+ *       "effect": "minecraft:slowness",
+ *       "duration": 40,
+ *       "amplifier": 0
+ *     }
  *   ],
+ *   "interval": 20,
  *   "condition": {
  *     "type": "forgero:is_sneaking"
  *   }
  * }
  * </pre>
  */
-public record OnHitProperty(
+public record OnTickProperty(
 		EntitySelector selector,
 		List<OnHitEffect> effects,
+		int interval,
 		@Nullable Condition condition
 ) implements ConditionalProperty {
-	public static final OpenIdentifier KEY_ID = new OpenIdentifier("minecraft", "on_hit");
-	public static final ResolutionKey<List<OnHitProperty>> KEY = new ResolutionKey<>(KEY_ID);
-	public static final PropertyKey<OnHitProperty> PROPERTY_KEY = new PropertyKey<>(OnHitProperty.class, KEY_ID.toString());
+	public static final OpenIdentifier KEY_ID = new OpenIdentifier("minecraft", "on_tick");
+	public static final ResolutionKey<List<OnTickProperty>> KEY = new ResolutionKey<>(KEY_ID);
+	public static final PropertyKey<OnTickProperty> PROPERTY_KEY = new PropertyKey<>(OnTickProperty.class, KEY_ID.toString());
 
-	public static Codec<OnHitProperty> codec(Codec<Condition> conditionCodec) {
+	public static Codec<OnTickProperty> codec(Codec<Condition> conditionCodec) {
 		return RecordCodecBuilder.create(instance -> instance.group(
-				EntitySelector.CODEC.fieldOf("selector").forGetter(OnHitProperty::selector),
-				Codec.list(OnHitEffect.CODEC).fieldOf("effects").forGetter(OnHitProperty::effects),
+				EntitySelector.CODEC.fieldOf("selector").forGetter(OnTickProperty::selector),
+				Codec.list(OnHitEffect.CODEC).fieldOf("effects").forGetter(OnTickProperty::effects),
+				Codec.INT.optionalFieldOf("interval", 20).forGetter(OnTickProperty::interval),
 				conditionCodec.optionalFieldOf("condition").forGetter(p -> Optional.ofNullable(p.condition()))
-		).apply(instance, (selector, effects, condition) -> new OnHitProperty(selector, effects, condition.orElse(null))));
+		).apply(instance, (selector, effects, interval, condition) -> new OnTickProperty(selector, effects, interval, condition.orElse(null))));
 	}
 
 	@Override
@@ -65,13 +72,13 @@ public record OnHitProperty(
 		return condition;
 	}
 
-	public static class Engine extends AbstractConditionalPropertyEngine<OnHitProperty, List<OnHitProperty>> {
+	public static class Engine extends AbstractConditionalPropertyEngine<OnTickProperty, List<OnTickProperty>> {
 		public Engine() {
 			super(KEY, PROPERTY_KEY);
 		}
 
 		@Override
-		public List<OnHitProperty> apply(OptimizedBakedResult<OnHitProperty> baked, DynamicContext context) {
+		public List<OnTickProperty> apply(OptimizedBakedResult<OnTickProperty> baked, DynamicContext context) {
 			return baked.stream(context).collect(Collectors.toList());
 		}
 	}

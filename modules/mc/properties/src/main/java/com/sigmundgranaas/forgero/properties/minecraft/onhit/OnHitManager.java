@@ -5,6 +5,9 @@ import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.property.context.ContextKeys;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
+import com.sigmundgranaas.forgero.effects.entity.ContextualEffectHandler;
+import com.sigmundgranaas.forgero.effects.entity.EntityEffectHandler;
+import com.sigmundgranaas.forgero.effects.entity.OnHitEffect;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -27,9 +30,24 @@ public class OnHitManager {
 
 		ForgeroApi.converter().toComponent(stack).ifPresent(component -> {
 			List<OnHitProperty> properties = getActiveProperties(component, target);
-			properties.forEach(prop -> prop.handler().onHit(source, target));
+
+			for (OnHitProperty property : properties) {
+				// Selector handles both selection and filtering
+				List<Entity> finalTargets = property.selector().select(source, target);
+
+				for (Entity finalTarget : finalTargets) {
+					for (OnHitEffect effect : property.effects()) {
+						if (effect instanceof ContextualEffectHandler contextual) {
+							contextual.apply(source, finalTarget);
+						} else if (effect instanceof EntityEffectHandler simple) {
+							simple.apply(finalTarget);
+						}
+					}
+				}
+			}
 		});
 	}
+
 
 	private static List<OnHitProperty> getActiveProperties(Component component, Entity target) {
 		var engine = new OnHitProperty.Engine();
