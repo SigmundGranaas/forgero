@@ -18,6 +18,7 @@ public interface BlockFilter {
 			case IsBlockFilter.TYPE -> IsBlockFilter.CODEC;
 			case SameBlockFilter.TYPE -> SameBlockFilter.CODEC;
 			case SimilarBlockFilter.TYPE -> SimilarBlockFilter.CODEC;
+			case BlockTagFilter.TYPE -> BlockTagFilter.CODEC;
 			default -> throw new IllegalArgumentException("Unknown BlockFilter type: " + type);
 		};
 	}

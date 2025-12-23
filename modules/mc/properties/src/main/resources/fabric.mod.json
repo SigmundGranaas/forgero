@@ -20,7 +20,11 @@
       "com.sigmundgranaas.forgero.properties.minecraft.ontick.OnTickPropertiesPlugin",
       "com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.BlockBreakingPropertiesPlugin",
       "com.sigmundgranaas.forgero.properties.minecraft.onhit.OnHitPropertiesPlugin",
-      "com.sigmundgranaas.forgero.properties.minecraft.loot.LootPropertiesPlugin"
+      "com.sigmundgranaas.forgero.properties.minecraft.loot.LootPropertiesPlugin",
+      "com.sigmundgranaas.forgero.properties.minecraft.ondamage.OnDamageReceivedPropertiesPlugin",
+      "com.sigmundgranaas.forgero.properties.minecraft.onkill.OnKillPropertiesPlugin",
+      "com.sigmundgranaas.forgero.properties.minecraft.onsneak.OnSneakTogglePropertiesPlugin",
+      "com.sigmundgranaas.forgero.properties.minecraft.onblockplace.OnBlockPlacePropertiesPlugin"
     ]
   },
   "mixins": [

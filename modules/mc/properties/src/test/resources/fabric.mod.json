@@ -17,7 +17,12 @@
       "com.sigmundgranaas.forgero.properties.gametest.BlockSelectorGametest",
       "com.sigmundgranaas.forgero.properties.gametest.OnHitHandlerGametest",
       "com.sigmundgranaas.forgero.properties.gametest.MixinIntegrationGametest",
-      "com.sigmundgranaas.forgero.properties.gametest.LootGametest"
+      "com.sigmundgranaas.forgero.properties.gametest.LootGametest",
+      "com.sigmundgranaas.forgero.properties.gametest.EffectHandlerTests",
+      "com.sigmundgranaas.forgero.properties.gametest.EventPropertyTests",
+      "com.sigmundgranaas.forgero.properties.gametest.NewFilterTests",
+      "com.sigmundgranaas.forgero.properties.gametest.IntegrationTests",
+      "com.sigmundgranaas.forgero.properties.gametest.PerformanceTests"
     ]
   }
 }

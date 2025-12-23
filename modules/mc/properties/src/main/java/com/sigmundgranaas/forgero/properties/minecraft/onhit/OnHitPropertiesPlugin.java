@@ -6,14 +6,23 @@ import com.sigmundgranaas.forgero.effects.entity.ConvertHandler;
 import com.sigmundgranaas.forgero.effects.entity.DisarmHandler;
 import com.sigmundgranaas.forgero.effects.entity.ExplosionHandler;
 import com.sigmundgranaas.forgero.effects.entity.FireHandler;
+import com.sigmundgranaas.forgero.effects.entity.FreezeHandler;
 import com.sigmundgranaas.forgero.effects.entity.KnockbackHandler;
 import com.sigmundgranaas.forgero.effects.entity.LifeStealHandler;
 import com.sigmundgranaas.forgero.effects.entity.LightningHandler;
+import com.sigmundgranaas.forgero.effects.entity.MagnetHandler;
+import com.sigmundgranaas.forgero.effects.entity.ModifyBlockHandler;
 import com.sigmundgranaas.forgero.effects.entity.OnHitEffect;
+import com.sigmundgranaas.forgero.effects.entity.ParticleHandler;
+import com.sigmundgranaas.forgero.effects.entity.SoundHandler;
+import com.sigmundgranaas.forgero.effects.entity.SpawnEntityHandler;
 import com.sigmundgranaas.forgero.effects.entity.StatusEffectHandler;
+import com.sigmundgranaas.forgero.effects.entity.VelocityHandler;
 import com.sigmundgranaas.forgero.loader.api.DataPlugin;
 import com.sigmundgranaas.forgero.loader.api.PluginRegistrationContext;
 import com.sigmundgranaas.forgero.properties.minecraft.entityfilter.*;
+import com.sigmundgranaas.forgero.properties.minecraft.entityfilter.EnvironmentFilter;
+import com.sigmundgranaas.forgero.properties.minecraft.entityfilter.EntityStateFilter;
 import com.sigmundgranaas.forgero.properties.minecraft.entityselector.AreaOfEffectSelector;
 import com.sigmundgranaas.forgero.properties.minecraft.entityselector.ChainSelector;
 import com.sigmundgranaas.forgero.properties.minecraft.entityselector.ConeSelector;
@@ -35,6 +44,7 @@ public class OnHitPropertiesPlugin implements DataPlugin {
 		registerEffect(FireHandler.TYPE, FireHandler.CODEC);
 		registerEffect(LightningHandler.TYPE, LightningHandler.CODEC);
 		registerEffect(StatusEffectHandler.TYPE, StatusEffectHandler.CODEC);
+		registerEffect(FreezeHandler.TYPE, FreezeHandler.CODEC);
 
 		// ContextualEffect Handlers (source and target)
 		registerEffect(LifeStealHandler.TYPE, LifeStealHandler.CODEC);
@@ -42,6 +52,12 @@ public class OnHitPropertiesPlugin implements DataPlugin {
 		registerEffect(ExplosionHandler.TYPE, ExplosionHandler.CODEC);
 		registerEffect(ConvertHandler.TYPE, ConvertHandler.CODEC);
 		registerEffect(DisarmHandler.TYPE, DisarmHandler.CODEC);
+		registerEffect(SoundHandler.TYPE, SoundHandler.CODEC);
+		registerEffect(ParticleHandler.TYPE, ParticleHandler.CODEC);
+		registerEffect(VelocityHandler.TYPE, VelocityHandler.CODEC);
+		registerEffect(MagnetHandler.TYPE, MagnetHandler.CODEC);
+		registerEffect(SpawnEntityHandler.TYPE, SpawnEntityHandler.CODEC);
+		registerEffect(ModifyBlockHandler.TYPE, ModifyBlockHandler.CODEC);
 
 		// Selectors
 		registerSelector(SingleTargetSelector.TYPE, SingleTargetSelector.CODEC);
@@ -71,6 +87,10 @@ public class OnHitPropertiesPlugin implements DataPlugin {
 		registerFilter(AndFilter.TYPE, AndFilter.CODEC);
 		registerFilter(OrFilter.TYPE, OrFilter.CODEC);
 		registerFilter(NotFilter.TYPE, NotFilter.CODEC);
+
+		// New Filters - Phase 4
+		registerFilter(EnvironmentFilter.TYPE, EnvironmentFilter.CODEC);
+		registerFilter(EntityStateFilter.TYPE, EntityStateFilter.CODEC);
 	}
 
 	public static void registerEffect(String type, Codec<? extends OnHitEffect> codec) {

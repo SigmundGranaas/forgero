@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.properties.minecraft.mixin;
 
+import com.sigmundgranaas.forgero.properties.minecraft.onsneak.OnSneakToggleManager;
 import com.sigmundgranaas.forgero.properties.minecraft.ontick.OnTickManager;
 import net.minecraft.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,5 +15,6 @@ public abstract class LivingEntityTickMixin {
 	private void forgero$onTick(CallbackInfo ci) {
 		LivingEntity entity = (LivingEntity) (Object) this;
 		OnTickManager.handle(entity);
+		OnSneakToggleManager.handleTick(entity);
 	}
 }
