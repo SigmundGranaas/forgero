@@ -42,18 +42,81 @@ Modifies how a tool breaks blocks, allowing for Area of Effect (AoE) mining patt
 
 ### On Entity Hit (`minecraft:on_hit`)
 
-Triggers an effect when the wielder hits an entity with the item.
+Triggers one or more effects when the wielder hits an entity. Uses the three-tier architecture combining selectors, filters, and effects.
 
 **Interface Slots:**
-*   `handler`: Expects an `OnHitHandler` component. Defines the action to perform on hit.
+*   `selector`: Expects an `EntitySelector` component. Defines which entities to target (single target, area of effect, cone, chain).
+*   `effects`: Expects a list of `OnHitEffect` components. These are the actual effects to apply to selected targets.
+*   `condition` (optional): Expects a `DynamicCondition` for property-level filtering (e.g., time of day, biome).
 
 **Example:**
 ```json
 {
   "minecraft:on_hit": [
     {
-      "handler": {
-        "type": "forgero:lightning"
+      "selector": {
+        "type": "forgero:aoe",
+        "radius": 3,
+        "filters": [
+          {
+            "type": "forgero:is_hostile"
+          },
+          {
+            "type": "forgero:health_threshold",
+            "threshold": 0.5,
+            "comparator": "less_than"
+          }
+        ]
+      },
+      "effects": [
+        {
+          "type": "forgero:lightning"
+        },
+        {
+          "type": "forgero:fire",
+          "duration": 5
+        }
+      ]
+    }
+  ]
+}
+```
+
+### On Tick (`minecraft:on_tick`)
+
+Triggers effects periodically while the item is equipped (in hand or armor slot).
+
+**Interface Slots:**
+*   `selector`: Expects an `EntitySelector` component. Defines which entities to target.
+*   `effects`: Expects a list of `OnHitEffect` components. Effects to apply each interval.
+*   `interval` (optional): Tick interval between triggers (default: 20 ticks = 1 second).
+*   `condition` (optional): Expects a `DynamicCondition` for property-level filtering.
+
+**Example:**
+```json
+{
+  "minecraft:on_tick": [
+    {
+      "selector": {
+        "type": "forgero:aoe",
+        "radius": 5,
+        "filters": [
+          {
+            "type": "forgero:is_hostile"
+          }
+        ]
+      },
+      "effects": [
+        {
+          "type": "forgero:status_effect",
+          "effect": "minecraft:slowness",
+          "duration": 40,
+          "amplifier": 0
+        }
+      ],
+      "interval": 20,
+      "condition": {
+        "type": "forgero:is_sneaking"
       }
     }
   ]
@@ -95,16 +158,68 @@ Modifies the loot dropped by blocks or entities.
 
 These are the concrete implementations you can "plug into" the slots defined by the Event Properties above. They are grouped by the interface they implement.
 
-### On-Hit Handlers (`OnHitHandler`)
-*Used by: `minecraft:on_hit`*
+### Entity Selectors (`EntitySelector`)
+*Used by: `minecraft:on_hit`, `minecraft:on_tick`*
 
-These components define an action to be performed when an entity is hit.
+Entity selectors define **who** gets targeted by effects. All selectors support an optional `filters` array.
+
+| `type` | Description | JSON Properties |
+| :--- | :--- | :--- |
+| **`forgero:single_target`** | Selects only the entity that was directly hit. | `filters` (List<EntityFilter>, optional) |
+| **`forgero:aoe`** | Selects all entities in a radius around the initial target. | `radius` (int, **required**)<br>`filters` (List<EntityFilter>, optional) |
+| **`forgero:cone`** | Selects entities within a cone-shaped area in front of the source. | `angle` (float, **required**, degrees, 0-360)<br>`range` (float, **required**)<br>`filters` (List<EntityFilter>, optional) |
+| **`forgero:chain`** | Chains from the initial target to nearby entities. | `maxChains` (int, **required**, 0+)<br>`chainRange` (float, **required**)<br>`allowRepeats` (boolean, optional, default: false)<br>`filters` (List<EntityFilter>, optional) |
+
+### Entity Filters (`EntityFilter`)
+*Used by: `EntitySelector` components*
+
+Entity filters narrow down which entities from a selector's selection should receive effects.
+
+**Basic Filters:**
+
+| `type` | Description | JSON Properties |
+| :--- | :--- | :--- |
+| **`forgero:is_alive`** | Filters dead or removed entities. | *None* |
+| **`forgero:is_hostile`** | Filters entities extending `HostileEntity`. | *None* |
+| **`forgero:is_teammate`** | Filters based on team relationship. | `invert` (boolean, optional, default: false) |
+| **`forgero:has_tag`** | Filters entities by entity type tag. | `tag` (Identifier, **required**) |
+| **`forgero:entity_type`** | Filters by specific entity type. | `entity_type` (Identifier, **required**) |
+| **`forgero:is_player`** | Filters entities that are players. | *None* |
+
+**State-Based Filters:**
+
+| `type` | Description | JSON Properties |
+| :--- | :--- | :--- |
+| **`forgero:is_burning`** | Filters entities currently on fire. | *None* |
+| **`forgero:is_in_water`** | Filters entities in/touching water. | *None* |
+| **`forgero:has_effect`** | Filters entities with a status effect. | `effect` (Identifier, **required**) |
+
+**Advanced Filters:**
+
+| `type` | Description | JSON Properties |
+| :--- | :--- | :--- |
+| **`forgero:health_threshold`** | Filters by health percentage (0.0-1.0). | `threshold` (float, **required**, 0.0-1.0)<br>`comparator` (String, **required**) |
+| **`forgero:distance`** | Filters within distance range. | `min` (float, optional, default: 0.0)<br>`max` (float, **required**) |
+| **`forgero:random_chance`** | Filters by random chance (0.0-1.0). | `chance` (float, **required**, 0.0-1.0) |
+
+**Composite Filters:**
+
+| `type` | Description | JSON Properties |
+| :--- | :--- | :--- |
+| **`forgero:and`** | Requires ALL filters to pass. | `filters` (List<EntityFilter>, **required**) |
+| **`forgero:or`** | Requires ANY filter to pass. | `filters` (List<EntityFilter>, **required**) |
+| **`forgero:not`** | Inverts the filter result. | `filter` (EntityFilter, **required**) |
+
+### On-Hit Effects (`OnHitEffect`)
+*Used by: `minecraft:on_hit`, `minecraft:on_tick`*
+
+These components define an action to be performed on the selected targets.
 
 | `type` | Description | JSON Properties |
 | :--- | :--- | :--- |
 | **`forgero:convert`** | Converts the target entity into another entity. | `convert_to` (Identifier, **required**) |
 | **`forgero:disarm`** | Forces the target to drop their main-hand item. | *None* |
-| **`forgero:explosion`** | Creates an explosion at the target's location. | `power` (float, **required**)<br>`create_fire` (boolean, optional, default: `false`)<br>`destruction_type` (String, optional, default: "none", options: `none`, `block`, `mob`) |
+| **`forgero:explosion`** | Creates an explosion at the target's location. | `power` (float, **required**)<br>`create_fire` (boolean, optional, default: `false`)<br>`destruction_type` (String, optional, default: "none") |
 | **`forgero:fire`** | Sets the target on fire. | `duration` (int, **required**, in seconds) |
 | **`forgero:knockback`** | Applies knockback to the target. | `force` (float, **required**)<br>`direction` (String, **required**, options: `push`, `pull`) |
 | **`forgero:life_steal`** | Damages the target and heals the attacker. | `amount` (float, **required**) |
