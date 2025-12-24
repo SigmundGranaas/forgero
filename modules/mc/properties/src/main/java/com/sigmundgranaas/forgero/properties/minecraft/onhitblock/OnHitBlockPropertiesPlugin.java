@@ -4,7 +4,9 @@ import com.mojang.serialization.Codec;
 import com.sigmundgranaas.forgero.core.property.api.codec.ListCodecWrapper;
 import com.sigmundgranaas.forgero.effects.block.BlockParticleEffect;
 import com.sigmundgranaas.forgero.effects.block.BlockSoundEffect;
+import com.sigmundgranaas.forgero.effects.block.IgniteBlockEffect;
 import com.sigmundgranaas.forgero.effects.block.OnHitBlockEffect;
+import com.sigmundgranaas.forgero.effects.block.PlaceBlockEffect;
 import com.sigmundgranaas.forgero.effects.block.TransformBlockEffect;
 import com.sigmundgranaas.forgero.loader.api.DataPlugin;
 import com.sigmundgranaas.forgero.loader.api.PluginRegistrationContext;
@@ -25,6 +27,8 @@ public class OnHitBlockPropertiesPlugin implements DataPlugin {
 		registerEffect(BlockSoundEffect.TYPE, BlockSoundEffect.CODEC);
 		registerEffect(BlockParticleEffect.TYPE, BlockParticleEffect.CODEC);
 		registerEffect(TransformBlockEffect.TYPE, TransformBlockEffect.CODEC);
+		registerEffect(PlaceBlockEffect.TYPE, PlaceBlockEffect.CODEC);
+		registerEffect(IgniteBlockEffect.TYPE, IgniteBlockEffect.CODEC);
 	}
 
 	public static void registerEffect(String type, Codec<? extends OnHitBlockEffect> codec) {
