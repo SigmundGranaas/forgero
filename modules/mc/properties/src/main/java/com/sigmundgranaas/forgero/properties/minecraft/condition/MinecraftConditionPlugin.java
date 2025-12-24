@@ -17,23 +17,58 @@ public class MinecraftConditionPlugin implements DataPlugin {
 	}
 
 	private void registerDynamicConditions(PluginRegistrationContext context) {
-		OpenIdentifier damagePercentageType = new OpenIdentifier("forgero", "damage_percentage");
-		OpenIdentifier weatherType = new OpenIdentifier("forgero", "weather");
-		OpenIdentifier randomType = new OpenIdentifier("forgero", "random");
-
+		// Runtime state conditions
 		context.registerDynamicConditionCodec(
-				damagePercentageType.toString(),
+				"forgero:damage_percentage",
 				DamagePercentageCondition.CODEC
 		);
 
 		context.registerDynamicConditionCodec(
-				weatherType.toString(),
+				"forgero:weather",
 				WeatherCondition.CODEC
 		);
 
 		context.registerDynamicConditionCodec(
-				randomType.toString(),
+				"forgero:random",
 				RandomCondition.CODEC
+		);
+
+		// Entity conditions
+		context.registerDynamicConditionCodec(
+				"forgero:entity_type",
+				EntityTypeCondition.CODEC
+		);
+
+		context.registerDynamicConditionCodec(
+				"forgero:entity_flag",
+				EntityFlagCondition.CODEC
+		);
+
+		// Block conditions
+		context.registerDynamicConditionCodec(
+				"forgero:block_match",
+				BlockMatchCondition.CODEC
+		);
+
+		context.registerDynamicConditionCodec(
+				"forgero:block_tag",
+				BlockTagCondition.CODEC
+		);
+
+		// World/Location conditions
+		context.registerDynamicConditionCodec(
+				"forgero:dimension",
+				DimensionCondition.CODEC
+		);
+
+		context.registerDynamicConditionCodec(
+				"forgero:biome",
+				BiomeCondition.CODEC
+		);
+
+		context.registerDynamicConditionCodec(
+				"forgero:position",
+				PositionCondition.CODEC
 		);
 	}
 

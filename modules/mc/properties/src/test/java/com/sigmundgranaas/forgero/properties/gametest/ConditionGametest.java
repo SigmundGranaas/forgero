@@ -110,6 +110,156 @@ public class ConditionGametest {
 		context.complete();
 	}
 
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
+	public void testEntityTypeCondition(TestContext context) {
+		var player = context.createMockCreativeServerPlayerInWorld();
+		var zombie = context.spawnEntity(net.minecraft.entity.EntityType.ZOMBIE, context.getAbsolutePos(context.getRelativePos(net.minecraft.util.math.BlockPos.ORIGIN)));
+
+		// Test player entity type
+		var playerTypeCondition = new com.sigmundgranaas.forgero.properties.minecraft.condition.EntityTypeCondition(
+				new OpenIdentifier("forgero", "entity_type"),
+				new net.minecraft.util.Identifier("minecraft", "player")
+		);
+
+		DynamicContext playerContext = new DynamicContext.Builder()
+				.put(MinecraftContextKeys.SOURCE_ENTITY, player)
+				.build();
+
+		context.assertTrue(playerTypeCondition.test(playerContext), "Should match player entity type");
+
+		// Test zombie entity type
+		var zombieTypeCondition = new com.sigmundgranaas.forgero.properties.minecraft.condition.EntityTypeCondition(
+				new OpenIdentifier("forgero", "entity_type"),
+				new net.minecraft.util.Identifier("minecraft", "zombie")
+		);
+
+		DynamicContext zombieContext = new DynamicContext.Builder()
+				.put(MinecraftContextKeys.TARGET_ENTITY, zombie)
+				.build();
+
+		context.assertTrue(zombieTypeCondition.test(zombieContext), "Should match zombie entity type");
+
+		// Test non-matching type
+		context.assertFalse(playerTypeCondition.test(zombieContext), "Should not match wrong entity type");
+
+		context.complete();
+	}
+
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
+	public void testEntityFlagCondition(TestContext context) {
+		var player = context.createMockCreativeServerPlayerInWorld();
+
+		// Test on_ground flag
+		var onGroundCondition = new com.sigmundgranaas.forgero.properties.minecraft.condition.EntityFlagCondition(
+				new OpenIdentifier("forgero", "entity_flag"),
+				com.sigmundgranaas.forgero.properties.minecraft.condition.EntityFlagCondition.EntityFlag.ON_GROUND
+		);
+
+		DynamicContext groundContext = new DynamicContext.Builder()
+				.put(MinecraftContextKeys.SOURCE_ENTITY, player)
+				.build();
+
+		context.assertTrue(onGroundCondition.test(groundContext), "Player should be on ground");
+
+		// Test sprinting flag (player starts not sprinting)
+		var sprintingCondition = new com.sigmundgranaas.forgero.properties.minecraft.condition.EntityFlagCondition(
+				new OpenIdentifier("forgero", "entity_flag"),
+				com.sigmundgranaas.forgero.properties.minecraft.condition.EntityFlagCondition.EntityFlag.SPRINTING
+		);
+
+		context.assertFalse(sprintingCondition.test(groundContext), "Player should not be sprinting initially");
+
+		context.complete();
+	}
+
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
+	public void testBlockMatchCondition(TestContext context) {
+		var pos = context.getAbsolutePos(context.getRelativePos(net.minecraft.util.math.BlockPos.ORIGIN));
+		var world = context.getWorld();
+
+		// Place a stone block
+		world.setBlockState(pos, net.minecraft.block.Blocks.STONE.getDefaultState());
+
+		// Test matching block
+		var stoneCondition = new com.sigmundgranaas.forgero.properties.minecraft.condition.BlockMatchCondition(
+				new OpenIdentifier("forgero", "block_match"),
+				java.util.List.of(net.minecraft.block.Blocks.STONE)
+		);
+
+		DynamicContext blockContext = new DynamicContext.Builder()
+				.put(MinecraftContextKeys.WORLD, world)
+				.put(MinecraftContextKeys.BLOCK_POS, pos)
+				.build();
+
+		context.assertTrue(stoneCondition.test(blockContext), "Should match stone block");
+
+		// Test non-matching block
+		var dirtCondition = new com.sigmundgranaas.forgero.properties.minecraft.condition.BlockMatchCondition(
+				new OpenIdentifier("forgero", "block_match"),
+				java.util.List.of(net.minecraft.block.Blocks.DIRT)
+		);
+
+		context.assertFalse(dirtCondition.test(blockContext), "Should not match dirt when stone is placed");
+
+		context.complete();
+	}
+
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
+	public void testDimensionCondition(TestContext context) {
+		var world = context.getWorld();
+		var dimensionId = world.getRegistryKey().getValue();
+
+		// Test matching dimension
+		var matchingCondition = new com.sigmundgranaas.forgero.properties.minecraft.condition.DimensionCondition(
+				new OpenIdentifier("forgero", "dimension"),
+				dimensionId,
+				true
+		);
+
+		DynamicContext dimContext = new DynamicContext.Builder()
+				.put(MinecraftContextKeys.WORLD, world)
+				.build();
+
+		context.assertTrue(matchingCondition.test(dimContext), "Should match current dimension");
+
+		// Test inverted match (not in different dimension)
+		var netherCondition = new com.sigmundgranaas.forgero.properties.minecraft.condition.DimensionCondition(
+				new OpenIdentifier("forgero", "dimension"),
+				new net.minecraft.util.Identifier("minecraft", "the_nether"),
+				false  // NOT in nether
+		);
+
+		context.assertTrue(netherCondition.test(dimContext), "Should match 'not in nether' condition");
+
+		context.complete();
+	}
+
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
+	public void testPositionCondition(TestContext context) {
+		var pos = new net.minecraft.util.math.BlockPos(10, 64, 20);
+
+		var exactCondition = new com.sigmundgranaas.forgero.properties.minecraft.condition.PositionCondition(
+				new OpenIdentifier("forgero", "position"),
+				10, 64, 20
+		);
+
+		DynamicContext posContext = new DynamicContext.Builder()
+				.put(MinecraftContextKeys.BLOCK_POS, pos)
+				.build();
+
+		context.assertTrue(exactCondition.test(posContext), "Should match exact position");
+
+		// Test non-matching position
+		var wrongCondition = new com.sigmundgranaas.forgero.properties.minecraft.condition.PositionCondition(
+				new OpenIdentifier("forgero", "position"),
+				5, 64, 20
+		);
+
+		context.assertFalse(wrongCondition.test(posContext), "Should not match wrong position");
+
+		context.complete();
+	}
+
 	// ========== NOTES ON UNTESTED CONDITIONS ==========
 
 	/*
@@ -122,11 +272,9 @@ public class ConditionGametest {
 	 * - Property system tests
 	 * - End-to-end item creation tests
 	 *
-	 * WEATHER CONDITION:
-	 * WeatherCondition is NOT tested here because:
-	 * 1. Gametests run in isolated test worlds
-	 * 2. Controlling weather in gametests is unreliable
-	 * 3. Weather state may not persist properly in test contexts
-	 * 4. The condition is simple enough that manual testing is sufficient
+	 * NOT TESTED IN GAMETESTS:
+	 * - WeatherCondition: Gametest environments don't reliably support weather manipulation
+	 * - BiomeCondition: Would require complex biome setup in test world
+	 * - BlockTagCondition: Tag matching works identically to BlockMatchCondition with tag lookup
 	 */
 }
