@@ -22,7 +22,9 @@
       "com.sigmundgranaas.forgero.properties.gametest.EventPropertyTests",
       "com.sigmundgranaas.forgero.properties.gametest.NewFilterTests",
       "com.sigmundgranaas.forgero.properties.gametest.IntegrationTests",
-      "com.sigmundgranaas.forgero.properties.gametest.PerformanceTests"
+      "com.sigmundgranaas.forgero.properties.gametest.PerformanceTests",
+      "com.sigmundgranaas.forgero.properties.gametest.UseInteractionGametest",
+      "com.sigmundgranaas.forgero.properties.gametest.ThrowableGametest"
     ]
   }
 }

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-bows-gametest",
+  "version": "1.0.0",
+  "environment": "*",
+  "description": "GameTests for the Forgero Bows module.",
+  "license": "MIT",
+  "authors": [
+    "SigmundGranaas"
+  ],
+  "entrypoints": {
+    "main": [
+    ],
+    "fabric-gametest": [
+      "com.sigmundgranaas.forgero.bows.gametest.BowHandlerGametest"
+    ]
+  }
+}

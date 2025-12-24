@@ -1,0 +1,217 @@
+package com.sigmundgranaas.forgero.bows.handlers;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.useinteraction.UseContext;
+import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
+import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
+import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
+import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.ContextualUseHandler;
+
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.item.ArrowItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.stat.Stats;
+import net.minecraft.world.World;
+
+/**
+ * Handler that launches a projectile when the bow is released.
+ * This is typically used in the "on_release" phase of UseInteractionProperty.
+ *
+ * <p>The handler respects enchantments like Infinity and Power, and
+ * properly handles creative mode and arrow consumption.</p>
+ *
+ * <h3>JSON Example:</h3>
+ * <pre>
+ * {
+ *   "type": "forgero:launch_projectile",
+ *   "base_power": 3.0,
+ *   "base_divergence": 1.0
+ * }
+ * </pre>
+ */
+public record LaunchProjectileHandler(
+		float basePower,
+		float baseDivergence
+) implements ContextualUseHandler {
+
+	public static final String TYPE = "forgero:launch_projectile";
+	private static final float DEFAULT_POWER = 3.0f;
+	private static final float DEFAULT_DIVERGENCE = 1.0f;
+	private static final float DEFAULT_ACCURACY = 50.0f;
+
+	/**
+	 * Attribute identifier for resolving draw power from Forgero components.
+	 * Higher draw power = faster projectile velocity.
+	 */
+	private static final OpenIdentifier DRAW_POWER_ATTR = new OpenIdentifier("forgero", "draw_power");
+
+	/**
+	 * Attribute identifier for resolving accuracy from Forgero components.
+	 * Higher accuracy = lower divergence (more accurate shots).
+	 */
+	private static final OpenIdentifier ACCURACY_ATTR = new OpenIdentifier("forgero", "accuracy");
+
+	public static final Codec<LaunchProjectileHandler> CODEC = RecordCodecBuilder.create(instance ->
+			instance.group(
+					Codec.FLOAT.optionalFieldOf("base_power", DEFAULT_POWER).forGetter(LaunchProjectileHandler::basePower),
+					Codec.FLOAT.optionalFieldOf("base_divergence", DEFAULT_DIVERGENCE).forGetter(LaunchProjectileHandler::baseDivergence)
+			).apply(instance, LaunchProjectileHandler::new)
+	);
+
+	@Override
+	public void apply(UseContext context) {
+		if (context.isClient()) {
+			return;
+		}
+
+		context.asPlayer().ifPresent(player -> {
+			ItemStack bowStack = context.stack();
+			ItemStack arrowStack = getArrowStack(player, bowStack);
+
+			if (arrowStack.isEmpty()) {
+				return;
+			}
+
+			float pullProgress = context.pullProgress();
+			if (pullProgress < 0.1f) {
+				return;
+			}
+
+			World world = context.world();
+			ArrowItem arrowItem = (arrowStack.getItem() instanceof ArrowItem ai) ? ai : (ArrowItem) Items.ARROW;
+
+			PersistentProjectileEntity projectile = arrowItem.createArrow(world, arrowStack, player);
+
+			// Resolve draw power and accuracy from component, fall back to handler config
+			float resolvedPower = resolveAttribute(bowStack, DRAW_POWER_ATTR, basePower);
+			float resolvedAccuracy = resolveAttribute(bowStack, ACCURACY_ATTR, DEFAULT_ACCURACY);
+			float divergence = accuracyToDivergence(resolvedAccuracy, baseDivergence);
+
+			float velocity = resolvedPower * pullProgress;
+			projectile.setVelocity(player, player.getPitch(), player.getYaw(), 0.0f, velocity, divergence);
+
+			if (pullProgress >= 1.0f) {
+				projectile.setCritical(true);
+			}
+
+			applyEnchantments(bowStack, projectile, player);
+
+			world.spawnEntity(projectile);
+			playSound(world, player, pullProgress);
+
+			consumeArrow(player, bowStack, arrowStack);
+			damageBow(player, bowStack, context.hand());
+			player.incrementStat(Stats.USED.getOrCreateStat(bowStack.getItem()));
+		});
+	}
+
+	private ItemStack getArrowStack(PlayerEntity player, ItemStack bowStack) {
+		ItemStack arrowStack = player.getProjectileType(bowStack);
+		if (arrowStack.isEmpty() && player.getAbilities().creativeMode) {
+			arrowStack = new ItemStack(Items.ARROW);
+		}
+		return arrowStack;
+	}
+
+	private void applyEnchantments(ItemStack bowStack, PersistentProjectileEntity projectile, PlayerEntity player) {
+		int powerLevel = EnchantmentHelper.getLevel(Enchantments.POWER, bowStack);
+		if (powerLevel > 0) {
+			projectile.setDamage(projectile.getDamage() + (double) powerLevel * 0.5 + 0.5);
+		}
+
+		int punchLevel = EnchantmentHelper.getLevel(Enchantments.PUNCH, bowStack);
+		if (punchLevel > 0) {
+			projectile.setPunch(punchLevel);
+		}
+
+		if (EnchantmentHelper.getLevel(Enchantments.FLAME, bowStack) > 0) {
+			projectile.setOnFireFor(100);
+		}
+
+		if (hasInfinity(bowStack) || player.getAbilities().creativeMode) {
+			projectile.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
+		}
+	}
+
+	private void playSound(World world, PlayerEntity player, float pullProgress) {
+		world.playSound(
+				null,
+				player.getX(),
+				player.getY(),
+				player.getZ(),
+				SoundEvents.ENTITY_ARROW_SHOOT,
+				SoundCategory.PLAYERS,
+				1.0f,
+				1.0f / (world.getRandom().nextFloat() * 0.4f + 1.2f) + pullProgress * 0.5f
+		);
+	}
+
+	private void consumeArrow(PlayerEntity player, ItemStack bowStack, ItemStack arrowStack) {
+		if (!player.getAbilities().creativeMode && !hasInfinity(bowStack)) {
+			arrowStack.decrement(1);
+			if (arrowStack.isEmpty()) {
+				player.getInventory().removeOne(arrowStack);
+			}
+		}
+	}
+
+	private void damageBow(PlayerEntity player, ItemStack bowStack, net.minecraft.util.Hand hand) {
+		if (!player.getAbilities().creativeMode) {
+			bowStack.damage(1, player, p -> p.sendToolBreakStatus(hand));
+		}
+	}
+
+	private boolean hasInfinity(ItemStack stack) {
+		return EnchantmentHelper.getLevel(Enchantments.INFINITY, stack) > 0;
+	}
+
+	/**
+	 * Resolves an attribute value from the item's Forgero component.
+	 * If the item is not a Forgero item or doesn't have the attribute, returns the fallback value.
+	 *
+	 * @param stack    The item stack to resolve from
+	 * @param attr     The attribute identifier to query
+	 * @param fallback The fallback value if resolution fails or returns zero/negative
+	 * @return The resolved attribute value, or fallback if not available
+	 */
+	private static float resolveAttribute(ItemStack stack, OpenIdentifier attr, float fallback) {
+		return ForgeroApi.converter().toComponent(stack)
+				.map(component -> {
+					AttributeQueryResult result = ForgeroApi.resolver()
+							.resolve(component, new AttributeEngine());
+					return result.getValue(attr);
+				})
+				.filter(value -> value > 0)
+				.orElse(fallback);
+	}
+
+	/**
+	 * Converts accuracy (0-100 scale) to divergence (projectile spread).
+	 * Higher accuracy = lower divergence = more accurate shots.
+	 *
+	 * @param accuracy      The accuracy value (0-100 scale, higher is better)
+	 * @param fallbackDiv   The fallback divergence if accuracy is at default
+	 * @return The divergence value (higher = less accurate)
+	 */
+	private static float accuracyToDivergence(float accuracy, float fallbackDiv) {
+		if (accuracy == DEFAULT_ACCURACY) {
+			return fallbackDiv;
+		}
+		// Convert accuracy (0-100) to divergence
+		// 100 accuracy = 0 divergence, 0 accuracy = 10 divergence
+		return Math.max(0.0f, (100f - accuracy) / 10f);
+	}
+
+	@Override
+	public String type() {
+		return TYPE;
+	}
+}

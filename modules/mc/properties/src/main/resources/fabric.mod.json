@@ -17,14 +17,20 @@
   },
   "entrypoints": {
     "forgero:data_plugin": [
+      "com.sigmundgranaas.forgero.properties.minecraft.condition.MinecraftConditionPlugin",
       "com.sigmundgranaas.forgero.properties.minecraft.ontick.OnTickPropertiesPlugin",
       "com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.BlockBreakingPropertiesPlugin",
       "com.sigmundgranaas.forgero.properties.minecraft.onhit.OnHitPropertiesPlugin",
+      "com.sigmundgranaas.forgero.properties.minecraft.onhitblock.OnHitBlockPropertiesPlugin",
+      "com.sigmundgranaas.forgero.properties.minecraft.swing.SwingHandPropertiesPlugin",
+      "com.sigmundgranaas.forgero.properties.minecraft.entityuse.EntityUsePropertiesPlugin",
+      "com.sigmundgranaas.forgero.properties.minecraft.blockuse.BlockUsePropertiesPlugin",
       "com.sigmundgranaas.forgero.properties.minecraft.loot.LootPropertiesPlugin",
       "com.sigmundgranaas.forgero.properties.minecraft.ondamage.OnDamageReceivedPropertiesPlugin",
       "com.sigmundgranaas.forgero.properties.minecraft.onkill.OnKillPropertiesPlugin",
       "com.sigmundgranaas.forgero.properties.minecraft.onsneak.OnSneakTogglePropertiesPlugin",
-      "com.sigmundgranaas.forgero.properties.minecraft.onblockplace.OnBlockPlacePropertiesPlugin"
+      "com.sigmundgranaas.forgero.properties.minecraft.onblockplace.OnBlockPlacePropertiesPlugin",
+      "com.sigmundgranaas.forgero.properties.minecraft.useinteraction.UseInteractionPropertiesPlugin"
     ]
   },
   "mixins": [

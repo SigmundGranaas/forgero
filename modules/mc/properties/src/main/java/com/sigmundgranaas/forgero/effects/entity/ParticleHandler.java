@@ -2,12 +2,17 @@ package com.sigmundgranaas.forgero.effects.entity;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.SimpleUseHandler;
+
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.StringIdentifiable;
 import org.slf4j.Logger;
@@ -72,7 +77,7 @@ import java.util.Locale;
  * @param spread Particle spread radius (0.0-5.0)
  * @param target Whether to spawn particles at SOURCE or TARGET location
  */
-public record ParticleHandler(Identifier particle, int count, double speed, double spread, ParticleTarget target) implements ContextualEffectHandler {
+public record ParticleHandler(Identifier particle, int count, double speed, double spread, ParticleTarget target) implements ContextualEffectHandler, SimpleUseHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ParticleHandler.class);
 	public static final String TYPE = "forgero:particle";
 	public static final Codec<ParticleHandler> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -127,6 +132,46 @@ public record ParticleHandler(Identifier particle, int count, double speed, doub
 				);
 			} else {
 				// Unsupported particle type
+				LOGGER.debug("Unsupported particle type: {} ({})", particle, particleType.getClass().getSimpleName());
+			}
+		}
+	}
+
+	/**
+	 * SimpleUseHandler implementation - spawns particles at the user's location.
+	 * Used when this handler is part of a UseInteractionProperty.
+	 */
+	@Override
+	public void apply(LivingEntity user, ItemStack stack, Hand hand) {
+		if (user.getWorld() instanceof ServerWorld serverWorld) {
+			ParticleType<?> particleType = Registries.PARTICLE_TYPE.get(particle);
+
+			if (particleType == null) {
+				LOGGER.debug("Invalid particle identifier in effect: {}", particle);
+				return;
+			}
+
+			if (particleType instanceof DefaultParticleType defaultType) {
+				serverWorld.spawnParticles(
+						defaultType,
+						user.getX(),
+						user.getEyeY(),
+						user.getZ(),
+						count,
+						spread, spread, spread,
+						speed
+				);
+			} else if (particleType instanceof ParticleEffect particleEffect) {
+				serverWorld.spawnParticles(
+						particleEffect,
+						user.getX(),
+						user.getEyeY(),
+						user.getZ(),
+						count,
+						spread, spread, spread,
+						speed
+				);
+			} else {
 				LOGGER.debug("Unsupported particle type: {} ({})", particle, particleType.getClass().getSimpleName());
 			}
 		}

@@ -24,6 +24,7 @@ include "modules:mc:loader"
 include "modules:mc:properties"
 include "modules:mc:predicate"
 include "modules:mc:development"
+include "modules:mc:bows"
 
 // Content
 include("content")

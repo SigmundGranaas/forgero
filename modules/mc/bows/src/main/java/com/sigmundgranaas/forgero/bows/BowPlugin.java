@@ -1,0 +1,49 @@
+package com.sigmundgranaas.forgero.bows;
+
+import com.sigmundgranaas.forgero.bows.handlers.ConsumeProjectileHandler;
+import com.sigmundgranaas.forgero.bows.handlers.LaunchProjectileHandler;
+import com.sigmundgranaas.forgero.bows.handlers.MountProjectileHandler;
+import com.sigmundgranaas.forgero.bows.item.ForgeroBowItem;
+import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.property.api.Resolver;
+import com.sigmundgranaas.forgero.data.loading.api.data.host.CreateData;
+import com.sigmundgranaas.forgero.loader.api.DataPlugin;
+import com.sigmundgranaas.forgero.loader.api.PluginRegistrationContext;
+import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.UseInteractionPropertiesPlugin;
+
+import net.minecraft.item.Item;
+
+/**
+ * Forgero Bow data plugin.
+ * Registers bow item creators and bow-specific UseHandler implementations.
+ *
+ * <p>This plugin follows the same pattern as {@link com.sigmundgranaas.forgero.armor.ArmorPlugin}:</p>
+ * <ul>
+ *   <li>Registers item creators for bow items</li>
+ *   <li>Registers handlers with UseInteractionPropertiesPlugin</li>
+ * </ul>
+ */
+public class BowPlugin implements DataPlugin {
+	public static final String BOW_ITEM_CLASS = "forgero:bow_item";
+
+	static {
+		// Register bow-specific handlers with the UseInteraction system
+		UseInteractionPropertiesPlugin.registerHandler(MountProjectileHandler.TYPE, MountProjectileHandler.CODEC);
+		UseInteractionPropertiesPlugin.registerHandler(LaunchProjectileHandler.TYPE, LaunchProjectileHandler.CODEC);
+		UseInteractionPropertiesPlugin.registerHandler(ConsumeProjectileHandler.TYPE, ConsumeProjectileHandler.CODEC);
+	}
+
+	@Override
+	public void register(PluginRegistrationContext context) {
+		context.registerItemCreator(BOW_ITEM_CLASS, this::createBowItem);
+	}
+
+	@Override
+	public String getId() {
+		return "forgero:bow-plugin";
+	}
+
+	private Item createBowItem(Component component, CreateData data, Resolver resolver) {
+		return new ForgeroBowItem(new Item.Settings(), component);
+	}
+}

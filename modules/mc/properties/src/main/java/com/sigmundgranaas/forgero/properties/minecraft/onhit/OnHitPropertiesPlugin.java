@@ -7,6 +7,7 @@ import com.sigmundgranaas.forgero.effects.entity.DisarmHandler;
 import com.sigmundgranaas.forgero.effects.entity.ExplosionHandler;
 import com.sigmundgranaas.forgero.effects.entity.FireHandler;
 import com.sigmundgranaas.forgero.effects.entity.FreezeHandler;
+import com.sigmundgranaas.forgero.effects.entity.FunctionExecuteHandler;
 import com.sigmundgranaas.forgero.effects.entity.KnockbackHandler;
 import com.sigmundgranaas.forgero.effects.entity.LifeStealHandler;
 import com.sigmundgranaas.forgero.effects.entity.LightningHandler;
@@ -17,6 +18,7 @@ import com.sigmundgranaas.forgero.effects.entity.ParticleHandler;
 import com.sigmundgranaas.forgero.effects.entity.SoundHandler;
 import com.sigmundgranaas.forgero.effects.entity.SpawnEntityHandler;
 import com.sigmundgranaas.forgero.effects.entity.StatusEffectHandler;
+import com.sigmundgranaas.forgero.effects.entity.TeleportHandler;
 import com.sigmundgranaas.forgero.effects.entity.VelocityHandler;
 import com.sigmundgranaas.forgero.loader.api.DataPlugin;
 import com.sigmundgranaas.forgero.loader.api.PluginRegistrationContext;
@@ -58,6 +60,8 @@ public class OnHitPropertiesPlugin implements DataPlugin {
 		registerEffect(MagnetHandler.TYPE, MagnetHandler.CODEC);
 		registerEffect(SpawnEntityHandler.TYPE, SpawnEntityHandler.CODEC);
 		registerEffect(ModifyBlockHandler.TYPE, ModifyBlockHandler.CODEC);
+		registerEffect(TeleportHandler.TYPE, TeleportHandler.CODEC);
+		registerEffect(FunctionExecuteHandler.TYPE, FunctionExecuteHandler.CODEC);
 
 		// Selectors
 		registerSelector(SingleTargetSelector.TYPE, SingleTargetSelector.CODEC);

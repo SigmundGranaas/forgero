@@ -6,6 +6,9 @@ dependencies {
 	implementation(project(":modules:core"))
 	implementation(project(path: ":modules:mc:loader", configuration: 'namedElements'))
 
+	// MC Common module - provides shared abstractions like UseContext, UsePhaseEffect
+	implementation(project(path: ":modules:mc:common", configuration: 'namedElements'))
+
 	// Testing
 	testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")

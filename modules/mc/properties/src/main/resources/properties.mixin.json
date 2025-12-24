@@ -15,12 +15,17 @@
   },
   "mixins": [
     "AbstractBlockMixin",
+    "BlockAttackMixin",
     "BlockItemUseMixin",
     "BlockLootMixin",
+    "ItemBlockUseMixin",
+    "ItemEntityUseMixin",
+    "ItemUseInteractionMixin",
     "LivingEntityDamageMixin",
     "LivingEntityDeathMixin",
     "LivingEntityLootMixin",
     "LivingEntityOnHitMixin",
+    "LivingEntitySwingMixin",
     "LivingEntityTickMixin"
   ]
 }

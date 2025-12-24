@@ -2,9 +2,14 @@ package com.sigmundgranaas.forgero.effects.entity;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.SimpleUseHandler;
+
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.StringIdentifiable;
 import org.slf4j.Logger;
@@ -41,8 +46,11 @@ import java.util.Locale;
  * @param volume The volume multiplier (1.0 is normal volume)
  * @param pitch The pitch multiplier (1.0 is normal pitch, higher = higher pitch)
  * @param target Whether to play the sound at SOURCE or TARGET location
+ *
+ * <p>This handler can be used in both OnHit effects and UseInteraction handlers,
+ * making it reusable across different property systems.</p>
  */
-public record SoundHandler(Identifier sound, float volume, float pitch, SoundTarget target) implements ContextualEffectHandler {
+public record SoundHandler(Identifier sound, float volume, float pitch, SoundTarget target) implements ContextualEffectHandler, SimpleUseHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SoundHandler.class);
 	public static final String TYPE = "forgero:sound";
 	public static final Codec<SoundHandler> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -80,6 +88,34 @@ public record SoundHandler(Identifier sound, float volume, float pitch, SoundTar
 				soundLocation.getZ(),
 				soundEvent,
 				soundLocation.getSoundCategory(),
+				volume,
+				pitch
+		);
+	}
+
+	/**
+	 * SimpleUseHandler implementation - plays sound at the user's location.
+	 * Used when this handler is part of a UseInteractionProperty.
+	 */
+	@Override
+	public void apply(LivingEntity user, ItemStack stack, Hand hand) {
+		if (user.getWorld().isClient) {
+			return; // Server-side only
+		}
+
+		SoundEvent soundEvent = Registries.SOUND_EVENT.get(sound);
+		if (soundEvent == null) {
+			LOGGER.debug("Invalid sound identifier in effect: {}", sound);
+			return;
+		}
+
+		user.getWorld().playSound(
+				null,
+				user.getX(),
+				user.getY(),
+				user.getZ(),
+				soundEvent,
+				user.getSoundCategory(),
 				volume,
 				pitch
 		);

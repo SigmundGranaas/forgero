@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-bows",
+  "version": "${version}",
+  "name": "Forgero Bows",
+  "description": "Bow module for Forgero. Provides bow item registration and bow-specific UseInteraction handlers.",
+  "authors": [
+    "Sigmund Granaas"
+  ],
+  "contact": {
+    "homepage": "https://sigmundgranaas.com",
+    "sources": "https://github.com/sigmundgranaas/forgero",
+    "issues": "https://github.com/sigmundgranaas/forgero/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/forgero/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "forgero:data_plugin": [
+      "com.sigmundgranaas.forgero.bows.BowPlugin"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "minecraft": "1.20.1",
+    "java": ">=17",
+    "forgero-loader": "${version}",
+    "forgero-properties": "${version}"
+  },
+  "suggests": {},
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/v6sDsftE9N"
+      },
+      "badges": [
+        "library"
+      ],
+      "parent": {
+        "id": "forgero",
+        "name": "Forgero",
+        "description": "Equipment crafting expansion mod for Fabric!",
+        "icon": "icon.png"
+      }
+    }
+  }
+}
