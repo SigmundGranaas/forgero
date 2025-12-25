@@ -1,11 +1,12 @@
-package com.sigmundgranaas.forgero.properties.minecraft.condition;
+package com.sigmundgranaas.forgero.predicate.minecraft.standalone;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
+import com.sigmundgranaas.forgero.predicate.minecraft.MinecraftContextKeys;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -22,7 +23,7 @@ import java.util.Random;
  * <pre>
  * {
  *   "type": "forgero:random",
- *   "value": 0.5
+ *   "chance": 0.5
  * }
  * </pre>
  *
@@ -30,20 +31,21 @@ import java.util.Random;
  * <pre>
  * {
  *   "type": "forgero:random",
- *   "value": 0.5,
+ *   "chance": 0.5,
  *   "seed": ["world_time", "block_pos"],
- *   "worldTimeQuantization": 20
+ *   "world_time_quantization": 20
  * }
  * </pre>
  *
  * <p>Available seed sources: BLOCK_POS, TARGET_ENTITY, SOURCE_ENTITY, WORLD_TIME, NONE</p>
  */
-public record RandomCondition(
-		OpenIdentifier type,
-		float value,
+public record RandomPredicate(
+		float chance,
 		int worldTimeQuantization,
 		List<SeedSource> seedSources
 ) implements DynamicCondition {
+
+	public static final OpenIdentifier TYPE = new OpenIdentifier("forgero", "random");
 
 	private static final long FIXED_SEED = 0x12345678ABCDL;
 
@@ -52,13 +54,12 @@ public record RandomCondition(
 			SeedSource::toString
 	);
 
-	public static final Codec<RandomCondition> CODEC = RecordCodecBuilder.create(instance ->
+	public static final Codec<RandomPredicate> CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(
-					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(RandomCondition::type),
-					Codec.FLOAT.fieldOf("value").forGetter(RandomCondition::value),
-					Codec.INT.optionalFieldOf("worldTimeQuantization", 0).forGetter(RandomCondition::worldTimeQuantization),
-					Codec.list(SEED_SOURCE_CODEC).optionalFieldOf("seed", Collections.emptyList()).forGetter(RandomCondition::seedSources)
-			).apply(instance, RandomCondition::new));
+					Codec.FLOAT.fieldOf("chance").forGetter(RandomPredicate::chance),
+					Codec.INT.optionalFieldOf("world_time_quantization", 0).forGetter(RandomPredicate::worldTimeQuantization),
+					Codec.list(SEED_SOURCE_CODEC).optionalFieldOf("seed", Collections.emptyList()).forGetter(RandomPredicate::seedSources)
+			).apply(instance, RandomPredicate::new));
 
 	@Override
 	public boolean test(DynamicContext context) {
@@ -69,7 +70,7 @@ public record RandomCondition(
 			long seed = generateSeed(context);
 			random = new Random(seed);
 		}
-		return random.nextFloat() < value;
+		return random.nextFloat() < chance;
 	}
 
 	private long generateSeed(DynamicContext context) {
@@ -124,6 +125,11 @@ public record RandomCondition(
 		}
 		double angle = (worldTime % 360) * (Math.PI / 180);
 		return (long) (Math.sin(angle) * Long.MAX_VALUE);
+	}
+
+	@Override
+	public OpenIdentifier type() {
+		return TYPE;
 	}
 
 	public enum SeedSource {

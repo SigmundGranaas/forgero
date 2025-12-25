@@ -1,22 +1,59 @@
 package com.sigmundgranaas.forgero.predicate.minecraft;
 
-import com.sigmundgranaas.forgero.core.property.context.Key;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.core.property.context.Key;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class MinecraftContextKeys {
-	// The entity performing an action or holding the tool
-	public static final Key<Entity> ENTITY = new Key<>(new OpenIdentifier("forgero-mc", "entity"));
+/**
+ * A central registry for Minecraft-specific type-safe keys used in DynamicContext.
+ * These keys allow predicates and properties to access gameplay data in a type-safe manner.
+ * <p>
+ * This is the single source of truth for all Minecraft context keys.
+ */
+public final class MinecraftContextKeys {
+	/**
+	 * The ItemStack being used/held.
+	 */
+	public static final Key<ItemStack> STACK = new Key<>(new OpenIdentifier("minecraft", "stack"));
 
-	// The entity being targeted (e.g., in an attack)
-	public static final Key<Entity> TARGET_ENTITY = new Key<>(new OpenIdentifier("forgero-mc", "target_entity"));
+	/**
+	 * The world where the event occurs.
+	 */
+	public static final Key<World> WORLD = new Key<>(new OpenIdentifier("minecraft", "world"));
 
-	// The block being targeted (e.g., being broken)
-	public static final Key<BlockPos> TARGET_BLOCK_POS = new Key<>(new OpenIdentifier("forgero-mc", "target_block_pos"));
+	/**
+	 * The source/user entity (e.g., the attacker, the item user).
+	 */
+	public static final Key<Entity> SOURCE_ENTITY = new Key<>(new OpenIdentifier("minecraft", "source_entity"));
 
-	// The world where the event is happening
-	public static final Key<World> WORLD = new Key<>(new OpenIdentifier("forgero-mc", "world"));
+	/**
+	 * The target entity (e.g., the entity being hit).
+	 */
+	public static final Key<Entity> TARGET_ENTITY = new Key<>(new OpenIdentifier("minecraft", "target_entity"));
+
+	/**
+	 * The block position being interacted with.
+	 */
+	public static final Key<BlockPos> BLOCK_POS = new Key<>(new OpenIdentifier("minecraft", "block_pos"));
+
+	// Deprecated aliases for backward compatibility within predicate module
+	/**
+	 * @deprecated Use {@link #SOURCE_ENTITY} instead.
+	 */
+	@Deprecated
+	public static final Key<Entity> ENTITY = SOURCE_ENTITY;
+
+	/**
+	 * @deprecated Use {@link #BLOCK_POS} instead.
+	 */
+	@Deprecated
+	public static final Key<BlockPos> TARGET_BLOCK_POS = BLOCK_POS;
+
+	private MinecraftContextKeys() {
+		// Static utility class
+	}
 }

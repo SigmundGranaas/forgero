@@ -1,11 +1,12 @@
-package com.sigmundgranaas.forgero.properties.minecraft.condition;
+package com.sigmundgranaas.forgero.predicate.minecraft.standalone;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
+import com.sigmundgranaas.forgero.predicate.minecraft.MinecraftContextKeys;
+
 import net.minecraft.item.ItemStack;
 
 /**
@@ -15,7 +16,7 @@ import net.minecraft.item.ItemStack;
  * <h3>Example (percentage as 0-1):</h3>
  * <pre>
  * {
- *   "type": "forgero:damage_percentage",
+ *   "type": "forgero:damage",
  *   "percentage": 0.5
  * }
  * </pre>
@@ -23,19 +24,21 @@ import net.minecraft.item.ItemStack;
  * <h3>Example (percentage as 0-100):</h3>
  * <pre>
  * {
- *   "type": "forgero:damage_percentage",
+ *   "type": "forgero:damage",
  *   "percentage": 75
  * }
  * </pre>
  *
  * <p>If percentage > 1, it's treated as a 0-100 scale, otherwise 0-1.</p>
  */
-public record DamagePercentageCondition(OpenIdentifier type, float percentage) implements DynamicCondition {
-	public static final Codec<DamagePercentageCondition> CODEC = RecordCodecBuilder.create(instance ->
+public record DamagePredicate(float percentage) implements DynamicCondition {
+
+	public static final OpenIdentifier TYPE = new OpenIdentifier("forgero", "damage");
+
+	public static final Codec<DamagePredicate> CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(
-					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(DamagePercentageCondition::type),
-					Codec.FLOAT.fieldOf("percentage").forGetter(DamagePercentageCondition::percentage)
-			).apply(instance, DamagePercentageCondition::new));
+					Codec.FLOAT.fieldOf("percentage").forGetter(DamagePredicate::percentage)
+			).apply(instance, DamagePredicate::new));
 
 	@Override
 	public boolean test(DynamicContext context) {
@@ -58,5 +61,10 @@ public record DamagePercentageCondition(OpenIdentifier type, float percentage) i
 			// Treat as 0-1 scale
 			return damageRatio >= percentage;
 		}
+	}
+
+	@Override
+	public OpenIdentifier type() {
+		return TYPE;
 	}
 }

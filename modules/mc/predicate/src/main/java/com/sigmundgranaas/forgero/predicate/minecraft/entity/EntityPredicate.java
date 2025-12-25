@@ -74,7 +74,7 @@ public record EntityPredicate(
 		if (target().isPresent() && target().get() == Target.TARGET_ENTITY) {
 			return context.get(MinecraftContextKeys.TARGET_ENTITY);
 		} else {
-			return context.get(MinecraftContextKeys.ENTITY);
+			return context.get(MinecraftContextKeys.SOURCE_ENTITY);
 		}
 	}
 

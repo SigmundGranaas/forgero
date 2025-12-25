@@ -19,7 +19,7 @@ public record BlockPredicate(
 		Optional<LocationPredicate> location
 ) implements DynamicCondition {
 
-	public static final OpenIdentifier TYPE = new OpenIdentifier("forgero", "block_match");
+	public static final OpenIdentifier TYPE = new OpenIdentifier("minecraft", "block");
 
 	public static final Codec<BlockPredicate> CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(
@@ -32,7 +32,7 @@ public record BlockPredicate(
 	@Override
 	public boolean test(DynamicContext context) {
 		Optional<World> worldOpt = context.get(MinecraftContextKeys.WORLD);
-		Optional<BlockPos> posOpt = context.get(MinecraftContextKeys.TARGET_BLOCK_POS);
+		Optional<BlockPos> posOpt = context.get(MinecraftContextKeys.BLOCK_POS);
 
 		if (worldOpt.isEmpty() || posOpt.isEmpty()) {
 			return false;

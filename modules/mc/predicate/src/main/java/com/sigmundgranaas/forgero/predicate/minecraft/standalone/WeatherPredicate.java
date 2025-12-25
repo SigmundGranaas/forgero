@@ -1,14 +1,16 @@
-package com.sigmundgranaas.forgero.properties.minecraft.condition;
+package com.sigmundgranaas.forgero.predicate.minecraft.standalone;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
+import com.sigmundgranaas.forgero.predicate.minecraft.MinecraftContextKeys;
+
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 /**
  * A dynamic condition that checks the current weather in the world.
@@ -17,7 +19,7 @@ import javax.annotation.Nullable;
  * <h3>Example (check for rain):</h3>
  * <pre>
  * {
- *   "type": "forgero:weather",
+ *   "type": "minecraft:weather",
  *   "raining": true
  * }
  * </pre>
@@ -25,7 +27,7 @@ import javax.annotation.Nullable;
  * <h3>Example (check for thunderstorm):</h3>
  * <pre>
  * {
- *   "type": "forgero:weather",
+ *   "type": "minecraft:weather",
  *   "thundering": true
  * }
  * </pre>
@@ -33,25 +35,25 @@ import javax.annotation.Nullable;
  * <h3>Example (check for clear weather):</h3>
  * <pre>
  * {
- *   "type": "forgero:weather",
+ *   "type": "minecraft:weather",
  *   "raining": false,
  *   "thundering": false
  * }
  * </pre>
  */
-public record WeatherCondition(
-		OpenIdentifier type,
+public record WeatherPredicate(
 		@Nullable Boolean raining,
 		@Nullable Boolean thundering
 ) implements DynamicCondition {
 
-	public static final Codec<WeatherCondition> CODEC = RecordCodecBuilder.create(instance ->
+	public static final OpenIdentifier TYPE = new OpenIdentifier("minecraft", "weather");
+
+	public static final Codec<WeatherPredicate> CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(
-					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(WeatherCondition::type),
-					Codec.BOOL.optionalFieldOf("raining").forGetter(c -> java.util.Optional.ofNullable(c.raining())),
-					Codec.BOOL.optionalFieldOf("thundering").forGetter(c -> java.util.Optional.ofNullable(c.thundering()))
-			).apply(instance, (type, rain, thunder) ->
-					new WeatherCondition(type, rain.orElse(null), thunder.orElse(null))));
+					Codec.BOOL.optionalFieldOf("raining").forGetter(c -> Optional.ofNullable(c.raining())),
+					Codec.BOOL.optionalFieldOf("thundering").forGetter(c -> Optional.ofNullable(c.thundering()))
+			).apply(instance, (rain, thunder) ->
+					new WeatherPredicate(rain.orElse(null), thunder.orElse(null))));
 
 	@Override
 	public boolean test(DynamicContext context) {
@@ -68,5 +70,10 @@ public record WeatherCondition(
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public OpenIdentifier type() {
+		return TYPE;
 	}
 }
