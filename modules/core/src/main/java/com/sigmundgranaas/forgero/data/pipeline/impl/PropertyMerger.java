@@ -14,6 +14,8 @@ import com.sigmundgranaas.forgero.data.loading.api.data.template.EquipmentTempla
 import com.sigmundgranaas.forgero.data.loading.api.data.template.PartTemplateData;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.OperatorMapper;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
  * It also parses the raw JsonElements into their final runtime Java types using injected codecs.
  */
 public class PropertyMerger {
+	private static final Logger LOGGER = LoggerFactory.getLogger(PropertyMerger.class);
 	private final Map<String, Codec<? extends List<?>>> propertyCodecs;
 	private final OperatorMapper operatorMapper = new OperatorMapper();
 
@@ -87,7 +90,7 @@ public class PropertyMerger {
 			Codec<? extends List<?>> codec = propertyCodecs.get(key);
 			if (codec != null) {
 				codec.parse(JsonOps.INSTANCE, json)
-						.resultOrPartial(System.err::println)
+						.resultOrPartial(error -> LOGGER.warn("Failed to parse property '{}': {}", key, error))
 						.ifPresent(list -> parsedProperties.put(key, list));
 			}
 		});

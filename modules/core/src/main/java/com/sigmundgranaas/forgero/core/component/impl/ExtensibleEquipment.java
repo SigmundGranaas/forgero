@@ -5,9 +5,6 @@ import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgrades;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -47,12 +44,6 @@ public record ExtensibleEquipment(
 
 	@Override
 	public Component withProperties(Map<String, List<?>> newProperties) {
-		Map<String, List<?>> merged = new HashMap<>(this.properties);
-		newProperties.forEach((key, value) -> merged.merge(key, value, (existing, incoming) -> {
-			List<Object> combined = new ArrayList<>(existing);
-			combined.addAll(incoming);
-			return combined;
-		}));
-		return new ExtensibleEquipment(this.id, this.tags, Collections.unmodifiableMap(merged), this.upgrades);
+		return new ExtensibleEquipment(this.id, this.tags, PropertyMergeHelper.merge(this.properties, newProperties), this.upgrades);
 	}
 }

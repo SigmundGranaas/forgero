@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.properties.minecraft.onhit;
 
 import com.mojang.serialization.Codec;
 import com.sigmundgranaas.forgero.core.property.api.codec.ListCodecWrapper;
+import com.sigmundgranaas.forgero.effects.EffectCodecRegistry;
 import com.sigmundgranaas.forgero.effects.entity.ConvertHandler;
 import com.sigmundgranaas.forgero.effects.entity.DisarmHandler;
 import com.sigmundgranaas.forgero.effects.entity.ExplosionHandler;
@@ -99,8 +100,13 @@ public class OnHitPropertiesPlugin implements DataPlugin {
 
 	public static void registerEffect(String type, Codec<? extends OnHitEffect> codec) {
 		EFFECTS.put(type, codec);
+		EffectCodecRegistry.registerOnHitEffect(type, codec);
 	}
 
+	/**
+	 * @deprecated Use {@link EffectCodecRegistry#getOnHitEffectCodec(String)} instead
+	 */
+	@Deprecated
 	public static Codec<? extends OnHitEffect> getEffectCodec(String type) {
 		return EFFECTS.get(type);
 	}

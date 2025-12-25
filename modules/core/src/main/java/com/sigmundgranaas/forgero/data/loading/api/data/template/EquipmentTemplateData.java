@@ -40,5 +40,5 @@ public record EquipmentTemplateData(
 		List<AttributeData> attributes,
 		@Nullable
 		Map<String, JsonElement> properties
-) {
+) implements TemplateData {
 }

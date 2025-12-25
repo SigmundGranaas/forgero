@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.properties.minecraft.onhitblock;
 
 import com.mojang.serialization.Codec;
 import com.sigmundgranaas.forgero.core.property.api.codec.ListCodecWrapper;
+import com.sigmundgranaas.forgero.effects.EffectCodecRegistry;
 import com.sigmundgranaas.forgero.effects.block.BlockParticleEffect;
 import com.sigmundgranaas.forgero.effects.block.BlockSoundEffect;
 import com.sigmundgranaas.forgero.effects.block.IgniteBlockEffect;
@@ -33,8 +34,13 @@ public class OnHitBlockPropertiesPlugin implements DataPlugin {
 
 	public static void registerEffect(String type, Codec<? extends OnHitBlockEffect> codec) {
 		EFFECTS.put(type, codec);
+		EffectCodecRegistry.registerOnHitBlockEffect(type, codec);
 	}
 
+	/**
+	 * @deprecated Use {@link EffectCodecRegistry#getOnHitBlockEffectCodec(String)} instead
+	 */
+	@Deprecated
 	public static Codec<? extends OnHitBlockEffect> getEffectCodec(String type) {
 		return EFFECTS.get(type);
 	}

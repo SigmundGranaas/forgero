@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.mojang.serialization.Codec;
 import com.sigmundgranaas.forgero.core.property.api.codec.ListCodecWrapper;
+import com.sigmundgranaas.forgero.effects.EffectCodecRegistry;
 import com.sigmundgranaas.forgero.loader.api.DataPlugin;
 import com.sigmundgranaas.forgero.loader.api.PluginRegistrationContext;
 import com.sigmundgranaas.forgero.effects.entity.ParticleHandler;
@@ -59,6 +60,7 @@ public class UseInteractionPropertiesPlugin implements DataPlugin {
 	 */
 	public static void registerHandler(String type, Codec<? extends UseHandler> codec) {
 		HANDLERS.put(type, codec);
+		EffectCodecRegistry.registerUseHandler(type, codec);
 	}
 
 	/**
@@ -66,7 +68,9 @@ public class UseInteractionPropertiesPlugin implements DataPlugin {
 	 *
 	 * @param type the handler type identifier
 	 * @return the codec, or null if not found
+	 * @deprecated Use {@link EffectCodecRegistry#getUseHandlerCodec(String)} instead
 	 */
+	@Deprecated
 	public static Codec<? extends UseHandler> getHandlerCodec(String type) {
 		return HANDLERS.get(type);
 	}

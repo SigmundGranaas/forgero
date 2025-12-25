@@ -5,9 +5,6 @@ import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -40,12 +37,6 @@ public record StructuredEquipment(
 
 	@Override
 	public Component withProperties(Map<String, List<?>> newProperties) {
-		Map<String, List<?>> merged = new HashMap<>(this.properties);
-		newProperties.forEach((key, value) -> merged.merge(key, value, (existing, incoming) -> {
-			List<Object> combined = new ArrayList<>(existing);
-			combined.addAll(incoming);
-			return combined;
-		}));
-		return new StructuredEquipment(this.id, this.tags, Collections.unmodifiableMap(merged), this.structure);
+		return new StructuredEquipment(this.id, this.tags, PropertyMergeHelper.merge(this.properties, newProperties), this.structure);
 	}
 }

@@ -44,5 +44,5 @@ public record PartTemplateData(
 		GenerationConfigData generation,
 		@Nullable
 		Map<String, JsonElement> properties
-)  {
+) implements TemplateData {
 }

@@ -12,14 +12,21 @@ import com.sigmundgranaas.forgero.core.condition.logical.AndCondition;
 import com.sigmundgranaas.forgero.core.condition.logical.NotCondition;
 import com.sigmundgranaas.forgero.core.condition.logical.OrCondition;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.JsonElementCodec;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 public final class ConditionCodec implements Codec<Condition> {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ConditionCodec.class);
+
 	private final Codec<StaticCondition> staticDispatcher;
 	private final Codec<DynamicCondition> dynamicDispatcher;
+	private final Map<String, LogicalConditionHandler> logicalHandlers;
 
 	private static final Codec<List<JsonElement>> PREDICATE_LIST_CODEC =
 			Codec.either(Codec.list(JsonElementCodec.INSTANCE), JsonElementCodec.INSTANCE)
@@ -28,9 +35,26 @@ public final class ConditionCodec implements Codec<Condition> {
 							list -> list.size() == 1 ? Either.right(list.get(0)) : Either.left(list)
 					);
 
+	/**
+	 * Handler for logical conditions (AND, OR, NOT) with codec creation and factory methods.
+	 */
+	private record LogicalConditionHandler(
+			Function<Codec<Condition>, Codec<Condition>> codecFactory,
+			Function<Condition, Object> fromFactory
+	) {}
+
 	public ConditionCodec(Map<String, Codec<? extends StaticCondition>> staticCodecs, Map<String, Codec<? extends DynamicCondition>> dynamicCodecs) {
 		this.staticDispatcher = createDispatcher(staticCodecs, StaticCondition.class);
 		this.dynamicDispatcher = createDispatcher(dynamicCodecs, DynamicCondition.class);
+		this.logicalHandlers = buildLogicalHandlers();
+	}
+
+	private Map<String, LogicalConditionHandler> buildLogicalHandlers() {
+		Map<String, LogicalConditionHandler> handlers = new HashMap<>();
+		handlers.put(AndCondition.TYPE.toString(), new LogicalConditionHandler(AndCondition::codec, AndCondition::from));
+		handlers.put(OrCondition.TYPE.toString(), new LogicalConditionHandler(OrCondition::codec, OrCondition::from));
+		handlers.put(NotCondition.TYPE.toString(), new LogicalConditionHandler(NotCondition::codec, NotCondition::from));
+		return handlers;
 	}
 
 	private <B> Codec<B> createDispatcher(Map<String, Codec<? extends B>> codecs, Class<B> baseClass) {
@@ -82,34 +106,22 @@ public final class ConditionCodec implements Codec<Condition> {
 					return DataResult.error(() -> "Predicate must be a JSON object with a 'type' field: " + predicateJson);
 				}
 				String type = predicateJson.getAsJsonObject().get("type").getAsString();
-				Object result = null;
 
-				DataResult<Condition> logicalResult = DataResult.error(() -> "Not a logical condition");
-				if (type.equals(AndCondition.TYPE.toString())) {
-					logicalResult = AndCondition.codec(this).parse(JsonOps.INSTANCE, predicateJson);
-				} else if (type.equals(OrCondition.TYPE.toString())) {
-					logicalResult = OrCondition.codec(this).parse(JsonOps.INSTANCE, predicateJson);
-				} else if (type.equals(NotCondition.TYPE.toString())) {
-					logicalResult = NotCondition.codec(this).parse(JsonOps.INSTANCE, predicateJson);
-				}
-
-				if (logicalResult.result().isPresent()) {
-					if (type.equals(AndCondition.TYPE.toString())) {
-						result = AndCondition.from(logicalResult.getOrThrow(false, System.err::println));
-					} else if (type.equals(OrCondition.TYPE.toString())) {
-						result = OrCondition.from(logicalResult.getOrThrow(false, System.err::println));
-					} else if (type.equals(NotCondition.TYPE.toString())) {
-						result = NotCondition.from(logicalResult.getOrThrow(false, System.err::println));
-					}
+				LogicalConditionHandler handler = logicalHandlers.get(type);
+				if (handler != null) {
+					DataResult<Condition> logicalResult = handler.codecFactory().apply(this).parse(JsonOps.INSTANCE, predicateJson);
+					logicalResult.result().ifPresent(condition -> {
+						Object result = handler.fromFactory().apply(condition);
+						if (result instanceof StaticCondition sc) {
+							staticResults.add(sc);
+						} else if (result instanceof DynamicCondition dc) {
+							dynamicResults.add(dc);
+						}
+					});
+					logicalResult.error().ifPresent(error -> LOGGER.warn("Failed to parse logical condition: {}", error.message()));
 				} else {
 					staticDispatcher.parse(JsonOps.INSTANCE, predicateJson).result().ifPresent(staticResults::add);
 					dynamicDispatcher.parse(JsonOps.INSTANCE, predicateJson).result().ifPresent(dynamicResults::add);
-				}
-
-				if (result instanceof StaticCondition sc) {
-					staticResults.add(sc);
-				} else if (result instanceof DynamicCondition dc) {
-					dynamicResults.add(dc);
 				}
 			}
 			return DataResult.success(Pair.of(new Condition(staticResults, dynamicResults), pair.getSecond()));
@@ -130,35 +142,59 @@ public final class ConditionCodec implements Codec<Condition> {
 	}
 
 	private <T> DataResult<T> encodeSingle(Object condition, DynamicOps<T> ops, T prefix) {
-		DataResult<T> encodedContent;
-		OpenIdentifier typeId;
+		return tryEncodeLogical(condition, ops, prefix)
+				.orElseGet(() -> encodeNonLogical(condition, ops, prefix));
+	}
+
+	private <T> java.util.Optional<DataResult<T>> tryEncodeLogical(Object condition, DynamicOps<T> ops, T prefix) {
+		Condition toEncode = null;
+		OpenIdentifier typeId = null;
+		String handlerKey = null;
 
 		if (condition instanceof AndCondition.AndStatic logical) {
-			encodedContent = AndCondition.codec(this).encode(logical.toCondition(), ops, prefix);
+			toEncode = logical.toCondition();
 			typeId = logical.type();
+			handlerKey = AndCondition.TYPE.toString();
 		} else if (condition instanceof AndCondition.AndDynamic logical) {
-			encodedContent = AndCondition.codec(this).encode(logical.toCondition(), ops, prefix);
+			toEncode = logical.toCondition();
 			typeId = logical.type();
+			handlerKey = AndCondition.TYPE.toString();
 		} else if (condition instanceof OrCondition.OrStatic logical) {
-			encodedContent = OrCondition.codec(this).encode(logical.toCondition(), ops, prefix);
+			toEncode = logical.toCondition();
 			typeId = logical.type();
+			handlerKey = OrCondition.TYPE.toString();
 		} else if (condition instanceof OrCondition.OrDynamic logical) {
-			encodedContent = OrCondition.codec(this).encode(logical.toCondition(), ops, prefix);
+			toEncode = logical.toCondition();
 			typeId = logical.type();
+			handlerKey = OrCondition.TYPE.toString();
 		} else if (condition instanceof NotCondition.NotStatic logical) {
-			encodedContent = NotCondition.codec(this).encode(logical.toCondition(), ops, prefix);
+			toEncode = logical.toCondition();
 			typeId = logical.type();
+			handlerKey = NotCondition.TYPE.toString();
 		} else if (condition instanceof NotCondition.NotDynamic logical) {
-			encodedContent = NotCondition.codec(this).encode(logical.toCondition(), ops, prefix);
+			toEncode = logical.toCondition();
 			typeId = logical.type();
-		} else if (condition instanceof StaticCondition sc) {
+			handlerKey = NotCondition.TYPE.toString();
+		}
+
+		if (toEncode == null || handlerKey == null) {
+			return java.util.Optional.empty();
+		}
+
+		LogicalConditionHandler handler = logicalHandlers.get(handlerKey);
+		Codec<Condition> codec = handler.codecFactory().apply(this);
+		final OpenIdentifier finalTypeId = typeId;
+		DataResult<T> result = codec.encode(toEncode, ops, prefix)
+				.flatMap(content -> ops.mergeToMap(content, ops.createString("type"), ops.createString(finalTypeId.toString())));
+		return java.util.Optional.of(result);
+	}
+
+	private <T> DataResult<T> encodeNonLogical(Object condition, DynamicOps<T> ops, T prefix) {
+		if (condition instanceof StaticCondition sc) {
 			return staticDispatcher.encode(sc, ops, prefix);
 		} else if (condition instanceof DynamicCondition dc) {
 			return dynamicDispatcher.encode(dc, ops, prefix);
-		} else {
-			return DataResult.error(() -> "Unknown condition type for encoding: " + condition.getClass().getName());
 		}
-
-		return encodedContent.flatMap(content -> ops.mergeToMap(content, ops.createString("type"), ops.createString(typeId.toString())));
+		return DataResult.error(() -> "Unknown condition type for encoding: " + condition.getClass().getName());
 	}
 }

@@ -1,6 +1,8 @@
 package com.sigmundgranaas.forgero.model.texture.impl;
 
 import com.sigmundgranaas.forgero.model.texture.api.TextureWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -8,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class FileTextureWriter implements TextureWriter {
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileTextureWriter.class);
 	private final String outputDir;
 
 	/**
@@ -25,8 +28,7 @@ public class FileTextureWriter implements TextureWriter {
 			outputFile.getParentFile().mkdirs();
 			ImageIO.write(image, "PNG", outputFile);
 		} catch (IOException e) {
-			System.err.println("Failed to write texture to path: " + path);
-			e.printStackTrace();
+			LOGGER.error("Failed to write texture to path: {}", path, e);
 		}
 	}
 }

@@ -13,6 +13,8 @@ import com.sigmundgranaas.forgero.data.loading.api.data.host.HostData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.template.HostTemplateData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.*;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -25,6 +27,7 @@ import java.util.stream.Stream;
  * This is the heart of the combinatorial item generation system.
  */
 public class TemplateGenerator {
+	private static final Logger LOGGER = LoggerFactory.getLogger(TemplateGenerator.class);
 	private final IdentifierFactory idFactory;
 	private final TagGraph tagGraph;
 	private final PropertyMerger propertyMerger;
@@ -323,9 +326,8 @@ public class TemplateGenerator {
 
 			// Warn if explicit list excludes all components
 			if (filtered.isEmpty() && !components.isEmpty()) {
-				System.err.println("[WARN] Generation filter with explicit list excluded all components. " +
-						"Explicit IDs: " + filter.explicitList() + ", Available components: " +
-						components.stream().map(c -> c.id().toString()).toList());
+				LOGGER.warn("Generation filter with explicit list excluded all components. Explicit IDs: {}, Available components: {}",
+						filter.explicitList(), components.stream().map(c -> c.id().toString()).toList());
 			}
 
 			return filtered;
@@ -381,10 +383,10 @@ public class TemplateGenerator {
 
 		// Warn if filter excluded all components
 		if (filtered.isEmpty() && !components.isEmpty()) {
-			System.err.println("[WARN] Generation filter excluded all components. " +
-					"Filter: " + formatFilter(filter) + ", Available components: " +
-					components.stream().map(c -> c.id().toString()).limit(5).toList() +
-					(components.size() > 5 ? " (and " + (components.size() - 5) + " more)" : ""));
+			LOGGER.warn("Generation filter excluded all components. Filter: {}, Available components: {}{}",
+					formatFilter(filter),
+					components.stream().map(c -> c.id().toString()).limit(5).toList(),
+					components.size() > 5 ? " (and " + (components.size() - 5) + " more)" : "");
 		}
 
 		return filtered;
@@ -402,9 +404,8 @@ public class TemplateGenerator {
 			Set<OpenIdentifier> intersection = new HashSet<>(filter.requireAllTags());
 			intersection.retainAll(filter.excludeAnyTags());
 			if (!intersection.isEmpty()) {
-				System.err.println("[WARN] Generation filter has conflicting rules: tags " + intersection +
-						" are both required (requireAllTags) and excluded (excludeAnyTags). " +
-						"This will exclude all components.");
+				LOGGER.warn("Generation filter has conflicting rules: tags {} are both required (requireAllTags) and excluded (excludeAnyTags). This will exclude all components.",
+						intersection);
 			}
 		}
 
@@ -413,8 +414,8 @@ public class TemplateGenerator {
 			Set<OpenIdentifier> allRequired = new HashSet<>(filter.requireAnyTags());
 			Set<OpenIdentifier> allExcluded = new HashSet<>(filter.excludeAnyTags());
 			if (allExcluded.containsAll(allRequired)) {
-				System.err.println("[WARN] Generation filter excludes all required tags (excludeAnyTags contains all requireAnyTags). " +
-						"Required: " + filter.requireAnyTags() + ", Excluded: " + filter.excludeAnyTags());
+				LOGGER.warn("Generation filter excludes all required tags (excludeAnyTags contains all requireAnyTags). Required: {}, Excluded: {}",
+						filter.requireAnyTags(), filter.excludeAnyTags());
 			}
 		}
 
@@ -425,8 +426,7 @@ public class TemplateGenerator {
 					(filter.excludeAnyTags() != null && !filter.excludeAnyTags().isEmpty()) ||
 					(filter.excludeAllTags() != null && !filter.excludeAllTags().isEmpty());
 			if (hasTagFilters) {
-				System.err.println("[INFO] Generation filter has both explicit list and tag filters. " +
-						"Explicit list will override tag filters. Consider removing unused tag filters.");
+				LOGGER.info("Generation filter has both explicit list and tag filters. Explicit list will override tag filters. Consider removing unused tag filters.");
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.properties.minecraft.useinteraction;
 
 import com.mojang.serialization.Codec;
+import com.sigmundgranaas.forgero.effects.EffectCodecRegistry;
 import com.sigmundgranaas.forgero.utility.codec.DispatchCodecUtils;
 
 /**
@@ -8,7 +9,7 @@ import com.sigmundgranaas.forgero.utility.codec.DispatchCodecUtils;
  * This follows the same pattern as {@link com.sigmundgranaas.forgero.effects.entity.OnHitEffect}.
  *
  * <p>Handlers are registered with their type string and codec via
- * {@link UseInteractionPropertiesPlugin#registerHandler(String, Codec)}.</p>
+ * {@link EffectCodecRegistry#registerUseHandler(String, Codec)}.</p>
  *
  * @see SimpleUseHandler for handlers that only need user, stack, and hand
  * @see ContextualUseHandler for handlers that need full lifecycle context
@@ -23,7 +24,7 @@ public interface UseHandler {
 	 * @throws IllegalArgumentException if the type is not registered
 	 */
 	static Codec<? extends UseHandler> getCodec(String type) {
-		Codec<? extends UseHandler> codec = UseInteractionPropertiesPlugin.getHandlerCodec(type);
+		Codec<? extends UseHandler> codec = EffectCodecRegistry.getUseHandlerCodec(type);
 		if (codec == null) {
 			throw new IllegalArgumentException("Unknown UseHandler type: " + type);
 		}

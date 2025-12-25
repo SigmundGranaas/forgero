@@ -23,7 +23,7 @@ public class HostCodecs {
 			instance.group(
 					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("id").forGetter(CreateData::id),
 					Codec.STRING.fieldOf("class_name").forGetter(CreateData::itemClass),
-					Codec.STRING.optionalFieldOf("itemGroup").forGetter(data -> Optional.ofNullable(data.itemGroup()))
+					Codec.STRING.optionalFieldOf("item_group").forGetter(data -> Optional.ofNullable(data.itemGroup()))
 			).apply(instance, (id, className, itemGroup) -> new CreateData(id, className, itemGroup.orElse(null))));
 
 	public static final Codec<HostData> HOST_DATA_CODEC = RecordCodecBuilder.create(instance ->

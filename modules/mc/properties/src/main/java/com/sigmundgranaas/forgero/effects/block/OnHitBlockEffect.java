@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.effects.block;
 
 import com.mojang.serialization.Codec;
-import com.sigmundgranaas.forgero.properties.minecraft.onhitblock.OnHitBlockPropertiesPlugin;
+import com.sigmundgranaas.forgero.effects.EffectCodecRegistry;
 import com.sigmundgranaas.forgero.utility.codec.DispatchCodecUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
@@ -38,14 +38,14 @@ public interface OnHitBlockEffect {
 	String type();
 
 	/**
-	 * Retrieves the codec for a specific effect type from the plugin registry.
+	 * Retrieves the codec for a specific effect type from the registry.
 	 *
 	 * @param type The effect type identifier
 	 * @return The codec for deserializing this effect type
 	 * @throws IllegalArgumentException if the type is not registered
 	 */
 	static Codec<? extends OnHitBlockEffect> getCodec(String type) {
-		Codec<? extends OnHitBlockEffect> codec = OnHitBlockPropertiesPlugin.getEffectCodec(type);
+		Codec<? extends OnHitBlockEffect> codec = EffectCodecRegistry.getOnHitBlockEffectCodec(type);
 		if (codec == null) {
 			throw new IllegalArgumentException("Unknown OnHitBlockEffect type: " + type);
 		}

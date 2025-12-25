@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.effects.entity;
 
 import com.mojang.serialization.Codec;
-import com.sigmundgranaas.forgero.properties.minecraft.onhit.OnHitPropertiesPlugin;
+import com.sigmundgranaas.forgero.effects.EffectCodecRegistry;
 import com.sigmundgranaas.forgero.utility.codec.DispatchCodecUtils;
 
 /**
@@ -13,7 +13,7 @@ public interface OnHitEffect {
 	String type();
 
 	static Codec<? extends OnHitEffect> getCodec(String type) {
-		Codec<? extends OnHitEffect> codec = OnHitPropertiesPlugin.getEffectCodec(type);
+		Codec<? extends OnHitEffect> codec = EffectCodecRegistry.getOnHitEffectCodec(type);
 		if (codec == null) {
 			throw new IllegalArgumentException("Unknown OnHitEffect type: " + type);
 		}
