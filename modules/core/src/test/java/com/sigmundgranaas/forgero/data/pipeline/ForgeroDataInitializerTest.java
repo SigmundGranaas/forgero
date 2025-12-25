@@ -40,6 +40,8 @@ class ForgeroDataInitializerTest {
 		tagMap.put(idFactory.of("forgero:pickaxe_head_shape"), new java.util.HashSet<>());
 		tagMap.put(idFactory.of("forgero:default_pickaxe_head"), new java.util.HashSet<>());
 		tagMap.put(idFactory.of("forgero:default_armor_plate"), new java.util.HashSet<>());
+		tagMap.put(idFactory.of("forgero:base_shape"), new java.util.HashSet<>());
+		tagMap.put(idFactory.of("forgero:mastercrafted"), new java.util.HashSet<>());
 		tagMap.put(idFactory.of("forgero:materials/tool_material"), new java.util.HashSet<>());
 		tagMap.put(idFactory.of("forgero:materials/metal"), new java.util.HashSet<>());
 		tagMap.put(idFactory.of("forgero:materials/armor_material"), new java.util.HashSet<>());
@@ -81,6 +83,13 @@ class ForgeroDataInitializerTest {
 		// Check for generated part mapping from pickaxe_head_template.json
 		// This combines "iron" material with "pickaxe_head" shape
 		OpenIdentifier ironPickaxeHeadId = idFactory.of("forgero:iron-pickaxe_head");
+
+		// Debug: Print all generated host items
+		System.out.println("=== Generated Host Items ===");
+		bundle.hostItemMap().keySet().stream()
+				.filter(id -> bundle.hostItemMap().get(id).create() != null)
+				.forEach(id -> System.out.println("Generated: " + id));
+
 		assertTrue(bundle.hostItemMap().containsKey(ironPickaxeHeadId), "Host map should contain generated part 'forgero:iron-pickaxe_head'");
 		HostData generatedPartHostData = bundle.hostItemMap().get(ironPickaxeHeadId);
 		assertNull(generatedPartHostData.identifiers(), "Generated part from template should not have 'identifiers'");

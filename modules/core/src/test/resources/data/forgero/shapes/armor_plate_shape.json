@@ -5,6 +5,9 @@
     "forgero:armor_plate_shape",
     "forgero:default_armor_plate"
   ],
+  "local_tags": [
+    "forgero:base_shape"
+  ],
   "attributes": [
     {
       "id": "forgero:shape-durability-mult",

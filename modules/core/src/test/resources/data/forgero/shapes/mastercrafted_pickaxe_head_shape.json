@@ -2,6 +2,7 @@
   "type": "forgero:shape",
   "name": "Mastercrafted Pickaxe Head",
   "tags": ["forgero:pickaxe_head_shape"],
+  "local_tags": ["forgero:mastercrafted"],
   "attributes": [
     {
       "id": "forgero:shape-durability-mult-master",

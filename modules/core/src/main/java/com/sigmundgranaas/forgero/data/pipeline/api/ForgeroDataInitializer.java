@@ -77,7 +77,7 @@ public class ForgeroDataInitializer {
 
 		// Prepare for multi-namespace loading
 		List<String> namespaces = List.of(config.defaultNamespace(), "minecraft");
-		List<String> definitionDirs = List.of("materials", "shapes", "parts", "equipment", "schematics");
+		List<String> definitionDirs = List.of("materials", "shapes", "parts", "equipment", "schematics", "casts");
 
 		// 2. LOAD RAW DEFINITIONS from all configured namespaces
 		Map<OpenIdentifier, RawDefinition> rawDefinitions = namespaces.stream()
@@ -152,7 +152,8 @@ public class ForgeroDataInitializer {
 			Map<String, Codec<?>> codecMap = new HashMap<>();
 			codecMap.put("material", MaterialCodecs.create(attributeCodec));
 			codecMap.put("shape", ShapeCodecs.create(attributeCodec));
-			codecMap.put("schematic", SchematicCodecs.create());
+			codecMap.put("schematic", SchematicCodecs.create(attributeCodec));
+			codecMap.put("cast", CastCodecs.create(attributeCodec));
 			codecMap.put("static_part", StaticPartCodecs.create(attributeCodec, upgradeSlotCodec));
 			codecMap.put("part_template", PartTemplateCodecs.create(attributeCodec, upgradeSlotCodec));
 			codecMap.put("equipment_template", EquipmentTemplateCodecs.create(attributeCodec, upgradeSlotCodec));

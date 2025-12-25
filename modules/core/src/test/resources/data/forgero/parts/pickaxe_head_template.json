@@ -6,12 +6,12 @@
   ],
   "host_template": {
     "create": {
-      "id": "forgero:{material.name}-{shape.name}",
+      "id": "forgero:{material.name}-{shape.shape_name}",
       "class_name": "forgero:part_item"
     }
   },
   "structure": {
-    "id": "forgero:{material.name}-{shape.name}",
+    "id": "forgero:{material.name}-{shape.shape_name}",
     "slots": {
       "material": {
         "type": "forgero:tool_material",
@@ -19,6 +19,13 @@
       },
       "shape": {
         "type": "forgero:pickaxe_head_shape"
+      }
+    }
+  },
+  "generation": {
+    "slots": {
+      "shape": {
+        "require_all_tags": ["forgero:pickaxe_head_shape", "forgero:base_shape"]
       }
     }
   }

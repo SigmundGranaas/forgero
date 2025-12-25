@@ -5,11 +5,20 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
+import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 import com.sigmundgranaas.forgero.data.loading.api.data.SchematicData;
+import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.AttributeCodecs;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.SchematicCodecs;
+import com.sigmundgranaas.forgero.core.condition.api.ConditionCodec;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,7 +28,11 @@ class SchematicDataCodecTest {
 
 	@BeforeEach
 	void setUp() {
-		this.schematicDataCodec = SchematicCodecs.create();
+		Map<String, Codec<? extends StaticCondition>> staticCodecs = new HashMap<>();
+		Map<String, Codec<? extends DynamicCondition>> dynamicCodecs = new HashMap<>();
+		ConditionCodec conditionCodec = new ConditionCodec(staticCodecs, dynamicCodecs);
+		Codec<List<AttributeData>> attributeListCodec = Codec.list(AttributeCodecs.create(conditionCodec));
+		this.schematicDataCodec = SchematicCodecs.create(attributeListCodec);
 	}
 
 	private <T> T parseSuccess(Codec<T> codec, String json) {
@@ -97,11 +110,53 @@ class SchematicDataCodecTest {
 	void testParseSchematicMissingRequiredFields() {
 		String json = """
 				{
-				  "type": "forgero:schematic",
-				  "name": "incomplete-schematic",
-				  "crafting_material": "minecraft:paper"
+				  "type": "forgero:schematic"
 				}
-				"""; // Missing 'target'
-		parseFailure(schematicDataCodec, json, "No key target");
+				"""; // Missing 'name'
+		parseFailure(schematicDataCodec, json, "No key name");
+	}
+
+	@Test
+	void testParseSchematicWithAttributes() {
+		String json = """
+				{
+				  "type": "forgero:schematic",
+				  "name": "pickaxe_head",
+				  "include": ["forgero:shapes/pickaxe_head"],
+				  "attributes": [
+					{
+					  "id": "forgero:schematic-durability-bonus",
+					  "type": "forgero:durability",
+					  "computation": { "multiply": 1.1 }
+					}
+				  ],
+				  "local_tags": ["forgero:schematic", "forgero:crafted"]
+				}
+				""";
+
+		SchematicData data = parseSuccess(schematicDataCodec, json);
+		assertEquals("pickaxe_head", data.name());
+		assertNotNull(data.attributes());
+		assertEquals(1, data.attributes().size());
+		assertNotNull(data.localTags());
+		assertEquals(2, data.localTags().size());
+		assertTrue(data.localTags().contains(id("forgero:schematic")));
+		assertTrue(data.localTags().contains(id("forgero:crafted")));
+	}
+
+	@Test
+	void testParseSchematicBackwardCompatibility() {
+		String json = """
+				{
+				  "type": "forgero:schematic",
+				  "name": "old_schematic",
+				  "target": "forgero:pickaxe_head"
+				}
+				""";
+
+		SchematicData data = parseSuccess(schematicDataCodec, json);
+		assertEquals(id("forgero:pickaxe_head"), data.target());
+		assertNull(data.attributes());
+		assertNull(data.localTags());
 	}
 }

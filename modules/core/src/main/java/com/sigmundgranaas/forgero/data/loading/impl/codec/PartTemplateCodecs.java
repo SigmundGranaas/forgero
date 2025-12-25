@@ -50,8 +50,9 @@ public class PartTemplateCodecs {
 						PART_TEMPLATE_STRUCTURE_DATA_CODEC.fieldOf("structure").forGetter(PartTemplateData::structure),
 						upgradeSlotCodec.optionalFieldOf("upgrades").forGetter(data -> Optional.ofNullable(data.upgrades())),
 						attributeCodec.optionalFieldOf("attributes").forGetter(data -> Optional.ofNullable(data.attributes())),
+						GenerationConfigCodecs.GENERATION_CONFIG_DATA_CODEC.optionalFieldOf("generation").forGetter(data -> Optional.ofNullable(data.generation())),
 						Codec.unboundedMap(Codec.STRING, CodecConstants.JSON_ELEMENT_CODEC).optionalFieldOf("properties").forGetter(data -> Optional.ofNullable(data.properties()))
-				).apply(instance, (type, name, include, tags, host, structure, upgrades, attributes, properties) ->
-						new PartTemplateData(type, name, include.orElse(null), tags.orElse(null), host.orElse(null), structure, upgrades.orElse(null), attributes.orElse(null), properties.orElse(null))));
+				).apply(instance, (type, name, include, tags, host, structure, upgrades, attributes, generation, properties) ->
+						new PartTemplateData(type, name, include.orElse(null), tags.orElse(null), host.orElse(null), structure, upgrades.orElse(null), attributes.orElse(null), generation.orElse(null), properties.orElse(null))));
 	}
 }

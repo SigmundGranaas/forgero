@@ -5,13 +5,20 @@
     "forgero:parts/armor_plate_type"
   ],
   "structure": {
-    "id": "forgero:{material.name}-{shape.name}_plate",
+    "id": "forgero:{material.name}-{shape.shape_name}_plate",
     "slots": {
       "material": {
         "type": "forgero:materials/armor_material"
       },
       "shape": {
         "type": "forgero:armor_plate_shape"
+      }
+    }
+  },
+  "generation": {
+    "slots": {
+      "shape": {
+        "require_all_tags": ["forgero:armor_plate_shape", "forgero:base_shape"]
       }
     }
   }

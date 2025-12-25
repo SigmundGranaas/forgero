@@ -19,10 +19,12 @@ public class MaterialCodecs {
 						Codec.STRING.fieldOf("name").forGetter(MaterialData::name),
 						Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("include").forGetter(data -> Optional.ofNullable(data.include())),
 						Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("tags").forGetter(data -> Optional.ofNullable(data.tags())),
+						Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("local_tags").forGetter(data -> Optional.ofNullable(data.localTags())),
 						HostCodecs.HOST_DATA_CODEC.optionalFieldOf("host").forGetter(data -> Optional.ofNullable(data.host())),
 						attributeCodec.optionalFieldOf("attributes").forGetter(data -> Optional.ofNullable(data.attributes())),
+						attributeCodec.optionalFieldOf("local_attributes").forGetter(data -> Optional.ofNullable(data.localAttributes())),
 						Codec.unboundedMap(Codec.STRING, JSON_ELEMENT_CODEC).optionalFieldOf("properties").forGetter(data -> Optional.ofNullable(data.properties()))
-				).apply(instance, (type, name, include, tags, host, attributes, properties) ->
-						new MaterialData(type, name, include.orElse(null), tags.orElse(null), host.orElse(null), attributes.orElse(null), properties.orElse(null))));
+				).apply(instance, (type, name, include, tags, localTags, host, attributes, localAttributes, properties) ->
+						new MaterialData(type, name, include.orElse(null), tags.orElse(null), localTags.orElse(null), host.orElse(null), attributes.orElse(null), localAttributes.orElse(null), properties.orElse(null))));
 	}
 }

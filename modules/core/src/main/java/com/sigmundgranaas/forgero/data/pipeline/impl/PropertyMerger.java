@@ -45,12 +45,13 @@ public class PropertyMerger {
 		// Iterate in reverse to ensure that more specific DTOs override generic ones.
 		for (int i = dtoList.size() - 1; i >= 0; i--) {
 			Object dto = dtoList.get(i);
+			boolean isLastDto = (i == dtoList.size() - 1);
 
 			// Apply tag inheritance logic
 			if (getTags(dto) != null) {
 				if (isTemplateBasedMerge) {
 					// If it's a template merge, only inherit tags from non-material/non-shape DTOs (i.e., from the template itself)
-					if (!(dto instanceof MaterialData) && !(dto instanceof ShapeData)) {
+					if (!(dto instanceof MaterialData) && !(dto instanceof ShapeData) && !(dto instanceof CastData) && !(dto instanceof SchematicData)) {
 						mergedTags.addAll(getTags(dto));
 					}
 				} else {
@@ -59,8 +60,18 @@ public class PropertyMerger {
 				}
 			}
 
+			// Add local_tags ONLY from the final DTO (not inherited)
+			if (isLastDto && getLocalTags(dto) != null) {
+				mergedTags.addAll(getLocalTags(dto));
+			}
+
 			if (getAttributes(dto) != null && !isTemplateBasedMerge) {
 				mergedAttributes.addAll(getAttributes(dto));
+			}
+
+			// Add local_attributes ONLY from the final DTO (not inherited)
+			if (isLastDto && getLocalAttributes(dto) != null && !isTemplateBasedMerge) {
+				mergedAttributes.addAll(getLocalAttributes(dto));
 			}
 
 			if (getProperties(dto) != null && !isTemplateBasedMerge) {
@@ -112,25 +123,45 @@ public class PropertyMerger {
 		if (dto instanceof MaterialData data) return data.tags();
 		if (dto instanceof ShapeData data) return data.tags();
 		if (dto instanceof SchematicData data) return data.tags();
+		if (dto instanceof CastData data) return data.tags();
 		if (dto instanceof StaticData data) return data.tags();
 		if (dto instanceof PartTemplateData data) return data.tags();
 		if (dto instanceof EquipmentTemplateData data) return data.tags();
 		return Collections.emptyList();
 	}
 
+	private List<OpenIdentifier> getLocalTags(Object dto) {
+		if (dto instanceof MaterialData data) return data.localTags();
+		if (dto instanceof ShapeData data) return data.localTags();
+		if (dto instanceof SchematicData data) return data.localTags();
+		if (dto instanceof CastData data) return data.localTags();
+		return null;
+	}
+
 	private List<AttributeData> getAttributes(Object dto) {
 		if (dto instanceof MaterialData data) return data.attributes();
 		if (dto instanceof ShapeData data) return data.attributes();
+		if (dto instanceof SchematicData data) return data.attributes();
+		if (dto instanceof CastData data) return data.attributes();
 		if (dto instanceof StaticData data) return data.attributes();
 		if (dto instanceof PartTemplateData data) return data.attributes();
 		if (dto instanceof EquipmentTemplateData data) return data.attributes();
 		return Collections.emptyList();
 	}
 
+	private List<AttributeData> getLocalAttributes(Object dto) {
+		if (dto instanceof MaterialData data) return data.localAttributes();
+		if (dto instanceof ShapeData data) return data.localAttributes();
+		if (dto instanceof SchematicData data) return data.localAttributes();
+		if (dto instanceof CastData data) return data.localAttributes();
+		return null;
+	}
+
 	private Map<String, JsonElement> getProperties(Object dto) {
 		if (dto instanceof MaterialData data) return data.properties();
 		if (dto instanceof ShapeData data) return data.properties();
 		if (dto instanceof SchematicData data) return data.properties();
+		if (dto instanceof CastData data) return data.properties();
 		if (dto instanceof StaticData data) return data.properties();
 		if (dto instanceof PartTemplateData data) return data.properties();
 		if (dto instanceof EquipmentTemplateData data) return data.properties();
@@ -141,6 +172,7 @@ public class PropertyMerger {
 		if (dto instanceof MaterialData data) return data.host();
 		if (dto instanceof ShapeData data) return data.host();
 		if (dto instanceof SchematicData data) return data.host();
+		if (dto instanceof CastData data) return data.host();
 		if (dto instanceof StaticData data) return data.host();
 		return null;
 	}

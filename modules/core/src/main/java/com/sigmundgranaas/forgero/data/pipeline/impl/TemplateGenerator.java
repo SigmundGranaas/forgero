@@ -64,7 +64,7 @@ public class TemplateGenerator {
 
 	private void generatePartsFromTemplate(RawDefinition templateDef) {
 		PartTemplateData template = (PartTemplateData) templateDef.data();
-		List<Map<String, CofComponent>> combinations = findCombinationsForPart(template.structure().slots());
+		List<Map<String, CofComponent>> combinations = findCombinationsForPart(template.structure().slots(), template.generation());
 
 		for (Map<String, CofComponent> combination : combinations) {
 			CofComponent generatedPart = generatePart(templateDef, combination);
@@ -174,15 +174,15 @@ public class TemplateGenerator {
 				.collect(Collectors.toList());
 	}
 
-	private List<Map<String, CofComponent>> findCombinationsForPart(Map<String, PartTemplateStructureSlotData> slots) {
-		return findCombinationsInternal(slots, staticComponents, PartTemplateStructureSlotData::type);
+	private List<Map<String, CofComponent>> findCombinationsForPart(Map<String, PartTemplateStructureSlotData> slots, @Nullable com.sigmundgranaas.forgero.data.loading.api.data.GenerationConfigData generationConfig) {
+		return findCombinationsInternal(slots, staticComponents, PartTemplateStructureSlotData::type, generationConfig);
 	}
 
 	private List<Map<String, CofComponent>> findCombinationsForEquipment(Map<String, EquipmentTemplateSlotData> slots, Map<OpenIdentifier, CofComponent> partsPool) {
-		return findCombinationsInternal(slots, partsPool, EquipmentTemplateSlotData::type);
+		return findCombinationsInternal(slots, partsPool, EquipmentTemplateSlotData::type, null);
 	}
 
-	private <T> List<Map<String, CofComponent>> findCombinationsInternal(Map<String, T> slots, Map<OpenIdentifier, CofComponent> componentPool, java.util.function.Function<T, OpenIdentifier> typeExtractor) {
+	private <T> List<Map<String, CofComponent>> findCombinationsInternal(Map<String, T> slots, Map<OpenIdentifier, CofComponent> componentPool, java.util.function.Function<T, OpenIdentifier> typeExtractor, @Nullable com.sigmundgranaas.forgero.data.loading.api.data.GenerationConfigData generationConfig) {
 		if (slots.isEmpty()) {
 			return Collections.emptyList();
 		}
@@ -190,7 +190,15 @@ public class TemplateGenerator {
 		Map<String, List<CofComponent>> compatibles = slots.entrySet().stream()
 				.collect(Collectors.toMap(
 						Map.Entry::getKey,
-						entry -> findCompatibleComponents(typeExtractor.apply(entry.getValue()), componentPool)
+						entry -> {
+							List<CofComponent> runtimeCompatible = findCompatibleComponents(typeExtractor.apply(entry.getValue()), componentPool);
+
+							// Apply generation filter if present
+							if (generationConfig != null && generationConfig.getFilterForSlot(entry.getKey()) != null) {
+								return applyGenerationFilter(runtimeCompatible, generationConfig.getFilterForSlot(entry.getKey()));
+							}
+							return runtimeCompatible;
+						}
 				));
 
 		List<Map<String, CofComponent>> combinations = new ArrayList<>();
@@ -255,6 +263,29 @@ public class TemplateGenerator {
 				}
 			} else {
 				String property = parts[1];
+
+				// Handle {shape.shape_name} placeholder
+				if ("shape_name".equals(property)) {
+					RawDefinition rawDef = rawDefinitions.get(componentInSlot.id());
+					if (rawDef != null && rawDef.data() instanceof com.sigmundgranaas.forgero.data.loading.api.data.ResourceTypeData resourceTypeData) {
+						// If has includes, get the name from the first include's identifier
+						if (resourceTypeData.include() != null && !resourceTypeData.include().isEmpty()) {
+							String includeName = resourceTypeData.include().get(0).name();
+							// Strip _shape suffix if present
+							if (includeName.endsWith("_shape")) {
+								return includeName.substring(0, includeName.length() - "_shape".length());
+							}
+							return includeName;
+						}
+					}
+					// Otherwise use the component's own identifier name and strip _shape suffix
+					String componentName = componentInSlot.id().name();
+					if (componentName.endsWith("_shape")) {
+						return componentName.substring(0, componentName.length() - "_shape".length());
+					}
+					return componentName;
+				}
+
 				if ("name".equals(property)) {
 					String componentName = componentInSlot.id().name();
 					if ("shape".equals(parts[0]) && componentName.endsWith("_shape")) {
@@ -265,6 +296,165 @@ public class TemplateGenerator {
 			}
 			return matchResult.group(0);
 		});
+	}
+
+	/**
+	 * Applies tag-based filtering to a list of components based on generation filter rules.
+	 * Logs warnings if the filter excludes all components or has potentially conflicting rules.
+	 *
+	 * @param components The runtime-compatible components to filter
+	 * @param filter     The generation filter rules to apply
+	 * @return Filtered list of components that pass all filter criteria
+	 */
+	private List<CofComponent> applyGenerationFilter(List<CofComponent> components, com.sigmundgranaas.forgero.data.loading.api.data.SlotGenerationFilter filter) {
+		if (filter.isEmpty()) {
+			return components;
+		}
+
+		// Validate filter for potential issues before applying
+		validateGenerationFilter(filter, components);
+
+		// If explicit list is provided, it overrides all tag filters
+		if (filter.explicitList() != null && !filter.explicitList().isEmpty()) {
+			Set<OpenIdentifier> allowedIds = new HashSet<>(filter.explicitList());
+			List<CofComponent> filtered = components.stream()
+					.filter(comp -> allowedIds.contains(comp.id()))
+					.toList();
+
+			// Warn if explicit list excludes all components
+			if (filtered.isEmpty() && !components.isEmpty()) {
+				System.err.println("[WARN] Generation filter with explicit list excluded all components. " +
+						"Explicit IDs: " + filter.explicitList() + ", Available components: " +
+						components.stream().map(c -> c.id().toString()).toList());
+			}
+
+			return filtered;
+		}
+
+		// Otherwise apply tag-based filters
+		List<CofComponent> filtered = components.stream()
+				.filter(comp -> {
+					Set<OpenIdentifier> componentTags = comp.tags();
+					if (componentTags == null || componentTags.isEmpty()) {
+						return false;
+					}
+
+					// requireAllTags: Component must have ALL of these tags
+					if (filter.requireAllTags() != null && !filter.requireAllTags().isEmpty()) {
+						boolean hasAllRequired = filter.requireAllTags().stream()
+								.allMatch(tag -> tagGraph.isTagged(() -> componentTags, tag));
+						if (!hasAllRequired) {
+							return false;
+						}
+					}
+
+					// requireAnyTags: Component must have AT LEAST ONE of these tags
+					if (filter.requireAnyTags() != null && !filter.requireAnyTags().isEmpty()) {
+						boolean hasAnyRequired = filter.requireAnyTags().stream()
+								.anyMatch(tag -> tagGraph.isTagged(() -> componentTags, tag));
+						if (!hasAnyRequired) {
+							return false;
+						}
+					}
+
+					// excludeAnyTags: Component must NOT have ANY of these tags
+					if (filter.excludeAnyTags() != null && !filter.excludeAnyTags().isEmpty()) {
+						boolean hasAnyExcluded = filter.excludeAnyTags().stream()
+								.anyMatch(tag -> tagGraph.isTagged(() -> componentTags, tag));
+						if (hasAnyExcluded) {
+							return false;
+						}
+					}
+
+					// excludeAllTags: Component must NOT have ALL of these tags (can have some)
+					if (filter.excludeAllTags() != null && !filter.excludeAllTags().isEmpty()) {
+						boolean hasAllExcluded = filter.excludeAllTags().stream()
+								.allMatch(tag -> tagGraph.isTagged(() -> componentTags, tag));
+						if (hasAllExcluded) {
+							return false;
+						}
+					}
+
+					return true;
+				})
+				.toList();
+
+		// Warn if filter excluded all components
+		if (filtered.isEmpty() && !components.isEmpty()) {
+			System.err.println("[WARN] Generation filter excluded all components. " +
+					"Filter: " + formatFilter(filter) + ", Available components: " +
+					components.stream().map(c -> c.id().toString()).limit(5).toList() +
+					(components.size() > 5 ? " (and " + (components.size() - 5) + " more)" : ""));
+		}
+
+		return filtered;
+	}
+
+	/**
+	 * Validates a generation filter for potential issues and logs warnings.
+	 *
+	 * @param filter     The filter to validate
+	 * @param components The components that will be filtered
+	 */
+	private void validateGenerationFilter(com.sigmundgranaas.forgero.data.loading.api.data.SlotGenerationFilter filter, List<CofComponent> components) {
+		// Check for conflicting requireAllTags and excludeAnyTags
+		if (filter.requireAllTags() != null && filter.excludeAnyTags() != null) {
+			Set<OpenIdentifier> intersection = new HashSet<>(filter.requireAllTags());
+			intersection.retainAll(filter.excludeAnyTags());
+			if (!intersection.isEmpty()) {
+				System.err.println("[WARN] Generation filter has conflicting rules: tags " + intersection +
+						" are both required (requireAllTags) and excluded (excludeAnyTags). " +
+						"This will exclude all components.");
+			}
+		}
+
+		// Check for potentially ineffective requireAnyTags with excludeAnyTags
+		if (filter.requireAnyTags() != null && filter.excludeAnyTags() != null) {
+			Set<OpenIdentifier> allRequired = new HashSet<>(filter.requireAnyTags());
+			Set<OpenIdentifier> allExcluded = new HashSet<>(filter.excludeAnyTags());
+			if (allExcluded.containsAll(allRequired)) {
+				System.err.println("[WARN] Generation filter excludes all required tags (excludeAnyTags contains all requireAnyTags). " +
+						"Required: " + filter.requireAnyTags() + ", Excluded: " + filter.excludeAnyTags());
+			}
+		}
+
+		// Check for explicit list with other filters (explicit list overrides tag filters)
+		if (filter.explicitList() != null && !filter.explicitList().isEmpty()) {
+			boolean hasTagFilters = (filter.requireAllTags() != null && !filter.requireAllTags().isEmpty()) ||
+					(filter.requireAnyTags() != null && !filter.requireAnyTags().isEmpty()) ||
+					(filter.excludeAnyTags() != null && !filter.excludeAnyTags().isEmpty()) ||
+					(filter.excludeAllTags() != null && !filter.excludeAllTags().isEmpty());
+			if (hasTagFilters) {
+				System.err.println("[INFO] Generation filter has both explicit list and tag filters. " +
+						"Explicit list will override tag filters. Consider removing unused tag filters.");
+			}
+		}
+	}
+
+	/**
+	 * Formats a filter for logging purposes.
+	 *
+	 * @param filter The filter to format
+	 * @return A string representation of the filter
+	 */
+	private String formatFilter(com.sigmundgranaas.forgero.data.loading.api.data.SlotGenerationFilter filter) {
+		List<String> parts = new java.util.ArrayList<>();
+		if (filter.requireAllTags() != null && !filter.requireAllTags().isEmpty()) {
+			parts.add("requireAllTags=" + filter.requireAllTags());
+		}
+		if (filter.requireAnyTags() != null && !filter.requireAnyTags().isEmpty()) {
+			parts.add("requireAnyTags=" + filter.requireAnyTags());
+		}
+		if (filter.excludeAnyTags() != null && !filter.excludeAnyTags().isEmpty()) {
+			parts.add("excludeAnyTags=" + filter.excludeAnyTags());
+		}
+		if (filter.excludeAllTags() != null && !filter.excludeAllTags().isEmpty()) {
+			parts.add("excludeAllTags=" + filter.excludeAllTags());
+		}
+		if (filter.explicitList() != null && !filter.explicitList().isEmpty()) {
+			parts.add("explicitList=" + filter.explicitList());
+		}
+		return "{" + String.join(", ", parts) + "}";
 	}
 
 	private List<CofComponent> findCompatibleComponents(OpenIdentifier typeTag, Map<OpenIdentifier, CofComponent> pool) {

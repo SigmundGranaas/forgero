@@ -4,7 +4,6 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.tooltip.display.AttributeDisplayData;
 import com.sigmundgranaas.forgero.common.tooltip.display.TooltipTextFormatter;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
-import com.sigmundgranaas.forgero.core.attribute.api.CompositeAttributeComponent;
 import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
 import com.sigmundgranaas.forgero.core.attribute.api.operator.*;
 import com.sigmundgranaas.forgero.core.component.api.Component;
@@ -29,14 +28,11 @@ public class CompositeSectionWriter implements TooltipSectionWriter {
 			new AttributeDisplayData(DefaultAttributes.ARMOR_TOUGHNESS, "attribute.forgero.armor_toughness", AttributeDisplayData.Style.ADDITIVE, 0.0f)
 	);
 
-	private final List<CompositeAttributeComponent> components;
+	private final List<Attribute> components;
 	private final List<Text> cachedEntries = new ArrayList<>();
 
 	public CompositeSectionWriter(Component component, List<Attribute> attributes) {
-		this.components = attributes.stream()
-				.filter(CompositeAttributeComponent.class::isInstance)
-				.map(CompositeAttributeComponent.class::cast)
-				.toList();
+		this.components = attributes;
 	}
 
 	@Override
@@ -59,11 +55,11 @@ public class CompositeSectionWriter implements TooltipSectionWriter {
 				.collect(Collectors.toMap(AttributeDisplayData::id, Function.identity()));
 
 		// 1. Segregate components by operator type
-		List<CompositeAttributeComponent> additives = components.stream()
+		List<Attribute> additives = components.stream()
 				.filter(c -> c.operator() instanceof AdditionOperator || c.operator() instanceof SubtractionOperator)
 				.toList();
 
-		List<CompositeAttributeComponent> multiplicatives = components.stream()
+		List<Attribute> multiplicatives = components.stream()
 				.filter(c -> c.operator() instanceof MultiplicationOperator || c.operator() instanceof DivisionOperator)
 				.toList();
 
@@ -78,7 +74,7 @@ public class CompositeSectionWriter implements TooltipSectionWriter {
 		return !cachedEntries.isEmpty();
 	}
 
-	private Map<OpenIdentifier, Float> aggregateAdditives(List<CompositeAttributeComponent> components) {
+	private Map<OpenIdentifier, Float> aggregateAdditives(List<Attribute> components) {
 		return components.stream()
 				.collect(Collectors.groupingBy(
 						Attribute::type,
@@ -90,7 +86,7 @@ public class CompositeSectionWriter implements TooltipSectionWriter {
 				.collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().floatValue()));
 	}
 
-	private Map<OpenIdentifier, Float> aggregateMultiplicatives(List<CompositeAttributeComponent> components) {
+	private Map<OpenIdentifier, Float> aggregateMultiplicatives(List<Attribute> components) {
 		return components.stream()
 				.collect(Collectors.groupingBy(
 						Attribute::type,

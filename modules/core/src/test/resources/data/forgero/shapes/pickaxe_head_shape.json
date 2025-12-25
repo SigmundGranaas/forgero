@@ -5,6 +5,9 @@
     "forgero:pickaxe_head_shape",
     "forgero:default_pickaxe_head"
   ],
+  "local_tags": [
+    "forgero:base_shape"
+  ],
   "attributes": [
     {
       "id": "forgero:shape-durability-mult",

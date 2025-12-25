@@ -56,6 +56,7 @@ public class IncludeResolver {
 		if (dto instanceof MaterialData data) return data.include();
 		if (dto instanceof ShapeData data) return data.include();
 		if (dto instanceof SchematicData data) return data.include();
+		if (dto instanceof CastData data) return data.include();
 		if (dto instanceof StaticData data) return data.include();
 		if (dto instanceof PartTemplateData data) return data.include();
 		if (dto instanceof EquipmentTemplateData data) return data.include();

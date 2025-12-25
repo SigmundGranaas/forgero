@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.data.loading.api.data.template;
 
 import com.google.gson.JsonElement;
+import com.sigmundgranaas.forgero.data.loading.api.data.GenerationConfigData;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.template.HostTemplateData;
@@ -22,6 +23,7 @@ import java.util.Map;
  * @param structure     Defines the required materials for its construction.
  * @param upgrades      Optional list of upgrade slots available on this part.
  * @param attributes    Optional list of attributes inherent to this part template.
+ * @param generation    Optional configuration for controlling which components trigger generation.
  * @param properties    Optional map for custom, extensible properties.
  */
 public record PartTemplateData(
@@ -38,6 +40,8 @@ public record PartTemplateData(
 		List<UpgradeSlotData> upgrades,
 		@Nullable
 		List<AttributeData> attributes,
+		@Nullable
+		GenerationConfigData generation,
 		@Nullable
 		Map<String, JsonElement> properties
 )  {
