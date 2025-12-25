@@ -1,7 +1,5 @@
 package com.sigmundgranaas.forgero.core.property.attribute.impl;
 
-import com.sigmundgranaas.forgero.core.attribute.api.CompositeAttribute;
-import com.sigmundgranaas.forgero.core.attribute.api.CompositeAttributeComponent;
 import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
 import com.sigmundgranaas.forgero.core.attribute.impl.computation.CalculationVisualizer;
@@ -212,53 +210,6 @@ class ComputationChainTest {
 		var chain = new ComputationChain(attributes);
 		assertThrows(ArithmeticException.class, () -> chain.compute(0f));
 	}
-
-	@Test
-	void testComputationChain_withCompositeAttributeAndSimpleAttribute() {
-		// 1. Create components for a CompositeAttribute
-		OpenIdentifier compositeType = DefaultAttributes.ATTACK_DAMAGE;
-		OpenIdentifier compositeKey = new OpenIdentifier("forgero", "tool_bonus");
-
-		CompositeAttributeComponent comp1 = new CompositeAttributeComponent(compositeType, 5f, AdditionOperator.getInstance(), 0, compositeKey); // 0 + 5 = 5
-		CompositeAttributeComponent comp2 = new CompositeAttributeComponent(compositeType, 1.5f, MultiplicationOperator.getInstance(), 1, compositeKey); // 5 * 1.5 = 7.5
-		CompositeAttributeComponent comp3 = new CompositeAttributeComponent(compositeType, 2f, SubtractionOperator.getInstance(), 2, compositeKey); // 7.5 - 2 = 5.5
-
-		// 2. Create the CompositeAttribute from these components (internal value 5.5)
-		Optional<CompositeAttribute> optionalCompositeAttribute = CompositeAttribute.of(compositeType, compositeKey, List.of(comp1, comp2, comp3));
-		assertTrue(optionalCompositeAttribute.isPresent(), "CompositeAttribute should be created successfully");
-		CompositeAttribute compositeAttr = optionalCompositeAttribute.get();
-
-		// Verify the internal value of the composite attribute
-		assertEquals(5.5f, compositeAttr.value(), 0.001f);
-
-		// 3. Create some SimpleAttributes
-		SimpleAttribute simpleAttr1 = new SimpleAttribute(compositeType, 10f, AdditionOperator.getInstance(), 0, Condition.ALWAYS_TRUE); // Add 10 (Order 1, Group 0)
-		SimpleAttribute simpleAttr2 = new SimpleAttribute(compositeType, 2f, MultiplicationOperator.getInstance(), 1, Condition.ALWAYS_TRUE); // Mul 2 (Order 2, Group 1)
-
-		// 4. Create the ComputationChain with the CompositeAttribute and SimpleAttributes.
-		var attributesForChain = List.of(
-				comp1, comp2, comp3, // Should be ignored
-				simpleAttr1,     // Group 0, Add 10
-				compositeAttr,   // Group 0, Add (compositeAttr's value 5.5)
-				simpleAttr2      // Group 1, Mul 2
-		);
-		var chain = new ComputationChain(attributesForChain);
-
-		// Detailed Calculation:
-		// Initial Base Value: 0f
-
-		// Group 0: Attributes sorted by operator order:
-		//   - SimpleAttribute: Add 10f (Order 1) -> 0 + 10 = 10
-		//   - CompositeAttribute: Add (value 5.5f, Order 1) -> 10 + 5.5 = 15.5
-		// Current Value after Group 0: 15.5f
-
-		// Group 1: Attributes sorted by operator order:
-		//   - SimpleAttribute: Mul 2f (Order 2) -> 15.5 * 2 = 31.0
-		// Final Result: 31.0f
-
-		assertEquals(31.0f, chain.compute(0f), 0.001f, new CalculationVisualizer(chain.orderedAttributes()).visualize(0f));
-	}
-
 
 	/**
 	 * This test demonstrates the use of CalculationVisualizer.

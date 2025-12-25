@@ -19,7 +19,7 @@ import java.util.Optional;
 
 public class FileModelProvider implements ResourceConverter<Model> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileModelProvider.class);
-	private static final String MODELS_BASE_PATH = "forgero/models/";
+	private static final String MODELS_BASE_PATH = "forgero_models/";
 	private final ModelTranslator translator;
 
 	public FileModelProvider() {

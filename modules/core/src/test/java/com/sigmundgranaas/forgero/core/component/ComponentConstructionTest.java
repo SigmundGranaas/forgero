@@ -71,7 +71,7 @@ class ComponentConstructionTest extends ForgeroTest {
 		var material = material(IRON_ID, METAL_TAG);
 		var schematic = schematic(PICKAXE_HEAD_ID);
 		// Update ComponentStructure to use Map.of
-		var structure = new ComponentStructure(slotsMap(slot(idFactory.of("material_slot"), MATERIAL_ID, material), slot(idFactory.of("schematic_slot"), SCHEMATIC_ID, schematic)));
+		var structure = new ComponentStructure(slotsMap(slot(idFactory.of("material_slot"), TOOL_MATERIAL_ID, material), slot(idFactory.of("schematic_slot"), PICKAXE_HEAD_SHAPE_ID, schematic)));
 
 		// Pass an empty HashMap for properties as there are no attributes
 		var part = new StructuredPart(PICKAXE_HEAD_ID, Set.of(), new HashMap<>(), structure);
@@ -83,7 +83,7 @@ class ComponentConstructionTest extends ForgeroTest {
 	void testStructuredExtensiblePart() {
 		var material = material(IRON_ID, METAL_TAG);
 		// Update ComponentStructure to use Map.of
-		var structure = new ComponentStructure(slotsMap(slot(idFactory.of("material_slot"), MATERIAL_ID, material)));
+		var structure = new ComponentStructure(slotsMap(slot(idFactory.of("material_slot"), TOOL_MATERIAL_ID, material)));
 		var slot = new UpgradeSlot(GEM_SLOT_ID, GEM_SLOT_TYPE_TAG, "Gem slot", (comp) -> true, Optional.empty());
 		var upgrades = new ComponentUpgrades(List.of(slot));
 

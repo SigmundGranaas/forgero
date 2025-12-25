@@ -33,7 +33,24 @@ class ForgeroDataInitializerTest {
 
 	@Test
 	void testInitializeData() {
-		ForgeroDataInitializer.Config config = new ForgeroDataInitializer.Config("forgero", testResourceProvider(), new HashMap<>(), new HashMap<>(), new HashMap<>());
+		// Create TagGraph with all tags referenced by test resources
+		var tagMap = new HashMap<OpenIdentifier, java.util.Set<OpenIdentifier>>();
+		// Tags from shape/material files
+		tagMap.put(idFactory.of("forgero:armor_plate_shape"), new java.util.HashSet<>());
+		tagMap.put(idFactory.of("forgero:pickaxe_head_shape"), new java.util.HashSet<>());
+		tagMap.put(idFactory.of("forgero:default_pickaxe_head"), new java.util.HashSet<>());
+		tagMap.put(idFactory.of("forgero:default_armor_plate"), new java.util.HashSet<>());
+		tagMap.put(idFactory.of("forgero:materials/tool_material"), new java.util.HashSet<>());
+		tagMap.put(idFactory.of("forgero:materials/metal"), new java.util.HashSet<>());
+		tagMap.put(idFactory.of("forgero:materials/armor_material"), new java.util.HashSet<>());
+		// Tags from template/part files (slot types)
+		tagMap.put(idFactory.of("forgero:parts/handle_type"), new java.util.HashSet<>());
+		tagMap.put(idFactory.of("forgero:parts/pickaxe_head_type"), new java.util.HashSet<>());
+		tagMap.put(idFactory.of("forgero:parts/armor_plate_type"), new java.util.HashSet<>());
+		tagMap.put(idFactory.of("forgero:tools/pickaxe"), new java.util.HashSet<>());
+		tagMap.put(idFactory.of("forgero:armor/chest_plate"), new java.util.HashSet<>());
+		var tagGraph = new com.sigmundgranaas.forgero.common.tags.engine.TagGraph(tagMap);
+		ForgeroDataInitializer.Config config = new ForgeroDataInitializer.Config("forgero", testResourceProvider(), tagGraph, new HashMap<>(), new HashMap<>(), new HashMap<>());
 		// Updated to use the new constructor with a test-specific ResourceProvider
 		ForgeroDataInitializer initializer = new ForgeroDataInitializer(config);
 		ForgeroDataBundle bundle = initializer.getDataBundle();

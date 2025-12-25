@@ -40,7 +40,7 @@ public class FullPickaxeRenderTest {
 		// Setup Model Registry
 		registry = new MapBackedModelRegistry();
 		ResourceProvider resourceProvider = new ClassPathResourceProvider("/assets");
-		var fileModelProvider = new FileModelProvider(resourceProvider);
+		var fileModelProvider = new FileModelProvider();
 		new ResourceLoader<>(resourceProvider, fileModelProvider)
 				.load(new OpenIdentifier("forgero", "forgero_models"), true)
 				.forEach(registry::register);
@@ -143,6 +143,11 @@ public class FullPickaxeRenderTest {
 		@Override
 		public Component withStructure(ComponentStructure newStructure) {
 			return new MockStructuredEquipment(id, tags, properties, newStructure);
+		}
+
+		@Override
+		public Component withProperties(Map<String, List<?>> newProperties) {
+			return new MockStructuredEquipment(id, tags, newProperties, structure);
 		}
 
 		@Override

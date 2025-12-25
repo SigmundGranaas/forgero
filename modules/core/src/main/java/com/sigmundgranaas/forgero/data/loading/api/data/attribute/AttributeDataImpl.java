@@ -8,7 +8,6 @@ public record AttributeDataImpl(
 		OpenIdentifier id,
 		OpenIdentifier type,
 		ComputationData computation,
-		@Nullable Condition condition,
-		@Nullable OpenIdentifier composite
+		@Nullable Condition condition
 ) implements AttributeData {
 }

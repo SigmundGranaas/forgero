@@ -10,7 +10,6 @@ import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeCodec;
-import com.sigmundgranaas.forgero.core.attribute.api.CompositeAttributeComponent;
 import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.attribute.api.operator.*;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
@@ -136,59 +135,6 @@ class AttributeCodecTest {
 	void encodeAlwaysUsesShortOperatorName() {
 		SimpleAttribute attribute = new SimpleAttribute(ATTACK_DAMAGE, 1.5f, SubtractionOperator.getInstance(), 0);
 		String expectedJson = "{ \"type\": \"forgero:attack_damage\", \"value\": 1.5, \"operator\": \"sub\", \"group\": 0 }";
-		assertEncode(attribute, expectedJson);
-	}
-
-	@Test
-	void decodeCompositeComponentWithDefaults() {
-		String inputJson = """
-            {
-              "type": "forgero:durability",
-              "value": 100,
-              "composite_key": "forgero:test-head"
-            }
-            """;
-		CompositeAttributeComponent expected = new CompositeAttributeComponent(Optional.empty(), DURABILITY, 100f, AdditionOperator.getInstance(), 0, COMPOSITE_KEY);
-		assertDecode(inputJson, expected);
-	}
-
-	@Test
-	void encodeCompositeComponentWithDefaults() {
-		CompositeAttributeComponent attribute = new CompositeAttributeComponent(DURABILITY, 100f, COMPOSITE_KEY);
-		String expectedJson = """
-            {
-              "type": "forgero:durability",
-              "value": 100.0,
-              "operator": "add",
-              "group": 0,
-              "composite_key": "forgero:test-head"
-            }
-            """;
-		assertEncode(attribute, expectedJson);
-	}
-
-	@Test
-	void decodeAndEncodeFullCompositeComponent() {
-		String json = """
-            {
-              "type": "forgero:durability",
-              "value": 0.1,
-              "operator": "div",
-              "group": 3,
-              "composite_key": "forgero:test-head"
-            }
-            """;
-		// 0.1f also has precision issues, so we use a different representable float
-		CompositeAttributeComponent attribute = new CompositeAttributeComponent(Optional.empty(), DURABILITY, 0.125f, DivisionOperator.getInstance(), 3, COMPOSITE_KEY);
-		String expectedJson = """
-            {
-              "type": "forgero:durability",
-              "value": 0.125,
-              "operator": "div",
-              "group": 3,
-              "composite_key": "forgero:test-head"
-            }
-            """;
 		assertEncode(attribute, expectedJson);
 	}
 

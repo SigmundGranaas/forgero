@@ -117,7 +117,7 @@ public class ModelPipelineFullIntegrationTest {
 		ArmorModelRegistry armorModelRegistry = new MapBackedArmorModelRegistry();
 
 		// Initialize models without writing files
-		ModelDataInitializer modelInitializer = new ModelDataInitializer(resourceProvider, "forgero");
+		ModelDataInitializer modelInitializer = new ModelDataInitializer(resourceProvider);
 		ModelInitializationResult initResult = modelInitializer.initialize(components, tagGraph, modelRegistry, armorModelRegistry);
 
 		// Manually write the generated assets to a specific directory for inspection
@@ -136,10 +136,10 @@ public class ModelPipelineFullIntegrationTest {
 		File guardTexture = new File(OUTPUT_DIRECTORY, "assets/forgero/item/iron-sword_guard.png");
 		assertTrue(guardTexture.exists() && guardTexture.length() > 0, "Texture for contextual iron guard should be generated.");
 
-		File bladeModelFile = new File(OUTPUT_DIRECTORY, "assets/forgero/models/iron-sword_blade.json");
+		File bladeModelFile = new File(OUTPUT_DIRECTORY, "assets/forgero/models/parts/iron-sword_blade.json");
 		assertTrue(bladeModelFile.exists() && bladeModelFile.length() > 0, "Model JSON for iron-sword_blade should be written.");
 
-		File handleModelFile = new File(OUTPUT_DIRECTORY, "assets/forgero/models/oak-handle.json");
+		File handleModelFile = new File(OUTPUT_DIRECTORY, "assets/forgero/models/parts/oak-handle.json");
 		assertTrue(handleModelFile.exists() && handleModelFile.length() > 0, "Model JSON for oak-handle should be written.");
 
 		File swordModelFile = new File(OUTPUT_DIRECTORY, "assets/forgero/models/equipment/iron-sword.json");

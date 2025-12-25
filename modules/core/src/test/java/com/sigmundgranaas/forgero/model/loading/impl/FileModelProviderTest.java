@@ -22,8 +22,14 @@ class FileModelProviderTest {
 	@BeforeEach
 	void setUp() {
 		registry = new MapBackedModelRegistry();
-		var resourceProvider = new ClassPathResourceProvider("/assets");
-		provider = new FileModelProvider(resourceProvider);
+		// Use filesystem-based provider for tests since classpath directory enumeration is unreliable
+		java.nio.file.Path assetsPath = java.nio.file.Paths.get("modules/core/build/resources/test/assets");
+		if (!java.nio.file.Files.exists(assetsPath)) {
+			// Fallback for different working directories
+			assetsPath = java.nio.file.Paths.get("build/resources/test/assets");
+		}
+		var resourceProvider = new ClassPathResourceProvider(assetsPath);
+		provider = new FileModelProvider();
 
 		// Use ResourceLoader to load models, acting as the orchestrator
 		ResourceLoader<Model> modelLoader = new ResourceLoader<>(resourceProvider, provider);
@@ -40,7 +46,8 @@ class FileModelProviderTest {
 	@Test
 	void testIronPickaxeModelLoaded() {
 		OpenIdentifier id = new OpenIdentifier("forgero", "equipment/iron-pickaxe");
-		assertTrue(registry.find(id).isPresent());
+		assertTrue(registry.find(id).isPresent(),
+			"Model not found. Registry contains " + registry.models().size() + " models");
 		assertInstanceOf(CompositeModel.class, registry.find(id).get());
 		CompositeModel model = (CompositeModel) registry.find(id).get();
 		assertEquals(3, model.slots().size()); // head, handle, binding

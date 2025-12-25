@@ -33,9 +33,11 @@ public class ForgeroTest {
 	public static final OpenIdentifier SWORD_ID = idFactory.of("sword");
 	public static final OpenIdentifier BLADE_ID = idFactory.of("blade");
 
-	// Common Slot Type Identifiers
-	public static final OpenIdentifier MATERIAL_ID = idFactory.of("material");
-	public static final OpenIdentifier SCHEMATIC_ID = idFactory.of("schematic");
+	// Common Slot Type Identifiers (specific to structure)
+	public static final OpenIdentifier TOOL_MATERIAL_ID = idFactory.of("tool_material");
+	public static final OpenIdentifier ARMOR_MATERIAL_ID = idFactory.of("armor_material");
+	public static final OpenIdentifier PICKAXE_HEAD_SHAPE_ID = idFactory.of("pickaxe_head_shape");
+	public static final OpenIdentifier ARMOR_PLATE_SHAPE_ID = idFactory.of("armor_plate_shape");
 
 	// Common Slot Identifiers
 	public static final OpenIdentifier HEAD_SLOT_ID = idFactory.of("head_slot");

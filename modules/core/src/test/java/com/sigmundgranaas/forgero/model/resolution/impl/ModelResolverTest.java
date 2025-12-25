@@ -33,7 +33,7 @@ class ModelResolverTest {
 		// Setup Model Registry
 		registry = new MapBackedModelRegistry();
 		ResourceProvider resourceProvider = new ClassPathResourceProvider("/assets");
-		var fileModelProvider = new FileModelProvider(resourceProvider);
+		var fileModelProvider = new FileModelProvider();
 		new ResourceLoader<>(resourceProvider, fileModelProvider)
 				.load(new OpenIdentifier("forgero", "forgero_models"), true)
 				.forEach(registry::register);
@@ -102,6 +102,11 @@ class ModelResolverTest {
 		@Override
 		public Component withStructure(ComponentStructure newStructure) {
 			return new MockStructuredEquipment(id, tags, properties, newStructure);
+		}
+
+		@Override
+		public Component withProperties(Map<String, List<?>> newProperties) {
+			return this; // Simple mock - properties don't affect model resolution
 		}
 
 		@Override

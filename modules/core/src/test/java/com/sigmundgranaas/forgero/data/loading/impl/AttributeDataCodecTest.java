@@ -53,9 +53,8 @@ class AttributeDataCodecTest {
 	void testParseFullAttribute() {
 		String json = """
 				{
-				  "id": "forgero:diamond-composite-mining-speed",
+				  "id": "forgero:diamond-scoped-mining-speed",
 				  "type": "forgero:mining_speed",
-				  "composite": "forgero:material-mining-speed",
 				  "condition": { "type": "forgero:self_has_tag", "tag": "forgero:gem" },
 				  "computation": { "add": 8 }
 				}
@@ -63,9 +62,8 @@ class AttributeDataCodecTest {
 
 		AttributeData data = parseSuccess(attributeDataCodec, json);
 
-		assertEquals(id("forgero:diamond-composite-mining-speed"), data.id());
+		assertEquals(id("forgero:diamond-scoped-mining-speed"), data.id());
 		assertEquals(id("forgero:mining_speed"), data.type());
-		assertEquals(id("forgero:material-mining-speed"), data.composite());
 		assertEquals(8f, data.computation().value());
 		assertEquals(AttributeCodecs.ADDITION_OPERATOR, data.computation().operator());
 		assertEquals(AttributeCodecs.BASE_ORDER, data.computation().order());
@@ -93,7 +91,6 @@ class AttributeDataCodecTest {
 
 		assertEquals(id("forgero:diamond-durability"), data.id());
 		assertEquals(id("forgero:durability"), data.type());
-		assertNull(data.composite(), "Composite should be null when not present");
 
 		assertNull(data.condition());
 		assertEquals(1561f, data.computation().value());

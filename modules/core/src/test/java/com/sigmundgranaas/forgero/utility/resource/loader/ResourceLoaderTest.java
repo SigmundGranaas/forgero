@@ -34,6 +34,13 @@ class ResourceLoaderTest {
 		}
 
 		@Override
+		public java.util.Set<String> getNamespaces() {
+			return resources.keySet().stream()
+					.map(OpenIdentifier::namespace)
+					.collect(Collectors.toSet());
+		}
+
+		@Override
 		public Stream<OpenIdentifier> list(OpenIdentifier path, boolean recursive) {
 			return resources.keySet().stream()
 					.filter(id -> id.namespace().equals(path.namespace()))

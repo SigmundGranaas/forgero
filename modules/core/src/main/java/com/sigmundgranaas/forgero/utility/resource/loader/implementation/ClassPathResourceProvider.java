@@ -102,13 +102,32 @@ public class ClassPathResourceProvider implements ResourceProvider {
 	}
 
 	private Stream<OpenIdentifier> listFromClasspath(OpenIdentifier path, boolean recursive) {
-		String baseClasspathPath = (topLevelDirectory.isEmpty() ? "" : topLevelDirectory + "/") + path.namespace() + "/";
+		// Build full path including target directory since getResources() doesn't work reliably for directories
+		String fullPath = (topLevelDirectory.isEmpty() ? "" : topLevelDirectory + "/") +
+						  path.namespace() + "/" +
+						  (path.path().isEmpty() ? "" : path.path() + "/");
 		try {
-			Enumeration<URL> urls = classLoader.getResources(baseClasspathPath);
+			Enumeration<URL> urls = classLoader.getResources(fullPath);
 			if (urls == null || !urls.hasMoreElements()) {
-				return Stream.empty();
+				// Fallback: try just the namespace directory
+				String baseClasspathPath = (topLevelDirectory.isEmpty() ? "" : topLevelDirectory + "/") + path.namespace() + "/";
+				urls = classLoader.getResources(baseClasspathPath);
+				if (urls == null || !urls.hasMoreElements()) {
+					return Stream.empty();
+				}
+				// Use the original approach with targetDirectory
+				return Collections.list(urls).stream()
+						.flatMap(url -> {
+							try {
+								return listResourcesFromUrl(url, path.path(), path.namespace(), recursive);
+							} catch (Exception e) {
+								LOGGER.error("Failed to list resources from URL: {}", url, e);
+								return Stream.empty();
+							}
+						});
 			}
 
+			// Direct path approach - the URL points to the target directory, but we still need to pass the target path
 			return Collections.list(urls).stream()
 					.flatMap(url -> {
 						try {
@@ -119,7 +138,7 @@ public class ClassPathResourceProvider implements ResourceProvider {
 						}
 					});
 		} catch (IOException e) {
-			LOGGER.error("Error listing resources from classpath path: {}", baseClasspathPath, e);
+			LOGGER.error("Error listing resources from classpath path: {}", fullPath, e);
 			return Stream.empty();
 		}
 	}
@@ -134,7 +153,18 @@ public class ClassPathResourceProvider implements ResourceProvider {
 	}
 
 	private Stream<OpenIdentifier> listResourcesFromFileSystem(Path namespaceRootPath, String targetDirectory, String namespace, boolean recursive) throws IOException {
-		Path startPath = namespaceRootPath.resolve(targetDirectory);
+		// Check if namespaceRootPath already ends with targetDirectory (happens when URL already points to target)
+		Path startPath;
+		Path effectiveNamespaceRoot;
+		if (!targetDirectory.isEmpty() && namespaceRootPath.endsWith(targetDirectory.replace('/', java.io.File.separatorChar))) {
+			// The URL already points to the target directory, so use it directly
+			startPath = namespaceRootPath;
+			effectiveNamespaceRoot = namespaceRootPath.getParent();
+		} else {
+			startPath = namespaceRootPath.resolve(targetDirectory);
+			effectiveNamespaceRoot = namespaceRootPath;
+		}
+
 		if (!Files.exists(startPath) || !Files.isDirectory(startPath)) {
 			return Stream.empty();
 		}
@@ -145,7 +175,8 @@ public class ClassPathResourceProvider implements ResourceProvider {
 					.filter(Files::isRegularFile)
 					.filter(p -> p.toString().endsWith(".json"))
 					.map(filePath -> {
-						Path relativePath = namespaceRootPath.relativize(filePath);
+						// Relativize from effectiveNamespaceRoot to include the full path from namespace root
+						Path relativePath = effectiveNamespaceRoot.relativize(filePath);
 						String relativePathString = relativePath.toString().replace('\\', '/');
 						return new OpenIdentifier(namespace, relativePathString);
 					})
@@ -175,6 +206,7 @@ public class ClassPathResourceProvider implements ResourceProvider {
 					.filter(Files::isRegularFile)
 					.filter(p -> p.toString().endsWith(".json"))
 					.map(filePath -> {
+						// Relativize from namespaceRootInJar to include the full path from namespace root
 						Path relativePath = namespaceRootInJar.relativize(filePath);
 						String relativePathString = relativePath.toString().replace('\\', '/');
 						return new OpenIdentifier(namespace, relativePathString);

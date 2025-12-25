@@ -11,7 +11,7 @@ import com.sigmundgranaas.forgero.utility.resource.loader.implementation.Resourc
 public class DefaultModelRegistrationService implements ItemModelRegistrationService {
 	private final ItemModelRegistry registry;
 	private final ResourceProvider resourceProvider;
-	private static final String FORGERO_MODELS_DIRECTORY = "forgero/models";
+	private static final String FORGERO_MODELS_DIRECTORY = "forgero_models";
 
 	public DefaultModelRegistrationService(ItemModelRegistry registry, ResourceProvider resourceProvider) {
 		this.registry = registry;
@@ -26,7 +26,6 @@ public class DefaultModelRegistrationService implements ItemModelRegistrationSer
 		resourceProvider.getNamespaces().stream()
 				.map(namespace -> new OpenIdentifier(namespace, FORGERO_MODELS_DIRECTORY))
 				.flatMap(root -> modelLoader.load(root, true))
-				.filter(model -> model.getContext().isEmpty()) // Filter out templates
 				.forEach(registry::register);
 	}
 }

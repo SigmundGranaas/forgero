@@ -10,6 +10,4 @@ public interface AttributeData {
 	ComputationData computation();
 	@Nullable
 	Condition condition();
-	@Nullable
-	OpenIdentifier composite();
 }

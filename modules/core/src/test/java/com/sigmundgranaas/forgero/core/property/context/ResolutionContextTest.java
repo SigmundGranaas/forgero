@@ -29,7 +29,7 @@ class ResolutionContextTest extends ForgeroTest {
 	void setUp() {
 		iron = material(IRON_ID, METAL_TAG);
 		// Update ComponentStructure to use Map.of
-		pickaxeHead = new StructuredPart(PICKAXE_HEAD_ID, Set.of(), new HashMap<>(), new ComponentStructure(slotsMap(slot(idFactory.of("material_slot"), MATERIAL_ID, iron))));
+		pickaxeHead = new StructuredPart(PICKAXE_HEAD_ID, Set.of(), new HashMap<>(), new ComponentStructure(slotsMap(slot(idFactory.of("material_slot"), TOOL_MATERIAL_ID, iron))));
 		handle = part(HANDLE_ID, WOOD_TAG);
 		binding = part(idFactory.of("binding"), METAL_TAG);
 		// Update ComponentStructure to use Map.of
@@ -75,7 +75,7 @@ class ResolutionContextTest extends ForgeroTest {
 		assertTrue(foundHandle.isPresent());
 		assertEquals(handle, foundHandle.get());
 
-		Optional<Component> foundIron = anyContext.findInRoot(MATERIAL_ID);
+		Optional<Component> foundIron = anyContext.findInRoot(TOOL_MATERIAL_ID);
 		assertTrue(foundIron.isPresent());
 		assertEquals(iron, foundIron.get());
 	}

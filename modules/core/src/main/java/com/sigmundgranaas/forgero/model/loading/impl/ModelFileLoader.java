@@ -53,8 +53,12 @@ public class ModelFileLoader {
 	}
 
 	private void loadModelsFromNamespace(String namespace) {
-		OpenIdentifier root = new OpenIdentifier(namespace, "forgero/models");
-		resourceProvider.list(root, true).forEach(this::parseResource);
+		// Scan both forgero_models and model_templates directories
+		OpenIdentifier modelsRoot = new OpenIdentifier(namespace, "forgero_models");
+		resourceProvider.list(modelsRoot, true).forEach(this::parseResource);
+
+		OpenIdentifier templatesRoot = new OpenIdentifier(namespace, "model_templates");
+		resourceProvider.list(templatesRoot, true).forEach(this::parseResource);
 	}
 
 	private void parseResource(OpenIdentifier id) {
@@ -109,7 +113,15 @@ public class ModelFileLoader {
 
 	private void parseManualArmorModel(OpenIdentifier id, JsonObject json) {
 		String path = id.path();
-		String normalizedPath = path.substring(path.indexOf("forgero/models/") + "forgero/models/".length()).replace(".json", "");
+		String normalizedPath;
+		if (path.contains("forgero_models/")) {
+			normalizedPath = path.substring(path.indexOf("forgero_models/") + "forgero_models/".length());
+		} else if (path.contains("model_templates/")) {
+			normalizedPath = path.substring(path.indexOf("model_templates/") + "model_templates/".length());
+		} else {
+			LOGGER.warn("Skipping armor model {}: path does not contain expected directory prefix", id);
+			return;
+		}
 		OpenIdentifier derivedId = new OpenIdentifier(id.namespace(), normalizedPath);
 
 		ArmorModelCodecs.ARMOR_MODEL_DTO_CODEC.parse(JsonOps.INSTANCE, json)
@@ -120,7 +132,15 @@ public class ModelFileLoader {
 
 	private void parseManualItemModel(OpenIdentifier id, JsonObject json) {
 		String path = id.path();
-		String normalizedPath = path.substring(path.indexOf("forgero/models/") + "forgero/models/".length()).replace(".json", "");
+		String normalizedPath;
+		if (path.contains("forgero_models/")) {
+			normalizedPath = path.substring(path.indexOf("forgero_models/") + "forgero_models/".length());
+		} else if (path.contains("model_templates/")) {
+			normalizedPath = path.substring(path.indexOf("model_templates/") + "model_templates/".length());
+		} else {
+			LOGGER.warn("Skipping item model {}: path does not contain expected directory prefix", id);
+			return;
+		}
 		OpenIdentifier derivedId = new OpenIdentifier(id.namespace(), normalizedPath);
 
 		ModelCodecs.MODEL_DTO_CODEC_DISPATCHER.parse(JsonOps.INSTANCE, json)

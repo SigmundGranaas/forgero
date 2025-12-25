@@ -12,7 +12,12 @@
     {
       "id": "forgero:iron-durability",
       "type": "forgero:durability",
-      "composite": "forgero:part-composite",
+      "condition": {
+        "static": [{
+          "type": "forgero:in_slot_type",
+          "slot_type": "forgero:tool_material"
+        }]
+      },
       "computation": {
         "value": 250
       }
@@ -20,7 +25,12 @@
     {
       "id": "forgero:iron-mining_speed",
       "type": "forgero:mining_speed",
-      "composite": "forgero:part-composite",
+      "condition": {
+        "static": [{
+          "type": "forgero:in_slot_type",
+          "slot_type": "forgero:tool_material"
+        }]
+      },
       "computation": {
         "value": 5
       }
@@ -28,7 +38,12 @@
     {
       "id": "forgero:iron-armor",
       "type": "forgero:armor",
-      "composite": "forgero:part-composite",
+      "condition": {
+        "static": [{
+          "type": "forgero:in_slot_type",
+          "slot_type": "forgero:armor_material"
+        }]
+      },
       "computation": {
         "value": 2
       }
@@ -36,7 +51,12 @@
     {
       "id": "forgero:iron-armor_toughness",
       "type": "forgero:armor_toughness",
-      "composite": "forgero:part-composite",
+      "condition": {
+        "static": [{
+          "type": "forgero:in_slot_type",
+          "slot_type": "forgero:armor_material"
+        }]
+      },
       "computation": {
         "value": 0.5
       }

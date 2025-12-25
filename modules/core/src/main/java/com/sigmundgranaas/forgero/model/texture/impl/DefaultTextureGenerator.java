@@ -77,7 +77,7 @@ public class DefaultTextureGenerator implements TextureGenerator {
 
 		// Handle inconsistent root directory for templates/palettes.
 		// Standard textures are expected to be in the "textures" directory.
-		if (!path.startsWith("textures/") && !path.startsWith("texture_template/")) {
+		if (!path.startsWith("textures/") && !path.startsWith("texture_templates/") && !path.startsWith("palettes/")) {
 			path = "textures/" + path;
 		}
 

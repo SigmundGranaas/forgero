@@ -15,13 +15,8 @@ import java.util.Optional;
 import java.util.function.Function;
 
 /**
- * A dispatching codec for the {@link Attribute} interface.
- * It can serialize and deserialize different implementations of Attribute,
- * such as {@link SimpleAttribute} and {@link CompositeAttributeComponent},
- * by inspecting the fields of the data object.
- * <p>
- * - If a "composite_key" field is present, it decodes to a {@link CompositeAttributeComponent}.
- * - Otherwise, it decodes to a {@link SimpleAttribute}.
+ * A codec for the {@link Attribute} interface.
+ * This codec serializes and deserializes {@link SimpleAttribute} instances.
  * <p>
  * This codec is designed to be a self-contained component for handling attribute serialization,
  * intended for use within Forgero's property system. It does not need to implement any
@@ -30,7 +25,6 @@ import java.util.function.Function;
 public final class AttributeCodec implements Codec<Attribute> {
 
 	private final Codec<SimpleAttribute> simpleAttributeCodec;
-	private final Codec<CompositeAttributeComponent> compositeAttributeComponentCodec;
 
 	/**
 	 * Constructs an AttributeCodec with a dependency on the master Condition codec.
@@ -51,39 +45,18 @@ public final class AttributeCodec implements Codec<Attribute> {
 						conditionCodec.optionalFieldOf("condition").forGetter(attr -> attr.condition().filter(c -> c != Condition.ALWAYS_TRUE))
 				).apply(instance, (id, type, value, operator, group, condition) -> new SimpleAttribute(id, type, value, operator, group, condition.orElse(Condition.ALWAYS_TRUE)))
 		);
-
-		this.compositeAttributeComponentCodec = RecordCodecBuilder.create(instance ->
-				instance.group(
-						Codec.STRING.optionalFieldOf("id").forGetter(CompositeAttributeComponent::id),
-						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(CompositeAttributeComponent::type),
-						Codec.FLOAT.fieldOf("value").forGetter(CompositeAttributeComponent::value),
-						operatorCodec.fieldOf("operator").orElse(AdditionOperator.getInstance()).forGetter(CompositeAttributeComponent::operator),
-						Codec.INT.fieldOf("group").orElse(0).forGetter(CompositeAttributeComponent::group),
-						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("composite_key").forGetter(CompositeAttributeComponent::compositeKey)
-				).apply(instance, CompositeAttributeComponent::new)
-		);
 	}
 
 	@Override
 	public <T> DataResult<Pair<Attribute, T>> decode(DynamicOps<T> ops, T input) {
-		return ops.getMap(input).flatMap(map -> {
-			Optional<T> compositeKey = Optional.ofNullable(map.get(ops.createString("composite_key")));
-			if (compositeKey.isPresent()) {
-				return compositeAttributeComponentCodec.decode(ops, input).map(pair -> pair.mapFirst(Function.identity()));
-			} else {
-				return simpleAttributeCodec.decode(ops, input).map(pair -> pair.mapFirst(Function.identity()));
-			}
-		});
+		return simpleAttributeCodec.decode(ops, input).map(pair -> pair.mapFirst(Function.identity()));
 	}
 
 	@Override
 	public <T> DataResult<T> encode(Attribute input, DynamicOps<T> ops, T prefix) {
-		if (input instanceof CompositeAttributeComponent component) {
-			return compositeAttributeComponentCodec.encode(component, ops, prefix);
-		} else if (input instanceof SimpleAttribute attribute) {
+		if (input instanceof SimpleAttribute attribute) {
 			return simpleAttributeCodec.encode(attribute, ops, prefix);
 		}
-		// CompositeAttribute is not meant to be serialized to data files, so it's not handled here.
 		return DataResult.error(() -> "Unsupported Attribute type for encoding: " + input.getClass().getName());
 	}
 

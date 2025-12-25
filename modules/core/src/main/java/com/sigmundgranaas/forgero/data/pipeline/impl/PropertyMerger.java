@@ -5,7 +5,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
-import com.sigmundgranaas.forgero.core.attribute.api.CompositeAttributeComponent;
 import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 import com.sigmundgranaas.forgero.data.loading.api.data.*;
@@ -99,25 +98,14 @@ public class PropertyMerger {
 		var order = operatorMapper.leveledOrder(computation.order());
 		var id = Optional.ofNullable(data.id()).map(OpenIdentifier::toString);
 
-		if (data.composite() != null) {
-			return new CompositeAttributeComponent(
-					id,
-					data.type(),
-					computation.value(),
-					operator,
-					order,
-					data.composite()
-			);
-		} else {
-			return new SimpleAttribute(
-					id,
-					data.type(),
-					computation.value(),
-					operator,
-					order,
-					data.condition()
-			);
-		}
+		return new SimpleAttribute(
+				id,
+				data.type(),
+				computation.value(),
+				operator,
+				order,
+				data.condition()
+		);
 	}
 
 	private List<OpenIdentifier> getTags(Object dto) {

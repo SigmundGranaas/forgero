@@ -19,7 +19,7 @@ public class ModelRegistrationServiceTest {
 
 		// Register models for the 'forgero' namespace.
 		// The service will look for models under /assets/forgero/models/
-		service.registerModels("forgero");
+		service.registerModels();
 
 		// Assertions for default models using their file-based IDs:
 		assertTrue(registry.find(new OpenIdentifier("forgero", "parts/oak-handle")).isPresent(), "oak-handle model should be present");

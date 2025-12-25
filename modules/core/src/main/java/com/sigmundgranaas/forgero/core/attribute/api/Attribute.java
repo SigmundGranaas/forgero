@@ -7,7 +7,7 @@ import com.sigmundgranaas.forgero.core.condition.api.Condition;
 
 import java.util.Optional;
 
-public sealed interface Attribute permits CompositeAttribute, CompositeAttributeComponent, SimpleAttribute {
+public sealed interface Attribute permits SimpleAttribute {
 	PropertyKey<Attribute> KEY = new PropertyKey<>(Attribute.class, "forgero:attributes");
 
 	Optional<String> id();

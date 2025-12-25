@@ -9,13 +9,23 @@
     {
       "id": "forgero:shape-durability-mult",
       "type": "forgero:durability",
-      "composite": "forgero:part-composite",
+      "condition": {
+        "static": [{
+          "type": "forgero:in_slot_type",
+          "slot_type": "forgero:pickaxe_head_shape"
+        }]
+      },
       "computation": { "multiply": 1.5 }
     },
     {
       "id": "forgero:shape-mining_speed-mult",
       "type": "forgero:mining_speed",
-      "composite": "forgero:part-composite",
+      "condition": {
+        "static": [{
+          "type": "forgero:in_slot_type",
+          "slot_type": "forgero:pickaxe_head_shape"
+        }]
+      },
       "computation": { "multiply": 1.2 }
     }
   ]

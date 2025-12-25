@@ -6,19 +6,34 @@
     {
       "id": "forgero:leather-durability",
       "type": "forgero:durability",
-      "composite": "forgero:part-composite",
+      "condition": {
+        "static": [{
+          "type": "forgero:in_slot_type",
+          "slot_type": "forgero:armor_material"
+        }]
+      },
       "computation": 75
     },
     {
       "id": "forgero:leather-armor",
       "type": "forgero:armor",
-      "composite": "forgero:part-composite",
+      "condition": {
+        "static": [{
+          "type": "forgero:in_slot_type",
+          "slot_type": "forgero:armor_material"
+        }]
+      },
       "computation": 1
     },
     {
       "id": "forgero:leather-armor_toughness",
       "type": "forgero:armor_toughness",
-      "composite": "forgero:part-composite",
+      "condition": {
+        "static": [{
+          "type": "forgero:in_slot_type",
+          "slot_type": "forgero:armor_material"
+        }]
+      },
       "computation": 0
     }
   ]

@@ -8,6 +8,7 @@
     "type": "forgero:texture_model",
     "layers": [
       {
+        "order": 20,
         "template": "forgero:texture_templates/parts/handle",
         "palette": "forgero:palettes/{target.name}",
         "output": "forgero:item/{target.name}-handle"
