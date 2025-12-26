@@ -36,7 +36,7 @@ class SlotScopedCompositionTest extends ForgeroTest {
 
 	@BeforeEach
 	void setUp() {
-		resolver = new ResolverEngine();
+		resolver = resolver();
 	}
 
 	private StaticComponent materialWithWhenIn(OpenIdentifier id, OpenIdentifier tag,
@@ -104,7 +104,7 @@ class SlotScopedCompositionTest extends ForgeroTest {
 				))
 		);
 
-		AttributeQueryResult result = resolver.resolve(pickaxeHead, new AttributeEngine());
+		AttributeQueryResult result = resolver.resolve(pickaxeHead, attributeEngine());
 
 		assertEquals(9f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f,
 				"Attack damage should be material base (6) * shape modifier (1.5) = 9");
@@ -129,7 +129,7 @@ class SlotScopedCompositionTest extends ForgeroTest {
 				))
 		);
 
-		AttributeQueryResult result = resolver.resolve(pickaxeHead, new AttributeEngine());
+		AttributeQueryResult result = resolver.resolve(pickaxeHead, attributeEngine());
 
 		assertEquals(10f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f,
 				"Attribute without when_in should always apply");
@@ -158,7 +158,7 @@ class SlotScopedCompositionTest extends ForgeroTest {
 				))
 		);
 
-		AttributeQueryResult result = resolver.resolve(pickaxeHead, new AttributeEngine());
+		AttributeQueryResult result = resolver.resolve(pickaxeHead, attributeEngine());
 
 		assertEquals(0f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f,
 				"Attribute should not apply when component is in wrong slot type");
@@ -204,7 +204,7 @@ class SlotScopedCompositionTest extends ForgeroTest {
 				))
 		);
 
-		AttributeQueryResult result = resolver.resolve(pickaxe, new AttributeEngine());
+		AttributeQueryResult result = resolver.resolve(pickaxe, attributeEngine());
 
 		// Both materials contribute: 6 + 2 = 8
 		assertEquals(8f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f,

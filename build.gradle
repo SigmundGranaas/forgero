@@ -69,25 +69,26 @@ allprojects {
 		// Reach entity attributes, and more
 		maven {
 			url = "https://maven.jamieswhiteshirt.com/libs-release"
-			content {
-				includeGroup "com.jamieswhiteshirt"
-			}
+			// content {
+			//	includeGroup "com.jamieswhiteshirt"
+			// }
 		}
 		maven {
 			url "https://dl.cloudsmith.io/public/klikli-dev/mods/maven/"
-			content {
-				includeGroup "com.klikli_dev"
-			}
+			// content {
+			//	includeGroup "com.klikli_dev"
+			// }
 		}
 	}
 
 	dependencies {
-		api(annotationProcessor("org.projectlombok:lombok:1.18.34"))
+		compileOnly "org.projectlombok:lombok:1.18.34"
+		annotationProcessor "org.projectlombok:lombok:1.18.34"
 
-		api("org.jetbrains:annotations:24.1.0")
-		api("com.google.guava:guava:33.2.1-jre")
-		api("org.apache.logging.log4j:log4j-core:2.23.1")
-		api("com.google.code.gson:gson:2.11.0")
+		api "org.jetbrains:annotations:24.1.0"
+		api "com.google.guava:guava:33.2.1-jre"
+		api "org.apache.logging.log4j:log4j-core:2.23.1"
+		api "com.google.code.gson:gson:2.11.0"
 	}
 
 	tasks.withType(JavaCompile).configureEach {
@@ -118,7 +119,7 @@ subprojects { project ->
 			publications {
 				mavenJava(MavenPublication) {
 					groupId = group
-					if (project.name === 'fabric') {
+					if (project.name == 'fabric') {
 						artifactId = "${rootProject.mod_id}-fabric"
 						archivesBaseName = "${rootProject.mod_id}-fabric"
 					} else {

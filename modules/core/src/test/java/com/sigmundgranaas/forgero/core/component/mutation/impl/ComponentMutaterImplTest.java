@@ -3,25 +3,13 @@ package com.sigmundgranaas.forgero.core.component.mutation.impl;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.Slot;
-import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgrades;
-import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
-import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
-import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
-import com.sigmundgranaas.forgero.core.component.impl.StructuredExtensibleEquipment;
 import com.sigmundgranaas.forgero.core.component.mutation.api.ComponentMutater;
-import com.sigmundgranaas.forgero.testutils.TestIdentifiers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
-import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.part;
-import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.tool;
+import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.*;
 import static com.sigmundgranaas.forgero.testutils.TestIdentifiers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -47,7 +35,7 @@ class ComponentMutaterImplTest {
 
 	@BeforeEach
 	void setUp() {
-		mutater = new ComponentMutaterImpl();
+		mutater = mutater();
 
 		// Setup parts with correct tags for slot type matching
 		originalHead = part(PICKAXE_HEAD_ID).withTag(PICKAXE_HEAD_TAG).build();
@@ -60,8 +48,8 @@ class ComponentMutaterImplTest {
 		pickaxe = tool(PICKAXE_ID).withTag("pickaxe")
 				.withPart(originalHead, "pickaxe-head_slot", PICKAXE_HEAD_TAG)
 				.withPart(originalHandle, "pickaxe-handle_slot", HANDLE_TAG)
-				.withUpgradeSlot(new UpgradeSlot(BINDING_SLOT_ID, BINDING_SLOT_TYPE, "Binding slot", c -> c.getTags().contains(BINDING_SLOT_TYPE), Optional.of(originalBinding)))
-				.withUpgradeSlot(new UpgradeSlot(GEM_SLOT_ID, GEM_TAG, "Gem slot", c -> c.getTags().contains(GEM_TAG), Optional.empty()))
+				.withUpgradeSlot(upgradeSlot(BINDING_SLOT_ID, BINDING_SLOT_TYPE, c -> c.getTags().contains(BINDING_SLOT_TYPE), originalBinding))
+				.withUpgradeSlot(upgradeSlot(GEM_SLOT_ID, GEM_TAG, c -> c.getTags().contains(GEM_TAG)))
 				.build();
 	}
 
@@ -131,26 +119,26 @@ class ComponentMutaterImplTest {
 
 	@Test
 	void testCreatingComponentWithDuplicateSlotIdsThrows() {
-		ComponentStructure structure = new ComponentStructure(Map.of(
-				HEAD_SLOT_ID, new StructureSlot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, "Head slot", originalHead)
-		));
-
-		ComponentUpgrades upgradesWithDuplicate = new ComponentUpgrades(List.of(
-				new UpgradeSlot(HEAD_SLOT_ID, BINDING_SLOT_TYPE, "Binding slot", c -> true, Optional.empty())
-		));
-
-		assertThrows(IllegalArgumentException.class, () -> new StructuredExtensibleEquipment(
-						PICKAXE_ID, Set.of(), new HashMap<>(), structure, upgradesWithDuplicate),
-				"Should throw when a slot ID is duplicated between structure and upgrades."
-		);
+		// This test verifies that the factory/builder properly validates duplicate slot IDs
+		// Since we're testing through the API, we create the component and expect the validation
+		// to occur during construction
+		assertThrows(IllegalArgumentException.class, () -> {
+			tool(PICKAXE_ID)
+					.withPart(originalHead, HEAD_SLOT_ID.toString(), PICKAXE_HEAD_TAG)
+					.withUpgradeSlot(upgradeSlot(HEAD_SLOT_ID, BINDING_SLOT_TYPE))
+					.build();
+		}, "Should throw when a slot ID is duplicated between structure and upgrades.");
 	}
 
 	@Test
 	void testComponentStructureConstructorThrowsOnIdMismatch() {
-		Map<OpenIdentifier, StructureSlot> invalidStructureSlots = Map.of(
-				TestIdentifiers.id("wrong_id"), new StructureSlot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, "Head slot", originalHead)
-		);
-		assertThrows(IllegalArgumentException.class, () -> new ComponentStructure(invalidStructureSlots),
+		// This test verifies internal validation logic - the API should prevent this scenario
+		// by constructing slots with matching IDs. We test that invalid construction fails.
+		var invalidSlot = structureSlot(HEAD_SLOT_ID.toString(), PICKAXE_HEAD_TAG, originalHead);
+		var wrongIdMap = java.util.Map.of(id("wrong_id"), invalidSlot);
+
+		assertThrows(IllegalArgumentException.class, () ->
+						new com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure(wrongIdMap),
 				"ComponentStructure constructor should throw if map key and slot's internal ID do not match.");
 	}
 }

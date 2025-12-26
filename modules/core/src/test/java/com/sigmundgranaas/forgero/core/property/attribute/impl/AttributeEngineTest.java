@@ -1,26 +1,14 @@
 package com.sigmundgranaas.forgero.core.property.attribute.impl;
 
 import com.sigmundgranaas.forgero.core.ForgeroTest;
-import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
-import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
-import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
-import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
-import com.sigmundgranaas.forgero.core.component.impl.StaticComponent;
-import com.sigmundgranaas.forgero.core.component.impl.StaticEquipment;
-import com.sigmundgranaas.forgero.core.component.impl.StructuredEquipment;
+import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
-import com.sigmundgranaas.forgero.core.property.engine.ResolverEngine;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AttributeEngineTest extends ForgeroTest {
@@ -28,18 +16,7 @@ class AttributeEngineTest extends ForgeroTest {
 
 	@BeforeEach
 	void setUp() {
-		resolver = new ResolverEngine();
-	}
-
-	/**
-	 * Helper method to create StaticComponent with attributes.
-	 */
-	private StaticComponent part(OpenIdentifier id, OpenIdentifier tag, List<Attribute> attributes) {
-		Map<String, List<?>> properties = new HashMap<>();
-		if (attributes != null && !attributes.isEmpty()) {
-			properties.put(Attribute.KEY.key(), attributes);
-		}
-		return new StaticComponent(id, Set.of(tag), properties);
+		resolver = resolver();
 	}
 
 	/**
@@ -48,20 +25,13 @@ class AttributeEngineTest extends ForgeroTest {
 	 */
 	@Test
 	void testStaticEquipmentBakesSimpleAttributesCorrectly() {
-		List<Attribute> attributes = List.of(
-				new SimpleAttribute(DefaultAttributes.ATTACK_DAMAGE, 10f),
-				new SimpleAttribute(DefaultAttributes.ATTACK_SPEED, 1.2f)
-		);
-		Map<String, List<?>> properties = new HashMap<>();
-		properties.put(Attribute.KEY.key(), attributes);
+		Component basicAxe = tool("basic_axe")
+				.withTag("axe")
+				.withAttribute(DefaultAttributes.ATTACK_DAMAGE, 10f)
+				.withAttribute(DefaultAttributes.ATTACK_SPEED, 1.2f)
+				.build();
 
-		StaticEquipment basicAxe = new StaticEquipment(
-				idFactory.of("basic_axe"),
-				Set.of(idFactory.of("axe")),
-				properties
-		);
-
-		AttributeQueryResult result = resolver.resolve(basicAxe, new AttributeEngine());
+		AttributeQueryResult result = resolver.resolve(basicAxe, attributeEngine());
 
 		assertEquals(10f, result.getValue(DefaultAttributes.ATTACK_DAMAGE));
 		assertEquals(1.2f, result.getValue(DefaultAttributes.ATTACK_SPEED));
@@ -73,23 +43,24 @@ class AttributeEngineTest extends ForgeroTest {
 	 */
 	@Test
 	void testStructuredEquipmentWithOnlySimpleAttributes() {
-		StaticComponent head = part(PICKAXE_HEAD_ID, PICKAXE_HEAD_TAG, List.of(new SimpleAttribute(DefaultAttributes.ATTACK_DAMAGE, 5f)));
-		StaticComponent handle = part(HANDLE_ID, HANDLE_TAG, List.of(new SimpleAttribute(DefaultAttributes.ATTACK_DAMAGE, 2f)));
+		Component head = part(PICKAXE_HEAD_ID)
+				.withTag(PICKAXE_HEAD_TAG)
+				.withAttribute(DefaultAttributes.ATTACK_DAMAGE, 5f)
+				.build();
 
-		Map<String, List<?>> baseProperties = new HashMap<>();
-		baseProperties.put(Attribute.KEY.key(), List.of(new SimpleAttribute(DefaultAttributes.ATTACK_DAMAGE, 3f)));
+		Component handle = part(HANDLE_ID)
+				.withTag(HANDLE_TAG)
+				.withAttribute(DefaultAttributes.ATTACK_DAMAGE, 2f)
+				.build();
 
-		StructuredEquipment pickaxe = new StructuredEquipment(
-				PICKAXE_ID,
-				Set.of(idFactory.of("pickaxe")),
-				baseProperties,
-				new ComponentStructure(slotsMap(
-						slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head),
-						slot(HANDLE_SLOT_ID, HANDLE_TAG, handle)
-				))
-		);
+		Component pickaxe = tool(PICKAXE_ID)
+				.withTag("pickaxe")
+				.withAttribute(DefaultAttributes.ATTACK_DAMAGE, 3f)
+				.withPart(head, HEAD_SLOT_ID.toString(), PICKAXE_HEAD_TAG)
+				.withPart(handle, HANDLE_SLOT_ID.toString(), HANDLE_TAG)
+				.build();
 
-		AttributeQueryResult result = resolver.resolve(pickaxe, new AttributeEngine());
+		AttributeQueryResult result = resolver.resolve(pickaxe, attributeEngine());
 		assertEquals(10f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), "Total attack damage should be base + head + handle (3+5+2=10)");
 	}
 
@@ -99,27 +70,24 @@ class AttributeEngineTest extends ForgeroTest {
 	 */
 	@Test
 	void testMixedAttributeTypes() {
-		SimpleAttribute baseMiningSpeed = new SimpleAttribute(DefaultAttributes.MINING_SPEED, 2.0f);
-		SimpleAttribute headMiningSpeed = new SimpleAttribute(DefaultAttributes.MINING_SPEED, 3.0f);
-		SimpleAttribute headDamage = new SimpleAttribute(DefaultAttributes.ATTACK_DAMAGE, 5.0f);
+		Component head = part(PICKAXE_HEAD_ID)
+				.withTag(PICKAXE_HEAD_TAG)
+				.withAttribute(DefaultAttributes.MINING_SPEED, 3.0f)
+				.withAttribute(DefaultAttributes.ATTACK_DAMAGE, 5.0f)
+				.build();
 
-		StaticComponent head = part(PICKAXE_HEAD_ID, PICKAXE_HEAD_TAG, List.of(headMiningSpeed, headDamage));
-		StaticComponent handle = part(HANDLE_ID, HANDLE_TAG, List.of());
+		Component handle = part(HANDLE_ID)
+				.withTag(HANDLE_TAG)
+				.build();
 
-		Map<String, List<?>> baseProperties = new HashMap<>();
-		baseProperties.put(Attribute.KEY.key(), List.of(baseMiningSpeed));
+		Component tool = tool(PICKAXE_ID)
+				.withTag("tool")
+				.withAttribute(DefaultAttributes.MINING_SPEED, 2.0f)
+				.withPart(head, HEAD_SLOT_ID.toString(), PICKAXE_HEAD_TAG)
+				.withPart(handle, HANDLE_SLOT_ID.toString(), HANDLE_TAG)
+				.build();
 
-		StructuredEquipment tool = new StructuredEquipment(
-				PICKAXE_ID,
-				Set.of(idFactory.of("tool")),
-				baseProperties,
-				new ComponentStructure(slotsMap(
-						slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, head),
-						slot(HANDLE_SLOT_ID, HANDLE_TAG, handle)
-				))
-		);
-
-		AttributeQueryResult result = resolver.resolve(tool, new AttributeEngine());
+		AttributeQueryResult result = resolver.resolve(tool, attributeEngine());
 
 		assertEquals(5.0f, result.getValue(DefaultAttributes.MINING_SPEED), "Mining Speed should be base + head (2.0 + 3.0 = 5.0)");
 		assertEquals(5.0f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), "Attack Damage should be from head only (5.0)");

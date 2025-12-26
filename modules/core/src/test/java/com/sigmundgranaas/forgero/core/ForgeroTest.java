@@ -3,22 +3,17 @@ package com.sigmundgranaas.forgero.core;
 import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
-import com.sigmundgranaas.forgero.core.component.impl.StaticComponent;
 import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.property.api.Property;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.*;
 
 /**
  * A central test fixture providing common objects and builders for Forgero core tests.
  * This reduces boilerplate and improves test readability.
+ *
+ * IMPORTANT: This class delegates to ForgeroTestFactory for object creation to avoid
+ * coupling tests to specific implementations.
  */
 public class ForgeroTest {
 	public static final IdentifierFactory idFactory = new IdentifierFactory.Builder().defaultNamespace("forgero").build();
@@ -61,44 +56,35 @@ public class ForgeroTest {
 	public static final OpenIdentifier BLADE_TAG = idFactory.of("blade_slot_type");
 
 
-	// Builder Methods
-	public StaticComponent part(OpenIdentifier id, Set<OpenIdentifier> tags, Map<String, List<?>> props) {
-		return new StaticComponent(id, tags, props);
-	}
-	public StaticComponent part(OpenIdentifier id, OpenIdentifier tag, Map<String, List<?>> props) {
-		return new StaticComponent(id, Set.of(tag), props);
+	// Helper Methods - Delegate to ForgeroTestFactory to avoid implementation coupling
+
+	/**
+	 * Creates a simple component part with the given tag.
+	 * Delegates to ForgeroTestFactory to avoid coupling to specific implementations.
+	 */
+	public Component material(OpenIdentifier id, OpenIdentifier tag) {
+		return part(id).withTag(tag).build();
 	}
 
-	public StaticComponent part(OpenIdentifier id, Set<OpenIdentifier> tags) {
-		return part(id, tags, new HashMap<>());
+	/**
+	 * Creates a simple schematic component.
+	 * Delegates to ForgeroTestFactory to avoid coupling to specific implementations.
+	 */
+	public Component schematic(OpenIdentifier id) {
+		return part(id).build();
 	}
 
-	public StaticComponent part(OpenIdentifier id, OpenIdentifier tag) {
-		return part(id, Set.of(tag), new HashMap<>());
-	}
-
-	public StaticComponent material(OpenIdentifier id, OpenIdentifier tag, Map<String, List<?>> props) {
-		return part(id, Set.of(tag), props);
-	}
-
-	public StaticComponent material(OpenIdentifier id, OpenIdentifier tag) {
-		return part(id, Set.of(tag), new HashMap<>());
-	}
-
-	public StaticComponent schematic(OpenIdentifier id) {
-		return new StaticComponent(id, Collections.emptySet(), new HashMap<>());
-	}
-
+	/**
+	 * Creates a structure slot.
+	 * Delegates to ForgeroTestFactory.
+	 */
 	public StructureSlot slot(OpenIdentifier id, OpenIdentifier type, Component component) {
-		return new StructureSlot(id, type, "A slot", component);
+		return structureSlot(id.toString(), type, component);
 	}
 
-	// New helper method to create a Map<OpenIdentifier, StructureSlot> from varargs of StructureSlot
-	public Map<OpenIdentifier, StructureSlot> slotsMap(StructureSlot... slots) {
-		return Arrays.stream(slots)
-				.collect(Collectors.toMap(StructureSlot::id, s -> s));
-	}
-
+	/**
+	 * Creates a simple attribute.
+	 */
 	public SimpleAttribute attribute(OpenIdentifier type, float value) {
 		return new SimpleAttribute(type, value);
 	}

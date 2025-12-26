@@ -2,13 +2,22 @@ package com.sigmundgranaas.forgero.testutils;
 
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
+import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
+import com.sigmundgranaas.forgero.core.component.mutation.api.ComponentMutater;
+import com.sigmundgranaas.forgero.core.component.mutation.impl.ComponentMutaterImpl;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
+import com.sigmundgranaas.forgero.core.property.api.Resolver;
+import com.sigmundgranaas.forgero.core.property.engine.ResolverEngine;
 
+import java.util.Arrays;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Main entry point for creating test objects using fluent builders.
@@ -16,6 +25,10 @@ import java.util.Optional;
  * e.g., import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.*;
  */
 public class ForgeroTestFactory {
+
+	// =============================================================================================
+	// Component Builders
+	// =============================================================================================
 
 	public static PartBuilder part(String id) {
 		return new PartBuilder(TestIdentifiers.id(id));
@@ -33,9 +46,17 @@ public class ForgeroTestFactory {
 		return new ToolBuilder(id);
 	}
 
+	// =============================================================================================
+	// Attribute Builders
+	// =============================================================================================
+
 	public static AttributeBuilder attribute(OpenIdentifier type) {
 		return new AttributeBuilder(type);
 	}
+
+	// =============================================================================================
+	// Slot Builders
+	// =============================================================================================
 
 	public static StructureSlot structureSlot(String id, OpenIdentifier type, Component content) {
 		return new StructureSlot(TestIdentifiers.id(id), type, "", content);
@@ -44,6 +65,62 @@ public class ForgeroTestFactory {
 	public static UpgradeSlot upgradeSlot(String id, OpenIdentifier type) {
 		return new UpgradeSlot(TestIdentifiers.id(id), type, "", (comp) -> true, Optional.empty());
 	}
+
+	public static UpgradeSlot upgradeSlot(String id, OpenIdentifier type, Predicate<Component> filter) {
+		return new UpgradeSlot(TestIdentifiers.id(id), type, "", filter, Optional.empty());
+	}
+
+	public static UpgradeSlot upgradeSlot(String id, OpenIdentifier type, Predicate<Component> filter, Component content) {
+		return new UpgradeSlot(TestIdentifiers.id(id), type, "", filter, Optional.of(content));
+	}
+
+	public static UpgradeSlot upgradeSlot(OpenIdentifier id, OpenIdentifier type, Predicate<Component> filter, Optional<Component> content) {
+		return new UpgradeSlot(id, type, "", filter, content);
+	}
+
+	// =============================================================================================
+	// Utility Methods
+	// =============================================================================================
+
+	/**
+	 * Creates a map of slots from varargs, using each slot's ID as the key.
+	 */
+	public static Map<OpenIdentifier, StructureSlot> slotsMap(StructureSlot... slots) {
+		return Arrays.stream(slots)
+				.collect(Collectors.toMap(StructureSlot::id, s -> s));
+	}
+
+	// =============================================================================================
+	// Engine and Service Factories (abstracts implementation details)
+	// =============================================================================================
+
+	/**
+	 * Creates a Resolver instance for testing.
+	 * Abstracts away the concrete implementation.
+	 */
+	public static Resolver resolver() {
+		return new ResolverEngine();
+	}
+
+	/**
+	 * Creates an AttributeEngine instance for testing.
+	 * Abstracts away the concrete implementation.
+	 */
+	public static AttributeEngine attributeEngine() {
+		return new AttributeEngine();
+	}
+
+	/**
+	 * Creates a ComponentMutater instance for testing.
+	 * Abstracts away the concrete implementation.
+	 */
+	public static ComponentMutater mutater() {
+		return new ComponentMutaterImpl();
+	}
+
+	// =============================================================================================
+	// Attribute Builder
+	// =============================================================================================
 
 	public static class AttributeBuilder {
 		private final OpenIdentifier type;

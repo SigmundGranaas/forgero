@@ -85,7 +85,7 @@ public class PredicateSystemTest extends ForgeroTest {
 		// Step 3: Create the master ConditionCodec with all registered predicates
 		ConditionCodec conditionCodec = new ConditionCodec(staticCodecs, dynamicCodecs);
 
-		this.resolver = new ResolverEngine();
+		this.resolver = resolver();
 
 		// Step 4: Create a condition object that uses the custom predicate by parsing JSON
 		String conditionJson = """
@@ -120,7 +120,7 @@ public class PredicateSystemTest extends ForgeroTest {
 				.put(MinecraftContextKeys.ENTITY_FLAGS, Set.of(id("minecraft:is_sneaking")))
 				.build();
 
-		AttributeQueryResult resultWhenSneaking = resolver.resolve(componentWithPlatformPredicate, new AttributeEngine(), contextWhenSneaking);
+		AttributeQueryResult resultWhenSneaking = resolver.resolve(componentWithPlatformPredicate, attributeEngine(), contextWhenSneaking);
 
 		float damageWhenSneaking = resultWhenSneaking.getValue(ATTACK_DAMAGE_IDENTIFIER);
 		assertEquals(10.0f, damageWhenSneaking, "Attribute should be applied when the custom predicate is met.");
@@ -130,7 +130,7 @@ public class PredicateSystemTest extends ForgeroTest {
 				.put(MinecraftContextKeys.ENTITY_FLAGS, Collections.emptySet())
 				.build();
 
-		AttributeQueryResult resultWhenNotSneaking = resolver.resolve(componentWithPlatformPredicate,  new AttributeEngine(), contextWhenNotSneaking);
+		AttributeQueryResult resultWhenNotSneaking = resolver.resolve(componentWithPlatformPredicate, attributeEngine(), contextWhenNotSneaking);
 
 		float damageWhenNotSneaking = resultWhenNotSneaking.getValue(ATTACK_DAMAGE_IDENTIFIER);
 		assertEquals(0.0f, damageWhenNotSneaking, "Attribute should NOT be applied when the custom predicate is not met.");
@@ -138,7 +138,7 @@ public class PredicateSystemTest extends ForgeroTest {
 		// Test Case 3: Context is missing the required data
 		DynamicContext emptyContext = DynamicContext.empty();
 
-		AttributeQueryResult resultWithEmptyContext = resolver.resolve(componentWithPlatformPredicate, new AttributeEngine(), emptyContext);
+		AttributeQueryResult resultWithEmptyContext = resolver.resolve(componentWithPlatformPredicate, attributeEngine(), emptyContext);
 
 		float damageWithEmptyContext = resultWithEmptyContext.getValue(ATTACK_DAMAGE_IDENTIFIER);
 		assertEquals(0.0f, damageWithEmptyContext, "Attribute should NOT be applied when context is missing required keys.");

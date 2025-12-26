@@ -39,7 +39,7 @@ class AttributeResolverTest {
 	@BeforeEach
 	void setUp() {
 		// Reset and initialize the PropertyRegistry to ensure all core codecs are available
-		resolver = new ResolverEngine();
+		resolver = resolver();
 	}
 
 	/**
@@ -55,7 +55,7 @@ class AttributeResolverTest {
 				.withPart(handle, "handle_slot", HANDLE_SLOT_TYPE)
 				.build();
 
-		AttributeQueryResult result = resolver.resolve(pickaxe, new AttributeEngine());
+		AttributeQueryResult result = resolver.resolve(pickaxe, attributeEngine());
 
 		float attackDamage = result.getValue(ATTACK_DAMAGE);
 		assertEquals(11f, attackDamage, "Should be 10 from head + 1 from pickaxe base.");
@@ -117,17 +117,17 @@ class AttributeResolverTest {
 		DynamicContext woodTarget = new DynamicContext.Builder().put(ContextKeys.TARGET_TAGS, Set.of(id("wood"))).build();
 
 		// Test pickaxe against different contexts
-		AttributeQueryResult pickaxeStoneResult = resolver.resolve(pickaxe, new AttributeEngine(), stoneTarget);
+		AttributeQueryResult pickaxeStoneResult = resolver.resolve(pickaxe, attributeEngine(), stoneTarget);
 		assertEquals(16f, pickaxeStoneResult.getValue(MINING_SPEED), "Base (1) + Iron (5) + Diamond (10) = 16");
 
-		AttributeQueryResult pickaxeWoodResult = resolver.resolve(pickaxe,  new AttributeEngine(), woodTarget);
+		AttributeQueryResult pickaxeWoodResult = resolver.resolve(pickaxe, attributeEngine(), woodTarget);
 		assertEquals(6f, pickaxeWoodResult.getValue(MINING_SPEED), "Base (1) + Iron (5) = 6");
 
 		// Test sword against different contexts
-		AttributeQueryResult swordStoneResult = resolver.resolve(sword, new AttributeEngine(), stoneTarget);
+		AttributeQueryResult swordStoneResult = resolver.resolve(sword, attributeEngine(), stoneTarget);
 		assertEquals(11f, swordStoneResult.getValue(MINING_SPEED), "Base (1) + Diamond (10) = 11. Iron bonus inactive.");
 
-		AttributeQueryResult swordWoodResult = resolver.resolve(sword, new AttributeEngine(), woodTarget);
+		AttributeQueryResult swordWoodResult = resolver.resolve(sword, attributeEngine(), woodTarget);
 		assertEquals(1f, swordWoodResult.getValue(MINING_SPEED), "Base (1) only.");
 	}
 
@@ -155,10 +155,10 @@ class AttributeResolverTest {
 				.withPart(ironHandle, "handle_slot", HANDLE_SLOT_TYPE)
 				.build();
 
-		float woodDamage = resolver.resolve(woodPickaxe,new AttributeEngine()).getValue(ATTACK_DAMAGE);
+		float woodDamage = resolver.resolve(woodPickaxe, attributeEngine()).getValue(ATTACK_DAMAGE);
 		assertEquals(6f, woodDamage, "Base damage (1) + head bonus (5, because handle is wood) = 6");
 
-		float ironDamage = resolver.resolve(ironPickaxe,new AttributeEngine()).getValue(ATTACK_DAMAGE);
+		float ironDamage = resolver.resolve(ironPickaxe, attributeEngine()).getValue(ATTACK_DAMAGE);
 		assertEquals(1f, ironDamage, "Base damage (1) only, because handle is not wood.");
 	}
 }

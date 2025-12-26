@@ -2,16 +2,14 @@ package com.sigmundgranaas.forgero.core.component.impl;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
-import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
-import com.sigmundgranaas.forgero.core.property.api.Property;
+import com.sigmundgranaas.forgero.core.component.api.Component;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import static com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes.DURABILITY;
+import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.*;
+import static com.sigmundgranaas.forgero.testutils.TestIdentifiers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class StaticPartTest {
@@ -19,17 +17,22 @@ class StaticPartTest {
 	@Test
 	void createsStaticPartWithAllProperties() {
 		// ARRANGE
-		OpenIdentifier id = new OpenIdentifier("forgero", "iron_ingot");
-		Set<OpenIdentifier> tags = Set.of(new OpenIdentifier("forgero", "metal"));
-		List<Attribute> attributes = List.of(new SimpleAttribute(DURABILITY, 250f));
-		Map<String, List<?>> properties = new HashMap<>();
-		properties.put("forgero:attributes", attributes);
+		OpenIdentifier id = id("iron_ingot");
+		OpenIdentifier metalTag = id("metal");
+
 		// ACT
-		StaticComponent part = new StaticComponent(id, tags, properties);
+		Component part = part(id)
+				.withTag(metalTag)
+				.withAttribute(DURABILITY, 250f)
+				.build();
 
 		// ASSERT
 		assertEquals(id, part.id());
-		assertEquals(tags, part.getTags());
-		assertEquals(properties, part.propertiesAsMap());
+		assertTrue(part.getTags().contains(metalTag));
+
+		List<Attribute> attributes = part.properties(Attribute.KEY);
+		assertEquals(1, attributes.size());
+		assertEquals(DURABILITY, attributes.get(0).type());
+		assertEquals(250f, attributes.get(0).value());
 	}
 }

@@ -81,7 +81,7 @@ class ComponentCofTest {
 	@BeforeEach
 	void setUp() {
 		constructorRegistry = ComponentConstructor.defaults();
-		mutater = new ComponentMutaterImpl();
+		mutater = mutater();
 		ComponentRegistry.Builder registryBuilder = ComponentRegistry.builder();
 		registryBuilder.add(IRON_COMPONENT).add(OAK_COMPONENT).add(PICKAXE_HEAD_COMPONENT)
 				.add(HANDLE_COMPONENT).add(GEM_COMPONENT).add(PRISTINE_PICKAXE)
