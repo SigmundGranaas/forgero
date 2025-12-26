@@ -49,7 +49,7 @@ public record ModelDTO(
 	}
 
 	public Optional<OpenIdentifier> getOpenIdentifierId() {
-		return getId().map(OpenIdentifier::new);
+		return getId().map(OpenIdentifier::parse);
 	}
 
 	public Optional<String> getId() {

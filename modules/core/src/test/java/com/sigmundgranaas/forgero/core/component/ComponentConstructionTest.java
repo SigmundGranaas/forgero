@@ -46,8 +46,8 @@ class ComponentConstructionTest extends ForgeroTest {
 				.withUpgradeSlot(upgradeSlot(GEM_SLOT_ID.toString(), GEM_SLOT_TYPE_TAG))
 				.build();
 
-		assertEquals(1, part.getUpgradeSlots().size());
 		assertInstanceOf(CustomizableComponent.class, part);
+		assertEquals(1, ((CustomizableComponent) part).getUpgradeSlots().size());
 	}
 
 	@Test
@@ -73,10 +73,10 @@ class ComponentConstructionTest extends ForgeroTest {
 				.withUpgradeSlot(upgradeSlot(GEM_SLOT_ID.toString(), GEM_SLOT_TYPE_TAG))
 				.build();
 
-		assertEquals(1, part.structure().slots().size());
-		assertEquals(1, part.getUpgradeSlots().size());
 		assertInstanceOf(StructuredComponent.class, part);
 		assertInstanceOf(CustomizableComponent.class, part);
+		assertEquals(1, ((StructuredComponent) part).structure().slots().all().size());
+		assertEquals(1, ((CustomizableComponent) part).getUpgradeSlots().size());
 	}
 
 	@Test
@@ -101,7 +101,8 @@ class ComponentConstructionTest extends ForgeroTest {
 				.withUpgradeSlot(upgradeSlot(GEM_SLOT_ID.toString(), GEM_SLOT_TYPE_TAG))
 				.build();
 
-		assertEquals(1, equipment.getUpgradeSlots().size());
+		assertInstanceOf(CustomizableComponent.class, equipment);
+		assertEquals(1, ((CustomizableComponent) equipment).getUpgradeSlots().size());
 	}
 
 	@Test
@@ -128,7 +129,9 @@ class ComponentConstructionTest extends ForgeroTest {
 				.withUpgradeSlot(upgradeSlot(BINDING_SLOT_ID.toString(), BINDING_TAG))
 				.build();
 
-		assertEquals(2, equipment.structure().slots().size());
-		assertEquals(1, equipment.upgrades().slots().size());
+		assertInstanceOf(StructuredComponent.class, equipment);
+		assertInstanceOf(CustomizableComponent.class, equipment);
+		assertEquals(2, ((StructuredComponent) equipment).structure().slots().all().size());
+		assertEquals(1, ((CustomizableComponent) equipment).upgrades().slots().all().size());
 	}
 }

@@ -68,7 +68,7 @@ public class RecursiveModelResolver implements ItemModelResolver {
 
 		if (component instanceof StructuredComponent structured) {
 			// Create a map of the component's actual children, keyed by their slot's path.
-			Map<String, Component> filledSlots = structured.structure().slots().values().stream()
+			Map<String, Component> filledSlots = structured.structure().slots().all().stream()
 					.collect(Collectors.toMap(slot -> slot.id().path(), StructureSlot::content));
 
 			for (ModelSlot modelSlot : composite.slots()) {

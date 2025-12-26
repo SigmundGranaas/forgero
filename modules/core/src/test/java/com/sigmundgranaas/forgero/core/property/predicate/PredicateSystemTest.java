@@ -17,9 +17,9 @@ import com.sigmundgranaas.forgero.core.condition.api.ConditionCodec;
 import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 import com.sigmundgranaas.forgero.core.condition.predicate.TagMatchCondition;
+import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.core.property.context.Key;
-import com.sigmundgranaas.forgero.core.property.engine.ResolverEngine;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -30,6 +30,8 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.sigmundgranaas.forgero.data.Utils.id;
+import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.attributeEngine;
+import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.resolver;
 import static com.sigmundgranaas.forgero.testutils.TestIdentifiers.ATTACK_DAMAGE_IDENTIFIER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -46,7 +48,7 @@ public class PredicateSystemTest extends ForgeroTest {
 
 	public record IsSneakingCondition(OpenIdentifier type, boolean value) implements DynamicCondition {
 		public static final Codec<IsSneakingCondition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				Codec.STRING.xmap(OpenIdentifier::new, OpenIdentifier::toString).fieldOf("type").forGetter(IsSneakingCondition::type),
+				Codec.STRING.xmap(OpenIdentifier::parse, OpenIdentifier::toString).fieldOf("type").forGetter(IsSneakingCondition::type),
 				Codec.BOOL.fieldOf("value").forGetter(IsSneakingCondition::value)
 		).apply(instance, IsSneakingCondition::new));
 
@@ -71,7 +73,7 @@ public class PredicateSystemTest extends ForgeroTest {
 	// Test Setup and Execution
 	// =============================================================================================
 
-	private ResolverEngine resolver;
+	private Resolver resolver;
 	private Component componentWithPlatformPredicate;
 
 	@BeforeEach

@@ -2,7 +2,7 @@
 package com.sigmundgranaas.forgero.model.pipeline.api;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
+import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.model.api.armor.ArmorModel;
 import com.sigmundgranaas.forgero.model.api.item.Model;
@@ -27,7 +27,7 @@ public class ModelDataInitializer {
 		this.resourceProvider = resourceProvider;
 	}
 
-	public ModelInitializationResult initialize(Map<OpenIdentifier, Component> components, TagGraph tagGraph, ItemModelRegistry itemModelRegistry, ArmorModelRegistry armorModelRegistry) {
+	public ModelInitializationResult initialize(Map<OpenIdentifier, Component> components, TagResolver tagResolver, ItemModelRegistry itemModelRegistry, ArmorModelRegistry armorModelRegistry) {
 		// 1. Load all files using the unified loader
 		ModelFileLoader fileLoader = new ModelFileLoader(resourceProvider);
 		fileLoader.load();
@@ -44,7 +44,7 @@ public class ModelDataInitializer {
 		);
 
 		// 4. Run generator with the loaded templates
-		ModelGenerator modelGenerator = new ModelGeneratorImpl(tagGraph);
+		ModelGenerator modelGenerator = new ModelGeneratorImpl(tagResolver);
 		ModelGenerationResult generationResult = modelGenerator.generate(components, templateProvider);
 
 		// 5a. Translate and register generated item models

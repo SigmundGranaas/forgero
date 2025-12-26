@@ -9,12 +9,10 @@ import com.sigmundgranaas.forgero.core.component.impl.*;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class PartBuilder extends BaseComponentBuilder<PartBuilder> {
-	private final Map<OpenIdentifier, StructureSlot> structureSlots = new HashMap<>();
+	private final List<StructureSlot> structureSlots = new ArrayList<>();
 	private final List<UpgradeSlot> upgradeSlots = new ArrayList<>();
 
 	public PartBuilder(OpenIdentifier id) {
@@ -22,7 +20,7 @@ public class PartBuilder extends BaseComponentBuilder<PartBuilder> {
 	}
 
 	public PartBuilder withStructureSlot(StructureSlot slot) {
-		this.structureSlots.put(slot.id(), slot);
+		this.structureSlots.add(slot);
 		return this;
 	}
 
@@ -34,8 +32,8 @@ public class PartBuilder extends BaseComponentBuilder<PartBuilder> {
 	public Component build() {
 		boolean hasStructure = !structureSlots.isEmpty();
 		boolean hasUpgrades = !upgradeSlots.isEmpty();
-		var structure = new ComponentStructure(structureSlots);
-		var upgrades = new ComponentUpgrades(upgradeSlots);
+		var structure = ComponentStructure.of(structureSlots);
+		var upgrades = ComponentUpgrades.of(upgradeSlots);
 
 		if (hasStructure && hasUpgrades) {
 			return new StructuredExtensiblePart(id, tags, properties, structure, upgrades);

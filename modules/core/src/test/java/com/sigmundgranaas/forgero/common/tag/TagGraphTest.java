@@ -26,12 +26,12 @@ class TagGraphTest {
 	@BeforeEach
 	void setUp() {
 		// IDs
-		material = new OpenIdentifier("forgero:material");
-		metal = new OpenIdentifier("forgero:metal");
-		toolMaterial = new OpenIdentifier("forgero:tool_material");
-		wood = new OpenIdentifier("forgero:wood");
-		pickaxe = new OpenIdentifier("forgero:pickaxe");
-		tool = new OpenIdentifier("forgero:tool");
+		material = new OpenIdentifier("forgero", "material");
+		metal = new OpenIdentifier("forgero", "metal");
+		toolMaterial = new OpenIdentifier("forgero", "tool_material");
+		wood = new OpenIdentifier("forgero", "wood");
+		pickaxe = new OpenIdentifier("forgero", "pickaxe");
+		tool = new OpenIdentifier("forgero", "tool");
 
 		// Hierarchy:
 		// material

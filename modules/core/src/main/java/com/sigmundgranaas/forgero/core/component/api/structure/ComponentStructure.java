@@ -1,41 +1,96 @@
 package com.sigmundgranaas.forgero.core.component.api.structure;
 
-import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.component.api.Slot;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.component.api.slot.SlotContainer;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Collections;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Represents the defined, required structural composition of a component.
- * This class is an immutable blueprint of a component's structure.
+ * The required structural composition of a component.
+ * All slots in a structure must be filled - there are no empty structural slots.
  *
- * @param slots A map of required slots where keys are unique slot identifiers and values are the StructureSlot objects.
+ * @param slots The container holding all structure slots.
  */
-public record ComponentStructure(Map<OpenIdentifier, StructureSlot> slots) {
-	public ComponentStructure {
-		// Validate that the ID of each StructureSlot in the map's values matches its corresponding key.
-		// This ensures consistency between the map key and the slot's internal ID.
-		slots.forEach((id, slot) -> {
-			if (slot == null) {
-				throw new IllegalArgumentException("StructureSlot cannot be null for ID: " + id);
-			}
-			if (!slot.id().equals(id)) {
-				throw new IllegalArgumentException(String.format("StructureSlot ID mismatch: Map key '%s' does not match slot's ID '%s'", id, slot.id()));
-			}
-		});
+public record ComponentStructure(SlotContainer<StructureSlot> slots) {
+
+	/**
+	 * Creates a structure from varargs slots.
+	 */
+	public static ComponentStructure of(StructureSlot... slots) {
+		return new ComponentStructure(SlotContainer.of(slots));
 	}
 
 	/**
-	 * @return A list of the direct sub-components held within the structure slots.
+	 * Creates a structure from a collection of slots.
+	 */
+	public static ComponentStructure of(Collection<StructureSlot> slots) {
+		return new ComponentStructure(SlotContainer.of(slots));
+	}
+
+	/**
+	 * Creates an empty structure (rare, but valid for some component types).
+	 */
+	public static ComponentStructure empty() {
+		return new ComponentStructure(SlotContainer.empty());
+	}
+
+	/**
+	 * Gets a slot by ID.
+	 */
+	public Optional<StructureSlot> get(OpenIdentifier id) {
+		return slots.get(id);
+	}
+
+	/**
+	 * Checks if a slot with the given ID exists.
+	 */
+	public boolean contains(OpenIdentifier id) {
+		return slots.contains(id);
+	}
+
+	/**
+	 * Returns all child components from all slots.
 	 */
 	public List<Component> children() {
-		// Iterate over the values of the map
-		return slots.values().stream()
+		return slots.all().stream()
 				.map(StructureSlot::content)
-				.collect(Collectors.toList());
+				.toList();
+	}
+
+	/**
+	 * Returns a new structure with the specified slot updated.
+	 */
+	public ComponentStructure withSlot(StructureSlot slot) {
+		return new ComponentStructure(slots.with(slot));
+	}
+
+	/**
+	 * Returns true if this structure has no slots.
+	 */
+	public boolean isEmpty() {
+		return slots.isEmpty();
+	}
+
+	/**
+	 * Returns the number of slots.
+	 */
+	public int size() {
+		return slots.size();
+	}
+
+	/**
+	 * Legacy compatibility: returns slots as a Map.
+	 *
+	 * @deprecated Use {@link #slots()} and its methods instead
+	 */
+	@Deprecated
+	public Map<OpenIdentifier, StructureSlot> slotsAsMap() {
+		return slots.all().stream()
+				.collect(Collectors.toMap(StructureSlot::id, s -> s));
 	}
 }

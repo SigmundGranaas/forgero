@@ -62,7 +62,7 @@ public class RenderInitializer implements ClientModInitializer {
 
 			ModelInitializationResult initialResult = modelInitializer.initialize(
 					ForgeroApi.components().all().stream().collect(Collectors.toMap(Component::id, Function.identity())),
-					ForgeroApi.tagGraph(),
+					ForgeroApi.tagResolver(),
 					itemModelRegistry,
 					armorModelRegistry
 			);

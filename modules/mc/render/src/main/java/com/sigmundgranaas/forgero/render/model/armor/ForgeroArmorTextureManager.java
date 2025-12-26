@@ -86,7 +86,7 @@ public class ForgeroArmorTextureManager {
 		}
 
 		if (sourceComponent instanceof StructuredComponent structured) {
-			Map<String, Component> filledSlots = structured.structure().slots().values().stream()
+			Map<String, Component> filledSlots = structured.structure().slots().all().stream()
 					.collect(Collectors.toMap(slot -> slot.id().path(), StructureSlot::content));
 
 			for (ModelSlot modelSlot : armorModel.slots()) {
@@ -125,7 +125,7 @@ public class ForgeroArmorTextureManager {
 			}
 
 			if (component instanceof StructuredComponent structured) {
-				Map<String, Component> filledSlots = structured.structure().slots().values().stream()
+				Map<String, Component> filledSlots = structured.structure().slots().all().stream()
 						.collect(Collectors.toMap(slot -> slot.id().path(), StructureSlot::content));
 
 				for (ModelSlot modelSlot : composite.slots()) {

@@ -6,7 +6,7 @@ import com.sigmundgranaas.forgero.cof.dto.CofStructure;
 import com.sigmundgranaas.forgero.cof.dto.CofUpgrades;
 import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
+import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.data.loading.api.RawDefinition;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.CreateData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.HostData;
@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 public class TemplateGenerator {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TemplateGenerator.class);
 	private final IdentifierFactory idFactory;
-	private final TagGraph tagGraph;
+	private final TagResolver tagResolver;
 	private final PropertyMerger propertyMerger;
 	private final Map<OpenIdentifier, CofComponent> staticComponents;
 	private final Map<OpenIdentifier, RawDefinition> rawDefinitions;
@@ -39,9 +39,9 @@ public class TemplateGenerator {
 	public record TemplateResult(List<CofComponent> components, Map<OpenIdentifier, HostData> hostData) {
 	}
 
-	public TemplateGenerator(IdentifierFactory idFactory, TagGraph tagGraph, PropertyMerger propertyMerger, Map<OpenIdentifier, CofComponent> staticComponents, Map<OpenIdentifier, RawDefinition> rawDefinitions) {
+	public TemplateGenerator(IdentifierFactory idFactory, TagResolver tagResolver, PropertyMerger propertyMerger, Map<OpenIdentifier, CofComponent> staticComponents, Map<OpenIdentifier, RawDefinition> rawDefinitions) {
 		this.idFactory = idFactory;
-		this.tagGraph = tagGraph;
+		this.tagResolver = tagResolver;
 		this.propertyMerger = propertyMerger;
 		this.staticComponents = staticComponents;
 		this.rawDefinitions = rawDefinitions;
@@ -99,7 +99,7 @@ public class TemplateGenerator {
 		PartTemplateData template = (PartTemplateData) templateDef.data();
 
 		String idTemplate = Objects.requireNonNullElse(template.structure().id(), "{material.name}-{shape.name}");
-		OpenIdentifier newId = new OpenIdentifier(resolveIdTemplate(idTemplate, combination));
+		OpenIdentifier newId = OpenIdentifier.parse(resolveIdTemplate(idTemplate, combination));
 
 		List<Object> dtoList = new ArrayList<>();
 		dtoList.add(template);
@@ -133,7 +133,7 @@ public class TemplateGenerator {
 		EquipmentTemplateData template = (EquipmentTemplateData) templateDef.data();
 
 		String idTemplate = Objects.requireNonNullElse(template.structure().id(), "{head.material.name}-tool");
-		OpenIdentifier newId = new OpenIdentifier(resolveIdTemplate(idTemplate, combination));
+		OpenIdentifier newId = OpenIdentifier.parse(resolveIdTemplate(idTemplate, combination));
 
 		List<Object> rawPartsDtoList = combination.values().stream()
 				.flatMap(comp -> getSourceDtosForComponent(comp).stream())
@@ -235,7 +235,7 @@ public class TemplateGenerator {
 		String resolvedClassName = resolveIdTemplate(template.create().className(), combination);
 		String resolvedItemGroup = template.create().itemGroup() != null ? resolveIdTemplate(template.create().itemGroup(), combination) : null;
 
-		OpenIdentifier resolvedId = new OpenIdentifier(resolvedIdStr);
+		OpenIdentifier resolvedId = OpenIdentifier.parse(resolvedIdStr);
 		return Optional.of(new HostData(null, new CreateData(resolvedId, resolvedClassName, resolvedItemGroup)));
 	}
 
@@ -344,7 +344,7 @@ public class TemplateGenerator {
 					// requireAllTags: Component must have ALL of these tags
 					if (filter.requireAllTags() != null && !filter.requireAllTags().isEmpty()) {
 						boolean hasAllRequired = filter.requireAllTags().stream()
-								.allMatch(tag -> tagGraph.isTagged(() -> componentTags, tag));
+								.allMatch(tag -> tagResolver.hasTag(() -> componentTags, tag));
 						if (!hasAllRequired) {
 							return false;
 						}
@@ -353,7 +353,7 @@ public class TemplateGenerator {
 					// requireAnyTags: Component must have AT LEAST ONE of these tags
 					if (filter.requireAnyTags() != null && !filter.requireAnyTags().isEmpty()) {
 						boolean hasAnyRequired = filter.requireAnyTags().stream()
-								.anyMatch(tag -> tagGraph.isTagged(() -> componentTags, tag));
+								.anyMatch(tag -> tagResolver.hasTag(() -> componentTags, tag));
 						if (!hasAnyRequired) {
 							return false;
 						}
@@ -362,7 +362,7 @@ public class TemplateGenerator {
 					// excludeAnyTags: Component must NOT have ANY of these tags
 					if (filter.excludeAnyTags() != null && !filter.excludeAnyTags().isEmpty()) {
 						boolean hasAnyExcluded = filter.excludeAnyTags().stream()
-								.anyMatch(tag -> tagGraph.isTagged(() -> componentTags, tag));
+								.anyMatch(tag -> tagResolver.hasTag(() -> componentTags, tag));
 						if (hasAnyExcluded) {
 							return false;
 						}
@@ -371,7 +371,7 @@ public class TemplateGenerator {
 					// excludeAllTags: Component must NOT have ALL of these tags (can have some)
 					if (filter.excludeAllTags() != null && !filter.excludeAllTags().isEmpty()) {
 						boolean hasAllExcluded = filter.excludeAllTags().stream()
-								.allMatch(tag -> tagGraph.isTagged(() -> componentTags, tag));
+								.allMatch(tag -> tagResolver.hasTag(() -> componentTags, tag));
 						if (hasAllExcluded) {
 							return false;
 						}
@@ -459,7 +459,7 @@ public class TemplateGenerator {
 
 	private List<CofComponent> findCompatibleComponents(OpenIdentifier typeTag, Map<OpenIdentifier, CofComponent> pool) {
 		return pool.values().stream()
-				.filter(comp -> comp.tags() != null && tagGraph.isTagged(comp::tags, typeTag))
+				.filter(comp -> comp.tags() != null && tagResolver.hasTag(comp::tags, typeTag))
 				.toList();
 	}
 

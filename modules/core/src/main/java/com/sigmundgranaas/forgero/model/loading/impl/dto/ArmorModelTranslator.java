@@ -33,8 +33,8 @@ public class ArmorModelTranslator {
 				.map(this::toModelSlot)
 				.toList();
 
-		OpenIdentifier modelId = new OpenIdentifier(dto.model());
-		Optional<OpenIdentifier> target = dto.getTarget().map(OpenIdentifier::new);
+		OpenIdentifier modelId = OpenIdentifier.parse(dto.model());
+		Optional<OpenIdentifier> target = dto.getTarget().map(OpenIdentifier::parse);
 		Optional<String> context = dto.getContext();
 
 		return new ArmorModel(finalId, modelId, layers, slots, target, context);

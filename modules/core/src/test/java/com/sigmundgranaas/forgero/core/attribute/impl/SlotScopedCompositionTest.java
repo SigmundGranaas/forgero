@@ -7,19 +7,22 @@ import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
 import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.attribute.api.operator.MultiplicationOperator;
+import com.sigmundgranaas.forgero.core.component.api.slot.SlotValidator;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
+import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
 import com.sigmundgranaas.forgero.core.component.impl.StaticComponent;
 import com.sigmundgranaas.forgero.core.component.impl.StructuredPart;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 import com.sigmundgranaas.forgero.core.condition.predicate.InSlotTypeCondition;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
-import com.sigmundgranaas.forgero.core.property.engine.ResolverEngine;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
+import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.attributeEngine;
+import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.resolver;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
@@ -99,9 +102,9 @@ class SlotScopedCompositionTest extends ForgeroTest {
 				PICKAXE_HEAD_ID,
 				Set.of(PICKAXE_HEAD_TAG),
 				headProps,
-				new ComponentStructure(slotsMap(
-						slot(idFactory.of("material_slot"), TOOL_MATERIAL_ID, iron)
-				))
+				ComponentStructure.of(
+						new StructureSlot(idFactory.of("material_slot"), TOOL_MATERIAL_ID, "", SlotValidator.ACCEPT_ALL, iron)
+				)
 		);
 
 		AttributeQueryResult result = resolver.resolve(pickaxeHead, attributeEngine());
@@ -124,9 +127,9 @@ class SlotScopedCompositionTest extends ForgeroTest {
 				PICKAXE_HEAD_ID,
 				Set.of(PICKAXE_HEAD_TAG),
 				new HashMap<>(),
-				new ComponentStructure(slotsMap(
-						slot(idFactory.of("material_slot"), TOOL_MATERIAL_ID, iron)
-				))
+				ComponentStructure.of(
+						new StructureSlot(idFactory.of("material_slot"), TOOL_MATERIAL_ID, "", SlotValidator.ACCEPT_ALL, iron)
+				)
 		);
 
 		AttributeQueryResult result = resolver.resolve(pickaxeHead, attributeEngine());
@@ -153,9 +156,9 @@ class SlotScopedCompositionTest extends ForgeroTest {
 				PICKAXE_HEAD_ID,
 				Set.of(PICKAXE_HEAD_TAG),
 				new HashMap<>(),
-				new ComponentStructure(slotsMap(
-						slot(idFactory.of("material_slot"), TOOL_MATERIAL_ID, iron)  // material slot, not upgrade
-				))
+				ComponentStructure.of(
+						new StructureSlot(idFactory.of("material_slot"), TOOL_MATERIAL_ID, "", SlotValidator.ACCEPT_ALL, iron)  // material slot, not upgrade
+				)
 		);
 
 		AttributeQueryResult result = resolver.resolve(pickaxeHead, attributeEngine());
@@ -188,9 +191,9 @@ class SlotScopedCompositionTest extends ForgeroTest {
 				PICKAXE_HEAD_ID,
 				Set.of(PICKAXE_HEAD_TAG),
 				new HashMap<>(),
-				new ComponentStructure(slotsMap(
-						slot(idFactory.of("head_material"), TOOL_MATERIAL_ID, headIron)
-				))
+				ComponentStructure.of(
+						new StructureSlot(idFactory.of("head_material"), TOOL_MATERIAL_ID, "", SlotValidator.ACCEPT_ALL, headIron)
+				)
 		);
 
 		// Pickaxe with head and binding slots
@@ -198,10 +201,10 @@ class SlotScopedCompositionTest extends ForgeroTest {
 				PICKAXE_ID,
 				Set.of(idFactory.of("pickaxe")),
 				new HashMap<>(),
-				new ComponentStructure(slotsMap(
-						slot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, pickaxeHead),
-						slot(BINDING_SLOT_ID, TOOL_MATERIAL_ID, bindingIron)
-				))
+				ComponentStructure.of(
+						new StructureSlot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, "", SlotValidator.ACCEPT_ALL, pickaxeHead),
+						new StructureSlot(BINDING_SLOT_ID, TOOL_MATERIAL_ID, "", SlotValidator.ACCEPT_ALL, bindingIron)
+				)
 		);
 
 		AttributeQueryResult result = resolver.resolve(pickaxe, attributeEngine());

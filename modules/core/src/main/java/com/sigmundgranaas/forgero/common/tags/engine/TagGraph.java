@@ -2,12 +2,13 @@ package com.sigmundgranaas.forgero.common.tags.engine;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.tags.api.Taggable;
+import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class TagGraph {
+public class TagGraph implements TagResolver {
 	private static final TagGraph EMPTY = new TagGraph(Collections.emptyMap());
 	private final Map<OpenIdentifier, Set<OpenIdentifier>> parentRelationships;
 	private final Map<OpenIdentifier, Set<OpenIdentifier>> childRelationships;
@@ -29,16 +30,18 @@ public class TagGraph {
 	}
 
 	/**
-	 * Merges this TagGraph with another, returning a new TagGraph containing the combined relationships.
+	 * Merges this TagGraph with another TagResolver, returning a new TagGraph containing the combined relationships.
+	 * Supports universal merge - any TagResolver implementation can be merged.
 	 *
-	 * @param other The other TagGraph to merge with.
-	 * @return A new, combined TagGraph.
+	 * @param other The other TagResolver to merge with.
+	 * @return A new, combined TagResolver.
 	 */
-	public TagGraph merge(TagGraph other) {
+	@Override
+	public TagResolver merge(TagResolver other) {
 		if (this == EMPTY) {
 			return other;
 		}
-		if (other == EMPTY) {
+		if (other == TagResolver.empty()) {
 			return this;
 		}
 
@@ -47,8 +50,8 @@ public class TagGraph {
 		// Deep copy current relationships to the new map
 		this.parentRelationships.forEach((key, value) -> mergedRelationships.put(key, new HashSet<>(value)));
 
-		// Merge relationships from the other graph
-		other.parentRelationships.forEach((childId, parentsToAdd) -> {
+		// Merge relationships from the other resolver (universal merge)
+		other.getRelationships().forEach((childId, parentsToAdd) -> {
 			mergedRelationships.computeIfAbsent(childId, k -> new HashSet<>()).addAll(parentsToAdd);
 		});
 
@@ -63,6 +66,11 @@ public class TagGraph {
 			}
 		});
 		return children;
+	}
+
+	@Override
+	public boolean hasTag(Taggable item, OpenIdentifier tag) {
+		return isTagged(item, tag);
 	}
 
 	/**
@@ -102,6 +110,7 @@ public class TagGraph {
 	 * @param <T>      The type of the Taggable item.
 	 * @return A new list containing only the matching items.
 	 */
+	@Override
 	public <T extends Taggable> List<T> findTagged(OpenIdentifier targetId, Collection<T> items) {
 		return items.stream()
 				.filter(item -> this.isTagged(item, targetId))
@@ -118,10 +127,16 @@ public class TagGraph {
 	 * @param <T>        The type of the Taggable item.
 	 * @return A new list containing only the matching items.
 	 */
+	@Override
 	public <T extends Taggable> List<T> findDirectlyTagged(OpenIdentifier targetId, Collection<T> items) {
 		return items.stream()
 				.filter(item -> item.getTags().contains(targetId))
 				.collect(Collectors.toList());
+	}
+
+	@Override
+	public Set<OpenIdentifier> getAllTags() {
+		return getAllIdentifiers();
 	}
 
 	/**
@@ -141,6 +156,7 @@ public class TagGraph {
 	 * @param id The identifier of the root tag to start the search from.
 	 * @return A set of all descendant tags plus the starting tag.
 	 */
+	@Override
 	public Set<OpenIdentifier> getDescendants(OpenIdentifier id) {
 		Set<OpenIdentifier> descendants = new HashSet<>();
 		Queue<OpenIdentifier> toVisit = new LinkedList<>();
@@ -165,7 +181,13 @@ public class TagGraph {
 	 * @param id The identifier of the child tag.
 	 * @return An unmodifiable set of the parent tag identifiers. Returns an empty set if the tag has no parents or is not in the graph.
 	 */
+	@Override
 	public Set<OpenIdentifier> getParents(OpenIdentifier id) {
 		return Set.copyOf(parentRelationships.getOrDefault(id, Collections.emptySet()));
+	}
+
+	@Override
+	public Map<OpenIdentifier, Set<OpenIdentifier>> getRelationships() {
+		return Map.copyOf(parentRelationships);
 	}
 }

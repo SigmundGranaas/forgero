@@ -48,8 +48,8 @@ class ComponentMutaterImplTest {
 		pickaxe = tool(PICKAXE_ID).withTag("pickaxe")
 				.withPart(originalHead, "pickaxe-head_slot", PICKAXE_HEAD_TAG)
 				.withPart(originalHandle, "pickaxe-handle_slot", HANDLE_TAG)
-				.withUpgradeSlot(upgradeSlot(BINDING_SLOT_ID, BINDING_SLOT_TYPE, c -> c.getTags().contains(BINDING_SLOT_TYPE), originalBinding))
-				.withUpgradeSlot(upgradeSlot(GEM_SLOT_ID, GEM_TAG, c -> c.getTags().contains(GEM_TAG)))
+				.withUpgradeSlot(upgradeSlot(BINDING_SLOT_ID.toString(), BINDING_SLOT_TYPE, c -> c.getTags().contains(BINDING_SLOT_TYPE), originalBinding))
+				.withUpgradeSlot(upgradeSlot(GEM_SLOT_ID.toString(), GEM_TAG, c -> c.getTags().contains(GEM_TAG)))
 				.build();
 	}
 
@@ -125,20 +125,21 @@ class ComponentMutaterImplTest {
 		assertThrows(IllegalArgumentException.class, () -> {
 			tool(PICKAXE_ID)
 					.withPart(originalHead, HEAD_SLOT_ID.toString(), PICKAXE_HEAD_TAG)
-					.withUpgradeSlot(upgradeSlot(HEAD_SLOT_ID, BINDING_SLOT_TYPE))
+					.withUpgradeSlot(upgradeSlot(HEAD_SLOT_ID.toString(), BINDING_SLOT_TYPE))
 					.build();
 		}, "Should throw when a slot ID is duplicated between structure and upgrades.");
 	}
 
 	@Test
 	void testComponentStructureConstructorThrowsOnIdMismatch() {
-		// This test verifies internal validation logic - the API should prevent this scenario
-		// by constructing slots with matching IDs. We test that invalid construction fails.
-		var invalidSlot = structureSlot(HEAD_SLOT_ID.toString(), PICKAXE_HEAD_TAG, originalHead);
-		var wrongIdMap = java.util.Map.of(id("wrong_id"), invalidSlot);
+		// This test verifies that SlotContainer validates uniqueness of slot IDs.
+		// Duplicate slot IDs should result in an exception to ensure data integrity.
+		var slot1 = structureSlot(HEAD_SLOT_ID.toString(), PICKAXE_HEAD_TAG, originalHead);
+		var slot2 = structureSlot(HEAD_SLOT_ID.toString(), HANDLE_TAG, originalHandle);
 
-		assertThrows(IllegalArgumentException.class, () ->
-						new com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure(wrongIdMap),
-				"ComponentStructure constructor should throw if map key and slot's internal ID do not match.");
+		// Creating a structure with both slots having the same ID should throw
+		assertThrows(IllegalArgumentException.class,
+				() -> com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure.of(slot1, slot2),
+				"Should throw when duplicate slot IDs are provided.");
 	}
 }

@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.component.api.slot.SlotValidator;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
 import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
 import com.sigmundgranaas.forgero.core.component.impl.StructuredEquipment;
@@ -30,7 +31,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,21 +53,21 @@ public class ModelPipelineFullIntegrationTest {
 	@BeforeEach
 	void setUp() {
 		// Define Tags
-		var partTag = new OpenIdentifier("forgero:part");
-		var toolTag = new OpenIdentifier("forgero:tool");
-		var metalTag = new OpenIdentifier("forgero:metal");
-		var woodTag = new OpenIdentifier("forgero:wood");
-		var swordTag = new OpenIdentifier("forgero:sword");
-		var swordBladePartTag = new OpenIdentifier("forgero:sword_blade_part");
-		var handlePartTag = new OpenIdentifier("forgero:handle_part");
+		var partTag = OpenIdentifier.parse("forgero:part");
+		var toolTag = OpenIdentifier.parse("forgero:tool");
+		var metalTag = OpenIdentifier.parse("forgero:metal");
+		var woodTag = OpenIdentifier.parse("forgero:wood");
+		var swordTag = OpenIdentifier.parse("forgero:sword");
+		var swordBladePartTag = OpenIdentifier.parse("forgero:sword_blade_part");
+		var handlePartTag = OpenIdentifier.parse("forgero:handle_part");
 
 
 		// Define IDs, including sub-paths for correct file output
-		var ironId = new OpenIdentifier("forgero:iron");
-		var oakId = new OpenIdentifier("forgero:oak");
-		var ironBladeId = new OpenIdentifier("forgero:parts/iron-sword_blade");
-		var oakHandleId = new OpenIdentifier("forgero:parts/oak-handle");
-		var ironSwordId = new OpenIdentifier("forgero:equipment/iron-sword");
+		var ironId = OpenIdentifier.parse("forgero:iron");
+		var oakId = OpenIdentifier.parse("forgero:oak");
+		var ironBladeId = OpenIdentifier.parse("forgero:parts/iron-sword_blade");
+		var oakHandleId = OpenIdentifier.parse("forgero:parts/oak-handle");
+		var ironSwordId = OpenIdentifier.parse("forgero:equipment/iron-sword");
 
 		// Setup TagGraph
 		tagGraph = new TagGraph(Map.of(
@@ -79,31 +79,34 @@ public class ModelPipelineFullIntegrationTest {
 		));
 
 		// Create mock runtime components, including composites with material children
-		Component iron = new StructuredPart(ironId, Set.of(metalTag, partTag), new HashMap<>(), new ComponentStructure(Collections.emptyMap()));
-		Component oak = new StructuredPart(oakId, Set.of(woodTag, partTag), new HashMap<>(), new ComponentStructure(Collections.emptyMap()));
+		Component iron = new StructuredPart(ironId, Set.of(metalTag, partTag), new HashMap<>(), ComponentStructure.empty());
+		Component oak = new StructuredPart(oakId, Set.of(woodTag, partTag), new HashMap<>(), ComponentStructure.empty());
 
+		var materialSlotId = OpenIdentifier.parse("forgero:material");
 		Component ironBlade = new StructuredPart(
 				ironBladeId,
 				Set.of(partTag, swordBladePartTag),
 				new HashMap<>(),
-				new ComponentStructure(Map.of(new OpenIdentifier("forgero:material"), new StructureSlot(new OpenIdentifier("forgero:material"), iron.id(), "", iron)))
+				ComponentStructure.of(new StructureSlot(materialSlotId, iron.id(), "", SlotValidator.ACCEPT_ALL, iron))
 		);
 
 		Component oakHandle = new StructuredPart(
 				oakHandleId,
 				Set.of(partTag, handlePartTag),
 				new HashMap<>(),
-				new ComponentStructure(Map.of(new OpenIdentifier("forgero:material"), new StructureSlot(new OpenIdentifier("forgero:material"), oak.id(), "", oak)))
+				ComponentStructure.of(new StructureSlot(materialSlotId, oak.id(), "", SlotValidator.ACCEPT_ALL, oak))
 		);
 
+		var bladeSlotId = OpenIdentifier.parse("forgero:blade");
+		var handleSlotId = OpenIdentifier.parse("forgero:handle");
 		Component ironSword = new StructuredEquipment(
 				ironSwordId,
 				Set.of(toolTag, swordTag),
 				new HashMap<>(),
-				new ComponentStructure(Map.of(
-						new OpenIdentifier("forgero:blade"), new StructureSlot(new OpenIdentifier("forgero:blade"), ironBlade.id(), "", ironBlade),
-						new OpenIdentifier("forgero:handle"), new StructureSlot(new OpenIdentifier("forgero:handle"), oakHandle.id(), "", oakHandle)
-				))
+				ComponentStructure.of(
+						new StructureSlot(bladeSlotId, ironBlade.id(), "", SlotValidator.ACCEPT_ALL, ironBlade),
+						new StructureSlot(handleSlotId, oakHandle.id(), "", SlotValidator.ACCEPT_ALL, oakHandle)
+				)
 		);
 
 		List<Component> componentList = List.of(iron, oak, ironBlade, oakHandle, ironSword);

@@ -66,7 +66,7 @@ public class RecursiveModelResolutionStrategy<M extends Identifiable> {
 
 		// Step 2: Recurse into children if this is a structured component
 		if (component instanceof StructuredComponent structured) {
-			structured.structure().slots().values().forEach(slot -> {
+			structured.structure().slots().all().forEach(slot -> {
 				Component child = slot.content();
 				if (child != null && shouldRecurse.test(child)) {
 					resolveRecursively(child, models);

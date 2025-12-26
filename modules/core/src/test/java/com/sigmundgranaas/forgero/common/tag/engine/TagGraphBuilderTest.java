@@ -13,8 +13,8 @@ class TagGraphBuilderTest {
 	@Test
 	void buildSucceedsForValidAcyclicGraph() {
 		TagGraphBuilder builder = new TagGraphBuilder();
-		builder.add(new OpenIdentifier("test", "a"), Set.of(new OpenIdentifier("test", "b")));
-		builder.add(new OpenIdentifier("test", "b"), Set.of(new OpenIdentifier("test", "c")));
+		builder.add(OpenIdentifier.of("test", "a"), Set.of(OpenIdentifier.of("test", "b")));
+		builder.add(OpenIdentifier.of("test", "b"), Set.of(OpenIdentifier.of("test", "c")));
 
 		assertDoesNotThrow(builder::build);
 	}
@@ -22,8 +22,8 @@ class TagGraphBuilderTest {
 	@Test
 	void builderThrowsExceptionOnDirectCycle() {
 		TagGraphBuilder builder = new TagGraphBuilder();
-		OpenIdentifier a = new OpenIdentifier("cycle", "a");
-		OpenIdentifier b = new OpenIdentifier("cycle", "b");
+		OpenIdentifier a = OpenIdentifier.of("cycle", "a");
+		OpenIdentifier b = OpenIdentifier.of("cycle", "b");
 
 		builder.add(a, Set.of(b));
 		builder.add(b, Set.of(a));
@@ -35,9 +35,9 @@ class TagGraphBuilderTest {
 	@Test
 	void builderThrowsExceptionOnTransitiveCycle() {
 		TagGraphBuilder builder = new TagGraphBuilder();
-		OpenIdentifier a = new OpenIdentifier("cycle", "a");
-		OpenIdentifier b = new OpenIdentifier("cycle", "b");
-		OpenIdentifier c = new OpenIdentifier("cycle", "c");
+		OpenIdentifier a = OpenIdentifier.of("cycle", "a");
+		OpenIdentifier b = OpenIdentifier.of("cycle", "b");
+		OpenIdentifier c = OpenIdentifier.of("cycle", "c");
 
 		builder.add(b, Set.of(a));
 		builder.add(c, Set.of(b));

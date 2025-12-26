@@ -59,9 +59,9 @@ public class ModelTranslator {
 				.map(this::toMountPoint)
 				.toList();
 
-		Optional<OpenIdentifier> target = dto.getTarget().map(OpenIdentifier::new);
+		Optional<OpenIdentifier> target = dto.getTarget().map(OpenIdentifier::parse);
 		Optional<String> context = dto.getContext();
-		Optional<OpenIdentifier> parent = dto.getParent().map(OpenIdentifier::new);
+		Optional<OpenIdentifier> parent = dto.getParent().map(OpenIdentifier::parse);
 		Optional<JsonElement> display = dto.getDisplay();
 
 		return new CompositeModel(id, layers, slots, mountPoints, target, context, parent, display);
@@ -88,9 +88,9 @@ public class ModelTranslator {
 	}
 
 	private TextureModel toTextureModel(OpenIdentifier id, ModelDTO dto) {
-		Optional<OpenIdentifier> target = dto.getTarget().map(OpenIdentifier::new);
+		Optional<OpenIdentifier> target = dto.getTarget().map(OpenIdentifier::parse);
 		Optional<String> context = dto.getContext();
-		Optional<OpenIdentifier> parent = dto.getParent().map(OpenIdentifier::new);
+		Optional<OpenIdentifier> parent = dto.getParent().map(OpenIdentifier::parse);
 		Optional<JsonElement> display = dto.getDisplay();
 
 		List<MountPoint> mountPoints = Optional.ofNullable(dto.mountPoints())
@@ -146,9 +146,9 @@ public class ModelTranslator {
 
 	private Predicate toPredicate(PredicateDTO dto) {
 		return switch (dto.type()) {
-			case "forgero:root_tag" -> new RootTagPredicate(new OpenIdentifier(dto.tag()));
+			case "forgero:root_tag" -> new RootTagPredicate(OpenIdentifier.parse(dto.tag()));
 			case "forgero:bow_pull" -> new BowPullPredicate(dto.pull(), dto.pulling());
-			case "forgero:child_tag" -> new ChildTagPredicate(new OpenIdentifier(dto.tag()));
+			case "forgero:child_tag" -> new ChildTagPredicate(OpenIdentifier.parse(dto.tag()));
 			default -> throw new IllegalArgumentException("Unknown predicate type: " + dto.type());
 		};
 	}

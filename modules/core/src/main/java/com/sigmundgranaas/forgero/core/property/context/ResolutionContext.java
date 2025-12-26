@@ -48,13 +48,13 @@ public class ResolutionContext {
 		depthMap.put(current, depth);
 
 		if (current instanceof StructuredComponent structured) {
-			for (StructureSlot slot : structured.structure().slots().values()) {
+			for (StructureSlot slot : structured.structure().slots().all()) {
 				slotMap.put(slot.content(), slot);
 				buildContextMaps(slot.content(), current, depth + 1);
 			}
 		}
 		if (current instanceof CustomizableComponent customizable) {
-			for (UpgradeSlot slot : customizable.upgrades().slots()) {
+			for (UpgradeSlot slot : customizable.upgrades().slots().all()) {
 				slot.content().ifPresent(child -> {
 					slotMap.put(child, slot);
 					buildContextMaps(child, current, depth + 1);
@@ -95,7 +95,7 @@ public class ResolutionContext {
 
 	private Optional<Component> findIn(Component component, OpenIdentifier slotType) {
 		if (component instanceof StructuredComponent structured) {
-			for (StructureSlot slot : structured.structure().slots().values()) {
+			for (StructureSlot slot : structured.structure().slots().all()) {
 				if (slot.type().equals(slotType)) {
 					return Optional.of(slot.content());
 				}

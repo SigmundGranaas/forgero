@@ -2,10 +2,11 @@ package com.sigmundgranaas.forgero.loader.api;
 
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.nbt.ComponentNbtConverter;
+import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
+import com.sigmundgranaas.forgero.common.tags.engine.TaggedRegistry;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
-import com.sigmundgranaas.forgero.common.tags.engine.TaggedRegistry;
 import com.sigmundgranaas.forgero.data.pipeline.api.ForgeroDataBundle;
 import net.minecraft.item.ItemStack;
 
@@ -13,43 +14,97 @@ import java.util.Optional;
 
 /**
  * Context object providing access to all loaded data and registries.
- * This is the primary interface for modules to access Forgero data.
+ * <p>
+ * This interface extends {@link ForgeroServices} to provide both the clean DI-friendly
+ * API and legacy getter methods for backward compatibility.
+ *
+ * @see ForgeroServices for the primary service interface
  */
-public interface DataLoadingContext {
+public interface DataLoadingContext extends ForgeroServices {
+
+	// ============================================================
+	// ForgeroServices implementation (preferred API)
+	// ============================================================
+
+	@Override
+	default TagResolver tagResolver() {
+		return getDataBundle().tagResolver();
+	}
+
+	@Override
+	default ComponentConverter converter() {
+		return getConverter();
+	}
+
+	@Override
+	default Resolver resolver() {
+		return getResolver();
+	}
+
+	@Override
+	default ComponentRegistry componentRegistry() {
+		return getComponentRegistry();
+	}
+
+	@Override
+	default TaggedRegistry<Component> taggedComponents() {
+		return getTaggedComponentRegistry();
+	}
+
+	@Override
+	default ComponentNbtConverter nbtConverter() {
+		return getNbtConverter();
+	}
+
+	@Override
+	default Optional<Component> component(ItemStack stack) {
+		return getComponent(stack);
+	}
+
+	// ============================================================
+	// Legacy API (for backward compatibility)
+	// ============================================================
+
 	/**
-	 * Get the component registry containing all loaded components.
+	 * @deprecated Use {@link #componentRegistry()} instead
 	 */
+	@Deprecated(forRemoval = true)
 	ComponentRegistry getComponentRegistry();
 
 	/**
-	 * Get the tagged registry for tag-based queries.
+	 * @deprecated Use {@link #taggedComponents()} instead
 	 */
+	@Deprecated(forRemoval = true)
 	TaggedRegistry<Component> getTaggedComponentRegistry();
 
 	/**
-	 * Get the property resolver for computing attributes and features.
+	 * @deprecated Use {@link #resolver()} instead
 	 */
+	@Deprecated(forRemoval = true)
 	Resolver getResolver();
 
 	/**
-	 * Maps an ItemStack to its corresponding Component.
-	 * This is the primary method for stateful conversion from an item to a component.
+	 * @deprecated Use {@link #component(ItemStack)} instead
 	 */
+	@Deprecated(forRemoval = true)
 	Optional<Component> getComponent(ItemStack stack);
 
 	/**
-	 * Get the main converter for all Forgero/Minecraft conversions.
-	 * This is the preferred way to access conversion logic.
+	 * @deprecated Use {@link #converter()} instead
 	 */
+	@Deprecated(forRemoval = true)
 	ComponentConverter getConverter();
 
 	/**
-	 * Get the NBT converter for serializing and deserializing components.
+	 * @deprecated Use {@link #nbtConverter()} instead
 	 */
+	@Deprecated(forRemoval = true)
 	ComponentNbtConverter getNbtConverter();
 
 	/**
 	 * Get the original data bundle for modules that need raw data access.
+	 * <p>
+	 * Note: Prefer using specific service methods rather than accessing the bundle directly.
 	 */
 	ForgeroDataBundle getDataBundle();
 }

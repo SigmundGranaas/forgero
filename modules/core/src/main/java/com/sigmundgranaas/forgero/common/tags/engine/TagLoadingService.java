@@ -4,6 +4,7 @@ package com.sigmundgranaas.forgero.common.tags.engine;
 import com.sigmundgranaas.forgero.common.identifier.api.Identifiable;
 import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceConverter;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceProvider;
 import com.sigmundgranaas.forgero.utility.resource.loader.implementation.ClassPathResourceProvider;
@@ -72,12 +73,12 @@ public class TagLoadingService {
 	}
 
 	/**
-	 * Loads all tag files from a given root path and constructs a TagGraph.
+	 * Loads all tag files from a given root path and constructs a TagResolver.
 	 *
 	 * @param rootPath The root identifier path to load tags from (e.g., "forgero:tags").
-	 * @return A fully constructed and validated TagGraph.
+	 * @return A fully constructed and validated TagResolver.
 	 */
-	public TagGraph loadTags(OpenIdentifier rootPath) {
+	public TagResolver loadTags(OpenIdentifier rootPath) {
 		TagGraphBuilder builder = new TagGraphBuilder();
 		// The rootPath passed to load is still a path-like OpenIdentifier (e.g., "forgero:tags").
 		Stream<IdentifiableTagDefinition> definitions = resourceLoader.load(rootPath, true);

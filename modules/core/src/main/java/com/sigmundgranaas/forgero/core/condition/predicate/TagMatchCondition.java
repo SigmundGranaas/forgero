@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.core.condition.predicate;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
+import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 import com.sigmundgranaas.forgero.core.property.context.ResolutionContext;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
@@ -15,20 +15,20 @@ public final class TagMatchCondition implements StaticCondition {
 
 	private final OpenIdentifier type;
 	private final OpenIdentifier tag;
-	private final transient Supplier<TagGraph> tagGraphSupplier;
+	private final transient Supplier<TagResolver> tagResolverSupplier;
 
-	public TagMatchCondition(OpenIdentifier type, OpenIdentifier tag, Supplier<TagGraph> tagGraphSupplier) {
+	public TagMatchCondition(OpenIdentifier type, OpenIdentifier tag, Supplier<TagResolver> tagResolverSupplier) {
 		this.type = type;
 		this.tag = tag;
-		this.tagGraphSupplier = tagGraphSupplier;
+		this.tagResolverSupplier = tagResolverSupplier;
 	}
 
-	public static Codec<TagMatchCondition> codec(Supplier<TagGraph> tagGraphSupplier) {
+	public static Codec<TagMatchCondition> codec(Supplier<TagResolver> tagResolverSupplier) {
 		return RecordCodecBuilder.create(instance ->
 				instance.group(
 						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(TagMatchCondition::type),
 						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("tag").forGetter(TagMatchCondition::tag)
-				).apply(instance, (type, tag) -> new TagMatchCondition(type, tag, tagGraphSupplier))
+				).apply(instance, (type, tag) -> new TagMatchCondition(type, tag, tagResolverSupplier))
 		);
 	}
 
@@ -43,16 +43,16 @@ public final class TagMatchCondition implements StaticCondition {
 
 	@Override
 	public boolean test(ResolutionContext context) {
-		TagGraph graph = tagGraphSupplier.get();
-		if (graph == null) {
+		TagResolver resolver = tagResolverSupplier.get();
+		if (resolver == null) {
 			// Fail-safe in case the supplier was not injected correctly or is not available.
 			return false;
 		}
 
 		if (type.path().equals("self_has_tag")) {
-			return graph.isTagged(context.self(), tag);
+			return resolver.hasTag(context.self(), tag);
 		} else if (type.path().equals("root_has_tag")) {
-			return graph.isTagged(context.root(), tag);
+			return resolver.hasTag(context.root(), tag);
 		}
 		return false;
 	}

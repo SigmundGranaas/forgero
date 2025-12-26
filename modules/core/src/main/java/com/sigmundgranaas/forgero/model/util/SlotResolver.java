@@ -29,7 +29,7 @@ public class SlotResolver {
 
 		// Build map of filled component slots
 		Map<String, Component> componentSlots = new HashMap<>();
-		component.structure().slots().values().forEach(slot ->
+		component.structure().slots().all().forEach(slot ->
 				componentSlots.put(slot.id().path(), slot.content())
 		);
 
@@ -62,7 +62,7 @@ public class SlotResolver {
 		}
 
 		// Find the component in this slot
-		return component.structure().slots().values().stream()
+		return component.structure().slots().all().stream()
 				.filter(slot -> slot.id().path().equals(slotId))
 				.map(StructureSlot::content)
 				.filter(SlotResolver::isNotEmptySlot)

@@ -59,7 +59,7 @@ class ForgeroDataInitializerTest {
 
 		assertNotNull(bundle);
 		assertNotNull(bundle.componentRegistry());
-		assertNotNull(bundle.tagGraph());
+		assertNotNull(bundle.tagResolver());
 		assertNotNull(bundle.hostItemMap());
 
 		// Check for static mapping from iron.json

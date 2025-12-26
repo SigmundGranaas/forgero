@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.model.generation.impl;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
+import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.model.generation.api.ModelGenerationResult;
@@ -21,11 +21,11 @@ import java.util.stream.Collectors;
 
 public class ModelGeneratorImpl implements ModelGenerator {
 
-	private final TagGraph tagGraph;
+	private final TagResolver tagResolver;
 	private final PlaceholderResolver placeholderResolver;
 
-	public ModelGeneratorImpl(TagGraph tagGraph) {
-		this.tagGraph = tagGraph;
+	public ModelGeneratorImpl(TagResolver tagResolver) {
+		this.tagResolver = tagResolver;
 		this.placeholderResolver = new PlaceholderResolver();
 	}
 
@@ -49,7 +49,7 @@ public class ModelGeneratorImpl implements ModelGenerator {
 
 	private void processItemTemplates(Collection<? extends TemplateDataProvider<TemplateModelDTO>> templates, Map<OpenIdentifier, Component> components, Map<OpenIdentifier, ModelDTO> models, List<TextureGenerationTask> tasks, Predicate<Component> componentFilter) {
 		for (TemplateDataProvider<TemplateModelDTO> template : templates) {
-			List<Component> compatibleComponents = tagGraph.findTagged(template.target().tag(), components.values())
+			List<Component> compatibleComponents = tagResolver.findTagged(template.target().tag(), components.values())
 					.stream()
 					.filter(componentFilter)
 					.toList();
@@ -66,7 +66,7 @@ public class ModelGeneratorImpl implements ModelGenerator {
 
 	private void processArmorTemplates(Collection<? extends TemplateDataProvider<TemplateArmorModelDTO>> templates, Map<OpenIdentifier, Component> components, Map<OpenIdentifier, ArmorModelDTO> models, List<TextureGenerationTask> tasks, Predicate<Component> componentFilter) {
 		for (TemplateDataProvider<TemplateArmorModelDTO> template : templates) {
-			List<Component> compatibleComponents = tagGraph.findTagged(template.target().tag(), components.values())
+			List<Component> compatibleComponents = tagResolver.findTagged(template.target().tag(), components.values())
 					.stream()
 					.filter(componentFilter)
 					.toList();
@@ -87,9 +87,9 @@ public class ModelGeneratorImpl implements ModelGenerator {
 
 		// Recursively unpack structured components to flatten the context
 		if (root instanceof StructuredComponent structured) {
-			structured.structure().slots().forEach((id, slot) -> {
+			structured.structure().slots().all().forEach(slot -> {
 				// Key by slot name, e.g., "head", "handle", "material"
-				context.put(id.name(), slot.content());
+				context.put(slot.id().name(), slot.content());
 				// Also add children of children to the context
 				context.putAll(createGenerationContext(slot.content()));
 			});
@@ -99,7 +99,7 @@ public class ModelGeneratorImpl implements ModelGenerator {
 
 	private ArmorModelDTO mapTemplateToArmorModel(TemplateArmorModelDTO template, Map<String, Component> context, List<TextureGenerationTask> tasks) {
 		String rawId = template.id() != null ? placeholderResolver.resolve(template.id(), context) : null;
-		OpenIdentifier resolvedId = (rawId != null && !rawId.isEmpty()) ? new OpenIdentifier(rawId) : null;
+		OpenIdentifier resolvedId = (rawId != null && !rawId.isEmpty()) ? OpenIdentifier.parse(rawId) : null;
 		if (resolvedId == null) {
 			throw new IllegalStateException("Generated armor model template missing 'id' field after resolution.");
 		}
@@ -127,7 +127,7 @@ public class ModelGeneratorImpl implements ModelGenerator {
 			throw new IllegalStateException("Generated model template could not resolve to a valid ID. It needs an 'id' or 'target' field. Template type: " + template.type());
 		}
 
-		OpenIdentifier resolvedId = new OpenIdentifier(rawId);
+		OpenIdentifier resolvedId = OpenIdentifier.parse(rawId);
 
 		// Process layers, which is now the only source of textures
 		List<LayerDTO> finalLayers = processLayerTemplates(template.layers(), context, tasks);

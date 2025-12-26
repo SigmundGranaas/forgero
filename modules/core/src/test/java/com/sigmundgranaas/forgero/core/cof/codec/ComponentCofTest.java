@@ -15,12 +15,12 @@ import com.sigmundgranaas.forgero.core.attribute.api.AttributeCodec;
 import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgrades;
+import com.sigmundgranaas.forgero.core.component.api.slot.SlotValidator;
 import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
 import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
 import com.sigmundgranaas.forgero.core.component.impl.*;
 import com.sigmundgranaas.forgero.core.component.mutation.api.ComponentMutater;
-import com.sigmundgranaas.forgero.core.component.mutation.impl.ComponentMutaterImpl;
 import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 import com.sigmundgranaas.forgero.core.property.api.codec.KeyMapDispatchCodec;
 import com.sigmundgranaas.forgero.core.property.api.codec.ListCodecWrapper;
@@ -32,6 +32,7 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.Field;
 import java.util.*;
 
+import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.mutater;
 import static com.sigmundgranaas.forgero.testutils.TestIdentifiers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -41,36 +42,36 @@ class ComponentCofTest {
 	private static final Component OAK_COMPONENT = new StaticComponent(OAK_ID, Set.of(WOOD_TAG), Collections.emptyMap());
 	private static final Component PICKAXE_HEAD_COMPONENT = new StaticComponent(id("iron-pickaxe_head"), Set.of(PICKAXE_HEAD_TAG), Collections.emptyMap());
 	private static final Component HANDLE_COMPONENT = new StaticComponent(id("oak-handle"), Set.of(HANDLE_TAG), Collections.emptyMap());
-	private static final Component GEM_COMPONENT = new StaticComponent(GEM_ID, Set.of(GEM_TAG), Map.of(Attribute.KEY.key(), List.of(new SimpleAttribute(new OpenIdentifier("forgero:attack_damage"), 10))));
+	private static final Component GEM_COMPONENT = new StaticComponent(GEM_ID, Set.of(GEM_TAG), Map.of(Attribute.KEY.key(), List.of(new SimpleAttribute(OpenIdentifier.parse("forgero:attack_damage"), 10))));
 	private static final Component SWORD_BLADE_COMPONENT = new StructuredPart(id("sword-blade"), Set.of(SWORD_BLADE_TAG), Collections.emptyMap(),
-			new ComponentStructure(Map.of(id("material"), new StructureSlot(id("material"), MATERIAL_SLOT_TYPE, "", IRON_COMPONENT)))
+			ComponentStructure.of(new StructureSlot(id("material"), MATERIAL_SLOT_TYPE, "", SlotValidator.ACCEPT_ALL, IRON_COMPONENT))
 	);
 	private static final Component HILT_COMPONENT = new ExtensiblePart(HILT_ID, Set.of(HILT_TAG), Collections.emptyMap(),
-			new ComponentUpgrades(List.of(new UpgradeSlot(id("pommel_slot"), POMMEL_TAG, "", c -> true, Optional.empty())))
+			ComponentUpgrades.of(new UpgradeSlot(id("pommel_slot"), POMMEL_TAG, "", SlotValidator.ACCEPT_ALL, Optional.empty()))
 	);
 	private static final Component FANCY_HILT_COMPONENT = new ExtensiblePart(id("fancy-hilt"), Set.of(HILT_TAG), Collections.emptyMap(),
-			new ComponentUpgrades(List.of(new UpgradeSlot(id("pommel_slot"), POMMEL_TAG, "", c -> true, Optional.empty())))
+			ComponentUpgrades.of(new UpgradeSlot(id("pommel_slot"), POMMEL_TAG, "", SlotValidator.ACCEPT_ALL, Optional.empty()))
 	);
 	private static final Component SWORD_COMPONENT = new StructuredEquipment(SWORD_ID, Set.of(SWORD_TAG), Collections.emptyMap(),
-			new ComponentStructure(Map.of(
-					id("blade"), new StructureSlot(id("blade"), SWORD_BLADE_TAG, "", SWORD_BLADE_COMPONENT),
-					id("handle"), new StructureSlot(id("handle"), HILT_TAG, "", HILT_COMPONENT)
-			))
+			ComponentStructure.of(
+					new StructureSlot(id("blade"), SWORD_BLADE_TAG, "", SlotValidator.ACCEPT_ALL, SWORD_BLADE_COMPONENT),
+					new StructureSlot(id("handle"), HILT_TAG, "", SlotValidator.ACCEPT_ALL, HILT_COMPONENT)
+			)
 	);
 	private static final Component AMULET_COMPONENT = new ExtensibleEquipment(AMULET_ID, Set.of(AMULET_TAG), Collections.emptyMap(),
-			new ComponentUpgrades(List.of(new UpgradeSlot(id("gem_slot"), GEM_TAG, "", c -> true, Optional.empty())))
+			ComponentUpgrades.of(new UpgradeSlot(id("gem_slot"), GEM_TAG, "", SlotValidator.ACCEPT_ALL, Optional.empty()))
 	);
 	private static final Component SHIELD_COMPONENT = new StaticEquipment(SHIELD_ID, Set.of(SHIELD_TAG), Collections.emptyMap());
 	private static final Component AXE_HEAD_COMPONENT = new StructuredExtensiblePart(AXE_HEAD_ID, Set.of(AXE_HEAD_TAG), Collections.emptyMap(),
-			new ComponentStructure(Map.of(id("material"), new StructureSlot(id("material"), MATERIAL_SLOT_TYPE, "", IRON_COMPONENT))),
-			new ComponentUpgrades(List.of(new UpgradeSlot(id("rune_slot"), RUNE_TAG, "", c -> true, Optional.empty())))
+			ComponentStructure.of(new StructureSlot(id("material"), MATERIAL_SLOT_TYPE, "", SlotValidator.ACCEPT_ALL, IRON_COMPONENT)),
+			ComponentUpgrades.of(new UpgradeSlot(id("rune_slot"), RUNE_TAG, "", SlotValidator.ACCEPT_ALL, Optional.empty()))
 	);
 	private static final Component PRISTINE_PICKAXE = new StructuredExtensibleEquipment(id("iron-pickaxe"), Set.of(PICKAXE_TAG), Collections.emptyMap(),
-			new ComponentStructure(Map.of(
-					id("head"), new StructureSlot(id("head"), PICKAXE_HEAD_TAG, "", PICKAXE_HEAD_COMPONENT),
-					id("handle"), new StructureSlot(id("handle"), HANDLE_TAG, "", HANDLE_COMPONENT)
-			)),
-			new ComponentUpgrades(List.of(new UpgradeSlot(id("gem_slot"), GEM_TAG, "", c -> true, Optional.empty())))
+			ComponentStructure.of(
+					new StructureSlot(id("head"), PICKAXE_HEAD_TAG, "", SlotValidator.ACCEPT_ALL, PICKAXE_HEAD_COMPONENT),
+					new StructureSlot(id("handle"), HANDLE_TAG, "", SlotValidator.ACCEPT_ALL, HANDLE_COMPONENT)
+			),
+			ComponentUpgrades.of(new UpgradeSlot(id("gem_slot"), GEM_TAG, "", SlotValidator.ACCEPT_ALL, Optional.empty()))
 	);
 
 	private ComponentCofCodec codec;
@@ -123,7 +124,7 @@ class ComponentCofTest {
 	@Test
 	void testStaticComponentCycle() {
 		testPristineSerialization(IRON_COMPONENT);
-		Component mutated = new StaticComponent(IRON_ID, Set.of(METAL_TAG), Map.of(Attribute.KEY.key(), List.of(new SimpleAttribute(new OpenIdentifier("forgero:durability"), 100f))));
+		Component mutated = new StaticComponent(IRON_ID, Set.of(METAL_TAG), Map.of(Attribute.KEY.key(), List.of(new SimpleAttribute(OpenIdentifier.parse("forgero:durability"), 100f))));
 		testMutatedCycle(IRON_COMPONENT, mutated);
 	}
 
@@ -158,7 +159,7 @@ class ComponentCofTest {
 	@Test
 	void testStaticEquipmentCycle() {
 		testPristineSerialization(SHIELD_COMPONENT);
-		Component mutated = new StaticEquipment(SHIELD_ID, Set.of(SHIELD_TAG), Map.of(Attribute.KEY.key(), List.of(new SimpleAttribute(new OpenIdentifier( "forgero:armor"), 5f))));
+		Component mutated = new StaticEquipment(SHIELD_ID, Set.of(SHIELD_TAG), Map.of(Attribute.KEY.key(), List.of(new SimpleAttribute(OpenIdentifier.parse("forgero:armor"), 5f))));
 		testMutatedCycle(SHIELD_COMPONENT, mutated);
 	}
 
@@ -178,7 +179,7 @@ class ComponentCofTest {
 
 	@Test
 	void testSerializationCache() throws NoSuchFieldException, IllegalAccessException {
-		Component mutated = new StaticEquipment(SHIELD_ID, Set.of(id("forgero:shield")), Map.of(Attribute.KEY.key(), List.of(new SimpleAttribute(new OpenIdentifier( "forgero:armor"), 5f))));
+		Component mutated = new StaticEquipment(SHIELD_ID, Set.of(id("forgero:shield")), Map.of(Attribute.KEY.key(), List.of(new SimpleAttribute(OpenIdentifier.parse("forgero:armor"), 5f))));
 
 		Field cacheField = ComponentCofCodec.class.getDeclaredField("serializationCache");
 		cacheField.setAccessible(true);

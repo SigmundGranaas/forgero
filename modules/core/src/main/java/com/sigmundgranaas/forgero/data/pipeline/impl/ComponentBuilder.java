@@ -9,12 +9,12 @@ import com.sigmundgranaas.forgero.cof.dto.CofUpgrades;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgrades;
+import com.sigmundgranaas.forgero.core.component.api.slot.SlotValidator;
 import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
 import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
 
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -73,7 +73,7 @@ public class ComponentBuilder {
 	}
 
 	private DataResult<ComponentStructure> buildStructureFromDto(CofStructure structureDto) {
-		Map<OpenIdentifier, StructureSlot> slots = new HashMap<>();
+		List<StructureSlot> slots = new ArrayList<>();
 		for (Map.Entry<OpenIdentifier, CofSlot> entry : structureDto.slots().entrySet()) {
 			CofSlot slotDto = entry.getValue();
 			if (slotDto.content() == null) {
@@ -81,9 +81,9 @@ public class ComponentBuilder {
 				return DataResult.error(() -> "Structure slot " + entry.getKey() + " is missing content.");
 			}
 			Component childComponent = buildFromId(slotDto.content().id());
-			slots.put(entry.getKey(), new StructureSlot(entry.getKey(), slotDto.type(), slotDto.description(), childComponent));
+			slots.add(new StructureSlot(entry.getKey(), slotDto.type(), slotDto.description(), SlotValidator.ACCEPT_ALL, childComponent));
 		}
-		return DataResult.success(new ComponentStructure(slots));
+		return DataResult.success(ComponentStructure.of(slots));
 	}
 
 	private DataResult<ComponentUpgrades> buildUpgradesFromDto(CofUpgrades upgradesDto) {
@@ -94,15 +94,15 @@ public class ComponentBuilder {
 				childComponent = buildFromId(slotDto.content().id());
 			}
 
-			Predicate<Component> validator = comp -> {
-				if (slotDto.validTags() == null || slotDto.validTags().isEmpty()) {
-					return true;
-				}
-				return comp.getTags().containsAll(slotDto.validTags());
-			};
+			SlotValidator validator;
+			if (slotDto.validTags() == null || slotDto.validTags().isEmpty()) {
+				validator = SlotValidator.ACCEPT_ALL;
+			} else {
+				validator = SlotValidator.requireAllTags(slotDto.validTags());
+			}
 
 			slots.add(new UpgradeSlot(slotDto.type(), slotDto.type(), slotDto.description(), validator, Optional.ofNullable(childComponent)));
 		}
-		return DataResult.success(new ComponentUpgrades(slots));
+		return DataResult.success(ComponentUpgrades.of(slots));
 	}
 }

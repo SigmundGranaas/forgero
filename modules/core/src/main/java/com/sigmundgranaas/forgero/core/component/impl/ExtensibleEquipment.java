@@ -32,9 +32,7 @@ public record ExtensibleEquipment(
 
 	@Override
 	public List<Component> getChildren() {
-		return upgrades.slots().stream()
-				.flatMap(slot -> slot.content().stream())
-				.toList();
+		return upgrades.filledContents();
 	}
 
 	@Override

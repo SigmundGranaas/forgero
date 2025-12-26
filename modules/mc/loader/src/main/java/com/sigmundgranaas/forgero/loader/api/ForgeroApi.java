@@ -1,7 +1,8 @@
 package com.sigmundgranaas.forgero.loader.api;
 
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
-import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
+import com.sigmundgranaas.forgero.common.nbt.ComponentNbtConverter;
+import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.common.tags.engine.TaggedRegistry;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
@@ -10,25 +11,47 @@ import net.minecraft.item.ItemStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Optional;
+
 /**
- * The official public API for Forgero.
- * This class provides a stable, static entry point for external developers to access Forgero's core systems,
- * such as component registries, the tag graph, the property resolver, and conversion utilities.
+ * Convenience API for external mod developers to access Forgero's core systems.
  * <p>
- * This API is guaranteed to be available after Forgero's main initialization phase is complete.
+ * This class provides static methods that wrap the {@link ForgeroServices} interface,
+ * offering a simple entry point for mods that prefer static access over dependency injection.
  *
- * Example usage:
+ * <h2>For External Mod Developers</h2>
+ * <p>
+ * This API is designed for simplicity. Just call the static methods:
  * <pre>{@code
- * Optional<Component> forgeroTool = ForgeroApi.component(player.getMainHandStack());
- * forgeroTool.ifPresent(tool -> {
- *     float attackDamage = ForgeroApi.resolver().resolve(tool, new AttributeEngine()).getValue(DefaultAttributes.ATTACK_DAMAGE);
- *     System.out.println("Forgero Tool Attack Damage: " + attackDamage);
+ * // Convert an ItemStack to a Component
+ * Optional<Component> tool = ForgeroApi.component(player.getMainHandStack());
+ *
+ * // Query tag relationships
+ * TagResolver resolver = ForgeroApi.tagResolver();
+ * boolean isMetal = resolver.hasTag(component, metalTag);
+ *
+ * // Compute attributes
+ * AttributeQueryResult result = ForgeroApi.resolver().resolve(component, new AttributeEngine());
+ * float damage = result.getValue(DefaultAttributes.ATTACK_DAMAGE);
+ * }</pre>
+ *
+ * <h2>For Internal Code / Advanced Usage</h2>
+ * <p>
+ * For better testability and cleaner architecture, prefer using {@link ForgeroServices}
+ * with dependency injection via the {@link ForgeroInitializedCallback} event:
+ * <pre>{@code
+ * ForgeroInitializedCallback.EVENT.register(services -> {
+ *     // Store services reference for later use
+ *     this.forgeroServices = services;
  * });
  * }</pre>
+ *
+ * @see ForgeroServices for the DI-friendly service interface
+ * @see ForgeroInitializedCallback for event-based initialization
  */
 public final class ForgeroApi {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ForgeroApi.class);
-	private static DataLoadingContext CONTEXT;
+	private static ForgeroServices SERVICES;
 
 	private ForgeroApi() {
 	}
@@ -36,69 +59,132 @@ public final class ForgeroApi {
 	/**
 	 * Initializes the Forgero API. This method is for internal use by the Forgero data loader only.
 	 *
-	 * @param context The fully loaded data context to back the API.
+	 * @param services The fully loaded services container to back the API.
 	 */
-	public static void initialize(DataLoadingContext context) {
-		if (CONTEXT != null) {
+	public static void initialize(ForgeroServices services) {
+		if (SERVICES != null) {
 			LOGGER.warn("ForgeroApi is being initialized more than once. This may indicate an issue.");
 		}
-		CONTEXT = context;
+		SERVICES = services;
+	}
+
+	/**
+	 * Returns the underlying services instance.
+	 * <p>
+	 * For most use cases, prefer using the individual static methods like {@link #converter()},
+	 * {@link #tagResolver()}, etc. This method is provided for cases where you need to pass
+	 * the services container to another component.
+	 *
+	 * @return The ForgeroServices instance
+	 * @throws IllegalStateException if Forgero has not been initialized
+	 */
+	public static ForgeroServices services() {
+		ensureInitialized();
+		return SERVICES;
 	}
 
 	private static void ensureInitialized() {
-		if (CONTEXT == null) {
-			throw new IllegalStateException("Forgero API has not been initialized. Please ensure Forgero has loaded correctly before accessing the API.");
+		if (SERVICES == null) {
+			throw new IllegalStateException(
+					"Forgero API has not been initialized. " +
+					"Please ensure Forgero has loaded correctly before accessing the API. " +
+					"For reliable access, use ForgeroInitializedCallback.EVENT to receive services when ready."
+			);
 		}
 	}
 
+	// ============================================================
+	// Convenience static methods (delegate to ForgeroServices)
+	// ============================================================
+
 	/**
-	 * Provides the primary converter for all Forgero/Minecraft conversions.
-	 * This is the recommended way to convert between {@link Component} and {@link ItemStack}.
+	 * Converts an ItemStack to its corresponding Component.
 	 *
-	 * @return The singleton instance of the ComponentConverter.
+	 * @param stack The ItemStack to convert
+	 * @return The component if the stack represents a Forgero item, empty otherwise
+	 */
+	public static Optional<Component> component(ItemStack stack) {
+		ensureInitialized();
+		return SERVICES.component(stack);
+	}
+
+	/**
+	 * Returns the primary converter for all Forgero/Minecraft conversions.
+	 *
+	 * @return The ComponentConverter instance
 	 */
 	public static ComponentConverter converter() {
 		ensureInitialized();
-		return CONTEXT.getConverter();
+		return SERVICES.converter();
 	}
 
 	/**
-	 * Provides the loaded tag graph
+	 * Returns the tag resolver for querying tag relationships and inheritance.
 	 *
-	 * @return The singleton instance of the TagGraph.
+	 * @return The TagResolver instance
 	 */
-	public static TagGraph tagGraph() {
+	public static TagResolver tagResolver() {
 		ensureInitialized();
-		return CONTEXT.getDataBundle().tagGraph();
+		return SERVICES.tagResolver();
 	}
 
 	/**
-	 * Provides the property resolver for computing attributes and features.
+	 * Returns the property resolver for computing attributes and features.
 	 *
-	 * @return The singleton instance of the Resolver.
+	 * @return The Resolver instance
 	 */
 	public static Resolver resolver() {
 		ensureInitialized();
-		return CONTEXT.getResolver();
+		return SERVICES.resolver();
 	}
 
 	/**
-	 * Provides the tagged registry for all loaded components, allowing for powerful tag-based queries.
+	 * Returns the tagged registry for tag-based component queries.
 	 *
-	 * @return The singleton instance of the TaggedRegistry for Components.
+	 * @return The TaggedRegistry for Components
 	 */
+	public static TaggedRegistry<Component> taggedComponents() {
+		ensureInitialized();
+		return SERVICES.taggedComponents();
+	}
+
+	/**
+	 * Returns the component registry containing all loaded default-state components.
+	 *
+	 * @return The ComponentRegistry instance
+	 */
+	public static ComponentRegistry componentRegistry() {
+		ensureInitialized();
+		return SERVICES.componentRegistry();
+	}
+
+	/**
+	 * Returns the NBT converter for serializing and deserializing components.
+	 *
+	 * @return The ComponentNbtConverter instance
+	 */
+	public static ComponentNbtConverter nbtConverter() {
+		ensureInitialized();
+		return SERVICES.nbtConverter();
+	}
+
+	// ============================================================
+	// Deprecated methods (for backward compatibility)
+	// ============================================================
+
+	/**
+	 * @deprecated Use {@link #taggedComponents()} instead
+	 */
+	@Deprecated(forRemoval = true)
 	public static TaggedRegistry<Component> components() {
-		ensureInitialized();
-		return CONTEXT.getTaggedComponentRegistry();
+		return taggedComponents();
 	}
 
 	/**
-	 * Provides the component registry containing all loaded default-state components.
-	 *
-	 * @return The singleton instance of the ComponentRegistry.
+	 * @deprecated Use {@link #componentRegistry()} instead
 	 */
+	@Deprecated(forRemoval = true)
 	public static ComponentRegistry defaultComponents() {
-		ensureInitialized();
-		return CONTEXT.getComponentRegistry();
+		return componentRegistry();
 	}
 }

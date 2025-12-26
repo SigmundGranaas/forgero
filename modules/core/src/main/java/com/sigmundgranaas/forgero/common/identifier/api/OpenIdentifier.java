@@ -1,24 +1,113 @@
 package com.sigmundgranaas.forgero.common.identifier.api;
 
 import java.util.Objects;
+import java.util.Optional;
 
+/**
+ * A namespace-qualified identifier in the format "namespace:path".
+ * <p>
+ * The namespace must be lowercase alphanumeric with '_' or '-'.
+ * The path may also contain '/' and '.' for resource paths.
+ */
 public record OpenIdentifier(String namespace, String path) {
 
-	public OpenIdentifier(String namespace, String path) {
-		this.namespace = Objects.requireNonNull(namespace);
-		this.path = Objects.requireNonNull(path);
+	public static final String DEFAULT_NAMESPACE = "forgero";
 
-		if (!isValidNamespace(namespace)) {
-			throw new IllegalArgumentException("Invalid namespace: '" + namespace + "'. Must be lowercase alphanumeric, '_', or '-'.");
+	public OpenIdentifier {
+		Objects.requireNonNull(namespace, "namespace cannot be null");
+		Objects.requireNonNull(path, "path cannot be null");
+
+		if (namespace.isEmpty()) {
+			throw new IllegalArgumentException("namespace cannot be empty");
 		}
-		// The path field can now contain slashes and dots, as it represents a resource path.
+		if (path.isEmpty()) {
+			throw new IllegalArgumentException("path cannot be empty");
+		}
+		if (!isValidNamespace(namespace)) {
+			throw new IllegalArgumentException(
+					"Invalid namespace: '" + namespace + "'. Must be lowercase alphanumeric, '_', or '-'.");
+		}
 		if (!isValidPath(path)) {
-			throw new IllegalArgumentException("Invalid path: '" + path + "'. Must be lowercase alphanumeric, '_', '-', '/', or '.'.");
+			throw new IllegalArgumentException(
+					"Invalid path: '" + path + "'. Must be lowercase alphanumeric, '_', '-', '/', or '.'.");
 		}
 	}
 
-	public OpenIdentifier(String id) {
-		this(id.split(":")[0], id.split(":")[1]);
+	/**
+	 * Parses a string in "namespace:path" format.
+	 *
+	 * @param id The identifier string to parse
+	 * @return A new OpenIdentifier
+	 * @throws IllegalArgumentException if the format is invalid
+	 * @throws NullPointerException     if id is null
+	 */
+	public static OpenIdentifier parse(String id) {
+		Objects.requireNonNull(id, "id cannot be null");
+		int colonIndex = id.indexOf(':');
+		if (colonIndex == -1) {
+			throw new IllegalArgumentException(
+					"Invalid identifier format: '" + id + "'. Expected 'namespace:path'.");
+		}
+		if (colonIndex == 0) {
+			throw new IllegalArgumentException(
+					"Invalid identifier: '" + id + "'. Namespace cannot be empty.");
+		}
+		if (colonIndex == id.length() - 1) {
+			throw new IllegalArgumentException(
+					"Invalid identifier: '" + id + "'. Path cannot be empty.");
+		}
+		return new OpenIdentifier(
+				id.substring(0, colonIndex),
+				id.substring(colonIndex + 1)
+		);
+	}
+
+	/**
+	 * Attempts to parse an identifier string, returning empty on failure.
+	 *
+	 * @param id The identifier string to parse
+	 * @return Optional containing the identifier if valid, empty otherwise
+	 */
+	public static Optional<OpenIdentifier> tryParse(String id) {
+		if (id == null) {
+			return Optional.empty();
+		}
+		try {
+			return Optional.of(parse(id));
+		} catch (IllegalArgumentException e) {
+			return Optional.empty();
+		}
+	}
+
+	/**
+	 * Creates an identifier in the default namespace ("forgero").
+	 *
+	 * @param path The path component
+	 * @return A new OpenIdentifier with the default namespace
+	 */
+	public static OpenIdentifier of(String path) {
+		return new OpenIdentifier(DEFAULT_NAMESPACE, path);
+	}
+
+	/**
+	 * Creates an identifier with explicit namespace and path.
+	 *
+	 * @param namespace The namespace component
+	 * @param path      The path component
+	 * @return A new OpenIdentifier
+	 */
+	public static OpenIdentifier of(String namespace, String path) {
+		return new OpenIdentifier(namespace, path);
+	}
+
+	/**
+	 * Creates a Minecraft-namespaced identifier.
+	 *
+	 * @param path The path component
+	 * @return A new OpenIdentifier with "minecraft" namespace
+	 */
+	public static OpenIdentifier minecraft(String path) {
+		return new OpenIdentifier("minecraft", path);
 	}
 
 	@Override
@@ -28,7 +117,6 @@ public record OpenIdentifier(String namespace, String path) {
 
 	/**
 	 * Returns the final name segment of the path, without any leading directory structure or file extension.
-	 * This is the original behavior for extracting the 'filename'.
 	 *
 	 * @return The name part of the identifier (e.g., "pickaxe_head" from "parts/heads/pickaxe_head.json").
 	 */
@@ -47,29 +135,19 @@ public record OpenIdentifier(String namespace, String path) {
 	 * @return A new OpenIdentifier instance representing the canonical ID.
 	 */
 	public OpenIdentifier toCanonical() {
-		// Use normalizePathSegment to ensure the path is a single-group name.
 		return new OpenIdentifier(this.namespace, normalizePathSegment(this.path));
 	}
 
 	/**
 	 * Normalizes a raw path segment by extracting only the final name and removing any file extension.
-	 * This is used to create the canonical 'path' part of an OpenIdentifier.
-	 * Examples:
-	 * - "materials/iron.json" -> "iron"
-	 * - "pickaxe_head.json" -> "pickaxe_head"
-	 * - "some/path/my_item" -> "my_item"
-	 * - "just_name" -> "just_name"
-	 * - "long/path/with.dots.in.name.json" -> "with.dots.in.name" (the last segment, without its extension)
 	 *
 	 * @param rawPathSegment The raw path string, which may contain directories and a file extension.
 	 * @return The normalized single-group name.
 	 */
 	public static String normalizePathSegment(String rawPathSegment) {
-		// First, get the part after the last slash (filename or last segment)
 		final int lastSlash = rawPathSegment.lastIndexOf('/');
 		String fileNameOrLastSegment = lastSlash == -1 ? rawPathSegment : rawPathSegment.substring(lastSlash + 1);
 
-		// Then, remove the last dot and everything after it (file extension)
 		final int lastDot = fileNameOrLastSegment.lastIndexOf('.');
 		return lastDot == -1 ? fileNameOrLastSegment : fileNameOrLastSegment.substring(0, lastDot);
 	}
@@ -82,23 +160,22 @@ public record OpenIdentifier(String namespace, String path) {
 	 * @return true if the specified part of the identifier equals the pattern, false otherwise.
 	 */
 	public boolean matches(PatternType type, String pattern) {
-		// These local variables are based on the *raw* path, not the canonicalized one.
 		final int lastSlash = this.path.lastIndexOf('/');
 		final String fileName = lastSlash == -1 ? this.path : this.path.substring(lastSlash + 1);
 		final int lastDot = fileName.lastIndexOf('.');
 
 		return switch (type) {
 			case NAMESPACE -> this.namespace.equals(pattern);
-			case LOCATION -> this.path.equals(pattern); // Full path including directories and filetype
-			case PATH -> { // Directory structure of the path, excluding the filename
+			case LOCATION -> this.path.equals(pattern);
+			case PATH -> {
 				String pathOnly = lastSlash == -1 ? "" : this.path.substring(0, lastSlash);
 				yield pathOnly.equals(pattern);
 			}
-			case NAME -> { // The final filename without extension (e.g., "pickaxe_head")
+			case NAME -> {
 				String nameOnly = lastDot == -1 ? fileName : fileName.substring(0, lastDot);
 				yield nameOnly.equals(pattern);
 			}
-			case FILETYPE -> { // The first segment of the path (e.g., "materials", "parts")
+			case FILETYPE -> {
 				final int firstSlash = this.path.indexOf('/');
 				String category = firstSlash == -1 ? this.path : this.path.substring(0, firstSlash);
 				yield category.equals(pattern);
@@ -106,10 +183,24 @@ public record OpenIdentifier(String namespace, String path) {
 		};
 	}
 
+	/**
+	 * Returns a new identifier with a different namespace.
+	 */
+	public OpenIdentifier withNamespace(String newNamespace) {
+		return new OpenIdentifier(newNamespace, this.path);
+	}
+
+	/**
+	 * Returns a new identifier with a different path.
+	 */
+	public OpenIdentifier withPath(String newPath) {
+		return new OpenIdentifier(this.namespace, newPath);
+	}
+
 	private static boolean isValidNamespace(String namespace) {
-		for (int i = 0; i < namespace.length(); ++i) {
-			char c = namespace.charAt(i);
-			if (!isAllowedInNamespace(c)) {
+		if (namespace.isEmpty()) return false;
+		for (int i = 0; i < namespace.length(); i++) {
+			if (!isAllowedInNamespace(namespace.charAt(i))) {
 				return false;
 			}
 		}
@@ -117,9 +208,9 @@ public record OpenIdentifier(String namespace, String path) {
 	}
 
 	private static boolean isValidPath(String path) {
-		for (int i = 0; i < path.length(); ++i) {
-			char c = path.charAt(i);
-			if (!isAllowedInPath(c)) {
+		if (path.isEmpty()) return false;
+		for (int i = 0; i < path.length(); i++) {
+			if (!isAllowedInPath(path.charAt(i))) {
 				return false;
 			}
 		}

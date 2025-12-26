@@ -59,7 +59,7 @@ class TaggedRegistryTest {
 		var invalidResource = new TestResource(new OpenIdentifier("test", "invalid"), Set.of(invalidTag));
 
 		var exception = assertThrows(IllegalArgumentException.class, () -> builder.add(invalidResource));
-		assertTrue(exception.getMessage().contains("does not exist in the TagGraph"));
+		assertTrue(exception.getMessage().contains("does not exist in the TagResolver"));
 	}
 
 	@Test

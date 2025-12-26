@@ -56,7 +56,7 @@ public class ForgeroShapedRecipe extends ShapedRecipe {
 		ComponentMutater mutater = ForgeroEnvironment.getComponentMutater();
 
 		// 1. Get the base component from the registry
-		OpenIdentifier baseComponentId = new OpenIdentifier(forgeroResult.item());
+		OpenIdentifier baseComponentId = OpenIdentifier.parse(forgeroResult.item());
 		Component baseComponent = registry.get(baseComponentId)
 				.orElseThrow(() -> new IllegalStateException("Base component not found in registry: " + baseComponentId));
 
@@ -66,13 +66,13 @@ public class ForgeroShapedRecipe extends ShapedRecipe {
 		forgeroResult.structure().ifPresent(structure ->
 				structure.forEach((slotId, source) -> {
 					Component part = resolveIngredient(source, converter, inventory);
-					mutationBuilder.withStructure(new OpenIdentifier(slotId), part);
+					mutationBuilder.withStructure(OpenIdentifier.parse(slotId), part);
 				}));
 
 		forgeroResult.upgrades().ifPresent(upgrades ->
 				upgrades.forEach(upgrade -> {
 					Component upgradeComponent = resolveIngredient(upgrade.component(), converter, inventory);
-					mutationBuilder.withUpgrade(new OpenIdentifier(upgrade.slot()), upgradeComponent);
+					mutationBuilder.withUpgrade(OpenIdentifier.parse(upgrade.slot()), upgradeComponent);
 				}));
 
 		forgeroResult.properties().ifPresent(mutationBuilder::withProperties);
@@ -90,7 +90,7 @@ public class ForgeroShapedRecipe extends ShapedRecipe {
 			return findFirstMatchingComponent(ingredient, converter, inventory);
 		} else {
 			// Otherwise, assume it's a direct component ID
-			return registry.get(new OpenIdentifier(source))
+			return registry.get(OpenIdentifier.parse(source))
 					.orElseThrow(() -> new IllegalStateException("Component not found in registry: " + source));
 		}
 	}

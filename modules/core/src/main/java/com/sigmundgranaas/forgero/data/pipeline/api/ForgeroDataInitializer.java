@@ -5,7 +5,7 @@ import com.sigmundgranaas.forgero.cof.ComponentConstructor;
 import com.sigmundgranaas.forgero.cof.dto.CofComponent;
 import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
+import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.common.tags.engine.TaggedRegistry;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
@@ -43,7 +43,7 @@ public class ForgeroDataInitializer {
 	 *
 	 * @param defaultNamespace      The default namespace for identifiers.
 	 * @param resourceProvider      The provider for loading raw data files.
-	 * @param tagGraph              The pre-loaded and merged TagGraph.
+	 * @param tagResolver           The pre-loaded and merged TagResolver.
 	 * @param propertyCodecs        A map of all property codecs to be used for parsing.
 	 * @param staticConditionCodecs A map of codecs for custom static conditions.
 	 * @param dynamicConditionCodecs A map of codecs for custom dynamic conditions.
@@ -51,7 +51,7 @@ public class ForgeroDataInitializer {
 	public record Config(
 			String defaultNamespace,
 			ResourceProvider resourceProvider,
-			TagGraph tagGraph,
+			TagResolver tagResolver,
 			Map<PropertyKey<?>, Codec<? extends List<?>>> propertyCodecs,
 			Map<String, Codec<? extends StaticCondition>> staticConditionCodecs,
 			Map<String, Codec<? extends DynamicCondition>> dynamicConditionCodecs
@@ -63,10 +63,10 @@ public class ForgeroDataInitializer {
 		long startTime = System.currentTimeMillis();
 		LOGGER.info("Starting Forgero data initialization pipeline...");
 
-		// 1. SETUP: Factories, Codecs, and Graphs
+		// 1. SETUP: Factories, Codecs, and Resolvers
 		IdentifierFactory identifierFactory = new IdentifierFactory.Builder().defaultNamespace(config.defaultNamespace()).build();
-		// Use the pre-loaded TagGraph from the config
-		TagGraph tagGraph = config.tagGraph();
+		// Use the pre-loaded TagResolver from the config
+		TagResolver tagResolver = config.tagResolver();
 		Codec<Condition> conditionCodec = new com.sigmundgranaas.forgero.core.condition.api.ConditionCodec(config.staticConditionCodecs(), config.dynamicConditionCodecs());
 		Codec<List<AttributeData>> attributeDataListCodec = Codec.list(AttributeCodecs.create(conditionCodec));
 		Codec<List<UpgradeSlotData>> upgradeSlotDataListCodec = Codec.list(PartTemplateCodecs.UPGRADE_SLOT_DATA_CODEC);
@@ -113,7 +113,7 @@ public class ForgeroDataInitializer {
 		LOGGER.info("Processed {} static definitions.", staticComponents.size());
 
 		// 6. PROCESS TEMPLATES
-		TemplateGenerator templateGenerator = new TemplateGenerator(identifierFactory, tagGraph, propertyMerger, staticComponents, rawDefinitions);
+		TemplateGenerator templateGenerator = new TemplateGenerator(identifierFactory, tagResolver, propertyMerger, staticComponents, rawDefinitions);
 		TemplateGenerator.TemplateResult templateResult = templateGenerator.generate();
 
 		Map<OpenIdentifier, CofComponent> allCofComponents = new HashMap<>(staticComponents);
@@ -129,9 +129,9 @@ public class ForgeroDataInitializer {
 		LOGGER.info("Built {} final runtime components.", components.size());
 
 		// 8. CREATE FINAL BUNDLE
-		TaggedRegistry.Builder<Component> registryBuilder = new TaggedRegistry.Builder<>(tagGraph);
+		TaggedRegistry.Builder<Component> registryBuilder = new TaggedRegistry.Builder<>(tagResolver);
 		components.forEach(registryBuilder::add);
-		this.dataBundle = new ForgeroDataBundle(registryBuilder.build(), tagGraph, Collections.unmodifiableMap(hostItemMap));
+		this.dataBundle = new ForgeroDataBundle(registryBuilder.build(), tagResolver, Collections.unmodifiableMap(hostItemMap));
 
 		long endTime = System.currentTimeMillis();
 		LOGGER.info("Forgero data initialization complete. Total time: {}ms", endTime - startTime);

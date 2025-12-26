@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.common.tags.engine;
 import com.sigmundgranaas.forgero.common.identifier.api.Identifiable;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.tags.api.Taggable;
+import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,12 +17,12 @@ public class TaggedRegistry<T extends Identifiable & Taggable> {
 
 	private final Map<OpenIdentifier, T> resources;
 	private final Map<OpenIdentifier, Set<OpenIdentifier>> tagIndex;
-	private final TagGraph tagGraph;
+	private final TagResolver tagResolver;
 
-	private TaggedRegistry(Map<OpenIdentifier, T> resources, Map<OpenIdentifier, Set<OpenIdentifier>> tagIndex, TagGraph tagGraph) {
+	private TaggedRegistry(Map<OpenIdentifier, T> resources, Map<OpenIdentifier, Set<OpenIdentifier>> tagIndex, TagResolver tagResolver) {
 		this.resources = resources;
 		this.tagIndex = tagIndex;
-		this.tagGraph = tagGraph;
+		this.tagResolver = tagResolver;
 	}
 
 	/**
@@ -64,7 +65,7 @@ public class TaggedRegistry<T extends Identifiable & Taggable> {
 	 * @return A list of all matching resources.
 	 */
 	public List<T> query(OpenIdentifier tag) {
-		return tagGraph.getDescendants(tag).stream()
+		return tagResolver.getDescendants(tag).stream()
 				.flatMap(descendantTag -> get(descendantTag).stream())
 				.distinct()
 				.collect(Collectors.toList());
@@ -72,23 +73,23 @@ public class TaggedRegistry<T extends Identifiable & Taggable> {
 
 
 	public static class Builder<T extends Identifiable & Taggable> {
-		private final TagGraph tagGraph;
+		private final TagResolver tagResolver;
 		private final Map<OpenIdentifier, T> resources = new HashMap<>();
 		private final Map<OpenIdentifier, Set<OpenIdentifier>> tagIndex = new HashMap<>();
 		private final Set<OpenIdentifier> knownTags;
 
-		public Builder(TagGraph tagGraph) {
-			this.tagGraph = tagGraph;
-			this.knownTags = tagGraph.getAllIdentifiers();
+		public Builder(TagResolver tagResolver) {
+			this.tagResolver = tagResolver;
+			this.knownTags = tagResolver.getAllTags();
 		}
 
 		/**
 		 * Adds a resource to the registry.
-		 * Validates that all of the resource's direct tags exist in the provided TagGraph.
+		 * Validates that all of the resource's direct tags exist in the provided TagResolver.
 		 *
 		 * @param resource The resource to add.
 		 * @return This builder instance for chaining.
-		 * @throws IllegalArgumentException if the resource has a tag that does not exist in the TagGraph
+		 * @throws IllegalArgumentException if the resource has a tag that does not exist in the TagResolver
 		 * or if a resource with the same ID has already been added.
 		 */
 		public Builder<T> add(T resource) {
@@ -98,7 +99,7 @@ public class TaggedRegistry<T extends Identifiable & Taggable> {
 
 			for (OpenIdentifier tag : resource.getTags()) {
 				if (!knownTags.contains(tag)) {
-					throw new IllegalArgumentException("Resource " + resource.id() + " contains tag " + tag + " which does not exist in the TagGraph. \n Available tags: " + knownTags);
+					throw new IllegalArgumentException("Resource " + resource.id() + " contains tag " + tag + " which does not exist in the TagResolver. \n Available tags: " + knownTags);
 				}
 				tagIndex.computeIfAbsent(tag, k -> new HashSet<>()).add(resource.id());
 			}
@@ -116,7 +117,7 @@ public class TaggedRegistry<T extends Identifiable & Taggable> {
 			return new TaggedRegistry<>(
 					Map.copyOf(resources),
 					Map.copyOf(tagIndex),
-					tagGraph
+					tagResolver
 			);
 		}
 	}

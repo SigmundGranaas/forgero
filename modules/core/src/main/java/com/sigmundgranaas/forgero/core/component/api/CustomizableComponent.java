@@ -27,6 +27,6 @@ public interface CustomizableComponent extends Component {
 	 * @return A list of upgrade slots.
 	 */
 	default List<UpgradeSlot> getUpgradeSlots() {
-		return upgrades().slots();
+		return upgrades().slots().asList();
 	}
 }

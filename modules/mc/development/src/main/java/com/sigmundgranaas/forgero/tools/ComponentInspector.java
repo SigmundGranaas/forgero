@@ -80,7 +80,7 @@ public class ComponentInspector {
 		List<Component> allChildren = Stream.concat(structureChildren.stream(), upgradeChildren.stream()).toList();
 
 		List<UpgradeSlot> upgradeSlots = (component instanceof CustomizableComponent c) ? c.getUpgradeSlots() : Collections.emptyList();
-		List<StructureSlot> structureSlots = (component instanceof StructuredComponent s) ? new ArrayList<>(s.structure().slots().values()) : Collections.emptyList();
+		List<StructureSlot> structureSlots = (component instanceof StructuredComponent s) ? new ArrayList<>(s.structure().slots().all()) : Collections.emptyList();
 
 
 		int totalSlots = upgradeSlots.size() + structureSlots.size();

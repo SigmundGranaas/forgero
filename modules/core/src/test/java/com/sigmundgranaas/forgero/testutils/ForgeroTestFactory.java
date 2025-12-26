@@ -4,6 +4,7 @@ import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.component.api.slot.SlotValidator;
 import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
 import com.sigmundgranaas.forgero.core.component.mutation.api.ComponentMutater;
@@ -59,23 +60,23 @@ public class ForgeroTestFactory {
 	// =============================================================================================
 
 	public static StructureSlot structureSlot(String id, OpenIdentifier type, Component content) {
-		return new StructureSlot(TestIdentifiers.id(id), type, "", content);
+		return new StructureSlot(TestIdentifiers.id(id), type, "", SlotValidator.ACCEPT_ALL, content);
 	}
 
 	public static UpgradeSlot upgradeSlot(String id, OpenIdentifier type) {
-		return new UpgradeSlot(TestIdentifiers.id(id), type, "", (comp) -> true, Optional.empty());
+		return new UpgradeSlot(TestIdentifiers.id(id), type, "", SlotValidator.ACCEPT_ALL, Optional.empty());
 	}
 
 	public static UpgradeSlot upgradeSlot(String id, OpenIdentifier type, Predicate<Component> filter) {
-		return new UpgradeSlot(TestIdentifiers.id(id), type, "", filter, Optional.empty());
+		return new UpgradeSlot(TestIdentifiers.id(id), type, "", SlotValidator.custom(filter), Optional.empty());
 	}
 
 	public static UpgradeSlot upgradeSlot(String id, OpenIdentifier type, Predicate<Component> filter, Component content) {
-		return new UpgradeSlot(TestIdentifiers.id(id), type, "", filter, Optional.of(content));
+		return new UpgradeSlot(TestIdentifiers.id(id), type, "", SlotValidator.custom(filter), Optional.of(content));
 	}
 
 	public static UpgradeSlot upgradeSlot(OpenIdentifier id, OpenIdentifier type, Predicate<Component> filter, Optional<Component> content) {
-		return new UpgradeSlot(id, type, "", filter, content);
+		return new UpgradeSlot(id, type, "", SlotValidator.custom(filter), content);
 	}
 
 	// =============================================================================================

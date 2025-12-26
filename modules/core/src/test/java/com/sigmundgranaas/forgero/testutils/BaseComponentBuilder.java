@@ -38,7 +38,7 @@ public abstract class BaseComponentBuilder<T extends BaseComponentBuilder<T>> {
 	public <R> T withProperty(PropertyKey<R> key, R property) {
 		if(properties.containsKey(key.key())) {
 			List<R> newList = new ArrayList<>(List.of(property));
-			List<R> list = (List<R>)properties.get(key);
+			List<R> list = (List<R>)properties.get(key.key());
 			newList.addAll(list);
 			properties.put(key.key(), newList);
 		}else{

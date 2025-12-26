@@ -19,7 +19,7 @@ import com.sigmundgranaas.forgero.common.item.DynamicSwordItem;
 import com.sigmundgranaas.forgero.common.item.DynamicToolItem;
 import com.sigmundgranaas.forgero.common.nbt.ComponentNbtConverter;
 import com.sigmundgranaas.forgero.common.recipe.ForgeroShapedRecipeSerializer;
-import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
+import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.common.tags.engine.TagLoadingService;
 import com.sigmundgranaas.forgero.common.tooltip.ForgeroTooltipRenderer;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
@@ -79,7 +79,7 @@ public class ForgeroDataLoader implements ModInitializer {
 	private final DataLoadingContextImpl context;
 	private final Map<Identifier, Item> registeredItems;
 	private boolean initialized = false;
-	private TagGraph tagGraph = TagGraph.empty();
+	private TagResolver tagResolver = TagResolver.empty();
 
 	private record DynamicItems(Item item, Item tool, Item sword) {}
 
@@ -106,14 +106,14 @@ public class ForgeroDataLoader implements ModInitializer {
 			// Phase 1: Collect all plugins
 			collectPlugins();
 
-			// Phase 2: Load the TagGraph BEFORE anything else
-			this.tagGraph = loadTagGraph();
+			// Phase 2: Load the TagResolver BEFORE anything else
+			this.tagResolver = loadTagResolver();
 
-			// Phase 3: Register plugin requirements, now with a valid TagGraph
-			PluginRegistrationContextImpl registrationContext = registerPluginRequirements(() -> this.tagGraph);
+			// Phase 3: Register plugin requirements, now with a valid TagResolver
+			PluginRegistrationContextImpl registrationContext = registerPluginRequirements(() -> this.tagResolver);
 
 			// Phase 4: Create configuration for the data initializer
-			ForgeroDataInitializer.Config dataConfig = createDataConfig(registrationContext, this.tagGraph);
+			ForgeroDataInitializer.Config dataConfig = createDataConfig(registrationContext, this.tagResolver);
 
 			// Phase 5: Load data using the configuration
 			ForgeroDataBundle bundle = loadData(dataConfig);
@@ -140,7 +140,12 @@ public class ForgeroDataLoader implements ModInitializer {
 			initialized = true;
 			ForgeroTooltipRenderer.initialize(context.getConverter(), context.getResolver());
 
-			// Phase 11: Finalize and expose the public API
+			// Phase 11: Fire the initialization event for DI-based subscribers
+			LOGGER.debug("Firing ForgeroInitializedCallback event...");
+			ForgeroInitializedCallback.EVENT.invoker().onForgeroInitialized(context);
+			LOGGER.info("ForgeroServices are now available via event subscribers.");
+
+			// Phase 12: Finalize and expose the public API for convenience access
 			ForgeroApi.initialize(context);
 			LOGGER.info("Forgero Public API is now available.");
 
@@ -174,20 +179,20 @@ public class ForgeroDataLoader implements ModInitializer {
 				dataPlugins + itemRegPlugins + postLoadPlugins, dataPlugins, itemRegPlugins, postLoadPlugins);
 	}
 
-	private TagGraph loadTagGraph() {
-		LOGGER.info("Loading TagGraph from all namespaces...");
+	private TagResolver loadTagResolver() {
+		LOGGER.info("Loading TagResolver from all namespaces...");
 		List<String> namespaces = List.of(MOD_NAMESPACE, "minecraft");
 		IdentifierFactory idFactory = new IdentifierFactory.Builder().defaultNamespace(MOD_NAMESPACE).build();
 		TagLoadingService tagLoader = new TagLoadingService(idFactory);
 
 		return namespaces.stream()
 				.map(ns -> tagLoader.loadTags(new OpenIdentifier(ns, "tags")))
-				.reduce(TagGraph.empty(), TagGraph::merge);
+				.reduce(TagResolver.empty(), TagResolver::merge);
 	}
 
 
-	private PluginRegistrationContextImpl registerPluginRequirements(Supplier<TagGraph> tagGraphSupplier) {
-		PluginRegistrationContextImpl registrationContext = new PluginRegistrationContextImpl(tagGraphSupplier);
+	private PluginRegistrationContextImpl registerPluginRequirements(Supplier<TagResolver> tagResolverSupplier) {
+		PluginRegistrationContextImpl registrationContext = new PluginRegistrationContextImpl(tagResolverSupplier);
 		for (DataPlugin plugin : pluginRegistry.getDataPlugins()) {
 			try {
 				LOGGER.debug("Registering requirements for data plugin: {}", plugin.getId());
@@ -199,7 +204,7 @@ public class ForgeroDataLoader implements ModInitializer {
 		return registrationContext;
 	}
 
-	private ForgeroDataInitializer.Config createDataConfig(PluginRegistrationContextImpl registrationContext, TagGraph tagGraph) {
+	private ForgeroDataInitializer.Config createDataConfig(PluginRegistrationContextImpl registrationContext, TagResolver tagResolver) {
 		Map<String, Codec<? extends StaticCondition>> staticConditionCodecs = registrationContext.getStaticConditionCodecs();
 		Map<String, Codec<? extends DynamicCondition>> dynamicConditionCodecs = registrationContext.getDynamicConditionCodecs();
 
@@ -222,7 +227,7 @@ public class ForgeroDataLoader implements ModInitializer {
 		return new ForgeroDataInitializer.Config(
 				MOD_NAMESPACE,
 				new ClassPathResourceProvider("data"),
-				tagGraph,
+				tagResolver,
 				propertyCodecs,
 				staticConditionCodecs,
 				dynamicConditionCodecs

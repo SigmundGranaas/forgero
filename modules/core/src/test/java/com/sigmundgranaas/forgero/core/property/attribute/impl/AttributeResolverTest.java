@@ -48,8 +48,8 @@ class AttributeResolverTest {
 	 */
 	@Test
 	void resolvesAndCalculatesCorrectly() {
-		var head = part(PICKAXE_HEAD_ID).withTag(METAL_TAG).withAttribute(ATTACK_DAMAGE, 10f).build();
-		var handle = part(HANDLE_ID).withTag(WOOD_TAG).withAttribute(MINING_SPEED, 5f).build();
+		var head = part(PICKAXE_HEAD_ID).withTag(METAL_TAG).withTag(HEAD_SLOT_TYPE).withAttribute(ATTACK_DAMAGE, 10f).build();
+		var handle = part(HANDLE_ID).withTag(WOOD_TAG).withTag(HANDLE_SLOT_TYPE).withAttribute(MINING_SPEED, 5f).build();
 		var pickaxe = tool(PICKAXE_ID).withTag("tool").withAttribute(ATTACK_DAMAGE, 1f)
 				.withPart(head, "head_slot", HEAD_SLOT_TYPE)
 				.withPart(handle, "handle_slot", HANDLE_SLOT_TYPE)
@@ -82,13 +82,13 @@ class AttributeResolverTest {
 
 			@Override
 			public OpenIdentifier type() {
-				return new OpenIdentifier("forgero:none");
+				return OpenIdentifier.parse("forgero:none");
 			}
 		};
 
 		var diamondCondition = new Condition(Collections.emptyList(), List.of(onStone));
 		var diamondProperty = attribute(MINING_SPEED).withValue(10f).withCondition(diamondCondition).build();
-		var diamond = part(DIAMOND_ID).withTag(GEM_TAG).withAttribute(diamondProperty).build();
+		var diamond = part(DIAMOND_ID).withTag(GEM_TAG).withTag(GEM_SLOT_TYPE).withAttribute(diamondProperty).build();
 
 		Map<OpenIdentifier, Set<OpenIdentifier>> tagMap = new HashMap<>();
 		tagMap.put(id("pickaxe"), new HashSet<>());
@@ -97,10 +97,11 @@ class AttributeResolverTest {
 		StaticCondition rootIsPickaxe = new TagMatchCondition(id("forgero:root_has_tag"), id("pickaxe"), () -> new TagGraph(tagMap));
 		var ironCondition = new Condition(List.of(rootIsPickaxe), Collections.emptyList());
 		var ironProperty = attribute(MINING_SPEED).withValue(5f).withCondition(ironCondition).build();
-		var iron = part(IRON_ID).withTag(METAL_TAG).withAttribute(ironProperty).build();
+		var iron = part(IRON_ID).withTag(METAL_TAG).withTag(MATERIAL_SLOT_TYPE).withAttribute(ironProperty).build();
 
 
 		var head = part(PICKAXE_HEAD_ID)
+				.withTag(HEAD_SLOT_TYPE).withTag(id("blade"))
 				.withStructureSlot(structureSlot("material_slot", MATERIAL_SLOT_TYPE, iron))
 				.withStructureSlot(structureSlot("gem_slot", GEM_SLOT_TYPE, diamond))
 				.build();
@@ -141,9 +142,9 @@ class AttributeResolverTest {
 		var headBonusCondition = new Condition(List.of(handleContainsWood), Collections.emptyList());
 		var headBonus = attribute(ATTACK_DAMAGE).withValue(5).withCondition(headBonusCondition).build();
 
-		var head = part(PICKAXE_HEAD_ID).withTag(METAL_TAG).withAttribute(headBonus).build();
-		var oakHandle = part(HANDLE_ID).withTag(WOOD_TAG).build();
-		var ironHandle = part(HANDLE_ID).withTag(METAL_TAG).build();
+		var head = part(PICKAXE_HEAD_ID).withTag(METAL_TAG).withTag(HEAD_SLOT_TYPE).withAttribute(headBonus).build();
+		var oakHandle = part(HANDLE_ID).withTag(WOOD_TAG).withTag(HANDLE_SLOT_TYPE).build();
+		var ironHandle = part(HANDLE_ID).withTag(METAL_TAG).withTag(HANDLE_SLOT_TYPE).build();
 
 		var woodPickaxe = tool(PICKAXE_ID).withAttribute(ATTACK_DAMAGE, 1f)
 				.withPart(head, "head_slot", HEAD_SLOT_TYPE)

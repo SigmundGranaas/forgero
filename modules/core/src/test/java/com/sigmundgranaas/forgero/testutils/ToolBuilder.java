@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.testutils;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgrades;
+import com.sigmundgranaas.forgero.core.component.api.slot.SlotValidator;
 import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
 import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
@@ -12,12 +13,10 @@ import com.sigmundgranaas.forgero.core.component.impl.StructuredExtensibleEquipm
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ToolBuilder extends BaseComponentBuilder<ToolBuilder> {
-	private final Map<OpenIdentifier, StructureSlot> structureSlots = new HashMap<>();
+	private final List<StructureSlot> structureSlots = new ArrayList<>();
 	private final List<UpgradeSlot> upgradeSlots = new ArrayList<>();
 
 	public ToolBuilder(OpenIdentifier id) {
@@ -26,7 +25,7 @@ public class ToolBuilder extends BaseComponentBuilder<ToolBuilder> {
 
 	public ToolBuilder withPart(Component part, String slotId, OpenIdentifier slotType) {
 		var id = TestIdentifiers.id(slotId);
-		this.structureSlots.put(id, new StructureSlot(id, slotType, "", part));
+		this.structureSlots.add(new StructureSlot(id, slotType, "", SlotValidator.requireTag(slotType), part));
 		return this;
 	}
 
@@ -39,8 +38,8 @@ public class ToolBuilder extends BaseComponentBuilder<ToolBuilder> {
 	public Component build() {
 		boolean hasStructure = !structureSlots.isEmpty();
 		boolean hasUpgrades = !upgradeSlots.isEmpty();
-		var structure = new ComponentStructure(structureSlots);
-		var upgrades = new ComponentUpgrades(upgradeSlots);
+		var structure = ComponentStructure.of(structureSlots);
+		var upgrades = ComponentUpgrades.of(upgradeSlots);
 
 		if (hasStructure && hasUpgrades) {
 			return new StructuredExtensibleEquipment(id, tags, properties, structure, upgrades);

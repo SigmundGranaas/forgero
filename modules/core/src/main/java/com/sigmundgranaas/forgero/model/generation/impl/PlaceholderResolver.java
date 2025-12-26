@@ -40,8 +40,8 @@ public class PlaceholderResolver {
 			// Otherwise, traverse deeper
 			if (current instanceof StructuredComponent structured) {
 				// The part name (e.g., "material") is the key for the next component
-				current = Optional.ofNullable(structured.structure().slots().get(new OpenIdentifier("forgero", property)))
-						.flatMap(slot -> Optional.ofNullable(slot.content()))
+				current = structured.structure().slots().get(OpenIdentifier.of("forgero", property))
+						.map(slot -> slot.content())
 						.orElse(null);
 				if (current == null) return Optional.empty(); // Path traversal failed
 			} else {

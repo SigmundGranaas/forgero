@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.loader.impl;
 
 import com.mojang.serialization.Codec;
-import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
+import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
@@ -27,10 +27,10 @@ public class PluginRegistrationContextImpl implements PluginRegistrationContext 
 	private final Map<String, Codec<? extends StaticCondition>> staticConditionCodecs = new HashMap<>();
 	private final Map<String, Codec<? extends DynamicCondition>> dynamicConditionCodecs = new HashMap<>();
 	private final Map<PropertyKey<?>, Function<Supplier<Codec<Condition>>, Codec<? extends List<?>>>> propertyCodecBuilders = new HashMap<>();
-	private final Supplier<TagGraph> tagGraphSupplier;
+	private final Supplier<TagResolver> tagResolverSupplier;
 
-	public PluginRegistrationContextImpl(Supplier<TagGraph> tagGraphSupplier) {
-		this.tagGraphSupplier = tagGraphSupplier;
+	public PluginRegistrationContextImpl(Supplier<TagResolver> tagResolverSupplier) {
+		this.tagResolverSupplier = tagResolverSupplier;
 	}
 
 	@Override
@@ -43,11 +43,11 @@ public class PluginRegistrationContextImpl implements PluginRegistrationContext 
 	}
 
 	@Override
-	public void registerStaticConditionCodec(String type, Function<Supplier<TagGraph>, Codec<? extends StaticCondition>> factory) {
+	public void registerStaticConditionCodec(String type, Function<Supplier<TagResolver>, Codec<? extends StaticCondition>> factory) {
 		if (staticConditionCodecs.containsKey(type)) {
 			LOGGER.warn("Static condition codec for type '{}' is being overwritten", type);
 		}
-		staticConditionCodecs.put(type, factory.apply(tagGraphSupplier));
+		staticConditionCodecs.put(type, factory.apply(tagResolverSupplier));
 		LOGGER.trace("Registered static condition codec for type '{}'", type);
 	}
 
