@@ -32,8 +32,10 @@
       "com.sigmundgranaas.forgero.fabric.gametest.PredicateTests",
       "com.sigmundgranaas.forgero.fabric.gametest.ExplosionHandlerTests",
       "com.sigmundgranaas.forgero.fabric.gametest.TeleportHandlerTest",
-      "com.sigmundgranaas.forgero.fabric.gametest.DurabilityTests"
-
+      "com.sigmundgranaas.forgero.fabric.gametest.DurabilityTests",
+      "com.sigmundgranaas.forgero.fabric.gametest.api.ForgeroServicesGameTest",
+      "com.sigmundgranaas.forgero.fabric.gametest.api.ForgeroInitializedCallbackTest",
+      "com.sigmundgranaas.forgero.fabric.gametest.api.TagResolverIntegrationTest"
     ]
   }
 }

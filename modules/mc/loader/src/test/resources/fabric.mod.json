@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-loader-gametest",
+  "version": "1.0.0",
+  "environment": "*",
+  "description": "GameTests for the Forgero Loader module - tests ForgeroServices API and TagResolver.",
+  "license": "MIT",
+  "authors": [
+    "SigmundGranaas"
+  ],
+  "entrypoints": {
+    "main": [
+    ],
+    "fabric-gametest": [
+      "com.sigmundgranaas.forgero.loader.gametest.ForgeroServicesGameTest",
+      "com.sigmundgranaas.forgero.loader.gametest.ForgeroInitializedCallbackTest",
+      "com.sigmundgranaas.forgero.loader.gametest.TagResolverIntegrationTest"
+    ]
+  },
+  "depends": {
+    "fabric-api": "*"
+  }
+}

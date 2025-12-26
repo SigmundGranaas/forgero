@@ -29,6 +29,10 @@ dependencies {
 	modApi("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}"){
 		exclude(group: "net.fabricmc.fabric-loader")
 	}
+
+	// Test dependencies - ForgeroServices API tests
+	testImplementation(project(path: ":modules:mc:loader", configuration: 'namedElements'))
+	testImplementation(project(":modules:core"))
 }
 
 sourceSets {
