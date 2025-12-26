@@ -7,6 +7,9 @@ dependencies {
 	implementation(project(path: ":modules:mc:common", configuration: 'namedElements'))
 	implementation(project(path: ":modules:mc:loader", configuration: 'namedElements'))
 
+	// Fabric Loader (required for fabric-loader-junit)
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
 	// Testing
 	testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
