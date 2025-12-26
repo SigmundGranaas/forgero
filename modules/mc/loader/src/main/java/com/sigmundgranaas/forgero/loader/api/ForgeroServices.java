@@ -14,15 +14,33 @@ import java.util.Optional;
 /**
  * The primary service interface for accessing Forgero's core systems.
  * <p>
- * This interface is designed for dependency injection. Internal code should receive
+ * This interface is designed for dependency injection. Code should receive
  * this interface via constructor injection or through the {@link ForgeroInitializedCallback} event.
- * <p>
- * For external mod developers who prefer static access, see {@link ForgeroApi} which
- * provides convenient static methods wrapping this interface.
  *
  * <h2>Usage Patterns</h2>
  *
- * <h3>Internal Code (Recommended)</h3>
+ * <h3>Event-Based Access (Recommended)</h3>
+ * <pre>{@code
+ * public class MyManager {
+ *     private static ComponentConverter converter;
+ *     private static Resolver resolver;
+ *
+ *     static {
+ *         ForgeroInitializedCallback.EVENT.register(services -> {
+ *             converter = services.converter();
+ *             resolver = services.resolver();
+ *         });
+ *     }
+ *
+ *     public void doSomething(ItemStack stack) {
+ *         converter.toComponent(stack).ifPresent(component -> {
+ *             // use component...
+ *         });
+ *     }
+ * }
+ * }</pre>
+ *
+ * <h3>Constructor Injection</h3>
  * <pre>{@code
  * public class MyService {
  *     private final ForgeroServices services;
@@ -38,15 +56,6 @@ import java.util.Optional;
  * }
  * }</pre>
  *
- * <h3>Event-Based Access</h3>
- * <pre>{@code
- * ForgeroInitializedCallback.EVENT.register(services -> {
- *     TagResolver resolver = services.tagResolver();
- *     // initialize your systems with the resolver...
- * });
- * }</pre>
- *
- * @see ForgeroApi for static convenience methods
  * @see ForgeroInitializedCallback for event-based initialization
  */
 public interface ForgeroServices {

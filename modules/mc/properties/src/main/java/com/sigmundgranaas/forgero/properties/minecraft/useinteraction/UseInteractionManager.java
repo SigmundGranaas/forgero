@@ -3,9 +3,11 @@ package com.sigmundgranaas.forgero.properties.minecraft.useinteraction;
 import java.util.List;
 import java.util.Optional;
 
+import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
-import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
+import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
 import com.sigmundgranaas.forgero.common.useinteraction.UseContext;
 
 import net.minecraft.entity.LivingEntity;
@@ -25,15 +27,29 @@ import net.minecraft.world.World;
  * <ul>
  *   <li>Static utility class with resolution logic</li>
  *   <li>Handler dispatch based on instanceof checks</li>
- *   <li>Property resolution via ForgeroApi</li>
+ *   <li>Property resolution via event-based initialization</li>
  * </ul>
  *
  * <p>All methods are static and designed to be called from mixins.</p>
  */
 public final class UseInteractionManager {
 
+	private static ComponentConverter converter;
+	private static Resolver resolver;
+
 	private UseInteractionManager() {
 		// Static utility class
+	}
+
+	/**
+	 * Initializes the manager with required services.
+	 * Called during Forgero initialization.
+	 *
+	 * @param services The Forgero services container
+	 */
+	public static void initialize(ForgeroServices services) {
+		converter = services.converter();
+		resolver = services.resolver();
 	}
 
 	/**
@@ -219,7 +235,7 @@ public final class UseInteractionManager {
 			return Optional.empty();
 		}
 
-		return ForgeroApi.converter().toComponent(stack)
+		return converter.toComponent(stack)
 				.flatMap(component -> getProperties(component))
 				.flatMap(list -> list.stream().findFirst());
 	}
@@ -231,7 +247,7 @@ public final class UseInteractionManager {
 		var engine = new UseInteractionProperty.Engine();
 		DynamicContext context = new DynamicContext.Builder().build();
 
-		List<UseInteractionProperty> properties = ForgeroApi.resolver().resolve(component, engine, context);
+		List<UseInteractionProperty> properties = resolver.resolve(component, engine, context);
 
 		return properties.isEmpty() ? Optional.empty() : Optional.of(properties);
 	}

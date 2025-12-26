@@ -1,13 +1,15 @@
 package com.sigmundgranaas.forgero.properties.minecraft.ondamage;
 
+import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.context.ContextKeys;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.effects.entity.ContextualEffectHandler;
 import com.sigmundgranaas.forgero.effects.entity.EntityEffectHandler;
 import com.sigmundgranaas.forgero.effects.entity.OnHitEffect;
-import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
+import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -26,8 +28,22 @@ import java.util.stream.Collectors;
  */
 public class OnDamageReceivedManager {
 
+	private static ComponentConverter converter;
+	private static Resolver resolver;
+
 	private OnDamageReceivedManager() {
 		// Static class
+	}
+
+	/**
+	 * Initializes the manager with required services.
+	 * Called during Forgero initialization.
+	 *
+	 * @param services The Forgero services container
+	 */
+	public static void initialize(ForgeroServices services) {
+		converter = services.converter();
+		resolver = services.resolver();
 	}
 
 	/**
@@ -60,7 +76,7 @@ public class OnDamageReceivedManager {
 				continue;
 			}
 
-			ForgeroApi.converter().toComponent(stack).ifPresent(component -> {
+			converter.toComponent(stack).ifPresent(component -> {
 				List<OnDamageReceivedProperty> properties = getActiveProperties(component, attacker, amount);
 
 				for (OnDamageReceivedProperty property : properties) {
@@ -97,6 +113,6 @@ public class OnDamageReceivedManager {
 		// Future enhancement: Could add damage amount to context for conditional properties
 		// contextBuilder.put(ContextKeys.DAMAGE_AMOUNT, amount);
 
-		return ForgeroApi.resolver().resolve(component, engine, contextBuilder.build());
+		return resolver.resolve(component, engine, contextBuilder.build());
 	}
 }

@@ -67,7 +67,7 @@ public class ModelTranslator {
 		return new CompositeModel(id, layers, slots, mountPoints, target, context, parent, display);
 	}
 
-	private ModelLayer toModelLayer(LayerDTO dto) {
+	protected ModelLayer toModelLayer(LayerDTO dto) {
 		TexturesDTO textures = dto.textures();
 		String defaultTexture = textures.defaultTexture();
 		Optional<Offset> offset = Optional.ofNullable(dto.offset()).map(arr -> new Offset(arr[0], arr[1]));
@@ -81,7 +81,7 @@ public class ModelTranslator {
 		return new ModelLayer(defaultTexture, dto.order(), variants, offset);
 	}
 
-	private ModelSlot toModelSlot(SlotDTO dto) {
+	protected ModelSlot toModelSlot(SlotDTO dto) {
 		RendererDTO renderer = dto.renderer();
 		Optional<String> context = Optional.ofNullable(renderer.context());
 		return new ModelSlot(dto.id(), dto.order(), context, dto.getTargetMount(), dto.getChildMount());

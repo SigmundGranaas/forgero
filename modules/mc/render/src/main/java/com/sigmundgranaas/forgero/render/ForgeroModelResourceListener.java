@@ -2,8 +2,12 @@ package com.sigmundgranaas.forgero.render;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
+import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
+import com.sigmundgranaas.forgero.common.tags.engine.TaggedRegistry;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
+import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
+import com.sigmundgranaas.forgero.loader.api.ForgeroInitializedCallback;
 import com.sigmundgranaas.forgero.model.generation.api.TextureGenerationTask;
 import com.sigmundgranaas.forgero.model.pipeline.api.ModelDataInitializer;
 import com.sigmundgranaas.forgero.model.pipeline.api.ModelInitializationResult;
@@ -36,6 +40,21 @@ import static com.sigmundgranaas.forgero.render.RenderInitializer.RRP;
 public class ForgeroModelResourceListener implements IdentifiableResourceReloadListener {
 	public static final Identifier ID = new Identifier("forgero", "model_reload_listener");
 
+	// Services received from ForgeroInitializedCallback
+	private static TaggedRegistry<Component> taggedComponents;
+	private static TagResolver tagResolver;
+	private static ComponentConverter converter;
+	private static ComponentRegistry componentRegistry;
+
+	static {
+		ForgeroInitializedCallback.EVENT.register(services -> {
+			taggedComponents = services.taggedComponents();
+			tagResolver = services.tagResolver();
+			converter = services.converter();
+			componentRegistry = services.componentRegistry();
+		});
+	}
+
 	@Override
 	public Identifier getFabricId() {
 		return ID;
@@ -52,8 +71,8 @@ public class ForgeroModelResourceListener implements IdentifiableResourceReloadL
 					ModelDataInitializer modelInitializer = new ModelDataInitializer(resourceProvider);
 
 					ModelInitializationResult result = modelInitializer.initialize(
-							ForgeroApi.components().all().stream().collect(Collectors.toMap(Component::id, Function.identity())),
-							ForgeroApi.tagResolver(),
+							taggedComponents.all().stream().collect(Collectors.toMap(Component::id, Function.identity())),
+							tagResolver,
 							itemModelRegistry,
 							armorModelRegistry
 					);
@@ -65,8 +84,8 @@ public class ForgeroModelResourceListener implements IdentifiableResourceReloadL
 					ForgeroClient.services = new ForgeroClient.ClientServices(
 							result.itemModelRegistry(),
 							result.armorModelRegistry(),
-							ForgeroApi.converter()::toComponent,
-							ForgeroApi.defaultComponents(),
+							converter::toComponent,
+							componentRegistry,
 							new ForgeroArmorTextureManager(result.itemModelRegistry()),
 							new ForgeroArmorModelManager(MinecraftClient.getInstance().getEntityModelLoader())
 					);

@@ -38,7 +38,6 @@ import net.fabricmc.fabric.api.event.EventFactory;
  * The event is fired synchronously on the main thread during mod initialization.
  *
  * @see ForgeroServices for the services interface
- * @see ForgeroApi for static convenience access (for external mods)
  */
 @FunctionalInterface
 public interface ForgeroInitializedCallback {

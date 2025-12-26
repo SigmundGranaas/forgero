@@ -1,7 +1,8 @@
 package com.sigmundgranaas.forgero.tools;
 
+import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
-import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
+import com.sigmundgranaas.forgero.loader.api.ForgeroInitializedCallback;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -13,6 +14,15 @@ import org.lwjgl.glfw.GLFW;
 
 public class DevClientPlugin implements ClientModInitializer {
 	private static KeyBinding viewUpgradesKey;
+
+	// Services received from ForgeroInitializedCallback
+	private static ComponentConverter converter;
+
+	static {
+		ForgeroInitializedCallback.EVENT.register(services -> {
+			converter = services.converter();
+		});
+	}
 
 	@Override
 	public void onInitializeClient() {
@@ -34,12 +44,12 @@ public class DevClientPlugin implements ClientModInitializer {
 					continue;
 				}
 
-				ForgeroApi.converter().toComponent(mainHandStack)
+				converter.toComponent(mainHandStack)
 						.filter(CustomizableComponent.class::isInstance)
 						.map(CustomizableComponent.class::cast)
 						.ifPresent(component -> {
 							if (!component.getUpgradeSlots().isEmpty()) {
-								client.setScreen(new ComponentUpgradeScreen(component, ForgeroApi.converter(), Hand.MAIN_HAND));
+								client.setScreen(new ComponentUpgradeScreen(component, converter, Hand.MAIN_HAND));
 							}
 						});
 			}

@@ -1,12 +1,13 @@
 package com.sigmundgranaas.forgero.properties.gametest;
 
+import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.impl.StaticComponent;
 import com.sigmundgranaas.forgero.core.property.api.Property;
-import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
+import com.sigmundgranaas.forgero.loader.api.ForgeroInitializedCallback;
 import com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.BlockBreakingProperty;
 import com.sigmundgranaas.forgero.properties.minecraft.blockuse.BlockUseProperty;
 import com.sigmundgranaas.forgero.properties.minecraft.entityuse.EntityUseProperty;
@@ -25,6 +26,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ComponentTester {
+
+	// Services received from ForgeroInitializedCallback
+	private static ComponentConverter converter;
+
+	static {
+		ForgeroInitializedCallback.EVENT.register(services -> {
+			converter = services.converter();
+		});
+	}
 
 	/**
 	 * Creates a dynamic ItemStack on-the-fly for testing purposes.
@@ -68,7 +78,7 @@ public class ComponentTester {
 
 		Component component = new StaticComponent(id, openTags, propertiesMap);
 
-		return ForgeroApi.converter().toStack(component)
+		return converter.toStack(component)
 				.orElse(ItemStack.EMPTY);
 	}
 
@@ -128,7 +138,7 @@ public class ComponentTester {
 
 		Component component = new StaticComponent(id, openTags, propertiesMap);
 
-		return ForgeroApi.converter().toStack(component)
+		return converter.toStack(component)
 				.orElse(ItemStack.EMPTY);
 	}
 

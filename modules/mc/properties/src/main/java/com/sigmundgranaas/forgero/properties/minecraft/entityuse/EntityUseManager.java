@@ -1,12 +1,13 @@
 package com.sigmundgranaas.forgero.properties.minecraft.entityuse;
 
+import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.useinteraction.EntityUseEffect;
 import com.sigmundgranaas.forgero.common.useinteraction.UseContext;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
-import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
+import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -20,8 +21,22 @@ import java.util.List;
  */
 public class EntityUseManager {
 
+	private static ComponentConverter converter;
+	private static Resolver resolver;
+
 	private EntityUseManager() {
 		// Static class
+	}
+
+	/**
+	 * Initializes the manager with required services.
+	 * Called during Forgero initialization.
+	 *
+	 * @param services The Forgero services container
+	 */
+	public static void initialize(ForgeroServices services) {
+		converter = services.converter();
+		resolver = services.resolver();
 	}
 
 	/**
@@ -38,7 +53,7 @@ public class EntityUseManager {
 			return ActionResult.PASS;
 		}
 
-		return ForgeroApi.converter().toComponent(stack)
+		return converter.toComponent(stack)
 				.map(component -> {
 					List<EntityUseProperty> properties = getActiveProperties(component);
 
@@ -77,6 +92,6 @@ public class EntityUseManager {
 		DynamicContext.Builder contextBuilder = new DynamicContext.Builder();
 
 		// Build context for dynamic condition evaluation
-		return ForgeroApi.resolver().resolve(component, engine, contextBuilder.build());
+		return resolver.resolve(component, engine, contextBuilder.build());
 	}
 }

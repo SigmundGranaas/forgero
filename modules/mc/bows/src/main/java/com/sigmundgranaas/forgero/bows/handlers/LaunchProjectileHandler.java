@@ -2,11 +2,14 @@ package com.sigmundgranaas.forgero.bows.handlers;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.useinteraction.UseContext;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
-import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
+import com.sigmundgranaas.forgero.core.property.api.Resolver;
+import com.sigmundgranaas.forgero.loader.api.ForgeroInitializedCallback;
+import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
 import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.ContextualUseHandler;
 
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -46,6 +49,17 @@ public record LaunchProjectileHandler(
 	private static final float DEFAULT_POWER = 3.0f;
 	private static final float DEFAULT_DIVERGENCE = 1.0f;
 	private static final float DEFAULT_ACCURACY = 50.0f;
+
+	// Services received from ForgeroInitializedCallback
+	private static ComponentConverter converter;
+	private static Resolver resolver;
+
+	static {
+		ForgeroInitializedCallback.EVENT.register(services -> {
+			converter = services.converter();
+			resolver = services.resolver();
+		});
+	}
 
 	/**
 	 * Attribute identifier for resolving draw power from Forgero components.
@@ -183,9 +197,9 @@ public record LaunchProjectileHandler(
 	 * @return The resolved attribute value, or fallback if not available
 	 */
 	private static float resolveAttribute(ItemStack stack, OpenIdentifier attr, float fallback) {
-		return ForgeroApi.converter().toComponent(stack)
+		return converter.toComponent(stack)
 				.map(component -> {
-					AttributeQueryResult result = ForgeroApi.resolver()
+					AttributeQueryResult result = resolver
 							.resolve(component, new AttributeEngine());
 					return result.getValue(attr);
 				})

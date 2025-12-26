@@ -1,9 +1,11 @@
 package com.sigmundgranaas.forgero.properties.minecraft.onblockplace;
 
+import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.effects.block.BlockEffect;
-import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
+import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -16,8 +18,23 @@ import java.util.List;
  * Orchestrates property resolution and effect application when players place blocks.
  */
 public class OnBlockPlaceManager {
+
+	private static ComponentConverter converter;
+	private static Resolver resolver;
+
 	private OnBlockPlaceManager() {
 		// Static class
+	}
+
+	/**
+	 * Initializes the manager with required services.
+	 * Called during Forgero initialization.
+	 *
+	 * @param services The Forgero services container
+	 */
+	public static void initialize(ForgeroServices services) {
+		converter = services.converter();
+		resolver = services.resolver();
 	}
 
 	/**
@@ -38,7 +55,7 @@ public class OnBlockPlaceManager {
 		}
 
 		// Convert item to component and resolve properties
-		ForgeroApi.converter().toComponent(stack).ifPresent(component -> {
+		converter.toComponent(stack).ifPresent(component -> {
 			List<OnBlockPlaceProperty> properties = getActiveProperties(component);
 
 			for (OnBlockPlaceProperty property : properties) {
@@ -73,6 +90,6 @@ public class OnBlockPlaceManager {
 		// Additional context could be added here (biome, time of day, etc.)
 		// For now, use empty context
 
-		return ForgeroApi.resolver().resolve(component, engine, contextBuilder.build());
+		return resolver.resolve(component, engine, contextBuilder.build());
 	}
 }

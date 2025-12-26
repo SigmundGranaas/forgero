@@ -4,7 +4,8 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.common.tags.api.Taggable;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
+import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
+import com.sigmundgranaas.forgero.loader.api.ForgeroInitializedCallback;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
@@ -20,6 +21,17 @@ import static org.junit.jupiter.api.Assertions.*;
  * These tests verify that tag resolution works correctly with real loaded data.
  */
 public class TagResolverIntegrationTest {
+
+	// Services received from ForgeroInitializedCallback
+	private static TagResolver tagResolver;
+	private static ComponentRegistry componentRegistry;
+
+	static {
+		ForgeroInitializedCallback.EVENT.register(services -> {
+			tagResolver = services.tagResolver();
+			componentRegistry = services.componentRegistry();
+		});
+	}
 
 	/**
 	 * Verifies that TagResolver.empty() returns the singleton empty resolver.
@@ -40,7 +52,7 @@ public class TagResolverIntegrationTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "tag_resolver", required = true)
 	public void testMergeWithEmpty(TestContext context) {
-		TagResolver loaded = ForgeroApi.tagResolver();
+		TagResolver loaded = tagResolver;
 		TagResolver empty = TagResolver.empty();
 
 		// Merging loaded with empty should return loaded
@@ -61,7 +73,7 @@ public class TagResolverIntegrationTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "tag_resolver", required = true)
 	public void testTagInheritance(TestContext context) {
-		TagResolver resolver = ForgeroApi.tagResolver();
+		TagResolver resolver = tagResolver;
 
 		// Find a tag that has descendants
 		var allTags = resolver.getAllTags();
@@ -90,8 +102,8 @@ public class TagResolverIntegrationTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "tag_resolver", required = true)
 	public void testHasTagWithComponents(TestContext context) {
-		TagResolver resolver = ForgeroApi.tagResolver();
-		var registry = ForgeroApi.componentRegistry();
+		TagResolver resolver = tagResolver;
+		var registry = componentRegistry;
 
 		// Get a component and check its tags
 		var components = registry.all();
@@ -113,8 +125,8 @@ public class TagResolverIntegrationTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "tag_resolver", required = true)
 	public void testFindTagged(TestContext context) {
-		TagResolver resolver = ForgeroApi.tagResolver();
-		var registry = ForgeroApi.componentRegistry();
+		TagResolver resolver = tagResolver;
+		var registry = componentRegistry;
 
 		List<Component> allComponents = registry.all().stream().collect(Collectors.toList());
 
@@ -147,8 +159,8 @@ public class TagResolverIntegrationTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "tag_resolver", required = true)
 	public void testFindDirectlyTagged(TestContext context) {
-		TagResolver resolver = ForgeroApi.tagResolver();
-		var registry = ForgeroApi.componentRegistry();
+		TagResolver resolver = tagResolver;
+		var registry = componentRegistry;
 
 		List<Component> allComponents = registry.all().stream().collect(Collectors.toList());
 
@@ -176,7 +188,7 @@ public class TagResolverIntegrationTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "tag_resolver", required = true)
 	public void testGetRelationships(TestContext context) {
-		TagResolver resolver = ForgeroApi.tagResolver();
+		TagResolver resolver = tagResolver;
 
 		var relationships = resolver.getRelationships();
 		assertNotNull(relationships, "getRelationships should not return null");
@@ -204,7 +216,7 @@ public class TagResolverIntegrationTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "tag_resolver", required = true)
 	public void testFromRelationships(TestContext context) {
-		TagResolver original = ForgeroApi.tagResolver();
+		TagResolver original = tagResolver;
 		var relationships = original.getRelationships();
 
 		// Create a new resolver from the relationships

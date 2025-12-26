@@ -1,9 +1,11 @@
 package com.sigmundgranaas.forgero.properties.minecraft.ontick;
 
+import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.context.ContextKeys;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
-import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
+import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
 import com.sigmundgranaas.forgero.effects.entity.ContextualEffectHandler;
 import com.sigmundgranaas.forgero.effects.entity.EntityEffectHandler;
 import com.sigmundgranaas.forgero.effects.entity.OnHitEffect;
@@ -19,8 +21,23 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class OnTickManager {
+
+	private static ComponentConverter converter;
+	private static Resolver resolver;
+
 	private OnTickManager() {
 		// Static class
+	}
+
+	/**
+	 * Initializes the manager with required services.
+	 * Called during Forgero initialization.
+	 *
+	 * @param services The Forgero services container
+	 */
+	public static void initialize(ForgeroServices services) {
+		converter = services.converter();
+		resolver = services.resolver();
 	}
 
 	public static void handle(LivingEntity entity) {
@@ -47,9 +64,9 @@ public class OnTickManager {
 			if (stack.isEmpty()) {
 				continue;
 			}
-			ForgeroApi.converter().toComponent(stack).ifPresent(component -> {
+			converter.toComponent(stack).ifPresent(component -> {
 				var engine = new OnTickProperty.Engine();
-				List<OnTickProperty> properties = ForgeroApi.resolver().resolve(component, engine, context);
+				List<OnTickProperty> properties = resolver.resolve(component, engine, context);
 
 				for (OnTickProperty property : properties) {
 					if (entity.age % property.interval() == 0) {

@@ -2,8 +2,10 @@ package com.sigmundgranaas.forgero.properties.minecraft.blockbreaking;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
+import com.sigmundgranaas.forgero.core.property.api.Resolver;
+import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,8 +28,22 @@ public class BlockBreakingManager {
 			.expireAfterAccess(Duration.of(20, ChronoUnit.SECONDS))
 			.build();
 
+	private static ComponentConverter converter;
+	private static Resolver resolver;
+
 	private BlockBreakingManager() {
 		// Static class
+	}
+
+	/**
+	 * Initializes the manager with required services.
+	 * Called during Forgero initialization.
+	 *
+	 * @param services The Forgero services container
+	 */
+	public static void initialize(ForgeroServices services) {
+		converter = services.converter();
+		resolver = services.resolver();
 	}
 
 	/**
@@ -54,14 +70,14 @@ public class BlockBreakingManager {
 	}
 
 	private static Optional<BlockBreakingResult> calculateBreakingResult(PlayerEntity player, BlockPos pos) {
-		return ForgeroApi.converter().toComponent(player.getMainHandStack())
+		return converter.toComponent(player.getMainHandStack())
 				.flatMap(component -> findActiveProperty(component, player, pos)
 						.flatMap(property -> createResult(property, player, pos)));
 	}
 
 	private static Optional<BlockBreakingProperty> findActiveProperty(Component component, PlayerEntity player, BlockPos pos) {
 		var engine = new BlockBreakingProperty.Engine();
-		List<BlockBreakingProperty> bakedResult = ForgeroApi.resolver().resolve(component, engine);
+		List<BlockBreakingProperty> bakedResult = resolver.resolve(component, engine);
 		return bakedResult.stream().findFirst();
 	}
 

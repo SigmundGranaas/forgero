@@ -1,10 +1,12 @@
 package com.sigmundgranaas.forgero.properties.minecraft.loot;
 
+import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.context.ContextKeys;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
-import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
+import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -19,7 +21,22 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class LootManager {
+
+	private static ComponentConverter converter;
+	private static Resolver resolver;
+
 	private LootManager() {
+	}
+
+	/**
+	 * Initializes the manager with required services.
+	 * Called during Forgero initialization.
+	 *
+	 * @param services The Forgero services container
+	 */
+	public static void initialize(ForgeroServices services) {
+		converter = services.converter();
+		resolver = services.resolver();
 	}
 
 	public static List<ItemStack> handleBlockLoot(List<ItemStack> loot, LootContext context) {
@@ -28,7 +45,7 @@ public class LootManager {
 			return loot;
 		}
 
-		Optional<Component> componentOpt = ForgeroApi.converter().toComponent(tool);
+		Optional<Component> componentOpt = converter.toComponent(tool);
 		if (componentOpt.isEmpty()) {
 			return loot;
 		}
@@ -36,7 +53,7 @@ public class LootManager {
 		DynamicContext.Builder dynamicContextBuilder = new DynamicContext.Builder();
 
 		var engine = new LootProperty.Engine();
-		List<LootProperty> properties = ForgeroApi.resolver().resolve(componentOpt.get(), engine, dynamicContextBuilder.build());
+		List<LootProperty> properties = resolver.resolve(componentOpt.get(), engine, dynamicContextBuilder.build());
 
 		List<ItemStack> currentLoot = loot;
 		for (LootProperty property : properties) {
@@ -57,7 +74,7 @@ public class LootManager {
 			return loot;
 		}
 
-		Optional<Component> componentOpt = ForgeroApi.converter().toComponent(tool.get());
+		Optional<Component> componentOpt = converter.toComponent(tool.get());
 		if (componentOpt.isEmpty()) {
 			return loot;
 		}
@@ -69,7 +86,7 @@ public class LootManager {
 		}
 
 		var engine = new LootProperty.Engine();
-		List<LootProperty> properties = ForgeroApi.resolver().resolve(componentOpt.get(), engine, dynamicContextBuilder.build());
+		List<LootProperty> properties = resolver.resolve(componentOpt.get(), engine, dynamicContextBuilder.build());
 
 		List<ItemStack> currentLoot = loot;
 		for (LootProperty property : properties) {

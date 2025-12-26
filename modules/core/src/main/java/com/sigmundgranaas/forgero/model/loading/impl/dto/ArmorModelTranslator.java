@@ -6,17 +6,15 @@ import com.sigmundgranaas.forgero.model.api.ModelLayer;
 import com.sigmundgranaas.forgero.model.api.ModelSlot;
 import com.sigmundgranaas.forgero.model.loading.impl.ModelTranslator;
 
-import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class ArmorModelTranslator {
-	private final ModelTranslator itemModelTranslator;
-
-	public ArmorModelTranslator() {
-		this.itemModelTranslator = new ModelTranslator();
-	}
+/**
+ * Translates ArmorModelDTO to ArmorModel domain objects.
+ * Extends ModelTranslator to reuse layer and slot translation logic.
+ */
+public class ArmorModelTranslator extends ModelTranslator {
 
 	public ArmorModel toDomain(OpenIdentifier fileDerivedId, ArmorModelDTO dto) {
 		OpenIdentifier finalId = dto.getId().orElse(fileDerivedId);
@@ -38,27 +36,5 @@ public class ArmorModelTranslator {
 		Optional<String> context = dto.getContext();
 
 		return new ArmorModel(finalId, modelId, layers, slots, target, context);
-	}
-
-	// HACK: Accessing private methods from ModelTranslator.
-	// In a real scenario, these should be made public or moved to a shared utility.
-	private ModelLayer toModelLayer(LayerDTO dto) {
-		try {
-			Method method = ModelTranslator.class.getDeclaredMethod("toModelLayer", LayerDTO.class);
-			method.setAccessible(true);
-			return (ModelLayer) method.invoke(itemModelTranslator, dto);
-		} catch (Exception e) {
-			throw new RuntimeException("Failed to reflectively call toModelLayer", e);
-		}
-	}
-
-	private ModelSlot toModelSlot(SlotDTO dto) {
-		try {
-			Method method = ModelTranslator.class.getDeclaredMethod("toModelSlot", SlotDTO.class);
-			method.setAccessible(true);
-			return (ModelSlot) method.invoke(itemModelTranslator, dto);
-		} catch (Exception e) {
-			throw new RuntimeException("Failed to reflectively call toModelSlot", e);
-		}
 	}
 }

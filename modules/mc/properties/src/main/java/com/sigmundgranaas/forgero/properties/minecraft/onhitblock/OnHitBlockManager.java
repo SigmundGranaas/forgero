@@ -1,8 +1,10 @@
 package com.sigmundgranaas.forgero.properties.minecraft.onhitblock;
 
+import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
-import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
+import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
 import com.sigmundgranaas.forgero.effects.block.OnHitBlockEffect;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -18,8 +20,22 @@ import java.util.Set;
  */
 public class OnHitBlockManager {
 
+	private static ComponentConverter converter;
+	private static Resolver resolver;
+
 	private OnHitBlockManager() {
 		// Static class
+	}
+
+	/**
+	 * Initializes the manager with required services.
+	 * Called during Forgero initialization.
+	 *
+	 * @param services The Forgero services container
+	 */
+	public static void initialize(ForgeroServices services) {
+		converter = services.converter();
+		resolver = services.resolver();
 	}
 
 	/**
@@ -35,7 +51,7 @@ public class OnHitBlockManager {
 			return;
 		}
 
-		ForgeroApi.converter().toComponent(stack).ifPresent(component -> {
+		converter.toComponent(stack).ifPresent(component -> {
 			List<OnHitBlockProperty> properties = getActiveProperties(component);
 
 			for (OnHitBlockProperty property : properties) {
@@ -59,6 +75,6 @@ public class OnHitBlockManager {
 		// Build context for dynamic condition evaluation
 		// You can add more context keys here as needed (world state, biome, time, etc.)
 
-		return ForgeroApi.resolver().resolve(component, engine, contextBuilder.build());
+		return resolver.resolve(component, engine, contextBuilder.build());
 	}
 }

@@ -1,9 +1,11 @@
 package com.sigmundgranaas.forgero.properties.minecraft.useinteraction.entity;
 
+import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
-import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
+import com.sigmundgranaas.forgero.core.property.api.Resolver;
+import com.sigmundgranaas.forgero.loader.api.ForgeroInitializedCallback;
 import com.sigmundgranaas.forgero.properties.minecraft.onhit.OnHitManager;
 
 import net.minecraft.entity.Entity;
@@ -47,6 +49,17 @@ public class ThrownItemEntity extends PersistentProjectileEntity {
 
 	private static final float DEFAULT_WEIGHT = 10f;
 	private static final float BASE_DAMAGE = 5f;
+
+	// Services received from ForgeroInitializedCallback
+	private static ComponentConverter converter;
+	private static Resolver resolver;
+
+	static {
+		ForgeroInitializedCallback.EVENT.register(services -> {
+			converter = services.converter();
+			resolver = services.resolver();
+		});
+	}
 
 	/**
 	 * Attribute identifier for resolving attack damage from Forgero components.
@@ -159,9 +172,9 @@ public class ThrownItemEntity extends PersistentProjectileEntity {
 	 * @return The resolved attribute value, or fallback if not available
 	 */
 	private static float resolveAttribute(ItemStack stack, OpenIdentifier attr, float fallback) {
-		return ForgeroApi.converter().toComponent(stack)
+		return converter.toComponent(stack)
 				.map(component -> {
-					AttributeQueryResult result = ForgeroApi.resolver()
+					AttributeQueryResult result = resolver
 							.resolve(component, new AttributeEngine());
 					return result.getValue(attr);
 				})

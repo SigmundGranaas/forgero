@@ -2,8 +2,13 @@ package com.sigmundgranaas.forgero.render;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
+import com.sigmundgranaas.forgero.common.tags.engine.TaggedRegistry;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
+import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
+import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
+import com.sigmundgranaas.forgero.loader.api.ForgeroInitializedCallback;
+import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
 import com.sigmundgranaas.forgero.model.generation.api.TextureGenerationTask;
 import com.sigmundgranaas.forgero.model.pipeline.api.ModelDataInitializer;
 import com.sigmundgranaas.forgero.model.pipeline.api.ModelInitializationResult;
@@ -43,6 +48,21 @@ public class RenderInitializer implements ClientModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(RenderInitializer.class);
 	public static final RuntimeResourcePack RRP = RuntimeResourcePack.create(MOD_NAMESPACE + ":resources");
 
+	// Services received from ForgeroInitializedCallback
+	private static TaggedRegistry<Component> taggedComponents;
+	private static TagResolver tagResolver;
+	private static ComponentConverter converter;
+	private static ComponentRegistry componentRegistry;
+
+	static {
+		ForgeroInitializedCallback.EVENT.register(services -> {
+			taggedComponents = services.taggedComponents();
+			tagResolver = services.tagResolver();
+			converter = services.converter();
+			componentRegistry = services.componentRegistry();
+		});
+	}
+
 	@Override
 	public void onInitializeClient() {
 		LOGGER.info("Forgero client rendering setup starting...");
@@ -61,8 +81,8 @@ public class RenderInitializer implements ClientModInitializer {
 			ModelDataInitializer modelInitializer = new ModelDataInitializer(preloadProvider);
 
 			ModelInitializationResult initialResult = modelInitializer.initialize(
-					ForgeroApi.components().all().stream().collect(Collectors.toMap(Component::id, Function.identity())),
-					ForgeroApi.tagResolver(),
+					taggedComponents.all().stream().collect(Collectors.toMap(Component::id, Function.identity())),
+					tagResolver,
 					itemModelRegistry,
 					armorModelRegistry
 			);
@@ -81,8 +101,8 @@ public class RenderInitializer implements ClientModInitializer {
 			ForgeroClient.services = new ForgeroClient.ClientServices(
 					initialResult.itemModelRegistry(),
 					initialResult.armorModelRegistry(),
-					ForgeroApi.converter()::toComponent,
-					ForgeroApi.defaultComponents(),
+					converter::toComponent,
+					componentRegistry,
 					new ForgeroArmorTextureManager(initialResult.itemModelRegistry()),
 					new ForgeroArmorModelManager(MinecraftClient.getInstance().getEntityModelLoader())
 			);
