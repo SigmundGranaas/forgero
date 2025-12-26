@@ -38,8 +38,14 @@ public class ComponentNbtConverter {
 		}
 		NbtElement forgeroNbt = nbt.get(FORGERO_NBT_KEY);
 
+		var logger = LoggerFactory.getLogger(ComponentNbtConverter.class);
+		logger.debug("Attempting to decode component from NBT: {}", forgeroNbt);
+
 		return componentCodec.decode(NbtOps.INSTANCE, forgeroNbt)
-				.resultOrPartial(err -> LoggerFactory.getLogger(ComponentNbtConverter.class).error("Failed to decode component from NBT: {}", err))
+				.resultOrPartial(err -> {
+					logger.error("Failed to decode component from NBT: {}", err);
+					logger.debug("NBT data that failed to decode: {}", forgeroNbt);
+				})
 				.map(Pair::getFirst);
 	}
 

@@ -23,6 +23,8 @@ import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructur
 import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
 import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -30,6 +32,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class ComponentCofCodec implements Codec<Component> {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(ComponentCofCodec.class);
 
 	private final ComponentRegistry componentRegistry;
 	private final ComponentConstructor constructorRegistry;
@@ -127,13 +131,22 @@ public class ComponentCofCodec implements Codec<Component> {
 	}
 
 	private DataResult<Component> buildComponentFromDto(CofComponent dto) {
+		LOGGER.debug("Building component from DTO: id={}, type={}, hasStructure={}, hasUpgrades={}",
+				dto.id(), dto.componentType(), dto.structure() != null, dto.upgrades() != null);
+
+		var structure = buildStructureFromDto(dto).orElse(null);
+		var upgrades = buildUpgradesFromDto(dto).orElse(null);
+
+		LOGGER.debug("Built structure: {}, upgrades: {} for component {}",
+				structure != null, upgrades != null, dto.id());
+
 		return constructorRegistry.construct(
 						dto.id(),
 						dto.componentType(),
 						dto.tags(),
 						dto.properties(),
-						buildStructureFromDto(dto).orElse(null),
-						buildUpgradesFromDto(dto).orElse(null))
+						structure,
+						upgrades)
 				.mapError(err -> "Failed to construct component " + dto.id() + ": " + err);
 	}
 
@@ -167,13 +180,34 @@ public class ComponentCofCodec implements Codec<Component> {
 
 
 	private Optional<ComponentUpgrades> buildUpgradesFromDto(CofComponent parentDto) {
+		// Check if the component type requires upgrades
+		boolean typeRequiresUpgrades = isUpgradeRequiredType(parentDto.componentType());
+
 		if (parentDto.upgrades() == null) {
+			if (typeRequiresUpgrades) {
+				LOGGER.warn("No upgrades DTO for component {} (type: {}) but type requires upgrades. Creating empty upgrades.",
+						parentDto.id(), parentDto.componentType());
+				return Optional.of(new ComponentUpgrades(Collections.emptyList()));
+			}
+			LOGGER.debug("No upgrades DTO for component {}", parentDto.id());
 			return Optional.empty();
 		}
+
 		Component pristineParent = componentRegistry.get(parentDto.id()).orElse(null);
-		if (!(pristineParent instanceof CustomizableComponent pristineCustomizable)) {
-			return Optional.empty();
+		if (pristineParent == null) {
+			LOGGER.warn("No pristine component found in registry for id: {} (type: {}). Building upgrades from DTO without validation.",
+					parentDto.id(), parentDto.componentType());
+			return buildUpgradesFromDtoWithoutPristine(parentDto);
 		}
+
+		if (!(pristineParent instanceof CustomizableComponent pristineCustomizable)) {
+			LOGGER.warn("Pristine component {} is not CustomizableComponent (actual type: {}). Building upgrades from DTO without validation.",
+					parentDto.id(), pristineParent.getClass().getSimpleName());
+			return buildUpgradesFromDtoWithoutPristine(parentDto);
+		}
+
+		LOGGER.debug("Building upgrades for component {} with {} upgrade slots from DTO",
+				parentDto.id(), parentDto.upgrades().slots().size());
 
 		Map<OpenIdentifier, UpgradeSlot> pristineSlotsById = pristineCustomizable.upgrades().slots().stream()
 				.collect(Collectors.toMap(UpgradeSlot::id, Function.identity()));
@@ -181,17 +215,79 @@ public class ComponentCofCodec implements Codec<Component> {
 		List<UpgradeSlot> newSlots = new ArrayList<>();
 		for (CofSlot slotDto : parentDto.upgrades().slots()) {
 			UpgradeSlot pristineSlot = pristineSlotsById.get(slotDto.id());
-			if (pristineSlot == null) continue;
+			if (pristineSlot == null) {
+				LOGGER.debug("Skipping upgrade slot {} - not found in pristine component {}", slotDto.id(), parentDto.id());
+				continue;
+			}
 
 			var contentResult = Optional.ofNullable(slotDto.content())
 					.map(this::buildComponentFromDto)
 					.map(dr -> dr.map(Optional::of))
 					.orElse(DataResult.success(Optional.empty()));
 
-			if (contentResult.error().isPresent()) return Optional.empty();
+			if (contentResult.error().isPresent()) {
+				LOGGER.error("Failed to build upgrade content for slot {} in component {}: {}",
+						slotDto.id(), parentDto.id(), contentResult.error().get());
+				return Optional.empty();
+			}
 
 			newSlots.add(new UpgradeSlot(slotDto.id(), slotDto.type(), slotDto.description(), pristineSlot.validator(), contentResult.result().get()));
 		}
+
+		LOGGER.debug("Successfully built {} upgrade slots for component {}", newSlots.size(), parentDto.id());
+		return Optional.of(new ComponentUpgrades(newSlots));
+	}
+
+	/**
+	 * Checks if a component type requires upgrades to be present.
+	 */
+	private boolean isUpgradeRequiredType(OpenIdentifier componentType) {
+		String typeStr = componentType.toString();
+		return typeStr.contains("extensible_equipment") ||
+				typeStr.contains("extensible_part") ||
+				typeStr.contains("structured_extensible_equipment") ||
+				typeStr.contains("structured_extensible_part");
+	}
+
+	/**
+	 * Builds upgrades from a DTO without using the pristine component definition.
+	 * This is a fallback method used when the pristine component is not available in the registry.
+	 * Slots will not have validators, which may cause issues with slot validation.
+	 */
+	private Optional<ComponentUpgrades> buildUpgradesFromDtoWithoutPristine(CofComponent parentDto) {
+		if (parentDto.upgrades() == null || parentDto.upgrades().slots().isEmpty()) {
+			LOGGER.debug("Creating empty upgrades for component {} (no pristine definition)", parentDto.id());
+			return Optional.of(new ComponentUpgrades(Collections.emptyList()));
+		}
+
+		LOGGER.debug("Building {} upgrade slots from DTO without pristine definition for component {}",
+				parentDto.upgrades().slots().size(), parentDto.id());
+
+		List<UpgradeSlot> newSlots = new ArrayList<>();
+		for (CofSlot slotDto : parentDto.upgrades().slots()) {
+			var contentResult = Optional.ofNullable(slotDto.content())
+					.map(this::buildComponentFromDto)
+					.map(dr -> dr.map(Optional::of))
+					.orElse(DataResult.success(Optional.empty()));
+
+			if (contentResult.error().isPresent()) {
+				LOGGER.error("Failed to build upgrade content for slot {} in component {} (no pristine): {}",
+						slotDto.id(), parentDto.id(), contentResult.error().get());
+				return Optional.empty();
+			}
+
+			// Create slot without validator since we don't have the pristine definition
+			newSlots.add(new UpgradeSlot(
+					slotDto.id(),
+					slotDto.type(),
+					slotDto.description(),
+					component -> true, // Accept any component since we don't have a validator
+					contentResult.result().get()
+			));
+		}
+
+		LOGGER.debug("Successfully built {} upgrade slots from DTO without pristine for component {}",
+				newSlots.size(), parentDto.id());
 		return Optional.of(new ComponentUpgrades(newSlots));
 	}
 }
