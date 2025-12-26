@@ -2,9 +2,8 @@ package com.sigmundgranaas.forgero.model.texture.impl;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.model.generation.api.TextureGenerationTask;
-import com.sigmundgranaas.forgero.model.texture.api.PalettizedTextureGenerator;
-import com.sigmundgranaas.forgero.model.texture.api.TextureGenerator;
-import com.sigmundgranaas.forgero.model.texture.api.TextureWriter;
+import com.sigmundgranaas.forgero.model.texture.api.*;
+import com.sigmundgranaas.forgero.model.texture.dto.AnimationMetadataDTO;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +20,35 @@ public class DefaultTextureGenerator implements TextureGenerator {
 	private final ResourceProvider resourceProvider;
 	private final PalettizedTextureGenerator palettizedGenerator;
 	private final TextureWriter textureWriter;
+	private final AnimationDetector animationDetector;
+	private final AnimatedPalettizedTextureGenerator animatedGenerator;
 
+	/**
+	 * Creates a texture generator with animation support.
+	 */
 	public DefaultTextureGenerator(ResourceProvider resourceProvider, PalettizedTextureGenerator palettizedGenerator, TextureWriter textureWriter) {
 		this.resourceProvider = resourceProvider;
 		this.palettizedGenerator = palettizedGenerator;
 		this.textureWriter = textureWriter;
+		this.animationDetector = new AnimationDetector(resourceProvider);
+		this.animatedGenerator = new DefaultAnimatedPalettizedTextureGenerator(palettizedGenerator);
+	}
+
+	/**
+	 * Creates a texture generator with custom animation components.
+	 */
+	public DefaultTextureGenerator(
+			ResourceProvider resourceProvider,
+			PalettizedTextureGenerator palettizedGenerator,
+			TextureWriter textureWriter,
+			AnimationDetector animationDetector,
+			AnimatedPalettizedTextureGenerator animatedGenerator
+	) {
+		this.resourceProvider = resourceProvider;
+		this.palettizedGenerator = palettizedGenerator;
+		this.textureWriter = textureWriter;
+		this.animationDetector = animationDetector;
+		this.animatedGenerator = animatedGenerator;
 	}
 
 	@Override
@@ -46,12 +69,21 @@ public class DefaultTextureGenerator implements TextureGenerator {
 					continue;
 				}
 
-				// 3. Generate the final image (can throw validation exceptions)
-				BufferedImage finalImage = palettizedGenerator.generate(templateOpt.get(), paletteOpt.get());
+				// 3. Detect animation metadata for template and palette
+				Optional<AnimationMetadataDTO> templateMetadata = animationDetector.detectAnimation(task.template());
+				Optional<AnimationMetadataDTO> paletteMetadata = animationDetector.detectAnimation(task.palette());
 
-				// 4. Write the final image to a file
+				// 4. Generate the final image with animation support
 				String filePath = "assets/" + task.output().replace(":", "/") + ".png";
-				textureWriter.write(finalImage, filePath);
+
+				if (templateMetadata.isPresent() || paletteMetadata.isPresent() || isMultiFrame(templateOpt.get()) || isMultiFrame(paletteOpt.get())) {
+					// Use animated generation pipeline
+					generateAnimated(templateOpt.get(), paletteOpt.get(), templateMetadata, paletteMetadata, filePath);
+				} else {
+					// Use simple single-frame generation
+					BufferedImage finalImage = palettizedGenerator.generate(templateOpt.get(), paletteOpt.get());
+					textureWriter.write(finalImage, filePath);
+				}
 
 			} catch (IllegalArgumentException e) {
 				// Catches strict validation errors from AwtPalettizedTextureGenerator
@@ -61,6 +93,44 @@ public class DefaultTextureGenerator implements TextureGenerator {
 				// Generic catch-all for other unexpected errors during the process
 				LOGGER.error("An unexpected error occurred while generating texture for '{}'. Task: (Template: {}, Palette: {})",
 						task.output(), task.template(), task.palette(), e);
+			}
+		}
+	}
+
+	/**
+	 * Checks if an image appears to be multi-frame (height is a multiple of width and greater than width).
+	 */
+	private boolean isMultiFrame(BufferedImage image) {
+		int width = image.getWidth();
+		int height = image.getHeight();
+		return height > width && height % width == 0;
+	}
+
+	/**
+	 * Generates an animated texture using the framed texture pipeline.
+	 */
+	private void generateAnimated(
+			BufferedImage templateImage,
+			BufferedImage paletteImage,
+			Optional<AnimationMetadataDTO> templateMetadata,
+			Optional<AnimationMetadataDTO> paletteMetadata,
+			String filePath
+	) {
+		// Wrap images in framed texture/palette wrappers
+		FramedTexture template = VerticalStripFramedTexture.fromImage(templateImage);
+		FramedPalette palette = RowBasedFramedPalette.fromImage(paletteImage);
+
+		// Generate with animation support
+		TextureGenerationResult result = animatedGenerator.generate(template, palette, templateMetadata, paletteMetadata);
+
+		// Write using animated writer if texture writer supports it, otherwise fall back
+		if (textureWriter instanceof AnimatedTextureWriter animatedWriter) {
+			animatedWriter.write(result, filePath);
+		} else {
+			// Fall back: write image only, no mcmeta
+			textureWriter.write(result.image(), filePath);
+			if (result.isAnimated()) {
+				LOGGER.warn("Animation metadata for '{}' will be lost because TextureWriter does not support animation", filePath);
 			}
 		}
 	}

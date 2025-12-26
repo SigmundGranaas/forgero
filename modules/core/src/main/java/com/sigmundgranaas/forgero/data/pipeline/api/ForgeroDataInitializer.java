@@ -88,6 +88,23 @@ public class ForgeroDataInitializer {
 					return existing;
 				}));
 
+		// 2b. LOAD EXTENSIONS from all configured namespaces
+		Map<OpenIdentifier, RawDefinition> extensionDefinitions = namespaces.stream()
+				.map(ns -> new OpenIdentifier(ns, "extensions"))
+				.flatMap(path -> dataLoader.load(path, true))
+				.collect(Collectors.toMap(RawDefinition::id, Function.identity(), (existing, replacement) -> {
+					LOGGER.warn("Duplicate extension ID found: [{}]. The existing entry will be kept.", existing.id());
+					return existing;
+				}));
+
+		// 3. MERGE EXTENSIONS into their targets
+		if (!extensionDefinitions.isEmpty()) {
+			Map<OpenIdentifier, RawDefinition> combined = new HashMap<>(rawDefinitions);
+			combined.putAll(extensionDefinitions);
+			ExtensionMerger extensionMerger = new ExtensionMerger();
+			rawDefinitions = extensionMerger.merge(combined);
+		}
+
 		// 4. INSTANTIATE SERVICES
 		IncludeResolver includeResolver = new IncludeResolver(rawDefinitions);
 		PropertyMerger propertyMerger = new PropertyMerger(config.propertyCodecs());
@@ -158,6 +175,7 @@ public class ForgeroDataInitializer {
 			codecMap.put("part_template", PartTemplateCodecs.create(attributeCodec, upgradeSlotCodec));
 			codecMap.put("equipment_template", EquipmentTemplateCodecs.create(attributeCodec, upgradeSlotCodec));
 			codecMap.put("tool_template", EquipmentTemplateCodecs.create(attributeCodec, upgradeSlotCodec)); // Legacy support
+			codecMap.put("extension", ExtensionCodecs.create(attributeCodec));
 
 			return codecMap;
 		}
