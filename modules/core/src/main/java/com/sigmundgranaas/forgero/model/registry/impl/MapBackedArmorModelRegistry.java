@@ -21,7 +21,7 @@ public class MapBackedArmorModelRegistry implements ArmorModelRegistry {
 
 	@Override
 	public void register(ArmorModel model) {
-		models.put(model.identifier(), model);
+		models.put(model.id(), model);
 	}
 
 	@Override

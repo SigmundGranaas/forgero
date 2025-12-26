@@ -10,7 +10,7 @@ public record ArmorModelDTO(
 		@Nullable OpenIdentifier id,
 		String type,
 		String model,
-		List<LayerDTO> textures,
+		List<LayerDTO> layers,
 		List<SlotDTO> slots,
 		@Nullable String target,
 		@Nullable String context

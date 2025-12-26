@@ -1,7 +1,9 @@
 package com.sigmundgranaas.forgero.model.api.item;
 
 import com.google.gson.JsonElement;
+import com.sigmundgranaas.forgero.common.identifier.api.Identifiable;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.model.api.Contextual;
 import com.sigmundgranaas.forgero.model.api.ModelResolutionContext;
 import com.sigmundgranaas.forgero.model.api.ModelVariant;
 import com.sigmundgranaas.forgero.model.api.MountPoint;
@@ -15,6 +17,9 @@ import java.util.Optional;
  * A simple model that represents a single texture.
  * It can have variants that change the texture based on contextual predicates.
  *
+ * This model implements modular capability interfaces, allowing generic code to work
+ * with it through composition rather than inheritance.
+ *
  * @param identifier  The unique identifier for this model.
  * @param texture     The default texture identifier.
  * @param variants    A list of alternative textures that can be chosen based on predicates.
@@ -25,7 +30,12 @@ import java.util.Optional;
  * @param parent      The optional parent model to inherit transformations from.
  * @param display     The optional display block for custom transformations.
  */
-public record TextureModel(OpenIdentifier identifier, String texture, List<ModelVariant> variants, Optional<Offset> offset, List<MountPoint> mountPoints, Optional<OpenIdentifier> target, Optional<String> context, Optional<OpenIdentifier> parent, Optional<JsonElement> display) implements Model {
+public record TextureModel(OpenIdentifier identifier, String texture, List<ModelVariant> variants, Optional<Offset> offset, List<MountPoint> mountPoints, Optional<OpenIdentifier> target, Optional<String> context, Optional<OpenIdentifier> parent, Optional<JsonElement> display) implements Model, Identifiable, Contextual {
+
+	@Override
+	public OpenIdentifier id() {
+		return identifier;
+	}
 
 	@Override
 	public OpenIdentifier getIdentifier() {

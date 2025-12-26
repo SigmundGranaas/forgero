@@ -1,10 +1,5 @@
 package com.sigmundgranaas.forgero.model.loading.impl;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
-import com.mojang.serialization.DataResult;
-import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.model.api.armor.ArmorModel;
 import com.sigmundgranaas.forgero.model.loading.impl.codec.ArmorModelCodecs;
@@ -12,51 +7,59 @@ import com.sigmundgranaas.forgero.model.loading.impl.dto.ArmorModelDTO;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.ArmorModelTranslator;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceConverter;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Optional;
 
+/**
+ * Loads armor models from JSON files.
+ *
+ * This class has been refactored to use the generic GenericJsonModelLoader,
+ * eliminating duplication with FileModelProvider while maintaining the same
+ * functionality.
+ */
 public class FileArmorModelProvider implements ResourceConverter<ArmorModel> {
-	private static final Logger LOGGER = LoggerFactory.getLogger(FileArmorModelProvider.class);
-	private final ResourceProvider resourceProvider;
-	private final ArmorModelTranslator translator;
+	private static final String ARMOR_MODELS_PATH_PREFIX = "forgero_models/armor/";
+
+	private final GenericJsonModelLoader<ArmorModelDTO, ArmorModel> loader;
 
 	public FileArmorModelProvider(ResourceProvider resourceProvider) {
-		this.resourceProvider = resourceProvider;
-		this.translator = new ArmorModelTranslator();
+		ArmorModelTranslator translator = new ArmorModelTranslator();
+		this.loader = new GenericJsonModelLoader<>(
+				ArmorModelCodecs.ARMOR_MODEL_DTO_CODEC,
+				translator::toDomain,
+				"armor model"
+		);
 	}
 
 	@Override
 	public Optional<ArmorModel> convert(InputStream stream, OpenIdentifier resourceId) {
-		try (InputStreamReader reader = new InputStreamReader(stream)) {
-			JsonElement modelJson = JsonParser.parseReader(reader);
+		return loader.load(stream, resourceId, this::normalizeArmorModelPath);
+	}
 
-			if (modelJson == null || modelJson.isJsonNull()) {
-				LOGGER.error("Failed to parse armor model {}: File is empty or contains only 'null'.", resourceId);
-				return Optional.empty();
-			}
-
-			DataResult<ArmorModelDTO> result = ArmorModelCodecs.ARMOR_MODEL_DTO_CODEC.parse(JsonOps.INSTANCE, modelJson);
-			if (result.error().isPresent()) {
-				LOGGER.error("Failed to parse armor model {} due to codec error: {}", resourceId, result.error().get().message());
-				return Optional.empty();
-			}
-
-			String idPath = resourceId.path();
-			String normalizedPath = idPath.substring(idPath.indexOf("forgero_models/armor/") + "forgero_models/armor/".length());
-			normalizedPath = normalizedPath.replace(".json", "");
-			OpenIdentifier fileDerivedId = new OpenIdentifier(resourceId.namespace(), normalizedPath);
-
-			return result.result().map(dto -> translator.toDomain(fileDerivedId, dto));
-		} catch (JsonSyntaxException e) {
-			LOGGER.error("Failed to parse armor model {} due to a JSON syntax error: {}", resourceId, e.getMessage());
-			return Optional.empty();
-		} catch (Exception e) {
-			LOGGER.error("An unexpected error occurred while parsing armor model {}: {}", resourceId, e.getMessage(), e);
-			return Optional.empty();
+	/**
+	 * Normalizes the file path to derive the armor model ID.
+	 * E.g., "assets/forgero/forgero_models/armor/iron_helmet.json" -> "forgero:iron_helmet"
+	 */
+	private OpenIdentifier normalizeArmorModelPath(String path) {
+		int prefixIndex = path.indexOf(ARMOR_MODELS_PATH_PREFIX);
+		if (prefixIndex == -1) {
+			// Fallback: just remove .json extension
+			return new OpenIdentifier("forgero", path.replace(".json", ""));
 		}
+
+		String relativePath = path.substring(prefixIndex + ARMOR_MODELS_PATH_PREFIX.length());
+		relativePath = relativePath.replace(".json", "");
+
+		// Extract namespace from path if present, otherwise default to "forgero"
+		String namespace = "forgero";
+		if (path.contains("/") && path.indexOf("/") < prefixIndex) {
+			int namespaceEnd = path.indexOf("/", path.indexOf("assets/") + 7);
+			if (namespaceEnd > 0) {
+				namespace = path.substring(path.indexOf("assets/") + 7, namespaceEnd);
+			}
+		}
+
+		return new OpenIdentifier(namespace, relativePath);
 	}
 }

@@ -23,6 +23,11 @@ public non-sealed class EmptyModel implements Model {
 	}
 
 	@Override
+	public OpenIdentifier id() {
+		return identifier;
+	}
+
+	@Override
 	public OpenIdentifier getIdentifier() {
 		return identifier;
 	}

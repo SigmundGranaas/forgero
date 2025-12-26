@@ -21,7 +21,7 @@ public class ArmorModelTranslator {
 	public ArmorModel toDomain(OpenIdentifier fileDerivedId, ArmorModelDTO dto) {
 		OpenIdentifier finalId = dto.getId().orElse(fileDerivedId);
 
-		List<ModelLayer> textures = Optional.ofNullable(dto.textures())
+		List<ModelLayer> layers = Optional.ofNullable(dto.layers())
 				.orElse(Collections.emptyList())
 				.stream()
 				.map(this::toModelLayer)
@@ -37,7 +37,7 @@ public class ArmorModelTranslator {
 		Optional<OpenIdentifier> target = dto.getTarget().map(OpenIdentifier::new);
 		Optional<String> context = dto.getContext();
 
-		return new ArmorModel(finalId, modelId, textures, slots, target, context);
+		return new ArmorModel(finalId, modelId, layers, slots, target, context);
 	}
 
 	// HACK: Accessing private methods from ModelTranslator.

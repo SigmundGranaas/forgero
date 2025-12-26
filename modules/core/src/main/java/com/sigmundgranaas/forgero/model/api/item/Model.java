@@ -1,14 +1,20 @@
 package com.sigmundgranaas.forgero.model.api.item;
 
 import com.google.gson.JsonElement;
+import com.sigmundgranaas.forgero.common.identifier.api.Identifiable;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.model.api.Contextual;
 import com.sigmundgranaas.forgero.model.api.ModelResolutionContext;
 import com.sigmundgranaas.forgero.model.api.MountPoint;
 
 import java.util.List;
 import java.util.Optional;
 
-public sealed interface Model permits CompositeModel, TextureModel, EmptyModel {
+/**
+ * Base interface for item models using composition.
+ * Extends Identifiable and Contextual to compose capabilities.
+ */
+public sealed interface Model extends Identifiable, Contextual permits CompositeModel, TextureModel, EmptyModel {
 	OpenIdentifier getIdentifier();
 
 	/**
@@ -24,6 +30,17 @@ public sealed interface Model permits CompositeModel, TextureModel, EmptyModel {
 	 * @return An optional containing the context string.
 	 */
 	Optional<String> getContext();
+
+	// Bridge methods for Contextual interface (delegates to getTarget/getContext)
+	@Override
+	default Optional<OpenIdentifier> target() {
+		return getTarget();
+	}
+
+	@Override
+	default Optional<String> context() {
+		return getContext();
+	}
 
 	/**
 	 * Gets the identifier of a parent model whose display properties should be inherited.

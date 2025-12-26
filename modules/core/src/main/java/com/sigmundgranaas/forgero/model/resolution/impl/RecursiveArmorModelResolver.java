@@ -1,41 +1,33 @@
 package com.sigmundgranaas.forgero.model.resolution.impl;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.model.api.armor.ArmorModel;
 import com.sigmundgranaas.forgero.model.registry.api.armor.ArmorModelRegistry;
 import com.sigmundgranaas.forgero.model.resolution.api.armor.ArmorModelResolver;
 
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Armor model resolver using pure composition.
+ *
+ * This class COMPOSES a RecursiveModelResolutionStrategy rather than
+ * implementing the recursive logic itself or extending an abstract base class.
+ * This demonstrates the composition pattern where behavior is delegated
+ * to contained objects.
+ */
 public class RecursiveArmorModelResolver implements ArmorModelResolver {
-
-	private final ArmorModelRegistry armorModelRegistry;
+	// Composition: CONTAINS a strategy, delegates resolution to it
+	private final RecursiveModelResolutionStrategy<ArmorModel> strategy;
 
 	public RecursiveArmorModelResolver(ArmorModelRegistry armorModelRegistry) {
-		this.armorModelRegistry = armorModelRegistry;
+		// Compose the strategy with custom behavior
+		this.strategy = new RecursiveModelResolutionStrategy<>(armorModelRegistry);
 	}
 
 	@Override
 	public List<ArmorModel> resolve(Component component) {
-		List<ArmorModel> models = new ArrayList<>();
-		resolveRecursively(component, models);
-		return models;
-	}
-
-	private void resolveRecursively(Component component, List<ArmorModel> models) {
-		// 1. Check if the current component has its own ArmorModel definition.
-		armorModelRegistry.find(component.id()).ifPresent(models::add);
-
-		// 2. Recurse into children in slots.
-		// This allows an upgrade to add a new 3D part to a base item.
-		if (component instanceof StructuredComponent structured) {
-			structured.structure().slots().forEach((id, slot) -> {
-				if (slot.content() != null && !slot.content().id().path().contains("empty")) {
-					resolveRecursively(slot.content(), models);
-				}
-			});
-		}
+		// Delegate all work to the composed strategy
+		return strategy.resolve(component);
 	}
 }
+

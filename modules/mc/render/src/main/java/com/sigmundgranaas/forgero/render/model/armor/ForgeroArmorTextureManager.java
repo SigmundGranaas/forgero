@@ -81,7 +81,7 @@ public class ForgeroArmorTextureManager {
 		List<RenderableTexture> textures = new ArrayList<>();
 		ModelResolutionContext context = new ModelResolutionContext(sourceComponent, sourceComponent);
 
-		for (ModelLayer layer : armorModel.textures()) {
+		for (ModelLayer layer : armorModel.layers()) {
 			textures.add(getLayerTexture(layer, context, 0));
 		}
 

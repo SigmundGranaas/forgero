@@ -1,11 +1,15 @@
 package com.sigmundgranaas.forgero.model.api.item;
 
 import com.google.gson.JsonElement;
+import com.sigmundgranaas.forgero.common.identifier.api.Identifiable;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.model.api.Contextual;
+import com.sigmundgranaas.forgero.model.api.Layered;
 import com.sigmundgranaas.forgero.model.api.ModelLayer;
 import com.sigmundgranaas.forgero.model.api.ModelResolutionContext;
 import com.sigmundgranaas.forgero.model.api.ModelSlot;
 import com.sigmundgranaas.forgero.model.api.MountPoint;
+import com.sigmundgranaas.forgero.model.api.Slotted;
 
 import java.util.Collections;
 import java.util.List;
@@ -14,6 +18,9 @@ import java.util.Optional;
 /**
  * A model composed of multiple layers and slots for other components.
  * This is the primary model type for building complex tools and parts.
+ *
+ * This model implements modular capability interfaces, allowing generic code to work
+ * with it through composition rather than inheritance.
  *
  * @param identifier  The unique identifier for this model.
  * @param layers      The visual layers of this model itself.
@@ -24,7 +31,12 @@ import java.util.Optional;
  * @param parent      The optional parent model to inherit transformations from.
  * @param display     The optional display block for custom transformations.
  */
-public record CompositeModel(OpenIdentifier identifier, List<ModelLayer> layers, List<ModelSlot> slots, List<MountPoint> mountPoints, Optional<OpenIdentifier> target, Optional<String> context, Optional<OpenIdentifier> parent, Optional<JsonElement> display) implements Model {
+public record CompositeModel(OpenIdentifier identifier, List<ModelLayer> layers, List<ModelSlot> slots, List<MountPoint> mountPoints, Optional<OpenIdentifier> target, Optional<String> context, Optional<OpenIdentifier> parent, Optional<JsonElement> display) implements Model, Identifiable, Layered, Slotted, Contextual {
+
+	@Override
+	public OpenIdentifier id() {
+		return identifier;
+	}
 
 	@Override
 	public OpenIdentifier getIdentifier() {
