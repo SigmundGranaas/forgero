@@ -1,0 +1,27 @@
+{
+  "type": "forgero:static_part",
+  "name": "Iron Sword",
+  "tags": [
+    "forgero:tools/sword",
+    "minecraft:tool/sword",
+    "forgero:vanilla_tool"
+  ],
+  "host": {
+    "identifiers": [
+      { "type": "item", "id": "minecraft:iron_sword" }
+    ]
+  },
+  "attributes": [
+    { "id": "forgero:iron-sword-durability", "type": "forgero:durability", "computation": 250 },
+    { "id": "forgero:iron-sword-attack_damage", "type": "forgero:attack_damage", "computation": 6 },
+    { "id": "forgero:iron-sword-attack_speed", "type": "forgero:attack_speed", "computation": 1.6 }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:binding-slot",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/binding"],
+      "description": "slot.forgero.binding"
+    }
+  ]
+}

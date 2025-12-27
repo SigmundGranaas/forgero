@@ -3,7 +3,7 @@
 //file:noinspection DependencyNotationArgument
 
 plugins {
-	id "fabric-loom" version "${fabric_loom_version}"
+	id "fabric-loom"
 	id "com.modrinth.minotaur" version "2.+"
 	id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
@@ -55,8 +55,8 @@ dependencies {
 		}
 	}
 
-	// Advanced runtime resource pack
-	include modApi("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
+	// Dynamic Resource Pack module
+	include(project(path: ":modules:mc:drp", configuration: 'namedElements'))
 
 	include modApi("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}")
 }
@@ -112,7 +112,6 @@ curseforge {
 		mainArtifact(remapJar) {
 			displayName = "Forgero [Fabric]: $version"
 			relations {
-				embeddedLibrary 'arrp'
 				requiredDependency 'fabric-api'
 				optionalDependency 'modonomicon'
 				optionalDependency "lambdynamiclights"
@@ -170,7 +169,6 @@ modrinth {
 	versionName = "Forgero $version"
 	changelog = file('../changelog.md').text
 	dependencies {
-		embedded.project "arrp"
 		required.project "fabric-api"
 		optional.project "modonomicon"
 		optional.project "lambdynamiclights"

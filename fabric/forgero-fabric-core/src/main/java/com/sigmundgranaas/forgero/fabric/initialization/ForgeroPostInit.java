@@ -38,7 +38,7 @@ import com.sigmundgranaas.forgero.fabric.initialization.registrar.DynamicItemsRe
 import com.sigmundgranaas.forgero.fabric.initialization.registrar.StateItemRegistrar;
 import com.sigmundgranaas.forgero.fabric.initialization.registrar.TreasureLootRegistrar;
 import com.sigmundgranaas.forgero.fabric.registry.RecipeRegistry;
-import com.sigmundgranaas.forgero.fabric.resources.ARRPGenerator;
+import com.sigmundgranaas.forgero.fabric.resources.ForgeroResourceGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.AllPartToAllSchematicsGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.MaterialPartTagGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartToSchematicGenerator;
@@ -94,7 +94,7 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 		registerDataReloadListener();
 		registerLootConditionReloadListener();
 		registerRecipeSerializers();
-		registerAARPRecipes(stateService);
+		registerDynamicResources(stateService);
 		registerHungerCallbacks(stateService);
 		registerToolTipFilters();
 		registerRecipeGenerators(stateService);
@@ -267,21 +267,21 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 	}
 
 	/**
-	 * The registerAarpRecipes method registers AARP recipes for the mod.
-	 * These recipes are handled by AARP as a dynamic resource pack
+	 * The registerDynamicResources method registers dynamically generated resources for the mod.
+	 * These resources are handled by the DRP (Dynamic Resource Pack) module.
 	 *
 	 * @param service The state service provides services related to game states.
 	 */
-	private void registerAARPRecipes(StateService service) {
-		ARRPGenerator.register(new RepairKitResourceGenerator(ForgeroConfigurationLoader.configuration, service));
+	private void registerDynamicResources(StateService service) {
+		ForgeroResourceGenerator.register(new RepairKitResourceGenerator(ForgeroConfigurationLoader.configuration, service));
 		if (ForgeroConfigurationLoader.configuration.enableRecipesForAllSchematics) {
-			ARRPGenerator.register(() -> new AllPartToAllSchematicsGenerator(service, new PartToSchematicGenerator.SchematicRecipeCreator(), new PartToSchematicGenerator.AllVariantFilter()));
+			ForgeroResourceGenerator.register(() -> new AllPartToAllSchematicsGenerator(service, new PartToSchematicGenerator.SchematicRecipeCreator(), new PartToSchematicGenerator.AllVariantFilter()));
 		}
 
-		ARRPGenerator.register(() -> new WoodPartsTag(ForgeroStateRegistry.TREE));
-		ARRPGenerator.register(() -> new MaterialPartTagGenerator(service));
-		ARRPGenerator.register(() -> new SchematicPartTagGenerator(service));
-		ARRPGenerator.register(() -> new PartTypeTagGenerator(service));
-		ARRPGenerator.generate(service);
+		ForgeroResourceGenerator.register(() -> new WoodPartsTag(ForgeroStateRegistry.TREE));
+		ForgeroResourceGenerator.register(() -> new MaterialPartTagGenerator(service));
+		ForgeroResourceGenerator.register(() -> new SchematicPartTagGenerator(service));
+		ForgeroResourceGenerator.register(() -> new PartTypeTagGenerator(service));
+		ForgeroResourceGenerator.generate(service);
 	}
 }

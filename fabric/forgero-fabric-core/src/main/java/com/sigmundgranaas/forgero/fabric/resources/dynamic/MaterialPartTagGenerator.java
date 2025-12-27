@@ -11,11 +11,9 @@ import java.util.function.Supplier;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.Composite;
+import com.sigmundgranaas.forgero.drp.api.DynamicResourcePack;
+import com.sigmundgranaas.forgero.drp.api.tag.TagBuilder;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
-import net.devtech.arrp.api.RuntimeResourcePack;
-import net.devtech.arrp.json.tags.JTag;
-
-import net.minecraft.util.Identifier;
 
 public class MaterialPartTagGenerator implements DynamicResourceGenerator {
 	private final StateService service;
@@ -26,7 +24,7 @@ public class MaterialPartTagGenerator implements DynamicResourceGenerator {
 	}
 
 	@Override
-	public void generate(RuntimeResourcePack pack) {
+	public void generate(DynamicResourcePack pack) {
 		service.all().stream()
 				.map(Supplier::get)
 				.filter(Composite.class::isInstance)
@@ -34,9 +32,9 @@ public class MaterialPartTagGenerator implements DynamicResourceGenerator {
 				.forEach(this::mapTags);
 
 		for (Map.Entry<String, List<String>> entry : idTagEntries.entrySet()) {
-			var tag = new JTag();
-			entry.getValue().stream().map(Identifier::new).forEach(tag::add);
-			pack.addTag(new Identifier(Forgero.NAMESPACE, "items/" + entry.getKey()), tag);
+			var tagBuilder = TagBuilder.items(Forgero.NAMESPACE + ":" + entry.getKey());
+			entry.getValue().forEach(tagBuilder::add);
+			pack.addTag(tagBuilder);
 		}
 	}
 

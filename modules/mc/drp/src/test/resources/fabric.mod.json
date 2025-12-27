@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-drp-test",
+  "version": "1.0.0",
+  "name": "Forgero DRP Test",
+  "description": "Test mod for Forgero Dynamic Resource Pack module.",
+  "authors": ["Test"],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.sigmundgranaas.forgero.drp.testutil.DRPTestInitializer"
+    ],
+    "fabric-gametest": [
+      "com.sigmundgranaas.forgero.drp.gametest.TagGametest",
+      "com.sigmundgranaas.forgero.drp.gametest.RecipeGametest",
+      "com.sigmundgranaas.forgero.drp.gametest.ResourcePackGametest"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "fabric-api": "*",
+    "minecraft": "1.20.1",
+    "forgero-drp": "*"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-drp",
+  "version": "${version}",
+  "name": "Forgero Dynamic Resource Pack",
+  "description": "Dynamic resource pack generation for Forgero - tags, recipes, models, language files, and textures.",
+  "authors": [
+    "Sigmund Granaas",
+    "JorisDeBeer"
+  ],
+  "contact": {
+    "homepage": "https://sigmundgranaas.com",
+    "sources": "https://github.com/sigmundgranaas/forgero",
+    "issues": "https://github.com/sigmundgranaas/forgero/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/forgero/icon.png",
+  "environment": "*",
+  "entrypoints": {},
+  "mixins": [
+    "drp.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "fabric-api": "*",
+    "minecraft": "1.20.1",
+    "java": ">=17"
+  },
+  "suggests": {}
+}

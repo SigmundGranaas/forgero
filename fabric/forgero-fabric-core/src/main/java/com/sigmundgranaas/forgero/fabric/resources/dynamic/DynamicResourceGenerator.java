@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.fabric.resources.dynamic;
 
-import net.devtech.arrp.api.RuntimeResourcePack;
+import com.sigmundgranaas.forgero.drp.api.DynamicResourcePack;
 
 @FunctionalInterface
 public interface DynamicResourceGenerator {
-	void generate(RuntimeResourcePack pack);
+	void generate(DynamicResourcePack pack);
 
 	default boolean enabled() {
 		return true;

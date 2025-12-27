@@ -12,11 +12,11 @@ import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.IngredientData;
 import com.sigmundgranaas.forgero.core.resource.data.v2.data.RecipeData;
 import com.sigmundgranaas.forgero.core.state.composite.ConstructedState;
+import com.sigmundgranaas.forgero.drp.api.DynamicResourcePack;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.customrecipe.RecipeTypes;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.RecipeUtils;
 import com.sigmundgranaas.forgero.minecraft.common.recipe.implementation.generator.CompositeRecipeOptimiser;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
-import net.devtech.arrp.api.RuntimeResourcePack;
 
 import net.minecraft.util.Identifier;
 
@@ -43,12 +43,12 @@ public class PartToSchematicGenerator implements DynamicResourceGenerator {
 	}
 
 	/**
-	 * Generates schematic recipes and adds them to a RuntimeResourcePack object.
+	 * Generates schematic recipes and adds them to a DynamicResourcePack object.
 	 *
-	 * @param pack The RuntimeResourcePack object.
+	 * @param pack The DynamicResourcePack object.
 	 */
 	@Override
-	public void generate(RuntimeResourcePack pack) {
+	public void generate(DynamicResourcePack pack) {
 		var recipes = parts().stream()
 				.map(recipeCreator::createRecipe)
 				.flatMap(Optional::stream)
@@ -57,7 +57,7 @@ public class PartToSchematicGenerator implements DynamicResourceGenerator {
 		var optimiser = new CompositeRecipeOptimiser();
 		optimiser.process(recipes).stream()
 				.map(this::convertRecipeData)
-				.forEach(recipe -> pack.addData(generateId(recipe), recipe.toString().getBytes()));
+				.forEach(recipe -> pack.addRawData(generatePath(recipe), recipe.toString().getBytes()));
 	}
 
 	/**
@@ -87,9 +87,9 @@ public class PartToSchematicGenerator implements DynamicResourceGenerator {
 		return json;
 	}
 
-	protected Identifier generateId(JsonObject recipe) {
+	protected String generatePath(JsonObject recipe) {
 		String output = recipe.getAsJsonObject("result").get("item").getAsString().split(":")[1];
-		return new Identifier("forgero:recipes/" + output + "_recipe" + ".json");
+		return "data/forgero/recipes/" + output + "_recipe.json";
 	}
 
 	/**

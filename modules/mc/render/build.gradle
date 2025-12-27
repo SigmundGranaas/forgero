@@ -13,7 +13,8 @@ dependencies {
 	// Mixins
 	modCompileOnly("net.fabricmc:fabric-loader:${project.loader_version}")
 
-	modImplementation("maven.modrinth:arrp:${project.advanced_runtime_resource_pack_version}")
+	// Dynamic Resource Pack module
+	implementation(project(path: ":modules:mc:drp", configuration: 'namedElements'))
 }
 
 loom {

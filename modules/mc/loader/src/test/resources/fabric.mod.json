@@ -14,7 +14,8 @@
     "fabric-gametest": [
       "com.sigmundgranaas.forgero.loader.gametest.ForgeroServicesGameTest",
       "com.sigmundgranaas.forgero.loader.gametest.ForgeroInitializedCallbackTest",
-      "com.sigmundgranaas.forgero.loader.gametest.TagResolverIntegrationTest"
+      "com.sigmundgranaas.forgero.loader.gametest.TagResolverIntegrationTest",
+      "com.sigmundgranaas.forgero.loader.gametest.DataLoadingValidationTest"
     ]
   },
   "depends": {

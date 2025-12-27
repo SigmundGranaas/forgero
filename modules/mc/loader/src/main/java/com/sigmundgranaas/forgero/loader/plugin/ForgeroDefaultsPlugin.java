@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.loader.plugin;
 
 import com.sigmundgranaas.forgero.core.condition.predicate.*;
+import com.sigmundgranaas.forgero.core.condition.predicate.HasOtherContributorCondition;
 import com.sigmundgranaas.forgero.core.property.api.codec.ListCodecWrapper;
 import com.sigmundgranaas.forgero.loader.api.DataPlugin;
 import com.sigmundgranaas.forgero.loader.api.PluginRegistrationContext;
@@ -40,6 +41,7 @@ public class ForgeroDefaultsPlugin implements DataPlugin {
 		// Conditions with no dependencies ignore the supplier.
 		context.registerStaticConditionCodec("forgero:at_depth", AtDepthCondition.CODEC);
 		context.registerStaticConditionCodec("forgero:has_sibling", HasSiblingCondition.CODEC);
+		context.registerStaticConditionCodec("forgero:has_other_contributor", HasOtherContributorCondition.CODEC);
 		context.registerStaticConditionCodec("forgero:id_match", IdMatchCondition.CODEC);
 		context.registerStaticConditionCodec("forgero:in_slot_type",  InSlotTypeCondition.CODEC);
 		context.registerStaticConditionCodec("forgero:is_root", IsRootCondition.CODEC);

@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.fabric.resources;
 
-
 import static com.sigmundgranaas.forgero.core.identifier.Common.ELEMENT_SEPARATOR;
 
 import java.util.ArrayList;
@@ -18,25 +17,30 @@ import com.sigmundgranaas.forgero.core.state.Identifiable;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.MutableTypeNode;
 import com.sigmundgranaas.forgero.core.type.Type;
+import com.sigmundgranaas.forgero.drp.api.DRPApi;
+import com.sigmundgranaas.forgero.drp.api.DynamicResourcePack;
+import com.sigmundgranaas.forgero.drp.api.lifecycle.ResourcePackPhase;
+import com.sigmundgranaas.forgero.drp.api.tag.TagBuilder;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.DynamicResourceGenerator;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateMapper;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import lombok.Synchronized;
-import net.devtech.arrp.api.RRPCallback;
-import net.devtech.arrp.api.RuntimeResourcePack;
-import net.devtech.arrp.json.tags.JTag;
 
 import net.minecraft.util.Identifier;
 
+/**
+ * Generates dynamic resources for Forgero using the DRP (Dynamic Resource Pack) module.
+ * This replaces the former ARRP-based ARRPGenerator.
+ */
+public class ForgeroResourceGenerator {
 
-public class ARRPGenerator {
-
-	public static final RuntimeResourcePack RESOURCE_PACK_BUILTIN = RuntimeResourcePack.create("forgero:builtin_generator");
-	public static final RuntimeResourcePack RESOURCE_PACK = RuntimeResourcePack.create("forgero:dynamic_generator");
 	private static final List<DynamicResourceGenerator> generators = new ArrayList<>();
+	private static DynamicResourcePack builtinPack;
+	private static DynamicResourcePack dynamicPack;
+
 	private final StateMapper mapper;
 
-	public ARRPGenerator(StateMapper mapper) {
+	public ForgeroResourceGenerator(StateMapper mapper) {
 		this.mapper = mapper;
 	}
 
@@ -50,19 +54,50 @@ public class ARRPGenerator {
 		generators.add(supplier.get());
 	}
 
-	public static void generate(StateService service) {
-		new ARRPGenerator(service.getMapper()).generateResources();
-		generators.stream()
-				.filter(DynamicResourceGenerator::enabled)
-				.forEach(generator -> generator.generate(RESOURCE_PACK));
-		RRPCallback.BEFORE_VANILLA.register(a -> a.add(RESOURCE_PACK));
+	/**
+	 * Gets the builtin resource pack (for type tree tags and material tool tags).
+	 * Creates it lazily if not already created.
+	 */
+	public static DynamicResourcePack getBuiltinPack() {
+		if (builtinPack == null) {
+			builtinPack = DRPApi.getInstance()
+					.createPack("forgero:builtin_generator")
+					.description("Forgero builtin generated resources")
+					.build();
+		}
+		return builtinPack;
 	}
 
+	/**
+	 * Gets the dynamic resource pack (for plugin-registered generators).
+	 * Creates it lazily if not already created.
+	 */
+	public static DynamicResourcePack getDynamicPack() {
+		if (dynamicPack == null) {
+			dynamicPack = DRPApi.getInstance()
+					.createPack("forgero:dynamic_generator")
+					.description("Forgero dynamically generated resources")
+					.build();
+		}
+		return dynamicPack;
+	}
+
+	public static void generate(StateService service) {
+		new ForgeroResourceGenerator(service.getMapper()).generateResources();
+
+		DynamicResourcePack pack = getDynamicPack();
+		generators.stream()
+				.filter(DynamicResourceGenerator::enabled)
+				.forEach(generator -> generator.generate(pack));
+
+		DRPApi api = DRPApi.getInstance();
+		api.register(getBuiltinPack(), ResourcePackPhase.BEFORE_VANILLA);
+		api.register(pack, ResourcePackPhase.BEFORE_VANILLA);
+	}
 
 	public void generateResources() {
 		generateTagsFromStateTree();
 		createMaterialToolTags();
-		RRPCallback.BEFORE_VANILLA.register(a -> a.add(RESOURCE_PACK_BUILTIN));
 	}
 
 	public void generateTagsFromStateTree() {
@@ -70,13 +105,13 @@ public class ARRPGenerator {
 	}
 
 	private void createTagFromType(MutableTypeNode node) {
-		JTag typeTag = new JTag();
 		var states = node.getResources(State.class);
-		if (states.size() > 0) {
+		if (!states.isEmpty()) {
+			var tagBuilder = TagBuilder.items(Forgero.NAMESPACE + ":items/" + node.name().toLowerCase(Locale.ENGLISH));
 			states.stream()
 					.map(State::identifier)
-					.forEach(id -> add(id, typeTag));
-			RESOURCE_PACK_BUILTIN.addTag(new Identifier("forgero", "items/" + node.name().toLowerCase(Locale.ENGLISH)), typeTag);
+					.forEach(id -> addToTag(id, tagBuilder));
+			getBuiltinPack().addTag(tagBuilder);
 		}
 	}
 
@@ -94,22 +129,22 @@ public class ARRPGenerator {
 		for (Map.Entry<String, List<State>> entry : materialMap.entrySet()) {
 			String key = entry.getKey();
 			List<State> states = entry.getValue();
-			JTag materialToolTag = new JTag();
-			if (states.size() > 0) {
+			if (!states.isEmpty()) {
+				var tagBuilder = TagBuilder.items(Forgero.NAMESPACE + ":items/" + key + "_tool");
 				states.stream()
 						.map(State::identifier)
-						.forEach(id -> add(id, materialToolTag));
-				RESOURCE_PACK_BUILTIN.addTag(new Identifier(Forgero.NAMESPACE, "items/" + key + "_tool"), materialToolTag);
+						.forEach(id -> addToTag(id, tagBuilder));
+				getBuiltinPack().addTag(tagBuilder);
 			}
 		}
 	}
 
-	private void add(String id, JTag tag) {
+	private void addToTag(String id, TagBuilder<?> tagBuilder) {
 		Optional<Identifier> tagId = mapper.stateToTag(id);
 		if (tagId.isPresent()) {
-			tag.tag(tagId.get());
+			tagBuilder.includeTag(tagId.get().toString());
 		} else {
-			tag.add(mapper.stateToContainer(id));
+			tagBuilder.add(mapper.stateToContainer(id).toString());
 		}
 	}
 }

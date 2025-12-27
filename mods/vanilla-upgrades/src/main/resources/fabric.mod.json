@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "vanilla-upgrades",
+  "version": "${version}",
+  "name": "Vanilla Upgrades",
+  "description": "Add upgrade slots to vanilla Minecraft tools and weapons. Enhance your tools with bindings, reinforcements, and gems!",
+  "authors": [
+    "Sigmund Granaas Sandring"
+  ],
+  "contact": {
+    "homepage": "https://sigmundgranaas.com",
+    "sources": "https://github.com/sigmundgranaas/forgero",
+    "issues": "https://github.com/sigmundgranaas/forgero/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/vanilla-upgrades/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.sigmundgranaas.vanillaupgrades.VanillaUpgradesMod"
+    ]
+  },
+  "mixins": [],
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "minecraft": "1.20.1",
+    "java": ">=17",
+    "fabric": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/v6sDsftE9N"
+      }
+    }
+  }
+}

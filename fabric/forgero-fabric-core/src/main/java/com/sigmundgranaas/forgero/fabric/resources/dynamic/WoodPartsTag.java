@@ -5,10 +5,8 @@ import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.core.state.State;
 import com.sigmundgranaas.forgero.core.type.Type;
 import com.sigmundgranaas.forgero.core.type.TypeTree;
-import net.devtech.arrp.api.RuntimeResourcePack;
-import net.devtech.arrp.json.tags.JTag;
-
-import net.minecraft.util.Identifier;
+import com.sigmundgranaas.forgero.drp.api.DynamicResourcePack;
+import com.sigmundgranaas.forgero.drp.api.tag.TagBuilder;
 
 import java.util.List;
 
@@ -21,7 +19,7 @@ public class WoodPartsTag implements DynamicResourceGenerator {
 	}
 
 	@Override
-	public void generate(RuntimeResourcePack pack) {
+	public void generate(DynamicResourcePack pack) {
 		var woods = tree.find(Type.of("WOOD"))
 				.map(node -> node.getResources(State.class))
 				.orElse(ImmutableList.<State>builder().build());
@@ -34,12 +32,11 @@ public class WoodPartsTag implements DynamicResourceGenerator {
 				"sword_guard",
 				"handle");
 		for (var part : parts) {
-			var tag = new JTag();
+			var tagBuilder = TagBuilder.items(Forgero.NAMESPACE + ":wood-" + part);
 			for (var wood : woods) {
-				tag.tag(new Identifier(Forgero.NAMESPACE, wood.name() + "-" + part));
+				tagBuilder.includeTag(Forgero.NAMESPACE + ":" + wood.name() + "-" + part);
 			}
-
-			pack.addTag(new Identifier(Forgero.NAMESPACE, "items/" + "wood" + "-" + part), tag);
+			pack.addTag(tagBuilder);
 		}
 	}
 }

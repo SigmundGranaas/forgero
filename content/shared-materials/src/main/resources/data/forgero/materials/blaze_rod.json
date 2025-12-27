@@ -1,0 +1,33 @@
+{
+  "type": "forgero:material",
+  "name": "Blaze rod",
+  "tags": ["forgero:upgrade/binding", "forgero:upgrade/tip_reinforcement"],
+  "host": { "identifiers": [{ "type": "item", "id": "minecraft:blaze_rod" }] },
+  "properties": {
+    "minecraft:on_loot_drop": [
+      {
+        "handler": {
+          "type": "forgero:apply_functions",
+          "functions": [
+            {
+              "type": "forgero:auto_smelt",
+              "description": "Smelts raw ore drops into ingots.",
+              "filter": {
+                "type": "forgero:tag",
+                "tag": "c:raw_ores"
+              }
+            },
+            {
+              "type": "forgero:auto_smelt",
+              "description": "Cooks raw meat drops from entities.",
+              "filter": {
+                "type": "forgero:tag",
+                "tag": "c:cookable_meats"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

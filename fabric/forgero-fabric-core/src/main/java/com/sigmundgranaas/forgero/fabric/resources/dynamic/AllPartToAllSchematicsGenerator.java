@@ -3,10 +3,8 @@ package com.sigmundgranaas.forgero.fabric.resources.dynamic;
 import java.util.Optional;
 
 import com.google.gson.JsonObject;
+import com.sigmundgranaas.forgero.drp.api.DynamicResourcePack;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
-import net.devtech.arrp.api.RuntimeResourcePack;
-
-import net.minecraft.util.Identifier;
 
 public class AllPartToAllSchematicsGenerator extends PartToSchematicGenerator {
 
@@ -16,18 +14,18 @@ public class AllPartToAllSchematicsGenerator extends PartToSchematicGenerator {
 	}
 
 	@Override
-	public void generate(RuntimeResourcePack pack) {
+	public void generate(DynamicResourcePack pack) {
 		parts().stream()
 				.map(recipeCreator::createRecipe)
 				.flatMap(Optional::stream)
 				.map(this::convertRecipeData)
-				.forEach(recipe -> pack.addData(generateId(recipe), recipe.toString().getBytes()));
+				.forEach(recipe -> pack.addRawData(generatePath(recipe), recipe.toString().getBytes()));
 	}
 
 	@Override
-	protected Identifier generateId(JsonObject recipe) {
+	protected String generatePath(JsonObject recipe) {
 		String output = recipe.getAsJsonObject("result").get("item").getAsString().split(":")[1];
 		String ingredient = recipe.getAsJsonArray("ingredients").get(1).getAsJsonObject().get("item").getAsString().split(":")[1];
-		return new Identifier("forgero:recipes/" + output + ingredient + "_recipe" + ".json");
+		return "data/forgero/recipes/" + output + ingredient + "_recipe.json";
 	}
 }

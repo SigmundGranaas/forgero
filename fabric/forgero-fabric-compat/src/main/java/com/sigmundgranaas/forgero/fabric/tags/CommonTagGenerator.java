@@ -1,17 +1,18 @@
 package com.sigmundgranaas.forgero.fabric.tags;
 
 import com.sigmundgranaas.forgero.core.Forgero;
+import com.sigmundgranaas.forgero.drp.api.DRPApi;
+import com.sigmundgranaas.forgero.drp.api.DynamicResourcePack;
+import com.sigmundgranaas.forgero.drp.api.lifecycle.ResourcePackPhase;
+import com.sigmundgranaas.forgero.drp.api.tag.TagBuilder;
 import com.sigmundgranaas.forgero.fabric.ForgeroCompatInitializer;
-import net.devtech.arrp.api.RRPCallback;
-import net.devtech.arrp.api.RuntimeResourcePack;
-import net.devtech.arrp.json.tags.JTag;
 
 import net.minecraft.util.Identifier;
 
 public abstract class CommonTagGenerator {
 	private final String mod;
 	private final String namespace;
-	private  RuntimeResourcePack resourcePack;
+	private DynamicResourcePack resourcePack;
 
 	protected CommonTagGenerator(String mod, String namespace) {
 		this.mod = mod;
@@ -25,17 +26,22 @@ public abstract class CommonTagGenerator {
 
 	public abstract void addTags();
 
-	public void register(){
-		this.resourcePack = RuntimeResourcePack.create("%s:%s_common_tags".formatted(Forgero.NAMESPACE, mod));
+	public void register() {
+		this.resourcePack = DRPApi.getInstance()
+				.createPack("%s:%s_common_tags".formatted(Forgero.NAMESPACE, mod))
+				.description("Forgero common tags for " + mod)
+				.build();
 		addTags();
-		RRPCallback.BEFORE_VANILLA.register(a -> a.add(resourcePack));
+		DRPApi.getInstance().register(resourcePack, ResourcePackPhase.BEFORE_VANILLA);
 	}
 
-	public boolean isModLoaded(){
+	public boolean isModLoaded() {
 		return ForgeroCompatInitializer.isModLoaded(mod);
 	}
 
-	protected void registerCommonItemTag(String item){
-		resourcePack.addTag(new Identifier("c", "items/" + item), JTag.tag().add(new Identifier(namespace, item)));
+	protected void registerCommonItemTag(String item) {
+		var tagBuilder = TagBuilder.items("c:items/" + item)
+				.add(new Identifier(namespace, item).toString());
+		resourcePack.addTag(tagBuilder);
 	}
 }

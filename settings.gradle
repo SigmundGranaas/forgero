@@ -25,6 +25,7 @@ include "modules:mc:properties"
 include "modules:mc:predicate"
 include "modules:mc:development"
 include "modules:mc:bows"
+include "modules:mc:drp"
 
 // Content
 include("content")
@@ -38,6 +39,10 @@ include("content:minecraft-tools")
 include("content:${mod_id}-compat")
 include("content:${mod_id}-structures")
 include("content:${mod_id}-deprecated")
+
+// Shared Content (for both Vanilla Upgrades and Forgero)
+include("content:shared-materials")
+include("content:vanilla-upgrades-base")
 
 // Mods
 include 'mods:vanilla-upgrades'

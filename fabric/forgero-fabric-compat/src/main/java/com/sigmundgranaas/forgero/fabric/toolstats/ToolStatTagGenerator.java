@@ -2,25 +2,25 @@ package com.sigmundgranaas.forgero.fabric.toolstats;
 
 import com.sigmundgranaas.forgero.core.ForgeroStateRegistry;
 import com.sigmundgranaas.forgero.core.state.Identifiable;
-import net.devtech.arrp.json.tags.JTag;
+import com.sigmundgranaas.forgero.drp.api.tag.TagBuilder;
+import com.sigmundgranaas.forgero.fabric.resources.ForgeroResourceGenerator;
 
 import net.minecraft.util.Identifier;
 
 import java.util.function.Supplier;
 
-import static com.sigmundgranaas.forgero.fabric.resources.ARRPGenerator.RESOURCE_PACK;
-
 public class ToolStatTagGenerator {
 	public static void generateTags() {
-		if (ForgeroStateRegistry.STATES == null){
+		if (ForgeroStateRegistry.STATES == null) {
 			return;
 		}
-		var tag = new JTag();
+		var tagBuilder = TagBuilder.items("toolstats:items/ignored");
 		ForgeroStateRegistry.STATES.all().stream()
 				.map(Supplier::get)
 				.map(Identifiable::identifier)
 				.map(Identifier::new)
-				.forEach(tag::add);
-		RESOURCE_PACK.addTag(new Identifier("toolstats", "items/ignored"), tag);
+				.map(Identifier::toString)
+				.forEach(tagBuilder::add);
+		ForgeroResourceGenerator.getDynamicPack().addTag(tagBuilder);
 	}
 }

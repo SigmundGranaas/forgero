@@ -1,7 +1,5 @@
 package com.sigmundgranaas.forgero.render;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.tags.engine.TaggedRegistry;
 import com.sigmundgranaas.forgero.core.component.api.Component;
@@ -24,8 +22,10 @@ import com.sigmundgranaas.forgero.render.model.item.ForgeroModelProvider;
 import com.sigmundgranaas.forgero.render.texture.RuntimeTextureWriter;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceProvider;
 import com.sigmundgranaas.forgero.utility.resource.loader.implementation.ClassPathResourceProvider;
-import net.devtech.arrp.api.RRPCallback;
-import net.devtech.arrp.api.RuntimeResourcePack;
+import com.sigmundgranaas.forgero.drp.api.DRPApi;
+import com.sigmundgranaas.forgero.drp.api.DynamicResourcePack;
+import com.sigmundgranaas.forgero.drp.api.lifecycle.ResourcePackPhase;
+import com.sigmundgranaas.forgero.drp.api.texture.AtlasBuilder;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -46,7 +46,17 @@ import java.util.stream.Collectors;
 public class RenderInitializer implements ClientModInitializer {
 	public static final String MOD_NAMESPACE = "forgero";
 	public static final Logger LOGGER = LoggerFactory.getLogger(RenderInitializer.class);
-	public static final RuntimeResourcePack RRP = RuntimeResourcePack.create(MOD_NAMESPACE + ":resources");
+	private static DynamicResourcePack resourcePack;
+
+	public static DynamicResourcePack getResourcePack() {
+		if (resourcePack == null) {
+			resourcePack = DRPApi.getInstance()
+					.createPack(MOD_NAMESPACE + ":render_resources")
+					.description("Forgero render-generated resources")
+					.build();
+		}
+		return resourcePack;
+	}
 
 	// Services received from ForgeroInitializedCallback
 	private static TaggedRegistry<Component> taggedComponents;
@@ -66,7 +76,7 @@ public class RenderInitializer implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		LOGGER.info("Forgero client rendering setup starting...");
-		RRPCallback.BEFORE_VANILLA.register(a -> a.add(RRP));
+		DRPApi.getInstance().register(getResourcePack(), ResourcePackPhase.BEFORE_VANILLA);
 
 		// STEP 1: Synchronous Pre-load Phase
 		// This runs once at startup, before the ModelLoader is created.
@@ -80,33 +90,47 @@ public class RenderInitializer implements ClientModInitializer {
 			ArmorModelRegistry armorModelRegistry = new MapBackedArmorModelRegistry();
 			ModelDataInitializer modelInitializer = new ModelDataInitializer(preloadProvider);
 
-			ModelInitializationResult initialResult = modelInitializer.initialize(
-					taggedComponents.all().stream().collect(Collectors.toMap(Component::id, Function.identity())),
-					tagResolver,
-					itemModelRegistry,
-					armorModelRegistry
-			);
+			// Check if taggedComponents is available (data loading may not have completed yet)
+			// The ForgeroModelResourceListener will handle hot-reload once data is ready
+			if (taggedComponents != null && tagResolver != null) {
+				ModelInitializationResult initialResult = modelInitializer.initialize(
+						taggedComponents.all().stream().collect(Collectors.toMap(Component::id, Function.identity())),
+						tagResolver,
+						itemModelRegistry,
+						armorModelRegistry
+				);
 
-			// Generate initial textures and atlas config BEFORE the first resource reload
-			var tasks = initialResult.generationResult().textureGenerationTasks();
-			if (!tasks.isEmpty()) {
-				LOGGER.info("Performing initial texture generation for {} tasks...", tasks.size());
-				var textureGenerator = new DefaultTextureGenerator(preloadProvider, new AwtPalettizedTextureGenerator(), new RuntimeTextureWriter(RRP));
-				textureGenerator.generate(tasks);
-				generateAtlasConfig(tasks);
+				// Generate initial textures and atlas config BEFORE the first resource reload
+				var tasks = initialResult.generationResult().textureGenerationTasks();
+				if (!tasks.isEmpty()) {
+					LOGGER.info("Performing initial texture generation for {} tasks...", tasks.size());
+					var textureGenerator = new DefaultTextureGenerator(preloadProvider, new AwtPalettizedTextureGenerator(), new RuntimeTextureWriter(getResourcePack()));
+					textureGenerator.generate(tasks);
+					generateAtlasConfig(tasks);
+				}
+
+				// Create and populate the initial services object.
+				ForgeroClient.services = new ForgeroClient.ClientServices(
+						initialResult.itemModelRegistry(),
+						initialResult.armorModelRegistry(),
+						converter != null ? converter::toComponent : s -> Optional.empty(),
+						componentRegistry,
+						new ForgeroArmorTextureManager(initialResult.itemModelRegistry()),
+						new ForgeroArmorModelManager(MinecraftClient.getInstance().getEntityModelLoader())
+				);
+				LOGGER.info("Synchronous model pre-load complete. {} item models loaded.", initialResult.itemModelRegistry().models().size());
+			} else {
+				LOGGER.warn("Forgero data not yet initialized during client startup. Models will be loaded on first resource reload.");
+				// Initialize with empty services - hot reload will populate them later
+				ForgeroClient.services = new ForgeroClient.ClientServices(
+						itemModelRegistry,
+						armorModelRegistry,
+						s -> Optional.empty(),
+						null,
+						new ForgeroArmorTextureManager(itemModelRegistry),
+						new ForgeroArmorModelManager(MinecraftClient.getInstance().getEntityModelLoader())
+				);
 			}
-
-
-			// Create and populate the initial services object.
-			ForgeroClient.services = new ForgeroClient.ClientServices(
-					initialResult.itemModelRegistry(),
-					initialResult.armorModelRegistry(),
-					converter::toComponent,
-					componentRegistry,
-					new ForgeroArmorTextureManager(initialResult.itemModelRegistry()),
-					new ForgeroArmorModelManager(MinecraftClient.getInstance().getEntityModelLoader())
-			);
-			LOGGER.info("Synchronous model pre-load complete. {} item models loaded.", initialResult.itemModelRegistry().models().size());
 		} catch (Exception e) {
 			LOGGER.error("Critical error during Forgero synchronous pre-load. Models will not render correctly.", e);
 			// To prevent crashes in a broken state, initialize with empty services.
@@ -127,18 +151,17 @@ public class RenderInitializer implements ClientModInitializer {
 
 	private void generateAtlasConfig(List<TextureGenerationTask> tasks) {
 		if (tasks.isEmpty()) return;
-		JsonArray sources = new JsonArray();
-		tasks.stream().map(TextureGenerationTask::output).distinct().filter(textureId -> textureId.startsWith("forgero:item/")).forEach(textureId -> {
-			JsonObject entry = new JsonObject();
-			entry.addProperty("type", "single");
-			entry.addProperty("resource", textureId);
-			sources.add(entry);
-		});
-		if (sources.isEmpty()) return;
-		JsonObject atlas = new JsonObject();
-		atlas.add("sources", sources);
-		Identifier atlasId = new Identifier("minecraft", "atlases/blocks.json");
-		RRP.addResource(ResourceType.CLIENT_RESOURCES, atlasId, atlas.toString().getBytes());
-		LOGGER.info("Generated and added initial atlas configuration for {} item textures.", sources.size());
+
+		AtlasBuilder atlasBuilder = AtlasBuilder.create();
+		tasks.stream()
+				.map(TextureGenerationTask::output)
+				.distinct()
+				.filter(textureId -> textureId.startsWith("forgero:item/"))
+				.forEach(atlasBuilder::addSingle);
+
+		if (atlasBuilder.getSources().isEmpty()) return;
+
+		getResourcePack().addAtlas(new Identifier("minecraft", "blocks"), atlasBuilder);
+		LOGGER.info("Generated and added initial atlas configuration for {} item textures.", atlasBuilder.getSources().size());
 	}
 }

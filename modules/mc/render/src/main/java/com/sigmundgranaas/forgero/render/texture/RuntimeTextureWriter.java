@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.render.texture;
 
+import com.sigmundgranaas.forgero.drp.api.DynamicResourcePack;
 import com.sigmundgranaas.forgero.model.texture.api.TextureWriter;
-import net.devtech.arrp.api.RuntimeResourcePack;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,9 +13,9 @@ import java.io.IOException;
 
 public class RuntimeTextureWriter implements TextureWriter {
 	public static final Logger LOGGER = LoggerFactory.getLogger(RuntimeTextureWriter.class);
-	private final RuntimeResourcePack resourcePack;
+	private final DynamicResourcePack resourcePack;
 
-	public RuntimeTextureWriter(RuntimeResourcePack resourcePack) {
+	public RuntimeTextureWriter(DynamicResourcePack resourcePack) {
 		this.resourcePack = resourcePack;
 	}
 
@@ -30,8 +30,8 @@ public class RuntimeTextureWriter implements TextureWriter {
 			String identifierPath = path.replace("assets/", "");
 			String[] parts = identifierPath.split("/", 2);
 			if (parts.length == 2) {
-				Identifier id = new Identifier( parts[0], "textures/" +  parts[1]);
-				resourcePack.addAsset(id, bytes);
+				Identifier id = new Identifier(parts[0], "textures/" + parts[1]);
+				resourcePack.addRawAsset(id, bytes);
 				LOGGER.trace("Generated and added texture to runtime resource pack: {}", id);
 			} else {
 				LOGGER.warn("Could not form valid identifier from texture path: {}", path);

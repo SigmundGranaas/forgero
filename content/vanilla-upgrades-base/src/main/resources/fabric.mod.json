@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "vanilla-upgrades-content",
+  "version": "${version}",
+  "name": "Vanilla Upgrades Content",
+  "description": "Static part definitions for vanilla Minecraft tools with upgrade slots.",
+  "authors": [
+    "Sigmund Granaas Sandring"
+  ],
+  "contact": {
+    "homepage": "https://sigmundgranaas.com",
+    "sources": "https://github.com/sigmundgranaas/forgero",
+    "issues": "https://github.com/sigmundgranaas/forgero/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/forgero/icon.png",
+  "environment": "*",
+  "depends": {
+    "forgero-core": "*",
+    "forgero-shared-materials": "*",
+    "java": ">=17"
+  },
+  "custom": {
+    "forgeroResource": true,
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/v6sDsftE9N"
+      },
+      "badges": [
+        "library"
+      ],
+      "parent": {
+        "id": "vanilla-upgrades",
+        "name": "Vanilla Upgrades",
+        "description": "Add upgrade slots to vanilla Minecraft tools!",
+        "icon": "assets/vanilla-upgrades/icon.png"
+      }
+    }
+  }
+}

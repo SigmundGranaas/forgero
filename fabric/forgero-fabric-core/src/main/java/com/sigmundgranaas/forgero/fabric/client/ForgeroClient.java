@@ -19,7 +19,6 @@ import com.sigmundgranaas.forgero.minecraft.common.block.upgradestation.UpgradeS
 import com.sigmundgranaas.forgero.minecraft.common.entity.Entities;
 import com.sigmundgranaas.forgero.minecraft.common.handler.use.ThrowableItemRenderer;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
-import net.devtech.arrp.api.RRPCallback;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -96,7 +95,6 @@ public class ForgeroClient implements ClientModInitializer {
 		PALETTE_REMAP.putAll(modelRegistry.getPaletteRemapper());
 		TEXTURES.putAll(modelRegistry.getTextures());
 		Generator.generate();
-		RRPCallback.BEFORE_VANILLA.register(a -> a.add(Generator.RESOURCE_PACK_CLIENT));
 
 	}
 
