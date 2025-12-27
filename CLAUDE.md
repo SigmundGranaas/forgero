@@ -1,0 +1,308 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+Forgero is a Minecraft Fabric mod for deep tool/weapon/armor customization. The mod is data-driven through JSON - materials, tools, and behaviors can be added without code changes. Everything is a `Component` that composes into hierarchies, with properties attaching behaviors and templates auto-generating permutations.
+
+**Target**: Minecraft 1.20.1 (Fabric)
+**Language**: Java 17
+
+## Build Commands
+
+### Running the Mod
+```bash
+# Run Minecraft client with the mod
+./gradlew :mods:runClient
+
+# Run Minecraft server
+./gradlew :mods:runServer
+
+# Run vanilla-upgrades mod specifically
+./gradlew :mods:vanilla-upgrades:runClient
+./gradlew :mods:vanilla-upgrades:runServer
+```
+
+### Building
+```bash
+# Build the entire project
+./gradlew build
+
+# Build only the mods module
+./gradlew :mods:build
+
+# Build vanilla-upgrades specifically
+./gradlew :mods:vanilla-upgrades:build
+
+# Clean build artifacts
+./gradlew clean
+```
+
+### Testing
+```bash
+# Run all tests
+./gradlew test
+
+# Run tests for a specific module
+./gradlew :modules:core:test
+./gradlew :modules:mc:properties:test
+./gradlew :modules:mc:loader:test
+
+# Run tests with detailed output
+./gradlew test --info
+```
+
+### Publishing (Requires credentials)
+```bash
+# Publish to Maven repository
+./gradlew publish
+```
+
+## Module Architecture
+
+Forgero uses a multi-module architecture with strict dependency rules:
+
+### Core Modules (Platform-Agnostic)
+- **`modules/core/`** - Platform-agnostic core logic with ZERO Minecraft dependencies
+  - Component system, tags, identifiers, data pipeline
+  - Pure Java - can run on any JVM
+  - **CRITICAL**: Never import Minecraft classes here
+
+### Minecraft Modules
+- **`modules/mc/loader/`** - ForgeroApi and plugin system
+  - Plugin registry, data loading orchestration
+  - Depends on: `modules/core`, Fabric API
+
+- **`modules/mc/properties/`** - OnHit, OnTick, BlockBreaking, Loot properties
+  - Effect handlers (`effects/entity/`), selectors (`entityselector/`)
+  - Depends on: `modules/core`, `modules/mc/loader`, Fabric API
+
+- **`modules/mc/common/`** - Common Minecraft utilities
+- **`modules/mc/tools/`** - Tool-specific implementations
+- **`modules/mc/armor/`** - Armor-specific implementations
+- **`modules/mc/bows/`** - Bow and arrow implementations
+- **`modules/mc/render/`** - Rendering utilities
+- **`modules/mc/predicate/`** - Predicates and conditions
+- **`modules/mc/development/`** - Development tools
+
+### Mod Implementations
+- **`mods/vanilla-upgrades/`** - Vanilla item upgrade system mod
+  - Uses modules/core, modules/mc/* as dependencies
+  - Provides runtime implementation of Forgero for vanilla items
+
+### Content Modules (JSON Data Packs)
+- **`content/minecraft-vanilla-materials/`** - Vanilla Minecraft materials with Forgero properties
+- **`content/minecraft-tools/`** - Vanilla tool definitions
+- **`content/forgero-vanilla/`** - Base Forgero content
+- **`content/forgero-extended/`** - Extended content pack
+- **`content/forgero-tools/`** - Additional tool definitions
+- **`content/forgero-armor/`** - Armor definitions
+- **`content/forgero-compat/`** - Mod compatibility definitions
+- **`content/forgero-structures/`** - Structure templates
+- **`content/forgero-deprecated/`** - Deprecated content
+
+### Dependency Rules
+```
+modules/core/              → ZERO Minecraft dependencies
+modules/mc/loader/         → core, Fabric API
+modules/mc/properties/     → core, loader, Fabric API
+mods/vanilla-upgrades/     → core, mc/*, content/*
+content/*                  → Pure JSON data packs
+```
+
+## Key Architectural Concepts
+
+### Component System
+Everything in Forgero is a `Component` - materials, parts, tools, and upgrades all implement the Component interface. Components:
+- Are immutable - use `.with*()` methods for modifications
+- Compose into hierarchies (e.g., a sword contains a blade, handle, and binding)
+- Carry properties that define behaviors
+- Are registered in `ComponentRegistry`
+
+**Key APIs**:
+```java
+// Get ForgeroApi instance
+ForgeroApi api = ForgeroApi.getInstance();
+
+// Convert ItemStack ↔ Component
+Optional<Component> comp = api.converter().toComponent(stack);
+ItemStack stack = api.converter().toStack(comp);
+
+// Access registry
+ComponentRegistry registry = api.registry();
+Optional<Component> comp = registry.find(identifier);
+
+// Resolve properties
+PropertyResolver resolver = api.resolver();
+List<Property> props = resolver.resolve(component, engine, context);
+```
+
+### Plugin System
+Forgero uses a plugin-based architecture for extensibility. Plugins are registered via `fabric.mod.json`:
+
+```json
+{
+  "entrypoints": {
+    "forgero:data_plugin": [
+      "com.example.MyDataPlugin"
+    ],
+    "forgero:item_registration_plugin": [
+      "com.example.MyItemPlugin"
+    ],
+    "forgero:post_load_plugin": [
+      "com.example.MyPostLoadPlugin"
+    ]
+  }
+}
+```
+
+**Plugin Types**:
+- `DataPlugin` - Register property codecs, add custom data processing
+- `ItemRegistrationPlugin` - Register custom items
+- `PostLoadPlugin` - Post-initialization tasks
+
+### Codec-Based Serialization
+Forgero uses Mojang's Codec system for type-safe JSON (de)serialization:
+
+- **Singleton codecs**: `Codec.unit(INSTANCE)` for parameterless handlers
+- **Record codecs**: `RecordCodecBuilder` for handlers with fields
+- **Optional fields**: `.optionalFieldOf("field", defaultValue)`
+- **Polymorphic dispatch**: `DispatchCodecUtils.create()` for type-based routing
+
+See `FORGERO_AI_CONTEXT.md` for detailed codec patterns.
+
+### Property System
+Properties attach behaviors to components. They are resolved dynamically based on:
+- **Static Conditions**: Component structure (`in_slot_type`, `is_root`, `has_tag`)
+- **Dynamic Conditions**: Game state (`is_sneaking`, `is_raining`, `target_has_tag`)
+
+**Property Types**:
+- `minecraft:on_hit` - Triggers when entity is hit
+- `minecraft:on_tick` - Periodic effects while held/worn
+- `minecraft:on_loot_drop` - Modifies loot drops
+- `minecraft:block_breaking` - Block breaking behaviors
+- Attributes (`forgero:durability`, `forgero:attack_damage`, etc.)
+
+**Three-Tier Property Structure** (OnHit/OnTick):
+1. **Selector** - Who to affect (single target, AOE, cone, chain)
+2. **Effects** - What happens (fire, lightning, status effects, etc.)
+3. **Condition** - When to trigger (optional)
+
+## JSON Data Structure
+
+Forgero's data-driven design means most content is defined in JSON files located in `content/*/src/main/resources/data/forgero/`.
+
+### Directory Structure
+```
+data/forgero/
+├── materials/       - Material definitions (iron, diamond, etc.)
+├── schematics/      - Tool part schematics (blade, handle, etc.)
+├── tags/           - Tag definitions for grouping
+└── properties/     - Custom property definitions
+```
+
+### Common JSON Patterns
+
+See `FORGERO_AI_CONTEXT.md` for comprehensive JSON examples including:
+- Material definitions with properties and attributes
+- OnHit effects with selectors and conditions
+- OnTick periodic effects
+- Conditional attribute application
+- All available effect types, selectors, filters, and conditions
+
+## Testing
+
+Tests use JUnit 5:
+
+```bash
+# Run unit tests
+./gradlew test
+
+# Run tests for specific module
+./gradlew :modules:core:test
+./gradlew :modules:mc:properties:test
+
+# Run specific test class
+./gradlew test --tests "com.example.MyTest"
+
+# Run with verbose output
+./gradlew test --info
+```
+
+**Test Locations**:
+- Unit tests: `src/test/java/` in each module
+- Test resources: `src/test/resources/`
+
+## Mixins
+
+Mixins are used to inject into Minecraft code. Mixin configuration files (`.mixin.json`) are located in `src/main/resources/` and referenced in `fabric.mod.json`.
+
+**Example**: `modules/mc/properties/src/main/resources/properties.mixin.json`
+
+**Important**:
+- Always check `!world.isClient` for server-only logic
+- Use injection points carefully to avoid conflicts
+- Test both client and server sides
+
+## Common Development Patterns
+
+### Adding a New Effect Handler
+
+1. **Create the handler** in `modules/mc/properties/src/main/java/com/sigmundgranaas/forgero/effects/entity/`
+2. **Implement** `EntityEffectHandler` or `ContextualEffectHandler`
+3. **Define the codec** (see `FORGERO_AI_CONTEXT.md` for patterns)
+4. **Register in plugin** static block
+5. **Add plugin to** `fabric.mod.json` if new
+6. **Use in JSON** with `"type": "forgero:your_effect"`
+
+### Adding a New Material
+
+1. Create JSON file in `content/minecraft-vanilla-materials/src/main/resources/data/forgero/materials/`
+2. Define type, name, tags, host identifiers
+3. Add properties and attributes as needed
+4. Use conditional application for slot-specific behaviors
+
+### Working with Components
+
+Components are immutable - always create new instances:
+```java
+// Wrong
+component.setName("new name");
+
+// Correct
+Component updated = component.with(builder -> builder.name("new name"));
+```
+
+## Important Context Documents
+
+- **`FORGERO_AI_CONTEXT.md`** - Comprehensive technical reference with real code examples, JSON patterns, codec implementations, and debugging guides. This is your primary reference for implementation details.
+- **`README.md`** - User-facing documentation and project overview
+- **`CONTRIBUTING.md`** - Contribution guidelines
+
+## Version Information
+
+- **Minecraft Version**: 1.20.1
+- **Java Version**: 17
+- **Fabric Loader**: See module-specific `gradle.properties`
+- **Fabric API**: 0.92.2+1.20.1
+- **Yarn Mappings**: 1.20.1+build.10
+- **Fabric Loom**: 1.9-1.10-SNAPSHOT (varies by module)
+
+## Git Workflow
+
+- **Main Branch**: `1.20` (use this for PRs)
+- **Current Branch**: `feature/overhauled-selection-filter-and-interfaces`
+- The repository uses semantic versioning
+- Version is derived from git tags via `build.gradle`
+
+## Access Wideners
+
+Forgero modules may use access wideners to access Minecraft internals when necessary. These are configured in the `loom` block of module-specific `build.gradle` files.
+
+## Additional Resources
+
+- **Wiki**: https://github.com/sigmundgranaas/forgero/wiki
+- **Discord**: https://discord.gg/3vK7ZwEDex
+- **Issues**: https://github.com/sigmundgranaas/forgero/issues
+- **CurseForge**: https://www.curseforge.com/minecraft/mc-mods/forgero
