@@ -14,6 +14,7 @@ import com.sigmundgranaas.forgero.model.loading.impl.dto.ArmorModelTranslator;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.ArmorModelTemplateDTO;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.PartModelTemplateDTO;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.UpgradeModelTemplateDTO;
+import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * A unified loader for all Forgero model and model template files.
@@ -40,10 +42,20 @@ public class ModelFileLoader {
 	private final List<Model> manualItemModels = new ArrayList<>();
 	private final List<ArmorModel> manualArmorModels = new ArrayList<>();
 
-	public ModelFileLoader(ResourceProvider resourceProvider) {
+	/**
+	 * Creates a loader with inheritance-aware tag predicates.
+	 */
+	public ModelFileLoader(ResourceProvider resourceProvider, Supplier<TagResolver> resolverSupplier) {
 		this.resourceProvider = resourceProvider;
-		this.itemModelTranslator = new ModelTranslator();
+		this.itemModelTranslator = new ModelTranslator(resolverSupplier);
 		this.armorModelTranslator = new ArmorModelTranslator();
+	}
+
+	/**
+	 * Creates a loader with direct-only tag matching (no inheritance).
+	 */
+	public ModelFileLoader(ResourceProvider resourceProvider) {
+		this(resourceProvider, null);
 	}
 
 	public void load() {

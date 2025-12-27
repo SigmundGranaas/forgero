@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.common.tags.engine;
 
 import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +19,7 @@ public class TagLoader {
 		this.parser = parser;
 	}
 
-	public TagGraph load(List<TagSource> sources) {
+	public TagResolver load(List<TagSource> sources) {
 		TagGraphBuilder builder = new TagGraphBuilder();
 		Map<String, TagDefinition> allDefinitions = new HashMap<>();
 

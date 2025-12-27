@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.model.loading.impl;
 
 import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.model.api.item.CompositeModel;
 import com.sigmundgranaas.forgero.model.api.item.EmptyModel;
 import com.sigmundgranaas.forgero.model.api.item.Model;
@@ -20,6 +21,7 @@ import com.sigmundgranaas.forgero.model.match.predicate.RootTagPredicate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -27,6 +29,21 @@ import java.util.stream.Collectors;
  * into the main Forgero domain model classes.
  */
 public class ModelTranslator {
+	private final Supplier<TagResolver> resolverSupplier;
+
+	/**
+	 * Creates a translator with inheritance-aware tag predicates.
+	 */
+	public ModelTranslator(Supplier<TagResolver> resolverSupplier) {
+		this.resolverSupplier = resolverSupplier;
+	}
+
+	/**
+	 * Creates a translator with direct-only tag matching (no inheritance).
+	 */
+	public ModelTranslator() {
+		this(null);
+	}
 
 	public Model toDomain(OpenIdentifier fileDerivedId, ModelDTO dto) {
 		OpenIdentifier finalId = dto.getOpenIdentifierId().orElse(fileDerivedId);
@@ -146,9 +163,9 @@ public class ModelTranslator {
 
 	private Predicate toPredicate(PredicateDTO dto) {
 		return switch (dto.type()) {
-			case "forgero:root_tag" -> new RootTagPredicate(OpenIdentifier.parse(dto.tag()));
+			case "forgero:root_tag" -> new RootTagPredicate(OpenIdentifier.parse(dto.tag()), resolverSupplier);
 			case "forgero:bow_pull" -> new BowPullPredicate(dto.pull(), dto.pulling());
-			case "forgero:child_tag" -> new ChildTagPredicate(OpenIdentifier.parse(dto.tag()));
+			case "forgero:child_tag" -> new ChildTagPredicate(OpenIdentifier.parse(dto.tag()), resolverSupplier);
 			default -> throw new IllegalArgumentException("Unknown predicate type: " + dto.type());
 		};
 	}

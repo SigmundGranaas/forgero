@@ -7,6 +7,8 @@ import com.mojang.serialization.JsonOps;
 import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.loading.api.RawDefinition;
+import com.sigmundgranaas.forgero.data.loading.api.data.DefinitionData;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.DefinitionCodecRegistry;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,20 +16,19 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
-import java.util.function.Function;
 
 /**
  * A dedicated resource converter that parses a raw JSON stream into a {@link RawDefinition}.
- * It uses a provided function to look up the correct codec for the definition's "type" field.
+ * It uses a {@link DefinitionCodecRegistry} to look up the correct codec for the definition's "type" field.
  */
 public class RawDefinitionConverter implements ResourceConverter<RawDefinition> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RawDefinitionConverter.class);
 	private final IdentifierFactory identifierFactory;
-	private final Function<String, Codec<?>> codecProvider;
+	private final DefinitionCodecRegistry codecRegistry;
 
-	public RawDefinitionConverter(IdentifierFactory identifierFactory, Function<String, Codec<?>> codecProvider) {
+	public RawDefinitionConverter(IdentifierFactory identifierFactory, DefinitionCodecRegistry codecRegistry) {
 		this.identifierFactory = identifierFactory;
-		this.codecProvider = codecProvider;
+		this.codecRegistry = codecRegistry;
 	}
 
 	@Override
@@ -40,11 +41,9 @@ public class RawDefinitionConverter implements ResourceConverter<RawDefinition> 
 				return Optional.empty();
 			}
 			String typeName = root.get("type").getAsString();
-			Codec<?> codec = codecProvider.apply(identifierFactory.of(typeName).path());
-			if (codec == null) {
-				LOGGER.warn("Unsupported definition type '{}' in file [{}]. Skipping.", typeName, id);
-				return Optional.empty();
-			}
+			String typeId = identifierFactory.of(typeName).path();
+			Codec<? extends DefinitionData> codec = codecRegistry.codecFor(typeId);
+
 			// Use the id from the file path as the canonical ID
 			OpenIdentifier canonicalId = identifierFactory.of(id.namespace(), id.name());
 			return codec.parse(JsonOps.INSTANCE, root)

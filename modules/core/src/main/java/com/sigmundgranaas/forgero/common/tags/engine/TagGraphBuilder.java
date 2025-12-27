@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.common.tags.engine;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,7 +14,7 @@ public class TagGraphBuilder {
 		return this;
 	}
 
-	public TagGraph build() {
+	public TagResolver build() {
 		validateForCycles();
 		return new TagGraph(parentRelationships);
 	}

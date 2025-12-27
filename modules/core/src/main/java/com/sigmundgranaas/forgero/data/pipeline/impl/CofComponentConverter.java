@@ -6,10 +6,8 @@ import com.sigmundgranaas.forgero.cof.dto.CofUpgrades;
 import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.loading.api.RawDefinition;
-import com.sigmundgranaas.forgero.data.loading.api.data.MaterialData;
-import com.sigmundgranaas.forgero.data.loading.api.data.SchematicData;
-import com.sigmundgranaas.forgero.data.loading.api.data.ShapeData;
-import com.sigmundgranaas.forgero.data.loading.api.data.StaticData;
+import com.sigmundgranaas.forgero.data.loading.api.data.DefinitionData;
+import com.sigmundgranaas.forgero.data.loading.api.data.ResourceData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.UpgradeSlotData;
 
 import java.util.List;
@@ -27,21 +25,20 @@ public class CofComponentConverter {
 	}
 
 	public CofComponent convert(RawDefinition rawDef, PropertyMerger.MergedResult merged) {
-		Object dto = rawDef.data();
+		DefinitionData dto = rawDef.data();
 
 		// Determine component type and upgrades based on the DTO
 		OpenIdentifier componentType;
 		CofUpgrades upgrades = null;
 
-		if (dto instanceof StaticData staticDto) {
-			if (staticDto.upgrades() != null && !staticDto.upgrades().isEmpty()) {
+		if (dto instanceof ResourceData resourceData) {
+			// ResourceData is the unified type for materials, shapes, schematics, casts, and static parts
+			if (resourceData.upgrades() != null && !resourceData.upgrades().isEmpty()) {
 				componentType = idFactory.of("extensible_part");
-				upgrades = convertUpgrades(staticDto.upgrades());
+				upgrades = convertUpgrades(resourceData.upgrades());
 			} else {
 				componentType = idFactory.of("static_component");
 			}
-		} else if (dto instanceof MaterialData || dto instanceof ShapeData || dto instanceof SchematicData) {
-			componentType = idFactory.of("static_component");
 		} else {
 			// This should not happen if the initializer's logic is correct (skipping templates)
 			throw new IllegalArgumentException("Unsupported DTO type for static conversion: " + dto.getClass().getName());

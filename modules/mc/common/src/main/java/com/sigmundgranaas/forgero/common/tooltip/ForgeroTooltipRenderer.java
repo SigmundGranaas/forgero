@@ -1,6 +1,8 @@
 package com.sigmundgranaas.forgero.common.tooltip;
 
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
+import com.sigmundgranaas.forgero.common.tooltip.api.TooltipApi;
+import com.sigmundgranaas.forgero.common.tooltip.section.DefaultSections;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import net.minecraft.client.item.TooltipContext;
@@ -14,9 +16,11 @@ import java.util.Optional;
 
 /**
  * The static entry point for rendering Forgero tooltips.
+ * <p>
  * This class orchestrates the conversion from ItemStack to Component,
- * resolves all necessary properties using the standard core AttributeEngine,
- * and then delegates the rendering to a TooltipWriter instance.
+ * and delegates rendering to the tooltip API.
+ *
+ * @see TooltipApi
  */
 public final class ForgeroTooltipRenderer {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ForgeroTooltipRenderer.class);
@@ -28,7 +32,8 @@ public final class ForgeroTooltipRenderer {
 	}
 
 	/**
-	 * Initializes the renderer with necessary services. Must be called once during mod setup.
+	 * Initializes the renderer with necessary services.
+	 * Must be called once during mod setup.
 	 */
 	public static void initialize(ComponentConverter converter, Resolver resolver) {
 		if (initialized) {
@@ -38,15 +43,17 @@ public final class ForgeroTooltipRenderer {
 		ForgeroTooltipRenderer.converter = converter;
 		ForgeroTooltipRenderer.resolver = resolver;
 		ForgeroTooltipRenderer.initialized = true;
+
+		// Register default sections
+		DefaultSections.register();
 	}
 
 	/**
 	 * Appends the Forgero-specific tooltip to an item's tooltip list.
-	 * This is the primary method to be called from client-side hooks (e.g., mixins).
 	 *
-	 * @param stack   The ItemStack to generate a tooltip for.
-	 * @param tooltip The list of tooltip texts to append to.
-	 * @param context The tooltip context provided by Minecraft.
+	 * @param stack   The ItemStack to generate a tooltip for
+	 * @param tooltip The list of tooltip texts to append to
+	 * @param context The tooltip context provided by Minecraft
 	 */
 	public static void append(ItemStack stack, List<Text> tooltip, TooltipContext context) {
 		if (!initialized || stack.isEmpty()) {
@@ -60,8 +67,15 @@ public final class ForgeroTooltipRenderer {
 
 		Component component = componentOpt.get();
 
-		TooltipWriter writer = new ForgeroCompositeTooltipWriter(component, resolver);
+		// Use the new TooltipApi
+		TooltipApi.builder(component, resolver)
+				.appendTo(tooltip, context);
+	}
 
-		writer.append(tooltip, context);
+	/**
+	 * Checks if the renderer has been initialized.
+	 */
+	public static boolean isInitialized() {
+		return initialized;
 	}
 }

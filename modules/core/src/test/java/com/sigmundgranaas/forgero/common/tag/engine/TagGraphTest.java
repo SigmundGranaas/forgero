@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.common.tag.engine;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.common.tags.api.Taggable;
 import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
 import com.sigmundgranaas.forgero.common.tags.engine.TagGraphBuilder;
@@ -20,23 +21,23 @@ class TagGraphTest {
 
 	@Test
 	void itemWithDirectTagIsTaggedCorrectly() {
-		TagGraph graph = new TagGraph(Map.of());
+		TagResolver resolver = new TagGraph(Map.of());
 		Taggable swordSchematic = () -> Set.of(SWORD_BLADE);
-		assertTrue(graph.isTagged(swordSchematic, SWORD_BLADE));
-		assertFalse(graph.isTagged(swordSchematic, PICKAXE_HEAD));
+		assertTrue(resolver.hasTag(swordSchematic, SWORD_BLADE));
+		assertFalse(resolver.hasTag(swordSchematic, PICKAXE_HEAD));
 	}
 
 	@Test
 	void itemInheritsSingleParentTag() {
 		TagGraphBuilder builder = new TagGraphBuilder();
 		builder.add(SWORD_BLADE, Set.of(WEAPON_HEAD));
-		TagGraph graph = builder.build();
+		TagResolver resolver = builder.build();
 
 		Taggable swordSchematic = () -> Set.of(SWORD_BLADE);
 
-		assertTrue(graph.isTagged(swordSchematic, SWORD_BLADE));
-		assertTrue(graph.isTagged(swordSchematic, WEAPON_HEAD));
-		assertFalse(graph.isTagged(swordSchematic, PART));
+		assertTrue(resolver.hasTag(swordSchematic, SWORD_BLADE));
+		assertTrue(resolver.hasTag(swordSchematic, WEAPON_HEAD));
+		assertFalse(resolver.hasTag(swordSchematic, PART));
 	}
 
 	@Test
@@ -44,12 +45,12 @@ class TagGraphTest {
 		OpenIdentifier magical = new OpenIdentifier("forgero", "magical_item");
 		TagGraphBuilder builder = new TagGraphBuilder();
 		builder.add(SWORD_BLADE, Set.of(WEAPON_HEAD, magical));
-		TagGraph graph = builder.build();
+		TagResolver resolver = builder.build();
 
 		Taggable item = () -> Set.of(SWORD_BLADE);
 
-		assertTrue(graph.isTagged(item, WEAPON_HEAD));
-		assertTrue(graph.isTagged(item, magical));
+		assertTrue(resolver.hasTag(item, WEAPON_HEAD));
+		assertTrue(resolver.hasTag(item, magical));
 	}
 
 	@Test
@@ -60,14 +61,14 @@ class TagGraphTest {
 		TagGraphBuilder builder = new TagGraphBuilder();
 		builder.add(WEAPON_HEAD, Set.of(PART));
 		builder.add(metaTag, Set.of(WEAPON_HEAD, undeadSlaying));
-		TagGraph graph = builder.build();
+		TagResolver resolver = builder.build();
 
 		Taggable item = () -> Set.of(metaTag);
 
-		assertTrue(graph.isTagged(item, metaTag));
-		assertTrue(graph.isTagged(item, WEAPON_HEAD));
-		assertTrue(graph.isTagged(item, undeadSlaying));
-		assertTrue(graph.isTagged(item, PART));
+		assertTrue(resolver.hasTag(item, metaTag));
+		assertTrue(resolver.hasTag(item, WEAPON_HEAD));
+		assertTrue(resolver.hasTag(item, undeadSlaying));
+		assertTrue(resolver.hasTag(item, PART));
 	}
 
 	@Test
@@ -76,7 +77,7 @@ class TagGraphTest {
 		TagGraphBuilder builder = new TagGraphBuilder();
 		builder.add(SWORD_BLADE, Set.of(WEAPON_HEAD));
 		builder.add(maceHead, Set.of(WEAPON_HEAD));
-		TagGraph graph = builder.build();
+		TagResolver resolver = builder.build();
 
 		Taggable sword = () -> Set.of(SWORD_BLADE);
 		Taggable mace = () -> Set.of(maceHead);
@@ -84,7 +85,7 @@ class TagGraphTest {
 		Taggable genericHead = () -> Set.of(WEAPON_HEAD);
 
 		List<Taggable> allItems = List.of(sword, mace, pickaxe, genericHead);
-		List<Taggable> weaponHeads = graph.findTagged(WEAPON_HEAD, allItems);
+		List<Taggable> weaponHeads = resolver.findTagged(WEAPON_HEAD, allItems);
 
 		assertEquals(3, weaponHeads.size());
 		assertTrue(weaponHeads.containsAll(List.of(sword, mace, genericHead)));
@@ -94,13 +95,13 @@ class TagGraphTest {
 	void findDirectlyTaggedFindsOnlyExactMatches() {
 		TagGraphBuilder builder = new TagGraphBuilder();
 		builder.add(SWORD_BLADE, Set.of(WEAPON_HEAD));
-		TagGraph graph = builder.build();
+		TagResolver resolver = builder.build();
 
 		Taggable sword = () -> Set.of(SWORD_BLADE);
 		Taggable genericHead = () -> Set.of(WEAPON_HEAD);
 		List<Taggable> allItems = List.of(sword, genericHead);
 
-		List<Taggable> weaponHeads = graph.findDirectlyTagged(WEAPON_HEAD, allItems);
+		List<Taggable> weaponHeads = resolver.findDirectlyTagged(WEAPON_HEAD, allItems);
 
 		assertEquals(1, weaponHeads.size());
 		assertTrue(weaponHeads.contains(genericHead));
@@ -112,15 +113,15 @@ class TagGraphTest {
 		TagGraphBuilder builder = new TagGraphBuilder();
 		builder.add(WEAPON_HEAD, Set.of(PART));
 		builder.add(SWORD_BLADE, Set.of(WEAPON_HEAD, magical));
-		TagGraph graph = builder.build();
+		TagResolver resolver = builder.build();
 
-		Set<OpenIdentifier> allTags = graph.getAllIdentifiers();
+		Set<OpenIdentifier> allTags = resolver.getAllTags();
 		assertEquals(4, allTags.size());
 		assertTrue(allTags.containsAll(Set.of(SWORD_BLADE, WEAPON_HEAD, PART, magical)));
 
-		assertEquals(Set.of(WEAPON_HEAD, magical), graph.getParents(SWORD_BLADE));
-		assertEquals(Set.of(PART), graph.getParents(WEAPON_HEAD));
-		assertTrue(graph.getParents(PART).isEmpty());
-		assertTrue(graph.getParents(new OpenIdentifier("forgero", "nonexistent")).isEmpty());
+		assertEquals(Set.of(WEAPON_HEAD, magical), resolver.getParents(SWORD_BLADE));
+		assertEquals(Set.of(PART), resolver.getParents(WEAPON_HEAD));
+		assertTrue(resolver.getParents(PART).isEmpty());
+		assertTrue(resolver.getParents(new OpenIdentifier("forgero", "nonexistent")).isEmpty());
 	}
 }

@@ -14,9 +14,11 @@ import java.util.Locale;
  */
 public final class TooltipTextFormatter {
 
-	// Using a DecimalFormat initialized with Locale.US is crucial to ensure
-	// the decimal separator is always a period (.), avoiding localization issues.
-	private static final DecimalFormat NUMBER_FORMAT = new DecimalFormat("#.##", new java.text.DecimalFormatSymbols(Locale.US));
+	// ThreadLocal DecimalFormat for thread safety (DecimalFormat is not thread-safe).
+	// Using Locale.US ensures the decimal separator is always a period (.).
+	private static final ThreadLocal<DecimalFormat> NUMBER_FORMAT = ThreadLocal.withInitial(
+			() -> new DecimalFormat("#.##", new java.text.DecimalFormatSymbols(Locale.US))
+	);
 
 	/**
 	 * Formats a float to a string with a maximum of two decimal places, using a period as the separator.
@@ -28,7 +30,7 @@ public final class TooltipTextFormatter {
 		if (value == (long) value) {
 			return String.format(Locale.US, "%d", (long) value);
 		}
-		return NUMBER_FORMAT.format(value);
+		return NUMBER_FORMAT.get().format(value);
 	}
 
 	/**

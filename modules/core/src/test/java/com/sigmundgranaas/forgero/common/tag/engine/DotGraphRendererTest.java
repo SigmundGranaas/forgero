@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.common.tag.engine;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.common.tags.engine.DotGraphRenderer;
-import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
 import com.sigmundgranaas.forgero.common.tags.engine.TagGraphBuilder;
 import org.junit.jupiter.api.Test;
 
@@ -22,11 +22,11 @@ class DotGraphRendererTest {
 
 		builder.add(weaponHead, Set.of(part));
 		builder.add(swordBlade, Set.of(weaponHead, magical));
-		TagGraph graph = builder.build();
+		TagResolver resolver = builder.build();
 
 		DotGraphRenderer renderer = new DotGraphRenderer();
 
-		String dotOutput = renderer.render(graph, "TestGraph");
+		String dotOutput = renderer.render(resolver, "TestGraph");
 
 		assertTrue(dotOutput.contains("\"forgero:sword_blade\" -> \"forgero:magical\""));
 		assertTrue(dotOutput.contains("\"forgero:sword_blade\" -> \"forgero:weapon_head\""));

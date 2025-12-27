@@ -2,8 +2,8 @@ package com.sigmundgranaas.forgero.common.tag.engine;
 
 import com.sigmundgranaas.forgero.common.identifier.api.Identifiable;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.common.tags.api.Taggable;
-import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
 import com.sigmundgranaas.forgero.common.tags.engine.TagGraphBuilder;
 import com.sigmundgranaas.forgero.common.tags.engine.TaggedRegistry;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +24,7 @@ class TaggedRegistryTest {
 		}
 	}
 
-	private TagGraph graph;
+	private TagResolver resolver;
 	private static final OpenIdentifier METAL = new OpenIdentifier("forgero", "metal");
 	private static final OpenIdentifier IRON = new OpenIdentifier("forgero", "iron");
 	private static final OpenIdentifier WOOD = new OpenIdentifier("forgero", "wood");
@@ -33,17 +33,17 @@ class TaggedRegistryTest {
 
 	@BeforeEach
 	void setUp() {
-		// Build a tag graph for our tests
+		// Build a tag resolver for our tests
 		TagGraphBuilder builder = new TagGraphBuilder();
 		builder.add(IRON, Set.of(METAL));
 		builder.add(OAK, Set.of(WOOD));
 		builder.add(PICKAXE, Set.of());
-		graph = builder.build();
+		resolver = builder.build();
 	}
 
 	@Test
 	void successfullyBuildsRegistryWithValidItems() {
-		var builder = new TaggedRegistry.Builder<TestResource>(graph);
+		var builder = new TaggedRegistry.Builder<TestResource>(resolver);
 		var ironPickaxe = new TestResource(new OpenIdentifier("test", "iron_pickaxe"), Set.of(IRON, PICKAXE));
 		builder.add(ironPickaxe);
 		TaggedRegistry<TestResource> registry = builder.build();
@@ -54,7 +54,7 @@ class TaggedRegistryTest {
 
 	@Test
 	void builderFailsToAddResourceWithNonExistentTag() {
-		var builder = new TaggedRegistry.Builder<TestResource>(graph);
+		var builder = new TaggedRegistry.Builder<TestResource>(resolver);
 		var invalidTag = new OpenIdentifier("forgero", "non_existent_tag");
 		var invalidResource = new TestResource(new OpenIdentifier("test", "invalid"), Set.of(invalidTag));
 
@@ -64,7 +64,7 @@ class TaggedRegistryTest {
 
 	@Test
 	void builderFailsToAddDuplicateResource() {
-		var builder = new TaggedRegistry.Builder<TestResource>(graph);
+		var builder = new TaggedRegistry.Builder<TestResource>(resolver);
 		var id = new OpenIdentifier("test", "duplicate");
 		var resource1 = new TestResource(id, Set.of(IRON));
 		var resource2 = new TestResource(id, Set.of(WOOD));
@@ -74,52 +74,52 @@ class TaggedRegistryTest {
 	}
 
 	@Test
-	void getFindsDirectlyTaggedResources() {
-		var registry = new TaggedRegistry.Builder<TestResource>(graph)
+	void getDirectlyTaggedFindsDirectlyTaggedResources() {
+		var registry = new TaggedRegistry.Builder<TestResource>(resolver)
 				.add(new TestResource(new OpenIdentifier("test", "iron_pickaxe"), Set.of(IRON, PICKAXE)))
 				.add(new TestResource(new OpenIdentifier("test", "oak_handle"), Set.of(OAK)))
 				.build();
 
-		assertEquals(1, registry.get(IRON).size());
-		assertEquals("test:iron_pickaxe", registry.get(IRON).get(0).id().toString());
-		assertEquals(1, registry.get(PICKAXE).size());
-		assertTrue(registry.get(METAL).isEmpty(), "Get should not find inherited tags");
+		assertEquals(1, registry.getDirectlyTagged(IRON).size());
+		assertEquals("test:iron_pickaxe", registry.getDirectlyTagged(IRON).get(0).id().toString());
+		assertEquals(1, registry.getDirectlyTagged(PICKAXE).size());
+		assertTrue(registry.getDirectlyTagged(METAL).isEmpty(), "getDirectlyTagged should not find inherited tags");
 	}
 
 	@Test
-	void queryFindsInheritedTags() {
+	void findByTagFindsInheritedTags() {
 		var ironPickaxe = new TestResource(new OpenIdentifier("test", "iron_pickaxe"), Set.of(IRON, PICKAXE));
-		var registry = new TaggedRegistry.Builder<TestResource>(graph)
+		var registry = new TaggedRegistry.Builder<TestResource>(resolver)
 				.add(ironPickaxe)
 				.add(new TestResource(new OpenIdentifier("test", "oak_handle"), Set.of(OAK)))
 				.build();
 
-		List<TestResource> metalItems = registry.query(METAL);
+		List<TestResource> metalItems = registry.findByTag(METAL);
 		assertEquals(1, metalItems.size());
 		assertTrue(metalItems.contains(ironPickaxe));
 
-		List<TestResource> woodItems = registry.query(WOOD);
+		List<TestResource> woodItems = registry.findByTag(WOOD);
 		assertEquals(1, woodItems.size());
 		assertEquals("test:oak_handle", woodItems.get(0).id().toString());
 	}
 
 	@Test
-	void queryReturnsDirectAndInherited() {
+	void findByTagReturnsDirectAndInherited() {
 		var ironPickaxe = new TestResource(new OpenIdentifier("test", "iron_pickaxe"), Set.of(IRON, PICKAXE));
 		var rawMetal = new TestResource(new OpenIdentifier("test", "raw_metal"), Set.of(METAL)); // Directly tagged with parent
-		var registry = new TaggedRegistry.Builder<TestResource>(graph)
+		var registry = new TaggedRegistry.Builder<TestResource>(resolver)
 				.add(ironPickaxe)
 				.add(rawMetal)
 				.build();
 
-		List<TestResource> metalItems = registry.query(METAL);
+		List<TestResource> metalItems = registry.findByTag(METAL);
 		assertEquals(2, metalItems.size());
 		assertTrue(metalItems.containsAll(List.of(ironPickaxe, rawMetal)));
 	}
 
 	@Test
 	void allReturnsAllItems() {
-		var registry = new TaggedRegistry.Builder<TestResource>(graph)
+		var registry = new TaggedRegistry.Builder<TestResource>(resolver)
 				.add(new TestResource(new OpenIdentifier("test", "item1"), Set.of(IRON)))
 				.add(new TestResource(new OpenIdentifier("test", "item2"), Set.of(OAK)))
 				.build();
@@ -130,7 +130,7 @@ class TaggedRegistryTest {
 	@Test
 	void findReturnsCorrectItem() {
 		var item1ID = new OpenIdentifier("test", "item1");
-		var registry = new TaggedRegistry.Builder<TestResource>(graph)
+		var registry = new TaggedRegistry.Builder<TestResource>(resolver)
 				.add(new TestResource(item1ID, Set.of(IRON)))
 				.build();
 

@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.common.tag.engine;
 
 import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
+import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.common.tags.engine.TagLoader;
 import com.sigmundgranaas.forgero.common.tags.engine.TagParser;
 import com.sigmundgranaas.forgero.common.tags.engine.TagSource;
@@ -33,15 +33,15 @@ class TagLoaderTest {
 		);
 
 		TagLoader loader = new TagLoader(factory, parser);
-		TagGraph graph = loader.load(List.of(source));
+		TagResolver resolver = loader.load(List.of(source));
 
 		OpenIdentifier swordBladeId = factory.of("forgero:sword_blade");
 		OpenIdentifier partId = factory.of("forgero:part");
 		OpenIdentifier bladeId = factory.of("forgero:blade");
 
-		assertTrue(graph.isTagged(() -> Set.of(swordBladeId), partId));
-		assertTrue(graph.isTagged(() -> Set.of(swordBladeId), bladeId));
-		assertFalse(graph.isTagged(() -> Set.of(bladeId), partId));
+		assertTrue(resolver.hasTag(() -> Set.of(swordBladeId), partId));
+		assertTrue(resolver.hasTag(() -> Set.of(swordBladeId), bladeId));
+		assertFalse(resolver.hasTag(() -> Set.of(bladeId), partId));
 	}
 
 	@Test

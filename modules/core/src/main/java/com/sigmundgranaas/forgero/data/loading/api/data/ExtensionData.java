@@ -51,7 +51,7 @@ public record ExtensionData(
 		@Nullable List<OpenIdentifier> tags,
 		@Nullable List<AttributeData> attributes,
 		@Nullable Map<String, JsonElement> properties
-) implements ResourceTypeData {
+) implements DefinitionData, ResourceTypeData {
 
 	/**
 	 * The type identifier for extension resources.

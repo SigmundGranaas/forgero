@@ -7,8 +7,7 @@ import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.loading.api.RawDefinition;
 import com.sigmundgranaas.forgero.data.loading.api.data.ExtensionData;
-import com.sigmundgranaas.forgero.data.loading.api.data.MaterialData;
-import com.sigmundgranaas.forgero.data.loading.api.data.ShapeData;
+import com.sigmundgranaas.forgero.data.loading.api.data.ResourceData;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeDataImpl;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.ComputationData;
@@ -42,7 +41,7 @@ class ExtensionMergerTest {
 
 		@Test
 		void shouldReturnOriginalDefinitionsUnchanged() {
-			MaterialData iron = new MaterialData(
+			ResourceData iron = new ResourceData(
 					id("forgero:material"),
 					"iron",
 					null,
@@ -70,7 +69,7 @@ class ExtensionMergerTest {
 
 		@Test
 		void shouldUnionTagsFromExtension() {
-			MaterialData iron = new MaterialData(
+			ResourceData iron = new ResourceData(
 					id("forgero:material"),
 					"iron",
 					null,
@@ -95,7 +94,7 @@ class ExtensionMergerTest {
 			assertEquals(1, result.size());
 			assertFalse(result.containsKey(id("forgero:extensions/iron-tools")));
 
-			MaterialData merged = (MaterialData) result.get(id("forgero:materials/iron")).data();
+			ResourceData merged = (ResourceData) result.get(id("forgero:materials/iron")).data();
 			assertNotNull(merged.tags());
 			assertEquals(3, merged.tags().size());
 			assertTrue(merged.tags().contains(id("forgero:metal")));
@@ -105,7 +104,7 @@ class ExtensionMergerTest {
 
 		@Test
 		void shouldNotDuplicateTags() {
-			MaterialData iron = new MaterialData(
+			ResourceData iron = new ResourceData(
 					id("forgero:material"),
 					"iron",
 					null,
@@ -126,7 +125,7 @@ class ExtensionMergerTest {
 			definitions.put(id("forgero:extensions/iron-ext"), new RawDefinition(id("forgero:extensions/iron-ext"), extension));
 
 			Map<OpenIdentifier, RawDefinition> result = merger.merge(definitions);
-			MaterialData merged = (MaterialData) result.get(id("forgero:materials/iron")).data();
+			ResourceData merged = (ResourceData) result.get(id("forgero:materials/iron")).data();
 
 			// Should have 3 unique tags, not 4
 			assertEquals(3, merged.tags().size());
@@ -145,7 +144,7 @@ class ExtensionMergerTest {
 					null
 			);
 
-			MaterialData iron = new MaterialData(
+			ResourceData iron = new ResourceData(
 					id("forgero:material"),
 					"iron",
 					null, null, null, null,
@@ -174,7 +173,7 @@ class ExtensionMergerTest {
 			definitions.put(id("forgero:extensions/iron-tools"), new RawDefinition(id("forgero:extensions/iron-tools"), extension));
 
 			Map<OpenIdentifier, RawDefinition> result = merger.merge(definitions);
-			MaterialData merged = (MaterialData) result.get(id("forgero:materials/iron")).data();
+			ResourceData merged = (ResourceData) result.get(id("forgero:materials/iron")).data();
 
 			assertNotNull(merged.attributes());
 			assertEquals(2, merged.attributes().size());
@@ -192,7 +191,7 @@ class ExtensionMergerTest {
 			tooltips.add(new JsonPrimitive("Base tooltip"));
 			Map<String, com.google.gson.JsonElement> baseProps = Map.of("forgero:tooltip", tooltips);
 
-			MaterialData iron = new MaterialData(
+			ResourceData iron = new ResourceData(
 					id("forgero:material"),
 					"iron",
 					null, null, null, null, null, null,
@@ -216,7 +215,7 @@ class ExtensionMergerTest {
 			definitions.put(id("forgero:extensions/iron-ext"), new RawDefinition(id("forgero:extensions/iron-ext"), extension));
 
 			Map<OpenIdentifier, RawDefinition> result = merger.merge(definitions);
-			MaterialData merged = (MaterialData) result.get(id("forgero:materials/iron")).data();
+			ResourceData merged = (ResourceData) result.get(id("forgero:materials/iron")).data();
 
 			assertNotNull(merged.properties());
 			assertEquals(2, merged.properties().size());
@@ -229,7 +228,7 @@ class ExtensionMergerTest {
 			JsonArray baseTooltips = new JsonArray();
 			baseTooltips.add(new JsonPrimitive("Base tooltip"));
 
-			MaterialData iron = new MaterialData(
+			ResourceData iron = new ResourceData(
 					id("forgero:material"),
 					"iron",
 					null, null, null, null, null, null,
@@ -252,7 +251,7 @@ class ExtensionMergerTest {
 			definitions.put(id("forgero:extensions/iron-ext"), new RawDefinition(id("forgero:extensions/iron-ext"), extension));
 
 			Map<OpenIdentifier, RawDefinition> result = merger.merge(definitions);
-			MaterialData merged = (MaterialData) result.get(id("forgero:materials/iron")).data();
+			ResourceData merged = (ResourceData) result.get(id("forgero:materials/iron")).data();
 
 			JsonArray mergedTooltips = merged.properties().get("forgero:tooltip").getAsJsonArray();
 			assertEquals(2, mergedTooltips.size());
@@ -264,7 +263,7 @@ class ExtensionMergerTest {
 			baseConfig.addProperty("debug", false);
 			baseConfig.addProperty("version", "1.0");
 
-			MaterialData iron = new MaterialData(
+			ResourceData iron = new ResourceData(
 					id("forgero:material"),
 					"iron",
 					null, null, null, null, null, null,
@@ -288,7 +287,7 @@ class ExtensionMergerTest {
 			definitions.put(id("forgero:extensions/iron-ext"), new RawDefinition(id("forgero:extensions/iron-ext"), extension));
 
 			Map<OpenIdentifier, RawDefinition> result = merger.merge(definitions);
-			MaterialData merged = (MaterialData) result.get(id("forgero:materials/iron")).data();
+			ResourceData merged = (ResourceData) result.get(id("forgero:materials/iron")).data();
 
 			JsonObject mergedConfig = merged.properties().get("config").getAsJsonObject();
 			// Extension value overwrites base for primitives
@@ -305,7 +304,7 @@ class ExtensionMergerTest {
 
 		@Test
 		void shouldApplyInPriorityOrder() {
-			MaterialData iron = new MaterialData(
+			ResourceData iron = new ResourceData(
 					id("forgero:material"),
 					"iron",
 					null,
@@ -335,7 +334,7 @@ class ExtensionMergerTest {
 			definitions.put(id("forgero:extensions/iron-high"), new RawDefinition(id("forgero:extensions/iron-high"), highPriority));
 
 			Map<OpenIdentifier, RawDefinition> result = merger.merge(definitions);
-			MaterialData merged = (MaterialData) result.get(id("forgero:materials/iron")).data();
+			ResourceData merged = (ResourceData) result.get(id("forgero:materials/iron")).data();
 
 			// All tags should be present in order
 			assertEquals(3, merged.tags().size());
@@ -372,7 +371,7 @@ class ExtensionMergerTest {
 
 		@Test
 		void shouldMergeIntoShapeData() {
-			ShapeData shape = new ShapeData(
+			ResourceData shape = new ResourceData(
 					id("forgero:shape"),
 					"pickaxe_head",
 					null,
@@ -393,7 +392,7 @@ class ExtensionMergerTest {
 			definitions.put(id("forgero:extensions/pickaxe-ext"), new RawDefinition(id("forgero:extensions/pickaxe-ext"), extension));
 
 			Map<OpenIdentifier, RawDefinition> result = merger.merge(definitions);
-			ShapeData merged = (ShapeData) result.get(id("forgero:shapes/pickaxe_head")).data();
+			ResourceData merged = (ResourceData) result.get(id("forgero:shapes/pickaxe_head")).data();
 
 			assertEquals(2, merged.tags().size());
 			assertTrue(merged.tags().contains(id("forgero:tool_shape")));
@@ -406,7 +405,7 @@ class ExtensionMergerTest {
 
 		@Test
 		void shouldCreateFieldsWhenBaseIsNull() {
-			MaterialData iron = new MaterialData(
+			ResourceData iron = new ResourceData(
 					id("forgero:material"),
 					"iron",
 					null, null, null, null, null, null, null
@@ -425,7 +424,7 @@ class ExtensionMergerTest {
 			definitions.put(id("forgero:extensions/iron-ext"), new RawDefinition(id("forgero:extensions/iron-ext"), extension));
 
 			Map<OpenIdentifier, RawDefinition> result = merger.merge(definitions);
-			MaterialData merged = (MaterialData) result.get(id("forgero:materials/iron")).data();
+			ResourceData merged = (ResourceData) result.get(id("forgero:materials/iron")).data();
 
 			assertNotNull(merged.tags());
 			assertEquals(1, merged.tags().size());

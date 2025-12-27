@@ -8,6 +8,7 @@ import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.data.loading.api.RawDefinition;
+import com.sigmundgranaas.forgero.data.loading.api.data.DefinitionData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.CreateData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.HostData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.template.HostTemplateData;
@@ -101,7 +102,7 @@ public class TemplateGenerator {
 		String idTemplate = Objects.requireNonNullElse(template.structure().id(), "{material.name}-{shape.name}");
 		OpenIdentifier newId = OpenIdentifier.parse(resolveIdTemplate(idTemplate, combination));
 
-		List<Object> dtoList = new ArrayList<>();
+		List<DefinitionData> dtoList = new ArrayList<>();
 		dtoList.add(template);
 		combination.values().forEach(comp -> dtoList.add(rawDefinitions.get(comp.id()).data()));
 		PropertyMerger.MergedResult merged = propertyMerger.merge(dtoList);
@@ -135,11 +136,11 @@ public class TemplateGenerator {
 		String idTemplate = Objects.requireNonNullElse(template.structure().id(), "{head.material.name}-tool");
 		OpenIdentifier newId = OpenIdentifier.parse(resolveIdTemplate(idTemplate, combination));
 
-		List<Object> rawPartsDtoList = combination.values().stream()
+		List<DefinitionData> rawPartsDtoList = combination.values().stream()
 				.flatMap(comp -> getSourceDtosForComponent(comp).stream())
 				.toList();
 
-		List<Object> fullDtoList = new ArrayList<>();
+		List<DefinitionData> fullDtoList = new ArrayList<>();
 		fullDtoList.add(template);
 		fullDtoList.addAll(rawPartsDtoList);
 		PropertyMerger.MergedResult merged = propertyMerger.merge(fullDtoList);
@@ -167,7 +168,7 @@ public class TemplateGenerator {
 		return new CofComponent(newId, componentType, merged.tags(), merged.properties(), newStructure, upgrades, 1);
 	}
 
-	private List<Object> getSourceDtosForComponent(CofComponent component) {
+	private List<DefinitionData> getSourceDtosForComponent(CofComponent component) {
 		if (component.structure() == null) { // It's a static component
 			return List.of(rawDefinitions.get(component.id()).data());
 		}

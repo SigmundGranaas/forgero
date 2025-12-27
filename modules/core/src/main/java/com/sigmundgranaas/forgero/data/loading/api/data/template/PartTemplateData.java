@@ -1,9 +1,10 @@
 package com.sigmundgranaas.forgero.data.loading.api.data.template;
 
 import com.google.gson.JsonElement;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.data.loading.api.data.DefinitionData;
 import com.sigmundgranaas.forgero.data.loading.api.data.GenerationConfigData;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
-import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.template.HostTemplateData;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,5 +45,5 @@ public record PartTemplateData(
 		GenerationConfigData generation,
 		@Nullable
 		Map<String, JsonElement> properties
-) implements TemplateData {
+) implements DefinitionData, TemplateData {
 }

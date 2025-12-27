@@ -7,8 +7,16 @@ dependencies {
 
 	// Fabric API
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
+
+	// JUnit
+	testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
 }
 
 loom {
 	accessWidenerPath = file("src/main/resources/common.accesswidener")
+}
+
+test {
+	useJUnitPlatform()
 }

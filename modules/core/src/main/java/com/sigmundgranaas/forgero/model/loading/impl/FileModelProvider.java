@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.model.loading.impl;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.model.api.item.Model;
 import com.sigmundgranaas.forgero.model.loading.impl.codec.ModelCodecs;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.ModelDTO;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * Loads item models from JSON files using pure composition.
@@ -25,13 +27,23 @@ public class FileModelProvider implements ResourceConverter<Model> {
 	// Composition: CONTAINS a generic loader, delegates loading to it
 	private final GenericJsonModelLoader<ModelDTO, Model> loader;
 
-	public FileModelProvider() {
-		ModelTranslator translator = new ModelTranslator();
+	/**
+	 * Creates a provider with inheritance-aware tag predicates.
+	 */
+	public FileModelProvider(Supplier<TagResolver> resolverSupplier) {
+		ModelTranslator translator = new ModelTranslator(resolverSupplier);
 		this.loader = new GenericJsonModelLoader<>(
 				ModelCodecs.MODEL_DTO_CODEC_DISPATCHER,
 				translator::toDomain,
 				"item model"
 		);
+	}
+
+	/**
+	 * Creates a provider with direct-only tag matching (no inheritance).
+	 */
+	public FileModelProvider() {
+		this(null);
 	}
 
 	@Override

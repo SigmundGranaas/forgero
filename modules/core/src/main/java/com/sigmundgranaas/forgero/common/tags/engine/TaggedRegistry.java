@@ -49,7 +49,7 @@ public class TaggedRegistry<T extends Identifiable & Taggable> {
 	 * @param tag The exact tag to look for.
 	 * @return A list of resources with the direct tag.
 	 */
-	public List<T> get(OpenIdentifier tag) {
+	public List<T> getDirectlyTagged(OpenIdentifier tag) {
 		return tagIndex.getOrDefault(tag, Collections.emptySet())
 				.stream()
 				.map(resources::get)
@@ -58,17 +58,33 @@ public class TaggedRegistry<T extends Identifiable & Taggable> {
 	}
 
 	/**
-	 * Queries for all resources that match a tag, including through inheritance.
+	 * Finds all resources that match a tag, including through inheritance.
 	 * For example, querying for "forgero:metal" will also find items tagged with "forgero:iron" if iron is a child of metal.
 	 *
 	 * @param tag The tag to query by.
 	 * @return A list of all matching resources.
 	 */
-	public List<T> query(OpenIdentifier tag) {
+	public List<T> findByTag(OpenIdentifier tag) {
 		return tagResolver.getDescendants(tag).stream()
-				.flatMap(descendantTag -> get(descendantTag).stream())
+				.flatMap(descendantTag -> getDirectlyTagged(descendantTag).stream())
 				.distinct()
 				.collect(Collectors.toList());
+	}
+
+	/**
+	 * @deprecated Use {@link #getDirectlyTagged(OpenIdentifier)} instead.
+	 */
+	@Deprecated(forRemoval = true)
+	public List<T> get(OpenIdentifier tag) {
+		return getDirectlyTagged(tag);
+	}
+
+	/**
+	 * @deprecated Use {@link #findByTag(OpenIdentifier)} instead.
+	 */
+	@Deprecated(forRemoval = true)
+	public List<T> query(OpenIdentifier tag) {
+		return findByTag(tag);
 	}
 
 

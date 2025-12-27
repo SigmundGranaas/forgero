@@ -28,8 +28,8 @@ public class ModelDataInitializer {
 	}
 
 	public ModelInitializationResult initialize(Map<OpenIdentifier, Component> components, TagResolver tagResolver, ItemModelRegistry itemModelRegistry, ArmorModelRegistry armorModelRegistry) {
-		// 1. Load all files using the unified loader
-		ModelFileLoader fileLoader = new ModelFileLoader(resourceProvider);
+		// 1. Load all files using the unified loader (with inheritance-aware tag predicates)
+		ModelFileLoader fileLoader = new ModelFileLoader(resourceProvider, () -> tagResolver);
 		fileLoader.load();
 
 		// 2. Register all manually defined models immediately
@@ -47,8 +47,8 @@ public class ModelDataInitializer {
 		ModelGenerator modelGenerator = new ModelGeneratorImpl(tagResolver);
 		ModelGenerationResult generationResult = modelGenerator.generate(components, templateProvider);
 
-		// 5a. Translate and register generated item models
-		ModelTranslator itemTranslator = new ModelTranslator();
+		// 5a. Translate and register generated item models (with inheritance-aware tag predicates)
+		ModelTranslator itemTranslator = new ModelTranslator(() -> tagResolver);
 		generationResult.generatedModels().forEach((id, dto) -> {
 			Model model = itemTranslator.toDomain(id, dto);
 			itemModelRegistry.register(model);

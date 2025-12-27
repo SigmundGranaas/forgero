@@ -5,7 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.loading.api.RawDefinition;
-import com.sigmundgranaas.forgero.data.loading.api.data.*;
+import com.sigmundgranaas.forgero.data.loading.api.data.DefinitionData;
+import com.sigmundgranaas.forgero.data.loading.api.data.ExtensionData;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,7 +84,7 @@ public class ExtensionMerger {
 				continue;
 			}
 
-			Object mergedData = targetDef.data();
+			DefinitionData mergedData = targetDef.data();
 			for (ExtensionData extension : targetExtensions) {
 				mergedData = mergeInto(mergedData, extension);
 			}
@@ -96,97 +97,22 @@ public class ExtensionMerger {
 	}
 
 	/**
-	 * Merges an extension's data into a target definition.
+	 * Merges an extension's data into a target definition using polymorphic dispatch.
 	 *
-	 * @param target    The target data object
+	 * <p>Uses the {@link DefinitionData#withMergedExtension} method to create a new
+	 * definition with merged tags, attributes, and properties. Types that don't support
+	 * extension merging (like templates) return themselves unchanged.</p>
+	 *
+	 * @param target    The target definition data
 	 * @param extension The extension to merge
-	 * @return A new data object with the extension merged
+	 * @return A new definition with the extension merged
 	 */
-	private Object mergeInto(Object target, ExtensionData extension) {
-		if (target instanceof MaterialData data) {
-			return mergeMaterial(data, extension);
-		} else if (target instanceof ShapeData data) {
-			return mergeShape(data, extension);
-		} else if (target instanceof SchematicData data) {
-			return mergeSchematic(data, extension);
-		} else if (target instanceof CastData data) {
-			return mergeCast(data, extension);
-		} else if (target instanceof StaticData data) {
-			return mergeStatic(data, extension);
-		} else {
-			LOGGER.warn("Cannot merge extension into unsupported type: {}", target.getClass().getSimpleName());
-			return target;
-		}
-	}
+	private DefinitionData mergeInto(DefinitionData target, ExtensionData extension) {
+		List<OpenIdentifier> mergedTags = mergeTags(target.tags(), extension.tags());
+		List<AttributeData> mergedAttributes = mergeAttributes(target.attributes(), extension.attributes());
+		Map<String, JsonElement> mergedProperties = mergeProperties(target.properties(), extension.properties());
 
-	private MaterialData mergeMaterial(MaterialData target, ExtensionData extension) {
-		return new MaterialData(
-				target.type(),
-				target.name(),
-				target.include(),
-				mergeTags(target.tags(), extension.tags()),
-				target.localTags(),
-				target.host(),
-				mergeAttributes(target.attributes(), extension.attributes()),
-				target.localAttributes(),
-				mergeProperties(target.properties(), extension.properties())
-		);
-	}
-
-	private ShapeData mergeShape(ShapeData target, ExtensionData extension) {
-		return new ShapeData(
-				target.type(),
-				target.name(),
-				target.include(),
-				mergeTags(target.tags(), extension.tags()),
-				target.localTags(),
-				target.host(),
-				mergeAttributes(target.attributes(), extension.attributes()),
-				target.localAttributes(),
-				mergeProperties(target.properties(), extension.properties())
-		);
-	}
-
-	private SchematicData mergeSchematic(SchematicData target, ExtensionData extension) {
-		return new SchematicData(
-				target.type(),
-				target.name(),
-				target.include(),
-				mergeTags(target.tags(), extension.tags()),
-				target.localTags(),
-				target.host(),
-				mergeAttributes(target.attributes(), extension.attributes()),
-				target.localAttributes(),
-				target.target(),
-				mergeProperties(target.properties(), extension.properties())
-		);
-	}
-
-	private CastData mergeCast(CastData target, ExtensionData extension) {
-		return new CastData(
-				target.type(),
-				target.name(),
-				target.include(),
-				mergeTags(target.tags(), extension.tags()),
-				target.localTags(),
-				target.host(),
-				mergeAttributes(target.attributes(), extension.attributes()),
-				target.localAttributes(),
-				mergeProperties(target.properties(), extension.properties())
-		);
-	}
-
-	private StaticData mergeStatic(StaticData target, ExtensionData extension) {
-		return new StaticData(
-				target.type(),
-				target.name(),
-				target.include(),
-				mergeTags(target.tags(), extension.tags()),
-				target.host(),
-				mergeAttributes(target.attributes(), extension.attributes()),
-				target.upgrades(),
-				mergeProperties(target.properties(), extension.properties())
-		);
+		return target.withMergedExtension(mergedTags, mergedAttributes, mergedProperties);
 	}
 
 	/**

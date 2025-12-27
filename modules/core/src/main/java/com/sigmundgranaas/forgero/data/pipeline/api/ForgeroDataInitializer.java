@@ -13,12 +13,15 @@ import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 import com.sigmundgranaas.forgero.data.loading.api.RawDefinition;
+import com.sigmundgranaas.forgero.data.loading.api.data.DefinitionData;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.HostData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.EquipmentTemplateData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.PartTemplateData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.UpgradeSlotData;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.*;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.AttributeCodecs;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.DefinitionCodecRegistry;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.PartTemplateCodecs;
 import com.sigmundgranaas.forgero.data.pipeline.impl.*;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceConverter;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceProvider;
@@ -71,8 +74,8 @@ public class ForgeroDataInitializer {
 		Codec<List<AttributeData>> attributeDataListCodec = Codec.list(AttributeCodecs.create(conditionCodec));
 		Codec<List<UpgradeSlotData>> upgradeSlotDataListCodec = Codec.list(PartTemplateCodecs.UPGRADE_SLOT_DATA_CODEC);
 
-		var rawDtoCodecs = new RawDtoCodecs(RawDtoCodecs.defaultMap(attributeDataListCodec, upgradeSlotDataListCodec));
-		ResourceConverter<RawDefinition> converter = new RawDefinitionConverter(identifierFactory, rawDtoCodecs::codecFor);
+		DefinitionCodecRegistry codecRegistry = DefinitionCodecRegistry.createDefault(attributeDataListCodec, upgradeSlotDataListCodec);
+		ResourceConverter<RawDefinition> converter = new RawDefinitionConverter(identifierFactory, codecRegistry);
 		ResourceLoader<RawDefinition> dataLoader = new ResourceLoader<>(config.resourceProvider(), converter);
 
 		// Prepare for multi-namespace loading
@@ -119,7 +122,7 @@ public class ForgeroDataInitializer {
 				.toList();
 
 		for (RawDefinition def : staticDefinitions) {
-			List<Object> chain = includeResolver.resolve(def.id());
+			List<DefinitionData> chain = includeResolver.resolve(def.id());
 			PropertyMerger.MergedResult merged = propertyMerger.merge(chain);
 			CofComponent cof = cofConverter.convert(def, merged);
 			staticComponents.put(cof.id(), cof);
@@ -156,32 +159,5 @@ public class ForgeroDataInitializer {
 
 	public ForgeroDataBundle getDataBundle() {
 		return dataBundle;
-	}
-
-	private static class RawDtoCodecs {
-		private final Map<String, Codec<?>> codecMap;
-
-		private RawDtoCodecs(Map<String, Codec<?>> codecMap) {
-			this.codecMap = codecMap;
-		}
-
-		public static Map<String, Codec<?>> defaultMap(Codec<List<AttributeData>> attributeCodec, Codec<List<UpgradeSlotData>> upgradeSlotCodec) {
-			Map<String, Codec<?>> codecMap = new HashMap<>();
-			codecMap.put("material", MaterialCodecs.create(attributeCodec));
-			codecMap.put("shape", ShapeCodecs.create(attributeCodec));
-			codecMap.put("schematic", SchematicCodecs.create(attributeCodec));
-			codecMap.put("cast", CastCodecs.create(attributeCodec));
-			codecMap.put("static_part", StaticPartCodecs.create(attributeCodec, upgradeSlotCodec));
-			codecMap.put("part_template", PartTemplateCodecs.create(attributeCodec, upgradeSlotCodec));
-			codecMap.put("equipment_template", EquipmentTemplateCodecs.create(attributeCodec, upgradeSlotCodec));
-			codecMap.put("tool_template", EquipmentTemplateCodecs.create(attributeCodec, upgradeSlotCodec)); // Legacy support
-			codecMap.put("extension", ExtensionCodecs.create(attributeCodec));
-
-			return codecMap;
-		}
-
-		public Codec<?> codecFor(String type) {
-			return codecMap.get(type);
-		}
 	}
 }
