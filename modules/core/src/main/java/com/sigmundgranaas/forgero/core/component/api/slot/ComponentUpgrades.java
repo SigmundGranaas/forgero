@@ -94,14 +94,4 @@ public record ComponentUpgrades(SlotContainer<UpgradeSlot> slots) {
 	public boolean allFilled() {
 		return slots.all().stream().allMatch(UpgradeSlot::isFilled);
 	}
-
-	/**
-	 * Legacy compatibility: returns slots as a List.
-	 *
-	 * @deprecated Use {@link #slots()} and its methods instead
-	 */
-	@Deprecated
-	public List<UpgradeSlot> slotsList() {
-		return slots.asList();
-	}
 }

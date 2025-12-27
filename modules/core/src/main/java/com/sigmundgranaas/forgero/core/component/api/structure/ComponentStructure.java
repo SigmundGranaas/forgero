@@ -82,15 +82,4 @@ public record ComponentStructure(SlotContainer<StructureSlot> slots) {
 	public int size() {
 		return slots.size();
 	}
-
-	/**
-	 * Legacy compatibility: returns slots as a Map.
-	 *
-	 * @deprecated Use {@link #slots()} and its methods instead
-	 */
-	@Deprecated
-	public Map<OpenIdentifier, StructureSlot> slotsAsMap() {
-		return slots.all().stream()
-				.collect(Collectors.toMap(StructureSlot::id, s -> s));
-	}
 }

@@ -21,7 +21,7 @@ public class NotCondition {
 		return conditionCodec.fieldOf("predicate").codec();
 	}
 
-	public static Object from(Condition child) {
+	public static LogicalConditionResult from(Condition child) {
 		if (child.dynamicConditions().isEmpty()) {
 			return new NotStatic(child.staticConditions().get(0));
 		}
@@ -29,7 +29,7 @@ public class NotCondition {
 				child.dynamicConditions().isEmpty() ? null : child.dynamicConditions().get(0));
 	}
 
-	public record NotStatic(StaticCondition condition) implements StaticCondition {
+	public record NotStatic(StaticCondition condition) implements StaticCondition, LogicalConditionResult {
 		@Override
 		public boolean test(ResolutionContext context) {
 			return !condition.test(context);
@@ -45,7 +45,7 @@ public class NotCondition {
 		}
 	}
 
-	public record NotDynamic(StaticCondition staticCond, DynamicCondition dynamicCond) implements DynamicCondition {
+	public record NotDynamic(StaticCondition staticCond, DynamicCondition dynamicCond) implements DynamicCondition, LogicalConditionResult {
 		@Override
 		public boolean test(DynamicContext context) {
 			boolean dynamicResult = dynamicCond == null || dynamicCond.test(context);

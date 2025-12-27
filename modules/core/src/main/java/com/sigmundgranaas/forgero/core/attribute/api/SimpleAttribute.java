@@ -45,6 +45,6 @@ public record SimpleAttribute(
 						   int group,
 						   @Nullable
 						   Condition localCondition) {
-		this(Optional.empty(), type, value, operator, group, Condition.ALWAYS_TRUE);
+		this(Optional.empty(), type, value, operator, group, localCondition);
 	}
 }

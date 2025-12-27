@@ -71,23 +71,6 @@ public class TaggedRegistry<T extends Identifiable & Taggable> {
 				.collect(Collectors.toList());
 	}
 
-	/**
-	 * @deprecated Use {@link #getDirectlyTagged(OpenIdentifier)} instead.
-	 */
-	@Deprecated(forRemoval = true)
-	public List<T> get(OpenIdentifier tag) {
-		return getDirectlyTagged(tag);
-	}
-
-	/**
-	 * @deprecated Use {@link #findByTag(OpenIdentifier)} instead.
-	 */
-	@Deprecated(forRemoval = true)
-	public List<T> query(OpenIdentifier tag) {
-		return findByTag(tag);
-	}
-
-
 	public static class Builder<T extends Identifiable & Taggable> {
 		private final TagResolver tagResolver;
 		private final Map<OpenIdentifier, T> resources = new HashMap<>();

@@ -23,14 +23,14 @@ public class OrCondition {
 		return conditionCodec.fieldOf("predicates").codec();
 	}
 
-	public static Object from(Condition children) {
+	public static LogicalConditionResult from(Condition children) {
 		if (children.dynamicConditions().isEmpty()) {
 			return new OrStatic(children.staticConditions());
 		}
 		return new OrDynamic(children.staticConditions(), children.dynamicConditions());
 	}
 
-	public record OrStatic(List<StaticCondition> conditions) implements StaticCondition {
+	public record OrStatic(List<StaticCondition> conditions) implements StaticCondition, LogicalConditionResult {
 		@Override
 		public boolean test(ResolutionContext context) {
 			return conditions.stream().anyMatch(c -> c.test(context));
@@ -46,7 +46,7 @@ public class OrCondition {
 		}
 	}
 
-	public record OrDynamic(List<StaticCondition> staticConds, List<DynamicCondition> dynamicConds) implements DynamicCondition {
+	public record OrDynamic(List<StaticCondition> staticConds, List<DynamicCondition> dynamicConds) implements DynamicCondition, LogicalConditionResult {
 		@Override
 		public boolean test(DynamicContext context) {
 			return dynamicConds.stream().anyMatch(c -> c.test(context));

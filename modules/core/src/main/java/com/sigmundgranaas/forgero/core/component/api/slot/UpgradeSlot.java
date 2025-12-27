@@ -102,14 +102,4 @@ public record UpgradeSlot(
 	public boolean isEmpty() {
 		return content.isEmpty();
 	}
-
-	/**
-	 * Legacy compatibility: applies content using the validator.
-	 *
-	 * @deprecated Use {@link #withContent(Component)} instead
-	 */
-	@Deprecated
-	public UpgradeSlot apply(Component newContent) {
-		return withContent(newContent);
-	}
 }

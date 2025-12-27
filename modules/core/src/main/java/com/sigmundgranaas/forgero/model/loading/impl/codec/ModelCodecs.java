@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.model.loading.impl.codec;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.JsonElementCodec;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.*;
 
 import java.util.Arrays;

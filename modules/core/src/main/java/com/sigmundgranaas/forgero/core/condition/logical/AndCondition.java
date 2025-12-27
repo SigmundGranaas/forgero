@@ -37,7 +37,7 @@ public class AndCondition {
 	 * @param children The Condition object containing the child predicates.
 	 * @return A StaticCondition if all children are static, otherwise a DynamicCondition.
 	 */
-	public static Object from(Condition children) {
+	public static LogicalConditionResult from(Condition children) {
 		if (children.dynamicConditions().isEmpty()) {
 			return new AndStatic(children.staticConditions());
 		}
@@ -48,7 +48,7 @@ public class AndCondition {
 	 * An AND condition that only contains static children and can be fully evaluated
 	 * during the "bake" phase.
 	 */
-	public record AndStatic(List<StaticCondition> conditions) implements StaticCondition {
+	public record AndStatic(List<StaticCondition> conditions) implements StaticCondition, LogicalConditionResult {
 		@Override
 		public boolean test(ResolutionContext context) {
 			return conditions.stream().allMatch(c -> c.test(context));
@@ -68,7 +68,7 @@ public class AndCondition {
 	 * An AND condition that contains at least one dynamic child. It must be
 	 * evaluated during the "apply" phase.
 	 */
-	public record AndDynamic(List<StaticCondition> staticConds, List<DynamicCondition> dynamicConds) implements DynamicCondition {
+	public record AndDynamic(List<StaticCondition> staticConds, List<DynamicCondition> dynamicConds) implements DynamicCondition, LogicalConditionResult {
 		@Override
 		public boolean test(DynamicContext context) {
 			return dynamicConds.stream().allMatch(c -> c.test(context));
