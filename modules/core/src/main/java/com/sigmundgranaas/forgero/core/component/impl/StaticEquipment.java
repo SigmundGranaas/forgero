@@ -18,6 +18,13 @@ public record StaticEquipment(
 		Map<String, List<?>> properties
 ) implements Component {
 
+	private static final OpenIdentifier TYPE_IDENTIFIER = OpenIdentifier.of("static_equipment");
+
+	@Override
+	public OpenIdentifier getTypeIdentifier() {
+		return TYPE_IDENTIFIER;
+	}
+
 	@Override
 	public Map<String, List<?>> propertiesAsMap() {
 		return properties;

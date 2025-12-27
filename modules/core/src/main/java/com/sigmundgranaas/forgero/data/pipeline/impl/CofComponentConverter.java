@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.data.pipeline.impl;
 
+import com.sigmundgranaas.forgero.cof.ComponentTypeRegistry;
 import com.sigmundgranaas.forgero.cof.dto.CofComponent;
 import com.sigmundgranaas.forgero.cof.dto.CofSlot;
 import com.sigmundgranaas.forgero.cof.dto.CofUpgrades;
@@ -34,10 +35,10 @@ public class CofComponentConverter {
 		if (dto instanceof ResourceData resourceData) {
 			// ResourceData is the unified type for materials, shapes, schematics, casts, and static parts
 			if (resourceData.upgrades() != null && !resourceData.upgrades().isEmpty()) {
-				componentType = idFactory.of("extensible_part");
+				componentType = ComponentTypeRegistry.EXTENSIBLE_PART;
 				upgrades = convertUpgrades(resourceData.upgrades());
 			} else {
-				componentType = idFactory.of("static_component");
+				componentType = ComponentTypeRegistry.STATIC_COMPONENT;
 			}
 		} else {
 			// This should not happen if the initializer's logic is correct (skipping templates)

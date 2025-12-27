@@ -20,6 +20,13 @@ public record ExtensiblePart(
 		ComponentUpgrades upgrades
 ) implements CustomizableComponent {
 
+	private static final OpenIdentifier TYPE_IDENTIFIER = OpenIdentifier.of("extensible_part");
+
+	@Override
+	public OpenIdentifier getTypeIdentifier() {
+		return TYPE_IDENTIFIER;
+	}
+
 	@Override
 	public Map<String, List<?>> propertiesAsMap() {
 		return properties;

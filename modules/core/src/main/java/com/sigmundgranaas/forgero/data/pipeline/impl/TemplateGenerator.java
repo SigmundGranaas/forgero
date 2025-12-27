@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.data.pipeline.impl;
 
+import com.sigmundgranaas.forgero.cof.ComponentTypeRegistry;
 import com.sigmundgranaas.forgero.cof.dto.CofComponent;
 import com.sigmundgranaas.forgero.cof.dto.CofSlot;
 import com.sigmundgranaas.forgero.cof.dto.CofStructure;
@@ -13,13 +14,12 @@ import com.sigmundgranaas.forgero.data.loading.api.data.host.CreateData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.HostData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.template.HostTemplateData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.*;
+import com.sigmundgranaas.forgero.data.pipeline.util.IdTemplateResolver;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -32,6 +32,7 @@ public class TemplateGenerator {
 	private final IdentifierFactory idFactory;
 	private final TagResolver tagResolver;
 	private final PropertyMerger propertyMerger;
+	private final IdTemplateResolver idTemplateResolver;
 	private final Map<OpenIdentifier, CofComponent> staticComponents;
 	private final Map<OpenIdentifier, RawDefinition> rawDefinitions;
 	private final List<CofComponent> generatedComponents = new ArrayList<>();
@@ -40,10 +41,11 @@ public class TemplateGenerator {
 	public record TemplateResult(List<CofComponent> components, Map<OpenIdentifier, HostData> hostData) {
 	}
 
-	public TemplateGenerator(IdentifierFactory idFactory, TagResolver tagResolver, PropertyMerger propertyMerger, Map<OpenIdentifier, CofComponent> staticComponents, Map<OpenIdentifier, RawDefinition> rawDefinitions) {
+	public TemplateGenerator(IdentifierFactory idFactory, TagResolver tagResolver, PropertyMerger propertyMerger, IdTemplateResolver idTemplateResolver, Map<OpenIdentifier, CofComponent> staticComponents, Map<OpenIdentifier, RawDefinition> rawDefinitions) {
 		this.idFactory = idFactory;
 		this.tagResolver = tagResolver;
 		this.propertyMerger = propertyMerger;
+		this.idTemplateResolver = idTemplateResolver;
 		this.staticComponents = staticComponents;
 		this.rawDefinitions = rawDefinitions;
 	}
@@ -100,7 +102,7 @@ public class TemplateGenerator {
 		PartTemplateData template = (PartTemplateData) templateDef.data();
 
 		String idTemplate = Objects.requireNonNullElse(template.structure().id(), "{material.name}-{shape.name}");
-		OpenIdentifier newId = OpenIdentifier.parse(resolveIdTemplate(idTemplate, combination));
+		OpenIdentifier newId = OpenIdentifier.parse(idTemplateResolver.resolve(idTemplate, combination));
 
 		List<DefinitionData> dtoList = new ArrayList<>();
 		dtoList.add(template);
@@ -121,10 +123,10 @@ public class TemplateGenerator {
 		OpenIdentifier componentType;
 		CofUpgrades upgrades = null;
 		if (template.upgrades() != null && !template.upgrades().isEmpty()) {
-			componentType = idFactory.of("structured_extensible_part");
+			componentType = ComponentTypeRegistry.STRUCTURED_EXTENSIBLE_PART;
 			upgrades = convertUpgrades(template.upgrades());
 		} else {
-			componentType = idFactory.of("structured_part");
+			componentType = ComponentTypeRegistry.STRUCTURED_PART;
 		}
 
 		return new CofComponent(newId, componentType, merged.tags(), merged.properties(), newStructure, upgrades, 1);
@@ -134,7 +136,7 @@ public class TemplateGenerator {
 		EquipmentTemplateData template = (EquipmentTemplateData) templateDef.data();
 
 		String idTemplate = Objects.requireNonNullElse(template.structure().id(), "{head.material.name}-tool");
-		OpenIdentifier newId = OpenIdentifier.parse(resolveIdTemplate(idTemplate, combination));
+		OpenIdentifier newId = OpenIdentifier.parse(idTemplateResolver.resolve(idTemplate, combination));
 
 		List<DefinitionData> rawPartsDtoList = combination.values().stream()
 				.flatMap(comp -> getSourceDtosForComponent(comp).stream())
@@ -159,10 +161,10 @@ public class TemplateGenerator {
 		OpenIdentifier componentType;
 		CofUpgrades upgrades = null;
 		if (template.upgrades() != null && !template.upgrades().isEmpty()) {
-			componentType = idFactory.of("structured_extensible_equipment");
+			componentType = ComponentTypeRegistry.STRUCTURED_EXTENSIBLE_EQUIPMENT;
 			upgrades = convertUpgrades(template.upgrades());
 		} else {
-			componentType = idFactory.of("structured_equipment");
+			componentType = ComponentTypeRegistry.STRUCTURED_EQUIPMENT;
 		}
 
 		return new CofComponent(newId, componentType, merged.tags(), merged.properties(), newStructure, upgrades, 1);
@@ -232,74 +234,12 @@ public class TemplateGenerator {
 			return Optional.empty();
 		}
 
-		String resolvedIdStr = resolveIdTemplate(template.create().id(), combination);
-		String resolvedClassName = resolveIdTemplate(template.create().className(), combination);
-		String resolvedItemGroup = template.create().itemGroup() != null ? resolveIdTemplate(template.create().itemGroup(), combination) : null;
+		String resolvedIdStr = idTemplateResolver.resolve(template.create().id(), combination);
+		String resolvedClassName = idTemplateResolver.resolve(template.create().className(), combination);
+		String resolvedItemGroup = template.create().itemGroup() != null ? idTemplateResolver.resolve(template.create().itemGroup(), combination) : null;
 
 		OpenIdentifier resolvedId = OpenIdentifier.parse(resolvedIdStr);
 		return Optional.of(new HostData(null, new CreateData(resolvedId, resolvedClassName, resolvedItemGroup)));
-	}
-
-	private String resolveIdTemplate(String template, Map<String, CofComponent> combination) {
-		Pattern pattern = Pattern.compile("\\{([^}]+)}");
-		Matcher matcher = pattern.matcher(template);
-		return matcher.replaceAll(matchResult -> {
-			String placeholder = matchResult.group(1);
-			String[] parts = placeholder.split("\\.");
-			if (parts.length < 2) return matchResult.group(0);
-
-			CofComponent componentInSlot = combination.get(parts[0]);
-			if (componentInSlot == null) return matchResult.group(0);
-
-			if (parts.length > 2) {
-				CofComponent current = componentInSlot;
-				for (int i = 1; i < parts.length - 1; i++) {
-					if (current.structure() != null && current.structure().slots().containsKey(idFactory.of(parts[i]))) {
-						current = current.structure().slots().get(idFactory.of(parts[i])).content();
-						if (current == null) return matchResult.group(0);
-					} else {
-						return matchResult.group(0);
-					}
-				}
-				String property = parts[parts.length - 1];
-				if ("name".equals(property)) {
-					return current.id().name();
-				}
-			} else {
-				String property = parts[1];
-
-				// Handle {shape.shape_name} placeholder
-				if ("shape_name".equals(property)) {
-					RawDefinition rawDef = rawDefinitions.get(componentInSlot.id());
-					if (rawDef != null && rawDef.data() instanceof com.sigmundgranaas.forgero.data.loading.api.data.ResourceTypeData resourceTypeData) {
-						// If has includes, get the name from the first include's identifier
-						if (resourceTypeData.include() != null && !resourceTypeData.include().isEmpty()) {
-							String includeName = resourceTypeData.include().get(0).name();
-							// Strip _shape suffix if present
-							if (includeName.endsWith("_shape")) {
-								return includeName.substring(0, includeName.length() - "_shape".length());
-							}
-							return includeName;
-						}
-					}
-					// Otherwise use the component's own identifier name and strip _shape suffix
-					String componentName = componentInSlot.id().name();
-					if (componentName.endsWith("_shape")) {
-						return componentName.substring(0, componentName.length() - "_shape".length());
-					}
-					return componentName;
-				}
-
-				if ("name".equals(property)) {
-					String componentName = componentInSlot.id().name();
-					if ("shape".equals(parts[0]) && componentName.endsWith("_shape")) {
-						return componentName.substring(0, componentName.length() - "_shape".length());
-					}
-					return componentName;
-				}
-			}
-			return matchResult.group(0);
-		});
 	}
 
 	/**

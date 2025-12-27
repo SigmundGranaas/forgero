@@ -12,6 +12,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+import static com.sigmundgranaas.forgero.cof.ComponentTypeRegistry.*;
+
 /**
  * A service responsible for constructing component instances from their constituent parts
  * and for determining the type identifier of a component instance for serialization.
@@ -55,53 +57,53 @@ public final class ComponentConstructor {
 		};
 
 		// Register from most specific to least specific to ensure correct type resolution.
-		register.accept(id("structured_extensible_equipment"), StructuredExtensibleEquipment.class, (id, tags, props, struct, upgs) -> {
+		register.accept(STRUCTURED_EXTENSIBLE_EQUIPMENT, StructuredExtensibleEquipment.class, (id, tags, props, struct, upgs) -> {
 			if (struct == null || upgs == null) {
 				return DataResult.error(() -> "Missing structure or upgrades for structured_extensible_equipment with id: " + id);
 			}
 			return DataResult.success(new StructuredExtensibleEquipment(id, tags, props, struct, upgs));
 		});
 
-		register.accept(id("structured_extensible_part"), StructuredExtensiblePart.class, (id, tags, props, struct, upgs) -> {
+		register.accept(STRUCTURED_EXTENSIBLE_PART, StructuredExtensiblePart.class, (id, tags, props, struct, upgs) -> {
 			if (struct == null || upgs == null) {
 				return DataResult.error(() -> "Missing structure or upgrades for structured_extensible_part with id: " + id);
 			}
 			return DataResult.success(new StructuredExtensiblePart(id, tags, props, struct, upgs));
 		});
 
-		register.accept(id("structured_equipment"), StructuredEquipment.class, (id, tags, props, struct, upgs) -> {
+		register.accept(STRUCTURED_EQUIPMENT, StructuredEquipment.class, (id, tags, props, struct, upgs) -> {
 			if (struct == null) {
 				return DataResult.error(() -> "Missing structure for structured_equipment with id: " + id);
 			}
 			return DataResult.success(new StructuredEquipment(id, tags, props, struct));
 		});
 
-		register.accept(id("structured_part"), StructuredPart.class, (id, tags, props, struct, upgs) -> {
+		register.accept(STRUCTURED_PART, StructuredPart.class, (id, tags, props, struct, upgs) -> {
 			if (struct == null) {
 				return DataResult.error(() -> "Missing structure for structured_part with id: " + id);
 			}
 			return DataResult.success(new StructuredPart(id, tags, props, struct));
 		});
 
-		register.accept(id("extensible_equipment"), ExtensibleEquipment.class, (id, tags, props, struct, upgs) -> {
+		register.accept(EXTENSIBLE_EQUIPMENT, ExtensibleEquipment.class, (id, tags, props, struct, upgs) -> {
 			if (upgs == null) {
 				return DataResult.error(() -> "Missing upgrades for extensible_equipment with id: " + id);
 			}
 			return DataResult.success(new ExtensibleEquipment(id, tags, props, upgs));
 		});
 
-		register.accept(id("extensible_part"), ExtensiblePart.class, (id, tags, props, struct, upgs) -> {
+		register.accept(EXTENSIBLE_PART, ExtensiblePart.class, (id, tags, props, struct, upgs) -> {
 			if (upgs == null) {
 				return DataResult.error(() -> "Missing upgrades for extensible_part with id: " + id);
 			}
 			return DataResult.success(new ExtensiblePart(id, tags, props, upgs));
 		});
 
-		register.accept(id("static_equipment"), StaticEquipment.class, (id, tags, props, struct, upgs) ->
+		register.accept(STATIC_EQUIPMENT, StaticEquipment.class, (id, tags, props, struct, upgs) ->
 				DataResult.success(new StaticEquipment(id, tags, props))
 		);
 
-		register.accept(id("static_component"), StaticComponent.class, (id, tags, props, struct, upgs) ->
+		register.accept(STATIC_COMPONENT, StaticComponent.class, (id, tags, props, struct, upgs) ->
 				DataResult.success(new StaticComponent(id, tags, props))
 		);
 

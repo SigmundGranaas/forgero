@@ -26,6 +26,13 @@ public record StructuredExtensibleEquipment(
 		ComponentUpgrades upgrades
 ) implements StructuredComponent, CustomizableComponent {
 
+	private static final OpenIdentifier TYPE_IDENTIFIER = OpenIdentifier.of("structured_extensible_equipment");
+
+	@Override
+	public OpenIdentifier getTypeIdentifier() {
+		return TYPE_IDENTIFIER;
+	}
+
 	public StructuredExtensibleEquipment {
 		// Validate that slot IDs are unique across both structure and upgrades.
 		var ids = new HashSet<>(structure.slots().ids());

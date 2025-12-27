@@ -23,6 +23,7 @@ import com.sigmundgranaas.forgero.data.loading.impl.codec.AttributeCodecs;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.DefinitionCodecRegistry;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.PartTemplateCodecs;
 import com.sigmundgranaas.forgero.data.pipeline.impl.*;
+import com.sigmundgranaas.forgero.data.pipeline.util.IdTemplateResolver;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceConverter;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceProvider;
 import com.sigmundgranaas.forgero.utility.resource.loader.implementation.ResourceLoader;
@@ -133,7 +134,8 @@ public class ForgeroDataInitializer {
 		LOGGER.info("Processed {} static definitions.", staticComponents.size());
 
 		// 6. PROCESS TEMPLATES
-		TemplateGenerator templateGenerator = new TemplateGenerator(identifierFactory, tagResolver, propertyMerger, staticComponents, rawDefinitions);
+		IdTemplateResolver idTemplateResolver = new IdTemplateResolver(identifierFactory, rawDefinitions);
+		TemplateGenerator templateGenerator = new TemplateGenerator(identifierFactory, tagResolver, propertyMerger, idTemplateResolver, staticComponents, rawDefinitions);
 		TemplateGenerator.TemplateResult templateResult = templateGenerator.generate();
 
 		Map<OpenIdentifier, CofComponent> allCofComponents = new HashMap<>(staticComponents);

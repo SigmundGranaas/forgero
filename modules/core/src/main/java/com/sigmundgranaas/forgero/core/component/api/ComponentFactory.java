@@ -125,26 +125,13 @@ public final class ComponentFactory {
 	/**
 	 * Returns the component type identifier for a component instance.
 	 * Useful for serialization.
+	 *
+	 * @deprecated Use {@link Component#getTypeIdentifier()} instead.
+	 * This static method will be removed in a future version.
+	 * @since 0.14.0 deprecated
 	 */
+	@Deprecated(since = "0.14.0", forRemoval = true)
 	public static OpenIdentifier getTypeIdentifier(Component component) {
-		// Order matters: check most specific types first
-		if (component instanceof StructuredExtensibleEquipment) {
-			return OpenIdentifier.of("structured_extensible_equipment");
-		} else if (component instanceof StructuredExtensiblePart) {
-			return OpenIdentifier.of("structured_extensible_part");
-		} else if (component instanceof StructuredEquipment) {
-			return OpenIdentifier.of("structured_equipment");
-		} else if (component instanceof StructuredPart) {
-			return OpenIdentifier.of("structured_part");
-		} else if (component instanceof ExtensibleEquipment) {
-			return OpenIdentifier.of("extensible_equipment");
-		} else if (component instanceof ExtensiblePart) {
-			return OpenIdentifier.of("extensible_part");
-		} else if (component instanceof StaticEquipment) {
-			return OpenIdentifier.of("static_equipment");
-		} else if (component instanceof StaticComponent) {
-			return OpenIdentifier.of("static_component");
-		}
-		throw new IllegalArgumentException("Unknown component type: " + component.getClass().getName());
+		return component.getTypeIdentifier();
 	}
 }

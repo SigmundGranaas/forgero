@@ -127,7 +127,7 @@ public class ComponentCofCodec implements Codec<Component> {
 			upgradesDto = new CofUpgrades(upgradeDtos);
 		}
 
-		OpenIdentifier componentType = constructorRegistry.getTypeIdentifier(component);
+		OpenIdentifier componentType = component.getTypeIdentifier();
 		return new CofComponent(component.id(), componentType, component.getTags(), properties, structureDto, upgradesDto, 1);
 	}
 
@@ -181,7 +181,7 @@ public class ComponentCofCodec implements Codec<Component> {
 
 
 	private Optional<ComponentUpgrades> buildUpgradesFromDto(CofComponent parentDto) {
-		boolean typeRequiresUpgrades = isUpgradeRequiredType(parentDto.componentType());
+		boolean typeRequiresUpgrades = com.sigmundgranaas.forgero.cof.ComponentTypeRegistry.requiresUpgrades(parentDto.componentType());
 
 		if (parentDto.upgrades() == null) {
 			if (typeRequiresUpgrades) {
@@ -239,13 +239,6 @@ public class ComponentCofCodec implements Codec<Component> {
 		return Optional.of(ComponentUpgrades.of(newSlots));
 	}
 
-	private boolean isUpgradeRequiredType(OpenIdentifier componentType) {
-		String typeStr = componentType.toString();
-		return typeStr.contains("extensible_equipment") ||
-				typeStr.contains("extensible_part") ||
-				typeStr.contains("structured_extensible_equipment") ||
-				typeStr.contains("structured_extensible_part");
-	}
 
 	private Optional<ComponentUpgrades> buildUpgradesFromDtoWithoutPristine(CofComponent parentDto) {
 		if (parentDto.upgrades() == null || parentDto.upgrades().slots().isEmpty()) {

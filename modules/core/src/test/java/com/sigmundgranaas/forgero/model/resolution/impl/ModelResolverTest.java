@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.model.resolution.impl;
 
+import com.sigmundgranaas.forgero.cof.ComponentTypeRegistry;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
@@ -117,6 +118,11 @@ class ModelResolverTest {
 		@Override
 		public Set<OpenIdentifier> getTags() {
 			return tags;
+		}
+
+		@Override
+		public OpenIdentifier getTypeIdentifier() {
+			return ComponentTypeRegistry.STRUCTURED_EQUIPMENT;
 		}
 	}
 }

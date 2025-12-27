@@ -21,6 +21,13 @@ public record StructuredPart(
 		ComponentStructure structure
 ) implements StructuredComponent {
 
+	private static final OpenIdentifier TYPE_IDENTIFIER = OpenIdentifier.of("structured_part");
+
+	@Override
+	public OpenIdentifier getTypeIdentifier() {
+		return TYPE_IDENTIFIER;
+	}
+
 	@Override
 	public Map<String, List<?>> propertiesAsMap() {
 		return properties;
