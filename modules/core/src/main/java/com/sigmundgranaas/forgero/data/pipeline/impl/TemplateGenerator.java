@@ -129,7 +129,7 @@ public class TemplateGenerator {
 			componentType = ComponentTypeRegistry.STRUCTURED_PART;
 		}
 
-		return new CofComponent(newId, componentType, merged.tags(), merged.properties(), newStructure, upgrades, 1);
+		return new CofComponent(newId, componentType, Optional.of(merged.tags()), Optional.of(merged.properties()), Optional.of(newStructure), Optional.ofNullable(upgrades), Optional.of(1));
 	}
 
 	private CofComponent generateEquipment(RawDefinition templateDef, Map<String, CofComponent> combination) {
@@ -167,15 +167,15 @@ public class TemplateGenerator {
 			componentType = ComponentTypeRegistry.STRUCTURED_EQUIPMENT;
 		}
 
-		return new CofComponent(newId, componentType, merged.tags(), merged.properties(), newStructure, upgrades, 1);
+		return new CofComponent(newId, componentType, Optional.of(merged.tags()), Optional.of(merged.properties()), Optional.of(newStructure), Optional.ofNullable(upgrades), Optional.of(1));
 	}
 
 	private List<DefinitionData> getSourceDtosForComponent(CofComponent component) {
-		if (component.structure() == null) { // It's a static component
+		if (component.structure().isEmpty()) { // It's a static component
 			return List.of(rawDefinitions.get(component.id()).data());
 		}
 		// It's a generated part, recursively find its sources
-		return component.structure().slots().values().stream()
+		return component.structure().get().slots().values().stream()
 				.flatMap(slot -> getSourceDtosForComponent(slot.content()).stream())
 				.collect(Collectors.toList());
 	}
@@ -277,8 +277,8 @@ public class TemplateGenerator {
 		// Otherwise apply tag-based filters
 		List<CofComponent> filtered = components.stream()
 				.filter(comp -> {
-					Set<OpenIdentifier> componentTags = comp.tags();
-					if (componentTags == null || componentTags.isEmpty()) {
+					Set<OpenIdentifier> componentTags = comp.tags().orElse(Set.of());
+					if (componentTags.isEmpty()) {
 						return false;
 					}
 
@@ -400,7 +400,7 @@ public class TemplateGenerator {
 
 	private List<CofComponent> findCompatibleComponents(OpenIdentifier typeTag, Map<OpenIdentifier, CofComponent> pool) {
 		return pool.values().stream()
-				.filter(comp -> comp.tags() != null && tagResolver.hasTag(comp::tags, typeTag))
+				.filter(comp -> comp.tags().isPresent() && tagResolver.hasTag(() -> comp.tags().orElse(Set.of()), typeTag))
 				.toList();
 	}
 

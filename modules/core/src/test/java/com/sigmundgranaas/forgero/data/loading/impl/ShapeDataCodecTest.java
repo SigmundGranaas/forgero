@@ -88,7 +88,7 @@ class ShapeDataCodecTest {
 
 		assertNotNull(data.attributes());
 		assertEquals(1, data.attributes().size());
-		Optional<AttributeData> miningSpeed = data.attributes().stream().filter(a -> a.id().equals(id("forgero:head-mining_speed-composite"))).findFirst();
+		Optional<AttributeData> miningSpeed = data.attributes().stream().filter(a -> a.id().equals(Optional.of(id("forgero:head-mining_speed-composite")))).findFirst();
 		assertTrue(miningSpeed.isPresent());
 		assertEquals(1.25f, miningSpeed.get().computation().value());
 

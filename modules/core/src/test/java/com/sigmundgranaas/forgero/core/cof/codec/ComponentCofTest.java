@@ -112,7 +112,11 @@ class ComponentCofTest {
 
 		JsonElement serialized = codec.encodeStart(JsonOps.INSTANCE, mutated).getOrThrow(false, System.err::println);
 		assertTrue(serialized.isJsonObject(), "Mutated " + pristine.getClass().getSimpleName() + " should serialize to a full object");
-		assertEquals(1, serialized.getAsJsonObject().get("cof_version").getAsInt(), "Serialized object should have cof_version = 1");
+		// cof_version is optional with default 1 - if present it should be 1, if absent that's also valid (means default)
+		JsonElement versionElement = serialized.getAsJsonObject().get("cof_version");
+		if (versionElement != null) {
+			assertEquals(1, versionElement.getAsInt(), "Serialized object should have cof_version = 1");
+		}
 
 		Component deserialized = codec.parse(JsonOps.INSTANCE, serialized).getOrThrow(false, System.err::println);
 

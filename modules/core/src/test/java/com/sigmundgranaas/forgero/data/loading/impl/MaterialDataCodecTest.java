@@ -99,7 +99,7 @@ class MaterialDataCodecTest {
 
 		assertNotNull(data.attributes());
 		assertEquals(1, data.attributes().size());
-		Optional<AttributeData> durability = data.attributes().stream().filter(a -> a.id().equals(id("forgero:diamond-durability"))).findFirst();
+		Optional<AttributeData> durability = data.attributes().stream().filter(a -> a.id().equals(Optional.of(id("forgero:diamond-durability")))).findFirst();
 		assertTrue(durability.isPresent());
 		assertEquals(1561f, durability.get().computation().value());
 

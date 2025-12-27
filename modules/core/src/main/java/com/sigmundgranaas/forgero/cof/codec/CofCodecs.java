@@ -81,13 +81,13 @@ public class CofCodecs {
 				instance.group(
 						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("id").forGetter(CofComponent::id),
 						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("component_type").forGetter(CofComponent::componentType),
-						Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).xmap(java.util.Set::copyOf, java.util.List::copyOf).optionalFieldOf("tags").forGetter(dto -> Optional.ofNullable(dto.tags())),
-						propertyMapCodec.optionalFieldOf("properties").forGetter(dto -> Optional.ofNullable(dto.properties())),
-						structureDtoCodec.optionalFieldOf("structure").forGetter(dto -> Optional.ofNullable(dto.structure())),
-						upgradesDtoCodec.optionalFieldOf("upgrades").forGetter(dto -> Optional.ofNullable(dto.upgrades())),
-						Codec.INT.optionalFieldOf("cof_version").forGetter(dto -> Optional.ofNullable(dto.cofVersion()))
+						Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).xmap(java.util.Set::copyOf, java.util.List::copyOf).optionalFieldOf("tags").forGetter(CofComponent::tags),
+						propertyMapCodec.optionalFieldOf("properties").forGetter(CofComponent::properties),
+						structureDtoCodec.optionalFieldOf("structure").forGetter(CofComponent::structure),
+						upgradesDtoCodec.optionalFieldOf("upgrades").forGetter(CofComponent::upgrades),
+						Codec.INT.optionalFieldOf("cof_version", 1).forGetter(dto -> dto.cofVersion().orElse(1))
 				).apply(instance, (id, type, tags, properties, structure, upgrades, version) ->
-						new CofComponent(id, type, tags.orElse(null), properties.orElse(null), structure.orElse(null), upgrades.orElse(null), version.orElse(1))
+						new CofComponent(id, type, tags, properties, structure, upgrades, Optional.of(version))
 				));
 
 		// 5. Finally, set the delegate in the proxy to the fully constructed codec.

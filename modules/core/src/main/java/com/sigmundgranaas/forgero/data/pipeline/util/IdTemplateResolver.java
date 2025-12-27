@@ -104,16 +104,17 @@ public class IdTemplateResolver {
 
 		// Traverse through structure slots (skip first part - slot name, and last part - property name)
 		for (int i = 1; i < parts.length - 1; i++) {
-			if (current.structure() == null) {
+			if (current.structure().isEmpty()) {
 				return null; // No structure to traverse
 			}
 
 			OpenIdentifier slotId = idFactory.of(parts[i]);
-			if (!current.structure().slots().containsKey(slotId)) {
+			var structure = current.structure().get();
+			if (!structure.slots().containsKey(slotId)) {
 				return null; // Slot not found in structure
 			}
 
-			current = current.structure().slots().get(slotId).content();
+			current = structure.slots().get(slotId).content();
 			if (current == null) {
 				return null; // Empty slot
 			}

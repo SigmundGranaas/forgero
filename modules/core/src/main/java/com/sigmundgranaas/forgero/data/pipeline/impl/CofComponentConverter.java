@@ -12,6 +12,7 @@ import com.sigmundgranaas.forgero.data.loading.api.data.ResourceData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.UpgradeSlotData;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Converts a raw definition and its merged properties into a basic CofComponent.
@@ -48,11 +49,11 @@ public class CofComponentConverter {
 		return new CofComponent(
 				rawDef.id(),
 				componentType,
-				merged.tags(),
-				merged.properties(),
-				null, // Static components do not have a structure by this definition
-				upgrades,
-				1 // COF Version
+				Optional.of(merged.tags()),
+				Optional.of(merged.properties()),
+				Optional.empty(), // Static components do not have a structure by this definition
+				Optional.ofNullable(upgrades),
+				Optional.of(1) // COF Version
 		);
 	}
 

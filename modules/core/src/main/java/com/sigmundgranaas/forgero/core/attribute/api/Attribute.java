@@ -10,7 +10,7 @@ import java.util.Optional;
 public sealed interface Attribute permits SimpleAttribute {
 	PropertyKey<Attribute> KEY = new PropertyKey<>(Attribute.class, "forgero:attributes");
 
-	Optional<String> id();
+	Optional<OpenIdentifier> id();
 	OpenIdentifier type();
 	float value();
 	Operator operator();

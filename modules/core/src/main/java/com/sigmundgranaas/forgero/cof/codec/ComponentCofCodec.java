@@ -128,12 +128,20 @@ public class ComponentCofCodec implements Codec<Component> {
 		}
 
 		OpenIdentifier componentType = component.getTypeIdentifier();
-		return new CofComponent(component.id(), componentType, component.getTags(), properties, structureDto, upgradesDto, 1);
+		return new CofComponent(
+				component.id(),
+				componentType,
+				Optional.of(component.getTags()),
+				Optional.of(properties),
+				Optional.ofNullable(structureDto),
+				Optional.ofNullable(upgradesDto),
+				Optional.of(1)
+		);
 	}
 
 	private DataResult<Component> buildComponentFromDto(CofComponent dto) {
 		LOGGER.debug("Building component from DTO: id={}, type={}, hasStructure={}, hasUpgrades={}",
-				dto.id(), dto.componentType(), dto.structure() != null, dto.upgrades() != null);
+				dto.id(), dto.componentType(), dto.structure().isPresent(), dto.upgrades().isPresent());
 
 		var structure = buildStructureFromDto(dto).orElse(null);
 		var upgrades = buildUpgradesFromDto(dto).orElse(null);
@@ -144,8 +152,8 @@ public class ComponentCofCodec implements Codec<Component> {
 		return constructorRegistry.construct(
 						dto.id(),
 						dto.componentType(),
-						dto.tags(),
-						dto.properties(),
+						dto.tags().orElse(Set.of()),
+						dto.properties().orElse(Map.of()),
 						structure,
 						upgrades)
 				.mapError(err -> "Failed to construct component " + dto.id() + ": " + err);
@@ -153,7 +161,7 @@ public class ComponentCofCodec implements Codec<Component> {
 
 
 	private Optional<ComponentStructure> buildStructureFromDto(CofComponent parentDto) {
-		if (parentDto.structure() == null) {
+		if (parentDto.structure().isEmpty()) {
 			return Optional.empty();
 		}
 
@@ -162,8 +170,9 @@ public class ComponentCofCodec implements Codec<Component> {
 			return Optional.empty();
 		}
 
+		CofStructure structure = parentDto.structure().get();
 		List<StructureSlot> slots = new ArrayList<>();
-		for (CofSlot slotDto : parentDto.structure().slots().values()) {
+		for (CofSlot slotDto : structure.slots().values()) {
 			if (slotDto.content() == null) continue;
 
 			var componentResult = buildComponentFromDto(slotDto.content());
@@ -183,7 +192,7 @@ public class ComponentCofCodec implements Codec<Component> {
 	private Optional<ComponentUpgrades> buildUpgradesFromDto(CofComponent parentDto) {
 		boolean typeRequiresUpgrades = com.sigmundgranaas.forgero.cof.ComponentTypeRegistry.requiresUpgrades(parentDto.componentType());
 
-		if (parentDto.upgrades() == null) {
+		if (parentDto.upgrades().isEmpty()) {
 			if (typeRequiresUpgrades) {
 				LOGGER.warn("No upgrades DTO for component {} (type: {}) but type requires upgrades. Creating empty upgrades.",
 						parentDto.id(), parentDto.componentType());
@@ -192,6 +201,8 @@ public class ComponentCofCodec implements Codec<Component> {
 			LOGGER.debug("No upgrades DTO for component {}", parentDto.id());
 			return Optional.empty();
 		}
+
+		CofUpgrades upgrades = parentDto.upgrades().get();
 
 		Component pristineParent = componentRegistry.get(parentDto.id()).orElse(null);
 		if (pristineParent == null) {
@@ -207,13 +218,13 @@ public class ComponentCofCodec implements Codec<Component> {
 		}
 
 		LOGGER.debug("Building upgrades for component {} with {} upgrade slots from DTO",
-				parentDto.id(), parentDto.upgrades().slots().size());
+				parentDto.id(), upgrades.slots().size());
 
 		Map<OpenIdentifier, UpgradeSlot> pristineSlotsById = pristineCustomizable.upgrades().slots().all().stream()
 				.collect(Collectors.toMap(UpgradeSlot::id, Function.identity()));
 
 		List<UpgradeSlot> newSlots = new ArrayList<>();
-		for (CofSlot slotDto : parentDto.upgrades().slots()) {
+		for (CofSlot slotDto : upgrades.slots()) {
 			UpgradeSlot pristineSlot = pristineSlotsById.get(slotDto.id());
 			if (pristineSlot == null) {
 				LOGGER.debug("Skipping upgrade slot {} - not found in pristine component {}", slotDto.id(), parentDto.id());
@@ -241,16 +252,17 @@ public class ComponentCofCodec implements Codec<Component> {
 
 
 	private Optional<ComponentUpgrades> buildUpgradesFromDtoWithoutPristine(CofComponent parentDto) {
-		if (parentDto.upgrades() == null || parentDto.upgrades().slots().isEmpty()) {
+		if (parentDto.upgrades().isEmpty() || parentDto.upgrades().get().slots().isEmpty()) {
 			LOGGER.debug("Creating empty upgrades for component {} (no pristine definition)", parentDto.id());
 			return Optional.of(ComponentUpgrades.empty());
 		}
 
+		CofUpgrades upgrades = parentDto.upgrades().get();
 		LOGGER.debug("Building {} upgrade slots from DTO without pristine definition for component {}",
-				parentDto.upgrades().slots().size(), parentDto.id());
+				upgrades.slots().size(), parentDto.id());
 
 		List<UpgradeSlot> newSlots = new ArrayList<>();
-		for (CofSlot slotDto : parentDto.upgrades().slots()) {
+		for (CofSlot slotDto : upgrades.slots()) {
 			var contentResult = Optional.ofNullable(slotDto.content())
 					.map(this::buildComponentFromDto)
 					.map(dr -> dr.map(Optional::of))

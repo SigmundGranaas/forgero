@@ -60,7 +60,7 @@ class SlotScopedCompositionTest extends ForgeroTest {
 		Condition condition = new Condition(List.of(whenInCondition), Collections.emptyList());
 		return new SimpleAttribute(Optional.empty(), type, value,
 				com.sigmundgranaas.forgero.core.attribute.api.operator.AdditionOperator.getInstance(),
-				0, condition);
+				0, Optional.of(condition));
 	}
 
 	/**
@@ -93,7 +93,7 @@ class SlotScopedCompositionTest extends ForgeroTest {
 				1.5f,
 				MultiplicationOperator.getInstance(),
 				1,  // Higher group = applied after base
-				null
+				Optional.empty()
 		);
 		Map<String, List<?>> headProps = new HashMap<>();
 		headProps.put(Attribute.KEY.key(), List.of(headModifier));

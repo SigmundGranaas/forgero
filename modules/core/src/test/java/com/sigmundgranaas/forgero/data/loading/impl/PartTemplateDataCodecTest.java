@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -119,7 +120,7 @@ class PartTemplateDataCodecTest {
 		assertNotNull(data.attributes());
 		assertEquals(2, data.attributes().size());
 		AttributeData miningSpeed = data.attributes().get(1);
-		assertEquals(id("forgero:variant-schematic-mining_speed-composite"), miningSpeed.id());
+		assertEquals(Optional.of(id("forgero:variant-schematic-mining_speed-composite")), miningSpeed.id());
 
 		assertNotNull(data.properties());
 		assertEquals(2, data.properties().size());

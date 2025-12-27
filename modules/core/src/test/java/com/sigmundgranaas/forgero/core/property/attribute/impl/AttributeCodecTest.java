@@ -76,7 +76,7 @@ class AttributeCodecTest {
               "value": 10.0
             }
             """;
-		SimpleAttribute expected = new SimpleAttribute(Optional.empty(), ATTACK_DAMAGE, 10.0f, AdditionOperator.getInstance(), 0, Condition.ALWAYS_TRUE);
+		SimpleAttribute expected = new SimpleAttribute(Optional.empty(), ATTACK_DAMAGE, 10.0f, AdditionOperator.getInstance(), 0, Optional.empty());
 		assertDecode(inputJson, expected);
 	}
 
@@ -105,7 +105,7 @@ class AttributeCodecTest {
               "group": 2
             }
             """;
-		SimpleAttribute expected = new SimpleAttribute(Optional.empty(), ATTACK_DAMAGE, 1.5f, MultiplicationOperator.getInstance(), 2, Condition.ALWAYS_TRUE);
+		SimpleAttribute expected = new SimpleAttribute(Optional.empty(), ATTACK_DAMAGE, 1.5f, MultiplicationOperator.getInstance(), 2, Optional.empty());
 		assertDecode(inputJson, expected);
 	}
 
@@ -127,7 +127,7 @@ class AttributeCodecTest {
 	@Test
 	void decodeSimpleAttributeWithLongOperatorName() {
 		String inputJson = "{ \"type\": \"forgero:attack_damage\", \"value\": 1.5, \"operator\": \"subtraction\" }";
-		SimpleAttribute expected = new SimpleAttribute(Optional.empty(), ATTACK_DAMAGE, 1.5f, SubtractionOperator.getInstance(), 0, Condition.ALWAYS_TRUE);
+		SimpleAttribute expected = new SimpleAttribute(Optional.empty(), ATTACK_DAMAGE, 1.5f, SubtractionOperator.getInstance(), 0, Optional.empty());
 		assertDecode(inputJson, expected);
 	}
 

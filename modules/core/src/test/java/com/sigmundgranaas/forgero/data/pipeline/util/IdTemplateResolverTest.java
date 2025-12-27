@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -261,15 +262,15 @@ class IdTemplateResolverTest {
 
 	private CofComponent createComponent(String name, Map<OpenIdentifier, CofSlot> slots) {
 		OpenIdentifier id = idFactory.of(name);
-		CofStructure structure = slots != null ? new CofStructure(slots) : null;
+		Optional<CofStructure> structure = slots != null ? Optional.of(new CofStructure(slots)) : Optional.empty();
 		return new CofComponent(
 				id,
 				idFactory.of("static_component"),
-				Set.of(),
-				Map.of(),
+				Optional.of(Set.of()),
+				Optional.of(Map.of()),
 				structure,
-				null,
-				1
+				Optional.empty(),
+				Optional.of(1)
 		);
 	}
 }

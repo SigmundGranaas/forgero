@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.sigmundgranaas.forgero.testutils.TestIdentifiers.id;
@@ -132,7 +133,7 @@ class EquipmentTemplateDataCodecTest {
 		assertNotNull(data.attributes());
 		assertEquals(1, data.attributes().size());
 		AttributeData attackSpeed = data.attributes().get(0);
-		assertEquals(id("forgero:tool-attack_speed"), attackSpeed.id());
+		assertEquals(Optional.of(id("forgero:tool-attack_speed")), attackSpeed.id());
 		assertEquals(id("forgero:attack_speed"), attackSpeed.type());
 
 		assertNotNull(data.properties());

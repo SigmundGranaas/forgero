@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.sigmundgranaas.forgero.testutils.TestIdentifiers.id;
@@ -62,16 +63,17 @@ class AttributeDataCodecTest {
 
 		AttributeData data = parseSuccess(attributeDataCodec, json);
 
-		assertEquals(id("forgero:diamond-scoped-mining-speed"), data.id());
+		assertEquals(Optional.of(id("forgero:diamond-scoped-mining-speed")), data.id());
 		assertEquals(id("forgero:mining_speed"), data.type());
 		assertEquals(8f, data.computation().value());
 		assertEquals(AttributeCodecs.ADDITION_OPERATOR, data.computation().operator());
 		assertEquals(AttributeCodecs.BASE_ORDER, data.computation().order());
 
-		assertNotNull(data.condition());
-		assertEquals(1, data.condition().staticConditions().size());
-		assertTrue(data.condition().dynamicConditions().isEmpty());
-		var predicate = data.condition().staticConditions().get(0);
+		assertTrue(data.condition().isPresent());
+		var condition = data.condition().get();
+		assertEquals(1, condition.staticConditions().size());
+		assertTrue(condition.dynamicConditions().isEmpty());
+		var predicate = condition.staticConditions().get(0);
 		assertInstanceOf(TagMatchCondition.class, predicate);
 		assertEquals(id("forgero:self_has_tag"), predicate.type());
 		assertEquals(id("forgero:gem"), ((TagMatchCondition) predicate).tag());
@@ -89,10 +91,10 @@ class AttributeDataCodecTest {
 
 		AttributeData data = parseSuccess(attributeDataCodec, json);
 
-		assertEquals(id("forgero:diamond-durability"), data.id());
+		assertEquals(Optional.of(id("forgero:diamond-durability")), data.id());
 		assertEquals(id("forgero:durability"), data.type());
 
-		assertNull(data.condition());
+		assertTrue(data.condition().isEmpty());
 		assertEquals(1561f, data.computation().value());
 		assertEquals(AttributeCodecs.ADDITION_OPERATOR, data.computation().operator());
 		assertEquals(AttributeCodecs.BASE_ORDER, data.computation().order());

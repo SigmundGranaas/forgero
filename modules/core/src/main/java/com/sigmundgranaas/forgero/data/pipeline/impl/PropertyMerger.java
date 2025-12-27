@@ -109,10 +109,9 @@ public class PropertyMerger {
 		var computation = data.computation();
 		var operator = operatorMapper.apply(computation.operator());
 		var order = operatorMapper.leveledOrder(computation.order());
-		var id = Optional.ofNullable(data.id()).map(OpenIdentifier::toString);
 
 		return new SimpleAttribute(
-				id,
+				data.id(),
 				data.type(),
 				computation.value(),
 				operator,

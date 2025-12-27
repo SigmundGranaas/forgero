@@ -121,10 +121,7 @@ public record OpenIdentifier(String namespace, String path) {
 	 * @return The name part of the identifier (e.g., "pickaxe_head" from "parts/heads/pickaxe_head.json").
 	 */
 	public String name() {
-		final int lastSlash = this.path.lastIndexOf('/');
-		final String fileName = lastSlash == -1 ? this.path : this.path.substring(lastSlash + 1);
-		final int lastDot = fileName.lastIndexOf('.');
-		return lastDot == -1 ? fileName : fileName.substring(0, lastDot);
+		return parsePath().name();
 	}
 
 	/**
@@ -135,7 +132,7 @@ public record OpenIdentifier(String namespace, String path) {
 	 * @return A new OpenIdentifier instance representing the canonical ID.
 	 */
 	public OpenIdentifier toCanonical() {
-		return new OpenIdentifier(this.namespace, normalizePathSegment(this.path));
+		return new OpenIdentifier(this.namespace, name());
 	}
 
 	/**
@@ -145,11 +142,7 @@ public record OpenIdentifier(String namespace, String path) {
 	 * @return The normalized single-group name.
 	 */
 	public static String normalizePathSegment(String rawPathSegment) {
-		final int lastSlash = rawPathSegment.lastIndexOf('/');
-		String fileNameOrLastSegment = lastSlash == -1 ? rawPathSegment : rawPathSegment.substring(lastSlash + 1);
-
-		final int lastDot = fileNameOrLastSegment.lastIndexOf('.');
-		return lastDot == -1 ? fileNameOrLastSegment : fileNameOrLastSegment.substring(0, lastDot);
+		return ParsedPath.parse(rawPathSegment).name();
 	}
 
 	/**
@@ -160,27 +153,38 @@ public record OpenIdentifier(String namespace, String path) {
 	 * @return true if the specified part of the identifier equals the pattern, false otherwise.
 	 */
 	public boolean matches(PatternType type, String pattern) {
-		final int lastSlash = this.path.lastIndexOf('/');
-		final String fileName = lastSlash == -1 ? this.path : this.path.substring(lastSlash + 1);
-		final int lastDot = fileName.lastIndexOf('.');
-
 		return switch (type) {
 			case NAMESPACE -> this.namespace.equals(pattern);
 			case LOCATION -> this.path.equals(pattern);
-			case PATH -> {
-				String pathOnly = lastSlash == -1 ? "" : this.path.substring(0, lastSlash);
-				yield pathOnly.equals(pattern);
-			}
-			case NAME -> {
-				String nameOnly = lastDot == -1 ? fileName : fileName.substring(0, lastDot);
-				yield nameOnly.equals(pattern);
-			}
+			case PATH -> parsePath().directory().equals(pattern);
+			case NAME -> parsePath().name().equals(pattern);
 			case FILETYPE -> {
 				final int firstSlash = this.path.indexOf('/');
 				String category = firstSlash == -1 ? this.path : this.path.substring(0, firstSlash);
 				yield category.equals(pattern);
 			}
 		};
+	}
+
+	/**
+	 * Parses this identifier's path into its component parts.
+	 */
+	private ParsedPath parsePath() {
+		return ParsedPath.parse(this.path);
+	}
+
+	/**
+	 * Helper record for parsed path components. Eliminates duplicated parsing logic.
+	 */
+	private record ParsedPath(String directory, String fileName, String name) {
+		static ParsedPath parse(String path) {
+			int lastSlash = path.lastIndexOf('/');
+			String directory = lastSlash == -1 ? "" : path.substring(0, lastSlash);
+			String fileName = lastSlash == -1 ? path : path.substring(lastSlash + 1);
+			int lastDot = fileName.lastIndexOf('.');
+			String name = lastDot == -1 ? fileName : fileName.substring(0, lastDot);
+			return new ParsedPath(directory, fileName, name);
+		}
 	}
 
 	/**

@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -88,7 +89,7 @@ class StaticPartDataCodecTest {
 		assertNotNull(data.attributes());
 		assertEquals(1, data.attributes().size());
 		AttributeData hardness = data.attributes().get(0);
-		assertEquals(id("forgero:custom-hardness"), hardness.id());
+		assertEquals(Optional.of(id("forgero:custom-hardness")), hardness.id());
 		assertEquals(id("forgero:hardness"), hardness.type());
 		assertEquals(5.0f, hardness.computation().value());
 

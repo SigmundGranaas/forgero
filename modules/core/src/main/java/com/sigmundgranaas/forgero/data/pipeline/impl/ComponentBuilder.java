@@ -57,17 +57,17 @@ public class ComponentBuilder {
 	}
 
 	private DataResult<Component> buildComponentFromDto(CofComponent dto) {
-		DataResult<ComponentStructure> structureResult = dto.structure() != null
-				? buildStructureFromDto(dto.structure())
+		DataResult<ComponentStructure> structureResult = dto.structure().isPresent()
+				? buildStructureFromDto(dto.structure().get())
 				: DataResult.success(null);
 
-		DataResult<ComponentUpgrades> upgradesResult = dto.upgrades() != null
-				? buildUpgradesFromDto(dto.upgrades())
+		DataResult<ComponentUpgrades> upgradesResult = dto.upgrades().isPresent()
+				? buildUpgradesFromDto(dto.upgrades().get())
 				: DataResult.success(null);
 
 		return structureResult.flatMap(structure ->
 				upgradesResult.flatMap(upgrades ->
-						constructorRegistry.construct(dto.id(), dto.componentType(), dto.tags(), dto.properties(), structure, upgrades)
+						constructorRegistry.construct(dto.id(), dto.componentType(), dto.tags().orElse(Set.of()), dto.properties().orElse(Map.of()), structure, upgrades)
 				)
 		);
 	}

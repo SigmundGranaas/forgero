@@ -150,12 +150,12 @@ public class ModelTranslator {
 	private ModelVariant toModelVariant(VariantDTO dto) {
 		List<Predicate> predicates = dto.predicate().stream().map(this::toPredicate).collect(Collectors.toList());
 		Optional<String> texture = Optional.ofNullable(dto.texture());
-		Optional<Object> model;
+		Optional<Model> model = Optional.empty();
 		if (dto.model() != null && dto.model().equals("forgero:common/empty")) {
 			model = Optional.of(EmptyModel.INSTANCE);
-		} else {
-			model = Optional.ofNullable(dto.model());
 		}
+		// Note: Non-empty model identifiers are not currently supported for variants.
+		// If needed, model resolution should be added here to look up models by identifier.
 		Optional<Offset> offset = Optional.ofNullable(dto.offset()).map(arr -> new Offset(arr[0], arr[1]));
 
 		return new ModelVariant(predicates, texture, model, offset);

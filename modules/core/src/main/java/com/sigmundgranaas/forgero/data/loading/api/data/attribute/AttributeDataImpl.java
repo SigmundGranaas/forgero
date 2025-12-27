@@ -2,12 +2,13 @@ package com.sigmundgranaas.forgero.data.loading.api.data.attribute;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public record AttributeDataImpl(
-		OpenIdentifier id,
+		Optional<OpenIdentifier> id,
 		OpenIdentifier type,
 		ComputationData computation,
-		@Nullable Condition condition
+		Optional<Condition> condition
 ) implements AttributeData {
 }

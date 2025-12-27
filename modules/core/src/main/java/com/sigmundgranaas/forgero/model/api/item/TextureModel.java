@@ -80,8 +80,6 @@ public record TextureModel(OpenIdentifier identifier, String texture, List<Model
 				.filter(variant -> variant.model().isPresent() && variant.predicate().stream().allMatch(p -> p.test(context)))
 				.findFirst()
 				.flatMap(ModelVariant::model)
-				.filter(Model.class::isInstance)
-				.map(Model.class::cast)
 				.orElse(this);
 	}
 }

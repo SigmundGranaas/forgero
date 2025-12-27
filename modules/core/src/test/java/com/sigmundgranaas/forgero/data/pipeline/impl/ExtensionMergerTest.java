@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -138,10 +139,10 @@ class ExtensionMergerTest {
 		@Test
 		void shouldConcatenateAttributes() {
 			AttributeData durability = new AttributeDataImpl(
-					id("forgero:iron-durability"),
+					Optional.of(id("forgero:iron-durability")),
 					id("forgero:durability"),
 					new ComputationData(250f, null, null),
-					null
+					Optional.empty()
 			);
 
 			ResourceData iron = new ResourceData(
@@ -153,10 +154,10 @@ class ExtensionMergerTest {
 			);
 
 			AttributeData miningSpeed = new AttributeDataImpl(
-					id("forgero:iron-mining-speed"),
+					Optional.of(id("forgero:iron-mining-speed")),
 					id("forgero:mining_speed"),
 					new ComputationData(6f, null, null),
-					null
+					Optional.empty()
 			);
 
 			ExtensionData extension = new ExtensionData(
@@ -177,8 +178,8 @@ class ExtensionMergerTest {
 
 			assertNotNull(merged.attributes());
 			assertEquals(2, merged.attributes().size());
-			assertTrue(merged.attributes().stream().anyMatch(a -> a.id().equals(id("forgero:iron-durability"))));
-			assertTrue(merged.attributes().stream().anyMatch(a -> a.id().equals(id("forgero:iron-mining-speed"))));
+			assertTrue(merged.attributes().stream().anyMatch(a -> a.id().equals(Optional.of(id("forgero:iron-durability")))));
+			assertTrue(merged.attributes().stream().anyMatch(a -> a.id().equals(Optional.of(id("forgero:iron-mining-speed")))));
 		}
 	}
 

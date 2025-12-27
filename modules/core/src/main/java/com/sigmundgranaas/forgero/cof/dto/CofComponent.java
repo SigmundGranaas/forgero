@@ -1,10 +1,10 @@
 package com.sigmundgranaas.forgero.cof.dto;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -23,10 +23,10 @@ import java.util.Set;
 public record CofComponent(
 		OpenIdentifier id,
 		OpenIdentifier componentType,
-		@Nullable Set<OpenIdentifier> tags,
-		@Nullable Map<String, List<?>> properties,
-		@Nullable CofStructure structure,
-		@Nullable CofUpgrades upgrades,
-		@Nullable Integer cofVersion
+		Optional<Set<OpenIdentifier>> tags,
+		Optional<Map<String, List<?>>> properties,
+		Optional<CofStructure> structure,
+		Optional<CofUpgrades> upgrades,
+		Optional<Integer> cofVersion
 ) {
 }

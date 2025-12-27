@@ -79,12 +79,11 @@ public class AttributeCodecs {
 	public static Codec<AttributeData> create(Codec<Condition> conditionCodec) {
 		return RecordCodecBuilder.create(instance ->
 				instance.group(
-						CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("id").forGetter(data -> Optional.ofNullable(data.id())),
+						CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("id").forGetter(AttributeData::id),
 						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(AttributeData::type),
 						COMPUTATION_CODEC.fieldOf("computation").forGetter(AttributeData::computation),
-						conditionCodec.optionalFieldOf("condition").forGetter(data -> Optional.ofNullable(data.condition()))
-				).apply(instance, (idOpt, type, comp, cond) ->
-						new AttributeDataImpl(idOpt.orElse(null), type, comp, cond.orElse(null)))
+						conditionCodec.optionalFieldOf("condition").forGetter(AttributeData::condition)
+				).apply(instance, AttributeDataImpl::new)
 		);
 	}
 }
