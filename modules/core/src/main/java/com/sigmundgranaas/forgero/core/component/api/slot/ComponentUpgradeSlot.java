@@ -1,8 +1,11 @@
 package com.sigmundgranaas.forgero.core.component.api.slot;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.Slot;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
 
 import java.util.Optional;
 
@@ -120,4 +123,21 @@ public record ComponentUpgradeSlot(
 	                                           SlotValidator validator, Component content) {
 		return new ComponentUpgradeSlot(id, slotType, description, validator, Optional.of(content));
 	}
+
+	// Codec for (de)serialization
+
+	/**
+	 * Codec for ComponentUpgradeSlot.
+	 * Serializes/deserializes slot configuration.
+	 * Note: This codec creates empty slots with tag-based validation.
+	 * Custom validators and content are not serialized (runtime-only).
+	 */
+	public static final Codec<ComponentUpgradeSlot> CODEC = RecordCodecBuilder.create(instance ->
+		instance.group(
+			CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("id").forGetter(ComponentUpgradeSlot::id),
+			CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("slot_type").forGetter(ComponentUpgradeSlot::slotType),
+			Codec.STRING.optionalFieldOf("description", "").forGetter(ComponentUpgradeSlot::description)
+		).apply(instance, (id, slotType, description) ->
+			ComponentUpgradeSlot.emptyOfType(id, slotType, description)
+		));
 }

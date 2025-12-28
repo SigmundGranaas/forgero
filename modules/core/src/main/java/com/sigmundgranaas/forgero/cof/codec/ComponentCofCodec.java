@@ -116,11 +116,13 @@ public class ComponentCofCodec implements Codec<Component> {
 		CofUpgrades upgradesDto = null;
 		if (component instanceof CustomizableComponent customizable) {
 			List<CofSlot> upgradeDtos = customizable.upgrades().slots().all().stream()
-					.map(slot -> new CofSlot(
-							slot.id(),
-							slot.type(),
-							slot.description(),
-							slot.content().map(this::buildDtoFromComponent).orElse(null),
+					.filter(slot -> slot instanceof ComponentUpgradeSlot)
+					.map(slot -> (ComponentUpgradeSlot) slot)
+					.map(upgradeSlot -> new CofSlot(
+							upgradeSlot.id(),
+							upgradeSlot.slotType(),
+							upgradeSlot.description(),
+							upgradeSlot.getContent().map(this::buildDtoFromComponent).orElse(null),
 							null // validTags are part of pristine definition, not serialized
 					))
 					.toList();
@@ -221,6 +223,8 @@ public class ComponentCofCodec implements Codec<Component> {
 				parentDto.id(), upgrades.slots().size());
 
 		Map<OpenIdentifier, ComponentUpgradeSlot> pristineSlotsById = pristineCustomizable.upgrades().slots().all().stream()
+				.filter(slot -> slot instanceof ComponentUpgradeSlot)
+				.map(slot -> (ComponentUpgradeSlot) slot)
 				.collect(Collectors.toMap(ComponentUpgradeSlot::id, Function.identity()));
 
 		List<ComponentUpgradeSlot> newSlots = new ArrayList<>();

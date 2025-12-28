@@ -29,9 +29,9 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class SlotManagerIntegrationTest {
 
-	private static final OpenIdentifier OFFENSIVE_GEM_SLOT_TYPE = OpenIdentifier.of("forgero:offensive_gem_slot");
-	private static final OpenIdentifier UTILITY_GEM_SLOT_TYPE = OpenIdentifier.of("forgero:utility_gem_slot");
-	private static final OpenIdentifier GEM_TYPE = OpenIdentifier.of("forgero:gem");
+	private static final OpenIdentifier OFFENSIVE_GEM_SLOT_TYPE = OpenIdentifier.parse("forgero:offensive_gem_slot");
+	private static final OpenIdentifier UTILITY_GEM_SLOT_TYPE = OpenIdentifier.parse("forgero:utility_gem_slot");
+	private static final OpenIdentifier GEM_TYPE = OpenIdentifier.parse("forgero:gem");
 
 	private SlotManager slotManager;
 	private ComponentMutater mutater;
@@ -66,11 +66,11 @@ class SlotManagerIntegrationTest {
 			Component toolWithOffensiveGem = offensiveResult.component().orElseThrow();
 
 			// Verify the gem was installed in offensive slot
-			List<ComponentUpgradeSlot> filledSlots = slotManager.getFilledComponentUpgradeSlots(toolWithOffensiveGem);
+			List<ComponentUpgradeSlot> filledSlots = slotManager.getFilledUpgradeSlots(toolWithOffensiveGem);
 			assertEquals(1, filledSlots.size(), "Should have one filled slot");
 
 			ComponentUpgradeSlot filledSlot = filledSlots.get(0);
-			assertEquals(OFFENSIVE_GEM_SLOT_TYPE, filledSlot.type(),
+			assertEquals(OFFENSIVE_GEM_SLOT_TYPE, filledSlot.slotType(),
 				"Gem should be in offensive slot");
 
 			// Verify the gem has the conditional property
@@ -135,13 +135,13 @@ class SlotManagerIntegrationTest {
 			Component toolWithBothGems = result2.component().orElseThrow();
 
 			// Verify both gems are installed
-			List<ComponentUpgradeSlot> filledSlots = slotManager.getFilledComponentUpgradeSlots(toolWithBothGems);
+			List<ComponentUpgradeSlot> filledSlots = slotManager.getFilledUpgradeSlots(toolWithBothGems);
 			assertEquals(2, filledSlots.size(), "Should have two filled slots");
 
 			// Verify slot types
 			Set<OpenIdentifier> slotTypes = Set.of(
-				filledSlots.get(0).type(),
-				filledSlots.get(1).type()
+				filledSlots.get(0).slotType(),
+				filledSlots.get(1).slotType()
 			);
 			assertTrue(slotTypes.contains(OFFENSIVE_GEM_SLOT_TYPE),
 				"Should have offensive slot filled");
@@ -169,9 +169,9 @@ class SlotManagerIntegrationTest {
 				toolWithBoth, offensiveGem.id());
 
 			// Verify only utility gem remains
-			List<ComponentUpgradeSlot> filledSlots = slotManager.getFilledComponentUpgradeSlots(toolWithUtilityOnly);
+			List<ComponentUpgradeSlot> filledSlots = slotManager.getFilledUpgradeSlots(toolWithUtilityOnly);
 			assertEquals(1, filledSlots.size(), "Should have one filled slot");
-			assertEquals(UTILITY_GEM_SLOT_TYPE, filledSlots.get(0).type(),
+			assertEquals(UTILITY_GEM_SLOT_TYPE, filledSlots.get(0).slotType(),
 				"Remaining gem should be in utility slot");
 		}
 	}
@@ -192,8 +192,8 @@ class SlotManagerIntegrationTest {
 
 			// Create upgrade without gem tag
 			TestComponent nonGem = new TestComponent(
-				OpenIdentifier.of("forgero:not_a_gem"),
-				Set.of(OpenIdentifier.of("forgero:material")), // No gem tag
+				OpenIdentifier.parse("forgero:not_a_gem"),
+				Set.of(OpenIdentifier.parse("forgero:material")), // No gem tag
 				Map.of(),
 				ComponentUpgrades.empty()
 			);
@@ -215,11 +215,11 @@ class SlotManagerIntegrationTest {
 
 			// Create upgrade with gem tag
 			TestComponent gem = new TestComponent(
-				OpenIdentifier.of("forgero:ruby"),
+				OpenIdentifier.parse("forgero:ruby"),
 				Set.of(GEM_TYPE), // Has gem tag
 				Map.of("attributes", List.of(
 					new SimpleAttribute(
-						OpenIdentifier.of("forgero:attack_damage"),
+						OpenIdentifier.parse("forgero:attack_damage"),
 						5.0f
 					)
 				)),
@@ -276,7 +276,7 @@ class SlotManagerIntegrationTest {
 		void installingWhenAllSlotsFull_ShouldFail() {
 			// Create tool with 1 gem slot
 			TestComponent tool = new TestComponent(
-				OpenIdentifier.of("forgero:sword"),
+				OpenIdentifier.parse("forgero:sword"),
 				Set.of(),
 				Map.of(),
 				ComponentUpgrades.of(List.of(
@@ -307,7 +307,7 @@ class SlotManagerIntegrationTest {
 
 	private TestComponent createToolWithTwoGemSlots() {
 		return new TestComponent(
-			OpenIdentifier.of("forgero:sword"),
+			OpenIdentifier.parse("forgero:sword"),
 			Set.of(),
 			Map.of(),
 			ComponentUpgrades.of(List.of(
@@ -327,7 +327,7 @@ class SlotManagerIntegrationTest {
 
 	private TestComponent createToolWithThreeGemSlots() {
 		return new TestComponent(
-			OpenIdentifier.of("forgero:pickaxe"),
+			OpenIdentifier.parse("forgero:pickaxe"),
 			Set.of(),
 			Map.of(),
 			ComponentUpgrades.of(List.of(
@@ -352,7 +352,7 @@ class SlotManagerIntegrationTest {
 
 	private TestComponent createToolWithStrictGemSlot() {
 		return new TestComponent(
-			OpenIdentifier.of("forgero:axe"),
+			OpenIdentifier.parse("forgero:axe"),
 			Set.of(),
 			Map.of(),
 			ComponentUpgrades.of(List.of(
@@ -366,16 +366,16 @@ class SlotManagerIntegrationTest {
 	}
 
 	private TestComponent createOffensiveGem() {
-		OpenIdentifier conditionType = OpenIdentifier.of("forgero:in_slot_type");
+		OpenIdentifier conditionType = OpenIdentifier.parse("forgero:in_slot_type");
 		InSlotTypeCondition slotCondition = new InSlotTypeCondition(conditionType, OFFENSIVE_GEM_SLOT_TYPE);
 		Condition condition = new Condition(List.of(slotCondition), List.of());
 
 		return new TestComponent(
-			OpenIdentifier.of("forgero:ruby"),
+			OpenIdentifier.parse("forgero:ruby"),
 			Set.of(OFFENSIVE_GEM_SLOT_TYPE),
 			Map.of("attributes", List.of(
 				new SimpleAttribute(
-					OpenIdentifier.of("forgero:attack_damage"),
+					OpenIdentifier.parse("forgero:attack_damage"),
 					5.0f,
 					condition
 				)
@@ -385,16 +385,16 @@ class SlotManagerIntegrationTest {
 	}
 
 	private TestComponent createUtilityGem() {
-		OpenIdentifier conditionType = OpenIdentifier.of("forgero:in_slot_type");
+		OpenIdentifier conditionType = OpenIdentifier.parse("forgero:in_slot_type");
 		InSlotTypeCondition slotCondition = new InSlotTypeCondition(conditionType, UTILITY_GEM_SLOT_TYPE);
 		Condition condition = new Condition(List.of(slotCondition), List.of());
 
 		return new TestComponent(
-			OpenIdentifier.of("forgero:sapphire"),
+			OpenIdentifier.parse("forgero:sapphire"),
 			Set.of(UTILITY_GEM_SLOT_TYPE),
 			Map.of("attributes", List.of(
 				new SimpleAttribute(
-					OpenIdentifier.of("forgero:mining_speed"),
+					OpenIdentifier.parse("forgero:mining_speed"),
 					2.0f,
 					condition
 				)
@@ -405,11 +405,11 @@ class SlotManagerIntegrationTest {
 
 	private TestComponent createGem(String name, double attackDamage) {
 		return new TestComponent(
-			OpenIdentifier.of("forgero:" + name),
+			OpenIdentifier.parse("forgero:" + name),
 			Set.of(GEM_TYPE),
 			Map.of("attributes", List.of(
 				new SimpleAttribute(
-					OpenIdentifier.of("forgero:attack_damage"),
+					OpenIdentifier.parse("forgero:attack_damage"),
 					(float) attackDamage
 				)
 			)),
@@ -430,7 +430,7 @@ class SlotManagerIntegrationTest {
 
 		@Override
 		public OpenIdentifier getTypeIdentifier() {
-			return OpenIdentifier.of("forgero:test_component");
+			return OpenIdentifier.parse("forgero:test_component");
 		}
 
 		@Override

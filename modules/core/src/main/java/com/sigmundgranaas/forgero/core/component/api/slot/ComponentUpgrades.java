@@ -76,7 +76,7 @@ public record ComponentUpgrades(SlotContainer slots) {
 	 * Returns true if there are no ComponentUpgradeSlot instances.
 	 */
 	public boolean isEmpty() {
-		return upgradeSlots().isEmpty();
+		return upgradeSlots().findAny().isEmpty();
 	}
 
 	/**

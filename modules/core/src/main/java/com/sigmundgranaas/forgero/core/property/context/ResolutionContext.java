@@ -22,6 +22,7 @@ public class ResolutionContext {
 	private final Component self;
 	private final Component root;
 	private final Map<Component, Slot> slotMap;  // Only contains components in MUTABLE slots
+	private final Map<Component, ComponentPart> partMap;  // Contains components in IMMUTABLE structure parts
 	private final Map<Component, Component> parentMap;
 	private final Map<Component, Integer> depthMap;
 
@@ -38,6 +39,7 @@ public class ResolutionContext {
 		// Use IdentityHashMap to distinguish between component instances, not just their values.
 		// This is crucial for correctly handling identical components in different slots.
 		this.slotMap = new IdentityHashMap<>();
+		this.partMap = new IdentityHashMap<>();
 		this.parentMap = new IdentityHashMap<>();
 		this.depthMap = new IdentityHashMap<>();
 		buildContextMaps(root, null, 0);
@@ -48,10 +50,11 @@ public class ResolutionContext {
 		depthMap.put(current, depth);
 
 		// Structure parts - immutable composition, NOT slots
-		// Components in structure parts are NOT added to slotMap
+		// Components in structure parts are added to partMap for InSlotTypeCondition checking
 		if (current instanceof StructuredComponent structured) {
 			for (ComponentPart part : structured.structure().allParts()) {
-				// DON'T add to slotMap - ComponentPart is not a Slot
+				// Add to partMap (not slotMap) since ComponentPart is not a Slot
+				partMap.put(part.getContent(), part);
 				buildContextMaps(part.getContent(), current, depth + 1);
 			}
 		}
@@ -76,8 +79,11 @@ public class ResolutionContext {
 	/** @return The top-group component in the resolution tree. */
 	public Component root() { return root; }
 
-	/** @return An Optional containing the Slot the 'self' component is contained within. Empty if 'self' is the root. */
+	/** @return An Optional containing the Slot the 'self' component is contained within. Empty if 'self' is the root or not in a slot. */
 	public Optional<Slot> getSlot() { return Optional.ofNullable(slotMap.get(self)); }
+
+	/** @return An Optional containing the ComponentPart the 'self' component is contained within. Empty if 'self' is the root or not in a structure part. */
+	public Optional<ComponentPart> getPart() { return Optional.ofNullable(partMap.get(self)); }
 
 	/** @return A list of the 'self' component's siblings (other components sharing the same parent). */
 	public List<Component> getSiblings() {

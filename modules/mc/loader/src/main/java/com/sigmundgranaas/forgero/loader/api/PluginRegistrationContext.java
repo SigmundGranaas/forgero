@@ -47,4 +47,13 @@ public interface PluginRegistrationContext {
 	 * @param codecBuilder A function that takes a ConditionCodec supplier and returns a complete codec for your property list.
 	 */
 	void registerPropertyCodec(PropertyKey<?> key, Function<Supplier<Codec<Condition>>, Codec<? extends List<?>>> codecBuilder);
+
+	/**
+	 * Registers a codec for a custom slot type.
+	 * This enables plugins to add new slot implementations (e.g., ArrowSlot, SoulSlot).
+	 *
+	 * @param type  The unique type identifier for the slot (e.g., "forgero:arrow", "forgero:soul").
+	 * @param codec The codec for parsing the slot.
+	 */
+	void registerSlotCodec(String type, Codec<? extends com.sigmundgranaas.forgero.core.component.api.Slot> codec);
 }

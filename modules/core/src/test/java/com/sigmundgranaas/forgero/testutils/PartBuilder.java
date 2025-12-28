@@ -24,7 +24,7 @@ public class PartBuilder extends BaseComponentBuilder<PartBuilder> {
 		return this;
 	}
 
-	public PartBuilder withComponentUpgradeSlot(ComponentUpgradeSlot slot) {
+	public PartBuilder withUpgradeSlot(ComponentUpgradeSlot slot) {
 		this.upgradeSlots.add(slot);
 		return this;
 	}

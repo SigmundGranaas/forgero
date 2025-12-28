@@ -22,10 +22,10 @@ import static org.junit.jupiter.api.Assertions.*;
 class SlotQueryTest {
 
 	// Test slot types
-	private static final OpenIdentifier GEM_TYPE = OpenIdentifier.of("forgero:gem");
-	private static final OpenIdentifier BINDING_TYPE = OpenIdentifier.of("forgero:binding");
-	private static final OpenIdentifier HANDLE_TYPE = OpenIdentifier.of("forgero:handle");
-	private static final OpenIdentifier OFFENSIVE_GEM_TYPE = OpenIdentifier.of("forgero:offensive_gem_slot");
+	private static final OpenIdentifier GEM_TYPE = OpenIdentifier.parse("forgero:gem");
+	private static final OpenIdentifier BINDING_TYPE = OpenIdentifier.parse("forgero:binding");
+	private static final OpenIdentifier HANDLE_TYPE = OpenIdentifier.parse("forgero:handle");
+	private static final OpenIdentifier OFFENSIVE_GEM_TYPE = OpenIdentifier.parse("forgero:offensive_gem_slot");
 
 	// Test components
 	private Component gemUpgrade;
@@ -75,7 +75,7 @@ class SlotQueryTest {
 			List<ComponentUpgradeSlot> result = query.ofType(GEM_TYPE).execute();
 
 			assertEquals(3, result.size(), "Should find all gem slots");
-			assertTrue(result.stream().allMatch(s -> s.type().equals(GEM_TYPE)),
+			assertTrue(result.stream().allMatch(s -> s.slotType().equals(GEM_TYPE)),
 				"All results should be gem type");
 		}
 
@@ -83,7 +83,7 @@ class SlotQueryTest {
 		@DisplayName("ofType() should return empty list for non-existent type")
 		void ofType_ReturnsEmptyForNonExistentType() {
 			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
-			OpenIdentifier nonExistent = OpenIdentifier.of("forgero:nonexistent");
+			OpenIdentifier nonExistent = OpenIdentifier.parse("forgero:nonexistent");
 
 			List<ComponentUpgradeSlot> result = query.ofType(nonExistent).execute();
 
@@ -99,7 +99,7 @@ class SlotQueryTest {
 
 			assertEquals(5, result.size(), "Should find all gem and binding slots");
 			assertTrue(result.stream().allMatch(s ->
-					s.type().equals(GEM_TYPE) || s.type().equals(BINDING_TYPE)),
+					s.slotType().equals(GEM_TYPE) || s.slotType().equals(BINDING_TYPE)),
 				"All results should be gem or binding type");
 		}
 
@@ -111,7 +111,7 @@ class SlotQueryTest {
 			List<ComponentUpgradeSlot> result = query.ofAnyType(HANDLE_TYPE).execute();
 
 			assertEquals(1, result.size(), "Should find handle slot");
-			assertEquals(HANDLE_TYPE, result.get(0).type(), "Should be handle type");
+			assertEquals(HANDLE_TYPE, result.get(0).slotType(), "Should be handle type");
 		}
 	}
 
@@ -159,7 +159,7 @@ class SlotQueryTest {
 
 			assertEquals(2, result.size(), "Should find empty gem slots only");
 			assertTrue(result.stream().allMatch(s ->
-					s.type().equals(GEM_TYPE) && s.isEmpty()),
+					s.slotType().equals(GEM_TYPE) && s.isEmpty()),
 				"All results should be empty gem slots");
 		}
 
@@ -175,7 +175,7 @@ class SlotQueryTest {
 
 			assertEquals(1, result.size(), "Should find filled binding slot");
 			ComponentUpgradeSlot slot = result.get(0);
-			assertEquals(BINDING_TYPE, slot.type(), "Should be binding type");
+			assertEquals(BINDING_TYPE, slot.slotType(), "Should be binding type");
 			assertFalse(slot.isEmpty(), "Should be filled");
 		}
 	}
@@ -225,7 +225,7 @@ class SlotQueryTest {
 		@DisplayName("multiple matching() calls should AND predicates")
 		void multipleMatching_ANDsPredicates() {
 			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
-			Predicate<ComponentUpgradeSlot> isGemType = slot -> slot.type().equals(GEM_TYPE);
+			Predicate<ComponentUpgradeSlot> isGemType = slot -> slot.slotType().equals(GEM_TYPE);
 			Predicate<ComponentUpgradeSlot> descriptionHasSlot1 = slot ->
 				slot.description().contains("Slot 1");
 
@@ -236,7 +236,7 @@ class SlotQueryTest {
 
 			assertEquals(1, result.size(), "Should find exactly one slot matching both");
 			ComponentUpgradeSlot slot = result.get(0);
-			assertEquals(GEM_TYPE, slot.type(), "Should be gem type");
+			assertEquals(GEM_TYPE, slot.slotType(), "Should be gem type");
 			assertTrue(slot.description().contains("Slot 1"),
 				"Should have 'Slot 1' in description");
 		}
@@ -305,7 +305,7 @@ class SlotQueryTest {
 				.execute();
 
 			assertEquals(1, result.size(), "Should find only gem type compatible slot");
-			assertEquals(GEM_TYPE, result.get(0).type(), "Should be gem type");
+			assertEquals(GEM_TYPE, result.get(0).slotType(), "Should be gem type");
 		}
 	}
 
@@ -331,7 +331,7 @@ class SlotQueryTest {
 		@DisplayName("execute() should return empty list when no matches")
 		void execute_ReturnsEmptyWhenNoMatches() {
 			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
-			OpenIdentifier nonExistent = OpenIdentifier.of("forgero:nonexistent");
+			OpenIdentifier nonExistent = OpenIdentifier.parse("forgero:nonexistent");
 
 			List<ComponentUpgradeSlot> result = query.ofType(nonExistent).execute();
 
@@ -346,14 +346,14 @@ class SlotQueryTest {
 			Optional<ComponentUpgradeSlot> result = query.ofType(GEM_TYPE).first();
 
 			assertTrue(result.isPresent(), "Should find first gem slot");
-			assertEquals(GEM_TYPE, result.get().type(), "Should be gem type");
+			assertEquals(GEM_TYPE, result.get().slotType(), "Should be gem type");
 		}
 
 		@Test
 		@DisplayName("first() should return empty when no matches")
 		void first_ReturnsEmptyWhenNoMatches() {
 			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
-			OpenIdentifier nonExistent = OpenIdentifier.of("forgero:nonexistent");
+			OpenIdentifier nonExistent = OpenIdentifier.parse("forgero:nonexistent");
 
 			Optional<ComponentUpgradeSlot> result = query.ofType(nonExistent).first();
 
@@ -374,7 +374,7 @@ class SlotQueryTest {
 		@DisplayName("exists() should return false when no matches")
 		void exists_ReturnsFalseWhenNoMatches() {
 			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
-			OpenIdentifier nonExistent = OpenIdentifier.of("forgero:nonexistent");
+			OpenIdentifier nonExistent = OpenIdentifier.parse("forgero:nonexistent");
 
 			boolean result = query.ofType(nonExistent).exists();
 
@@ -395,7 +395,7 @@ class SlotQueryTest {
 		@DisplayName("count() should return 0 when no matches")
 		void count_ReturnsZeroWhenNoMatches() {
 			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
-			OpenIdentifier nonExistent = OpenIdentifier.of("forgero:nonexistent");
+			OpenIdentifier nonExistent = OpenIdentifier.parse("forgero:nonexistent");
 
 			long result = query.ofType(nonExistent).count();
 
@@ -424,7 +424,7 @@ class SlotQueryTest {
 
 			assertEquals(1, result.size(), "Should find exactly one slot");
 			ComponentUpgradeSlot slot = result.get(0);
-			assertEquals(GEM_TYPE, slot.type(), "Should be gem type");
+			assertEquals(GEM_TYPE, slot.slotType(), "Should be gem type");
 			assertTrue(slot.isEmpty(), "Should be empty");
 			assertTrue(slot.description().contains("Slot 1"),
 				"Should have 'Slot 1' in description");
@@ -443,7 +443,7 @@ class SlotQueryTest {
 
 			assertTrue(result.size() >= 2, "Should find multiple slots");
 			assertTrue(result.stream().allMatch(s ->
-					(s.type().equals(GEM_TYPE) || s.type().equals(BINDING_TYPE)) &&
+					(s.slotType().equals(GEM_TYPE) || s.slotType().equals(BINDING_TYPE)) &&
 					s.isEmpty() &&
 					!s.description().contains("Offensive")),
 				"All results should match all filter criteria");
@@ -521,7 +521,7 @@ class SlotQueryTest {
 	// ============================================================
 
 	private Component createTestUpgrade(String id) {
-		OpenIdentifier upgradeId = OpenIdentifier.of("forgero:" + id);
+		OpenIdentifier upgradeId = OpenIdentifier.parse("forgero:" + id);
 		return new TestComponent(upgradeId);
 	}
 
@@ -569,7 +569,7 @@ class SlotQueryTest {
 
 		@Override
 		public OpenIdentifier getTypeIdentifier() {
-			return OpenIdentifier.of("forgero:test_component");
+			return OpenIdentifier.parse("forgero:test_component");
 		}
 
 		@Override

@@ -34,4 +34,38 @@ dependencies {
     // Recipe Generator module (included in JAR)
     include(project(path: ":mods:recipe-generator", configuration: 'namedElements'))
     implementation(project(path: ":mods:recipe-generator", configuration: 'namedElements'))
+
+    // Testing dependencies
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
+    testImplementation("net.fabricmc:fabric-loader-junit:${project.loader_version}")
+}
+
+loom {
+    runs {
+        testServer {
+            server()
+            name = "Test Server"
+            source sourceSets.test
+        }
+        gameTest {
+            inherit testServer
+            name "Game Test"
+            vmArg "-Dfabric-api.gametest"
+            vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
+            runDir "build/gameTest"
+        }
+    }
+}
+
+sourceSets {
+    test {
+        compileClasspath += main.compileClasspath
+        runtimeClasspath += main.runtimeClasspath
+    }
+}
+
+test {
+    useJUnitPlatform()
+    testLogging.events("passed", "skipped", "failed")
 }

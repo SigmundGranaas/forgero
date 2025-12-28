@@ -34,7 +34,7 @@ import java.util.Optional;
  * }
  *
  * // Query empty gem slots
- * List<ComponentUpgradeSlot> gemSlots = manager.queryComponentUpgradeSlots(tool)
+ * List<ComponentUpgradeSlot> gemSlots = manager.queryUpgradeSlots(tool)
  *     .ofType(OpenIdentifier.of("forgero:gem"))
  *     .onlyEmpty()
  *     .execute();
@@ -54,7 +54,7 @@ public interface SlotManager {
 	 * <p>
 	 * Example usage:
 	 * <pre>{@code
-	 * List<ComponentUpgradeSlot> slots = manager.queryComponentUpgradeSlots(component)
+	 * List<ComponentUpgradeSlot> slots = manager.queryUpgradeSlots(component)
 	 *     .ofType(BINDING_TYPE)
 	 *     .onlyEmpty()
 	 *     .execute();
@@ -63,7 +63,7 @@ public interface SlotManager {
 	 * @param component The component to query
 	 * @return A slot query builder
 	 */
-	SlotQuery<ComponentUpgradeSlot> queryComponentUpgradeSlots(Component component);
+	SlotQuery<ComponentUpgradeSlot> queryUpgradeSlots(Component component);
 
 	/**
 	 * Gets all structure parts from a component.
@@ -80,7 +80,7 @@ public interface SlotManager {
 	 * @param component The component to inspect
 	 * @return List of all upgrade slots, empty if component has no upgrades
 	 */
-	List<ComponentUpgradeSlot> getAllComponentUpgradeSlots(Component component);
+	List<ComponentUpgradeSlot> getAllUpgradeSlots(Component component);
 
 	/**
 	 * Gets only empty upgrade slots.
@@ -88,7 +88,7 @@ public interface SlotManager {
 	 * @param component The component to inspect
 	 * @return List of empty upgrade slots
 	 */
-	List<ComponentUpgradeSlot> getEmptyComponentUpgradeSlots(Component component);
+	List<ComponentUpgradeSlot> getEmptyUpgradeSlots(Component component);
 
 	/**
 	 * Gets only filled upgrade slots.
@@ -96,7 +96,7 @@ public interface SlotManager {
 	 * @param component The component to inspect
 	 * @return List of filled upgrade slots
 	 */
-	List<ComponentUpgradeSlot> getFilledComponentUpgradeSlots(Component component);
+	List<ComponentUpgradeSlot> getFilledUpgradeSlots(Component component);
 
 	/**
 	 * Gets all upgrade components currently installed.

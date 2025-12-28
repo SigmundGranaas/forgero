@@ -9,6 +9,7 @@ import com.sigmundgranaas.forgero.core.property.context.ResolutionContext;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -43,9 +44,19 @@ public abstract class AbstractConditionalPropertyEngine<P extends ConditionalPro
 		List<P> staticallyValid = componentList.stream()
 				.flatMap(component -> {
 					ResolutionContext resCtx = new ResolutionContext(component, root);
-					// Use the PropertyKey to get only the relevant properties from the holder
-					return component.properties(propertyKey).stream()
-							.filter(prop -> prop.getCondition()
+
+					// Get properties from component
+					Stream<P> componentProps = component.properties(propertyKey).stream();
+
+					// APPLY SLOT FILTERING (only if component is in a slot)
+					// This allows slots to control which properties contribute to the parent
+					Optional<com.sigmundgranaas.forgero.core.component.api.Slot> slot = resCtx.getSlot();
+					Stream<P> filteredProps = slot
+							.map(s -> s.filterProperties(propertyKey, componentProps))
+							.orElse(componentProps);
+
+					// Apply static condition filtering
+					return filteredProps.filter(prop -> prop.getCondition()
 									.map(Condition::staticConditions)
 									.map(resCtx::test)
 									.orElse(true));

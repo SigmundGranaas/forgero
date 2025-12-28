@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-blocks",
+  "version": "${version}",
+  "name": "Forgero Blocks",
+  "description": "Station blocks for component customization - Upgrade Station and Assembly Station.",
+  "authors": [
+    "Sigmund Granaas"
+  ],
+  "contact": {
+    "homepage": "https://sigmundgranaas.com",
+    "sources": "https://github.com/sigmundgranaas/forgero",
+    "issues": "https://github.com/sigmundgranaas/forgero/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/forgero/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "forgero:post_load_plugin": [
+      "com.sigmundgranaas.forgero.blocks.BlocksPlugin"
+    ],
+    "client": [
+      "com.sigmundgranaas.forgero.blocks.BlocksClientPlugin"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "minecraft": "1.20.1",
+    "java": ">=17",
+    "forgero-loader": "*"
+  },
+  "suggests": {}
+}

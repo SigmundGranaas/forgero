@@ -50,13 +50,13 @@ public class SlotQueryImpl<S extends Slot> implements SlotQuery<S> {
 
 	@Override
 	public SlotQuery<S> ofType(OpenIdentifier type) {
-		return matching(slot -> slot.type().equals(type));
+		return matching(slot -> slot.slotType().equals(type));
 	}
 
 	@Override
 	public SlotQuery<S> ofAnyType(OpenIdentifier... types) {
 		Set<OpenIdentifier> typeSet = Set.of(types);
-		return matching(slot -> typeSet.contains(slot.type()));
+		return matching(slot -> typeSet.contains(slot.slotType()));
 	}
 
 	@Override

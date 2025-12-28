@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-blocks-test",
+  "version": "${version}",
+  "name": "Forgero Blocks Tests",
+  "description": "GameTests for Forgero Blocks module.",
+  "authors": [
+    "Sigmund Granaas"
+  ],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-gametest": [
+      "com.sigmundgranaas.forgero.blocks.gametest.UpgradeStationGameTest",
+      "com.sigmundgranaas.forgero.blocks.gametest.AssemblyStationGameTest"
+    ]
+  },
+  "depends": {
+    "forgero-blocks": "*"
+  }
+}

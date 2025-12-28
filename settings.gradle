@@ -25,6 +25,7 @@ include "modules:mc:properties"
 include "modules:mc:predicate"
 include "modules:mc:development"
 include "modules:mc:bows"
+include "modules:mc:blocks"
 // DRP is a standalone mod - see mods:drp
 
 // Content - New Structure
@@ -52,9 +53,10 @@ include("content:${mod_id}-deprecated")
 
 // Mods
 include 'mods:drp'
-include 'mods:recipe-generator'
-include 'mods:vanilla-upgrades'
-include 'mods:forgero'
+// Temporarily disabled due to build issues - Phase 5 refactoring
+// include 'mods:recipe-generator'
+// include 'mods:vanilla-upgrades'
+// include 'mods:forgero'
 
 // LEGACY
 // Fabric

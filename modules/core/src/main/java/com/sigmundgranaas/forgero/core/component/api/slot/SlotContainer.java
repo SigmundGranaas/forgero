@@ -16,7 +16,7 @@ public final class SlotContainer {
 	private final Map<OpenIdentifier, Slot> slots;
 
 	private SlotContainer(Map<OpenIdentifier, Slot> slots) {
-		this.slots = Map.copyOf(slots);
+		this.slots = Collections.unmodifiableMap(new LinkedHashMap<>(slots));
 	}
 
 	/**

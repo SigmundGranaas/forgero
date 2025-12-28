@@ -28,10 +28,14 @@ public record ComponentStructure(Map<OpenIdentifier, ComponentPart> parts) {
 
 	/**
 	 * Creates a structure from varargs parts.
+	 * @throws IllegalArgumentException if duplicate part IDs are provided
 	 */
 	public static ComponentStructure of(ComponentPart... parts) {
 		Map<OpenIdentifier, ComponentPart> map = new LinkedHashMap<>();
 		for (ComponentPart part : parts) {
+			if (map.containsKey(part.id())) {
+				throw new IllegalArgumentException("Duplicate part ID: " + part.id());
+			}
 			map.put(part.id(), part);
 		}
 		return new ComponentStructure(map);
@@ -39,10 +43,14 @@ public record ComponentStructure(Map<OpenIdentifier, ComponentPart> parts) {
 
 	/**
 	 * Creates a structure from a collection of parts.
+	 * @throws IllegalArgumentException if duplicate part IDs are provided
 	 */
 	public static ComponentStructure of(Collection<ComponentPart> parts) {
 		Map<OpenIdentifier, ComponentPart> map = new LinkedHashMap<>();
 		for (ComponentPart part : parts) {
+			if (map.containsKey(part.id())) {
+				throw new IllegalArgumentException("Duplicate part ID: " + part.id());
+			}
 			map.put(part.id(), part);
 		}
 		return new ComponentStructure(map);

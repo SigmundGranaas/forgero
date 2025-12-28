@@ -74,7 +74,7 @@ public class MaterialLoadingTest {
                 .orElseThrow(() -> new AssertionError("Netherite material not loaded"));
 
         assertNotNull(netherite.id(), "Netherite must have ID");
-        assertEquals("forgero", netherite.id().nameSpace(), "Netherite must be in forgero namespace");
+        assertEquals("forgero", netherite.id().namespace(), "Netherite must be in forgero namespace");
 
         context.complete();
     }

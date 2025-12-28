@@ -1,0 +1,13 @@
+{
+  "block.forgero.assembly_station": "Disassembly Station",
+  "block.forgero.upgrade_station": "Upgrade Station",
+  "forgero.station.error.no_compatible_slot": "No compatible slot available",
+  "forgero.station.error.slot_already_filled": "Slot is already filled",
+  "forgero.station.error.invalid_upgrade": "Invalid upgrade for slot type: %s",
+  "forgero.station.error.slot_not_found": "Slot not found: %s",
+  "forgero.station.error.conversion_failed": "Failed to convert component",
+  "forgero.station.error.not_forgero_item": "Not a Forgero item",
+  "forgero.station.error.validation_failed": "Validation failed: %s",
+  "forgero.station.error.install_failed": "Installation failed: %s",
+  "forgero.station.error.operation_failed": "Operation failed: %s"
+}

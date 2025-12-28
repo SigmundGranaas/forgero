@@ -29,7 +29,7 @@ public class DataPipelineTest {
         var services = ForgeroInitializedCallback.getServices().get();
         assertNotNull(services.componentRegistry(), "ComponentRegistry must be available");
         assertNotNull(services.taggedComponents(), "TaggedRegistry must be available");
-        assertNotNull(services.api(), "ForgeroApi must be available");
+        assertNotNull(services.converter(), "Converter must be available");
 
         context.complete();
     }

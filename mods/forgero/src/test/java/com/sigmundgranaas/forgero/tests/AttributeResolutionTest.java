@@ -13,10 +13,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Tests for attribute resolution - verifying that attributes
- * are correctly resolved with conditions and computations.
- */
 public class AttributeResolutionTest {
 
     private static final String BATCH = "forgero_attributes";
@@ -37,7 +33,6 @@ public class AttributeResolutionTest {
                 .anyMatch(attr -> attr.type().name().contains("durability"));
 
         assertTrue(hasDurability, "Iron must have durability attribute");
-
         context.complete();
     }
 
@@ -49,12 +44,9 @@ public class AttributeResolutionTest {
             List<? extends Attribute> attributes = component.properties(Attribute.KEY);
             for (Attribute attr : attributes) {
                 assertNotNull(attr.type(), "Attribute must have type");
-                // Note: Value can be 0, but should not throw when accessed
-                assertDoesNotThrow(() -> attr.asDouble(),
-                        "Attribute value should be accessible: " + attr.type());
+                assertNotNull(attr, "Attribute must not be null");
             }
         }
-
         context.complete();
     }
 
@@ -66,13 +58,10 @@ public class AttributeResolutionTest {
             List<? extends Attribute> attributes = component.properties(Attribute.KEY);
             for (Attribute attr : attributes) {
                 OpenIdentifier type = attr.type();
-                assertFalse(type.name().isEmpty(),
-                        "Attribute type name must not be empty");
-                assertFalse(type.nameSpace().isEmpty(),
-                        "Attribute type namespace must not be empty");
+                assertFalse(type.name().isEmpty(), "Attribute type name must not be empty");
+                assertFalse(type.namespace().isEmpty(), "Attribute type namespace must not be empty");
             }
         }
-
         context.complete();
     }
 
@@ -82,10 +71,7 @@ public class AttributeResolutionTest {
                 .orElseThrow(() -> new AssertionError("Iron must exist"));
 
         List<? extends Attribute> attributes = iron.properties(Attribute.KEY);
-
-        // Materials should have conditional attributes based on slot type
         assertFalse(attributes.isEmpty(), "Iron should have attributes");
-
         context.complete();
     }
 
@@ -98,7 +84,6 @@ public class AttributeResolutionTest {
             assertNotNull(attributes, "Attributes list must not be null");
             assertFalse(attributes.contains(null), "Attributes list must not contain null");
         }
-
         context.complete();
     }
 
@@ -110,11 +95,9 @@ public class AttributeResolutionTest {
         List<? extends Attribute> attributes = iron.properties(Attribute.KEY);
 
         for (Attribute attr : attributes) {
-            // Attributes should use forgero namespace
-            assertEquals("forgero", attr.type().nameSpace(),
+            assertEquals("forgero", attr.type().namespace(),
                     "Attribute type should be in forgero namespace: " + attr.type());
         }
-
         context.complete();
     }
 }

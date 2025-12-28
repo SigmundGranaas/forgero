@@ -86,6 +86,12 @@ public class ForgeroDataLoader implements ModInitializer {
 			PluginRegistrationContextImpl registrationContext =
 					plugins.registerPluginRequirements(() -> this.tagResolver);
 
+			// Phase 3.5: Register slot codecs into SlotRegistry
+			registrationContext.getSlotCodecs().forEach((type, codec) -> {
+				com.sigmundgranaas.forgero.core.component.api.slot.SlotRegistry.register(type, codec);
+				LOGGER.debug("Registered slot codec for type: {}", type);
+			});
+
 			// Phase 4: Create data configuration
 			ForgeroDataInitializer.Config dataConfig =
 					dataLoader.createConfig(registrationContext, this.tagResolver);

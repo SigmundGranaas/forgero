@@ -28,6 +28,7 @@ public class PluginOrchestrator {
 	public void discoverPlugins() {
 		registry.discoverPlugins();
 		registry.registerPlugin(new ForgeroDefaultsPlugin());
+		registry.registerPlugin(new com.sigmundgranaas.forgero.loader.plugin.CoreSlotTypesPlugin());
 
 		int dataPlugins = registry.getDataPlugins().size();
 		int itemRegPlugins = registry.getItemRegistrationPlugins().size();

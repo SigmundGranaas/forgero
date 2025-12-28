@@ -103,7 +103,7 @@ public class UpgradeSystemTest {
 
         if (!customizableComps.isEmpty()) {
             for (CustomizableComponent comp : customizableComps) {
-                List<ComponentUpgradeSlot> slots = comp.upgrades().slots().all();
+                List<ComponentUpgradeSlot> slots = comp.upgrades().allUpgradeSlots();
                 for (ComponentUpgradeSlot slot : slots) {
                     assertNotNull(slot.validator(),
                             "Upgrade slot must have validator: " + slot.id());
@@ -125,10 +125,10 @@ public class UpgradeSystemTest {
 
         if (!customizableComps.isEmpty()) {
             for (CustomizableComponent comp : customizableComps) {
-                List<ComponentUpgradeSlot> slots = comp.upgrades().slots().all();
+                List<ComponentUpgradeSlot> slots = comp.upgrades().allUpgradeSlots();
                 for (ComponentUpgradeSlot slot : slots) {
-                    assertNotNull(slot.type(), "Slot must have type: " + slot.id());
-                    assertFalse(slot.type().name().isEmpty(), "Slot type must not be empty");
+                    assertNotNull(slot.slotType(), "Slot must have type: " + slot.id());
+                    assertFalse(slot.slotType().name().isEmpty(), "Slot type must not be empty");
                 }
             }
         }
@@ -147,7 +147,7 @@ public class UpgradeSystemTest {
 
         if (!customizableComps.isEmpty()) {
             for (CustomizableComponent comp : customizableComps) {
-                List<ComponentUpgradeSlot> slots = comp.upgrades().slots().all();
+                List<ComponentUpgradeSlot> slots = comp.upgrades().allUpgradeSlots();
                 for (ComponentUpgradeSlot slot : slots) {
                     assertNotNull(slot.description(),
                             "Slot must have description: " + slot.id());

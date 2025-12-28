@@ -1,7 +1,9 @@
 package com.sigmundgranaas.forgero.core.component.api.slot;
 
+import com.mojang.serialization.Codec;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -23,6 +25,18 @@ public record SlotValidator(
 	 * A validator that accepts any component.
 	 */
 	public static final SlotValidator ACCEPT_ALL = new SlotValidator(null, c -> true);
+
+	/**
+	 * Codec for SlotValidator.
+	 * Only serializes the requiredType tag - custom predicates are not serializable
+	 * and default to accepting all components on deserialization.
+	 */
+	public static final Codec<SlotValidator> CODEC = CodecConstants.OPEN_IDENTIFIER_CODEC
+			.optionalFieldOf("required_tag")
+			.xmap(
+					opt -> opt.map(SlotValidator::requireTag).orElse(ACCEPT_ALL),
+					validator -> Optional.ofNullable(validator.requiredType())
+			).codec();
 
 	/**
 	 * Creates a validator that requires the component to have a specific tag.

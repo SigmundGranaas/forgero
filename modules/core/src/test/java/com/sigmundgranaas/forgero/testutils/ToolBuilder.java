@@ -29,7 +29,7 @@ public class ToolBuilder extends BaseComponentBuilder<ToolBuilder> {
 		return this;
 	}
 
-	public ToolBuilder withComponentUpgradeSlot(ComponentUpgradeSlot slot) {
+	public ToolBuilder withUpgradeSlot(ComponentUpgradeSlot slot) {
 		this.upgradeSlots.add(slot);
 		return this;
 	}

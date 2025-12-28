@@ -35,7 +35,7 @@ public class SlotManagerImpl implements SlotManager {
 	// ========== QUERY OPERATIONS ==========
 
 	@Override
-	public SlotQuery<ComponentUpgradeSlot> queryComponentUpgradeSlots(Component component) {
+	public SlotQuery<ComponentUpgradeSlot> queryUpgradeSlots(Component component) {
 		return new SlotQueryImpl<>(getAllUpgradeSlots(component));
 	}
 

@@ -3,6 +3,8 @@ package com.sigmundgranaas.forgero.core.component.mutation.impl;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.Slot;
+import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
+import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 import com.sigmundgranaas.forgero.core.component.mutation.api.ComponentMutater;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,17 +55,39 @@ class ComponentMutaterImplTest {
 				.build();
 	}
 
+	/**
+	 * Helper to find and extract Component content from either a structure part or upgrade slot.
+	 * Searches both structure parts (ComponentPart) and mutable slots (ComponentUpgradeSlot).
+	 */
+	private Optional<Component> findContentById(Component component, OpenIdentifier id) {
+		// Check structure parts first
+		if (component instanceof com.sigmundgranaas.forgero.core.component.api.StructuredComponent structured) {
+			var part = structured.structure().getPart(id);
+			if (part.isPresent()) {
+				return Optional.of(part.get().getContent());
+			}
+		}
+
+		// Check mutable slots
+		var slot = mutater.findSlot(component, id);
+		if (slot.isPresent() && slot.get() instanceof ComponentUpgradeSlot upgradeSlot) {
+			return upgradeSlot.getContent();
+		}
+
+		return Optional.empty();
+	}
+
 	@Test
 	void testReplaceHandleInStructureSlot() {
 		Component newPickaxe = mutater.setSlot(pickaxe, HANDLE_SLOT_ID, newHandle);
 
 		assertNotEquals(pickaxe, newPickaxe, "A new component instance should be returned.");
 
-		Optional<Component> handleInNew = mutater.findSlot(newPickaxe, HANDLE_SLOT_ID).flatMap(Slot::get);
+		Optional<Component> handleInNew = findContentById(newPickaxe, HANDLE_SLOT_ID);
 		assertTrue(handleInNew.isPresent());
 		assertEquals(newHandle, handleInNew.get());
 
-		Optional<Component> headInNew = mutater.findSlot(newPickaxe, HEAD_SLOT_ID).flatMap(Slot::get);
+		Optional<Component> headInNew = findContentById(newPickaxe, HEAD_SLOT_ID);
 		assertTrue(headInNew.isPresent());
 		assertSame(originalHead, headInNew.get(), "Unchanged parts should be the same instance.");
 	}
@@ -80,7 +104,7 @@ class ComponentMutaterImplTest {
 
 		assertNotEquals(pickaxe, newPickaxe);
 
-		Optional<Component> gemInNew = mutater.findSlot(newPickaxe, GEM_SLOT_ID).flatMap(Slot::get);
+		Optional<Component> gemInNew = findContentById(newPickaxe, GEM_SLOT_ID);
 		assertTrue(gemInNew.isPresent());
 		assertEquals(diamondGem, gemInNew.get());
 	}
@@ -91,7 +115,7 @@ class ComponentMutaterImplTest {
 
 		assertNotEquals(pickaxe, newPickaxe);
 
-		Optional<Component> bindingInNew = mutater.findSlot(newPickaxe, BINDING_SLOT_ID).flatMap(Slot::get);
+		Optional<Component> bindingInNew = findContentById(newPickaxe, BINDING_SLOT_ID);
 		assertTrue(bindingInNew.isEmpty(), "The binding slot should now be empty.");
 	}
 

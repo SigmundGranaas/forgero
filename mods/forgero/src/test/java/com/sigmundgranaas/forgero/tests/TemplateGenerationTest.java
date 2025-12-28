@@ -45,7 +45,7 @@ public class TemplateGenerationTest {
             OpenIdentifier id = component.id();
             assertNotNull(id, "Generated component must have ID");
             assertFalse(id.name().isEmpty(), "ID name must not be empty");
-            assertFalse(id.nameSpace().isEmpty(), "ID namespace must not be empty");
+            assertFalse(id.namespace().isEmpty(), "ID namespace must not be empty");
         }
 
         context.complete();
