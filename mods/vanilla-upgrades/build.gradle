@@ -39,6 +39,10 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
     testImplementation("net.fabricmc:fabric-loader-junit:${project.loader_version}")
+
+    // Test runtime needs drp and recipe-generator mods
+    testRuntimeOnly(project(path: ":mods:drp", configuration: 'namedElements'))
+    testRuntimeOnly(project(path: ":mods:recipe-generator", configuration: 'namedElements'))
 }
 
 loom {

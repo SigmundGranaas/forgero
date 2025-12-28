@@ -53,10 +53,9 @@ include("content:${mod_id}-deprecated")
 
 // Mods
 include 'mods:drp'
-// Temporarily disabled due to build issues - Phase 5 refactoring
-// include 'mods:recipe-generator'
-// include 'mods:vanilla-upgrades'
-// include 'mods:forgero'
+include 'mods:recipe-generator'
+include 'mods:vanilla-upgrades'
+include 'mods:forgero'
 
 // LEGACY
 // Fabric
