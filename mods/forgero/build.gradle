@@ -1,0 +1,185 @@
+plugins {
+    id "com.modrinth.minotaur" version "2.+"
+    id 'com.matthewprenger.cursegradle' version '1.4.0'
+}
+
+archivesBaseName = "forgero"
+group = 'com.sigmundgranaas'
+version = project.version
+
+dependencies {
+    // Core modules (included in JAR)
+    include(project(":modules:core"))
+    include(project(path: ":modules:mc:common", configuration: 'namedElements'))
+    include(project(path: ":modules:mc:loader", configuration: 'namedElements'))
+    include(project(path: ":modules:mc:properties", configuration: 'namedElements'))
+    include(project(path: ":modules:mc:render", configuration: 'namedElements'))
+    include(project(path: ":modules:mc:predicate", configuration: 'namedElements'))
+
+    // Forgero-specific modules (custom tool/armor/bow items)
+    include(project(path: ":modules:mc:tools", configuration: 'namedElements'))
+    include(project(path: ":modules:mc:armor", configuration: 'namedElements'))
+    include(project(path: ":modules:mc:bows", configuration: 'namedElements'))
+
+    // Dynamic Resource Pack module (included in JAR)
+    include(project(path: ":mods:drp", configuration: 'namedElements'))
+
+    // Implementation dependencies (for compilation and development runtime)
+    implementation(project(":modules:core"))
+    implementation(project(path: ":modules:mc:common", configuration: 'namedElements'))
+    implementation(project(path: ":modules:mc:loader", configuration: 'namedElements'))
+    implementation(project(path: ":modules:mc:properties", configuration: 'namedElements'))
+    implementation(project(path: ":modules:mc:render", configuration: 'namedElements'))
+    implementation(project(path: ":modules:mc:predicate", configuration: 'namedElements'))
+    implementation(project(path: ":mods:drp", configuration: 'namedElements'))
+    implementation(project(path: ":modules:mc:tools", configuration: 'namedElements'))
+    implementation(project(path: ":modules:mc:armor", configuration: 'namedElements'))
+    implementation(project(path: ":modules:mc:bows", configuration: 'namedElements'))
+
+    // Shared content (included in JAR and on runtime classpath for development)
+    include(project(":content:shared-materials"))
+    include(project(":content:minecraft-vanilla-materials"))
+    include(project(":content:minecraft-tools"))
+    runtimeOnly(project(":content:shared-materials"))
+    runtimeOnly(project(":content:minecraft-vanilla-materials"))
+    runtimeOnly(project(":content:minecraft-tools"))
+
+    // Forgero content (included in JAR and on runtime classpath for development)
+    include(project(":content:forgero-vanilla"))
+    include(project(":content:forgero-tools"))
+    include(project(":content:forgero-armor"))
+    include(project(":content:forgero-extended"))
+    include(project(":content:forgero-compat"))
+    runtimeOnly(project(":content:forgero-vanilla"))
+    runtimeOnly(project(":content:forgero-tools"))
+    runtimeOnly(project(":content:forgero-armor"))
+    runtimeOnly(project(":content:forgero-extended"))
+    runtimeOnly(project(":content:forgero-compat"))
+
+    // Fabric
+    modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
+
+    // Reach entity attributes API
+    include modApi("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}")
+}
+
+// CurseForge publishing
+curseforge {
+    apiKey = System.getenv("CURSEFORGE_API_KEY") ?: ""
+    project {
+        id = '581435'
+        changelogType = "markdown"
+        changelog = file('../../changelog.md')
+
+        releaseType = project.release_type
+        addGameVersion project.minecraft_version
+        addGameVersion 'Fabric'
+        addGameVersion 'Quilt'
+        addGameVersion "Java 17"
+
+        mainArtifact(remapJar) {
+            displayName = "Forgero [Fabric]: $version"
+            relations {
+                requiredDependency 'fabric-api'
+                optionalDependency 'modonomicon'
+                optionalDependency "lambdynamiclights"
+                optionalDependency "better-combat"
+                optionalDependency "modmenu"
+                optionalDependency "mythicmetals"
+                optionalDependency "betternether"
+                optionalDependency "betterend"
+                optionalDependency "mystical-crops"
+                optionalDependency "natures-spirit"
+                optionalDependency "create"
+                optionalDependency "ad-astra"
+                optionalDependency "deeperdarker"
+                optionalDependency "ecologics"
+                optionalDependency "naturalist"
+                optionalDependency "advanced-netherite"
+                optionalDependency "modern-industrialization"
+                optionalDependency "oh-the-biomes-weve-gone"
+                optionalDependency "techreborn"
+                optionalDependency "lets-do-bloomingnature"
+                optionalDependency "lets-do-beachparty"
+                optionalDependency "lets-do-vinery"
+                optionalDependency "lets-do-nethervinery"
+                optionalDependency "gardens-of-the-dead"
+                optionalDependency "ribbits"
+                optionalDependency "dragonloot"
+                optionalDependency "garnished-additions"
+                optionalDependency "mythicmetals-decorations"
+                optionalDependency "eldritch-end"
+                optionalDependency "regions-unexplored"
+                optionalDependency "spelunkery"
+                optionalDependency "beneath-the-wetlands"
+                optionalDependency "enderite-mod"
+                optionalDependency "galosphere"
+                optionalDependency "eden-ring-reforked"
+                incompatible "exordium"
+            }
+        }
+    }
+    options {
+        forgeGradleIntegration = false
+    }
+}
+
+// Modrinth publishing
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+
+    projectId = "forgero"
+    versionNumber = version
+    versionType = project.release_type
+    uploadFile = remapJar
+    gameVersions = [minecraft_version]
+    loaders = ["fabric", "quilt"]
+    versionName = "Forgero $version"
+    changelog = file('../../changelog.md').exists() ? file('../../changelog.md').text : "Release $version"
+    dependencies {
+        required.project "fabric-api"
+        optional.project "modonomicon"
+        optional.project "lambdynamiclights"
+        optional.project "better-combat"
+        optional.project "modmenu"
+        optional.project "mythicmetals"
+        optional.project "betternether"
+        optional.project "mystical_crops"
+        optional.project "wiredredstone"
+        optional.project "natures-spirit"
+        optional.project "create"
+        optional.project "ad-astra"
+        optional.project "betterend"
+        optional.project "deeperdarker"
+        optional.project "ecologics"
+        optional.project "naturalist"
+        optional.project "advanced-netherite"
+        optional.project "oh-the-biomes-weve-gone"
+        optional.project "modern-industrialization"
+        optional.project "lets-do-bloomingnature"
+        optional.project "fruitful-fun"
+        optional.project "lets-do-beachparty"
+        optional.project "lets-do-nethervinery"
+        optional.project "lets-do-vinery"
+        optional.project "gardens-of-the-dead"
+        optional.project "ribbits"
+        optional.project "dragonloot"
+        optional.project "garnished-additions"
+        optional.project "mythicmetals-decorations"
+        optional.project "eldritch-end"
+        optional.project "regions-unexplored"
+        optional.project "spelunkery"
+        optional.project "ends-phantasm"
+        optional.project "enderite-mod"
+        optional.project "galosphere"
+        optional.project "bountiful-fares"
+        optional.project "eden-ring-reforked"
+        optional.project "beneath-the-wetlands"
+        incompatible.project "exordium"
+    }
+}
+
+tasks.register('publishToModrinthAndCurseForge') {
+    dependsOn 'modrinth', 'curseforge'
+}

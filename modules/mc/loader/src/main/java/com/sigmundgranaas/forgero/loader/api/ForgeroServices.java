@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.common.nbt.ComponentNbtConverter;
 import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.common.tags.engine.TaggedRegistry;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.component.api.slot.SlotManager;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
 import net.minecraft.item.ItemStack;
@@ -109,6 +110,29 @@ public interface ForgeroServices {
 	 * @return The NBT converter instance
 	 */
 	ComponentNbtConverter nbtConverter();
+
+	/**
+	 * Returns the slot manager for high-level slot operations.
+	 * <p>
+	 * Use this to query available slots, check upgrade compatibility,
+	 * and install/remove upgrades.
+	 * <p>
+	 * Example usage:
+	 * <pre>{@code
+	 * SlotManager manager = services.slotManager();
+	 *
+	 * // Check if gem can be installed
+	 * if (manager.canInstall(tool, gem)) {
+	 *     InstallationResult result = manager.install(tool, gem);
+	 *     if (result.success()) {
+	 *         Component upgraded = result.orElseThrow();
+	 *     }
+	 * }
+	 * }</pre>
+	 *
+	 * @return The slot manager instance
+	 */
+	SlotManager slotManager();
 
 	/**
 	 * Maps an ItemStack to its corresponding Component.

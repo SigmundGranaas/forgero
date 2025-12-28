@@ -31,5 +31,5 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
 
     // Dynamic Resource Pack module (included in JAR)
-    include(project(path: ":modules:mc:drp", configuration: 'namedElements'))
+    include(project(path: ":mods:drp", configuration: 'namedElements'))
 }

@@ -14,7 +14,7 @@ dependencies {
 	modCompileOnly("net.fabricmc:fabric-loader:${project.loader_version}")
 
 	// Dynamic Resource Pack module
-	implementation(project(path: ":modules:mc:drp", configuration: 'namedElements'))
+	implementation(project(path: ":mods:drp", configuration: 'namedElements'))
 }
 
 loom {

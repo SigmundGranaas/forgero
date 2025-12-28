@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.common.recipe;
 
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
-import com.sigmundgranaas.forgero.common.env.ForgeroEnvironment;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.mutation.api.ComponentMutater;
@@ -26,11 +25,24 @@ public class ForgeroShapedRecipe extends ShapedRecipe {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ForgeroShapedRecipe.class);
 	final Map<Character, RecipeIngredient> forgeroKey;
 	final RecipeOutput forgeroResult;
+	private final RecipeServices services;
 
-	public ForgeroShapedRecipe(Identifier id, String group, CraftingRecipeCategory category, int width, int height, DefaultedList<Ingredient> input, ItemStack output, Map<Character, RecipeIngredient> forgeroKey, RecipeOutput forgeroResult) {
+	public ForgeroShapedRecipe(
+			Identifier id,
+			String group,
+			CraftingRecipeCategory category,
+			int width,
+			int height,
+			DefaultedList<Ingredient> input,
+			ItemStack output,
+			Map<Character, RecipeIngredient> forgeroKey,
+			RecipeOutput forgeroResult,
+			RecipeServices services
+	) {
 		super(id, group, category, width, height, input, output);
 		this.forgeroKey = forgeroKey;
 		this.forgeroResult = forgeroResult;
+		this.services = services;
 	}
 
 	@Override
@@ -42,18 +54,18 @@ public class ForgeroShapedRecipe extends ShapedRecipe {
 	public ItemStack craft(RecipeInputInventory recipeInputInventory, DynamicRegistryManager dynamicRegistryManager) {
 		try {
 			Component finalComponent = assemble(recipeInputInventory);
-			return ForgeroEnvironment.getComponentConverter().toStack(finalComponent).orElse(ItemStack.EMPTY);
+			return services.converter().toStack(finalComponent).orElse(ItemStack.EMPTY);
 		} catch (Exception e) {
 			// Log error and return empty to prevent crash
-            LOGGER.error("Error crafting Forgero item for recipe {}", this.getId(), e);
+			LOGGER.error("Error crafting Forgero item for recipe {}", this.getId(), e);
 			return ItemStack.EMPTY;
 		}
 	}
 
 	private Component assemble(RecipeInputInventory inventory) {
-		ComponentRegistry registry = ForgeroEnvironment.getComponentRegistry();
-		ComponentConverter converter = ForgeroEnvironment.getComponentConverter();
-		ComponentMutater mutater = ForgeroEnvironment.getComponentMutater();
+		ComponentRegistry registry = services.registry();
+		ComponentConverter converter = services.converter();
+		ComponentMutater mutater = services.mutater();
 
 		// 1. Get the base component from the registry
 		OpenIdentifier baseComponentId = OpenIdentifier.parse(forgeroResult.item());
@@ -82,7 +94,7 @@ public class ForgeroShapedRecipe extends ShapedRecipe {
 	}
 
 	private Component resolveIngredient(String source, ComponentConverter converter, RecipeInputInventory inventory) {
-		ComponentRegistry registry = ForgeroEnvironment.getComponentRegistry();
+		ComponentRegistry registry = services.registry();
 		// Check if source is a single character key in the recipe map
 		if (source.length() == 1 && forgeroKey.containsKey(source.charAt(0))) {
 			char recipeKey = source.charAt(0);

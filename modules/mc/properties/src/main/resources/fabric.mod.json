@@ -16,6 +16,9 @@
     "issues": "https://github.com/sigmundgranaas/forgero/issues"
   },
   "entrypoints": {
+    "main": [
+      "com.sigmundgranaas.forgero.properties.PropertiesInitializer"
+    ],
     "forgero:data_plugin": [
       "com.sigmundgranaas.forgero.properties.minecraft.ontick.OnTickPropertiesPlugin",
       "com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.BlockBreakingPropertiesPlugin",

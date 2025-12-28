@@ -24,7 +24,7 @@ dependencies {
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
 
 	// Dynamic Resource Pack module
-	api(project(path: ":modules:mc:drp", configuration: 'namedElements'))
+	api(project(path: ":mods:drp", configuration: 'namedElements'))
 
 	modApi("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}"){
 		exclude(group: "net.fabricmc.fabric-loader")

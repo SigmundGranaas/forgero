@@ -101,7 +101,7 @@ public class ComponentBuilder {
 				validator = SlotValidator.requireAllTags(slotDto.validTags());
 			}
 
-			slots.add(new UpgradeSlot(slotDto.type(), slotDto.type(), slotDto.description(), validator, Optional.ofNullable(childComponent)));
+			slots.add(new UpgradeSlot(slotDto.id(), slotDto.type(), slotDto.description(), validator, Optional.ofNullable(childComponent)));
 		}
 		return DataResult.success(ComponentUpgrades.of(slots));
 	}

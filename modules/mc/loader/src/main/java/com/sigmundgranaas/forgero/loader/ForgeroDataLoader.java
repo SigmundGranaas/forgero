@@ -1,13 +1,15 @@
 package com.sigmundgranaas.forgero.loader;
 
 import com.sigmundgranaas.forgero.common.attribute.AttributeManager;
-import com.sigmundgranaas.forgero.common.env.ForgeroEnvironment;
 import com.sigmundgranaas.forgero.common.item.DynamicItem;
 import com.sigmundgranaas.forgero.common.item.DynamicSwordItem;
 import com.sigmundgranaas.forgero.common.item.DynamicToolItem;
 import com.sigmundgranaas.forgero.common.recipe.ForgeroShapedRecipeSerializer;
+import com.sigmundgranaas.forgero.common.recipe.RecipeServices;
 import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.common.tooltip.ForgeroTooltipRenderer;
+import com.sigmundgranaas.forgero.core.component.api.slot.SlotManager;
+import com.sigmundgranaas.forgero.core.component.api.slot.impl.SlotManagerImpl;
 import com.sigmundgranaas.forgero.core.component.mutation.api.ComponentMutater;
 import com.sigmundgranaas.forgero.core.component.mutation.impl.ComponentMutaterImpl;
 import com.sigmundgranaas.forgero.data.pipeline.api.ForgeroDataBundle;
@@ -47,6 +49,9 @@ public class ForgeroDataLoader implements ModInitializer {
 	private final DataLoadingPipeline dataLoader = new DataLoadingPipeline();
 	private final ComponentRegistrationService componentService = new ComponentRegistrationService();
 	private final ApiInitializer apiInitializer = new ApiInitializer();
+
+	// Shared services
+	private ComponentMutater componentMutater;
 
 	// State
 	private final DataLoadingContextImpl context = new DataLoadingContextImpl();
@@ -95,7 +100,7 @@ public class ForgeroDataLoader implements ModInitializer {
 			// Initialize context with services
 			initializeContext(bundle, services);
 
-			// Initialize legacy services (AttributeManager, ForgeroEnvironment)
+			// Initialize legacy services (AttributeManager for mixin access)
 			initializeLegacyServices(services);
 
 			// Phase 7: Setup item registration callbacks
@@ -160,30 +165,39 @@ public class ForgeroDataLoader implements ModInitializer {
 			ForgeroDataBundle bundle,
 			ComponentRegistrationService.ServiceBundle services
 	) {
+		// Create ComponentMutater and SlotManager for services
+		ComponentMutater mutater = new ComponentMutaterImpl();
+		SlotManager slotManager = new SlotManagerImpl(mutater);
+
 		context.initialize(
 				services.componentRegistry(),
 				bundle.componentRegistry(),
 				services.resolver(),
 				services.converter(),
 				services.nbtConverter(),
+				slotManager,
 				bundle
 		);
+
+		// Store mutater for legacy services initialization
+		this.componentMutater = mutater;
 	}
 
 	private void initializeLegacyServices(ComponentRegistrationService.ServiceBundle services) {
 		// Initialize AttributeManager for mixin access
 		AttributeManager.initialize(services.converter(), services.resolver());
 		LOGGER.debug("Forgero Attribute Manager initialized.");
-
-		// Initialize ForgeroEnvironment for crafting recipes
-		ComponentMutater mutater = new ComponentMutaterImpl();
-		ForgeroEnvironment.initialize(services.componentRegistry(), services.converter(), mutater);
-		LOGGER.debug("Forgero Environment initialized for crafting.");
 	}
 
 	private void initializeRecipes(ForgeroDataInitializer.Config dataConfig) {
+		RecipeServices recipeServices = new RecipeServices(
+				context.getComponentRegistry(),
+				context.getConverter(),
+				componentMutater
+		);
+
 		ForgeroShapedRecipeSerializer.INSTANCE =
-				new ForgeroShapedRecipeSerializer(dataConfig.propertyCodecs());
+				new ForgeroShapedRecipeSerializer(dataConfig.propertyCodecs(), recipeServices);
 		Registry.register(
 				Registries.RECIPE_SERIALIZER,
 				ForgeroShapedRecipeSerializer.ID,

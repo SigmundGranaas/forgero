@@ -17,7 +17,7 @@ import com.sigmundgranaas.forgero.data.pipeline.api.ForgeroDataBundle;
 import com.sigmundgranaas.forgero.data.pipeline.api.ForgeroDataInitializer;
 import com.sigmundgranaas.forgero.loader.impl.phase.PhaseExecutor;
 import com.sigmundgranaas.forgero.loader.impl.phase.PhaseResult;
-import com.sigmundgranaas.forgero.utility.resource.loader.implementation.ClassPathResourceProvider;
+import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +60,10 @@ public class DataLoadingPipeline {
 			IdentifierFactory idFactory = new IdentifierFactory.Builder()
 					.defaultNamespace(MOD_NAMESPACE)
 					.build();
-			TagLoadingService tagLoader = new TagLoadingService(idFactory);
+
+			// Use FabricResourceProvider to properly find tags from Fabric mods
+			ResourceProvider resourceProvider = new FabricResourceProvider("data");
+			TagLoadingService tagLoader = new TagLoadingService(idFactory, resourceProvider);
 
 			return namespaces.stream()
 					.map(ns -> tagLoader.loadTags(new OpenIdentifier(ns, "tags")))
@@ -102,9 +105,12 @@ public class DataLoadingPipeline {
 			propertyCodecs.put(entry.getKey(), entry.getValue().apply(conditionCodecSupplier));
 		}
 
+		// Use FabricResourceProvider to properly find resources from Fabric mods
+		ResourceProvider resourceProvider = new FabricResourceProvider("data");
+
 		return new ForgeroDataInitializer.Config(
 				MOD_NAMESPACE,
-				new ClassPathResourceProvider("data"),
+				resourceProvider,
 				tagResolver,
 				propertyCodecs,
 				staticConditionCodecs,

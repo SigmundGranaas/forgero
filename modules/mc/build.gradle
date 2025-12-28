@@ -5,4 +5,12 @@ subprojects {
 		minecraft "com.mojang:minecraft:$project.minecraft_version"
 		mappings "net.fabricmc:yarn:${rootProject.yarn_mappings}:v2"
 	}
+
+	processResources {
+		inputs.property "version", rootProject.version
+
+		filesMatching("fabric.mod.json") {
+			expand "version": rootProject.version
+		}
+	}
 }

@@ -41,13 +41,13 @@ import net.minecraft.util.math.BlockPos;
  */
 public class BowHandlerGametest {
 
-	// Services received from ForgeroInitializedCallback
-	private static ComponentConverter converter;
-
-	static {
-		ForgeroInitializedCallback.EVENT.register(services -> {
-			converter = services.converter();
-		});
+	/**
+	 * Gets the ComponentConverter using the static accessor.
+	 */
+	private static ComponentConverter getConverter() {
+		return ForgeroInitializedCallback.getServices()
+				.map(s -> s.converter())
+				.orElse(null);
 	}
 
 	// ========== MountProjectileHandler Tests ==========
@@ -625,6 +625,10 @@ public class BowHandlerGametest {
 
 		Component component = new StaticComponent(id, openTags, propertiesMap);
 
+		ComponentConverter converter = getConverter();
+		if (converter == null) {
+			return ItemStack.EMPTY;
+		}
 		return converter.toStack(component)
 				.orElse(ItemStack.EMPTY);
 	}

@@ -35,11 +35,16 @@ public class ForgeroShapedRecipeSerializer implements RecipeSerializer<ForgeroSh
 	private final Codec<RecipeOutput> outputCodec;
 	private final Codec<Map<Character, RecipeIngredient>> keyCodec;
 	private final KeyMapDispatchCodec propertyDispatchCodec;
+	private final RecipeServices services;
 
-	public ForgeroShapedRecipeSerializer(Map<PropertyKey<?>, Codec<? extends List<?>>> propertyCodecs) {
+	public ForgeroShapedRecipeSerializer(
+			Map<PropertyKey<?>, Codec<? extends List<?>>> propertyCodecs,
+			RecipeServices services
+	) {
 		this.outputCodec = RecipeOutput.codec(propertyCodecs);
 		this.keyCodec = Codec.unboundedMap(Codec.STRING.xmap(s -> s.charAt(0), String::valueOf), RecipeIngredient.CODEC);
 		this.propertyDispatchCodec = new KeyMapDispatchCodec(propertyCodecs);
+		this.services = services;
 	}
 
 	@Override
@@ -64,7 +69,7 @@ public class ForgeroShapedRecipeSerializer implements RecipeSerializer<ForgeroSh
 
 		ItemStack outputStack = new ItemStack(Registries.ITEM.get(new Identifier(forgeroResult.item())));
 
-		return new ForgeroShapedRecipe(id, group, category, width, height, ingredients, outputStack, forgeroKey, forgeroResult);
+		return new ForgeroShapedRecipe(id, group, category, width, height, ingredients, outputStack, forgeroKey, forgeroResult, services);
 	}
 
 	@Override
@@ -103,7 +108,7 @@ public class ForgeroShapedRecipeSerializer implements RecipeSerializer<ForgeroSh
 
 		RecipeOutput forgeroResult = new RecipeOutput(resultItem, structure, upgrades, properties);
 
-		return new ForgeroShapedRecipe(id, group, category, width, height, ingredients, output, forgeroKey, forgeroResult);
+		return new ForgeroShapedRecipe(id, group, category, width, height, ingredients, output, forgeroKey, forgeroResult, services);
 	}
 
 	private void writeRecipeIngredient(PacketByteBuf buf, RecipeIngredient ingredient) {

@@ -25,7 +25,7 @@ include "modules:mc:properties"
 include "modules:mc:predicate"
 include "modules:mc:development"
 include "modules:mc:bows"
-include "modules:mc:drp"
+// DRP is a standalone mod - see mods:drp
 
 // Content
 include("content")
@@ -45,7 +45,9 @@ include("content:shared-materials")
 include("content:vanilla-upgrades-base")
 
 // Mods
+include 'mods:drp'
 include 'mods:vanilla-upgrades'
+include 'mods:forgero'
 
 // LEGACY
 // Fabric

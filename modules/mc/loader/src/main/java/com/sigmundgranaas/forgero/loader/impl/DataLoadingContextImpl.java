@@ -6,6 +6,7 @@ import com.sigmundgranaas.forgero.loader.api.DataLoadingContext;
 import com.sigmundgranaas.forgero.common.nbt.ComponentNbtConverter;
 import com.sigmundgranaas.forgero.common.tags.engine.TaggedRegistry;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.component.api.slot.SlotManager;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
 import com.sigmundgranaas.forgero.data.pipeline.api.ForgeroDataBundle;
@@ -19,6 +20,7 @@ public class DataLoadingContextImpl implements DataLoadingContext {
 	private Resolver resolver;
 	private ComponentConverter componentConverter;
 	private ComponentNbtConverter nbtConverter;
+	private SlotManager slotManager;
 	private ForgeroDataBundle dataBundle;
 
 	public void initialize(
@@ -27,12 +29,14 @@ public class DataLoadingContextImpl implements DataLoadingContext {
 			Resolver resolver,
 			ComponentConverter componentConverter,
 			ComponentNbtConverter nbtConverter,
+			SlotManager slotManager,
 			ForgeroDataBundle dataBundle) {
 		this.componentRegistry = componentRegistry;
 		this.taggedComponentRegistry = taggedComponentRegistry;
 		this.resolver = resolver;
 		this.componentConverter = componentConverter;
 		this.nbtConverter = nbtConverter;
+		this.slotManager = slotManager;
 		this.dataBundle = dataBundle;
 	}
 
@@ -64,6 +68,11 @@ public class DataLoadingContextImpl implements DataLoadingContext {
 	@Override
 	public ComponentNbtConverter getNbtConverter() {
 		return nbtConverter;
+	}
+
+	@Override
+	public SlotManager getSlotManager() {
+		return slotManager;
 	}
 
 	@Override

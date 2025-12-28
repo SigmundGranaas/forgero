@@ -61,6 +61,11 @@ public interface DataLoadingContext extends ForgeroServices {
 		return getComponent(stack);
 	}
 
+	@Override
+	default com.sigmundgranaas.forgero.core.component.api.slot.SlotManager slotManager() {
+		return getSlotManager();
+	}
+
 	// ============================================================
 	// Legacy API (for backward compatibility)
 	// ============================================================
@@ -100,6 +105,12 @@ public interface DataLoadingContext extends ForgeroServices {
 	 */
 	@Deprecated(forRemoval = true)
 	ComponentNbtConverter getNbtConverter();
+
+	/**
+	 * @deprecated Use {@link #slotManager()} instead
+	 */
+	@Deprecated(forRemoval = true)
+	com.sigmundgranaas.forgero.core.component.api.slot.SlotManager getSlotManager();
 
 	/**
 	 * Get the original data bundle for modules that need raw data access.

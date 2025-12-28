@@ -15,6 +15,11 @@ dependencies {
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
+
+	// Content data required for Forgero initialization in tests
+	testRuntimeOnly(project(":content:minecraft-vanilla-materials"))
+	testRuntimeOnly(project(":content:minecraft-tools"))
+	testRuntimeOnly(project(":content:shared-materials"))
 }
 
 loom {

@@ -22,15 +22,22 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class TagResolverIntegrationTest {
 
-	// Services received from ForgeroInitializedCallback
-	private static TagResolver tagResolver;
-	private static ComponentRegistry componentRegistry;
+	/**
+	 * Helper to get TagResolver using the static accessor.
+	 */
+	private static TagResolver getTagResolver() {
+		return ForgeroInitializedCallback.getServices()
+				.map(s -> s.tagResolver())
+				.orElse(null);
+	}
 
-	static {
-		ForgeroInitializedCallback.EVENT.register(services -> {
-			tagResolver = services.tagResolver();
-			componentRegistry = services.componentRegistry();
-		});
+	/**
+	 * Helper to get ComponentRegistry using the static accessor.
+	 */
+	private static ComponentRegistry getComponentRegistry() {
+		return ForgeroInitializedCallback.getServices()
+				.map(s -> s.componentRegistry())
+				.orElse(null);
 	}
 
 	/**
@@ -52,7 +59,7 @@ public class TagResolverIntegrationTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "tag_resolver", required = true)
 	public void testMergeWithEmpty(TestContext context) {
-		TagResolver loaded = tagResolver;
+		TagResolver loaded = getTagResolver();
 		TagResolver empty = TagResolver.empty();
 
 		// Merging loaded with empty should return loaded
@@ -73,7 +80,7 @@ public class TagResolverIntegrationTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "tag_resolver", required = true)
 	public void testTagInheritance(TestContext context) {
-		TagResolver resolver = tagResolver;
+		TagResolver resolver = getTagResolver();
 
 		// Find a tag that has descendants
 		var allTags = resolver.getAllTags();
@@ -102,8 +109,8 @@ public class TagResolverIntegrationTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "tag_resolver", required = true)
 	public void testHasTagWithComponents(TestContext context) {
-		TagResolver resolver = tagResolver;
-		var registry = componentRegistry;
+		TagResolver resolver = getTagResolver();
+		var registry = getComponentRegistry();
 
 		// Get a component and check its tags
 		var components = registry.all();
@@ -125,8 +132,8 @@ public class TagResolverIntegrationTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "tag_resolver", required = true)
 	public void testFindTagged(TestContext context) {
-		TagResolver resolver = tagResolver;
-		var registry = componentRegistry;
+		TagResolver resolver = getTagResolver();
+		var registry = getComponentRegistry();
 
 		List<Component> allComponents = registry.all().stream().collect(Collectors.toList());
 
@@ -159,8 +166,8 @@ public class TagResolverIntegrationTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "tag_resolver", required = true)
 	public void testFindDirectlyTagged(TestContext context) {
-		TagResolver resolver = tagResolver;
-		var registry = componentRegistry;
+		TagResolver resolver = getTagResolver();
+		var registry = getComponentRegistry();
 
 		List<Component> allComponents = registry.all().stream().collect(Collectors.toList());
 
@@ -188,7 +195,7 @@ public class TagResolverIntegrationTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "tag_resolver", required = true)
 	public void testGetRelationships(TestContext context) {
-		TagResolver resolver = tagResolver;
+		TagResolver resolver = getTagResolver();
 
 		var relationships = resolver.getRelationships();
 		assertNotNull(relationships, "getRelationships should not return null");
@@ -216,7 +223,7 @@ public class TagResolverIntegrationTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "tag_resolver", required = true)
 	public void testFromRelationships(TestContext context) {
-		TagResolver original = tagResolver;
+		TagResolver original = getTagResolver();
 		var relationships = original.getRelationships();
 
 		// Create a new resolver from the relationships

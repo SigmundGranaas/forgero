@@ -6,9 +6,6 @@ import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -20,16 +17,11 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class ForgeroInitializedCallbackTest {
 
-	// Static fields to capture event data during mod initialization
-	private static final AtomicBoolean EVENT_FIRED = new AtomicBoolean(false);
-	private static final AtomicReference<ForgeroServices> RECEIVED_SERVICES = new AtomicReference<>();
-
-	// Register a listener at class load time (before tests run)
-	static {
-		ForgeroInitializedCallback.EVENT.register(services -> {
-			EVENT_FIRED.set(true);
-			RECEIVED_SERVICES.set(services);
-		});
+	/**
+	 * Helper to get services using the static accessor.
+	 */
+	private static ForgeroServices getServices() {
+		return ForgeroInitializedCallback.getServices().orElse(null);
 	}
 
 	/**
@@ -37,7 +29,7 @@ public class ForgeroInitializedCallbackTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "forgero_events", required = true)
 	public void testEventWasFired(TestContext context) {
-		assertTrue(EVENT_FIRED.get(),
+		assertTrue(ForgeroInitializedCallback.isInitialized(),
 				"ForgeroInitializedCallback should have been fired during mod initialization");
 		context.complete();
 	}
@@ -47,7 +39,7 @@ public class ForgeroInitializedCallbackTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "forgero_events", required = true)
 	public void testEventProvidedValidServices(TestContext context) {
-		ForgeroServices services = RECEIVED_SERVICES.get();
+		ForgeroServices services = getServices();
 		assertNotNull(services, "Event should have provided a ForgeroServices instance");
 
 		// Verify all service methods return non-null
@@ -67,7 +59,7 @@ public class ForgeroInitializedCallbackTest {
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "forgero_events", required = true)
 	public void testEventEnablesDependencyInjection(TestContext context) {
 		// Simulate a service that receives its dependencies via the event
-		ForgeroServices services = RECEIVED_SERVICES.get();
+		ForgeroServices services = getServices();
 		assertNotNull(services, "Services should be available for DI");
 
 		// Create a mock service that depends on ForgeroServices

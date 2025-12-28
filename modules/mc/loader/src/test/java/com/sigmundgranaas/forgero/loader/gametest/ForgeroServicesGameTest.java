@@ -21,25 +21,42 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class ForgeroServicesGameTest {
 
-	// Services received from ForgeroInitializedCallback
-	private static ForgeroServices services;
-	private static TagResolver tagResolver;
-	private static ComponentConverter converter;
-	private static Resolver resolver;
-	private static ComponentRegistry componentRegistry;
-	private static TaggedRegistry<Component> taggedComponents;
-	private static ComponentNbtConverter nbtConverter;
+	/**
+	 * Gets the ForgeroServices, either from the stored static accessor or by registering
+	 * for the callback if not yet available.
+	 */
+	private static ForgeroServices getServices() {
+		return ForgeroInitializedCallback.getServices().orElse(null);
+	}
 
-	static {
-		ForgeroInitializedCallback.EVENT.register(s -> {
-			services = s;
-			tagResolver = s.tagResolver();
-			converter = s.converter();
-			resolver = s.resolver();
-			componentRegistry = s.componentRegistry();
-			taggedComponents = s.taggedComponents();
-			nbtConverter = s.nbtConverter();
-		});
+	private static TagResolver getTagResolver() {
+		ForgeroServices s = getServices();
+		return s != null ? s.tagResolver() : null;
+	}
+
+	private static ComponentConverter getConverter() {
+		ForgeroServices s = getServices();
+		return s != null ? s.converter() : null;
+	}
+
+	private static Resolver getResolver() {
+		ForgeroServices s = getServices();
+		return s != null ? s.resolver() : null;
+	}
+
+	private static ComponentRegistry getComponentRegistry() {
+		ForgeroServices s = getServices();
+		return s != null ? s.componentRegistry() : null;
+	}
+
+	private static TaggedRegistry<Component> getTaggedComponents() {
+		ForgeroServices s = getServices();
+		return s != null ? s.taggedComponents() : null;
+	}
+
+	private static ComponentNbtConverter getNbtConverter() {
+		ForgeroServices s = getServices();
+		return s != null ? s.nbtConverter() : null;
 	}
 
 	/**
@@ -47,7 +64,7 @@ public class ForgeroServicesGameTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "forgero_services", required = true)
 	public void testForgeroServicesAvailable(TestContext context) {
-		assertNotNull(services, "ForgeroServices should be available via callback");
+		assertNotNull(getServices(), "ForgeroServices should be available via callback");
 		context.complete();
 	}
 
@@ -56,6 +73,7 @@ public class ForgeroServicesGameTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "forgero_services", required = true)
 	public void testTagResolverAvailable(TestContext context) {
+		TagResolver tagResolver = getTagResolver();
 		assertNotNull(tagResolver, "TagResolver should be available");
 
 		// Verify it's not the empty resolver (should have loaded tags)
@@ -69,6 +87,7 @@ public class ForgeroServicesGameTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "forgero_services", required = true)
 	public void testComponentRegistryPopulated(TestContext context) {
+		ComponentRegistry componentRegistry = getComponentRegistry();
 		assertNotNull(componentRegistry, "ComponentRegistry should be available");
 		assertFalse(componentRegistry.all().isEmpty(), "ComponentRegistry should contain components");
 
@@ -80,7 +99,7 @@ public class ForgeroServicesGameTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "forgero_services", required = true)
 	public void testResolverAvailable(TestContext context) {
-		assertNotNull(resolver, "Resolver should be available");
+		assertNotNull(getResolver(), "Resolver should be available");
 
 		context.complete();
 	}
@@ -90,7 +109,7 @@ public class ForgeroServicesGameTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "forgero_services", required = true)
 	public void testConverterAvailable(TestContext context) {
-		assertNotNull(converter, "ComponentConverter should be available");
+		assertNotNull(getConverter(), "ComponentConverter should be available");
 
 		context.complete();
 	}
@@ -100,7 +119,7 @@ public class ForgeroServicesGameTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "forgero_services", required = true)
 	public void testTaggedComponentsAvailable(TestContext context) {
-		assertNotNull(taggedComponents, "TaggedRegistry should be available");
+		assertNotNull(getTaggedComponents(), "TaggedRegistry should be available");
 
 		context.complete();
 	}
@@ -110,7 +129,7 @@ public class ForgeroServicesGameTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "forgero_services", required = true)
 	public void testNbtConverterAvailable(TestContext context) {
-		assertNotNull(nbtConverter, "NbtConverter should be available");
+		assertNotNull(getNbtConverter(), "NbtConverter should be available");
 
 		context.complete();
 	}
@@ -120,14 +139,17 @@ public class ForgeroServicesGameTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "forgero_services", required = true)
 	public void testServicesConsistency(TestContext context) {
-		// Verify that accessing via services methods returns the same instances as stored
-		assertSame(services.tagResolver(), tagResolver,
+		ForgeroServices services = getServices();
+		assertNotNull(services, "Services must be available for consistency check");
+
+		// Verify that accessing via services methods returns the same instances
+		assertSame(services.tagResolver(), getTagResolver(),
 				"TagResolver should be the same instance");
-		assertSame(services.converter(), converter,
+		assertSame(services.converter(), getConverter(),
 				"Converter should be the same instance");
-		assertSame(services.resolver(), resolver,
+		assertSame(services.resolver(), getResolver(),
 				"Resolver should be the same instance");
-		assertSame(services.componentRegistry(), componentRegistry,
+		assertSame(services.componentRegistry(), getComponentRegistry(),
 				"ComponentRegistry should be the same instance");
 
 		context.complete();
@@ -138,6 +160,9 @@ public class ForgeroServicesGameTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "forgero_services", required = true)
 	public void testTagResolverQueries(TestContext context) {
+		TagResolver tagResolver = getTagResolver();
+		assertNotNull(tagResolver, "TagResolver must be available");
+
 		// Get all tags and verify we can query them
 		var allTags = tagResolver.getAllTags();
 		assertFalse(allTags.isEmpty(), "Should have tags loaded");
@@ -156,6 +181,9 @@ public class ForgeroServicesGameTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "forgero_services", required = true)
 	public void testComponentLookup(TestContext context) {
+		ComponentRegistry componentRegistry = getComponentRegistry();
+		assertNotNull(componentRegistry, "ComponentRegistry must be available");
+
 		var allComponents = componentRegistry.all();
 
 		if (!allComponents.isEmpty()) {

@@ -23,7 +23,7 @@ dependencies {
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
 
 	// Dynamic Resource Pack module
-	runtimeOnly(project(path: ":modules:mc:drp", configuration: 'namedElements'))
+	runtimeOnly(project(path: ":mods:drp", configuration: 'namedElements'))
 
 	// Testing
 	testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")

@@ -28,10 +28,23 @@ public class TagLoadingService {
 	private static final String JSON_EXTENSION = ".json";
 	private static final String TAGS_PATH_FOLDER = "tags/"; // The specific folder name for tags
 
+	/**
+	 * Creates a TagLoadingService with a default ClassPathResourceProvider.
+	 * Use {@link #TagLoadingService(IdentifierFactory, ResourceProvider)} for custom resource providers.
+	 */
 	public TagLoadingService(IdentifierFactory factory) {
+		this(factory, new ClassPathResourceProvider("data"));
+	}
+
+	/**
+	 * Creates a TagLoadingService with a custom ResourceProvider.
+	 * This allows platform-specific implementations (e.g., Fabric mod container-based loading).
+	 *
+	 * @param factory  The identifier factory for creating identifiers.
+	 * @param provider The resource provider to use for loading tag files.
+	 */
+	public TagLoadingService(IdentifierFactory factory, ResourceProvider provider) {
 		this.factory = factory;
-		// The service is configured to look in the /data directory of the classpath.
-		ResourceProvider provider = new ClassPathResourceProvider("data");
 
 		// The converter reads the stream, parses it into a TagDefinition, and pairs it with its cleaned ID.
 		ResourceConverter<IdentifiableTagDefinition> converter = (stream, id) -> {

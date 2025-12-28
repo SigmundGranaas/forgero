@@ -56,7 +56,7 @@ dependencies {
 	}
 
 	// Dynamic Resource Pack module
-	include(project(path: ":modules:mc:drp", configuration: 'namedElements'))
+	include(project(path: ":mods:drp", configuration: 'namedElements'))
 
 	include modApi("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}")
 }
