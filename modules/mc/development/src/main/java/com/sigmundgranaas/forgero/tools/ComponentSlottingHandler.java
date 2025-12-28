@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.tools;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
-import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
+import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.mutation.api.ComponentMutater;
 import com.sigmundgranaas.forgero.core.component.mutation.impl.ComponentMutaterImpl;
 import net.minecraft.entity.player.PlayerEntity;
@@ -61,7 +61,7 @@ public class ComponentSlottingHandler {
 			return TypedActionResult.pass(mainHandStack);
 		}
 
-		for (UpgradeSlot slot : customizable.getUpgradeSlots()) {
+		for (ComponentUpgradeSlot slot : customizable.getUpgradeSlots()) {
 			// Find the first empty slot that accepts the off-hand component
 			if (slot.content().isEmpty() && slot.validator().test(offHandComponent)) {
 				return performSlotUpgrade(player, mainComponent, offHandComponent, slot, mainHandStack, offHandStack);
@@ -71,7 +71,7 @@ public class ComponentSlottingHandler {
 		return TypedActionResult.pass(mainHandStack);
 	}
 
-	private TypedActionResult<ItemStack> performSlotUpgrade(PlayerEntity player, Component mainComponent, Component upgrade, UpgradeSlot slot, ItemStack originalStack, ItemStack upgradeStack) {
+	private TypedActionResult<ItemStack> performSlotUpgrade(PlayerEntity player, Component mainComponent, Component upgrade, ComponentUpgradeSlot slot, ItemStack originalStack, ItemStack upgradeStack) {
 		ComponentMutater mutater = new ComponentMutaterImpl();
 		Component newMainComponent = mutater.setSlot(mainComponent, slot.id(), upgrade);
 

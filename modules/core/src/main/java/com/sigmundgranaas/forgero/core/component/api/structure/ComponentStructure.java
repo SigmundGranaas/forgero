@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.core.component.api.structure;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -116,4 +117,14 @@ public record ComponentStructure(Map<OpenIdentifier, ComponentPart> parts) {
 	public int size() {
 		return parts.size();
 	}
+
+	// NOTE: Codec implementation for ComponentStructure would require Component.CODEC,
+	// which is complex due to polymorphic component types. Component serialization
+	// is handled by the data loading system (ForgeroDataInitializer) which uses
+	// templates and dynamic component creation rather than direct codec serialization.
+	//
+	// Future implementation would look like:
+	// public static final Codec<ComponentStructure> CODEC =
+	//     ComponentPart.CODEC.listOf()
+	//         .xmap(ComponentStructure::of, structure -> new ArrayList<>(structure.allParts()));
 }

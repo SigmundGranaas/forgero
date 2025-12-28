@@ -12,7 +12,7 @@ import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
-import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
+import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
 
@@ -79,7 +79,7 @@ public class ComponentInspector {
 		List<Component> upgradeChildren = (component instanceof CustomizableComponent c) ? c.getUpgradeSlots().stream().flatMap(s -> s.content().stream()).toList() : Collections.emptyList();
 		List<Component> allChildren = Stream.concat(structureChildren.stream(), upgradeChildren.stream()).toList();
 
-		List<UpgradeSlot> upgradeSlots = (component instanceof CustomizableComponent c) ? c.getUpgradeSlots() : Collections.emptyList();
+		List<ComponentUpgradeSlot> upgradeSlots = (component instanceof CustomizableComponent c) ? c.getUpgradeSlots() : Collections.emptyList();
 		List<ComponentPart> structureParts = (component instanceof StructuredComponent s) ? new ArrayList<>(s.structure().allParts()) : Collections.emptyList();
 
 
@@ -92,7 +92,7 @@ public class ComponentInspector {
 			appendTreeRecursive(builder, part.content(), prefix + (isLast ? "   " : "│  "), false);
 		}
 
-		for (UpgradeSlot slot : upgradeSlots) {
+		for (ComponentUpgradeSlot slot : upgradeSlots) {
 			boolean isLast = ++currentSlotIndex == totalSlots;
 			builder.append(prefix).append(isLast ? "└─ " : "├─ ").append("Slot: ").append(slot.id());
 			slot.content().ifPresentOrElse(

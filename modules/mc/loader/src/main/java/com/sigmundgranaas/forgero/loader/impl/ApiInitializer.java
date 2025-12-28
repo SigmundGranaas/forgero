@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.loader.impl;
 
+import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
 import com.sigmundgranaas.forgero.loader.api.ForgeroInitializedCallback;
 import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
 import org.slf4j.Logger;
@@ -19,6 +20,8 @@ public class ApiInitializer {
 	 */
 	public void fireInitializationEvent(ForgeroServices services) {
 		LOGGER.debug("Firing ForgeroInitializedCallback event...");
+		// Set services in static accessor for convenience access
+		ForgeroApi.setServices(services);
 		ForgeroInitializedCallback.EVENT.invoker().onForgeroInitialized(services);
 		LOGGER.info("ForgeroServices are now available via event subscribers.");
 	}

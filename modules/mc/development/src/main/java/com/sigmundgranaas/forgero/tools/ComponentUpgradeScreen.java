@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.tools;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
-import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
+import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.mutation.api.ComponentMutater;
 import com.sigmundgranaas.forgero.core.component.mutation.impl.ComponentMutaterImpl;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
@@ -31,7 +31,7 @@ public class ComponentUpgradeScreen extends Screen {
 	private CustomizableComponent component;
 	private final CustomizableComponent initialComponent; // Store the original state
 	private final ComponentConverter converter;
-	private List<UpgradeSlot> slots;
+	private List<ComponentUpgradeSlot> slots;
 	private ItemStack rootStack;
 	private final ComponentMutater mutater = new ComponentMutaterImpl();
 	private final Hand hand; // Hand holding the item
@@ -115,13 +115,13 @@ public class ComponentUpgradeScreen extends Screen {
 				Component potentialUpgrade = componentOpt.get();
 				// Check if this item is already in one of the slots (by component ID)
 				boolean alreadySlotted = this.slots.stream()
-						.map(UpgradeSlot::content)
+						.map(ComponentUpgradeSlot::content)
 						.flatMap(Optional::stream)
 						.anyMatch(c -> c.id().equals(potentialUpgrade.id()));
 
 				if (alreadySlotted) continue;
 
-				for (UpgradeSlot slot : this.slots) {
+				for (ComponentUpgradeSlot slot : this.slots) {
 					if (slot.validator().test(potentialUpgrade)) {
 						this.availableUpgrades.add(stack.copy()); // Use a copy
 						break; // Add only once per stack
@@ -210,7 +210,7 @@ public class ComponentUpgradeScreen extends Screen {
 		double angleStep = 2 * Math.PI / slots.size();
 
 		for (int i = 0; i < slots.size(); i++) {
-			UpgradeSlot slot = slots.get(i);
+			ComponentUpgradeSlot slot = slots.get(i);
 			double angle = angleStep * i - (Math.PI / 2); // Start from top
 			int slotX = (int) (centerX + radius * Math.cos(angle));
 			int slotY = (int) (centerY + radius * Math.sin(angle));
@@ -248,7 +248,7 @@ public class ComponentUpgradeScreen extends Screen {
 			int slotY = (int) (centerY + radius * Math.sin(angle));
 
 			if (isMouseOver(mouseX, mouseY, slotX - SLOT_SIZE / 2, slotY - SLOT_SIZE / 2)) {
-				UpgradeSlot slot = slots.get(i);
+				ComponentUpgradeSlot slot = slots.get(i);
 				Optional<ItemStack> upgradeStack = slot.content().flatMap(converter::toStack);
 				if (upgradeStack.isPresent()) {
 					context.drawTooltip(this.textRenderer, getTooltipFromItem(this.client, upgradeStack.get()), mouseX, mouseY);
@@ -309,7 +309,7 @@ public class ComponentUpgradeScreen extends Screen {
 			int slotY = (int) (centerY + radius * Math.sin(angle));
 
 			if (isMouseOver((int) mouseX, (int) mouseY, slotX - SLOT_SIZE / 2, slotY - SLOT_SIZE / 2)) {
-				UpgradeSlot clickedSlot = slots.get(i);
+				ComponentUpgradeSlot clickedSlot = slots.get(i);
 				clickedSlot.content().ifPresent(content -> converter.toStack(content).ifPresent(stackInSlot -> {
 					Component newRootComponent = mutater.removeSlot(this.component, clickedSlot.id());
 					updateComponentState(newRootComponent);
@@ -334,7 +334,7 @@ public class ComponentUpgradeScreen extends Screen {
 			int slotY = (int) (centerY + radius * Math.sin(angle));
 
 			if (isMouseOver((int) mouseX, (int) mouseY, slotX - SLOT_SIZE / 2, slotY - SLOT_SIZE / 2)) {
-				UpgradeSlot clickedSlot = slots.get(i);
+				ComponentUpgradeSlot clickedSlot = slots.get(i);
 
 				if (!heldStack.isEmpty() && heldComponent != null) {
 					if (clickedSlot.validator().test(heldComponent)) {
@@ -404,7 +404,7 @@ public class ComponentUpgradeScreen extends Screen {
 		if (heldOriginalSlot == -1) {
 			this.availableUpgrades.add(heldStack);
 		} else if (heldOriginalSlot < slots.size()) {
-			UpgradeSlot targetSlot = slots.get(heldOriginalSlot);
+			ComponentUpgradeSlot targetSlot = slots.get(heldOriginalSlot);
 			Component newRootComponent = mutater.setSlot(this.component, targetSlot.id(), heldComponent);
 			updateComponentState(newRootComponent);
 		}
