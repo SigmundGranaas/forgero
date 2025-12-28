@@ -69,7 +69,7 @@ public record HasOtherContributorCondition(
 
 		// Recurse into structured component slots
 		if (current instanceof StructuredComponent structured) {
-			for (var slot : structured.structure().slots().all()) {
+			for (var slot : structured.structure().allParts()) {
 				if (hasOtherContributor(slot.content(), self, attrType)) {
 					return true;
 				}
@@ -79,9 +79,11 @@ public record HasOtherContributorCondition(
 		// Recurse into customizable component upgrades
 		if (current instanceof CustomizableComponent customizable) {
 			for (var slot : customizable.upgrades().slots().all()) {
-				if (slot.content().isPresent()) {
-					if (hasOtherContributor(slot.content().get(), self, attrType)) {
-						return true;
+				if (slot instanceof com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot upgradeSlot) {
+					if (upgradeSlot.getContent().isPresent()) {
+						if (hasOtherContributor(upgradeSlot.getContent().get(), self, attrType)) {
+							return true;
+						}
 					}
 				}
 			}

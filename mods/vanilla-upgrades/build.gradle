@@ -17,14 +17,12 @@ dependencies {
     implementation(project(path: ":modules:mc:loader", configuration: 'namedElements'))
 
     // Content packs (included in JAR and on runtime classpath for development)
-    include(project(":content:shared-materials"))
+    include(project(":content:forgero-materials"))
+    include(project(":content:forgero-upgrades"))
     include(project(":content:vanilla-upgrades-base"))
-    include(project(":content:minecraft-tools"))
-    include(project(":content:minecraft-vanilla-materials"))
-    runtimeOnly(project(":content:shared-materials"))
+    runtimeOnly(project(":content:forgero-materials"))
+    runtimeOnly(project(":content:forgero-upgrades"))
     runtimeOnly(project(":content:vanilla-upgrades-base"))
-    runtimeOnly(project(":content:minecraft-tools"))
-    runtimeOnly(project(":content:minecraft-vanilla-materials"))
 
     // Fabric
     modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
@@ -32,4 +30,8 @@ dependencies {
 
     // Dynamic Resource Pack module (included in JAR)
     include(project(path: ":mods:drp", configuration: 'namedElements'))
+
+    // Recipe Generator module (included in JAR)
+    include(project(path: ":mods:recipe-generator", configuration: 'namedElements'))
+    implementation(project(path: ":mods:recipe-generator", configuration: 'namedElements'))
 }

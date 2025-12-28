@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.core.component.api.slot;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
+import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +34,7 @@ import java.util.Optional;
  * }
  *
  * // Query empty gem slots
- * List<UpgradeSlot> gemSlots = manager.queryUpgradeSlots(tool)
+ * List<ComponentUpgradeSlot> gemSlots = manager.queryComponentUpgradeSlots(tool)
  *     .ofType(OpenIdentifier.of("forgero:gem"))
  *     .onlyEmpty()
  *     .execute();
@@ -54,7 +54,7 @@ public interface SlotManager {
 	 * <p>
 	 * Example usage:
 	 * <pre>{@code
-	 * List<UpgradeSlot> slots = manager.queryUpgradeSlots(component)
+	 * List<ComponentUpgradeSlot> slots = manager.queryComponentUpgradeSlots(component)
 	 *     .ofType(BINDING_TYPE)
 	 *     .onlyEmpty()
 	 *     .execute();
@@ -63,15 +63,16 @@ public interface SlotManager {
 	 * @param component The component to query
 	 * @return A slot query builder
 	 */
-	SlotQuery<UpgradeSlot> queryUpgradeSlots(Component component);
+	SlotQuery<ComponentUpgradeSlot> queryComponentUpgradeSlots(Component component);
 
 	/**
-	 * Creates a fluent query builder for filtering structure slots.
+	 * Gets all structure parts from a component.
+	 * Note: Structure parts are immutable and not queryable like slots.
 	 *
-	 * @param component The component to query
-	 * @return A slot query builder for structure slots
+	 * @param component The component to inspect
+	 * @return List of all structure parts
 	 */
-	SlotQuery<StructureSlot> queryStructureSlots(Component component);
+	List<ComponentPart> getStructureParts(Component component);
 
 	/**
 	 * Gets all upgrade slots (both filled and empty).
@@ -79,7 +80,7 @@ public interface SlotManager {
 	 * @param component The component to inspect
 	 * @return List of all upgrade slots, empty if component has no upgrades
 	 */
-	List<UpgradeSlot> getAllUpgradeSlots(Component component);
+	List<ComponentUpgradeSlot> getAllComponentUpgradeSlots(Component component);
 
 	/**
 	 * Gets only empty upgrade slots.
@@ -87,7 +88,7 @@ public interface SlotManager {
 	 * @param component The component to inspect
 	 * @return List of empty upgrade slots
 	 */
-	List<UpgradeSlot> getEmptyUpgradeSlots(Component component);
+	List<ComponentUpgradeSlot> getEmptyComponentUpgradeSlots(Component component);
 
 	/**
 	 * Gets only filled upgrade slots.
@@ -95,7 +96,7 @@ public interface SlotManager {
 	 * @param component The component to inspect
 	 * @return List of filled upgrade slots
 	 */
-	List<UpgradeSlot> getFilledUpgradeSlots(Component component);
+	List<ComponentUpgradeSlot> getFilledComponentUpgradeSlots(Component component);
 
 	/**
 	 * Gets all upgrade components currently installed.
@@ -135,7 +136,7 @@ public interface SlotManager {
 	 * @param upgrade The upgrade to install
 	 * @return The first compatible slot, or empty if none found
 	 */
-	Optional<UpgradeSlot> findCompatibleSlot(Component target, Component upgrade);
+	Optional<ComponentUpgradeSlot> findCompatibleSlot(Component target, Component upgrade);
 
 	/**
 	 * Finds all compatible empty slots for an upgrade.
@@ -144,7 +145,7 @@ public interface SlotManager {
 	 * @param upgrade The upgrade to install
 	 * @return List of all compatible empty slots
 	 */
-	List<UpgradeSlot> findAllCompatibleSlots(Component target, Component upgrade);
+	List<ComponentUpgradeSlot> findAllCompatibleSlots(Component target, Component upgrade);
 
 	/**
 	 * Checks if a specific slot can accept the upgrade.
@@ -153,7 +154,7 @@ public interface SlotManager {
 	 * @param upgrade The upgrade to validate
 	 * @return true if the slot's validator accepts the upgrade
 	 */
-	boolean isCompatible(UpgradeSlot slot, Component upgrade);
+	boolean isCompatible(ComponentUpgradeSlot slot, Component upgrade);
 
 	/**
 	 * Validates an upgrade against a slot and returns error message if invalid.
@@ -162,7 +163,7 @@ public interface SlotManager {
 	 * @param upgrade The upgrade to validate
 	 * @return Error message if invalid, empty if valid
 	 */
-	Optional<String> validateUpgrade(UpgradeSlot slot, Component upgrade);
+	Optional<String> validateUpgrade(ComponentUpgradeSlot slot, Component upgrade);
 
 	//
 	// === INSTALLATION OPERATIONS ===
@@ -273,7 +274,7 @@ public interface SlotManager {
 	 * @param component The component to inspect
 	 * @return Number of upgrade slots (filled + empty)
 	 */
-	int countUpgradeSlots(Component component);
+	int countComponentUpgradeSlots(Component component);
 
 	/**
 	 * Counts filled upgrade slots.
@@ -305,5 +306,5 @@ public interface SlotManager {
 	 * @param component The component to inspect
 	 * @return true if component is customizable and has at least one upgrade slot
 	 */
-	boolean hasUpgradeSlots(Component component);
+	boolean hasComponentUpgradeSlots(Component component);
 }

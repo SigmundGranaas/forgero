@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-armor-content",
+  "version": "${version}",
+  "name": "Forgero Armor Content",
+  "description": "Armor definitions for Forgero",
+  "environment": "*",
+  "depends": {
+    "java": ">=17"
+  },
+  "custom": {
+    "forgeroResource": true
+  }
+}

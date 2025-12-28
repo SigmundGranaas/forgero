@@ -5,8 +5,8 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.SlotValidator;
+import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
-import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
 import com.sigmundgranaas.forgero.core.component.impl.StaticComponent;
 import com.sigmundgranaas.forgero.model.api.RenderableTexture;
 import com.sigmundgranaas.forgero.model.loading.impl.FileModelProvider;
@@ -127,11 +127,11 @@ public class FullPickaxeRenderTest {
 	}
 
 	private StructuredComponent mockStructuredComponent(String id, Map<String, Component> parts, String... tags) {
-		List<StructureSlot> slots = new ArrayList<>();
+		List<ComponentPart> slots = new ArrayList<>();
 		parts.forEach((slotIdPath, component) -> {
 			var openSlotId = OpenIdentifier.of("forgero", slotIdPath);
 			// Use component ID as slot type for simplicity in this mock
-			slots.add(new StructureSlot(openSlotId, component.id(), "description", SlotValidator.ACCEPT_ALL, component));
+			slots.add(new ComponentPart(openSlotId, component.id(), "description", SlotValidator.ACCEPT_ALL, component));
 		});
 		ComponentStructure structure = ComponentStructure.of(slots);
 		Set<OpenIdentifier> tagSet = Arrays.stream(tags)

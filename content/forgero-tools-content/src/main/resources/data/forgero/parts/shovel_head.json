@@ -1,0 +1,37 @@
+{
+  "type": "forgero:part_template",
+  "name": "shovel_head",
+  "tags": [
+    "forgero:parts/head",
+    "forgero:parts/shovel_head",
+    "forgero:schematics/heads"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-shovel_head"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-shovel_head",
+    "slots": {
+      "material": {
+        "type": "forgero:tool_material",
+        "default_tag": "forgero:materials/tool_material"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:shovel_head-reinforcement",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/tip_reinforcement"],
+      "description": "slot.forgero.tip_reinforcement"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:shovel_head-rarity",
+      "type": "forgero:rarity",
+      "computation": {"value": 20, "operation": "addition"}
+    }
+  ]
+}

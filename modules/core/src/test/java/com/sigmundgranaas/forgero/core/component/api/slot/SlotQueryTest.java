@@ -32,7 +32,7 @@ class SlotQueryTest {
 	private Component bindingUpgrade;
 
 	// Test slots
-	private List<UpgradeSlot> testSlots;
+	private List<ComponentUpgradeSlot> testSlots;
 
 	@BeforeEach
 	void setUp() {
@@ -70,9 +70,9 @@ class SlotQueryTest {
 		@Test
 		@DisplayName("ofType() should filter by single type")
 		void ofType_FiltersByType() {
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(testSlots);
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
 
-			List<UpgradeSlot> result = query.ofType(GEM_TYPE).execute();
+			List<ComponentUpgradeSlot> result = query.ofType(GEM_TYPE).execute();
 
 			assertEquals(3, result.size(), "Should find all gem slots");
 			assertTrue(result.stream().allMatch(s -> s.type().equals(GEM_TYPE)),
@@ -82,10 +82,10 @@ class SlotQueryTest {
 		@Test
 		@DisplayName("ofType() should return empty list for non-existent type")
 		void ofType_ReturnsEmptyForNonExistentType() {
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(testSlots);
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
 			OpenIdentifier nonExistent = OpenIdentifier.of("forgero:nonexistent");
 
-			List<UpgradeSlot> result = query.ofType(nonExistent).execute();
+			List<ComponentUpgradeSlot> result = query.ofType(nonExistent).execute();
 
 			assertTrue(result.isEmpty(), "Should return empty list for non-existent type");
 		}
@@ -93,9 +93,9 @@ class SlotQueryTest {
 		@Test
 		@DisplayName("ofAnyType() should filter by multiple types")
 		void ofAnyType_FiltersByMultipleTypes() {
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(testSlots);
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
 
-			List<UpgradeSlot> result = query.ofAnyType(GEM_TYPE, BINDING_TYPE).execute();
+			List<ComponentUpgradeSlot> result = query.ofAnyType(GEM_TYPE, BINDING_TYPE).execute();
 
 			assertEquals(5, result.size(), "Should find all gem and binding slots");
 			assertTrue(result.stream().allMatch(s ->
@@ -106,9 +106,9 @@ class SlotQueryTest {
 		@Test
 		@DisplayName("ofAnyType() with single type should behave like ofType()")
 		void ofAnyType_SingleType_BehavesLikeOfType() {
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(testSlots);
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
 
-			List<UpgradeSlot> result = query.ofAnyType(HANDLE_TYPE).execute();
+			List<ComponentUpgradeSlot> result = query.ofAnyType(HANDLE_TYPE).execute();
 
 			assertEquals(1, result.size(), "Should find handle slot");
 			assertEquals(HANDLE_TYPE, result.get(0).type(), "Should be handle type");
@@ -126,33 +126,33 @@ class SlotQueryTest {
 		@Test
 		@DisplayName("onlyEmpty() should filter empty slots")
 		void onlyEmpty_FiltersEmptySlots() {
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(testSlots);
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
 
-			List<UpgradeSlot> result = query.onlyEmpty().execute();
+			List<ComponentUpgradeSlot> result = query.onlyEmpty().execute();
 
 			assertEquals(5, result.size(), "Should find all empty slots");
-			assertTrue(result.stream().allMatch(UpgradeSlot::isEmpty),
+			assertTrue(result.stream().allMatch(ComponentUpgradeSlot::isEmpty),
 				"All results should be empty");
 		}
 
 		@Test
 		@DisplayName("onlyFilled() should filter filled slots")
 		void onlyFilled_FiltersFilledSlots() {
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(testSlots);
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
 
-			List<UpgradeSlot> result = query.onlyFilled().execute();
+			List<ComponentUpgradeSlot> result = query.onlyFilled().execute();
 
 			assertEquals(2, result.size(), "Should find all filled slots");
-			assertTrue(result.stream().noneMatch(UpgradeSlot::isEmpty),
+			assertTrue(result.stream().noneMatch(ComponentUpgradeSlot::isEmpty),
 				"All results should be filled");
 		}
 
 		@Test
 		@DisplayName("onlyEmpty() combined with type filter")
 		void onlyEmpty_CombinedWithTypeFilter() {
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(testSlots);
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
 
-			List<UpgradeSlot> result = query
+			List<ComponentUpgradeSlot> result = query
 				.ofType(GEM_TYPE)
 				.onlyEmpty()
 				.execute();
@@ -166,15 +166,15 @@ class SlotQueryTest {
 		@Test
 		@DisplayName("onlyFilled() combined with type filter")
 		void onlyFilled_CombinedWithTypeFilter() {
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(testSlots);
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
 
-			List<UpgradeSlot> result = query
+			List<ComponentUpgradeSlot> result = query
 				.ofType(BINDING_TYPE)
 				.onlyFilled()
 				.execute();
 
 			assertEquals(1, result.size(), "Should find filled binding slot");
-			UpgradeSlot slot = result.get(0);
+			ComponentUpgradeSlot slot = result.get(0);
 			assertEquals(BINDING_TYPE, slot.type(), "Should be binding type");
 			assertFalse(slot.isEmpty(), "Should be filled");
 		}
@@ -191,11 +191,11 @@ class SlotQueryTest {
 		@Test
 		@DisplayName("matching() should apply custom predicate")
 		void matching_AppliesCustomPredicate() {
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(testSlots);
-			Predicate<UpgradeSlot> descriptionContainsGem = slot ->
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
+			Predicate<ComponentUpgradeSlot> descriptionContainsGem = slot ->
 				slot.description().toLowerCase().contains("gem");
 
-			List<UpgradeSlot> result = query.matching(descriptionContainsGem).execute();
+			List<ComponentUpgradeSlot> result = query.matching(descriptionContainsGem).execute();
 
 			assertEquals(4, result.size(), "Should find all slots with 'gem' in description");
 			assertTrue(result.stream().allMatch(s ->
@@ -206,11 +206,11 @@ class SlotQueryTest {
 		@Test
 		@DisplayName("matching() should chain with other filters")
 		void matching_ChainsWithOtherFilters() {
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(testSlots);
-			Predicate<UpgradeSlot> idEndsWithOne = slot ->
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
+			Predicate<ComponentUpgradeSlot> idEndsWithOne = slot ->
 				slot.id().toString().endsWith("1");
 
-			List<UpgradeSlot> result = query
+			List<ComponentUpgradeSlot> result = query
 				.onlyEmpty()
 				.matching(idEndsWithOne)
 				.execute();
@@ -224,18 +224,18 @@ class SlotQueryTest {
 		@Test
 		@DisplayName("multiple matching() calls should AND predicates")
 		void multipleMatching_ANDsPredicates() {
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(testSlots);
-			Predicate<UpgradeSlot> isGemType = slot -> slot.type().equals(GEM_TYPE);
-			Predicate<UpgradeSlot> descriptionHasSlot1 = slot ->
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
+			Predicate<ComponentUpgradeSlot> isGemType = slot -> slot.type().equals(GEM_TYPE);
+			Predicate<ComponentUpgradeSlot> descriptionHasSlot1 = slot ->
 				slot.description().contains("Slot 1");
 
-			List<UpgradeSlot> result = query
+			List<ComponentUpgradeSlot> result = query
 				.matching(isGemType)
 				.matching(descriptionHasSlot1)
 				.execute();
 
 			assertEquals(1, result.size(), "Should find exactly one slot matching both");
-			UpgradeSlot slot = result.get(0);
+			ComponentUpgradeSlot slot = result.get(0);
 			assertEquals(GEM_TYPE, slot.type(), "Should be gem type");
 			assertTrue(slot.description().contains("Slot 1"),
 				"Should have 'Slot 1' in description");
@@ -255,17 +255,17 @@ class SlotQueryTest {
 		void compatibleWith_FiltersCompatibleSlots() {
 			// Create validator that only accepts the gemUpgrade
 			SlotValidator gemValidator = SlotValidator.custom(component -> component.equals(gemUpgrade));
-			UpgradeSlot restrictedSlot = createEmptySlotWithValidator(
+			ComponentUpgradeSlot restrictedSlot = createEmptySlotWithValidator(
 				"restricted_gem", GEM_TYPE, "Restricted Gem Slot", gemValidator);
 
-			List<UpgradeSlot> slots = List.of(
+			List<ComponentUpgradeSlot> slots = List.of(
 				restrictedSlot,
 				createEmptySlot("open_slot", GEM_TYPE, "Open Slot")
 			);
 
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(slots);
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(slots);
 
-			List<UpgradeSlot> result = query.compatibleWith(gemUpgrade).execute();
+			List<ComponentUpgradeSlot> result = query.compatibleWith(gemUpgrade).execute();
 
 			// Both slots should accept the gem (default validator accepts all)
 			assertEquals(2, result.size(), "Should find all compatible slots");
@@ -276,14 +276,14 @@ class SlotQueryTest {
 		void compatibleWith_ExcludesIncompatibleSlots() {
 			// Create validator that rejects gemUpgrade
 			SlotValidator rejectingValidator = SlotValidator.custom(component -> !component.equals(gemUpgrade));
-			UpgradeSlot restrictedSlot = createEmptySlotWithValidator(
+			ComponentUpgradeSlot restrictedSlot = createEmptySlotWithValidator(
 				"restricted", GEM_TYPE, "Restricted Slot", rejectingValidator);
 
-			List<UpgradeSlot> slots = List.of(restrictedSlot);
+			List<ComponentUpgradeSlot> slots = List.of(restrictedSlot);
 
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(slots);
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(slots);
 
-			List<UpgradeSlot> result = query.compatibleWith(gemUpgrade).execute();
+			List<ComponentUpgradeSlot> result = query.compatibleWith(gemUpgrade).execute();
 
 			assertTrue(result.isEmpty(), "Should find no compatible slots");
 		}
@@ -292,14 +292,14 @@ class SlotQueryTest {
 		@DisplayName("compatibleWith() combined with type filter")
 		void compatibleWith_CombinedWithTypeFilter() {
 			SlotValidator acceptsAll = SlotValidator.ACCEPT_ALL;
-			List<UpgradeSlot> slots = List.of(
+			List<ComponentUpgradeSlot> slots = List.of(
 				createEmptySlotWithValidator("gem1", GEM_TYPE, "Gem 1", acceptsAll),
 				createEmptySlotWithValidator("binding1", BINDING_TYPE, "Binding", acceptsAll)
 			);
 
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(slots);
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(slots);
 
-			List<UpgradeSlot> result = query
+			List<ComponentUpgradeSlot> result = query
 				.ofType(GEM_TYPE)
 				.compatibleWith(gemUpgrade)
 				.execute();
@@ -320,9 +320,9 @@ class SlotQueryTest {
 		@Test
 		@DisplayName("execute() should return all matching slots")
 		void execute_ReturnsAllMatches() {
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(testSlots);
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
 
-			List<UpgradeSlot> result = query.ofType(GEM_TYPE).execute();
+			List<ComponentUpgradeSlot> result = query.ofType(GEM_TYPE).execute();
 
 			assertEquals(3, result.size(), "Should return all gem slots");
 		}
@@ -330,10 +330,10 @@ class SlotQueryTest {
 		@Test
 		@DisplayName("execute() should return empty list when no matches")
 		void execute_ReturnsEmptyWhenNoMatches() {
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(testSlots);
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
 			OpenIdentifier nonExistent = OpenIdentifier.of("forgero:nonexistent");
 
-			List<UpgradeSlot> result = query.ofType(nonExistent).execute();
+			List<ComponentUpgradeSlot> result = query.ofType(nonExistent).execute();
 
 			assertTrue(result.isEmpty(), "Should return empty list");
 		}
@@ -341,9 +341,9 @@ class SlotQueryTest {
 		@Test
 		@DisplayName("first() should return first match")
 		void first_ReturnsFirstMatch() {
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(testSlots);
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
 
-			Optional<UpgradeSlot> result = query.ofType(GEM_TYPE).first();
+			Optional<ComponentUpgradeSlot> result = query.ofType(GEM_TYPE).first();
 
 			assertTrue(result.isPresent(), "Should find first gem slot");
 			assertEquals(GEM_TYPE, result.get().type(), "Should be gem type");
@@ -352,10 +352,10 @@ class SlotQueryTest {
 		@Test
 		@DisplayName("first() should return empty when no matches")
 		void first_ReturnsEmptyWhenNoMatches() {
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(testSlots);
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
 			OpenIdentifier nonExistent = OpenIdentifier.of("forgero:nonexistent");
 
-			Optional<UpgradeSlot> result = query.ofType(nonExistent).first();
+			Optional<ComponentUpgradeSlot> result = query.ofType(nonExistent).first();
 
 			assertTrue(result.isEmpty(), "Should return empty");
 		}
@@ -363,7 +363,7 @@ class SlotQueryTest {
 		@Test
 		@DisplayName("exists() should return true when matches exist")
 		void exists_ReturnsTrueWhenMatchesExist() {
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(testSlots);
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
 
 			boolean result = query.ofType(GEM_TYPE).exists();
 
@@ -373,7 +373,7 @@ class SlotQueryTest {
 		@Test
 		@DisplayName("exists() should return false when no matches")
 		void exists_ReturnsFalseWhenNoMatches() {
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(testSlots);
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
 			OpenIdentifier nonExistent = OpenIdentifier.of("forgero:nonexistent");
 
 			boolean result = query.ofType(nonExistent).exists();
@@ -384,7 +384,7 @@ class SlotQueryTest {
 		@Test
 		@DisplayName("count() should return number of matches")
 		void count_ReturnsNumberOfMatches() {
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(testSlots);
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
 
 			long result = query.ofType(GEM_TYPE).count();
 
@@ -394,7 +394,7 @@ class SlotQueryTest {
 		@Test
 		@DisplayName("count() should return 0 when no matches")
 		void count_ReturnsZeroWhenNoMatches() {
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(testSlots);
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
 			OpenIdentifier nonExistent = OpenIdentifier.of("forgero:nonexistent");
 
 			long result = query.ofType(nonExistent).count();
@@ -414,16 +414,16 @@ class SlotQueryTest {
 		@Test
 		@DisplayName("should apply multiple filters in sequence")
 		void multipleFilters_ApplyInSequence() {
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(testSlots);
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
 
-			List<UpgradeSlot> result = query
+			List<ComponentUpgradeSlot> result = query
 				.ofType(GEM_TYPE)
 				.onlyEmpty()
 				.matching(slot -> slot.description().contains("Slot 1"))
 				.execute();
 
 			assertEquals(1, result.size(), "Should find exactly one slot");
-			UpgradeSlot slot = result.get(0);
+			ComponentUpgradeSlot slot = result.get(0);
 			assertEquals(GEM_TYPE, slot.type(), "Should be gem type");
 			assertTrue(slot.isEmpty(), "Should be empty");
 			assertTrue(slot.description().contains("Slot 1"),
@@ -433,9 +433,9 @@ class SlotQueryTest {
 		@Test
 		@DisplayName("should handle complex filter chains")
 		void complexFilterChain_WorksCorrectly() {
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(testSlots);
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
 
-			List<UpgradeSlot> result = query
+			List<ComponentUpgradeSlot> result = query
 				.ofAnyType(GEM_TYPE, BINDING_TYPE)
 				.onlyEmpty()
 				.matching(slot -> !slot.description().contains("Offensive"))
@@ -452,15 +452,15 @@ class SlotQueryTest {
 		@Test
 		@DisplayName("order of filters should not matter for final result")
 		void filterOrder_DoesNotMatterForResult() {
-			SlotQuery<UpgradeSlot> query1 = new SlotQueryImpl<>(testSlots);
-			SlotQuery<UpgradeSlot> query2 = new SlotQueryImpl<>(testSlots);
+			SlotQuery<ComponentUpgradeSlot> query1 = new SlotQueryImpl<>(testSlots);
+			SlotQuery<ComponentUpgradeSlot> query2 = new SlotQueryImpl<>(testSlots);
 
-			List<UpgradeSlot> result1 = query1
+			List<ComponentUpgradeSlot> result1 = query1
 				.ofType(GEM_TYPE)
 				.onlyEmpty()
 				.execute();
 
-			List<UpgradeSlot> result2 = query2
+			List<ComponentUpgradeSlot> result2 = query2
 				.onlyEmpty()
 				.ofType(GEM_TYPE)
 				.execute();
@@ -484,9 +484,9 @@ class SlotQueryTest {
 		@Test
 		@DisplayName("should handle empty slot list")
 		void emptySlotList_HandlesGracefully() {
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(List.of());
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(List.of());
 
-			List<UpgradeSlot> result = query.ofType(GEM_TYPE).execute();
+			List<ComponentUpgradeSlot> result = query.ofType(GEM_TYPE).execute();
 
 			assertTrue(result.isEmpty(), "Should return empty list");
 		}
@@ -494,9 +494,9 @@ class SlotQueryTest {
 		@Test
 		@DisplayName("should handle query with no filters")
 		void noFilters_ReturnsAllSlots() {
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(testSlots);
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots);
 
-			List<UpgradeSlot> result = query.execute();
+			List<ComponentUpgradeSlot> result = query.execute();
 
 			assertEquals(testSlots.size(), result.size(),
 				"Should return all slots when no filters applied");
@@ -505,12 +505,12 @@ class SlotQueryTest {
 		@Test
 		@DisplayName("should handle consecutive execution calls")
 		void consecutiveExecutions_ReturnSameResult() {
-			SlotQuery<UpgradeSlot> query = new SlotQueryImpl<>(testSlots)
+			SlotQuery<ComponentUpgradeSlot> query = new SlotQueryImpl<>(testSlots)
 				.ofType(GEM_TYPE)
 				.onlyEmpty();
 
-			List<UpgradeSlot> result1 = query.execute();
-			List<UpgradeSlot> result2 = query.execute();
+			List<ComponentUpgradeSlot> result1 = query.execute();
+			List<ComponentUpgradeSlot> result2 = query.execute();
 
 			assertEquals(result1, result2, "Consecutive executions should return same result");
 		}
@@ -525,8 +525,8 @@ class SlotQueryTest {
 		return new TestComponent(upgradeId);
 	}
 
-	private UpgradeSlot createEmptySlot(String id, OpenIdentifier type, String description) {
-		return UpgradeSlot.emptyWithValidator(
+	private ComponentUpgradeSlot createEmptySlot(String id, OpenIdentifier type, String description) {
+		return ComponentUpgradeSlot.emptyWithValidator(
 			OpenIdentifier.of(id),
 			type,
 			description,
@@ -534,9 +534,9 @@ class SlotQueryTest {
 		);
 	}
 
-	private UpgradeSlot createFilledSlot(String id, OpenIdentifier type,
+	private ComponentUpgradeSlot createFilledSlot(String id, OpenIdentifier type,
 	                                     String description, Component content) {
-		return UpgradeSlot.filled(
+		return ComponentUpgradeSlot.filled(
 			OpenIdentifier.of(id),
 			type,
 			description,
@@ -545,9 +545,9 @@ class SlotQueryTest {
 		);
 	}
 
-	private UpgradeSlot createEmptySlotWithValidator(String id, OpenIdentifier type,
+	private ComponentUpgradeSlot createEmptySlotWithValidator(String id, OpenIdentifier type,
 	                                                 String description, SlotValidator validator) {
-		return UpgradeSlot.emptyWithValidator(
+		return ComponentUpgradeSlot.emptyWithValidator(
 			OpenIdentifier.of(id),
 			type,
 			description,

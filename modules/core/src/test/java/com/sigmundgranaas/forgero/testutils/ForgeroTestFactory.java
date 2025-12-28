@@ -5,8 +5,8 @@ import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.slot.SlotValidator;
-import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
-import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
+import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
+import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 import com.sigmundgranaas.forgero.core.component.mutation.api.ComponentMutater;
 import com.sigmundgranaas.forgero.core.component.mutation.impl.ComponentMutaterImpl;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
@@ -59,24 +59,24 @@ public class ForgeroTestFactory {
 	// Slot Builders
 	// =============================================================================================
 
-	public static StructureSlot structureSlot(String id, OpenIdentifier type, Component content) {
-		return new StructureSlot(TestIdentifiers.id(id), type, "", SlotValidator.ACCEPT_ALL, content);
+	public static ComponentPart structureSlot(String id, OpenIdentifier type, Component content) {
+		return new ComponentPart(TestIdentifiers.id(id), type, "", SlotValidator.ACCEPT_ALL, content);
 	}
 
-	public static UpgradeSlot upgradeSlot(String id, OpenIdentifier type) {
-		return new UpgradeSlot(TestIdentifiers.id(id), type, "", SlotValidator.ACCEPT_ALL, Optional.empty());
+	public static ComponentUpgradeSlot upgradeSlot(String id, OpenIdentifier type) {
+		return new ComponentUpgradeSlot(TestIdentifiers.id(id), type, "", SlotValidator.ACCEPT_ALL, Optional.empty());
 	}
 
-	public static UpgradeSlot upgradeSlot(String id, OpenIdentifier type, Predicate<Component> filter) {
-		return new UpgradeSlot(TestIdentifiers.id(id), type, "", SlotValidator.custom(filter), Optional.empty());
+	public static ComponentUpgradeSlot upgradeSlot(String id, OpenIdentifier type, Predicate<Component> filter) {
+		return new ComponentUpgradeSlot(TestIdentifiers.id(id), type, "", SlotValidator.custom(filter), Optional.empty());
 	}
 
-	public static UpgradeSlot upgradeSlot(String id, OpenIdentifier type, Predicate<Component> filter, Component content) {
-		return new UpgradeSlot(TestIdentifiers.id(id), type, "", SlotValidator.custom(filter), Optional.of(content));
+	public static ComponentUpgradeSlot upgradeSlot(String id, OpenIdentifier type, Predicate<Component> filter, Component content) {
+		return new ComponentUpgradeSlot(TestIdentifiers.id(id), type, "", SlotValidator.custom(filter), Optional.of(content));
 	}
 
-	public static UpgradeSlot upgradeSlot(OpenIdentifier id, OpenIdentifier type, Predicate<Component> filter, Optional<Component> content) {
-		return new UpgradeSlot(id, type, "", SlotValidator.custom(filter), content);
+	public static ComponentUpgradeSlot upgradeSlot(OpenIdentifier id, OpenIdentifier type, Predicate<Component> filter, Optional<Component> content) {
+		return new ComponentUpgradeSlot(id, type, "", SlotValidator.custom(filter), content);
 	}
 
 	// =============================================================================================
@@ -86,9 +86,9 @@ public class ForgeroTestFactory {
 	/**
 	 * Creates a map of slots from varargs, using each slot's ID as the key.
 	 */
-	public static Map<OpenIdentifier, StructureSlot> slotsMap(StructureSlot... slots) {
+	public static Map<OpenIdentifier, ComponentPart> slotsMap(ComponentPart... slots) {
 		return Arrays.stream(slots)
-				.collect(Collectors.toMap(StructureSlot::id, s -> s));
+				.collect(Collectors.toMap(ComponentPart::id, s -> s));
 	}
 
 	// =============================================================================================

@@ -6,18 +6,16 @@ import com.sigmundgranaas.forgero.core.component.api.Slot;
 import java.util.*;
 
 /**
- * A read-only container for slots. Provides consistent access regardless of
- * whether slots are required (structure) or optional (upgrades).
- * <p>
- * This is a final class, not an interface - there's only one way to contain slots,
- * and we don't want consumers extending this.
+ * Container for heterogeneous mutable slots.
+ * Holds different slot implementations (ComponentUpgradeSlot, ArrowSlot, SoulSlot, etc.).
  *
- * @param <S> The type of slot this container holds
+ * This is a final class - there's only one way to contain slots.
+ * NOTE: This is for MUTABLE slots only. Immutable structure uses ComponentStructure with ComponentPart.
  */
-public final class SlotContainer<S extends Slot> {
-	private final Map<OpenIdentifier, S> slots;
+public final class SlotContainer {
+	private final Map<OpenIdentifier, Slot> slots;
 
-	private SlotContainer(Map<OpenIdentifier, S> slots) {
+	private SlotContainer(Map<OpenIdentifier, Slot> slots) {
 		this.slots = Map.copyOf(slots);
 	}
 
@@ -26,36 +24,36 @@ public final class SlotContainer<S extends Slot> {
 	 *
 	 * @throws IllegalArgumentException if duplicate slot IDs are found
 	 */
-	public static <S extends Slot> SlotContainer<S> of(Collection<S> slots) {
-		Map<OpenIdentifier, S> map = new LinkedHashMap<>();
-		for (S slot : slots) {
+	public static SlotContainer of(Collection<? extends Slot> slots) {
+		Map<OpenIdentifier, Slot> map = new LinkedHashMap<>();
+		for (Slot slot : slots) {
 			if (map.containsKey(slot.id())) {
 				throw new IllegalArgumentException("Duplicate slot ID: " + slot.id());
 			}
 			map.put(slot.id(), slot);
 		}
-		return new SlotContainer<>(map);
+		return new SlotContainer(map);
 	}
 
 	/**
 	 * Creates a container from varargs slots.
 	 */
 	@SafeVarargs
-	public static <S extends Slot> SlotContainer<S> of(S... slots) {
+	public static <S extends Slot> SlotContainer of(S... slots) {
 		return of(List.of(slots));
 	}
 
 	/**
 	 * Creates an empty container.
 	 */
-	public static <S extends Slot> SlotContainer<S> empty() {
-		return new SlotContainer<>(Map.of());
+	public static SlotContainer empty() {
+		return new SlotContainer(Map.of());
 	}
 
 	/**
 	 * Gets a slot by ID.
 	 */
-	public Optional<S> get(OpenIdentifier id) {
+	public Optional<Slot> get(OpenIdentifier id) {
 		return Optional.ofNullable(slots.get(id));
 	}
 
@@ -69,7 +67,7 @@ public final class SlotContainer<S extends Slot> {
 	/**
 	 * Returns all slots in insertion order.
 	 */
-	public Collection<S> all() {
+	public Collection<Slot> all() {
 		return slots.values();
 	}
 
@@ -97,35 +95,35 @@ public final class SlotContainer<S extends Slot> {
 	/**
 	 * Returns a new container with the specified slot replaced or added.
 	 */
-	public SlotContainer<S> with(S slot) {
-		Map<OpenIdentifier, S> newSlots = new LinkedHashMap<>(slots);
+	public SlotContainer with(Slot slot) {
+		Map<OpenIdentifier, Slot> newSlots = new LinkedHashMap<>(slots);
 		newSlots.put(slot.id(), slot);
-		return new SlotContainer<>(newSlots);
+		return new SlotContainer(newSlots);
 	}
 
 	/**
 	 * Returns a new container with the specified slot removed.
 	 */
-	public SlotContainer<S> without(OpenIdentifier id) {
+	public SlotContainer without(OpenIdentifier id) {
 		if (!slots.containsKey(id)) {
 			return this;
 		}
-		Map<OpenIdentifier, S> newSlots = new LinkedHashMap<>(slots);
+		Map<OpenIdentifier, Slot> newSlots = new LinkedHashMap<>(slots);
 		newSlots.remove(id);
-		return new SlotContainer<>(newSlots);
+		return new SlotContainer(newSlots);
 	}
 
 	/**
 	 * Returns the slots as an unmodifiable list (for backwards compatibility).
 	 */
-	public List<S> asList() {
+	public List<Slot> asList() {
 		return List.copyOf(slots.values());
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (!(o instanceof SlotContainer<?> that)) return false;
+		if (!(o instanceof SlotContainer that)) return false;
 		return slots.equals(that.slots);
 	}
 

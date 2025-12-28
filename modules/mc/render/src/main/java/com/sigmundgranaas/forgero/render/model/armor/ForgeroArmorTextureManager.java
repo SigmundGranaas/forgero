@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.render.model.armor;
 import com.sigmundgranaas.forgero.render.texture.MinecraftResourceTextureProvider;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
-import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
+import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 import com.sigmundgranaas.forgero.model.api.*;
 import com.sigmundgranaas.forgero.model.api.armor.ArmorModel;
 import com.sigmundgranaas.forgero.model.api.item.CompositeModel;
@@ -86,8 +86,8 @@ public class ForgeroArmorTextureManager {
 		}
 
 		if (sourceComponent instanceof StructuredComponent structured) {
-			Map<String, Component> filledSlots = structured.structure().slots().all().stream()
-					.collect(Collectors.toMap(slot -> slot.id().path(), StructureSlot::content));
+			Map<String, Component> filledSlots = structured.structure().allParts().stream()
+					.collect(Collectors.toMap(slot -> slot.id().path(), ComponentPart::content));
 
 			for (ModelSlot modelSlot : armorModel.slots()) {
 				Component childComponent = filledSlots.get(modelSlot.id());
@@ -125,8 +125,8 @@ public class ForgeroArmorTextureManager {
 			}
 
 			if (component instanceof StructuredComponent structured) {
-				Map<String, Component> filledSlots = structured.structure().slots().all().stream()
-						.collect(Collectors.toMap(slot -> slot.id().path(), StructureSlot::content));
+				Map<String, Component> filledSlots = structured.structure().allParts().stream()
+						.collect(Collectors.toMap(slot -> slot.id().path(), ComponentPart::content));
 
 				for (ModelSlot modelSlot : composite.slots()) {
 					Component childComponent = filledSlots.get(modelSlot.id());

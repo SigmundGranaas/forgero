@@ -1,0 +1,169 @@
+{
+  "type": "forgero:material",
+  "name": "Crying Obsidian",
+  "tags": [
+    "forgero:materials/glass"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:crying_obsidian"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:crying_obsidian-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": {
+        "value": 2.0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:attack_speed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:crying_obsidian-attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": {
+        "value": 4.0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:attack_damage"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:crying_obsidian-mining_speed",
+      "type": "forgero:mining_speed",
+      "computation": {
+        "value": 6.0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:mining_speed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:crying_obsidian-mining_level",
+      "type": "forgero:mining_level",
+      "computation": {
+        "value": 3
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:mining_level"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:crying_obsidian-durability",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 1880
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:durability"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:crying_obsidian-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 70
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:rarity"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:crying_obsidian-weight",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 5.0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:weight"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:crying_obsidian-emissive",
+      "type": "forgero:emissive",
+      "computation": {
+        "value": 4
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:emissive"
+          }
+        ]
+      }
+    }
+  ]
+}

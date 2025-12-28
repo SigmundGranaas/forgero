@@ -75,7 +75,7 @@ class ComponentConstructionTest extends ForgeroTest {
 
 		assertInstanceOf(StructuredComponent.class, part);
 		assertInstanceOf(CustomizableComponent.class, part);
-		assertEquals(1, ((StructuredComponent) part).structure().slots().all().size());
+		assertEquals(1, ((StructuredComponent) part).structure().allParts().size());
 		assertEquals(1, ((CustomizableComponent) part).getUpgradeSlots().size());
 	}
 
@@ -131,7 +131,7 @@ class ComponentConstructionTest extends ForgeroTest {
 
 		assertInstanceOf(StructuredComponent.class, equipment);
 		assertInstanceOf(CustomizableComponent.class, equipment);
-		assertEquals(2, ((StructuredComponent) equipment).structure().slots().all().size());
+		assertEquals(2, ((StructuredComponent) equipment).structure().allParts().size());
 		assertEquals(1, ((CustomizableComponent) equipment).upgrades().slots().all().size());
 	}
 }

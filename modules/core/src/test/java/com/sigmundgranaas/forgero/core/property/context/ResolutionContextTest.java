@@ -7,8 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.sigmundgranaas.forgero.core.ForgeroTest;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.slot.SlotValidator;
+import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
-import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
 import com.sigmundgranaas.forgero.core.component.impl.StaticComponent;
 import com.sigmundgranaas.forgero.core.component.impl.StructuredPart;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,16 +32,16 @@ class ResolutionContextTest extends ForgeroTest {
 		iron = new StaticComponent(IRON_ID, Set.of(METAL_TAG, TOOL_MATERIAL_ID), new HashMap<>());
 		pickaxeHead = new StructuredPart(PICKAXE_HEAD_ID, Set.of(), new HashMap<>(),
 				ComponentStructure.of(
-						new StructureSlot(idFactory.of("material_slot"), TOOL_MATERIAL_ID, "", SlotValidator.ACCEPT_ALL, iron)
+						new ComponentPart(idFactory.of("material_slot"), TOOL_MATERIAL_ID, "", SlotValidator.ACCEPT_ALL, iron)
 				)
 		);
 		handle = new StaticComponent(HANDLE_ID, Set.of(WOOD_TAG, HANDLE_TAG), new HashMap<>());
 		binding = new StaticComponent(idFactory.of("binding"), Set.of(METAL_TAG, BINDING_TAG), new HashMap<>());
 		pickaxe = new StructuredPart(PICKAXE_ID, Set.of(), new HashMap<>(),
 				ComponentStructure.of(
-						new StructureSlot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, "", SlotValidator.ACCEPT_ALL, pickaxeHead),
-						new StructureSlot(HANDLE_SLOT_ID, HANDLE_TAG, "", SlotValidator.ACCEPT_ALL, handle),
-						new StructureSlot(BINDING_SLOT_ID, BINDING_TAG, "", SlotValidator.ACCEPT_ALL, binding)
+						new ComponentPart(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, "", SlotValidator.ACCEPT_ALL, pickaxeHead),
+						new ComponentPart(HANDLE_SLOT_ID, HANDLE_TAG, "", SlotValidator.ACCEPT_ALL, handle),
+						new ComponentPart(BINDING_SLOT_ID, BINDING_TAG, "", SlotValidator.ACCEPT_ALL, binding)
 				)
 		);
 	}

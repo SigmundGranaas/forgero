@@ -6,9 +6,9 @@ import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.Slot;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgrades;
-import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
+import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
-import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
+import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 import com.sigmundgranaas.forgero.core.component.mutation.api.ComponentMutater;
 
 import java.util.ArrayList;
@@ -19,8 +19,8 @@ import java.util.Map;
 /**
  * Default implementation of the component mutation service.
  * <p>
- * This implementation delegates validation to the slots themselves,
- * ensuring consistent validation behavior.
+ * This implementation handles both immutable structure parts and mutable slots.
+ * Structure parts validate content but are not part of the Slot system.
  */
 public class ComponentMutaterImpl implements ComponentMutater {
 
@@ -33,12 +33,12 @@ public class ComponentMutaterImpl implements ComponentMutater {
 			current = current.withProperties(mutation.properties());
 		}
 
-		// 2. Apply structure changes
+		// 2. Apply structure changes (ComponentPart, not Slots)
 		for (Map.Entry<OpenIdentifier, Component> entry : mutation.structure().entrySet()) {
 			current = setSlot(current, entry.getKey(), entry.getValue());
 		}
 
-		// 3. Apply upgrade changes
+		// 3. Apply upgrade changes (mutable Slots)
 		for (Map.Entry<OpenIdentifier, Component> entry : mutation.upgrades().entrySet()) {
 			current = setSlot(current, entry.getKey(), entry.getValue());
 		}
@@ -48,16 +48,22 @@ public class ComponentMutaterImpl implements ComponentMutater {
 
 	@Override
 	public Component setSlot(Component target, OpenIdentifier slotId, Component newContent) {
-		Slot targetSlot = findSlot(target, slotId)
-				.orElseThrow(() -> new IllegalArgumentException("Invalid slot ID: " + slotId));
+		// Check structure parts first (not Slots)
+		if (target instanceof StructuredComponent structured) {
+			var part = structured.structure().getPart(slotId);
+			if (part.isPresent()) {
+				ComponentPart updated = part.get().withContent(newContent);
+				return setStructurePart(target, updated);
+			}
+		}
 
-		// Slots validate their own content, so we just call withContent
-		if (targetSlot instanceof StructureSlot structureSlot) {
-			StructureSlot updated = structureSlot.withContent(newContent);
-			return setStructureSlot(target, updated);
-		} else if (targetSlot instanceof UpgradeSlot upgradeSlot) {
-			UpgradeSlot updated = upgradeSlot.withContent(newContent);
-			return setUpgradeSlot(target, updated);
+		// Check mutable slots
+		Slot targetSlot = findSlot(target, slotId)
+				.orElseThrow(() -> new IllegalArgumentException("Invalid slot or part ID: " + slotId));
+
+		if (targetSlot instanceof ComponentUpgradeSlot upgradeSlot) {
+			ComponentUpgradeSlot updated = upgradeSlot.withContent(newContent);
+			return setComponentUpgradeSlot(target, updated);
 		}
 
 		throw new IllegalStateException("Unknown slot type: " + targetSlot.getClass());
@@ -65,30 +71,34 @@ public class ComponentMutaterImpl implements ComponentMutater {
 
 	@Override
 	public Component removeSlot(Component target, OpenIdentifier slotId) {
+		// Structure parts cannot be removed
+		if (target instanceof StructuredComponent structured) {
+			if (structured.structure().contains(slotId)) {
+				throw new IllegalArgumentException("Cannot remove structure part (ID: " + slotId + ")");
+			}
+		}
+
+		// Only mutable slots can be removed
 		Slot targetSlot = findSlot(target, slotId)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid slot ID: " + slotId));
 
-		if (targetSlot.isRequired()) {
-			throw new IllegalArgumentException("Cannot remove content from a required slot (ID: " + slotId + ")");
-		}
-
-		if (targetSlot instanceof UpgradeSlot upgradeSlot) {
-			return setUpgradeSlot(target, upgradeSlot.empty());
+		if (targetSlot instanceof ComponentUpgradeSlot upgradeSlot) {
+			return setComponentUpgradeSlot(target, upgradeSlot.empty());
 		}
 
 		throw new IllegalStateException("Attempted to remove from a non-upgrade slot");
 	}
 
-	private Component setStructureSlot(Component target, StructureSlot updatedSlot) {
+	private Component setStructurePart(Component target, ComponentPart updatedPart) {
 		if (!(target instanceof StructuredComponent structured)) {
 			throw new IllegalArgumentException("Target component does not have a structure to modify.");
 		}
 
-		ComponentStructure newStructure = structured.structure().withSlot(updatedSlot);
+		ComponentStructure newStructure = structured.structure().withPart(updatedPart);
 		return structured.withStructure(newStructure);
 	}
 
-	private Component setUpgradeSlot(Component target, UpgradeSlot updatedSlot) {
+	private Component setComponentUpgradeSlot(Component target, ComponentUpgradeSlot updatedSlot) {
 		if (!(target instanceof CustomizableComponent customizable)) {
 			throw new IllegalArgumentException("Target component is not customizable.");
 		}
@@ -99,11 +109,10 @@ public class ComponentMutaterImpl implements ComponentMutater {
 
 	@Override
 	public List<Slot> getAllSlots(Component component) {
+		// Note: This now only returns MUTABLE slots
+		// Structure parts are NOT slots
 		List<Slot> slots = new ArrayList<>();
 
-		if (component instanceof StructuredComponent structured) {
-			slots.addAll(structured.structure().slots().all());
-		}
 		if (component instanceof CustomizableComponent customizable) {
 			slots.addAll(customizable.upgrades().slots().all());
 		}

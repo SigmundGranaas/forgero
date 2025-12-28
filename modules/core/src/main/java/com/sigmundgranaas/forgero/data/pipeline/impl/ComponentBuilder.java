@@ -10,9 +10,9 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgrades;
 import com.sigmundgranaas.forgero.core.component.api.slot.SlotValidator;
-import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
+import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
+import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
-import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -73,7 +73,7 @@ public class ComponentBuilder {
 	}
 
 	private DataResult<ComponentStructure> buildStructureFromDto(CofStructure structureDto) {
-		List<StructureSlot> slots = new ArrayList<>();
+		List<ComponentPart> parts = new ArrayList<>();
 		for (Map.Entry<OpenIdentifier, CofSlot> entry : structureDto.slots().entrySet()) {
 			CofSlot slotDto = entry.getValue();
 			if (slotDto.content() == null) {
@@ -81,13 +81,13 @@ public class ComponentBuilder {
 				return DataResult.error(() -> "Structure slot " + entry.getKey() + " is missing content.");
 			}
 			Component childComponent = buildFromId(slotDto.content().id());
-			slots.add(new StructureSlot(entry.getKey(), slotDto.type(), slotDto.description(), SlotValidator.ACCEPT_ALL, childComponent));
+			parts.add(new ComponentPart(entry.getKey(), slotDto.type(), slotDto.description(), SlotValidator.ACCEPT_ALL, childComponent));
 		}
-		return DataResult.success(ComponentStructure.of(slots));
+		return DataResult.success(ComponentStructure.of(parts));
 	}
 
 	private DataResult<ComponentUpgrades> buildUpgradesFromDto(CofUpgrades upgradesDto) {
-		List<UpgradeSlot> slots = new ArrayList<>();
+		List<ComponentUpgradeSlot> slots = new ArrayList<>();
 		for (CofSlot slotDto : upgradesDto.slots()) {
 			Component childComponent = null;
 			if (slotDto.content() != null) {
@@ -101,7 +101,7 @@ public class ComponentBuilder {
 				validator = SlotValidator.requireAllTags(slotDto.validTags());
 			}
 
-			slots.add(new UpgradeSlot(slotDto.id(), slotDto.type(), slotDto.description(), validator, Optional.ofNullable(childComponent)));
+			slots.add(new ComponentUpgradeSlot(slotDto.id(), slotDto.type(), slotDto.description(), validator, Optional.ofNullable(childComponent)));
 		}
 		return DataResult.success(ComponentUpgrades.of(slots));
 	}

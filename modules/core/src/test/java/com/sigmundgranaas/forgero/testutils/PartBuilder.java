@@ -2,9 +2,9 @@ package com.sigmundgranaas.forgero.testutils;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgrades;
-import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
+import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
+import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
-import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
 import com.sigmundgranaas.forgero.core.component.impl.*;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 
@@ -12,19 +12,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PartBuilder extends BaseComponentBuilder<PartBuilder> {
-	private final List<StructureSlot> structureSlots = new ArrayList<>();
-	private final List<UpgradeSlot> upgradeSlots = new ArrayList<>();
+	private final List<ComponentPart> structureSlots = new ArrayList<>();
+	private final List<ComponentUpgradeSlot> upgradeSlots = new ArrayList<>();
 
 	public PartBuilder(OpenIdentifier id) {
 		super(id);
 	}
 
-	public PartBuilder withStructureSlot(StructureSlot slot) {
+	public PartBuilder withStructureSlot(ComponentPart slot) {
 		this.structureSlots.add(slot);
 		return this;
 	}
 
-	public PartBuilder withUpgradeSlot(UpgradeSlot slot) {
+	public PartBuilder withComponentUpgradeSlot(ComponentUpgradeSlot slot) {
 		this.upgradeSlots.add(slot);
 		return this;
 	}

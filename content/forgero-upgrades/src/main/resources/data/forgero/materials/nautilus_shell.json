@@ -1,0 +1,333 @@
+{
+  "type": "forgero:material",
+  "name": "Nautilus Shell",
+  "tags": [
+    "forgero:materials/hard",
+    "forgero:materials/upgrade_material"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:nautilus_shell"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:scale-rarity-upgrade",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 25
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:scale-weight-upgrade",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 1
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:scale-attack_speed-offensive-upgrade",
+      "type": "forgero:attack_speed",
+      "computation": {
+        "value": 0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:scale-attack_damage-offensive-upgrade",
+      "type": "forgero:attack_damage",
+      "computation": {
+        "value": 0.5
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:scale-mining_speed-offensive-upgrade",
+      "type": "forgero:mining_speed",
+      "computation": {
+        "value": 0.5
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:scale-mining_level-offensive-upgrade",
+      "type": "forgero:mining_level",
+      "computation": {
+        "value": 0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:scale-durability-offensive-upgrade",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 162.5
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:scale-attack_speed-utility-upgrade",
+      "type": "forgero:attack_speed",
+      "computation": {
+        "value": 0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:scale-attack_damage-utility-upgrade",
+      "type": "forgero:attack_damage",
+      "computation": {
+        "value": 0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:scale-mining_speed-utility-upgrade",
+      "type": "forgero:mining_speed",
+      "computation": {
+        "value": 0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:scale-mining_level-utility-upgrade",
+      "type": "forgero:mining_level",
+      "computation": {
+        "value": 0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:scale-durability-utility-upgrade",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:scale-draw_power-offensive-upgrade",
+      "type": "forgero:draw_power",
+      "computation": {
+        "value": 0.42
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:scale-draw_speed-offensive-upgrade",
+      "type": "forgero:draw_speed",
+      "computation": {
+        "value": 0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:scale-rarity-upgrade",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 30
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:scale-weight-upgrade",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 1.5
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:scale-attack_speed-offensive-upgrade",
+      "type": "forgero:attack_speed",
+      "computation": {
+        "value": 0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:scale-attack_damage-offensive-upgrade",
+      "type": "forgero:attack_damage",
+      "computation": {
+        "value": 1
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:scale-mining_speed-offensive-upgrade",
+      "type": "forgero:mining_speed",
+      "computation": {
+        "value": 1
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:scale-durability-offensive-upgrade",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 190
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:scale-draw_power-offensive-upgrade",
+      "type": "forgero:draw_power",
+      "computation": {
+        "value": 0.65
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    }
+  ]
+}

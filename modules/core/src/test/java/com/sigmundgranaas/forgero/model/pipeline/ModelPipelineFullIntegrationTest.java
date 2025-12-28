@@ -6,8 +6,8 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.slot.SlotValidator;
+import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
-import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
 import com.sigmundgranaas.forgero.core.component.impl.StructuredEquipment;
 import com.sigmundgranaas.forgero.core.component.impl.StructuredPart;
 import com.sigmundgranaas.forgero.model.generation.api.ModelGenerationResult;
@@ -87,14 +87,14 @@ public class ModelPipelineFullIntegrationTest {
 				ironBladeId,
 				Set.of(partTag, swordBladePartTag),
 				new HashMap<>(),
-				ComponentStructure.of(new StructureSlot(materialSlotId, iron.id(), "", SlotValidator.ACCEPT_ALL, iron))
+				ComponentStructure.of(new ComponentPart(materialSlotId, iron.id(), "", SlotValidator.ACCEPT_ALL, iron))
 		);
 
 		Component oakHandle = new StructuredPart(
 				oakHandleId,
 				Set.of(partTag, handlePartTag),
 				new HashMap<>(),
-				ComponentStructure.of(new StructureSlot(materialSlotId, oak.id(), "", SlotValidator.ACCEPT_ALL, oak))
+				ComponentStructure.of(new ComponentPart(materialSlotId, oak.id(), "", SlotValidator.ACCEPT_ALL, oak))
 		);
 
 		var bladeSlotId = OpenIdentifier.parse("forgero:blade");
@@ -104,8 +104,8 @@ public class ModelPipelineFullIntegrationTest {
 				Set.of(toolTag, swordTag),
 				new HashMap<>(),
 				ComponentStructure.of(
-						new StructureSlot(bladeSlotId, ironBlade.id(), "", SlotValidator.ACCEPT_ALL, ironBlade),
-						new StructureSlot(handleSlotId, oakHandle.id(), "", SlotValidator.ACCEPT_ALL, oakHandle)
+						new ComponentPart(bladeSlotId, ironBlade.id(), "", SlotValidator.ACCEPT_ALL, ironBlade),
+						new ComponentPart(handleSlotId, oakHandle.id(), "", SlotValidator.ACCEPT_ALL, oakHandle)
 				)
 		);
 

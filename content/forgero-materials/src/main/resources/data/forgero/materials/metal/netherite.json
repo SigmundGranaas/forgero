@@ -1,0 +1,209 @@
+{
+  "type": "forgero:material",
+  "name": "Netherite",
+  "tags": [
+    "forgero:materials/metal",
+    "forgero:materials/tool_material",
+    "forgero:upgrade/tip_reinforcement"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:netherite_ingot"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:netherite-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": {
+        "value": 2.0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:attack_speed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:netherite-attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": {
+        "value": 6.0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:attack_damage"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:netherite-mining_speed",
+      "type": "forgero:mining_speed",
+      "computation": {
+        "value": 9.0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:mining_speed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:netherite-mining_level",
+      "type": "forgero:mining_level",
+      "computation": {
+        "value": 4
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:mining_level"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:netherite-durability",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 2020
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:durability"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:netherite-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 100
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:rarity"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:netherite-weight",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 6.0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:weight"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:netherite-draw_speed",
+      "type": "forgero:draw_speed",
+      "computation": {
+        "value": 1.25
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:draw_speed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:netherite-draw_power",
+      "type": "forgero:draw_power",
+      "computation": {
+        "value": 4.0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:draw_power"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:netherite-armor",
+      "type": "forgero:armor",
+      "computation": {
+        "value": 6
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:armor"
+          }
+        ]
+      }
+    }
+  ]
+}

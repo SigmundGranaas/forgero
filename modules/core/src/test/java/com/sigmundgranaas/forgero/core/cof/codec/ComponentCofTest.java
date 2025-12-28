@@ -16,9 +16,9 @@ import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgrades;
 import com.sigmundgranaas.forgero.core.component.api.slot.SlotValidator;
-import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
+import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
+import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
-import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
 import com.sigmundgranaas.forgero.core.component.impl.*;
 import com.sigmundgranaas.forgero.core.component.mutation.api.ComponentMutater;
 import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
@@ -44,34 +44,34 @@ class ComponentCofTest {
 	private static final Component HANDLE_COMPONENT = new StaticComponent(id("oak-handle"), Set.of(HANDLE_TAG), Collections.emptyMap());
 	private static final Component GEM_COMPONENT = new StaticComponent(GEM_ID, Set.of(GEM_TAG), Map.of(Attribute.KEY.key(), List.of(new SimpleAttribute(OpenIdentifier.parse("forgero:attack_damage"), 10))));
 	private static final Component SWORD_BLADE_COMPONENT = new StructuredPart(id("sword-blade"), Set.of(SWORD_BLADE_TAG), Collections.emptyMap(),
-			ComponentStructure.of(new StructureSlot(id("material"), MATERIAL_SLOT_TYPE, "", SlotValidator.ACCEPT_ALL, IRON_COMPONENT))
+			ComponentStructure.of(new ComponentPart(id("material"), MATERIAL_SLOT_TYPE, "", SlotValidator.ACCEPT_ALL, IRON_COMPONENT))
 	);
 	private static final Component HILT_COMPONENT = new ExtensiblePart(HILT_ID, Set.of(HILT_TAG), Collections.emptyMap(),
-			ComponentUpgrades.of(new UpgradeSlot(id("pommel_slot"), POMMEL_TAG, "", SlotValidator.ACCEPT_ALL, Optional.empty()))
+			ComponentUpgrades.of(new ComponentUpgradeSlot(id("pommel_slot"), POMMEL_TAG, "", SlotValidator.ACCEPT_ALL, Optional.empty()))
 	);
 	private static final Component FANCY_HILT_COMPONENT = new ExtensiblePart(id("fancy-hilt"), Set.of(HILT_TAG), Collections.emptyMap(),
-			ComponentUpgrades.of(new UpgradeSlot(id("pommel_slot"), POMMEL_TAG, "", SlotValidator.ACCEPT_ALL, Optional.empty()))
+			ComponentUpgrades.of(new ComponentUpgradeSlot(id("pommel_slot"), POMMEL_TAG, "", SlotValidator.ACCEPT_ALL, Optional.empty()))
 	);
 	private static final Component SWORD_COMPONENT = new StructuredEquipment(SWORD_ID, Set.of(SWORD_TAG), Collections.emptyMap(),
 			ComponentStructure.of(
-					new StructureSlot(id("blade"), SWORD_BLADE_TAG, "", SlotValidator.ACCEPT_ALL, SWORD_BLADE_COMPONENT),
-					new StructureSlot(id("handle"), HILT_TAG, "", SlotValidator.ACCEPT_ALL, HILT_COMPONENT)
+					new ComponentPart(id("blade"), SWORD_BLADE_TAG, "", SlotValidator.ACCEPT_ALL, SWORD_BLADE_COMPONENT),
+					new ComponentPart(id("handle"), HILT_TAG, "", SlotValidator.ACCEPT_ALL, HILT_COMPONENT)
 			)
 	);
 	private static final Component AMULET_COMPONENT = new ExtensibleEquipment(AMULET_ID, Set.of(AMULET_TAG), Collections.emptyMap(),
-			ComponentUpgrades.of(new UpgradeSlot(id("gem_slot"), GEM_TAG, "", SlotValidator.ACCEPT_ALL, Optional.empty()))
+			ComponentUpgrades.of(new ComponentUpgradeSlot(id("gem_slot"), GEM_TAG, "", SlotValidator.ACCEPT_ALL, Optional.empty()))
 	);
 	private static final Component SHIELD_COMPONENT = new StaticEquipment(SHIELD_ID, Set.of(SHIELD_TAG), Collections.emptyMap());
 	private static final Component AXE_HEAD_COMPONENT = new StructuredExtensiblePart(AXE_HEAD_ID, Set.of(AXE_HEAD_TAG), Collections.emptyMap(),
-			ComponentStructure.of(new StructureSlot(id("material"), MATERIAL_SLOT_TYPE, "", SlotValidator.ACCEPT_ALL, IRON_COMPONENT)),
-			ComponentUpgrades.of(new UpgradeSlot(id("rune_slot"), RUNE_TAG, "", SlotValidator.ACCEPT_ALL, Optional.empty()))
+			ComponentStructure.of(new ComponentPart(id("material"), MATERIAL_SLOT_TYPE, "", SlotValidator.ACCEPT_ALL, IRON_COMPONENT)),
+			ComponentUpgrades.of(new ComponentUpgradeSlot(id("rune_slot"), RUNE_TAG, "", SlotValidator.ACCEPT_ALL, Optional.empty()))
 	);
 	private static final Component PRISTINE_PICKAXE = new StructuredExtensibleEquipment(id("iron-pickaxe"), Set.of(PICKAXE_TAG), Collections.emptyMap(),
 			ComponentStructure.of(
-					new StructureSlot(id("head"), PICKAXE_HEAD_TAG, "", SlotValidator.ACCEPT_ALL, PICKAXE_HEAD_COMPONENT),
-					new StructureSlot(id("handle"), HANDLE_TAG, "", SlotValidator.ACCEPT_ALL, HANDLE_COMPONENT)
+					new ComponentPart(id("head"), PICKAXE_HEAD_TAG, "", SlotValidator.ACCEPT_ALL, PICKAXE_HEAD_COMPONENT),
+					new ComponentPart(id("handle"), HANDLE_TAG, "", SlotValidator.ACCEPT_ALL, HANDLE_COMPONENT)
 			),
-			ComponentUpgrades.of(new UpgradeSlot(id("gem_slot"), GEM_TAG, "", SlotValidator.ACCEPT_ALL, Optional.empty()))
+			ComponentUpgrades.of(new ComponentUpgradeSlot(id("gem_slot"), GEM_TAG, "", SlotValidator.ACCEPT_ALL, Optional.empty()))
 	);
 
 	private ComponentCofCodec codec;

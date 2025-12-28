@@ -1,0 +1,49 @@
+{
+  "type": "forgero:part_template",
+  "name": "chestplate",
+  "tags": [
+    "forgero:armor/chestplate",
+    "forgero:parts/armor",
+    "minecraft:armor/chestplate"
+  ],
+  "host_template": {
+    "class": "forgero:armor_item",
+    "id": "forgero:{material.name}-chestplate"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-chestplate",
+    "slots": {
+      "material": {
+        "type": "forgero:armor_material",
+        "default_tag": "forgero:materials/armor_material"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:chestplate-gem",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/gem"],
+      "description": "slot.forgero.gem"
+    },
+    {
+      "id": "forgero:chestplate-lining",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/lining"],
+      "description": "slot.forgero.lining"
+    },
+    {
+      "id": "forgero:chestplate-plate",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/plate"],
+      "description": "slot.forgero.plate"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:chestplate-armor-base",
+      "type": "forgero:armor",
+      "computation": {"value": 6, "operation": "addition"}
+    }
+  ]
+}

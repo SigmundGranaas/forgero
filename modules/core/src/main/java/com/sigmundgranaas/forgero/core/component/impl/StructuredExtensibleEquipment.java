@@ -35,10 +35,10 @@ public record StructuredExtensibleEquipment(
 
 	public StructuredExtensibleEquipment {
 		// Validate that slot IDs are unique across both structure and upgrades.
-		var ids = new HashSet<>(structure.slots().ids());
-		for (OpenIdentifier upgradeSlotId : upgrades.slots().ids()) {
-			if (!ids.add(upgradeSlotId)) {
-				throw new IllegalArgumentException("Duplicate slot ID found between structure and upgrades: " + upgradeSlotId);
+		var ids = new HashSet<>(structure.parts().keySet());
+		for (var upgradeSlot : upgrades.slots().all()) {
+			if (!ids.add(upgradeSlot.id())) {
+				throw new IllegalArgumentException("Duplicate slot ID found between structure and upgrades: " + upgradeSlot.id());
 			}
 		}
 	}

@@ -111,7 +111,7 @@ class EquipmentTemplateDataCodecTest {
 		assertNotNull(data.structure());
 		assertEquals("forgero:{head.material.name}-pickaxe", data.structure().id());
 		assertNotNull(data.structure().slots());
-		assertEquals(2, data.structure().slots().size());
+		assertEquals(2, data.structure().allParts().size());
 
 		var headSlot = data.structure().slots().get("head");
 		assertNotNull(headSlot);
@@ -164,7 +164,7 @@ class EquipmentTemplateDataCodecTest {
 		assertNotNull(data.structure());
 		assertEquals("forgero:minimal_tool-id", data.structure().id());
 		assertNotNull(data.structure().slots());
-		assertEquals(1, data.structure().slots().size());
+		assertEquals(1, data.structure().allParts().size());
 		var mainSlot = data.structure().slots().get("main");
 		assertNotNull(mainSlot);
 		assertEquals(id("forgero:some_part"), mainSlot.type());

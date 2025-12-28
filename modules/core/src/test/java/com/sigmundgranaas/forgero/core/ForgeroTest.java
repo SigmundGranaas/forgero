@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.core;
 
 import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
+import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 
@@ -78,7 +78,7 @@ public class ForgeroTest {
 	 * Creates a structure slot.
 	 * Delegates to ForgeroTestFactory.
 	 */
-	public StructureSlot slot(OpenIdentifier id, OpenIdentifier type, Component component) {
+	public ComponentPart slot(OpenIdentifier id, OpenIdentifier type, Component component) {
 		return structureSlot(id.toString(), type, component);
 	}
 

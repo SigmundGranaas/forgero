@@ -1,0 +1,43 @@
+{
+  "type": "forgero:part_template",
+  "name": "leggings",
+  "tags": [
+    "forgero:armor/leggings",
+    "forgero:parts/armor",
+    "minecraft:armor/leggings"
+  ],
+  "host_template": {
+    "class": "forgero:armor_item",
+    "id": "forgero:{material.name}-leggings"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-leggings",
+    "slots": {
+      "material": {
+        "type": "forgero:armor_material",
+        "default_tag": "forgero:materials/armor_material"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:leggings-gem",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/gem"],
+      "description": "slot.forgero.gem"
+    },
+    {
+      "id": "forgero:leggings-lining",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/lining"],
+      "description": "slot.forgero.lining"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:leggings-armor-base",
+      "type": "forgero:armor",
+      "computation": {"value": 5, "operation": "addition"}
+    }
+  ]
+}

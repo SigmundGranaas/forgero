@@ -3,9 +3,9 @@ package com.sigmundgranaas.forgero.core.component.api;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgrades;
 import com.sigmundgranaas.forgero.core.component.api.slot.SlotValidator;
-import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
+import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
+import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
-import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
 
 import java.util.*;
 
@@ -30,8 +30,8 @@ public final class ComponentBuilder {
 	private final OpenIdentifier id;
 	private final Set<OpenIdentifier> tags = new LinkedHashSet<>();
 	private final Map<String, List<Object>> properties = new LinkedHashMap<>();
-	private final List<StructureSlot> structureSlots = new ArrayList<>();
-	private final List<UpgradeSlot> upgradeSlots = new ArrayList<>();
+	private final List<ComponentPart> structureSlots = new ArrayList<>();
+	private final List<ComponentUpgradeSlot> upgradeSlots = new ArrayList<>();
 	private boolean isEquipment = false;
 
 	/**
@@ -122,7 +122,7 @@ public final class ComponentBuilder {
 	 */
 	public ComponentBuilder structureSlot(OpenIdentifier slotId, OpenIdentifier type,
 	                                       String description, Component content) {
-		structureSlots.add(StructureSlot.ofType(slotId, type, description, content));
+		structureSlots.add(ComponentPart.ofType(slotId, type, description, content));
 		return this;
 	}
 
@@ -131,7 +131,7 @@ public final class ComponentBuilder {
 	 */
 	public ComponentBuilder structureSlot(OpenIdentifier slotId, OpenIdentifier type,
 	                                       String description, SlotValidator validator, Component content) {
-		structureSlots.add(StructureSlot.withValidator(slotId, type, description, validator, content));
+		structureSlots.add(ComponentPart.withValidator(slotId, type, description, validator, content));
 		return this;
 	}
 
@@ -151,7 +151,7 @@ public final class ComponentBuilder {
 	/**
 	 * Adds a pre-built structure slot.
 	 */
-	public ComponentBuilder structureSlot(StructureSlot slot) {
+	public ComponentBuilder structureSlot(ComponentPart slot) {
 		structureSlots.add(slot);
 		return this;
 	}
@@ -162,7 +162,7 @@ public final class ComponentBuilder {
 	 * Adds an empty upgrade slot with type-based validation.
 	 */
 	public ComponentBuilder upgradeSlot(OpenIdentifier slotId, OpenIdentifier type, String description) {
-		upgradeSlots.add(UpgradeSlot.emptyOfType(slotId, type, description));
+		upgradeSlots.add(ComponentUpgradeSlot.emptyOfType(slotId, type, description));
 		return this;
 	}
 
@@ -171,7 +171,7 @@ public final class ComponentBuilder {
 	 */
 	public ComponentBuilder upgradeSlot(OpenIdentifier slotId, OpenIdentifier type,
 	                                     String description, SlotValidator validator) {
-		upgradeSlots.add(UpgradeSlot.emptyWithValidator(slotId, type, description, validator));
+		upgradeSlots.add(ComponentUpgradeSlot.emptyWithValidator(slotId, type, description, validator));
 		return this;
 	}
 
@@ -187,14 +187,14 @@ public final class ComponentBuilder {
 	 */
 	public ComponentBuilder filledUpgradeSlot(OpenIdentifier slotId, OpenIdentifier type,
 	                                           String description, Component content) {
-		upgradeSlots.add(UpgradeSlot.filledOfType(slotId, type, description, content));
+		upgradeSlots.add(ComponentUpgradeSlot.filledOfType(slotId, type, description, content));
 		return this;
 	}
 
 	/**
 	 * Adds a pre-built upgrade slot.
 	 */
-	public ComponentBuilder upgradeSlot(UpgradeSlot slot) {
+	public ComponentBuilder upgradeSlot(ComponentUpgradeSlot slot) {
 		upgradeSlots.add(slot);
 		return this;
 	}

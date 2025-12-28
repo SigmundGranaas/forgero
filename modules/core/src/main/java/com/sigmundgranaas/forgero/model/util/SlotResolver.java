@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.model.util;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
-import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
+import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 import com.sigmundgranaas.forgero.model.api.ModelSlot;
 import com.sigmundgranaas.forgero.model.api.Slotted;
 
@@ -29,7 +29,7 @@ public class SlotResolver {
 
 		// Build map of filled component slots
 		Map<String, Component> componentSlots = new HashMap<>();
-		component.structure().slots().all().forEach(slot ->
+		component.structure().allParts().forEach(slot ->
 				componentSlots.put(slot.id().path(), slot.content())
 		);
 
@@ -62,9 +62,9 @@ public class SlotResolver {
 		}
 
 		// Find the component in this slot
-		return component.structure().slots().all().stream()
+		return component.structure().allParts().stream()
 				.filter(slot -> slot.id().path().equals(slotId))
-				.map(StructureSlot::content)
+				.map(ComponentPart::getContent)
 				.filter(SlotResolver::isNotEmptySlot)
 				.findFirst();
 	}

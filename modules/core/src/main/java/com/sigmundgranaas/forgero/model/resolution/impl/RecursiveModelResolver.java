@@ -3,8 +3,8 @@ package com.sigmundgranaas.forgero.model.resolution.impl;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
-import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
-import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
+import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
+import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 import com.sigmundgranaas.forgero.model.api.*;
 import com.sigmundgranaas.forgero.model.api.item.CompositeModel;
 import com.sigmundgranaas.forgero.model.api.item.EmptyModel;
@@ -67,9 +67,9 @@ public class RecursiveModelResolver implements ItemModelResolver {
 		}
 
 		if (component instanceof StructuredComponent structured) {
-			// Create a map of the component's actual children, keyed by their slot's path.
-			Map<String, Component> filledSlots = structured.structure().slots().all().stream()
-					.collect(Collectors.toMap(slot -> slot.id().path(), StructureSlot::content));
+			// Create a map of the component's actual children, keyed by their part's path.
+			Map<String, Component> filledSlots = structured.structure().allParts().stream()
+					.collect(Collectors.toMap(part -> part.id().path(), ComponentPart::content));
 
 			for (ModelSlot modelSlot : composite.slots()) {
 				Component childComponent = filledSlots.get(modelSlot.id());
@@ -82,7 +82,7 @@ public class RecursiveModelResolver implements ItemModelResolver {
 		if (component instanceof CustomizableComponent customizable) {
 			// Create a map of the component's upgrade slots, keyed by their slot's id.
 			Map<String, Optional<Component>> slots = customizable.getUpgradeSlots().stream()
-					.collect(Collectors.toMap(slot -> slot.id().path(), UpgradeSlot::content));
+					.collect(Collectors.toMap(slot -> slot.id().path(), ComponentUpgradeSlot::getContent));
 
 			for (ModelSlot modelSlot : composite.slots().stream().toList()) {
 				if(slots.containsKey(modelSlot.id())) {

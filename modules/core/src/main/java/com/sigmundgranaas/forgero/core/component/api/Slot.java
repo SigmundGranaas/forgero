@@ -1,36 +1,70 @@
 package com.sigmundgranaas.forgero.core.component.api;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.core.property.api.Property;
+import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 
-import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
- * Common interface for slots in a component's structure.
- * A slot is an identified container within a component that can hold another component.
+ * Base interface for MUTABLE slot types.
+ * Slots are containers that can be added to or removed from components.
+ * Each slot implementation defines its own content type, validation, and behavior.
+ *
+ * NOTE: This is for MUTABLE slots only. Immutable component structure uses ComponentPart, not Slot.
+ *
+ * Implementations include:
+ * - ComponentUpgradeSlot: Holds component upgrades (gems, bindings, etc.)
+ * - ArrowSlot: Holds arrow items for bows (plugin example)
+ * - SoulSlot: Holds soul data for stat tracking (plugin example)
  */
 public interface Slot {
 	/**
-	 * @return The unique identifier for this slot within the component.
+	 * @return Unique identifier for this slot within its parent component
 	 */
 	OpenIdentifier id();
 
 	/**
-	 * @return The type of component that can fit in this slot.
+	 * @return Slot implementation type for codec dispatch
+	 * Examples: "forgero:component_upgrade", "forgero:arrow", "forgero:soul"
 	 */
 	OpenIdentifier type();
 
 	/**
-	 * @return A human-readable description of the slot.
+	 * @return Slot category/sub-type (e.g., "forgero:gem", "forgero:binding", "forgero:arrow")
+	 * This is the semantic type of what the slot holds.
+	 */
+	OpenIdentifier slotType();
+
+	/**
+	 * @return Human-readable description
 	 */
 	String description();
 
 	/**
-	 * @return The component currently held in this slot, if any.
+	 * Controls property contribution during resolution.
+	 * Called once per PropertyKey during property bake phase.
+	 *
+	 * Implementations can filter or transform properties from their content.
+	 * For example, ArrowSlot might return an empty stream to prevent arrows from contributing properties.
+	 *
+	 * @param propertyKey The property type being resolved
+	 * @param properties Properties from this slot's content (if applicable)
+	 * @return Filtered properties that should contribute to parent
 	 */
-	Optional<Component> get();
+	default <P extends Property> Stream<P> filterProperties(
+		PropertyKey<P> propertyKey,
+		Stream<P> properties
+	) {
+		return properties;  // Default: pass through all properties
+	}
 
 	/**
-	 * @return true if this slot is a required part of the component's structure.
+	 * Controls component tree traversal during property resolution.
+	 *
+	 * @return true if this slot's content should be included in property resolution traversal
 	 */
-	boolean isRequired();
+	default boolean includeInTraversal() {
+		return true;  // Default: include in traversal
+	}
 }

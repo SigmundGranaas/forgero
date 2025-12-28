@@ -4,8 +4,8 @@ import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.Slot;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
-import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
-import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
+import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
+import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 
@@ -21,7 +21,7 @@ import java.util.*;
 public class ResolutionContext {
 	private final Component self;
 	private final Component root;
-	private final Map<Component, Slot> slotMap;
+	private final Map<Component, Slot> slotMap;  // Only contains components in MUTABLE slots
 	private final Map<Component, Component> parentMap;
 	private final Map<Component, Integer> depthMap;
 
@@ -47,18 +47,25 @@ public class ResolutionContext {
 		parentMap.put(current, parent);
 		depthMap.put(current, depth);
 
+		// Structure parts - immutable composition, NOT slots
+		// Components in structure parts are NOT added to slotMap
 		if (current instanceof StructuredComponent structured) {
-			for (StructureSlot slot : structured.structure().slots().all()) {
-				slotMap.put(slot.content(), slot);
-				buildContextMaps(slot.content(), current, depth + 1);
+			for (ComponentPart part : structured.structure().allParts()) {
+				// DON'T add to slotMap - ComponentPart is not a Slot
+				buildContextMaps(part.getContent(), current, depth + 1);
 			}
 		}
+
+		// Upgrade slots - mutable containers
+		// Components in upgrade slots ARE added to slotMap
 		if (current instanceof CustomizableComponent customizable) {
-			for (UpgradeSlot slot : customizable.upgrades().slots().all()) {
-				slot.content().ifPresent(child -> {
-					slotMap.put(child, slot);
-					buildContextMaps(child, current, depth + 1);
-				});
+			for (Slot slot : customizable.upgrades().slots().all()) {
+				if (slot instanceof ComponentUpgradeSlot upgradeSlot) {
+					upgradeSlot.getContent().ifPresent(child -> {
+						slotMap.put(child, slot);  // ComponentUpgradeSlot IS a Slot
+						buildContextMaps(child, current, depth + 1);
+					});
+				}
 			}
 		}
 	}
@@ -95,11 +102,11 @@ public class ResolutionContext {
 
 	private Optional<Component> findIn(Component component, OpenIdentifier slotType) {
 		if (component instanceof StructuredComponent structured) {
-			for (StructureSlot slot : structured.structure().slots().all()) {
-				if (slot.type().equals(slotType)) {
-					return Optional.of(slot.content());
+			for (ComponentPart part : structured.structure().allParts()) {
+				if (part.partType().equals(slotType)) {
+					return Optional.of(part.content());
 				}
-				Optional<Component> nestedResult = findIn(slot.content(), slotType);
+				Optional<Component> nestedResult = findIn(part.content(), slotType);
 				if (nestedResult.isPresent()) {
 					return nestedResult;
 				}

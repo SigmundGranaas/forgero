@@ -1,0 +1,169 @@
+{
+  "type": "forgero:material",
+  "name": "Prismarine",
+  "tags": [
+    "forgero:materials/mineral"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:prismarine_shard"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:prismarine_shard-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": {
+        "value": 2.0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:attack_speed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:prismarine_shard-attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": {
+        "value": 6.5
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:attack_damage"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:prismarine_shard-mining_speed",
+      "type": "forgero:mining_speed",
+      "computation": {
+        "value": 8.0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:mining_speed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:prismarine_shard-mining_level",
+      "type": "forgero:mining_level",
+      "computation": {
+        "value": 3
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:mining_level"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:prismarine_shard-durability",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 1150
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:durability"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:prismarine_shard-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 70
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:rarity"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:prismarine_shard-weight",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 2.5
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:weight"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:prismarine_shard-armor",
+      "type": "forgero:armor",
+      "computation": {
+        "value": 5
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:armor"
+          }
+        ]
+      }
+    }
+  ]
+}

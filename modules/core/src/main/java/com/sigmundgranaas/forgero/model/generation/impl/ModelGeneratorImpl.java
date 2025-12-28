@@ -87,7 +87,7 @@ public class ModelGeneratorImpl implements ModelGenerator {
 
 		// Recursively unpack structured components to flatten the context
 		if (root instanceof StructuredComponent structured) {
-			structured.structure().slots().all().forEach(slot -> {
+			structured.structure().allParts().forEach(slot -> {
 				// Key by slot name, e.g., "head", "handle", "material"
 				context.put(slot.id().name(), slot.content());
 				// Also add children of children to the context

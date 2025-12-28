@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "recipegen-test",
+  "version": "1.0.0",
+  "name": "RecipeGen Test",
+  "description": "Test resources for recipe-generator module",
+  "authors": ["Test"],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.sigmundgranaas.forgero.recipegen.testutil.RecipeGenTestInitializer"
+    ],
+    "fabric-gametest": [
+      "com.sigmundgranaas.forgero.recipegen.gametest.RecipeGeneratorGametest"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "fabric-api": "*",
+    "minecraft": "1.20.1",
+    "forgero-recipegen": "*",
+    "forgero-drp": "*"
+  }
+}

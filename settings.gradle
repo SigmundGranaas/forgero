@@ -27,25 +27,32 @@ include "modules:mc:development"
 include "modules:mc:bows"
 // DRP is a standalone mod - see mods:drp
 
-// Content
+// Content - New Structure
 include("content")
+include("content:forgero-materials")
+include("content:forgero-upgrades")
+include("content:forgero-schematics")
+include("content:forgero-equipment")
+include("content:forgero-tools-content")
+include("content:forgero-armor-content")
+include("content:forgero-models")
 include("content:${mod_id}-extended")
-include("content:${mod_id}-vanilla")
+include("content:${mod_id}-compat")
 include("content:${mod_id}-armor")
+include("content:${mod_id}-structures")
+include("content:vanilla-upgrades-base")
+
+// Content - Legacy (to be removed)
+include("content:${mod_id}-vanilla")
 include("content:${mod_id}-tools")
 include("content:minecraft-vanilla-materials")
 include("content:minecraft-tools")
-
-include("content:${mod_id}-compat")
-include("content:${mod_id}-structures")
-include("content:${mod_id}-deprecated")
-
-// Shared Content (for both Vanilla Upgrades and Forgero)
 include("content:shared-materials")
-include("content:vanilla-upgrades-base")
+include("content:${mod_id}-deprecated")
 
 // Mods
 include 'mods:drp'
+include 'mods:recipe-generator'
 include 'mods:vanilla-upgrades'
 include 'mods:forgero'
 

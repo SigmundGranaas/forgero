@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-schematics",
+  "version": "${version}",
+  "name": "Forgero Schematics",
+  "description": "Schematic definitions for Forgero",
+  "environment": "*",
+  "depends": {
+    "java": ">=17"
+  },
+  "custom": {
+    "forgeroResource": true
+  }
+}

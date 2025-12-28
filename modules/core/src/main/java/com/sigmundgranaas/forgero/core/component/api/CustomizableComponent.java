@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.core.component.api;
 
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgrades;
-import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
+import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
 import java.util.List;
 
 /**
@@ -22,11 +22,15 @@ public interface CustomizableComponent extends Component {
 	Component withUpgrades(ComponentUpgrades newUpgrades);
 
 	/**
-	 * Convenience method to directly access the list of upgrade slots.
+	 * Convenience method to directly access the list of ComponentUpgradeSlot instances.
+	 * Filters the underlying heterogeneous SlotContainer to only return upgrade slots.
 	 *
-	 * @return A list of upgrade slots.
+	 * @return A list of ComponentUpgradeSlot instances.
 	 */
-	default List<UpgradeSlot> getUpgradeSlots() {
-		return upgrades().slots().asList();
+	default List<ComponentUpgradeSlot> getUpgradeSlots() {
+		return upgrades().slots().asList().stream()
+				.filter(slot -> slot instanceof ComponentUpgradeSlot)
+				.map(slot -> (ComponentUpgradeSlot) slot)
+				.toList();
 	}
 }

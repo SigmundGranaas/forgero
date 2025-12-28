@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-recipegen",
+  "version": "${version}",
+  "name": "Forgero Recipe Generator",
+  "description": "Template-based recipe generation with variable substitution for Forgero mods.",
+  "authors": [
+    "Sigmund Granaas"
+  ],
+  "contact": {
+    "homepage": "https://sigmundgranaas.com",
+    "sources": "https://github.com/sigmundgranaas/forgero",
+    "issues": "https://github.com/sigmundgranaas/forgero/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/forgero/icon.png",
+  "environment": "*",
+  "entrypoints": {},
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "fabric-api": "*",
+    "minecraft": "1.20.1",
+    "java": ">=17",
+    "forgero-drp": "*"
+  },
+  "suggests": {}
+}

@@ -1,0 +1,43 @@
+{
+  "type": "forgero:part_template",
+  "name": "boots",
+  "tags": [
+    "forgero:armor/boots",
+    "forgero:parts/armor",
+    "minecraft:armor/boots"
+  ],
+  "host_template": {
+    "class": "forgero:armor_item",
+    "id": "forgero:{material.name}-boots"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-boots",
+    "slots": {
+      "material": {
+        "type": "forgero:armor_material",
+        "default_tag": "forgero:materials/armor_material"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:boots-gem",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/gem"],
+      "description": "slot.forgero.gem"
+    },
+    {
+      "id": "forgero:boots-lining",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/lining"],
+      "description": "slot.forgero.lining"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:boots-armor-base",
+      "type": "forgero:armor",
+      "computation": {"value": 2, "operation": "addition"}
+    }
+  ]
+}

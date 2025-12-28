@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-upgrades",
+  "version": "${version}",
+  "name": "Forgero Upgrades",
+  "description": "Upgrade material definitions for Forgero",
+  "environment": "*",
+  "depends": {
+    "java": ">=17"
+  },
+  "custom": {
+    "forgeroResource": true
+  }
+}

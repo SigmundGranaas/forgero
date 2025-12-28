@@ -1,0 +1,43 @@
+{
+  "type": "forgero:part_template",
+  "name": "helmet",
+  "tags": [
+    "forgero:armor/helmet",
+    "forgero:parts/armor",
+    "minecraft:armor/helmet"
+  ],
+  "host_template": {
+    "class": "forgero:armor_item",
+    "id": "forgero:{material.name}-helmet"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-helmet",
+    "slots": {
+      "material": {
+        "type": "forgero:armor_material",
+        "default_tag": "forgero:materials/armor_material"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:helmet-gem",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/gem"],
+      "description": "slot.forgero.gem"
+    },
+    {
+      "id": "forgero:helmet-lining",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/lining"],
+      "description": "slot.forgero.lining"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:helmet-armor-base",
+      "type": "forgero:armor",
+      "computation": {"value": 2, "operation": "addition"}
+    }
+  ]
+}

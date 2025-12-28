@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "forgero:string",
+    "forgero:leather",
+    "forgero:rabbit_hide",
+    "forgero:phantom_membrane",
+    "forgero:feather"
+  ]
+}

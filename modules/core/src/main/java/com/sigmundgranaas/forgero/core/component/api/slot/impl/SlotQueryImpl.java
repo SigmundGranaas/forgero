@@ -4,7 +4,7 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.Slot;
 import com.sigmundgranaas.forgero.core.component.api.slot.SlotQuery;
-import com.sigmundgranaas.forgero.core.component.api.slot.UpgradeSlot;
+import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,27 +68,27 @@ public class SlotQueryImpl<S extends Slot> implements SlotQuery<S> {
 	@Override
 	public SlotQuery<S> onlyEmpty() {
 		return matching(slot -> {
-			if (slot instanceof UpgradeSlot upgradeSlot) {
+			if (slot instanceof ComponentUpgradeSlot upgradeSlot) {
 				return upgradeSlot.isEmpty();
 			}
-			return false; // Structure slots are always filled
+			return false; // Other slot types might not support empty/filled concept
 		});
 	}
 
 	@Override
 	public SlotQuery<S> onlyFilled() {
 		return matching(slot -> {
-			if (slot instanceof UpgradeSlot upgradeSlot) {
+			if (slot instanceof ComponentUpgradeSlot upgradeSlot) {
 				return upgradeSlot.isFilled();
 			}
-			return true; // Structure slots are always filled
+			return true; // Other slot types might not support empty/filled concept
 		});
 	}
 
 	@Override
 	public SlotQuery<S> compatibleWith(Component component) {
 		return matching(slot -> {
-			if (slot instanceof UpgradeSlot upgradeSlot) {
+			if (slot instanceof ComponentUpgradeSlot upgradeSlot) {
 				return upgradeSlot.validator().test(component);
 			}
 			return false;

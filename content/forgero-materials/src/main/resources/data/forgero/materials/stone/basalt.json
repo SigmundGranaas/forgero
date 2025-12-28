@@ -1,0 +1,169 @@
+{
+  "type": "forgero:material",
+  "name": "Basalt",
+  "tags": [
+    "forgero:materials/stone"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:basalt"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:basalt-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": {
+        "value": 2.0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:attack_speed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:basalt-attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": {
+        "value": 3.0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:attack_damage"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:basalt-mining_speed",
+      "type": "forgero:mining_speed",
+      "computation": {
+        "value": 4.0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:mining_speed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:basalt-mining_level",
+      "type": "forgero:mining_level",
+      "computation": {
+        "value": 1
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:mining_level"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:basalt-durability",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 190
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:durability"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:basalt-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 30
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:rarity"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:basalt-weight",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 4.0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:weight"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:basalt-armor",
+      "type": "forgero:armor",
+      "computation": {
+        "value": 3
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:armor"
+          }
+        ]
+      }
+    }
+  ]
+}

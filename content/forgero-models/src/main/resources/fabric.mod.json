@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-models",
+  "version": "${version}",
+  "name": "Forgero Models",
+  "description": "Model and texture definitions for Forgero",
+  "environment": "*",
+  "depends": {
+    "java": ">=17"
+  },
+  "custom": {
+    "forgeroResource": true
+  }
+}

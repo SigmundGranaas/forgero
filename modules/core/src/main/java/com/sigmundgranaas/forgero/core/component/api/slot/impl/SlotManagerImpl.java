@@ -5,7 +5,7 @@ import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.*;
-import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
+import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 import com.sigmundgranaas.forgero.core.component.mutation.api.ComponentMutater;
 
 import java.util.Collections;
@@ -35,37 +35,40 @@ public class SlotManagerImpl implements SlotManager {
 	// ========== QUERY OPERATIONS ==========
 
 	@Override
-	public SlotQuery<UpgradeSlot> queryUpgradeSlots(Component component) {
+	public SlotQuery<ComponentUpgradeSlot> queryComponentUpgradeSlots(Component component) {
 		return new SlotQueryImpl<>(getAllUpgradeSlots(component));
 	}
 
 	@Override
-	public SlotQuery<StructureSlot> queryStructureSlots(Component component) {
+	public List<ComponentPart> getStructureParts(Component component) {
 		if (component instanceof StructuredComponent structured) {
-			return new SlotQueryImpl<>(structured.structure().slots().all().stream().toList());
-		}
-		return new SlotQueryImpl<>(Collections.emptyList());
-	}
-
-	@Override
-	public List<UpgradeSlot> getAllUpgradeSlots(Component component) {
-		if (component instanceof CustomizableComponent customizable) {
-			return customizable.upgrades().slots().all().stream().toList();
+			return structured.structure().allParts().stream().toList();
 		}
 		return Collections.emptyList();
 	}
 
 	@Override
-	public List<UpgradeSlot> getEmptyUpgradeSlots(Component component) {
+	public List<ComponentUpgradeSlot> getAllUpgradeSlots(Component component) {
+		if (component instanceof CustomizableComponent customizable) {
+			return customizable.upgrades().slots().all().stream()
+					.filter(slot -> slot instanceof ComponentUpgradeSlot)
+					.map(slot -> (ComponentUpgradeSlot) slot)
+					.toList();
+		}
+		return Collections.emptyList();
+	}
+
+	@Override
+	public List<ComponentUpgradeSlot> getEmptyUpgradeSlots(Component component) {
 		return getAllUpgradeSlots(component).stream()
-				.filter(UpgradeSlot::isEmpty)
+				.filter(ComponentUpgradeSlot::isEmpty)
 				.toList();
 	}
 
 	@Override
-	public List<UpgradeSlot> getFilledUpgradeSlots(Component component) {
+	public List<ComponentUpgradeSlot> getFilledUpgradeSlots(Component component) {
 		return getAllUpgradeSlots(component).stream()
-				.filter(UpgradeSlot::isFilled)
+				.filter(ComponentUpgradeSlot::isFilled)
 				.toList();
 	}
 
@@ -85,26 +88,26 @@ public class SlotManagerImpl implements SlotManager {
 	}
 
 	@Override
-	public Optional<UpgradeSlot> findCompatibleSlot(Component target, Component upgrade) {
+	public Optional<ComponentUpgradeSlot> findCompatibleSlot(Component target, Component upgrade) {
 		return getEmptyUpgradeSlots(target).stream()
 				.filter(slot -> slot.validator().test(upgrade))
 				.findFirst();
 	}
 
 	@Override
-	public List<UpgradeSlot> findAllCompatibleSlots(Component target, Component upgrade) {
+	public List<ComponentUpgradeSlot> findAllCompatibleSlots(Component target, Component upgrade) {
 		return getEmptyUpgradeSlots(target).stream()
 				.filter(slot -> slot.validator().test(upgrade))
 				.toList();
 	}
 
 	@Override
-	public boolean isCompatible(UpgradeSlot slot, Component upgrade) {
+	public boolean isCompatible(ComponentUpgradeSlot slot, Component upgrade) {
 		return slot.validator().test(upgrade);
 	}
 
 	@Override
-	public Optional<String> validateUpgrade(UpgradeSlot slot, Component upgrade) {
+	public Optional<String> validateUpgrade(ComponentUpgradeSlot slot, Component upgrade) {
 		return slot.validator().validate(upgrade, slot.id());
 	}
 
@@ -119,7 +122,7 @@ public class SlotManagerImpl implements SlotManager {
 			throw new IllegalArgumentException("Upgrade component cannot be null");
 		}
 
-		Optional<UpgradeSlot> compatibleSlot = findCompatibleSlot(target, upgrade);
+		Optional<ComponentUpgradeSlot> compatibleSlot = findCompatibleSlot(target, upgrade);
 
 		if (compatibleSlot.isEmpty()) {
 			return InstallationResult.failure(
@@ -138,7 +141,7 @@ public class SlotManagerImpl implements SlotManager {
 	@Override
 	public Component installInSlot(Component target, OpenIdentifier slotId, Component upgrade) {
 		// Validate slot exists and is empty
-		UpgradeSlot slot = getUpgradeSlot(target, slotId)
+		ComponentUpgradeSlot slot = getComponentUpgradeSlot(target, slotId)
 				.orElseThrow(() -> new IllegalArgumentException("Slot not found: " + slotId));
 
 		if (slot.isFilled()) {
@@ -157,7 +160,7 @@ public class SlotManagerImpl implements SlotManager {
 	@Override
 	public Component installOrReplace(Component target, OpenIdentifier slotId, Component upgrade) {
 		// Just validate slot exists and upgrade is compatible
-		UpgradeSlot slot = getUpgradeSlot(target, slotId)
+		ComponentUpgradeSlot slot = getComponentUpgradeSlot(target, slotId)
 				.orElseThrow(() -> new IllegalArgumentException("Slot not found: " + slotId));
 
 		// Validate upgrade
@@ -172,7 +175,7 @@ public class SlotManagerImpl implements SlotManager {
 
 	@Override
 	public Component removeUpgrade(Component target, OpenIdentifier upgradeId) {
-		Optional<UpgradeSlot> slotToRemove = getFilledUpgradeSlots(target).stream()
+		Optional<ComponentUpgradeSlot> slotToRemove = getFilledUpgradeSlots(target).stream()
 				.filter(slot -> slot.content().map(c -> c.id().equals(upgradeId)).orElse(false))
 				.findFirst();
 
@@ -194,10 +197,11 @@ public class SlotManagerImpl implements SlotManager {
 			return target;
 		}
 
-		// Empty all upgrade slots
+		// Empty all ComponentUpgradeSlot instances
 		ComponentUpgrades emptyUpgrades = ComponentUpgrades.of(
 				customizable.upgrades().slots().all().stream()
-						.map(UpgradeSlot::empty)
+						.filter(slot -> slot instanceof ComponentUpgradeSlot)
+						.map(slot -> ((ComponentUpgradeSlot) slot).empty())
 						.toList()
 		);
 
@@ -207,7 +211,7 @@ public class SlotManagerImpl implements SlotManager {
 	// ========== UTILITY OPERATIONS ==========
 
 	@Override
-	public int countUpgradeSlots(Component component) {
+	public int countComponentUpgradeSlots(Component component) {
 		return getAllUpgradeSlots(component).size();
 	}
 
@@ -230,7 +234,7 @@ public class SlotManagerImpl implements SlotManager {
 	}
 
 	@Override
-	public boolean hasUpgradeSlots(Component component) {
+	public boolean hasComponentUpgradeSlots(Component component) {
 		return component instanceof CustomizableComponent customizable
 				&& !customizable.upgrades().isEmpty();
 	}
@@ -244,7 +248,7 @@ public class SlotManagerImpl implements SlotManager {
 	 * @param slotId    The slot ID
 	 * @return The upgrade slot if found
 	 */
-	private Optional<UpgradeSlot> getUpgradeSlot(Component component, OpenIdentifier slotId) {
+	private Optional<ComponentUpgradeSlot> getComponentUpgradeSlot(Component component, OpenIdentifier slotId) {
 		if (component instanceof CustomizableComponent customizable) {
 			return customizable.upgrades().get(slotId);
 		}

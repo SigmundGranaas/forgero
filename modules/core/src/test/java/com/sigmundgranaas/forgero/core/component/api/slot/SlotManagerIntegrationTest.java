@@ -66,10 +66,10 @@ class SlotManagerIntegrationTest {
 			Component toolWithOffensiveGem = offensiveResult.component().orElseThrow();
 
 			// Verify the gem was installed in offensive slot
-			List<UpgradeSlot> filledSlots = slotManager.getFilledUpgradeSlots(toolWithOffensiveGem);
+			List<ComponentUpgradeSlot> filledSlots = slotManager.getFilledComponentUpgradeSlots(toolWithOffensiveGem);
 			assertEquals(1, filledSlots.size(), "Should have one filled slot");
 
-			UpgradeSlot filledSlot = filledSlots.get(0);
+			ComponentUpgradeSlot filledSlot = filledSlots.get(0);
 			assertEquals(OFFENSIVE_GEM_SLOT_TYPE, filledSlot.type(),
 				"Gem should be in offensive slot");
 
@@ -135,7 +135,7 @@ class SlotManagerIntegrationTest {
 			Component toolWithBothGems = result2.component().orElseThrow();
 
 			// Verify both gems are installed
-			List<UpgradeSlot> filledSlots = slotManager.getFilledUpgradeSlots(toolWithBothGems);
+			List<ComponentUpgradeSlot> filledSlots = slotManager.getFilledComponentUpgradeSlots(toolWithBothGems);
 			assertEquals(2, filledSlots.size(), "Should have two filled slots");
 
 			// Verify slot types
@@ -169,7 +169,7 @@ class SlotManagerIntegrationTest {
 				toolWithBoth, offensiveGem.id());
 
 			// Verify only utility gem remains
-			List<UpgradeSlot> filledSlots = slotManager.getFilledUpgradeSlots(toolWithUtilityOnly);
+			List<ComponentUpgradeSlot> filledSlots = slotManager.getFilledComponentUpgradeSlots(toolWithUtilityOnly);
 			assertEquals(1, filledSlots.size(), "Should have one filled slot");
 			assertEquals(UTILITY_GEM_SLOT_TYPE, filledSlots.get(0).type(),
 				"Remaining gem should be in utility slot");
@@ -280,7 +280,7 @@ class SlotManagerIntegrationTest {
 				Set.of(),
 				Map.of(),
 				ComponentUpgrades.of(List.of(
-					UpgradeSlot.emptyOfType(
+					ComponentUpgradeSlot.emptyOfType(
 						OpenIdentifier.of("gem_slot"),
 						GEM_TYPE,
 						"Gem Slot"
@@ -311,12 +311,12 @@ class SlotManagerIntegrationTest {
 			Set.of(),
 			Map.of(),
 			ComponentUpgrades.of(List.of(
-				UpgradeSlot.emptyOfType(
+				ComponentUpgradeSlot.emptyOfType(
 					OpenIdentifier.of("offensive_gem_slot"),
 					OFFENSIVE_GEM_SLOT_TYPE,
 					"Offensive Gem Slot"
 				),
-				UpgradeSlot.emptyOfType(
+				ComponentUpgradeSlot.emptyOfType(
 					OpenIdentifier.of("utility_gem_slot"),
 					UTILITY_GEM_SLOT_TYPE,
 					"Utility Gem Slot"
@@ -331,17 +331,17 @@ class SlotManagerIntegrationTest {
 			Set.of(),
 			Map.of(),
 			ComponentUpgrades.of(List.of(
-				UpgradeSlot.emptyOfType(
+				ComponentUpgradeSlot.emptyOfType(
 					OpenIdentifier.of("gem_slot_1"),
 					GEM_TYPE,
 					"Gem Slot 1"
 				),
-				UpgradeSlot.emptyOfType(
+				ComponentUpgradeSlot.emptyOfType(
 					OpenIdentifier.of("gem_slot_2"),
 					GEM_TYPE,
 					"Gem Slot 2"
 				),
-				UpgradeSlot.emptyOfType(
+				ComponentUpgradeSlot.emptyOfType(
 					OpenIdentifier.of("gem_slot_3"),
 					GEM_TYPE,
 					"Gem Slot 3"
@@ -356,7 +356,7 @@ class SlotManagerIntegrationTest {
 			Set.of(),
 			Map.of(),
 			ComponentUpgrades.of(List.of(
-				UpgradeSlot.emptyOfType(
+				ComponentUpgradeSlot.emptyOfType(
 					OpenIdentifier.of("gem_slot"),
 					GEM_TYPE, // Requires gem tag
 					"Gem Slot"

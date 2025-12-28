@@ -1,0 +1,96 @@
+{
+  "type": "forgero:schematic",
+  "name": "Binding",
+  "tags": [
+    "forgero:schematics/bindings"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:schematic-rarity-local",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 25,
+        "operation": "addition"
+      }
+    },
+    {
+      "id": "forgero:schematic-rarity-composite",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 1,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:schematic-durability-composite",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 0.5,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:schematic-weight-composite",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 0.75,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:schematic-mining_speed-composite",
+      "type": "forgero:mining_speed",
+      "computation": {
+        "value": -1,
+        "operation": "addition"
+      }
+    }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:reinforcement-slot",
+      "type": "forgero:upgrade_material",
+      "tags": [
+        "forgero:upgrade/reinforcement"
+      ],
+      "description": "slot.forgero.reinforcement"
+    },
+    {
+      "id": "forgero:upgrade-slot",
+      "type": "forgero:trinket",
+      "tags": [
+        "forgero:upgrade/upgrade"
+      ],
+      "description": "slot.forgero.upgrade"
+    },
+    {
+      "id": "forgero:cosmetic-slot",
+      "type": "forgero:dye",
+      "tags": [
+        "forgero:upgrade/cosmetic"
+      ],
+      "description": "slot.forgero.cosmetic"
+    }
+  ]
+}

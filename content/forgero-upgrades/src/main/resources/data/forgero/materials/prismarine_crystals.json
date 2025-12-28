@@ -1,0 +1,230 @@
+{
+  "type": "forgero:material",
+  "name": "Prismarine Crystals",
+  "tags": [
+    "forgero:upgrade/gem",
+    "forgero:materials/hard",
+    "forgero:materials/mineral",
+    "forgero:materials/upgrade_material"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:prismarine_crystals"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:crystal-rarity-upgrade",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 37.5
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:crystal-weight-upgrade",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 1
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:crystal-attack_speed-offensive-upgrade",
+      "type": "forgero:attack_speed",
+      "computation": {
+        "value": 0.2
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:crystal-attack_damage-offensive-upgrade",
+      "type": "forgero:attack_damage",
+      "computation": {
+        "value": 1
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:crystal-mining_speed-offensive-upgrade",
+      "type": "forgero:mining_speed",
+      "computation": {
+        "value": 0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:crystal-mining_level-offensive-upgrade",
+      "type": "forgero:mining_level",
+      "computation": {
+        "value": 0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:crystal-durability-offensive-upgrade",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 287.5
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:crystal-attack_speed-utility-upgrade",
+      "type": "forgero:attack_speed",
+      "computation": {
+        "value": 0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:crystal-attack_damage-utility-upgrade",
+      "type": "forgero:attack_damage",
+      "computation": {
+        "value": 0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:crystal-mining_speed-utility-upgrade",
+      "type": "forgero:mining_speed",
+      "computation": {
+        "value": 0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:crystal-mining_level-utility-upgrade",
+      "type": "forgero:mining_level",
+      "computation": {
+        "value": 0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:crystal-durability-utility-upgrade",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:crystal-draw_power-offensive-upgrade",
+      "type": "forgero:draw_power",
+      "computation": {
+        "value": 0.45
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:crystal-draw_speed-offensive-upgrade",
+      "type": "forgero:draw_speed",
+      "computation": {
+        "value": 0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -42,38 +42,38 @@ class SlotManagerTest {
 	// ========== QUERY TESTS ==========
 
 	@Test
-	void getAllUpgradeSlots_ReturnsAllSlots() {
+	void getAllComponentUpgradeSlots_ReturnsAllSlots() {
 		Component tool = createToolWithTwoGemSlots();
 
-		List<UpgradeSlot> slots = slotManager.getAllUpgradeSlots(tool);
+		List<ComponentUpgradeSlot> slots = slotManager.getAllComponentUpgradeSlots(tool);
 
 		assertEquals(2, slots.size());
 	}
 
 	@Test
-	void getAllUpgradeSlots_ReturnsEmptyForNonCustomizable() {
+	void getAllComponentUpgradeSlots_ReturnsEmptyForNonCustomizable() {
 		Component gem = createGem();
 
-		List<UpgradeSlot> slots = slotManager.getAllUpgradeSlots(gem);
+		List<ComponentUpgradeSlot> slots = slotManager.getAllComponentUpgradeSlots(gem);
 
 		assertTrue(slots.isEmpty());
 	}
 
 	@Test
-	void getEmptyUpgradeSlots_ReturnsOnlyEmpty() {
+	void getEmptyComponentUpgradeSlots_ReturnsOnlyEmpty() {
 		Component tool = createToolWithMixedSlots(); // 1 filled, 1 empty
 
-		List<UpgradeSlot> emptySlots = slotManager.getEmptyUpgradeSlots(tool);
+		List<ComponentUpgradeSlot> emptySlots = slotManager.getEmptyComponentUpgradeSlots(tool);
 
 		assertEquals(1, emptySlots.size());
 		assertTrue(emptySlots.get(0).isEmpty());
 	}
 
 	@Test
-	void getFilledUpgradeSlots_ReturnsOnlyFilled() {
+	void getFilledComponentUpgradeSlots_ReturnsOnlyFilled() {
 		Component tool = createToolWithMixedSlots(); // 1 filled, 1 empty
 
-		List<UpgradeSlot> filledSlots = slotManager.getFilledUpgradeSlots(tool);
+		List<ComponentUpgradeSlot> filledSlots = slotManager.getFilledComponentUpgradeSlots(tool);
 
 		assertEquals(1, filledSlots.size());
 		assertTrue(filledSlots.get(0).isFilled());
@@ -126,7 +126,7 @@ class SlotManagerTest {
 		Component tool = createToolWithTwoGemSlots();
 		Component gem = createGem();
 
-		Optional<UpgradeSlot> slot = slotManager.findCompatibleSlot(tool, gem);
+		Optional<ComponentUpgradeSlot> slot = slotManager.findCompatibleSlot(tool, gem);
 
 		assertTrue(slot.isPresent());
 		assertEquals(GEM_SLOT_1, slot.get().id());
@@ -137,7 +137,7 @@ class SlotManagerTest {
 		Component tool = createToolWithBindingSlotOnly();
 		Component gem = createGem();
 
-		Optional<UpgradeSlot> slot = slotManager.findCompatibleSlot(tool, gem);
+		Optional<ComponentUpgradeSlot> slot = slotManager.findCompatibleSlot(tool, gem);
 
 		assertTrue(slot.isEmpty());
 	}
@@ -147,7 +147,7 @@ class SlotManagerTest {
 		Component tool = createToolWithTwoGemSlots();
 		Component gem = createGem();
 
-		List<UpgradeSlot> slots = slotManager.findAllCompatibleSlots(tool, gem);
+		List<ComponentUpgradeSlot> slots = slotManager.findAllCompatibleSlots(tool, gem);
 
 		assertEquals(2, slots.size());
 	}
@@ -155,7 +155,7 @@ class SlotManagerTest {
 	@Test
 	void isCompatible_ReturnsTrueForValidUpgrade() {
 		Component tool = createToolWithTwoGemSlots();
-		UpgradeSlot slot = slotManager.getAllUpgradeSlots(tool).get(0);
+		ComponentUpgradeSlot slot = slotManager.getAllComponentUpgradeSlots(tool).get(0);
 		Component gem = createGem();
 
 		boolean compatible = slotManager.isCompatible(slot, gem);
@@ -166,7 +166,7 @@ class SlotManagerTest {
 	@Test
 	void isCompatible_ReturnsFalseForInvalidUpgrade() {
 		Component tool = createToolWithTwoGemSlots();
-		UpgradeSlot slot = slotManager.getAllUpgradeSlots(tool).get(0);
+		ComponentUpgradeSlot slot = slotManager.getAllComponentUpgradeSlots(tool).get(0);
 		Component binding = createBinding();
 
 		boolean compatible = slotManager.isCompatible(slot, binding);
@@ -177,7 +177,7 @@ class SlotManagerTest {
 	@Test
 	void validateUpgrade_ReturnsEmptyForValid() {
 		Component tool = createToolWithTwoGemSlots();
-		UpgradeSlot slot = slotManager.getAllUpgradeSlots(tool).get(0);
+		ComponentUpgradeSlot slot = slotManager.getAllComponentUpgradeSlots(tool).get(0);
 		Component gem = createGem();
 
 		Optional<String> error = slotManager.validateUpgrade(slot, gem);
@@ -188,7 +188,7 @@ class SlotManagerTest {
 	@Test
 	void validateUpgrade_ReturnsErrorForInvalid() {
 		Component tool = createToolWithTwoGemSlots();
-		UpgradeSlot slot = slotManager.getAllUpgradeSlots(tool).get(0);
+		ComponentUpgradeSlot slot = slotManager.getAllComponentUpgradeSlots(tool).get(0);
 		Component binding = createBinding();
 
 		Optional<String> error = slotManager.validateUpgrade(slot, binding);
@@ -232,12 +232,12 @@ class SlotManagerTest {
 		Component upgraded = result.orElseThrow();
 
 		// First slot should be filled
-		List<UpgradeSlot> filledSlots = slotManager.getFilledUpgradeSlots(upgraded);
+		List<ComponentUpgradeSlot> filledSlots = slotManager.getFilledComponentUpgradeSlots(upgraded);
 		assertEquals(1, filledSlots.size());
 		assertEquals(GEM_SLOT_1, filledSlots.get(0).id());
 
 		// Second slot should be empty
-		List<UpgradeSlot> emptySlots = slotManager.getEmptyUpgradeSlots(upgraded);
+		List<ComponentUpgradeSlot> emptySlots = slotManager.getEmptyComponentUpgradeSlots(upgraded);
 		assertEquals(1, emptySlots.size());
 		assertEquals(GEM_SLOT_2, emptySlots.get(0).id());
 	}
@@ -268,7 +268,7 @@ class SlotManagerTest {
 		Component upgraded = slotManager.installInSlot(tool, GEM_SLOT_2, gem);
 
 		// Second slot should be filled
-		UpgradeSlot slot = ((CustomizableComponent) upgraded).upgrades().get(GEM_SLOT_2).orElseThrow();
+		ComponentUpgradeSlot slot = ((CustomizableComponent) upgraded).upgrades().get(GEM_SLOT_2).orElseThrow();
 		assertTrue(slot.isFilled());
 		assertEquals(GEM_ID, slot.content().orElseThrow().id());
 	}
@@ -312,7 +312,7 @@ class SlotManagerTest {
 		Component upgraded = slotManager.installOrReplace(tool, GEM_SLOT_1, emerald);
 
 		// Slot should now contain emerald
-		UpgradeSlot slot = ((CustomizableComponent) upgraded).upgrades().get(GEM_SLOT_1).orElseThrow();
+		ComponentUpgradeSlot slot = ((CustomizableComponent) upgraded).upgrades().get(GEM_SLOT_1).orElseThrow();
 		assertTrue(slot.isFilled());
 		assertEquals(EMERALD_ID, slot.content().orElseThrow().id());
 	}
@@ -346,7 +346,7 @@ class SlotManagerTest {
 
 		Component updated = slotManager.removeFromSlot(tool, GEM_SLOT_1);
 
-		UpgradeSlot slot = ((CustomizableComponent) updated).upgrades().get(GEM_SLOT_1).orElseThrow();
+		ComponentUpgradeSlot slot = ((CustomizableComponent) updated).upgrades().get(GEM_SLOT_1).orElseThrow();
 		assertTrue(slot.isEmpty());
 	}
 
@@ -357,16 +357,16 @@ class SlotManagerTest {
 		Component stripped = slotManager.removeAllUpgrades(tool);
 
 		assertEquals(0, slotManager.countFilledSlots(stripped));
-		assertEquals(2, slotManager.countUpgradeSlots(stripped));
+		assertEquals(2, slotManager.countComponentUpgradeSlots(stripped));
 	}
 
 	// ========== UTILITY TESTS ==========
 
 	@Test
-	void countUpgradeSlots_CountsCorrectly() {
+	void countComponentUpgradeSlots_CountsCorrectly() {
 		Component tool = createToolWithTwoGemSlots();
 
-		assertEquals(2, slotManager.countUpgradeSlots(tool));
+		assertEquals(2, slotManager.countComponentUpgradeSlots(tool));
 	}
 
 	@Test
@@ -398,26 +398,26 @@ class SlotManagerTest {
 	}
 
 	@Test
-	void hasUpgradeSlots_ReturnsTrueWhenPresent() {
+	void hasComponentUpgradeSlots_ReturnsTrueWhenPresent() {
 		Component tool = createToolWithTwoGemSlots();
 
-		assertTrue(slotManager.hasUpgradeSlots(tool));
+		assertTrue(slotManager.hasComponentUpgradeSlots(tool));
 	}
 
 	@Test
-	void hasUpgradeSlots_ReturnsFalseWhenAbsent() {
+	void hasComponentUpgradeSlots_ReturnsFalseWhenAbsent() {
 		Component gem = createGem();
 
-		assertFalse(slotManager.hasUpgradeSlots(gem));
+		assertFalse(slotManager.hasComponentUpgradeSlots(gem));
 	}
 
 	// ========== QUERY BUILDER TESTS ==========
 
 	@Test
-	void queryUpgradeSlots_ReturnsQueryBuilder() {
+	void queryComponentUpgradeSlots_ReturnsQueryBuilder() {
 		Component tool = createToolWithTwoGemSlots();
 
-		SlotQuery<UpgradeSlot> query = slotManager.queryUpgradeSlots(tool);
+		SlotQuery<ComponentUpgradeSlot> query = slotManager.queryComponentUpgradeSlots(tool);
 
 		assertNotNull(query);
 		assertEquals(2, query.count());
@@ -448,8 +448,8 @@ class SlotManagerTest {
 			Set.of(id("forgero:tool")),
 			Map.of(),
 			ComponentUpgrades.of(
-				UpgradeSlot.emptyOfType(GEM_SLOT_1, GEM_TYPE, "Gem Slot 1"),
-				UpgradeSlot.emptyOfType(GEM_SLOT_2, GEM_TYPE, "Gem Slot 2")
+				ComponentUpgradeSlot.emptyOfType(GEM_SLOT_1, GEM_TYPE, "Gem Slot 1"),
+				ComponentUpgradeSlot.emptyOfType(GEM_SLOT_2, GEM_TYPE, "Gem Slot 2")
 			)
 		);
 	}
@@ -460,7 +460,7 @@ class SlotManagerTest {
 			Set.of(id("forgero:tool")),
 			Map.of(),
 			ComponentUpgrades.of(
-				UpgradeSlot.emptyOfType(BINDING_SLOT, BINDING_TYPE, "Binding Slot")
+				ComponentUpgradeSlot.emptyOfType(BINDING_SLOT, BINDING_TYPE, "Binding Slot")
 			)
 		);
 	}
@@ -472,8 +472,8 @@ class SlotManagerTest {
 			Set.of(id("forgero:tool")),
 			Map.of(),
 			ComponentUpgrades.of(
-				UpgradeSlot.filledOfType(GEM_SLOT_1, GEM_TYPE, "Gem Slot 1", gem),
-				UpgradeSlot.emptyOfType(GEM_SLOT_2, GEM_TYPE, "Gem Slot 2")
+				ComponentUpgradeSlot.filledOfType(GEM_SLOT_1, GEM_TYPE, "Gem Slot 1", gem),
+				ComponentUpgradeSlot.emptyOfType(GEM_SLOT_2, GEM_TYPE, "Gem Slot 2")
 			)
 		);
 	}
@@ -486,8 +486,8 @@ class SlotManagerTest {
 			Set.of(id("forgero:tool")),
 			Map.of(),
 			ComponentUpgrades.of(
-				UpgradeSlot.filledOfType(GEM_SLOT_1, GEM_TYPE, "Gem Slot 1", ruby),
-				UpgradeSlot.filledOfType(GEM_SLOT_2, GEM_TYPE, "Gem Slot 2", emerald)
+				ComponentUpgradeSlot.filledOfType(GEM_SLOT_1, GEM_TYPE, "Gem Slot 1", ruby),
+				ComponentUpgradeSlot.filledOfType(GEM_SLOT_2, GEM_TYPE, "Gem Slot 2", emerald)
 			)
 		);
 	}

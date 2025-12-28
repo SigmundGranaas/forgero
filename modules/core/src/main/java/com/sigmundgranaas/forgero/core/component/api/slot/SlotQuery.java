@@ -19,13 +19,13 @@ import java.util.function.Predicate;
  * SlotManager manager = services.slotManager();
  *
  * // Find all empty gem slots
- * List<UpgradeSlot> gemSlots = manager.queryUpgradeSlots(tool)
+ * List<ComponentUpgradeSlot> gemSlots = manager.queryUpgradeSlots(tool)
  *     .ofType(OpenIdentifier.of("forgero:gem"))
  *     .onlyEmpty()
  *     .execute();
  *
  * // Find slots that can accept a specific upgrade
- * List<UpgradeSlot> compatibleSlots = manager.queryUpgradeSlots(tool)
+ * List<ComponentUpgradeSlot> compatibleSlots = manager.queryUpgradeSlots(tool)
  *     .onlyEmpty()
  *     .matching(slot -> slot.validator().test(upgrade))
  *     .execute();
@@ -36,14 +36,14 @@ import java.util.function.Predicate;
  *     .exists();
  *
  * // Get first compatible empty slot
- * Optional<UpgradeSlot> slot = manager.queryUpgradeSlots(tool)
+ * Optional<ComponentUpgradeSlot> slot = manager.queryUpgradeSlots(tool)
  *     .ofType(GEM_TYPE)
  *     .onlyEmpty()
  *     .compatibleWith(gemComponent)
  *     .first();
  * }</pre>
  *
- * @param <S> The type of slot being queried (UpgradeSlot or StructureSlot)
+ * @param <S> The type of slot being queried (ComponentUpgradeSlot, or other Slot implementations)
  */
 public interface SlotQuery<S extends Slot> {
 
@@ -79,21 +79,22 @@ public interface SlotQuery<S extends Slot> {
 	SlotQuery<S> matching(Predicate<S> predicate);
 
 	/**
-	 * Only includes empty slots (for UpgradeSlot queries).
+	 * Only includes empty slots (for ComponentUpgradeSlot queries).
 	 * <p>
-	 * Has no effect on StructureSlot queries (structure slots are always filled).
+	 * Only ComponentUpgradeSlot supports empty/filled states.
+	 * Other slot types might not support this concept.
 	 * <p>
-	 * For {@code UpgradeSlot}, this filters for {@code slot.isEmpty() == true}.
+	 * For {@code ComponentUpgradeSlot}, this filters for {@code slot.isEmpty() == true}.
 	 *
 	 * @return This query for chaining
 	 */
 	SlotQuery<S> onlyEmpty();
 
 	/**
-	 * Only includes filled slots (for UpgradeSlot queries).
+	 * Only includes filled slots (for ComponentUpgradeSlot queries).
 	 * <p>
-	 * For {@code UpgradeSlot}, this filters for {@code slot.isFilled() == true}.
-	 * For {@code StructureSlot}, this has no effect (always included).
+	 * For {@code ComponentUpgradeSlot}, this filters for {@code slot.isFilled() == true}.
+	 * Other slot types might not support this concept.
 	 *
 	 * @return This query for chaining
 	 */

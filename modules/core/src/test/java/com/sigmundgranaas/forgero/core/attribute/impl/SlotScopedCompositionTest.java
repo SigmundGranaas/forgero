@@ -8,8 +8,8 @@ import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
 import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.attribute.api.operator.MultiplicationOperator;
 import com.sigmundgranaas.forgero.core.component.api.slot.SlotValidator;
+import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
-import com.sigmundgranaas.forgero.core.component.api.structure.StructureSlot;
 import com.sigmundgranaas.forgero.core.component.impl.StaticComponent;
 import com.sigmundgranaas.forgero.core.component.impl.StructuredPart;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
@@ -103,7 +103,7 @@ class SlotScopedCompositionTest extends ForgeroTest {
 				Set.of(PICKAXE_HEAD_TAG),
 				headProps,
 				ComponentStructure.of(
-						new StructureSlot(idFactory.of("material_slot"), TOOL_MATERIAL_ID, "", SlotValidator.ACCEPT_ALL, iron)
+						new ComponentPart(idFactory.of("material_slot"), TOOL_MATERIAL_ID, "", SlotValidator.ACCEPT_ALL, iron)
 				)
 		);
 
@@ -128,7 +128,7 @@ class SlotScopedCompositionTest extends ForgeroTest {
 				Set.of(PICKAXE_HEAD_TAG),
 				new HashMap<>(),
 				ComponentStructure.of(
-						new StructureSlot(idFactory.of("material_slot"), TOOL_MATERIAL_ID, "", SlotValidator.ACCEPT_ALL, iron)
+						new ComponentPart(idFactory.of("material_slot"), TOOL_MATERIAL_ID, "", SlotValidator.ACCEPT_ALL, iron)
 				)
 		);
 
@@ -157,7 +157,7 @@ class SlotScopedCompositionTest extends ForgeroTest {
 				Set.of(PICKAXE_HEAD_TAG),
 				new HashMap<>(),
 				ComponentStructure.of(
-						new StructureSlot(idFactory.of("material_slot"), TOOL_MATERIAL_ID, "", SlotValidator.ACCEPT_ALL, iron)  // material slot, not upgrade
+						new ComponentPart(idFactory.of("material_slot"), TOOL_MATERIAL_ID, "", SlotValidator.ACCEPT_ALL, iron)  // material slot, not upgrade
 				)
 		);
 
@@ -192,7 +192,7 @@ class SlotScopedCompositionTest extends ForgeroTest {
 				Set.of(PICKAXE_HEAD_TAG),
 				new HashMap<>(),
 				ComponentStructure.of(
-						new StructureSlot(idFactory.of("head_material"), TOOL_MATERIAL_ID, "", SlotValidator.ACCEPT_ALL, headIron)
+						new ComponentPart(idFactory.of("head_material"), TOOL_MATERIAL_ID, "", SlotValidator.ACCEPT_ALL, headIron)
 				)
 		);
 
@@ -202,8 +202,8 @@ class SlotScopedCompositionTest extends ForgeroTest {
 				Set.of(idFactory.of("pickaxe")),
 				new HashMap<>(),
 				ComponentStructure.of(
-						new StructureSlot(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, "", SlotValidator.ACCEPT_ALL, pickaxeHead),
-						new StructureSlot(BINDING_SLOT_ID, TOOL_MATERIAL_ID, "", SlotValidator.ACCEPT_ALL, bindingIron)
+						new ComponentPart(HEAD_SLOT_ID, PICKAXE_HEAD_TAG, "", SlotValidator.ACCEPT_ALL, pickaxeHead),
+						new ComponentPart(BINDING_SLOT_ID, TOOL_MATERIAL_ID, "", SlotValidator.ACCEPT_ALL, bindingIron)
 				)
 		);
 
