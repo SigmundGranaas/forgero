@@ -1,0 +1,19 @@
+{
+  "type": "forgero:equipment_template",
+  "name": "test_heavy_arrow",
+  "name_space": "forgero-test",
+  "tags": [],
+  "host_template": {
+    "class": "forgero:arrow_item",
+    "id": "forgero-test:test_heavy_arrow"
+  },
+  "structure": {
+    "id": "forgero-test:test_heavy_arrow",
+    "slots": {
+      "material": {
+        "type": "forgero:tool_material",
+        "default": "forgero:test_heavy_arrow_material"
+      }
+    }
+  }
+}

@@ -3,9 +3,7 @@
   "name": "Pickaxe Head",
   "tags": [
     "forgero:pickaxe_head_shape",
-    "forgero:default_pickaxe_head"
-  ],
-  "local_tags": [
+    "forgero:default_pickaxe_head",
     "forgero:base_shape"
   ],
   "attributes": [

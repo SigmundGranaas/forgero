@@ -1,0 +1,8 @@
+{
+  "type": "forgero:schematic",
+  "name": "test-known-helmet",
+  "material": "forgero:test-known-armor-material",
+  "tags": ["forgero:helmet", "forgero:armor", "forgero:test-component"],
+  "item-type": "minecraft:helmet",
+  "attributes": []
+}

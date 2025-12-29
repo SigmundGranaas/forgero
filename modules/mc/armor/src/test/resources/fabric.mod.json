@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-armor-test",
+  "version": "${version}",
+  "name": "Forgero Armor Tests",
+  "description": "GameTests for Forgero Armor module.",
+  "authors": [
+    "Sigmund Granaas"
+  ],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-gametest": [
+      "com.sigmundgranaas.forgero.armor.ArmorItemTest"
+    ]
+  },
+  "depends": {
+    "forgero-armor": "*"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "forgero:material",
+  "name": "test-negative-tool-material",
+  "tags": ["forgero:tool-material", "forgero:test-material"],
+  "attributes": [
+    {
+      "id": "forgero:test-negative-mining-speed",
+      "type": "forgero:mining-speed",
+      "computation": -10.0
+    },
+    {
+      "id": "forgero:test-negative-attack-damage",
+      "type": "forgero:attack-damage",
+      "computation": -5.0
+    },
+    {
+      "id": "forgero:test-normal-durability",
+      "type": "forgero:durability",
+      "computation": 100
+    }
+  ]
+}

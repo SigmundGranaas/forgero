@@ -31,11 +31,12 @@ public class ForgeroArmorMaterial implements ArmorMaterial {
 	public ForgeroArmorMaterial(Component component, Resolver resolver) {
 		this.component = component;
 		this.attributes = resolver.resolve(component, new AttributeEngine());
-		LOGGER.debug("Created armor material for component: {} with durability={}, armor={}, toughness={}",
+		LOGGER.debug("Created armor material for component: {} with durability={}, armor={}, toughness={}, knockbackResistance={}",
 				component.id(),
 				(int) attributes.getValue(DefaultAttributes.DURABILITY),
 				(int) attributes.getValue(DefaultAttributes.ARMOR),
-				attributes.getValue(DefaultAttributes.ARMOR_TOUGHNESS));
+				attributes.getValue(DefaultAttributes.ARMOR_TOUGHNESS),
+				attributes.getValue(DefaultAttributes.KNOCKBACK_RESISTANCE));
 	}
 
 	@Override
@@ -83,7 +84,6 @@ public class ForgeroArmorMaterial implements ArmorMaterial {
 
 	@Override
 	public float getKnockbackResistance() {
-		// In the future, this could be driven by a "forgero:knockback_resistance" attribute.
-		return 0f;
+		return attributes.getValue(DefaultAttributes.KNOCKBACK_RESISTANCE);
 	}
 }

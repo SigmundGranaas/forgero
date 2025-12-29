@@ -1,0 +1,22 @@
+{
+  "type": "forgero:material",
+  "name": "test-zero-armor-material",
+  "tags": ["forgero:armor-material", "forgero:test-material"],
+  "attributes": [
+    {
+      "id": "forgero:test-zero-armor",
+      "type": "forgero:armor",
+      "computation": 0
+    },
+    {
+      "id": "forgero:test-zero-toughness",
+      "type": "forgero:armor-toughness",
+      "computation": 0
+    },
+    {
+      "id": "forgero:test-zero-durability",
+      "type": "forgero:durability",
+      "computation": 0
+    }
+  ]
+}

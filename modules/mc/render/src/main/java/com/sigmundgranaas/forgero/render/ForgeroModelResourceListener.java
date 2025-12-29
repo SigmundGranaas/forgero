@@ -44,7 +44,9 @@ public class ForgeroModelResourceListener implements IdentifiableResourceReloadL
 	private static ComponentRegistry componentRegistry;
 
 	static {
-		ForgeroInitializedCallback.EVENT.register(services -> {
+		// Use registerAndReplay to handle the case where the callback already fired
+		// before this class was loaded (client initializers run after main initializers)
+		ForgeroInitializedCallback.registerAndReplay(services -> {
 			taggedComponents = services.taggedComponents();
 			tagResolver = services.tagResolver();
 			converter = services.converter();

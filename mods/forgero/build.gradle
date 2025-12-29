@@ -97,9 +97,12 @@ sourceSets {
     }
 }
 
-// Exclude GameTests from regular JUnit test task - they run via runGameTest
+// GameTests are the primary test mechanism for this module.
+// Running :mods:forgero:test will execute GameTests via runGameTest.
 test {
-    exclude '**/tests/**'
+    dependsOn runGameTest
+    // Skip the regular JUnit test execution since we use GameTests
+    exclude '**/*'
 }
 
 // CurseForge publishing

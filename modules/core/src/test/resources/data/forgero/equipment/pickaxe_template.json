@@ -18,7 +18,7 @@
       },
       "handle": {
         "type": "forgero:parts/handle_type",
-        "default": "forgero:static_oak_handle"
+        "default": "forgero:wooden_handle"
       }
     }
   }

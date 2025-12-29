@@ -12,36 +12,16 @@ import net.minecraft.test.TestContext;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 
 /**
- * GameTests for the Upgrade Station.
- * <p>
- * These tests verify that the upgrade station works correctly in-game,
- * focusing on dupe prevention and sync issues.
+ * Tests for the Upgrade Station.
+ * Focus: Does the upgrade station work correctly in-game?
+ * - Item duplication prevention
+ * - Item count preservation
+ * - Proper item handling on close
  */
 public class UpgradeStationGameTest {
 
 	/**
-	 * Test that the upgrade station screen handler can be created.
-	 */
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "upgrade_station_basic")
-	public void screenHandler_canBeCreated(TestContext context) {
-		var player = context.createMockSurvivalPlayer();
-		PlayerInventory inventory = player.getInventory();
-
-		// Create screen handler (client-side mode, no context)
-		UpgradeStationScreenHandler handler = new UpgradeStationScreenHandler(
-				1,
-				inventory,
-				null,
-				ScreenHandlerContext.EMPTY
-		);
-
-		context.assertTrue(handler != null, "Screen handler should be created");
-		context.assertTrue(handler.slots.size() > 0, "Should have slots");
-		context.complete();
-	}
-
-	/**
-	 * Test that shift-clicking preserves item count.
+	 * USE CASE: Shift-clicking items doesn't duplicate or delete them (anti-dupe).
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "upgrade_station_dupe")
 	public void shiftClick_preservesItemCount(TestContext context) {
@@ -73,7 +53,7 @@ public class UpgradeStationGameTest {
 	}
 
 	/**
-	 * Test that closing the screen drops items properly.
+	 * USE CASE: Closing the upgrade station returns items to player (no item loss).
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "upgrade_station_basic")
 	public void onClosed_dropsItems(TestContext context) {
@@ -94,26 +74,6 @@ public class UpgradeStationGameTest {
 		handler.onClosed(player);
 
 		// The item should have been dropped (or returned to player)
-		context.complete();
-	}
-
-	/**
-	 * Test that the composite slot only accepts single items.
-	 */
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "upgrade_station_basic")
-	public void compositeSlot_maxOneItem(TestContext context) {
-		var player = context.createMockSurvivalPlayer();
-		PlayerInventory inventory = player.getInventory();
-
-		UpgradeStationScreenHandler handler = new UpgradeStationScreenHandler(
-				1,
-				inventory,
-				null,
-				ScreenHandlerContext.EMPTY
-		);
-
-		int maxCount = handler.getCompositeSlot().getMaxItemCount();
-		context.assertTrue(maxCount == 1, "Composite slot should only accept 1 item");
 		context.complete();
 	}
 

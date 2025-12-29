@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-tools-test",
+  "version": "${version}",
+  "name": "Forgero Tools Tests",
+  "description": "GameTests for Forgero Tools module.",
+  "authors": [
+    "Sigmund Granaas"
+  ],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-gametest": [
+      "com.sigmundgranaas.forgero.tools.ToolItemTest",
+      "com.sigmundgranaas.forgero.tools.ToolBehaviorIntegrationGametest"
+    ]
+  },
+  "depends": {
+    "forgero-tools": "*"
+  }
+}

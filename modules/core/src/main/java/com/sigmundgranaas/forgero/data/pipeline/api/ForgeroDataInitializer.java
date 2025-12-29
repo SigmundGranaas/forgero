@@ -72,10 +72,10 @@ public class ForgeroDataInitializer {
 		// Use the pre-loaded TagResolver from the config
 		TagResolver tagResolver = config.tagResolver();
 		Codec<Condition> conditionCodec = new com.sigmundgranaas.forgero.core.condition.api.ConditionCodec(config.staticConditionCodecs(), config.dynamicConditionCodecs());
-		Codec<List<AttributeData>> attributeDataListCodec = Codec.list(AttributeCodecs.create(conditionCodec));
 		Codec<List<UpgradeSlotData>> upgradeSlotDataListCodec = Codec.list(PartTemplateCodecs.UPGRADE_SLOT_DATA_CODEC);
 
-		DefinitionCodecRegistry codecRegistry = DefinitionCodecRegistry.createDefault(attributeDataListCodec, upgradeSlotDataListCodec);
+		// Use batch-enabled codec registry to support both traditional and batch attribute formats
+		DefinitionCodecRegistry codecRegistry = DefinitionCodecRegistry.createWithBatchSupport(conditionCodec, upgradeSlotDataListCodec);
 		ResourceConverter<RawDefinition> converter = new RawDefinitionConverter(identifierFactory, codecRegistry);
 		ResourceLoader<RawDefinition> dataLoader = new ResourceLoader<>(config.resourceProvider(), converter);
 

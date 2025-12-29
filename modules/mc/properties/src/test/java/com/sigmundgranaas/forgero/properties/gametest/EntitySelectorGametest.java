@@ -15,8 +15,16 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
+/**
+ * Tests entity selectors for OnHit effects.
+ * Focus: Do selectors correctly identify target entities?
+ * - Single target, AOE, cone, chain selectors
+ */
 public class EntitySelectorGametest {
 
+	/**
+	 * USE CASE: OnHit effect targets only the hit entity.
+	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
 	public void testSingleTargetSelector(TestContext context) {
 		SingleTargetSelector selector = new SingleTargetSelector(List.of());

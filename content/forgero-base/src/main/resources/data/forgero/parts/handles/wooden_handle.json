@@ -1,0 +1,17 @@
+{
+  "type": "forgero:static_part",
+  "name": "Wooden Handle",
+  "tags": ["forgero:handle", "forgero:default_handle"],
+  "host": {
+    "identifiers": [
+      { "type": "item", "id": "minecraft:stick" }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:wooden-handle-durability",
+      "type": "forgero:durability",
+      "computation": {"value": 50, "operation": "addition"}
+    }
+  ]
+}

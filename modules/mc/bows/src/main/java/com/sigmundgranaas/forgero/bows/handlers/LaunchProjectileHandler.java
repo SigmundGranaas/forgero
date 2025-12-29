@@ -1,10 +1,13 @@
 package com.sigmundgranaas.forgero.bows.handlers;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.sigmundgranaas.forgero.bows.entity.DynamicArrowEntity;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.useinteraction.UseContext;
@@ -20,6 +23,7 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ArrowItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.sound.SoundCategory;
@@ -85,6 +89,27 @@ public record LaunchProjectileHandler(
 			).apply(instance, LaunchProjectileHandler::new)
 	);
 
+	/**
+	 * Determines whether to use DynamicArrowEntity for this arrow.
+	 * Custom Forgero arrow components use DynamicArrowEntity to support custom models and properties.
+	 *
+	 * @param arrowStack The arrow ItemStack
+	 * @return true if DynamicArrowEntity should be used, false for vanilla arrow entity
+	 */
+	private boolean shouldUseDynamicArrow(ItemStack arrowStack) {
+		// Any arrow that converts to a Forgero Component is a custom arrow
+		// Custom arrows need DynamicArrowEntity for custom models and property system integration
+		if (converter == null) {
+			LOGGER.error("ComponentConverter is null in shouldUseDynamicArrow - cannot detect Forgero arrows");
+			return false;
+		}
+
+		boolean isComponent = converter.toComponent(arrowStack).isPresent();
+		LOGGER.debug("shouldUseDynamicArrow check: arrow={}, isComponent={}",
+			arrowStack.getItem().getTranslationKey(), isComponent);
+		return isComponent;
+	}
+
 	@Override
 	public void apply(UseContext context) {
 		if (context.isClient()) {
@@ -107,9 +132,19 @@ public record LaunchProjectileHandler(
 			}
 
 			World world = context.world();
-			ArrowItem arrowItem = (arrowStack.getItem() instanceof ArrowItem ai) ? ai : (ArrowItem) Items.ARROW;
 
-			PersistentProjectileEntity projectile = arrowItem.createArrow(world, arrowStack, player);
+			// Automatic detection: use DynamicArrowEntity for Forgero arrows, vanilla for standard arrows
+			PersistentProjectileEntity projectile;
+			if (shouldUseDynamicArrow(arrowStack)) {
+				// Create DynamicArrowEntity for custom Forgero arrows (supports custom models and properties)
+				projectile = new DynamicArrowEntity(world, player, arrowStack);
+				LOGGER.debug("Created DynamicArrowEntity for Forgero arrow: {}", arrowStack.getItem().getTranslationKey());
+			} else {
+				// Use vanilla arrow creation for standard arrows
+				ArrowItem arrowItem = (arrowStack.getItem() instanceof ArrowItem ai) ? ai : (ArrowItem) Items.ARROW;
+				projectile = arrowItem.createArrow(world, arrowStack, player);
+				LOGGER.debug("Created vanilla arrow entity for: {}", arrowStack.getItem().getTranslationKey());
+			}
 
 			// Resolve draw power and accuracy from component, fall back to handler config
 			float resolvedPower = resolveAttribute(bowStack, DRAW_POWER_ATTR, basePower);
@@ -127,6 +162,7 @@ public record LaunchProjectileHandler(
 			applyEnchantments(bowStack, projectile, player);
 
 			world.spawnEntity(projectile);
+
 			playSound(world, player, pullProgress);
 
 			LOGGER.debug("Launched projectile for player {}: velocity={}, divergence={}, critical={}, power={}, accuracy={}",
@@ -139,11 +175,35 @@ public record LaunchProjectileHandler(
 	}
 
 	private ItemStack getArrowStack(PlayerEntity player, ItemStack bowStack) {
-		ItemStack arrowStack = player.getProjectileType(bowStack);
-		if (arrowStack.isEmpty() && player.getAbilities().creativeMode) {
-			arrowStack = new ItemStack(Items.ARROW);
+		// IMPORTANT: We cannot use player.getProjectileType() because it creates a new ItemStack
+		// instead of returning the actual one from inventory. This causes ForgeroArrowItem instances
+		// to be converted to vanilla ArrowItem, breaking Forgero arrow detection.
+		// Instead, we search the inventory directly for arrow items.
+
+		// Check offhand first (vanilla behavior)
+		ItemStack offhandStack = player.getOffHandStack();
+		if (!offhandStack.isEmpty() && offhandStack.getItem() instanceof ArrowItem) {
+			LOGGER.debug("Found arrow in offhand: {}", offhandStack.getItem().getTranslationKey());
+			return offhandStack;
 		}
-		return arrowStack;
+
+		// Search main inventory for arrows
+		for (int i = 0; i < player.getInventory().size(); i++) {
+			ItemStack stack = player.getInventory().getStack(i);
+			if (!stack.isEmpty() && stack.getItem() instanceof ArrowItem) {
+				LOGGER.debug("Found arrow in inventory slot {}: {}", i, stack.getItem().getTranslationKey());
+				return stack;
+			}
+		}
+
+		// Creative mode fallback
+		if (player.getAbilities().creativeMode) {
+			LOGGER.debug("No arrows found in inventory, using creative mode fallback (vanilla arrow)");
+			return new ItemStack(Items.ARROW);
+		}
+
+		LOGGER.debug("No arrows found for player {}", player.getName().getString());
+		return ItemStack.EMPTY;
 	}
 
 	private void applyEnchantments(ItemStack bowStack, PersistentProjectileEntity projectile, PlayerEntity player) {
@@ -208,14 +268,15 @@ public record LaunchProjectileHandler(
 	 * @return The resolved attribute value, or fallback if not available
 	 */
 	private static float resolveAttribute(ItemStack stack, OpenIdentifier attr, float fallback) {
-		return converter.toComponent(stack)
+		Optional<Float> result = converter.toComponent(stack)
 				.map(component -> {
-					AttributeQueryResult result = resolver
+					AttributeQueryResult attrResult = resolver
 							.resolve(component, new AttributeEngine());
-					return result.getValue(attr);
+					return attrResult.getValue(attr);
 				})
-				.filter(value -> value > 0)
-				.orElse(fallback);
+				.filter(value -> value > 0);
+
+		return result.orElse(fallback);
 	}
 
 	/**

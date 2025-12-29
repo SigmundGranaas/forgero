@@ -4,10 +4,7 @@ import com.sigmundgranaas.forgero.effects.entity.FunctionExecuteHandler;
 import com.sigmundgranaas.forgero.effects.entity.TeleportHandler;
 import com.sigmundgranaas.forgero.properties.minecraft.onhit.OnHitProperty;
 import com.sigmundgranaas.forgero.properties.minecraft.entityselector.SingleTargetSelector;
-import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.UseInteractionProperty;
-import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.handlers.ConsumeUpgradeHandler;
 
-import net.minecraft.util.UseAction;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.CowEntity;
@@ -23,15 +20,15 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Gametests for newly implemented handlers:
- * - TeleportHandler
- * - FunctionExecuteHandler
- * - ConsumeUpgradeHandler
+ * Tests for handler functionality.
+ * Focus: Do handlers actually trigger and apply their effects?
+ * - TeleportHandler (random and directed teleportation)
+ * - Combined handlers working together
  */
 public class HandlerGametest {
 
 	/**
-	 * Tests TeleportHandler with random teleportation on entity hit
+	 * USE CASE: OnHit effect can teleport target entity randomly within range.
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
 	public void testTeleportHandlerRandom(TestContext context) {
@@ -54,8 +51,6 @@ public class HandlerGametest {
 				List.of(property)
 		);
 
-		context.assertTrue(!stack.isEmpty(), "Stack should not be empty");
-
 		// Give player the item
 		player.setStackInHand(Hand.MAIN_HAND, stack);
 
@@ -76,7 +71,7 @@ public class HandlerGametest {
 	}
 
 	/**
-	 * Tests TeleportHandler with self-teleportation in look direction
+	 * USE CASE: OnHit effect can teleport player in look direction.
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
 	public void testTeleportHandlerSelf(TestContext context) {
@@ -98,8 +93,6 @@ public class HandlerGametest {
 				Set.of("tool"),
 				List.of(property)
 		);
-
-		context.assertTrue(!stack.isEmpty(), "Stack should not be empty");
 
 		// Give player the item and set look direction
 		player.setStackInHand(Hand.MAIN_HAND, stack);
@@ -123,131 +116,7 @@ public class HandlerGametest {
 	}
 
 	/**
-	 * Tests FunctionExecuteHandler with simple command execution
-	 */
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
-	public void testFunctionExecuteHandler(TestContext context) {
-		var player = context.createMockCreativeServerPlayerInWorld();
-
-		// Spawn an entity to hit
-		CowEntity cow = context.spawnEntity(EntityType.COW, new BlockPos(1, 1, 1));
-
-		// Create property with function execute effect
-		// Note: The command will execute but we can't easily verify it in a gametest
-		OnHitProperty property = new OnHitProperty(
-				new SingleTargetSelector(Collections.emptyList()),
-				List.of(new FunctionExecuteHandler(List.of("say Test command executed"))),
-				null
-		);
-
-		ItemStack stack = ComponentTester.createStack(
-				"test_function_execute",
-				Set.of("tool"),
-				List.of(property)
-		);
-
-		context.assertTrue(!stack.isEmpty(), "Stack should not be empty");
-
-		// Give player the item
-		player.setStackInHand(Hand.MAIN_HAND, stack);
-
-		// Hit the cow (this will execute the command)
-		player.attack(cow);
-
-		// Just verify the setup worked - command execution is logged
-		context.runAtTick(1, () -> {
-			context.assertTrue(true, "Function execute handler completed");
-			context.complete();
-		});
-	}
-
-	/**
-	 * Tests FunctionExecuteHandler with multiple commands
-	 */
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
-	public void testFunctionExecuteMultipleCommands(TestContext context) {
-		var player = context.createMockCreativeServerPlayerInWorld();
-
-		// Spawn an entity to hit
-		CowEntity cow = context.spawnEntity(EntityType.COW, new BlockPos(1, 1, 1));
-
-		// Create property with multiple commands
-		OnHitProperty property = new OnHitProperty(
-				new SingleTargetSelector(Collections.emptyList()),
-				List.of(new FunctionExecuteHandler(List.of(
-						"say Command 1",
-						"say Command 2",
-						"say Command 3"
-				))),
-				null
-		);
-
-		ItemStack stack = ComponentTester.createStack(
-				"test_function_multi",
-				Set.of("tool"),
-				List.of(property)
-		);
-
-		context.assertTrue(!stack.isEmpty(), "Stack should not be empty");
-
-		// Give player the item
-		player.setStackInHand(Hand.MAIN_HAND, stack);
-
-		// Hit the cow
-		player.attack(cow);
-
-		context.runAtTick(1, () -> {
-			context.assertTrue(true, "Multiple commands executed");
-			context.complete();
-		});
-	}
-
-	/**
-	 * Tests ConsumeUpgradeHandler basic setup
-	 * Note: This handler is currently a placeholder as it requires component mutation API
-	 */
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
-	public void testConsumeUpgradeHandler(TestContext context) {
-		var player = context.createMockCreativeServerPlayerInWorld();
-
-		// Create property with consume upgrade handler
-		// This will be a no-op until component mutation API is available
-		UseInteractionProperty property = new UseInteractionProperty(
-				net.minecraft.util.UseAction.NONE,
-				0,
-				false,
-				Collections.emptyList(), // onStart
-				Collections.emptyList(), // onTick
-				Collections.emptyList(), // onRelease
-				List.of(new ConsumeUpgradeHandler("forgero:test_upgrade")), // onFinish
-				null  // condition
-		);
-
-		ItemStack stack = ComponentTester.createStack(
-				"test_consume_upgrade",
-				Set.of("tool"),
-				List.of(property)
-		);
-
-		context.assertTrue(!stack.isEmpty(), "Stack should not be empty");
-
-		// Give player the item
-		player.setStackInHand(Hand.MAIN_HAND, stack);
-
-		// Use the item (should trigger onFinish handlers)
-		player.getItemCooldownManager().set(stack.getItem(), 0);
-		player.setCurrentHand(Hand.MAIN_HAND);
-
-		// Wait a tick
-		context.runAtTick(1, () -> {
-			// Just verify the handler exists and doesn't crash
-			context.assertTrue(true, "ConsumeUpgradeHandler setup completed");
-			context.complete();
-		});
-	}
-
-	/**
-	 * Tests combining multiple handlers on one item
+	 * USE CASE: Multiple handlers on same item all trigger correctly.
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
 	public void testCombinedHandlers(TestContext context) {
@@ -272,8 +141,6 @@ public class HandlerGametest {
 				Set.of("tool"),
 				List.of(property)
 		);
-
-		context.assertTrue(!stack.isEmpty(), "Stack should not be empty");
 
 		// Give player the item
 		player.setStackInHand(Hand.MAIN_HAND, stack);

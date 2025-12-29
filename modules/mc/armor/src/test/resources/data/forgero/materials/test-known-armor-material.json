@@ -1,0 +1,27 @@
+{
+  "type": "forgero:material",
+  "name": "test-known-armor-material",
+  "tags": ["forgero:armor-material", "forgero:test-material"],
+  "attributes": [
+    {
+      "id": "forgero:test-known-armor",
+      "type": "forgero:armor",
+      "computation": 5
+    },
+    {
+      "id": "forgero:test-known-toughness",
+      "type": "forgero:armor-toughness",
+      "computation": 2.5
+    },
+    {
+      "id": "forgero:test-known-knockback",
+      "type": "forgero:knockback-resistance",
+      "computation": 0.2
+    },
+    {
+      "id": "forgero:test-known-durability",
+      "type": "forgero:durability",
+      "computation": 250
+    }
+  ]
+}

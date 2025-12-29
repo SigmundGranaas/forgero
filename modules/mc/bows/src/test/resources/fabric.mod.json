@@ -12,7 +12,11 @@
     "main": [
     ],
     "fabric-gametest": [
-      "com.sigmundgranaas.forgero.bows.gametest.BowHandlerGametest"
+      "com.sigmundgranaas.forgero.bows.gametest.BowHandlerGametest",
+      "com.sigmundgranaas.forgero.bows.gametest.DynamicArrowBehaviorTest"
     ]
+  },
+  "custom": {
+    "forgeroResource": true
   }
 }

@@ -25,8 +25,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+/**
+ * Tests OnHit effect handlers for real behavior.
+ * Focus: Do OnHit effects actually trigger and work correctly?
+ * - Fire, status effects, knockback, lifesteal, lightning, etc.
+ */
 public class OnHitHandlerGametest {
 
+	/**
+	 * USE CASE: OnHit effect can set target on fire.
+	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
 	public void testFireHandler(TestContext context) {
 		FireHandler handler = new FireHandler(5); // 5 seconds

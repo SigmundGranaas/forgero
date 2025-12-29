@@ -1,0 +1,23 @@
+{
+  "type": "forgero:material",
+  "name": "test_attack_damage_arrow_material",
+  "name_space": "forgero-test",
+  "tags": ["forgero:materials/tool_material"],
+  "attributes": [
+    {
+      "id": "forgero:test-arrow-attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": {
+        "value": 5.0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          }
+        ]
+      }
+    }
+  ]
+}

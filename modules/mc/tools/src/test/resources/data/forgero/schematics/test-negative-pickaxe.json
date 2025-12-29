@@ -1,0 +1,8 @@
+{
+  "type": "forgero:schematic",
+  "name": "test-negative-pickaxe",
+  "material": "forgero:test-negative-tool-material",
+  "tags": ["forgero:pickaxe", "forgero:tool", "forgero:test-component"],
+  "item-type": "minecraft:pickaxe",
+  "attributes": []
+}

@@ -84,11 +84,34 @@ public class RecursiveModelResolver implements ItemModelResolver {
 			Map<String, Optional<Component>> slots = customizable.getUpgradeSlots().stream()
 					.collect(Collectors.toMap(slot -> slot.id().path(), ComponentUpgradeSlot::getContent));
 
+			// Collect model slot IDs for reverse lookup
+			Set<String> modelSlotIds = composite.slots().stream()
+					.map(ModelSlot::id)
+					.collect(Collectors.toSet());
+
 			for (ModelSlot modelSlot : composite.slots().stream().toList()) {
 				if(slots.containsKey(modelSlot.id())) {
 					slots.get(modelSlot.id()).ifPresent(childComponent -> textures.addAll(resolveSlot(modelSlot, childComponent, context, baseOrder, composite)));
-				}else{
-					LOGGER.warn("No upgrade slot found in component found for slot {} in component {}",  modelSlot.id(), customizable.id());
+				} else {
+					// Model defines slot '{}' but component '{}' doesn't have this upgrade slot.
+					// This is expected - models are generic templates defining all possible slots,
+					// but components only have slots defined in their data/schematic.
+					// Example: handle model defines grip_slot/pommel_slot, but basic handles don't support these upgrades.
+					LOGGER.debug("Model slot '{}' not found in component '{}' - component doesn't define this upgrade slot",
+							modelSlot.id(), customizable.id());
+				}
+			}
+
+			// Check for component upgrade slots that have no corresponding model slot - these upgrades won't render!
+			for (var entry : slots.entrySet()) {
+				if (!modelSlotIds.contains(entry.getKey())) {
+					if (entry.getValue().isPresent()) {
+						LOGGER.warn("Component '{}' has filled upgrade slot '{}' with content '{}', but model has no slot for it - upgrade will not render!",
+								customizable.id(), entry.getKey(), entry.getValue().get().id());
+					} else {
+						LOGGER.warn("Component '{}' defines upgrade slot '{}', but model has no corresponding slot - upgrades in this slot won't render",
+								customizable.id(), entry.getKey());
+					}
 				}
 			}
 		}

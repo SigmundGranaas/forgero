@@ -156,7 +156,7 @@
         "static": [
           {
             "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
+            "slot_type": "forgero:armor_material"
           },
           {
             "type": "forgero:has_other_contributor",

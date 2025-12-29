@@ -1,0 +1,27 @@
+{
+  "type": "forgero:material",
+  "name": "test-known-tool-material",
+  "tags": ["forgero:tool-material", "forgero:test-material"],
+  "attributes": [
+    {
+      "id": "forgero:test-known-mining-speed",
+      "type": "forgero:mining-speed",
+      "computation": 8.0
+    },
+    {
+      "id": "forgero:test-known-attack-damage",
+      "type": "forgero:attack-damage",
+      "computation": 6.0
+    },
+    {
+      "id": "forgero:test-known-mining-level",
+      "type": "forgero:mining-level",
+      "computation": 3
+    },
+    {
+      "id": "forgero:test-known-durability",
+      "type": "forgero:durability",
+      "computation": 1561
+    }
+  ]
+}

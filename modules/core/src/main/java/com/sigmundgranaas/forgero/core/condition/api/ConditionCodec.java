@@ -120,8 +120,28 @@ public final class ConditionCodec implements Codec<Condition> {
 					});
 					logicalResult.error().ifPresent(error -> LOGGER.warn("Failed to parse logical condition: {}", error.message()));
 				} else {
-					staticDispatcher.parse(JsonOps.INSTANCE, predicateJson).result().ifPresent(staticResults::add);
-					dynamicDispatcher.parse(JsonOps.INSTANCE, predicateJson).result().ifPresent(dynamicResults::add);
+					// Try static first, then dynamic
+					DataResult<StaticCondition> staticResult = staticDispatcher.parse(JsonOps.INSTANCE, predicateJson);
+					DataResult<DynamicCondition> dynamicResult = dynamicDispatcher.parse(JsonOps.INSTANCE, predicateJson);
+
+					boolean parsedAny = false;
+					if (staticResult.result().isPresent()) {
+						staticResults.add(staticResult.result().get());
+						parsedAny = true;
+					}
+					if (dynamicResult.result().isPresent()) {
+						dynamicResults.add(dynamicResult.result().get());
+						parsedAny = true;
+					}
+
+					// CRITICAL: Log error if neither static nor dynamic codec recognized the type
+					// This prevents silent failures where conditions are silently dropped
+					if (!parsedAny) {
+						LOGGER.error("CONDITION PARSE FAILURE: Unknown condition type '{}'. " +
+								"This condition will be IGNORED, which may cause attribute leaks! " +
+								"Ensure the condition codec is registered. JSON: {}",
+								type, predicateJson);
+					}
 				}
 			}
 			return DataResult.success(Pair.of(new Condition(staticResults, dynamicResults), pair.getSecond()));

@@ -1,0 +1,38 @@
+{
+  "type": "forgero:material",
+  "name": "test_combo_bow_material",
+  "name_space": "forgero-test",
+  "tags": ["forgero:materials/tool_material"],
+  "attributes": [
+    {
+      "id": "forgero:test-combo-draw_power",
+      "type": "forgero:draw_power",
+      "computation": {
+        "value": 8.0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:test-combo-accuracy",
+      "type": "forgero:accuracy",
+      "computation": {
+        "value": 95.0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          }
+        ]
+      }
+    }
+  ]
+}

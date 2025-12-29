@@ -1,0 +1,45 @@
+{
+  "type": "forgero:part_model_template",
+  "target": {
+    "tag": "forgero:materials/tool_material"
+  },
+  "model": {
+    "id": "forgero:item/{target.name}-handle",
+    "type": "forgero:composite_model",
+    "target": "forgero:{target.name}-handle",
+    "layers": [
+      {
+        "order": 10,
+        "template": "forgero:texture_template/parts/handle",
+        "palette": "forgero:palette/{target.name}",
+        "output": "forgero:item/{target.name}-handle"
+      }
+    ],
+    "slots": [
+      {
+        "id": "grip_slot",
+        "order": 25,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "grip"
+        }
+      },
+      {
+        "id": "pommel_slot",
+        "order": 5,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "pommel"
+        }
+      },
+      {
+        "id": "handle-cosmetic",
+        "order": 15,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "handle_dye"
+        }
+      }
+    ]
+  }
+}

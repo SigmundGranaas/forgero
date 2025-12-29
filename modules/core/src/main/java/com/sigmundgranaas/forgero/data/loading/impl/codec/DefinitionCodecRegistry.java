@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.data.loading.impl.codec;
 
 import com.mojang.serialization.Codec;
+import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.data.loading.api.data.DefinitionData;
 import com.sigmundgranaas.forgero.data.loading.api.data.ResourceData;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
@@ -100,6 +101,42 @@ public class DefinitionCodecRegistry {
 		var registry = new DefinitionCodecRegistry(resourceCodec);
 
 		// All resource types use the unified ResourceDataCodec
+		registry.register("material", resourceCodec);
+		registry.register("shape", resourceCodec);
+		registry.register("schematic", resourceCodec);
+		registry.register("cast", resourceCodec);
+		registry.register("static_part", resourceCodec);
+
+		// Templates have unique structure - use their specific codecs
+		registry.register("part_template", PartTemplateCodecs.create(attributeCodec, upgradeSlotCodec));
+		registry.register("equipment_template", EquipmentTemplateCodecs.create(attributeCodec, upgradeSlotCodec));
+		registry.register("tool_template", EquipmentTemplateCodecs.create(attributeCodec, upgradeSlotCodec)); // Legacy
+
+		// Extension type
+		registry.register("extension", ExtensionCodecs.create(attributeCodec));
+
+		return registry;
+	}
+
+	/**
+	 * Creates a registry with attribute batch support for all standard types.
+	 *
+	 * <p>This version supports both traditional {@code "attributes"} arrays and the new
+	 * {@code "attribute_batches"} compact syntax.</p>
+	 *
+	 * @param conditionCodec   Codec for parsing conditions
+	 * @param upgradeSlotCodec Codec for parsing upgrade slot lists
+	 * @return A fully configured registry with batch support
+	 */
+	public static DefinitionCodecRegistry createWithBatchSupport(
+			Codec<Condition> conditionCodec,
+			Codec<List<UpgradeSlotData>> upgradeSlotCodec
+	) {
+		Codec<List<AttributeData>> attributeCodec = Codec.list(AttributeCodecs.create(conditionCodec));
+		Codec<ResourceData> resourceCodec = ResourceDataCodec.createWithBatchSupport(conditionCodec, upgradeSlotCodec);
+		var registry = new DefinitionCodecRegistry(resourceCodec);
+
+		// All resource types use the batch-enabled ResourceDataCodec
 		registry.register("material", resourceCodec);
 		registry.register("shape", resourceCodec);
 		registry.register("schematic", resourceCodec);

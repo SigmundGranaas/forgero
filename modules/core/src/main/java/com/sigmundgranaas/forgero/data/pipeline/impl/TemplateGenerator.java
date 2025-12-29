@@ -185,7 +185,39 @@ public class TemplateGenerator {
 	}
 
 	private List<Map<String, CofComponent>> findCombinationsForEquipment(Map<String, EquipmentTemplateSlotData> slots, Map<OpenIdentifier, CofComponent> partsPool) {
-		return findCombinationsInternal(slots, partsPool, EquipmentTemplateSlotData::type, null);
+		if (slots.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		Map<String, List<CofComponent>> compatibles = slots.entrySet().stream()
+				.collect(Collectors.toMap(
+						Map.Entry::getKey,
+						entry -> {
+							EquipmentTemplateSlotData slotData = entry.getValue();
+							List<CofComponent> runtimeCompatible = findCompatibleComponents(slotData.type(), partsPool);
+
+							// Apply default filtering based on slot configuration
+							if (slotData.defaultComponent() != null) {
+								// Case 1: Explicit default component - only use that one
+								return runtimeCompatible.stream()
+										.filter(comp -> comp.id().equals(slotData.defaultComponent()))
+										.toList();
+							} else if (slotData.defaultTag() != null) {
+								// Case 2: Default tag - filter to components matching the tag
+								return runtimeCompatible.stream()
+										.filter(comp -> comp.tags().isPresent() &&
+												tagResolver.hasTag(() -> comp.tags().orElse(Set.of()), slotData.defaultTag()))
+										.toList();
+							}
+							// Case 3: No default specified - use all compatible components
+							return runtimeCompatible;
+						}
+				));
+
+		List<Map<String, CofComponent>> combinations = new ArrayList<>();
+		List<String> slotNames = new ArrayList<>(compatibles.keySet());
+		buildCombinationsRecursive(0, slotNames, compatibles, new HashMap<>(), combinations);
+		return combinations;
 	}
 
 	private <T> List<Map<String, CofComponent>> findCombinationsInternal(Map<String, T> slots, Map<OpenIdentifier, CofComponent> componentPool, java.util.function.Function<T, OpenIdentifier> typeExtractor, @Nullable com.sigmundgranaas.forgero.data.loading.api.data.GenerationConfigData generationConfig) {

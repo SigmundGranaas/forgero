@@ -1,0 +1,38 @@
+{
+  "type": "forgero:material",
+  "name": "test_light_arrow_material",
+  "name_space": "forgero-test",
+  "tags": ["forgero:materials/tool_material"],
+  "attributes": [
+    {
+      "id": "forgero:test-light-weight",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 1.0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:test-light-attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": {
+        "value": 2.0
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          }
+        ]
+      }
+    }
+  ]
+}

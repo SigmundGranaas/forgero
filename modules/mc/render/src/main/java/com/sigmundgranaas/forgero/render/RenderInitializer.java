@@ -22,6 +22,7 @@ import com.sigmundgranaas.forgero.render.model.item.ForgeroModelProvider;
 import com.sigmundgranaas.forgero.render.texture.RuntimeTextureWriter;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceProvider;
 import com.sigmundgranaas.forgero.utility.resource.loader.implementation.ClassPathResourceProvider;
+import com.sigmundgranaas.forgero.loader.impl.FabricResourceProvider;
 import com.sigmundgranaas.forgero.drp.api.DRPApi;
 import com.sigmundgranaas.forgero.drp.api.DynamicResourcePack;
 import com.sigmundgranaas.forgero.drp.api.lifecycle.ResourcePackPhase;
@@ -32,6 +33,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
@@ -65,7 +67,9 @@ public class RenderInitializer implements ClientModInitializer {
 	private static ComponentRegistry componentRegistry;
 
 	static {
-		ForgeroInitializedCallback.EVENT.register(services -> {
+		// Use registerAndReplay to handle the case where the callback already fired
+		// before this class was loaded (client initializers run after main initializers)
+		ForgeroInitializedCallback.registerAndReplay(services -> {
 			taggedComponents = services.taggedComponents();
 			tagResolver = services.tagResolver();
 			converter = services.converter();
@@ -80,11 +84,21 @@ public class RenderInitializer implements ClientModInitializer {
 
 		// STEP 1: Synchronous Pre-load Phase
 		// This runs once at startup, before the ModelLoader is created.
-		// It uses your ClassPathResourceProvider to guarantee all model data is
-		// loaded before the ModelLoadingPlugin is registered, eliminating the startup race condition.
+		// Try to use Minecraft's ResourceManager if available, as it can find resources across all mod JARs.
+		// Fall back to FabricResourceProvider which uses Fabric's ModContainer API to scan all mod JARs.
 		try {
 			LOGGER.info("Starting synchronous model pre-load...");
-			ResourceProvider preloadProvider = new ClassPathResourceProvider("assets");
+			ResourceProvider preloadProvider;
+			ResourceManager mcResourceManager = MinecraftClient.getInstance().getResourceManager();
+			if (mcResourceManager != null && !mcResourceManager.getAllNamespaces().isEmpty()) {
+				LOGGER.info("Using MinecraftResourceProvider for synchronous pre-load (namespaces: {})", mcResourceManager.getAllNamespaces().size());
+				preloadProvider = new MinecraftResourceProvider(mcResourceManager);
+			} else {
+				// Use FabricResourceProvider which properly scans all mod JARs using Fabric's ModContainer API
+				// This works before Minecraft's ResourceManager is ready and finds assets in nested JARs
+				LOGGER.info("ResourceManager not ready, using FabricResourceProvider for asset loading");
+				preloadProvider = new FabricResourceProvider("assets");
+			}
 
 			ItemModelRegistry itemModelRegistry = new MapBackedModelRegistry();
 			ArmorModelRegistry armorModelRegistry = new MapBackedArmorModelRegistry();

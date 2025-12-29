@@ -17,6 +17,13 @@
       }
     }
   },
+  "generation": {
+    "slots": {
+      "material": {
+        "require_any_tags": ["forgero:materials/metal"]
+      }
+    }
+  },
   "attributes": [
     {
       "id": "forgero:pommel-attack_speed",

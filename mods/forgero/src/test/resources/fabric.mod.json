@@ -13,7 +13,8 @@
       "com.sigmundgranaas.forgero.tests.VanillaToolParityTest",
       "com.sigmundgranaas.forgero.tests.UpgradeEffectivenessTest",
       "com.sigmundgranaas.forgero.tests.UpgradeValueTest",
-      "com.sigmundgranaas.forgero.tests.MaxedOutToolTest"
+      "com.sigmundgranaas.forgero.tests.MaxedOutToolTest",
+      "com.sigmundgranaas.forgero.tests.AttributeLeakRegressionTest"
     ]
   },
   "depends": {

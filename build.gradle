@@ -133,3 +133,159 @@ subprojects { project ->
 		}
 	}
 }
+
+// ==============================================================================
+// Claude Code Source Extraction Tasks
+// ==============================================================================
+
+tasks.register('extractMinecraftSources') {
+	group = 'claude'
+	description = 'Extract decompiled Minecraft sources to .minecraft/sources/minecraft for Claude analysis'
+
+	def outputDir = file(".minecraft/sources/minecraft")
+	outputs.dir(outputDir)
+
+	doLast {
+		// Find Minecraft sources JAR in Loom cache
+		// Try project-local cache first, then global cache
+		def loomCaches = [
+			file(".gradle/loom-cache"),
+			file("${gradle.gradleUserHomeDir}/caches/fabric-loom")
+		]
+
+		def minecraftSourcesJar = null
+		for (cacheDir in loomCaches) {
+			if (!cacheDir.exists()) continue
+
+			minecraftSourcesJar = fileTree(cacheDir) {
+				include '**/minecraft-merged-*-sources.jar'
+			}.files.find { it.name.contains('minecraft-merged') && it.name.endsWith('-sources.jar') }
+
+			if (minecraftSourcesJar?.exists()) break
+		}
+
+		if (!minecraftSourcesJar?.exists()) {
+			logger.error("Minecraft sources JAR not found in Loom cache.")
+			logger.error("Please ensure you have run genSources:")
+			logger.error("  ./gradlew :mods:forgero:genSources")
+			throw new GradleException(
+				"Minecraft sources not found. Run './gradlew :mods:forgero:genSources' first."
+			)
+		}
+
+		logger.lifecycle("Found Minecraft sources: ${minecraftSourcesJar.name}")
+		logger.lifecycle("Extracting to: ${outputDir.absolutePath}")
+
+		// Clean and extract
+		delete(outputDir)
+		outputDir.mkdirs()
+
+		copy {
+			from zipTree(minecraftSourcesJar)
+			into outputDir
+			exclude 'META-INF/**'
+		}
+
+		def fileCount = fileTree(outputDir).files.size()
+		logger.lifecycle("✓ Extracted ${fileCount} source files")
+		logger.lifecycle("✓ Claude can now analyze: .minecraft/sources/minecraft/")
+	}
+}
+
+tasks.register('extractJarSources') {
+	group = 'claude'
+	description = 'Extract sources from JARs (use -Pjars=group:artifact:version or -PjarPath=/path/to.jar)'
+
+	doLast {
+		def outputBaseDir = file(".minecraft/sources/mods")
+		outputBaseDir.mkdirs()
+
+		// Mode 1: Maven coordinates (-Pjars=...)
+		if (project.hasProperty('jars')) {
+			project.property('jars').split(',').each { coord ->
+				def parts = coord.trim().split(':')
+				if (parts.size() != 3) {
+					logger.error("Invalid coordinates: ${coord}. Expected format: group:artifact:version")
+					return
+				}
+
+				def (group, artifact, version) = parts
+
+				// Search Gradle cache for sources JAR
+				def cacheDir = file("${gradle.gradleUserHomeDir}/caches/modules-2/files-2.1/${group}/${artifact}/${version}")
+				def sourcesJar = fileTree(cacheDir) {
+					include '**/*-sources.jar'
+				}.files.find { it.name.endsWith('-sources.jar') }
+
+				if (!sourcesJar?.exists()) {
+					logger.warn("Sources JAR not found for ${coord}")
+					logger.warn("Tip: Ensure the dependency is resolved or use -PjarPath for direct path")
+					return
+				}
+
+				def outputDir = file("${outputBaseDir}/${artifact}-${version}")
+				logger.lifecycle("Extracting ${artifact} sources to ${outputDir.name}/")
+
+				delete(outputDir)
+				outputDir.mkdirs()
+				copy {
+					from zipTree(sourcesJar)
+					into outputDir
+					exclude 'META-INF/**'
+				}
+
+				def fileCount = fileTree(outputDir).files.size()
+				logger.lifecycle("✓ ${artifact}: ${fileCount} files extracted")
+			}
+		}
+		// Mode 2: Direct JAR path (-PjarPath=...)
+		else if (project.hasProperty('jarPath')) {
+			def jarPath = file(project.property('jarPath'))
+
+			if (!jarPath.exists()) {
+				throw new GradleException("JAR not found: ${jarPath}")
+			}
+
+			def jarName = jarPath.name.replaceAll(/(-sources)?\.jar$/, '')
+			def outputDir = file("${outputBaseDir}/${jarName}")
+
+			logger.lifecycle("Extracting ${jarPath.name}")
+
+			delete(outputDir)
+			outputDir.mkdirs()
+			copy {
+				from zipTree(jarPath)
+				into outputDir
+				exclude 'META-INF/**'
+			}
+
+			def fileCount = fileTree(outputDir).files.size()
+			logger.lifecycle("✓ Extracted ${fileCount} files to ${outputDir.name}/")
+		}
+		else {
+			throw new GradleException(
+				"Provide either -Pjars=group:artifact:version or -PjarPath=/path/to.jar\n" +
+				"Examples:\n" +
+				"  ./gradlew extractJarSources -Pjars=net.fabricmc.fabric-api:fabric-api:0.92.2+1.20.1\n" +
+				"  ./gradlew extractJarSources -PjarPath=/home/user/my-mod-sources.jar"
+			)
+		}
+
+		logger.lifecycle("✓ Sources available at: .minecraft/sources/mods/")
+	}
+}
+
+tasks.register('cleanExtractedSources') {
+	group = 'claude'
+	description = 'Remove all extracted sources from .minecraft directory'
+
+	doLast {
+		def minecraftDir = file('.minecraft')
+		if (minecraftDir.exists()) {
+			delete(minecraftDir)
+			logger.lifecycle("✓ Cleaned .minecraft/ directory")
+		} else {
+			logger.lifecycle("✓ Nothing to clean (.minecraft/ doesn't exist)")
+		}
+	}
+}

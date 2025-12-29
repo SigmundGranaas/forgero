@@ -59,6 +59,47 @@ Forgero is a Minecraft Fabric mod for deep tool/weapon/armor customization. The 
 ./gradlew publish
 ```
 
+## Extracting Sources for Claude Analysis
+
+Claude Code can analyze decompiled Minecraft and mod sources when extracted to the local filesystem.
+
+### Extract Minecraft Sources
+
+```bash
+./gradlew extractMinecraftSources
+```
+
+Extracts ~4,000 Minecraft source files to `.minecraft/sources/minecraft/`. Claude can then read:
+- `.minecraft/sources/minecraft/net/minecraft/item/ItemStack.java`
+- `.minecraft/sources/minecraft/net/minecraft/block/Block.java`
+- `.minecraft/sources/minecraft/entity/player/PlayerEntity.java`
+
+This allows Claude to analyze Minecraft's internals to understand how systems work, find the right methods to call, and ensure compatibility with Minecraft's code.
+
+### Extract Mod Sources
+
+```bash
+# Fabric API
+./gradlew extractJarSources -Pjars=net.fabricmc.fabric-api:fabric-api:0.92.2+1.20.1
+
+# Multiple mods (comma-separated)
+./gradlew extractJarSources -Pjars="com.jamieswhiteshirt:reach-entity-attributes:2.4.0,net.fabricmc.fabric-api:fabric-api:0.92.2+1.20.1"
+
+# Custom JAR file
+./gradlew extractJarSources -PjarPath=/path/to/my-mod-sources.jar
+```
+
+Extracted mod sources are placed in `.minecraft/sources/mods/{artifact}-{version}/`.
+
+### Clean Extracted Sources
+
+```bash
+./gradlew cleanExtractedSources
+# Or manually: rm -rf .minecraft/
+```
+
+**Note:** The `.minecraft/` directory is git-ignored and safe to delete anytime. Regenerate sources as needed using the tasks above.
+
 ## Module Architecture
 
 Forgero uses a multi-module architecture with strict dependency rules:
@@ -137,6 +178,136 @@ Optional<Component> comp = registry.find(identifier);
 PropertyResolver resolver = api.resolver();
 List<Property> props = resolver.resolve(component, engine, context);
 ```
+
+### Modular ItemStack APIs
+
+For developers more familiar with Minecraft's ItemStack API, Forgero provides three modular, capability-based APIs that abstract away internal Component details. These APIs work directly with `ItemStack` and return sensible defaults (0, false, empty collections) for non-Forgero items.
+
+#### ItemQueryApi - Read-Only Queries
+
+Provides read-only access to item properties without exposing internal Component abstractions.
+
+```java
+ItemQueryApi query = ForgeroApi.itemQuery();
+
+// Check item properties
+if (query.isForgeroItem(stack)) {
+    boolean customizable = query.isCustomizable(stack);
+    boolean hasSlots = query.hasEmptySlots(stack);
+    int partCount = query.getPartCount(stack);
+}
+
+// Query attributes
+float damage = query.getAttackDamage(stack);
+int durability = query.getMaxDurability(stack);
+float miningSpeed = query.getMiningSpeed(stack);
+int miningLevel = query.getMiningLevel(stack);
+
+// Get composition
+List<ItemStack> parts = query.getParts(stack);
+List<ItemStack> upgrades = query.getInstalledUpgrades(stack);
+Optional<OpenIdentifier> material = query.getPrimaryMaterial(stack);
+
+// Check slots
+int totalSlots = query.getUpgradeSlotCount(stack);
+int emptySlots = query.getEmptySlotCount(stack);
+int filledSlots = query.getFilledSlotCount(stack);
+
+// Query tags
+boolean hasFire = query.hasTag(stack, OpenIdentifier.of("forgero:fire"));
+Set<OpenIdentifier> allTags = query.getTags(stack);
+```
+
+**Returns sensible defaults** for vanilla items:
+- Numeric queries: `0` or `0.0f`
+- Boolean queries: `false`
+- Collection queries: Empty collections
+- Optional queries: `Optional.empty()`
+
+#### ItemMutationApi - Upgrade Operations
+
+Provides immutable upgrade operations that return new ItemStacks.
+
+```java
+ItemMutationApi mutate = ForgeroApi.itemMutation();
+
+// Check compatibility before installing
+if (mutate.canInstallUpgrade(tool, gem)) {
+    // Install upgrade (returns new ItemStack, original unchanged)
+    ItemStack upgraded = mutate.installUpgrade(tool, gem);
+
+    // Remove specific upgrade by ID
+    ItemStack removed = mutate.removeUpgrade(upgraded, OpenIdentifier.of("forgero:diamond_gem"));
+
+    // Clear all upgrades
+    ItemStack cleared = mutate.removeAllUpgrades(upgraded);
+}
+```
+
+**Immutability guarantee**: All mutation methods return new ItemStacks, original stacks are never modified.
+
+**Failure behavior**: Returns original stack on failure (incompatible items, null inputs, etc.)
+
+#### ItemComparisonApi - Type and Similarity Checking
+
+Provides stateless comparison operations for ItemStacks.
+
+```java
+ItemComparisonApi compare = ForgeroApi.itemComparison();
+
+// Compare by type (ignoring NBT state like durability, upgrades)
+if (compare.isSameType(stack1, stack2)) {
+    // Same tool type (e.g., both iron pickaxes)
+}
+
+// Compare structure (same base parts, ignoring upgrades)
+if (compare.areSimilar(stack1, stack2)) {
+    // Same structure parts, but may have different upgrades
+}
+```
+
+**Comparison semantics**:
+- `isSameType()`: Compares component IDs (stateless), falls back to vanilla item comparison
+- `areSimilar()`: Compares structure parts, ignores upgrades (only works for Forgero items)
+
+#### Benefits of Modular APIs
+
+**Before** (Component-based approach):
+```java
+// Getting attack damage required understanding Components, Resolvers, AttributeEngines
+Optional<Component> comp = ForgeroApi.converter().toComponent(stack);
+if (comp.isPresent()) {
+    AttributeEngine engine = new AttributeEngine();
+    AttributeQueryResult result = ForgeroApi.resolver().resolve(comp.get(), engine, DynamicContext.empty());
+    float damage = result.getValue(DefaultAttributes.ATTACK_DAMAGE);
+}
+
+// Installing upgrade required Component round-tripping
+Optional<Component> toolComp = ForgeroApi.converter().toComponent(tool);
+Optional<Component> gemComp = ForgeroApi.converter().toComponent(gem);
+if (toolComp.isPresent() && gemComp.isPresent()) {
+    InstallationResult result = ForgeroApi.slotManager().install(toolComp.get(), gemComp.get());
+    if (result.success() && result.component().isPresent()) {
+        tool = ForgeroApi.converter().toStack(result.component().get()).orElse(tool);
+    }
+}
+```
+
+**After** (Modular APIs):
+```java
+// Getting attack damage is one line
+float damage = ForgeroApi.itemQuery().getAttackDamage(stack);
+
+// Installing upgrade is one line
+tool = ForgeroApi.itemMutation().installUpgrade(tool, gem);
+```
+
+**Advantages**:
+- **Simpler**: No Component exposure, no Optional chains
+- **Modular**: Use only the APIs you need (query-only code doesn't need mutation API)
+- **Safer**: Null-safe, returns sensible defaults
+- **Cleaner**: Less boilerplate, more readable code
+- **Familiar**: Works with ItemStack like vanilla Minecraft
 
 ### Plugin System
 Forgero uses a plugin-based architecture for extensibility. Plugins are registered via `fabric.mod.json`:

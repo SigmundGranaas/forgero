@@ -14,10 +14,17 @@ import net.minecraft.util.Identifier;
 
 import java.util.Optional;
 
+/**
+ * Tests ItemPredicate for tag-based item matching.
+ * Focus: Does ItemPredicate correctly match items by tags?
+ */
 public class ItemPredicateGametest {
 	private static final String EMPTY_STRUCTURE = FabricGameTest.EMPTY_STRUCTURE;
 	private static final TagKey<Item> SWORDS_TAG = TagKey.of(Registries.ITEM.getKey(), new Identifier("minecraft", "swords"));
 
+	/**
+	 * USE CASE: Properties can filter items by tag (e.g., "only apply to swords").
+	 */
 	@GameTest(templateName = EMPTY_STRUCTURE)
 	public void testTagMatch(TestContext context) {
 		ItemPredicate predicate = new ItemPredicate(Optional.empty(), Optional.of(SWORDS_TAG), Optional.empty());

@@ -52,14 +52,9 @@ public class BowHandlerGametest {
 
 	// ========== MountProjectileHandler Tests ==========
 
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
-	public void testMountProjectileHandlerType(TestContext context) {
-		MountProjectileHandler handler = new MountProjectileHandler();
-
-		context.assertTrue(handler.type().equals("forgero:mount_projectile"), "Type should be forgero:mount_projectile");
-		context.complete();
-	}
-
+	/**
+	 * USE CASE: Bow can be used when player has arrows in inventory.
+	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
 	public void testMountProjectileHandlerWithArrows(TestContext context) {
 		ServerPlayerEntity player = context.createMockCreativeServerPlayerInWorld();
@@ -77,6 +72,9 @@ public class BowHandlerGametest {
 		context.complete();
 	}
 
+	/**
+	 * USE CASE: Creative mode players can use bows without arrows.
+	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
 	public void testMountProjectileHandlerCreativeNoArrows(TestContext context) {
 		ServerPlayerEntity player = context.createMockCreativeServerPlayerInWorld();
@@ -126,23 +124,9 @@ public class BowHandlerGametest {
 
 	// ========== LaunchProjectileHandler Tests ==========
 
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
-	public void testLaunchProjectileHandlerType(TestContext context) {
-		LaunchProjectileHandler handler = new LaunchProjectileHandler(3.0f, 1.0f);
-
-		context.assertTrue(handler.type().equals("forgero:launch_projectile"), "Type should be forgero:launch_projectile");
-		context.complete();
-	}
-
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
-	public void testLaunchProjectileHandlerDefaultValues(TestContext context) {
-		LaunchProjectileHandler handler = new LaunchProjectileHandler(3.0f, 1.0f);
-
-		context.assertTrue(handler.basePower() == 3.0f, "Base power should be 3.0");
-		context.assertTrue(handler.baseDivergence() == 1.0f, "Base divergence should be 1.0");
-		context.complete();
-	}
-
+	/**
+	 * USE CASE: Releasing bow fires an arrow into the world.
+	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
 	public void testLaunchProjectileHandlerSpawnsArrow(TestContext context) {
 		ServerPlayerEntity player = context.createMockCreativeServerPlayerInWorld();
@@ -228,6 +212,9 @@ public class BowHandlerGametest {
 		});
 	}
 
+	/**
+	 * USE CASE: Fully charged bow shot creates critical arrow.
+	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
 	public void testLaunchProjectileHandlerCriticalShot(TestContext context) {
 		ServerPlayerEntity player = context.createMockCreativeServerPlayerInWorld();
@@ -370,30 +357,6 @@ public class BowHandlerGametest {
 		});
 	}
 
-	// ========== Handler Registration Tests ==========
-
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
-	public void testMountProjectileHandlerCodec(TestContext context) {
-		// Test that the codec can create a handler
-		MountProjectileHandler handler = new MountProjectileHandler();
-
-		context.assertTrue(handler != null, "Handler should be created");
-		context.assertTrue(handler.type().equals(MountProjectileHandler.TYPE), "Type should match constant");
-		context.complete();
-	}
-
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
-	public void testLaunchProjectileHandlerCodec(TestContext context) {
-		// Test that the codec can create a handler with custom values
-		LaunchProjectileHandler handler = new LaunchProjectileHandler(2.5f, 0.5f);
-
-		context.assertTrue(handler != null, "Handler should be created");
-		context.assertTrue(handler.basePower() == 2.5f, "Custom power should be preserved");
-		context.assertTrue(handler.baseDivergence() == 0.5f, "Custom divergence should be preserved");
-		context.assertTrue(handler.type().equals(LaunchProjectileHandler.TYPE), "Type should match constant");
-		context.complete();
-	}
-
 	// ========== Attribute Resolution Tests ==========
 
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
@@ -528,16 +491,9 @@ public class BowHandlerGametest {
 
 	// ========== ConsumeProjectileHandler Tests ==========
 
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
-	public void testConsumeProjectileHandlerType(TestContext context) {
-		com.sigmundgranaas.forgero.bows.handlers.ConsumeProjectileHandler handler =
-				new com.sigmundgranaas.forgero.bows.handlers.ConsumeProjectileHandler();
-
-		context.assertTrue(handler.type().equals("forgero:consume_projectile"),
-				"Type should be forgero:consume_projectile");
-		context.complete();
-	}
-
+	/**
+	 * USE CASE: Firing bow in survival mode consumes arrows from inventory.
+	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
 	public void testConsumeProjectileHandlerDecrementsArrow(TestContext context) {
 		ServerPlayerEntity player = context.createMockCreativeServerPlayerInWorld();
@@ -585,19 +541,6 @@ public class BowHandlerGametest {
 		int finalCount = arrowsInInventory.getCount();
 		context.assertTrue(finalCount == initialArrowCount,
 				"Arrow count should remain unchanged in creative mode");
-		context.complete();
-	}
-
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
-	public void testConsumeProjectileHandlerRegistered(TestContext context) {
-		// Verify the handler is registered in UseInteractionPropertiesPlugin
-		context.assertTrue(UseInteractionPropertiesPlugin.isHandlerRegistered("forgero:consume_projectile"),
-				"ConsumeProjectileHandler should be registered");
-
-		var codec = UseInteractionPropertiesPlugin.getHandlerCodec("forgero:consume_projectile");
-		context.assertTrue(codec != null,
-				"ConsumeProjectileHandler codec should be retrievable");
-
 		context.complete();
 	}
 

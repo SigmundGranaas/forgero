@@ -1,0 +1,15 @@
+{
+  "type": "forgero:schematic",
+  "name": "test_glass_break_arrow",
+  "name_space": "forgero-test",
+  "tags": ["forgero:arrow"],
+  "construct": {
+    "type": "forgero:arrow",
+    "ingredient": "forgero-test:test_glass_break_arrow_material",
+    "slot_type": "forgero:tool_material"
+  },
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:arrow"
+  }
+}

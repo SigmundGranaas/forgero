@@ -121,6 +121,11 @@ public abstract class AbstractStationScreenHandler extends ScreenHandler {
 	 * Delegates to {@link #onComponentChanged(Component)} if component is valid.
 	 */
 	private void handleComponentInventoryChanged(Inventory inventory) {
+		// Skip if context is null (client-side mode in tests)
+		if (context == null) {
+			return;
+		}
+
 		ItemStack stack = inventory.getStack(0);
 		if (stack.isEmpty()) {
 			executeUpdate(() -> {

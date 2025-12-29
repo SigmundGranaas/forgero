@@ -1,0 +1,29 @@
+{
+  "type": "forgero:material",
+  "name": "Test Batch Iron",
+  "tags": [
+    "forgero:materials/metal",
+    "forgero:materials/tool_material"
+  ],
+  "attribute_batches": [
+    {
+      "id_prefix": "forgero:test-iron",
+      "condition": [
+        {"type": "forgero:in_slot_type", "slot_type": "forgero:tool_material"},
+        {"type": "forgero:has_other_contributor"}
+      ],
+      "values": {
+        "forgero:attack_speed": 2.0,
+        "forgero:attack_damage": 4.0,
+        "forgero:mining_speed": 6.0,
+        "forgero:mining_level": 2.0,
+        "forgero:durability": 240.0,
+        "forgero:rarity": 40.0,
+        "forgero:weight": 5.0,
+        "forgero:draw_speed": 1.25,
+        "forgero:draw_power": 3.75,
+        "forgero:armor": 0.0
+      }
+    }
+  ]
+}

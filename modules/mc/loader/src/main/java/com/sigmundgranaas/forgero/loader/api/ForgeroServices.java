@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.loader.api;
 
+import com.sigmundgranaas.forgero.common.api.item.ItemComparisonApi;
+import com.sigmundgranaas.forgero.common.api.item.ItemMutationApi;
+import com.sigmundgranaas.forgero.common.api.item.ItemQueryApi;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.nbt.ComponentNbtConverter;
 import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
@@ -143,4 +146,32 @@ public interface ForgeroServices {
 	 * @return The component if the stack represents a Forgero item, empty otherwise
 	 */
 	Optional<Component> component(ItemStack stack);
+
+	/**
+	 * Returns the read-only ItemStack query API.
+	 * <p>
+	 * Use this to query attributes, composition, tags, and slot information
+	 * without modifying ItemStacks.
+	 *
+	 * @return The ItemStack query API instance
+	 */
+	ItemQueryApi itemQuery();
+
+	/**
+	 * Returns the ItemStack mutation API for upgrade operations.
+	 * <p>
+	 * Use this to install/remove upgrades and modify ItemStacks.
+	 *
+	 * @return The ItemStack mutation API instance
+	 */
+	ItemMutationApi itemMutation();
+
+	/**
+	 * Returns the ItemStack comparison API.
+	 * <p>
+	 * Use this to compare ItemStacks for type equality and similarity.
+	 *
+	 * @return The ItemStack comparison API instance
+	 */
+	ItemComparisonApi itemComparison();
 }

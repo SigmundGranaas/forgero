@@ -86,4 +86,36 @@ public class AttributeCodecs {
 				).apply(instance, AttributeDataImpl::new)
 		);
 	}
+
+	/**
+	 * Creates a codec for attribute lists that supports both traditional and batch formats.
+	 *
+	 * <p>This codec can parse material JSON files with either:</p>
+	 * <ul>
+	 *   <li>{@code "attributes": [...]}: Traditional attribute array</li>
+	 *   <li>{@code "attribute_batches": [...]}: Compact batch syntax</li>
+	 *   <li>Both fields simultaneously (results are merged)</li>
+	 * </ul>
+	 *
+	 * @param conditionCodec The condition codec for parsing conditions
+	 * @return A codec that handles both traditional and batch attribute formats
+	 */
+	public static Codec<java.util.List<AttributeData>> createListWithBatchSupport(Codec<Condition> conditionCodec) {
+		Codec<java.util.List<AttributeData>> traditionalCodec = Codec.list(create(conditionCodec));
+		Codec<java.util.List<AttributeData>> batchCodec = AttributeBatchCodecs.createBatchListCodec(conditionCodec);
+
+		// Return a codec that tries both formats and merges the results
+		return new Codec<java.util.List<AttributeData>>() {
+			@Override
+			public <T> DataResult<com.mojang.datafixers.util.Pair<java.util.List<AttributeData>, T>> decode(DynamicOps<T> ops, T input) {
+				// For now, just use traditional codec - merging happens at MaterialCodecs level
+				return traditionalCodec.decode(ops, input);
+			}
+
+			@Override
+			public <T> DataResult<T> encode(java.util.List<AttributeData> input, DynamicOps<T> ops, T prefix) {
+				return traditionalCodec.encode(input, ops, prefix);
+			}
+		};
+	}
 }

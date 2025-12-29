@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.loader.api;
 
+import com.sigmundgranaas.forgero.common.api.item.ItemComparisonApi;
+import com.sigmundgranaas.forgero.common.api.item.ItemMutationApi;
+import com.sigmundgranaas.forgero.common.api.item.ItemQueryApi;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.nbt.ComponentNbtConverter;
 import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
@@ -154,5 +157,38 @@ public final class ForgeroApi {
 	 */
 	public static SlotManager slotManager() {
 		return services().slotManager();
+	}
+
+	/**
+	 * Returns the read-only ItemStack query API.
+	 * Convenience method equivalent to {@code services().itemQuery()}.
+	 *
+	 * @return The ItemStack query API instance
+	 * @throws IllegalStateException if Forgero has not yet been initialized
+	 */
+	public static ItemQueryApi itemQuery() {
+		return services().itemQuery();
+	}
+
+	/**
+	 * Returns the ItemStack mutation API.
+	 * Convenience method equivalent to {@code services().itemMutation()}.
+	 *
+	 * @return The ItemStack mutation API instance
+	 * @throws IllegalStateException if Forgero has not yet been initialized
+	 */
+	public static ItemMutationApi itemMutation() {
+		return services().itemMutation();
+	}
+
+	/**
+	 * Returns the ItemStack comparison API.
+	 * Convenience method equivalent to {@code services().itemComparison()}.
+	 *
+	 * @return The ItemStack comparison API instance
+	 * @throws IllegalStateException if Forgero has not yet been initialized
+	 */
+	public static ItemComparisonApi itemComparison() {
+		return services().itemComparison();
 	}
 }

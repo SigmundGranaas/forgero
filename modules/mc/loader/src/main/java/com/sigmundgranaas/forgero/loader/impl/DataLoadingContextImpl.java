@@ -1,5 +1,11 @@
 package com.sigmundgranaas.forgero.loader.impl;
 
+import com.sigmundgranaas.forgero.common.api.item.ItemComparisonApi;
+import com.sigmundgranaas.forgero.common.api.item.ItemMutationApi;
+import com.sigmundgranaas.forgero.common.api.item.ItemQueryApi;
+import com.sigmundgranaas.forgero.common.api.item.impl.ItemComparisonApiImpl;
+import com.sigmundgranaas.forgero.common.api.item.impl.ItemMutationApiImpl;
+import com.sigmundgranaas.forgero.common.api.item.impl.ItemQueryApiImpl;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.nbt.ComponentNbtConverter;
 import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
@@ -28,6 +34,11 @@ public class DataLoadingContextImpl implements DataLoadingContext {
 	private ComponentNbtConverter nbtConverter;
 	private SlotManager slotManager;
 	private ForgeroDataBundle dataBundle;
+
+	// Lazy-initialized ItemStack APIs
+	private ItemQueryApi itemQueryApi;
+	private ItemMutationApi itemMutationApi;
+	private ItemComparisonApi itemComparisonApi;
 
 	public void initialize(
 			ComponentRegistry componentRegistry,
@@ -88,6 +99,30 @@ public class DataLoadingContextImpl implements DataLoadingContext {
 	@Override
 	public SlotManager slotManager() {
 		return slotManager;
+	}
+
+	@Override
+	public ItemQueryApi itemQuery() {
+		if (itemQueryApi == null) {
+			itemQueryApi = new ItemQueryApiImpl(componentConverter, resolver, slotManager);
+		}
+		return itemQueryApi;
+	}
+
+	@Override
+	public ItemMutationApi itemMutation() {
+		if (itemMutationApi == null) {
+			itemMutationApi = new ItemMutationApiImpl(componentConverter, slotManager);
+		}
+		return itemMutationApi;
+	}
+
+	@Override
+	public ItemComparisonApi itemComparison() {
+		if (itemComparisonApi == null) {
+			itemComparisonApi = new ItemComparisonApiImpl(componentConverter);
+		}
+		return itemComparisonApi;
 	}
 
 	@Override

@@ -48,7 +48,14 @@ public class CompositeContextualModelRegistry<M extends Identifiable & Contextua
 
 	@Override
 	public Optional<M> find(OpenIdentifier id) {
-		return find(id, DEFAULT_CONTEXT);
+		// First try the default context (models keyed by their own ID)
+		Optional<M> result = find(id, DEFAULT_CONTEXT);
+		if (result.isPresent()) {
+			return result;
+		}
+		// Then try the default_targets registry (models keyed by target ID)
+		return Optional.ofNullable(registries.get(DEFAULT_CONTEXT + "_targets"))
+				.flatMap(registry -> registry.find(id));
 	}
 
 	@Override

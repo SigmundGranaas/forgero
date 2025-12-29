@@ -46,9 +46,28 @@ public class HostCodecs {
 					Codec.STRING.optionalFieldOf("item_group").forGetter(data -> Optional.ofNullable(data.itemGroup()))
 			).apply(instance, (id, className, itemGroup) -> new CreateTemplateData(id, className, itemGroup.orElse(null))));
 
+	/**
+	 * Flat codec for host_template that reads "class" and "id" at the top level.
+	 * This matches the ergonomic JSON format:
+	 * <pre>
+	 * "host_template": {
+	 *   "class": "forgero:pickaxe_item",
+	 *   "id": "forgero:{head.material.name}-pickaxe",
+	 *   "item_group": "minecraft:tools_and_utilities"  // optional
+	 * }
+	 * </pre>
+	 */
 	public static final Codec<HostTemplateData> HOST_TEMPLATE_DATA_CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(
 					Codec.list(IDENTIFIER_TEMPLATE_ENTRY_CODEC).optionalFieldOf("identifiers").forGetter(data -> Optional.ofNullable(data.identifiers())),
-					CREATE_TEMPLATE_DATA_CODEC.fieldOf("create").forGetter(HostTemplateData::create)
-			).apply(instance, (identifiers, create) -> new HostTemplateData(identifiers.orElse(null), create)));
+					Codec.STRING.optionalFieldOf("class").forGetter(data -> Optional.ofNullable(data.create()).map(CreateTemplateData::className)),
+					Codec.STRING.optionalFieldOf("id").forGetter(data -> Optional.ofNullable(data.create()).map(CreateTemplateData::id)),
+					Codec.STRING.optionalFieldOf("item_group").forGetter(data -> Optional.ofNullable(data.create()).flatMap(c -> Optional.ofNullable(c.itemGroup())))
+			).apply(instance, (identifiers, className, id, itemGroup) -> {
+				CreateTemplateData create = null;
+				if (className.isPresent() && id.isPresent()) {
+					create = new CreateTemplateData(id.get(), className.get(), itemGroup.orElse(null));
+				}
+				return new HostTemplateData(identifiers.orElse(null), create);
+			}));
 }

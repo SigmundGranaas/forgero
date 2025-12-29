@@ -50,7 +50,12 @@ public abstract class BaseComponentBuilder<T extends BaseComponentBuilder<T>> {
 	public T withAttribute(OpenIdentifier type, float value) {
 		return withProperty(KEY, ForgeroTestFactory.attribute(type).withValue(value).build());
 	}
+
 	public T withAttribute(Attribute attribute) {
 		return withProperty(KEY, attribute);
+	}
+
+	public T withConditionalAttribute(OpenIdentifier type, float value, com.sigmundgranaas.forgero.core.condition.api.Condition condition) {
+		return withProperty(KEY, ForgeroTestFactory.attribute(type).withValue(value).withCondition(condition).build());
 	}
 }

@@ -37,10 +37,19 @@ public record HasOtherContributorCondition(
 		OpenIdentifier attributeType
 ) implements StaticCondition {
 
+	/**
+	 * Placeholder attribute type used when attribute_type is omitted in JSON.
+	 * This allows attribute batches to omit the type and have it injected automatically.
+	 */
+	private static final OpenIdentifier PLACEHOLDER_TYPE = CodecConstants.OPEN_IDENTIFIER_CODEC.parse(
+			com.mojang.serialization.JsonOps.INSTANCE,
+			com.google.gson.JsonParser.parseString("\"forgero:__placeholder__\"")
+	).result().orElseThrow();
+
 	public static final Codec<HasOtherContributorCondition> CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(
 					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(HasOtherContributorCondition::type),
-					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("attribute_type").forGetter(HasOtherContributorCondition::attributeType)
+					CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("attribute_type", PLACEHOLDER_TYPE).forGetter(HasOtherContributorCondition::attributeType)
 			).apply(instance, HasOtherContributorCondition::new));
 
 	@Override

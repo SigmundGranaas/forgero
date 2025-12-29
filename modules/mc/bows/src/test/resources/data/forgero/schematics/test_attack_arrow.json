@@ -1,0 +1,19 @@
+{
+  "type": "forgero:equipment_template",
+  "name": "test_attack_arrow",
+  "name_space": "forgero-test",
+  "tags": [],
+  "host_template": {
+    "class": "forgero:arrow_item",
+    "id": "forgero-test:test_attack_arrow"
+  },
+  "structure": {
+    "id": "forgero-test:test_attack_arrow",
+    "slots": {
+      "material": {
+        "type": "forgero:tool_material",
+        "default": "forgero:test_attack_damage_arrow_material"
+      }
+    }
+  }
+}

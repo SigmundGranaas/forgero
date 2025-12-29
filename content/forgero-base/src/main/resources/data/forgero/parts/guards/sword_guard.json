@@ -18,6 +18,13 @@
       }
     }
   },
+  "generation": {
+    "slots": {
+      "material": {
+        "require_any_tags": ["forgero:materials/tool_material"]
+      }
+    }
+  },
   "attributes": [
     {
       "id": "forgero:sword_guard-durability",

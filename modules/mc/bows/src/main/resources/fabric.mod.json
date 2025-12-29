@@ -18,6 +18,9 @@
   "entrypoints": {
     "forgero:data_plugin": [
       "com.sigmundgranaas.forgero.bows.BowPlugin"
+    ],
+    "client": [
+      "com.sigmundgranaas.forgero.bows.client.BowClientPlugin"
     ]
   },
   "depends": {

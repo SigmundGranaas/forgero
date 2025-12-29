@@ -14,6 +14,7 @@ import com.sigmundgranaas.forgero.properties.minecraft.entityuse.EntityUseProper
 import com.sigmundgranaas.forgero.properties.minecraft.loot.LootProperty;
 import com.sigmundgranaas.forgero.properties.minecraft.onhit.OnHitProperty;
 import com.sigmundgranaas.forgero.properties.minecraft.onhitblock.OnHitBlockProperty;
+import com.sigmundgranaas.forgero.properties.minecraft.ontick.OnTickProperty;
 import com.sigmundgranaas.forgero.properties.minecraft.swing.SwingHandProperty;
 import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.UseInteractionProperty;
 import net.minecraft.item.ItemStack;
@@ -60,6 +61,8 @@ public class ComponentTester {
 								return OnHitProperty.PROPERTY_KEY.key();
 							} else if (p instanceof OnHitBlockProperty) {
 								return OnHitBlockProperty.PROPERTY_KEY.key();
+							} else if (p instanceof OnTickProperty) {
+								return OnTickProperty.PROPERTY_KEY.key();
 							} else if (p instanceof SwingHandProperty) {
 								return SwingHandProperty.PROPERTY_KEY.key();
 							} else if (p instanceof EntityUseProperty) {
@@ -114,6 +117,8 @@ public class ComponentTester {
 									return OnHitProperty.PROPERTY_KEY.key();
 								} else if (p instanceof OnHitBlockProperty) {
 									return OnHitBlockProperty.PROPERTY_KEY.key();
+								} else if (p instanceof OnTickProperty) {
+									return OnTickProperty.PROPERTY_KEY.key();
 								} else if (p instanceof SwingHandProperty) {
 									return SwingHandProperty.PROPERTY_KEY.key();
 								} else if (p instanceof EntityUseProperty) {

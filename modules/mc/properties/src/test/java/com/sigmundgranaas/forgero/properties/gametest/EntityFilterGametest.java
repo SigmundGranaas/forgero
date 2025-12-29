@@ -13,8 +13,16 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
+/**
+ * Tests entity filters for effect targeting.
+ * Focus: Do filters correctly allow/reject entities?
+ * - Alive, hostile, teammate, health, distance, boolean logic, etc.
+ */
 public class EntityFilterGametest {
 
+	/**
+	 * USE CASE: Effect only targets living entities (not dead/removed).
+	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
 	public void testIsAliveFilter(TestContext context) {
 		IsAliveFilter filter = new IsAliveFilter();

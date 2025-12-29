@@ -6,6 +6,10 @@ import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ToolMaterial;
 
+/**
+ * A Forgero-backed pickaxe item.
+ * Durability and other stats are provided by the {@link ForgeroToolMaterial} passed to the constructor.
+ */
 public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroHostItem {
 	private final Component component;
 
@@ -18,5 +22,4 @@ public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroHostItem {
 	public Component getForgeroComponent() {
 		return component;
 	}
-
 }

@@ -1,0 +1,8 @@
+{
+  "type": "forgero:schematic",
+  "name": "test-extreme-helmet",
+  "material": "forgero:test-extreme-armor-material",
+  "tags": ["forgero:helmet", "forgero:armor", "forgero:test-component"],
+  "item-type": "minecraft:helmet",
+  "attributes": []
+}

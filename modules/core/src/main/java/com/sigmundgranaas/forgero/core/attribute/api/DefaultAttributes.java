@@ -10,4 +10,5 @@ public class DefaultAttributes {
 	public static final OpenIdentifier ATTACK_SPEED = new OpenIdentifier("forgero", "attack_speed");
 	public static final OpenIdentifier ARMOR = new OpenIdentifier("forgero", "armor");
 	public static final OpenIdentifier ARMOR_TOUGHNESS = new OpenIdentifier("forgero", "armor_toughness");
+	public static final OpenIdentifier KNOCKBACK_RESISTANCE = new OpenIdentifier("forgero", "knockback_resistance");
 }

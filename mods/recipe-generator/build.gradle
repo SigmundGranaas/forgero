@@ -2,17 +2,22 @@
 //file:noinspection GroovyAssignabilityCheck
 //file:noinspection DependencyNotationArgument
 
+// Ensure drp is evaluated first to avoid configuration-time JAR resolution issues
+evaluationDependsOn ':mods:drp'
+
 archivesBaseName = "recipe-generator"
 group = 'com.sigmundgranaas'
 version = project.version
 
 dependencies {
-	// Fabric (use modImplementation for proper remapping in dev environment)
+	// Fabric
 	modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
 
-	// DRP dependency for integration (use modImplementation for proper remapping)
-	modImplementation(project(path: ":mods:drp", configuration: 'namedElements'))
+	// DRP dependency for integration
+	// Use implementation (not modImplementation) to avoid configuration-time JAR access
+	// namedElements provides already-remapped classes from the Loom project
+	implementation(project(path: ":mods:drp", configuration: 'namedElements'))
 
 	// Unit Testing
 	testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")

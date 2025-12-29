@@ -21,13 +21,20 @@ public class ForgeroModelProvider implements ModelResolver {
 		Identifier requestedId = context.id();
 		String path = requestedId.getPath();
 
-		if (path.startsWith("item/")) {
-			path = path.substring("item/".length());
-		}
+		// Models in the registry include the "item/" prefix, so we need both versions
 		OpenIdentifier forgeroId = new OpenIdentifier(requestedId.getNamespace(), path);
 		OpenIdentifier forgeroIdNormalized = new OpenIdentifier(requestedId.getNamespace(), path.replace("_", "-"));
 
-		Optional<Model> modelOpt = services.modelRegistry().find(forgeroId).or(() -> services.modelRegistry().find(forgeroIdNormalized));
+		// Also try without item/ prefix for backwards compatibility
+		String pathWithoutPrefix = path.startsWith("item/") ? path.substring("item/".length()) : path;
+		OpenIdentifier forgeroIdNoPrefix = new OpenIdentifier(requestedId.getNamespace(), pathWithoutPrefix);
+		OpenIdentifier forgeroIdNoPrefixNormalized = new OpenIdentifier(requestedId.getNamespace(), pathWithoutPrefix.replace("_", "-"));
+
+		// Try all ID variants: with and without item/ prefix, with and without underscore normalization
+		Optional<Model> modelOpt = services.modelRegistry().find(forgeroId)
+			.or(() -> services.modelRegistry().find(forgeroIdNormalized))
+			.or(() -> services.modelRegistry().find(forgeroIdNoPrefix))
+			.or(() -> services.modelRegistry().find(forgeroIdNoPrefixNormalized));
 
 		if (modelOpt.isPresent()) {
 			OpenIdentifier componentId = modelOpt.get().getTarget().orElse(modelOpt.get().getIdentifier());

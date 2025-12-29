@@ -1,0 +1,19 @@
+{
+  "type": "forgero:equipment_template",
+  "name": "test_combo_bow",
+  "name_space": "forgero-test",
+  "tags": [],
+  "host_template": {
+    "class": "forgero:bow_item",
+    "id": "forgero-test:test_combo_bow"
+  },
+  "structure": {
+    "id": "forgero-test:test_combo_bow",
+    "slots": {
+      "material": {
+        "type": "forgero:tool_material",
+        "default": "forgero:test_combo_bow_material"
+      }
+    }
+  }
+}
