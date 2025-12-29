@@ -1,0 +1,31 @@
+{
+  "type": "forgero:equipment_model_template",
+  "target": {
+    "tag": "forgero:materials/tool_material"
+  },
+  "model": {
+    "id": "forgero:item/{target.name}-pickaxe",
+    "type": "forgero:composite_model",
+    "target": "forgero:{target.name}-pickaxe",
+    "slots": [
+      {
+        "id": "head",
+        "order": 20,
+        "renderer": { "type": "forgero:component" }
+      },
+      {
+        "id": "handle",
+        "order": 10,
+        "renderer": { "type": "forgero:component" }
+      },
+      {
+        "id": "binding_slot",
+        "order": 15,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "tool_binding"
+        }
+      }
+    ]
+  }
+}

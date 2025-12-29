@@ -1,0 +1,20 @@
+{
+  "type": "forgero:part_model_template",
+  "target": {
+    "tag": "forgero:materials/metal"
+  },
+  "model": {
+    "id": "forgero:item/{target.name}-pommel",
+    "type": "forgero:composite_model",
+    "target": "forgero:{target.name}-pommel",
+    "layers": [
+      {
+        "order": 60,
+        "template": "forgero:texture_template/parts/pommel",
+        "palette": "forgero:palette/{target.name}",
+        "output": "forgero:item/{target.name}-pommel"
+      }
+    ],
+    "slots": []
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "type": "forgero:part_model_template",
+  "target": {
+    "tag": "forgero:materials/tool_material"
+  },
+  "model": {
+    "id": "forgero:item/{target.name}-sword_guard",
+    "type": "forgero:composite_model",
+    "target": "forgero:{target.name}-sword_guard",
+    "layers": [
+      {
+        "order": 60,
+        "template": "forgero:texture_template/parts/sword_guard",
+        "palette": "forgero:palette/{target.name}",
+        "output": "forgero:item/{target.name}-sword_guard"
+      }
+    ],
+    "slots": [
+      {
+        "id": "reinforcement_slot",
+        "order": 70,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "guard_reinforcement"
+        }
+      },
+      {
+        "id": "gem_slot",
+        "order": 75,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "guard_gem"
+        }
+      }
+    ]
+  }
+}

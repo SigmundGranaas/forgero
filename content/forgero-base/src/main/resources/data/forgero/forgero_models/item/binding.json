@@ -1,0 +1,37 @@
+{
+  "type": "forgero:part_model_template",
+  "target": {
+    "tag": "forgero:materials/binding"
+  },
+  "model": {
+    "id": "forgero:item/{target.name}-binding",
+    "type": "forgero:composite_model",
+    "target": "forgero:{target.name}-binding",
+    "layers": [
+      {
+        "order": 40,
+        "template": "forgero:texture_template/parts/binding",
+        "palette": "forgero:palette/{target.name}",
+        "output": "forgero:item/{target.name}-binding"
+      }
+    ],
+    "slots": [
+      {
+        "id": "reinforcement_slot",
+        "order": 50,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "binding_reinforcement"
+        }
+      },
+      {
+        "id": "gem_slot",
+        "order": 90,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "binding_gem"
+        }
+      }
+    ]
+  }
+}

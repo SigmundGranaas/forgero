@@ -1,0 +1,103 @@
+{
+  "type": "forgero:schematic",
+  "name": "Sword Guard",
+  "tags": [
+    "forgero:schematics/guards"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:schematic-rarity-local",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 25,
+        "operation": "addition"
+      }
+    },
+    {
+      "id": "forgero:schematic-rarity-composite",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 1,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:schematic-durability-composite",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 0.25,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:schematic-armor-composite",
+      "type": "forgero:armor",
+      "computation": {
+        "value": 0,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:schematic-weight-composite",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 0.25,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:reinforcement-slot",
+      "type": "forgero:material",
+      "tags": [
+        "forgero:upgrade/reinforcement"
+      ],
+      "description": "slot.forgero.reinforcement"
+    },
+    {
+      "id": "forgero:upgrade-slot",
+      "type": "forgero:trinket",
+      "tags": [
+        "forgero:upgrade/upgrade"
+      ],
+      "description": "slot.forgero.upgrade"
+    },
+    {
+      "id": "forgero:cosmetic-slot",
+      "type": "forgero:dye",
+      "tags": [
+        "forgero:upgrade/cosmetic"
+      ],
+      "description": "slot.forgero.cosmetic"
+    }
+  ]
+}
