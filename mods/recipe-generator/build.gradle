@@ -7,9 +7,9 @@ group = 'com.sigmundgranaas'
 version = project.version
 
 dependencies {
-	// Fabric
-	modCompileOnly("net.fabricmc:fabric-loader:${project.loader_version}")
-	modCompileOnly("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
+	// Fabric (use modImplementation for proper remapping in dev environment)
+	modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
+	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
 
 	// DRP dependency for integration (use modImplementation for proper remapping)
 	modImplementation(project(path: ":mods:drp", configuration: 'namedElements'))
@@ -17,10 +17,6 @@ dependencies {
 	// Unit Testing
 	testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
-
-	// Fabric dependencies for GameTests (compilation and runtime)
-	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
-	modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
 }
 
 loom {

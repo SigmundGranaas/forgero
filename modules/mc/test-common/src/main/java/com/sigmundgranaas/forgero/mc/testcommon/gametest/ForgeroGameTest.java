@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.mc.testcommon.gametest;
 
 import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
 import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
+import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 
@@ -28,12 +29,12 @@ import net.minecraft.test.TestContext;
  * }
  * }</pre>
  */
-public interface ForgeroGameTest {
+public interface ForgeroGameTest extends FabricGameTest {
 
     /**
      * Common empty structure template for tests that don't need a specific structure.
+     * Inherited from FabricGameTest.EMPTY_STRUCTURE
      */
-    String EMPTY_STRUCTURE = "minecraft:empty";
 
     /**
      * Gets the ForgeroServices instance.

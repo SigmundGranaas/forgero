@@ -1,9 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "#forgero:parts/pickaxe_head",
-    "#forgero:parts/axe_head",
-    "#forgero:parts/shovel_head",
-    "#forgero:parts/hoe_head"
-  ]
-}

@@ -7,6 +7,12 @@ archivesBaseName = "forgero"
 group = 'com.sigmundgranaas'
 version = project.version
 
+// Exclude non-remapped fabric-api from non-mod configurations to prevent classpath pollution
+// The remapped fabric-api from modImplementation will still be included
+configurations.matching { !it.name.startsWith('mod') }.all {
+    exclude group: 'net.fabricmc.fabric-api'
+}
+
 dependencies {
     // Core modules (included in JAR)
     include(project(":modules:core"))
@@ -40,23 +46,10 @@ dependencies {
     implementation(project(path: ":modules:mc:armor", configuration: 'namedElements'))
     implementation(project(path: ":modules:mc:bows", configuration: 'namedElements'))
 
-    // NEW Content modules (clean, uses new JSON format)
-    // These are the only content modules the forgero mod depends on
-    include(project(":content:forgero-materials"))
-    include(project(":content:forgero-upgrades"))
-    include(project(":content:forgero-base"))
-    include(project(":content:forgero-gems"))
-    runtimeOnly(project(":content:forgero-materials"))
-    runtimeOnly(project(":content:forgero-upgrades"))
-    runtimeOnly(project(":content:forgero-base"))
-    runtimeOnly(project(":content:forgero-gems"))
-
-    // NOTE: Legacy content modules have been removed from dependencies
-    // They are kept in the repository as READ-ONLY references for migration
-    // When migration is complete, delete these from settings.gradle:
-    // - forgero-schematics, forgero-equipment, forgero-tools-content
-    // - forgero-armor-content, forgero-models, forgero-armor
-    // - forgero-extended, forgero-compat
+    // Content modules for testing - use same content as properties module for stability
+    runtimeOnly(project(":content:minecraft-vanilla-materials"))
+    runtimeOnly(project(":content:minecraft-tools"))
+    runtimeOnly(project(":content:shared-materials"))
 
     // Fabric
     modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
@@ -81,17 +74,15 @@ dependencies {
 
 loom {
     runs {
-        testServer {
-            server()
-            name = "Test Server"
-            source sourceSets.test
-        }
         gameTest {
-            inherit testServer
+            server()
             name "Game Test"
+            source sourceSets.test
             vmArg "-Dfabric-api.gametest"
             vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
             runDir "build/gameTest"
+            // Use ideConfigGenerated to avoid inheriting problematic classpaths
+            ideConfigGenerated = false
         }
     }
 }
@@ -103,9 +94,9 @@ sourceSets {
     }
 }
 
+// Exclude GameTests from regular JUnit test task - they run via runGameTest
 test {
-    useJUnitPlatform()
-    testLogging.events("passed", "skipped", "failed")
+    exclude '**/tests/**'
 }
 
 // CurseForge publishing
