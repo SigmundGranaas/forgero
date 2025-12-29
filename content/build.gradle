@@ -7,7 +7,7 @@ tasks.register('updateDevResources') {
 
 	// Define which project's 'processResources' task we want to run
 	def contentProjects = [
-		project(":content:minecraft-vanilla-materials"),
+		project(":content:forgero-materials"),
 		project(":content:forgero-tools"),
 		project(":content:forgero-armor"),
 		project(":content:minecraft-tools")

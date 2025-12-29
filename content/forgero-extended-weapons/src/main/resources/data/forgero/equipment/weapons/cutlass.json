@@ -1,0 +1,42 @@
+{
+  "type": "forgero:equipment_template",
+  "name": "cutlass",
+  "tags": [
+    "forgero:weapons/cutlass",
+    "forgero:weapons/swordlike",
+    "forgero:weapons/extended",
+    "forgero:tool"
+  ],
+  "host_template": {
+    "class": "forgero:sword_item",
+    "id": "forgero:{blade.material.name}-cutlass"
+  },
+  "structure": {
+    "id": "forgero:{blade.material.name}-cutlass",
+    "slots": {
+      "blade": {
+        "type": "forgero:cutlass_blade",
+        "default_tag": "forgero:parts/cutlass_blade"
+      },
+      "handle": {
+        "type": "forgero:handle",
+        "default_tag": "forgero:parts/handle"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:cutlass-binding",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/binding"],
+      "description": "slot.forgero.binding"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:cutlass-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": {"value": -2.3}
+    }
+  ]
+}

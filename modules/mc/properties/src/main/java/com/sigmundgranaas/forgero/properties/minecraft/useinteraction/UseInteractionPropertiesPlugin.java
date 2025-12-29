@@ -3,6 +3,9 @@ package com.sigmundgranaas.forgero.properties.minecraft.useinteraction;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mojang.serialization.Codec;
 import com.sigmundgranaas.forgero.core.property.api.codec.ListCodecWrapper;
 import com.sigmundgranaas.forgero.effects.EffectCodecRegistry;
@@ -33,6 +36,7 @@ import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.handlers.T
  */
 public class UseInteractionPropertiesPlugin implements DataPlugin {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(UseInteractionPropertiesPlugin.class);
 	private static final Map<String, Codec<? extends UseHandler>> HANDLERS = new ConcurrentHashMap<>();
 
 	static {
@@ -59,6 +63,9 @@ public class UseInteractionPropertiesPlugin implements DataPlugin {
 	 * @param codec the codec for the handler
 	 */
 	public static void registerHandler(String type, Codec<? extends UseHandler> codec) {
+		if (HANDLERS.containsKey(type)) {
+			LOGGER.warn("Overwriting UseHandler registration for type: {}", type);
+		}
 		HANDLERS.put(type, codec);
 		EffectCodecRegistry.registerUseHandler(type, codec);
 	}

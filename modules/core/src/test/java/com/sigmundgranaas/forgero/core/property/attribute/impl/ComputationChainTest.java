@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.core.property.attribute.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
 import com.sigmundgranaas.forgero.core.attribute.impl.computation.CalculationVisualizer;
@@ -235,7 +238,7 @@ class ComputationChainTest {
 
 		CalculationVisualizer visualizer = new CalculationVisualizer(attributes);
 		String debugOutput = visualizer.visualize(0f);
-		System.out.println(debugOutput);
+		LoggerFactory.getLogger(ComputationChainTest.class).debug("Calculation visualization:\n{}", debugOutput);
 
 		// You can still assert the final value here if you want to verify the calculation
 		assertEquals(16.0f, new ComputationChain(new ComputationChain(attributes).orderedAttributes()).compute(0f), 0.001f);

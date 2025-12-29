@@ -1,0 +1,62 @@
+{
+  "type": "forgero:schematic",
+  "name": "Shell Sword Guard",
+  "tags": [
+    "forgero:schematics/guards",
+    "forgero:schematics/extended"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:shell-schematic-rarity-local",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 90,
+        "operation": "addition"
+      }
+    },
+    {
+      "id": "forgero:shell-schematic-rarity-composite",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 1.45,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [{ "type": "forgero:is_root" }]
+      }
+    },
+    {
+      "id": "forgero:shell-schematic-durability-composite",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 0.5,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [{ "type": "forgero:is_root" }]
+      }
+    },
+    {
+      "id": "forgero:shell-schematic-armor-composite",
+      "type": "forgero:armor",
+      "computation": {
+        "value": 0.7,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [{ "type": "forgero:is_root" }]
+      }
+    },
+    {
+      "id": "forgero:shell-schematic-weight-composite",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 0.4,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [{ "type": "forgero:is_root" }]
+      }
+    }
+  ]
+}

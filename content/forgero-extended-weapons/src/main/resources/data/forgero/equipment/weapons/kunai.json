@@ -1,0 +1,34 @@
+{
+  "type": "forgero:equipment_template",
+  "name": "kunai",
+  "tags": [
+    "forgero:weapons/kunai",
+    "forgero:weapons/swordlike",
+    "forgero:weapons/extended",
+    "forgero:tool"
+  ],
+  "host_template": {
+    "class": "forgero:sword_item",
+    "id": "forgero:{blade.material.name}-kunai"
+  },
+  "structure": {
+    "id": "forgero:{blade.material.name}-kunai",
+    "slots": {
+      "blade": {
+        "type": "forgero:kunai_blade",
+        "default_tag": "forgero:parts/kunai_blade"
+      },
+      "handle": {
+        "type": "forgero:handle",
+        "default_tag": "forgero:parts/handle"
+      }
+    }
+  },
+  "attributes": [
+    {
+      "id": "forgero:kunai-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": {"value": -1.0}
+    }
+  ]
+}

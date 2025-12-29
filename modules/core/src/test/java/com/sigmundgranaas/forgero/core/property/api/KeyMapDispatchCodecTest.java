@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.core.property.api;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -22,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 public class KeyMapDispatchCodecTest {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(KeyMapDispatchCodecTest.class);
 
 	private KeyMapDispatchCodec codec;
 	private final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -63,7 +68,7 @@ public class KeyMapDispatchCodecTest {
 		assertTrue(encodedResult.result().isPresent(), "Encoding should succeed: " + encodedResult.error().map(DataResult.PartialResult::message).orElse(""));
 		JsonElement encodedJson = encodedResult.result().get();
 
-		System.out.println("Encoded JSON (Basic Single Value): " + toJson(encodedJson));
+		LOGGER.debug("Encoded JSON (Basic Single Value): {}", toJson(encodedJson));
 
 		// Verify that single-element lists are encoded as single JSON objects
 		assertTrue(encodedJson.getAsJsonObject().get(A_KEY.key()).isJsonObject());
@@ -90,7 +95,7 @@ public class KeyMapDispatchCodecTest {
 		assertTrue(encodedResult.result().isPresent(), "Encoding should succeed: " + encodedResult.error().map(DataResult.PartialResult::message).orElse(""));
 		JsonElement encodedJson = encodedResult.result().get();
 
-		System.out.println("Encoded JSON (Multi-Value): " + toJson(encodedJson));
+		LOGGER.debug("Encoded JSON (Multi-Value): {}", toJson(encodedJson));
 
 		// Verify JSON structure for multi-value (should be an array)
 		assertTrue(encodedJson.getAsJsonObject().get(A_KEY.key()).isJsonArray(), "PropertyA should be an array");
@@ -115,7 +120,7 @@ public class KeyMapDispatchCodecTest {
 		assertTrue(encodedResult.result().isPresent(), "Encoding should succeed: " + encodedResult.error().map(DataResult.PartialResult::message).orElse(""));
 		JsonElement encodedJson = encodedResult.result().get();
 
-		System.out.println("Encoded JSON (Mixed): " + toJson(encodedJson));
+		LOGGER.debug("Encoded JSON (Mixed): {}", toJson(encodedJson));
 
 		// Verify JSON structure: A should be single value, B should be array
 		assertFalse(encodedJson.getAsJsonObject().get(A_KEY.key()).isJsonArray(), "PropertyA should be a single object");
@@ -140,7 +145,7 @@ public class KeyMapDispatchCodecTest {
 		assertTrue(encodedResult.result().isPresent(), "Encoding should succeed.");
 		JsonElement encodedJson = encodedResult.result().get();
 
-		System.out.println("Encoded JSON (Skip Unknown): " + toJson(encodedJson));
+		LOGGER.debug("Encoded JSON (Skip Unknown): {}", toJson(encodedJson));
 
 		assertTrue(encodedJson.getAsJsonObject().has(A_KEY.key()), "Encoded JSON should contain property_a");
 		assertFalse(encodedJson.getAsJsonObject().has("unknown_property"), "Encoded JSON should not contain unknown_property");
@@ -178,7 +183,7 @@ public class KeyMapDispatchCodecTest {
 		assertTrue(encodedResult.result().isPresent(), "Encoding empty map should succeed.");
 		JsonElement encodedJson = encodedResult.result().get();
 
-		System.out.println("Encoded JSON (Empty Map): " + toJson(encodedJson));
+		LOGGER.debug("Encoded JSON (Empty Map): {}", toJson(encodedJson));
 		assertTrue(encodedJson.getAsJsonObject().entrySet().isEmpty(), "Encoded JSON object should be empty");
 	}
 
@@ -212,7 +217,7 @@ public class KeyMapDispatchCodecTest {
 		// Expect an error because property_c is malformed, but a partial result for A and B
 		assertTrue(decodedResult.error().isPresent(), "Decoding should report an error for malformed data.");
 		DataResult.PartialResult<?> error = decodedResult.error().get();
-		System.out.println("Decode error message: " + error.message());
+		LOGGER.debug("Decode error message: {}", error.message());
 		assertTrue(error.message().contains("Failed to decode properties:"), "Error message should indicate failure");
 		assertTrue(error.message().contains(C_KEY.key()), "Error message should mention property_c");
 
@@ -238,7 +243,7 @@ public class KeyMapDispatchCodecTest {
 		assertTrue(encodedResult.result().isPresent(), "Encoding single element should succeed.");
 		JsonElement encodedJson = encodedResult.result().get();
 
-		System.out.println("ListCodecWrapper Encode Single: " + toJson(encodedJson));
+		LOGGER.debug("ListCodecWrapper Encode Single: {}", toJson(encodedJson));
 		assertTrue(encodedJson.isJsonObject(), "Single element should encode as a JSON object, not an array.");
 		assertEquals(42, encodedJson.getAsJsonObject().get("value").getAsInt());
 	}
@@ -252,7 +257,7 @@ public class KeyMapDispatchCodecTest {
 		assertTrue(encodedResult.result().isPresent(), "Encoding multi elements should succeed.");
 		JsonElement encodedJson = encodedResult.result().get();
 
-		System.out.println("ListCodecWrapper Encode Multi: " + toJson(encodedJson));
+		LOGGER.debug("ListCodecWrapper Encode Multi: {}", toJson(encodedJson));
 		assertTrue(encodedJson.isJsonArray(), "Multiple elements should encode as a JSON array.");
 		assertEquals(2, encodedJson.getAsJsonArray().size());
 		assertEquals(1, encodedJson.getAsJsonArray().get(0).getAsJsonObject().get("value").getAsInt());
@@ -268,7 +273,7 @@ public class KeyMapDispatchCodecTest {
 		assertTrue(encodedResult.result().isPresent(), "Encoding empty list should succeed.");
 		JsonElement encodedJson = encodedResult.result().get();
 
-		System.out.println("ListCodecWrapper Encode Empty: " + toJson(encodedJson));
+		LOGGER.debug("ListCodecWrapper Encode Empty: {}", toJson(encodedJson));
 		assertTrue(encodedJson.isJsonArray(), "Empty list should encode as an empty JSON array.");
 		assertEquals(0, encodedJson.getAsJsonArray().size());
 	}

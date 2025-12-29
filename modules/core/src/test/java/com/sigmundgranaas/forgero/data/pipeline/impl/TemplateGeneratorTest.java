@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.data.pipeline.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mojang.serialization.Codec;
 import com.sigmundgranaas.forgero.cof.ComponentTypeRegistry;
 import com.sigmundgranaas.forgero.cof.dto.CofComponent;
@@ -75,6 +78,8 @@ class TemplateGeneratorTest {
 	@Nested
 	class WhenGeneratingParts {
 
+		private static final Logger LOGGER = LoggerFactory.getLogger(WhenGeneratingParts.class);
+
 		@Test
 		void debugTest() {
 			// Debug test to understand what's happening
@@ -83,8 +88,8 @@ class TemplateGeneratorTest {
 			staticComponents.put(iron.id(), iron);
 			staticComponents.put(pickaxeShape.id(), pickaxeShape);
 
-			System.out.println("Static components: " + staticComponents.keySet());
-			System.out.println("Raw definitions: " + rawDefinitions.keySet());
+			LOGGER.debug("Static components: {}", staticComponents.keySet());
+			LOGGER.debug("Raw definitions: {}", rawDefinitions.keySet());
 
 			PartTemplateData template = createPartTemplate(
 					"forgero:part_template",
@@ -98,16 +103,16 @@ class TemplateGeneratorTest {
 			);
 			addRawDefinition("forgero:part_template", template);
 
-			System.out.println("Template added. Raw definitions now: " + rawDefinitions.keySet());
-			System.out.println("Template type: " + template.type());
-			System.out.println("Template structure slots: " + template.structure().slots());
+			LOGGER.debug("Template added. Raw definitions now: {}", rawDefinitions.keySet());
+			LOGGER.debug("Template type: {}", template.type());
+			LOGGER.debug("Template structure slots: {}", template.structure().slots());
 
 			TemplateGenerator generator = createGenerator();
 			TemplateGenerator.TemplateResult result = generator.generate();
 
-			System.out.println("Generated components: " + result.components().size());
+			LOGGER.debug("Generated {} components", result.components().size());
 			result.components().forEach(comp -> {
-				System.out.println("  - " + comp.id() + " (type: " + comp.componentType() + ")");
+				LOGGER.debug("  - {} (type: {})", comp.id(), comp.componentType());
 			});
 		}
 

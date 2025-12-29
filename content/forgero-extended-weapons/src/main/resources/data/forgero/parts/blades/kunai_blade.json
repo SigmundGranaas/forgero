@@ -1,0 +1,44 @@
+{
+  "type": "forgero:part_template",
+  "name": "kunai_blade",
+  "tags": [
+    "forgero:parts/blade",
+    "forgero:parts/kunai_blade"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-kunai_blade"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-kunai_blade",
+    "slots": {
+      "material": {
+        "type": "forgero:tool_material",
+        "default_tag": "forgero:materials/tool_material"
+      }
+    }
+  },
+  "attributes": [
+    {
+      "id": "forgero:kunai_blade-rarity",
+      "type": "forgero:rarity",
+      "computation": {"value": 25, "operation": "addition"}
+    },
+    {
+      "id": "forgero:kunai_blade-attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": {"value": 0.5, "operation": "multiplication"},
+      "condition": {
+        "static": [{"type": "forgero:is_root"}]
+      }
+    },
+    {
+      "id": "forgero:kunai_blade-weight",
+      "type": "forgero:weight",
+      "computation": {"value": 0.3, "operation": "multiplication"},
+      "condition": {
+        "static": [{"type": "forgero:is_root"}]
+      }
+    }
+  ]
+}

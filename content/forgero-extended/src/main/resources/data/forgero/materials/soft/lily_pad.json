@@ -1,0 +1,49 @@
+{
+  "type": "forgero:material",
+  "name": "Lily Pad",
+  "tags": [
+    "forgero:materials/secondary",
+    "forgero:materials/soft",
+    "forgero:materials/plant",
+    "forgero:upgrade/binding"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:lily_pad"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:lily_pad-durability",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 20
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:binding_slot"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:lily_pad-weight",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 0.1
+      }
+    },
+    {
+      "id": "forgero:lily_pad-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 4
+      }
+    }
+  ]
+}

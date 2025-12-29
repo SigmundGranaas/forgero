@@ -1,0 +1,50 @@
+{
+  "type": "forgero:material",
+  "name": "Blaze Powder",
+  "tags": [
+    "forgero:materials/secondary",
+    "forgero:materials/hybrid",
+    "forgero:materials/dust",
+    "forgero:materials/nether",
+    "forgero:upgrade/coating"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:blaze_powder"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:blaze_powder-attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": {
+        "value": 0.2
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:coating_slot"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:blaze_powder-weight",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 0.1
+      }
+    },
+    {
+      "id": "forgero:blaze_powder-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 15
+      }
+    }
+  ]
+}

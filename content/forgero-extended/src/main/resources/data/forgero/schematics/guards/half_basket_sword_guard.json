@@ -1,0 +1,62 @@
+{
+  "type": "forgero:schematic",
+  "name": "Half Basket Sword Guard",
+  "tags": [
+    "forgero:schematics/guards",
+    "forgero:schematics/extended"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:half_basket-schematic-rarity-local",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 100,
+        "operation": "addition"
+      }
+    },
+    {
+      "id": "forgero:half_basket-schematic-rarity-composite",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 1.5,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [{ "type": "forgero:is_root" }]
+      }
+    },
+    {
+      "id": "forgero:half_basket-schematic-durability-composite",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 0.6,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [{ "type": "forgero:is_root" }]
+      }
+    },
+    {
+      "id": "forgero:half_basket-schematic-armor-composite",
+      "type": "forgero:armor",
+      "computation": {
+        "value": 0.8,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [{ "type": "forgero:is_root" }]
+      }
+    },
+    {
+      "id": "forgero:half_basket-schematic-weight-composite",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 0.5,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [{ "type": "forgero:is_root" }]
+      }
+    }
+  ]
+}

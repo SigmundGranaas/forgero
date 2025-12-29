@@ -1,0 +1,44 @@
+{
+  "type": "forgero:part_template",
+  "name": "club_head",
+  "tags": [
+    "forgero:parts/head",
+    "forgero:parts/club_head"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-club_head"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-club_head",
+    "slots": {
+      "material": {
+        "type": "forgero:tool_material",
+        "default_tag": "forgero:materials/tool_material"
+      }
+    }
+  },
+  "attributes": [
+    {
+      "id": "forgero:club_head-rarity",
+      "type": "forgero:rarity",
+      "computation": {"value": 20, "operation": "addition"}
+    },
+    {
+      "id": "forgero:club_head-attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": {"value": 1.3, "operation": "multiplication"},
+      "condition": {
+        "static": [{"type": "forgero:is_root"}]
+      }
+    },
+    {
+      "id": "forgero:club_head-weight",
+      "type": "forgero:weight",
+      "computation": {"value": 1.4, "operation": "multiplication"},
+      "condition": {
+        "static": [{"type": "forgero:is_root"}]
+      }
+    }
+  ]
+}

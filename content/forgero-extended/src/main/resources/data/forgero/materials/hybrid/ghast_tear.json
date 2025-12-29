@@ -1,0 +1,50 @@
+{
+  "type": "forgero:material",
+  "name": "Ghast Tear",
+  "tags": [
+    "forgero:materials/secondary",
+    "forgero:materials/hybrid",
+    "forgero:materials/goo",
+    "forgero:materials/nether",
+    "forgero:upgrade/gem"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:ghast_tear"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:ghast_tear-attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": {
+        "value": 0.3
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:gem_slot"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:ghast_tear-weight",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 0.2
+      }
+    },
+    {
+      "id": "forgero:ghast_tear-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 45
+      }
+    }
+  ]
+}

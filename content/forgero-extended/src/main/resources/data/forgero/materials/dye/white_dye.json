@@ -1,0 +1,26 @@
+{
+  "type": "forgero:material",
+  "name": "White Dye",
+  "tags": [
+    "forgero:materials/secondary",
+    "forgero:materials/dye",
+    "forgero:upgrade/coating"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:white_dye"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:white_dye-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 2
+      }
+    }
+  ]
+}

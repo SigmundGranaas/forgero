@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.model.pipeline;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
@@ -148,7 +151,7 @@ public class ModelPipelineFullIntegrationTest {
 		File swordModelFile = new File(OUTPUT_DIRECTORY, "assets/forgero/models/equipment/iron-sword.json");
 		assertTrue(swordModelFile.exists() && swordModelFile.length() > 0, "Model JSON for iron-sword should be written.");
 
-		System.out.println("Generated files written to: " + new File(OUTPUT_DIRECTORY).getAbsolutePath());
+		LoggerFactory.getLogger(ModelPipelineFullIntegrationTest.class).info("Generated files written to: {}", new File(OUTPUT_DIRECTORY).getAbsolutePath());
 	}
 
 	private void writeGeneratedAssets(ModelGenerationResult result, ResourceProvider resourceProvider) {

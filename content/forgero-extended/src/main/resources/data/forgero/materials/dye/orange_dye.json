@@ -1,0 +1,26 @@
+{
+  "type": "forgero:material",
+  "name": "Orange Dye",
+  "tags": [
+    "forgero:materials/secondary",
+    "forgero:materials/dye",
+    "forgero:upgrade/coating"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:orange_dye"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:orange_dye-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "type": "forgero:material",
+  "name": "String",
+  "tags": [
+    "forgero:materials/secondary",
+    "forgero:materials/soft",
+    "forgero:materials/string",
+    "forgero:upgrade/binding"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:string"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:string-durability",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 30
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:binding_slot"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:string-weight",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 0.2
+      }
+    },
+    {
+      "id": "forgero:string-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "type": "forgero:schematic",
+  "name": "Knife Blade",
+  "tags": [
+    "forgero:schematics/blades",
+    "forgero:schematics/extended"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:knife-schematic-rarity-local",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 15,
+        "operation": "addition"
+      }
+    }
+  ]
+}

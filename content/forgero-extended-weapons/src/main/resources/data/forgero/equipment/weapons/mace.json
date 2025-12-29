@@ -1,0 +1,42 @@
+{
+  "type": "forgero:equipment_template",
+  "name": "mace",
+  "tags": [
+    "forgero:weapons/mace",
+    "forgero:weapons/blunt",
+    "forgero:weapons/extended",
+    "forgero:tool"
+  ],
+  "host_template": {
+    "class": "forgero:sword_item",
+    "id": "forgero:{head.material.name}-mace"
+  },
+  "structure": {
+    "id": "forgero:{head.material.name}-mace",
+    "slots": {
+      "head": {
+        "type": "forgero:mace_head",
+        "default_tag": "forgero:parts/mace_head"
+      },
+      "handle": {
+        "type": "forgero:handle",
+        "default_tag": "forgero:parts/handle"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:mace-binding",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/binding"],
+      "description": "slot.forgero.binding"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:mace-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": {"value": -3.0}
+    }
+  ]
+}

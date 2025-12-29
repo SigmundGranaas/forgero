@@ -1,0 +1,57 @@
+{
+  "type": "forgero:material",
+  "name": "Shulker Shell",
+  "tags": [
+    "forgero:materials/secondary",
+    "forgero:materials/hard",
+    "forgero:materials/shell",
+    "forgero:materials/end",
+    "forgero:upgrade/reinforcement"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:shulker_shell"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:shulker_shell-durability",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 120
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:reinforcement_slot"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:shulker_shell-armor",
+      "type": "forgero:armor",
+      "computation": {
+        "value": 1.0
+      }
+    },
+    {
+      "id": "forgero:shulker_shell-weight",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 1.5
+      }
+    },
+    {
+      "id": "forgero:shulker_shell-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 60
+      }
+    }
+  ]
+}

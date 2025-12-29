@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.predicate.minecraft.standalone;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
@@ -46,6 +49,7 @@ public record WeatherPredicate(
 		@Nullable Boolean thundering
 ) implements DynamicCondition {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(WeatherPredicate.class);
 	public static final OpenIdentifier TYPE = new OpenIdentifier("minecraft", "weather");
 
 	public static final Codec<WeatherPredicate> CODEC = RecordCodecBuilder.create(instance ->
@@ -57,9 +61,14 @@ public record WeatherPredicate(
 
 	@Override
 	public boolean test(DynamicContext context) {
-		return context.get(MinecraftContextKeys.WORLD)
-				.map(this::testWeather)
-				.orElse(false);
+		Optional<World> worldOpt = context.get(MinecraftContextKeys.WORLD);
+		if (worldOpt.isEmpty()) {
+			LOGGER.debug("WeatherPredicate: No world in context");
+			return false;
+		}
+		boolean result = testWeather(worldOpt.get());
+		LOGGER.trace("WeatherPredicate: raining={}, thundering={}, result={}", raining, thundering, result);
+		return result;
 	}
 
 	private boolean testWeather(World world) {

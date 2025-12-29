@@ -9,5 +9,9 @@
   "forgero.station.error.not_forgero_item": "Not a Forgero item",
   "forgero.station.error.validation_failed": "Validation failed: %s",
   "forgero.station.error.install_failed": "Installation failed: %s",
-  "forgero.station.error.operation_failed": "Operation failed: %s"
+  "forgero.station.error.operation_failed": "Operation failed: %s",
+  "container.forgero.upgrade_station": "Upgrade Station",
+  "container.forgero.assembly_station": "Assembly Station",
+  "container.forgero.assembly_station.tooltip.empty": "Place an item here to disassemble it",
+  "container.forgero.assembly_station.tooltip.damaged": "Damaged items cannot be disassembled"
 }

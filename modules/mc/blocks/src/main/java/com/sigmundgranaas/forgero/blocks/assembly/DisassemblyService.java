@@ -1,24 +1,28 @@
 package com.sigmundgranaas.forgero.blocks.assembly;
 
 import com.sigmundgranaas.forgero.blocks.api.StationContext;
+import com.sigmundgranaas.forgero.blocks.assembly.DisassemblyRecipeLoader.DisassemblyRecipe;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
- * Service for disassembling Forgero components into their constituent parts.
+ * Service for disassembling items into their constituent parts.
  * <p>
- * The disassembly process:
+ * Supports two types of disassembly:
  * <ol>
- *   <li>Extracts all structure parts (blade, handle, etc.)</li>
- *   <li>Extracts all installed upgrades (gems, bindings, etc.)</li>
- *   <li>Converts each part/upgrade back to ItemStack</li>
+ *   <li><b>Component-based</b>: Forgero components are disassembled into structure parts and upgrades</li>
+ *   <li><b>Recipe-based</b>: Non-Forgero items are disassembled using JSON recipes</li>
  * </ol>
+ * <p>
+ * The service tries component-based disassembly first, then falls back to recipe-based.
  */
 public class DisassemblyService {
 
@@ -34,12 +38,38 @@ public class DisassemblyService {
 	}
 
 	/**
+	 * Disassembles an ItemStack into parts.
+	 * <p>
+	 * First attempts component-based disassembly, then falls back to recipe-based.
+	 *
+	 * @param stack The ItemStack to disassemble
+	 * @return Result containing the parts as ItemStacks
+	 */
+	public DisassemblyResult disassemble(ItemStack stack) {
+		if (stack == null || stack.isEmpty()) {
+			return DisassemblyResult.empty();
+		}
+
+		// Try component-based disassembly first
+		Optional<Component> component = context.converter().toComponent(stack);
+		if (component.isPresent()) {
+			DisassemblyResult result = disassembleComponent(component.get());
+			if (!result.isEmpty()) {
+				return result;
+			}
+		}
+
+		// Fall back to recipe-based disassembly
+		return disassembleByRecipe(stack);
+	}
+
+	/**
 	 * Disassembles a component into ItemStacks.
 	 *
 	 * @param component The component to disassemble
 	 * @return Result containing the parts as ItemStacks
 	 */
-	public DisassemblyResult disassemble(Component component) {
+	public DisassemblyResult disassembleComponent(Component component) {
 		if (component == null) {
 			return DisassemblyResult.empty();
 		}
@@ -58,22 +88,64 @@ public class DisassemblyService {
 			context.converter().toStack(upgrade).ifPresent(parts::add);
 		}
 
-		return new DisassemblyResult(parts, component);
+		return new DisassemblyResult(parts, null);
+	}
+
+	/**
+	 * Disassembles an ItemStack using recipe definitions.
+	 *
+	 * @param stack The ItemStack to disassemble
+	 * @return Result containing the parts as ItemStacks
+	 */
+	private DisassemblyResult disassembleByRecipe(ItemStack stack) {
+		for (DisassemblyRecipe recipe : DisassemblyRecipeLoader.getRecipes()) {
+			if (recipe.getInput().test(stack)) {
+				List<ItemStack> parts = new ArrayList<>();
+				for (Item item : recipe.getResults()) {
+					parts.add(new ItemStack(item));
+				}
+				return new DisassemblyResult(parts, null);
+			}
+		}
+		return DisassemblyResult.empty();
+	}
+
+	/**
+	 * Checks if an ItemStack can be disassembled.
+	 * <p>
+	 * An item can be disassembled if:
+	 * <ul>
+	 *   <li>It's a Forgero component with structure parts or upgrades, OR</li>
+	 *   <li>It matches a disassembly recipe</li>
+	 * </ul>
+	 *
+	 * @param stack The ItemStack to check
+	 * @return true if disassembly would produce parts
+	 */
+	public boolean canDisassemble(ItemStack stack) {
+		if (stack == null || stack.isEmpty()) {
+			return false;
+		}
+
+		// Check if it's a damageable item that's damaged
+		if (stack.isDamageable() && stack.getDamage() > 0) {
+			return false;
+		}
+
+		// Try component-based
+		Optional<Component> component = context.converter().toComponent(stack);
+		if (component.isPresent() && canDisassembleComponent(component.get())) {
+			return true;
+		}
+
+		// Try recipe-based
+		return hasMatchingRecipe(stack);
 	}
 
 	/**
 	 * Checks if a component can be disassembled.
-	 * <p>
-	 * A component can be disassembled if:
-	 * <ul>
-	 *   <li>It has structure parts OR installed upgrades</li>
-	 *   <li>At least one part can be converted to ItemStack</li>
-	 * </ul>
-	 *
-	 * @param component The component to check
-	 * @return true if disassembly would produce parts
 	 */
-	public boolean canDisassemble(Component component) {
+	private boolean canDisassembleComponent(Component component) {
 		if (component == null) {
 			return false;
 		}
@@ -87,6 +159,18 @@ public class DisassemblyService {
 		// Check if there are any upgrades
 		List<Component> upgrades = context.slotManager().getInstalledUpgrades(component);
 		return !upgrades.isEmpty();
+	}
+
+	/**
+	 * Checks if there's a recipe that matches this ItemStack.
+	 */
+	private boolean hasMatchingRecipe(ItemStack stack) {
+		for (DisassemblyRecipe recipe : DisassemblyRecipeLoader.getRecipes()) {
+			if (recipe.getInput().test(stack)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -121,7 +205,7 @@ public class DisassemblyService {
 	 * Result of a disassembly operation.
 	 *
 	 * @param parts             List of ItemStacks representing the parts
-	 * @param originalComponent The component that was disassembled
+	 * @param originalComponent The component that was disassembled (null for recipe-based)
 	 */
 	public record DisassemblyResult(
 			List<ItemStack> parts,

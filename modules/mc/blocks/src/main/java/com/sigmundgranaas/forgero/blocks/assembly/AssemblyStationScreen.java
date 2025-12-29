@@ -47,5 +47,39 @@ public class AssemblyStationScreen extends HandledScreen<AssemblyStationScreenHa
 		renderBackground(context);
 		super.render(context, mouseX, mouseY, delta);
 		drawMouseoverTooltip(context, mouseX, mouseY);
+		renderCustomTooltips(context, mouseX, mouseY);
+	}
+
+	/**
+	 * Renders helpful tooltips for the input slot.
+	 */
+	private void renderCustomTooltips(DrawContext context, int mouseX, int mouseY) {
+		// Only show tooltip when hovering over empty input slot
+		var inputSlot = handler.getSlot(0);
+		if (!isPointWithinBounds(inputSlot.x, inputSlot.y, 16, 16, mouseX, mouseY)) {
+			return;
+		}
+
+		if (!inputSlot.getStack().isEmpty()) {
+			return; // Slot has an item, let normal tooltip handle it
+		}
+
+		// Check cursor stack for helpful messages
+		var cursorStack = handler.getCursorStack();
+		if (cursorStack.isDamaged()) {
+			context.drawTooltip(
+					textRenderer,
+					Text.translatable("container.forgero.assembly_station.tooltip.damaged"),
+					mouseX,
+					mouseY
+			);
+		} else if (cursorStack.isEmpty()) {
+			context.drawTooltip(
+					textRenderer,
+					Text.translatable("container.forgero.assembly_station.tooltip.empty"),
+					mouseX,
+					mouseY
+			);
+		}
 	}
 }

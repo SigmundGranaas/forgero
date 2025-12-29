@@ -1,0 +1,26 @@
+{
+  "type": "forgero:material",
+  "name": "Green Dye",
+  "tags": [
+    "forgero:materials/secondary",
+    "forgero:materials/dye",
+    "forgero:upgrade/coating"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:green_dye"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:green_dye-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 2
+      }
+    }
+  ]
+}

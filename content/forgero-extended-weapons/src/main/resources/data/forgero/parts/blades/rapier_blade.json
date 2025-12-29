@@ -1,0 +1,52 @@
+{
+  "type": "forgero:part_template",
+  "name": "rapier_blade",
+  "tags": [
+    "forgero:parts/blade",
+    "forgero:parts/rapier_blade"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-rapier_blade"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-rapier_blade",
+    "slots": {
+      "material": {
+        "type": "forgero:tool_material",
+        "default_tag": "forgero:materials/tool_material"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:rapier_blade-reinforcement",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/reinforcement"],
+      "description": "slot.forgero.reinforcement"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:rapier_blade-rarity",
+      "type": "forgero:rarity",
+      "computation": {"value": 35, "operation": "addition"}
+    },
+    {
+      "id": "forgero:rapier_blade-attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": {"value": 0.9, "operation": "multiplication"},
+      "condition": {
+        "static": [{"type": "forgero:is_root"}]
+      }
+    },
+    {
+      "id": "forgero:rapier_blade-weight",
+      "type": "forgero:weight",
+      "computation": {"value": 0.6, "operation": "multiplication"},
+      "condition": {
+        "static": [{"type": "forgero:is_root"}]
+      }
+    }
+  ]
+}

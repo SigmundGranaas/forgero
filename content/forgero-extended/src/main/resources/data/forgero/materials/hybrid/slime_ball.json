@@ -1,0 +1,49 @@
+{
+  "type": "forgero:material",
+  "name": "Slimeball",
+  "tags": [
+    "forgero:materials/secondary",
+    "forgero:materials/hybrid",
+    "forgero:materials/goo",
+    "forgero:upgrade/binding"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:slime_ball"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:slime_ball-durability",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 50
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:binding_slot"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:slime_ball-weight",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 0.4
+      }
+    },
+    {
+      "id": "forgero:slime_ball-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 12
+      }
+    }
+  ]
+}

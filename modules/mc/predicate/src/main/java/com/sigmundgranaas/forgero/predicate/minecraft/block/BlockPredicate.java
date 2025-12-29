@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.predicate.minecraft.block;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
@@ -8,6 +11,7 @@ import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.predicate.minecraft.MinecraftContextKeys;
 import com.sigmundgranaas.forgero.predicate.minecraft.util.LocationPredicate;
 import net.minecraft.block.BlockState;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -19,6 +23,7 @@ public record BlockPredicate(
 		Optional<LocationPredicate> location
 ) implements DynamicCondition {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(BlockPredicate.class);
 	public static final OpenIdentifier TYPE = new OpenIdentifier("minecraft", "block");
 
 	public static final Codec<BlockPredicate> CODEC = RecordCodecBuilder.create(instance ->
@@ -35,6 +40,7 @@ public record BlockPredicate(
 		Optional<BlockPos> posOpt = context.get(MinecraftContextKeys.BLOCK_POS);
 
 		if (worldOpt.isEmpty() || posOpt.isEmpty()) {
+			LOGGER.debug("BlockPredicate: Missing context - world={}, blockPos={}", worldOpt.isPresent(), posOpt.isPresent());
 			return false;
 		}
 		World world = worldOpt.get();
@@ -45,7 +51,16 @@ public record BlockPredicate(
 		boolean propertiesMatch = properties.map(p -> p.test(state)).orElse(true);
 		boolean locationMatch = location.map(loc -> loc.test(world, pos)).orElse(true);
 
-		return typeMatch && propertiesMatch && locationMatch;
+		boolean result = typeMatch && propertiesMatch && locationMatch;
+
+		if (!result) {
+			LOGGER.debug("BlockPredicate failed for block {} at {}: type={}, properties={}, location={}",
+					Registries.BLOCK.getId(state.getBlock()), pos, typeMatch, propertiesMatch, locationMatch);
+		} else {
+			LOGGER.trace("BlockPredicate passed for block {} at {}", Registries.BLOCK.getId(state.getBlock()), pos);
+		}
+
+		return result;
 	}
 
 	@Override

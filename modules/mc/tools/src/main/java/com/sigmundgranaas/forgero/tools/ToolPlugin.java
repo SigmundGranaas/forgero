@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ToolPlugin implements DataPlugin {
-	public static final Logger LOGGER = LoggerFactory.getLogger(ToolPlugin.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ToolPlugin.class);
 	public static final String PICKAXE_ITEM_CLASS = "forgero:pickaxe_item";
 	public static final String PART_ITEM_CLASS = "forgero:part_item";
 
@@ -27,7 +27,6 @@ public class ToolPlugin implements DataPlugin {
 	public void register(PluginRegistrationContext context) {
 		context.registerItemCreator(PICKAXE_ITEM_CLASS, this::createPickaxeItem);
 		context.registerItemCreator(PART_ITEM_CLASS, this::createPartItem);
-		LOGGER.info("Registered item creators for tools and parts.");
 	}
 
 

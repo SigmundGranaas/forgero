@@ -16,6 +16,9 @@
   "icon": "assets/forgero/icon.png",
   "environment": "*",
   "entrypoints": {
+    "main": [
+      "com.sigmundgranaas.forgero.blocks.BlocksInitializer"
+    ],
     "forgero:post_load_plugin": [
       "com.sigmundgranaas.forgero.blocks.BlocksPlugin"
     ],

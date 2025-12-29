@@ -1,0 +1,26 @@
+{
+  "type": "forgero:material",
+  "name": "Purple Dye",
+  "tags": [
+    "forgero:materials/secondary",
+    "forgero:materials/dye",
+    "forgero:upgrade/coating"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:purple_dye"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:purple_dye-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 2
+      }
+    }
+  ]
+}

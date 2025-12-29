@@ -1,5 +1,5 @@
 // Vanilla Upgrades base content module
 // Contains static_part definitions for vanilla Minecraft tools with upgrade slots
 dependencies {
-    implementation project(":content:shared-materials")
+    implementation project(":content:forgero-materials")
 }

@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.bows.handlers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.SimpleUseHandler;
@@ -35,6 +38,7 @@ import net.minecraft.util.Hand;
  */
 public record ConsumeProjectileHandler() implements SimpleUseHandler {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(ConsumeProjectileHandler.class);
 	public static final String TYPE = "forgero:consume_projectile";
 
 	public static final Codec<ConsumeProjectileHandler> CODEC = RecordCodecBuilder.create(instance ->
@@ -49,11 +53,13 @@ public record ConsumeProjectileHandler() implements SimpleUseHandler {
 
 		// Creative mode doesn't consume arrows
 		if (player.getAbilities().creativeMode) {
+			LOGGER.trace("Skipping arrow consumption for player {} in creative mode", player.getName().getString());
 			return;
 		}
 
 		// Infinity enchantment doesn't consume arrows
 		if (hasInfinity(stack)) {
+			LOGGER.trace("Skipping arrow consumption for player {} with Infinity enchantment", player.getName().getString());
 			return;
 		}
 
@@ -61,6 +67,7 @@ public record ConsumeProjectileHandler() implements SimpleUseHandler {
 		ItemStack arrowStack = player.getProjectileType(stack);
 		if (!arrowStack.isEmpty()) {
 			arrowStack.decrement(1);
+			LOGGER.debug("Consumed arrow for player {}, remaining: {}", player.getName().getString(), arrowStack.getCount());
 			if (arrowStack.isEmpty()) {
 				player.getInventory().removeOne(arrowStack);
 			}

@@ -1,0 +1,42 @@
+{
+  "type": "forgero:material",
+  "name": "Glowstone Dust",
+  "tags": [
+    "forgero:materials/secondary",
+    "forgero:materials/hybrid",
+    "forgero:materials/dust",
+    "forgero:materials/nether",
+    "forgero:upgrade/coating"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:glowstone_dust"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:glowstone-emissive",
+      "type": "forgero:emissive",
+      "computation": {
+        "value": 4
+      }
+    },
+    {
+      "id": "forgero:glowstone-weight",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 0.1
+      }
+    },
+    {
+      "id": "forgero:glowstone-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 12
+      }
+    }
+  ]
+}

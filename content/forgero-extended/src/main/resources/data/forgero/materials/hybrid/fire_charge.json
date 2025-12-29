@@ -1,0 +1,50 @@
+{
+  "type": "forgero:material",
+  "name": "Fire Charge",
+  "tags": [
+    "forgero:materials/secondary",
+    "forgero:materials/hybrid",
+    "forgero:materials/magical",
+    "forgero:materials/nether",
+    "forgero:upgrade/gem"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:fire_charge"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:fire_charge-attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": {
+        "value": 0.4
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:gem_slot"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:fire_charge-weight",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 0.3
+      }
+    },
+    {
+      "id": "forgero:fire_charge-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 18
+      }
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "type": "forgero:equipment_template",
+  "name": "rapier",
+  "tags": [
+    "forgero:weapons/rapier",
+    "forgero:weapons/swordlike",
+    "forgero:weapons/extended",
+    "forgero:tool"
+  ],
+  "host_template": {
+    "class": "forgero:sword_item",
+    "id": "forgero:{blade.material.name}-rapier"
+  },
+  "structure": {
+    "id": "forgero:{blade.material.name}-rapier",
+    "slots": {
+      "blade": {
+        "type": "forgero:rapier_blade",
+        "default_tag": "forgero:parts/rapier_blade"
+      },
+      "handle": {
+        "type": "forgero:handle",
+        "default_tag": "forgero:parts/handle"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:rapier-guard",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/guard"],
+      "description": "slot.forgero.guard"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:rapier-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": {"value": -1.8}
+    }
+  ]
+}

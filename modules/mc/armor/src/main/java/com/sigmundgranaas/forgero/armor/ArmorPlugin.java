@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.armor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.sigmundgranaas.forgero.armor.item.ForgeroArmorItem;
 import com.sigmundgranaas.forgero.armor.item.ForgeroArmorMaterial;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
@@ -18,6 +21,7 @@ import java.util.stream.Collectors;
  * Registers all armor item creators with the common loader.
  */
 public class ArmorPlugin implements DataPlugin {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ArmorPlugin.class);
 	public static final String ARMOR_ITEM_CLASS = "forgero:armor_item";
 
 	@Override
@@ -33,6 +37,8 @@ public class ArmorPlugin implements DataPlugin {
 	private Item createArmorItem(Component component, CreateData data, Resolver resolver) {
 		var armorType = determineArmorType(component);
 		if (armorType == null) {
+			LOGGER.error("Cannot create armor item for '{}': no armor type tag (helmet/chestplate/leggings/boots) found in tags {}",
+					component.id(), component.getTags().stream().map(OpenIdentifier::name).collect(Collectors.toList()));
 			throw new IllegalArgumentException("Failed to create armor item for component '" + component.id() + "'. Could not determine armor type from tags.");
 		}
 		ForgeroArmorMaterial material = new ForgeroArmorMaterial(component, resolver);

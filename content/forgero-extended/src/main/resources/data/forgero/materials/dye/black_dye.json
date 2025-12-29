@@ -1,0 +1,26 @@
+{
+  "type": "forgero:material",
+  "name": "Black Dye",
+  "tags": [
+    "forgero:materials/secondary",
+    "forgero:materials/dye",
+    "forgero:upgrade/coating"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:black_dye"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:black_dye-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 2
+      }
+    }
+  ]
+}

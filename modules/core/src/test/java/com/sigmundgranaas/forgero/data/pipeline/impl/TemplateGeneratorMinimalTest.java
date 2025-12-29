@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.data.pipeline.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.sigmundgranaas.forgero.cof.ComponentTypeRegistry;
 import com.sigmundgranaas.forgero.cof.dto.CofComponent;
 import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
@@ -19,6 +22,8 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TemplateGeneratorMinimalTest {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(TemplateGeneratorMinimalTest.class);
 
 	@Test
 	void minimalTest() {
@@ -81,21 +86,20 @@ public class TemplateGeneratorMinimalTest {
 				idTemplateResolver, staticComponents, rawDefinitions);
 			result = generator.generate();
 		} catch (Exception e) {
-			System.err.println("Exception during generation: " + e.getClass().getName() + ": " + e.getMessage());
-			e.printStackTrace();
+			LOGGER.error("Exception during generation: {}: {}", e.getClass().getName(), e.getMessage(), e);
 			throw e;
 		}
 
 		// Assert
-		System.out.println("Generated " + result.components().size() + " components:");
+		LOGGER.debug("Generated {} components:", result.components().size());
 		result.components().forEach(comp -> {
-			System.out.println("  - " + comp.id() + " (type: " + comp.componentType() + ")");
+			LOGGER.debug("  - {} (type: {})", comp.id(), comp.componentType());
 		});
 
 		assertEquals(1, result.components().size(), "Should generate exactly 1 component");
 		CofComponent generated = result.components().get(0);
-		System.out.println("Expected ID: " + idFactory.of("iron-pickaxe_head"));
-		System.out.println("Actual ID: " + generated.id());
+		LOGGER.debug("Expected ID: {}", idFactory.of("iron-pickaxe_head"));
+		LOGGER.debug("Actual ID: {}", generated.id());
 		assertEquals(idFactory.of("iron-pickaxe_head"), generated.id());
 	}
 }

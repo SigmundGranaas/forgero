@@ -1,0 +1,50 @@
+{
+  "type": "forgero:material",
+  "name": "Nautilus Shell",
+  "tags": [
+    "forgero:materials/secondary",
+    "forgero:materials/hard",
+    "forgero:materials/shell",
+    "forgero:materials/ocean",
+    "forgero:upgrade/reinforcement"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:nautilus_shell"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:nautilus_shell-durability",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 100
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:reinforcement_slot"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:nautilus_shell-weight",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 1.2
+      }
+    },
+    {
+      "id": "forgero:nautilus_shell-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 50
+      }
+    }
+  ]
+}

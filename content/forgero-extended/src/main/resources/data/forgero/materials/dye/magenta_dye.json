@@ -1,0 +1,26 @@
+{
+  "type": "forgero:material",
+  "name": "Magenta Dye",
+  "tags": [
+    "forgero:materials/secondary",
+    "forgero:materials/dye",
+    "forgero:upgrade/coating"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:magenta_dye"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:magenta_dye-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 2
+      }
+    }
+  ]
+}

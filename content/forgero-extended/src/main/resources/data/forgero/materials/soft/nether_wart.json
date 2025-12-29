@@ -1,0 +1,50 @@
+{
+  "type": "forgero:material",
+  "name": "Nether Wart",
+  "tags": [
+    "forgero:materials/secondary",
+    "forgero:materials/soft",
+    "forgero:materials/plant",
+    "forgero:materials/nether",
+    "forgero:upgrade/binding"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:nether_wart"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:nether_wart-durability",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 30
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:binding_slot"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:nether_wart-weight",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 0.25
+      }
+    },
+    {
+      "id": "forgero:nether_wart-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 10
+      }
+    }
+  ]
+}

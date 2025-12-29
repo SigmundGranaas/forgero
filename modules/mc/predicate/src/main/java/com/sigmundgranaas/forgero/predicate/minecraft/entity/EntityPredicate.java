@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.predicate.minecraft.entity;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
@@ -30,6 +33,7 @@ public record EntityPredicate(
 		Optional<RelationalPredicate> relational
 ) implements DynamicCondition {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(EntityPredicate.class);
 	public static final OpenIdentifier TYPE = new OpenIdentifier("minecraft", "entity");
 
 	public enum Target {SELF, TARGET_ENTITY}
@@ -55,6 +59,7 @@ public record EntityPredicate(
 	public boolean test(DynamicContext context) {
 		Optional<Entity> entityToTest = getEntityToTest(context);
 		if (entityToTest.isEmpty()) {
+			LOGGER.debug("EntityPredicate: No entity found in context for target={}", target.orElse(Target.SELF));
 			return false;
 		}
 		Entity entity = entityToTest.get();
@@ -67,7 +72,16 @@ public record EntityPredicate(
 		boolean equipmentMatch = equipment.map(p -> entity instanceof LivingEntity living && p.test(living)).orElse(true);
 		boolean effectsMatch = effects.map(p -> entity instanceof LivingEntity living && p.test(living)).orElse(true);
 
-		return typeMatch && flagMatch && statsMatch && equipmentMatch && effectsMatch && locationMatch && relationalMatch;
+		boolean result = typeMatch && flagMatch && statsMatch && equipmentMatch && effectsMatch && locationMatch && relationalMatch;
+
+		if (!result) {
+			LOGGER.debug("EntityPredicate failed for entity {}: type={}, flags={}, stats={}, equipment={}, effects={}, location={}, relational={}",
+					Registries.ENTITY_TYPE.getId(entity.getType()), typeMatch, flagMatch, statsMatch, equipmentMatch, effectsMatch, locationMatch, relationalMatch);
+		} else {
+			LOGGER.trace("EntityPredicate passed for entity {}", Registries.ENTITY_TYPE.getId(entity.getType()));
+		}
+
+		return result;
 	}
 
 	private Optional<Entity> getEntityToTest(DynamicContext context) {

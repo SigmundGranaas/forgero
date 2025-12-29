@@ -13,7 +13,7 @@ dependencies {
 	runtimeOnly(project(path: ":modules:mc:properties",  configuration: 'namedElements'))
 
 	// Resources
-	runtimeOnly(project(path: ":content:minecraft-vanilla-materials"))
+	runtimeOnly(project(path: ":content:forgero-materials"))
 	runtimeOnly(project(path: ":content:forgero-tools"))
 	runtimeOnly(project(path: ":content:forgero-armor"))
 	runtimeOnly(project(path: ":content:minecraft-tools"))

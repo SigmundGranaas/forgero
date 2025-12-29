@@ -82,15 +82,39 @@ addSlot(new ComponentSlot(inventory, index, pos.x(), pos.y()));
 
 ## DisassemblyService
 
-Breaks components into parts:
+Breaks items into parts using two methods:
+
+1. **Component-based**: Forgero components are disassembled into structure parts and upgrades
+2. **Recipe-based**: Non-Forgero items are disassembled using JSON recipes
 
 ```java
 DisassemblyService service = DisassemblyService.create(context);
 
-if (service.canDisassemble(tool)) {
-    DisassemblyResult result = service.disassemble(tool);
+ItemStack stack = ...; // Any ItemStack (Forgero or vanilla)
+
+if (service.canDisassemble(stack)) {
+    DisassemblyResult result = service.disassemble(stack);
     for (ItemStack part : result.parts()) {
         // Add to output slots
     }
 }
 ```
+
+### Disassembly Recipes
+
+Recipe files are located in `data/*/disassembly/*.json`:
+
+```json
+{
+  "input": "minecraft:diamond_pickaxe",
+  "results": [
+    "minecraft:diamond",
+    "minecraft:diamond",
+    "minecraft:diamond",
+    "minecraft:stick",
+    "minecraft:stick"
+  ]
+}
+```
+
+Recipes are automatically reloaded when resource packs change.

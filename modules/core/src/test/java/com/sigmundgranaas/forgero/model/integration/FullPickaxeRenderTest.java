@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.model.integration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.sigmundgranaas.forgero.cof.ComponentTypeRegistry;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
@@ -114,7 +117,7 @@ public class FullPickaxeRenderTest {
 		assertEquals(16, result.getHeight());
 
 		PngWriter.save(result, "build/test_results/full_pickaxe_render.png");
-		System.out.println("Saved complex pickaxe render to build/test_results/full_pickaxe_render.png");
+		LoggerFactory.getLogger(FullPickaxeRenderTest.class).info("Saved complex pickaxe render to build/test_results/full_pickaxe_render.png");
 	}
 
 

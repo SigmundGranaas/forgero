@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.armor.item;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
@@ -20,12 +23,19 @@ import net.minecraft.sound.SoundEvents;
  */
 public class ForgeroArmorMaterial implements ArmorMaterial {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(ForgeroArmorMaterial.class);
+
 	private final Component component;
 	private final AttributeQueryResult attributes;
 
 	public ForgeroArmorMaterial(Component component, Resolver resolver) {
 		this.component = component;
 		this.attributes = resolver.resolve(component, new AttributeEngine());
+		LOGGER.debug("Created armor material for component: {} with durability={}, armor={}, toughness={}",
+				component.id(),
+				(int) attributes.getValue(DefaultAttributes.DURABILITY),
+				(int) attributes.getValue(DefaultAttributes.ARMOR),
+				attributes.getValue(DefaultAttributes.ARMOR_TOUGHNESS));
 	}
 
 	@Override

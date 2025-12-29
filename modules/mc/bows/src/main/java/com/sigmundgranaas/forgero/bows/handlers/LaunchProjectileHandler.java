@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.bows.handlers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
@@ -45,6 +48,7 @@ public record LaunchProjectileHandler(
 		float baseDivergence
 ) implements ContextualUseHandler {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(LaunchProjectileHandler.class);
 	public static final String TYPE = "forgero:launch_projectile";
 	private static final float DEFAULT_POWER = 3.0f;
 	private static final float DEFAULT_DIVERGENCE = 1.0f;
@@ -58,6 +62,7 @@ public record LaunchProjectileHandler(
 		ForgeroInitializedCallback.EVENT.register(services -> {
 			converter = services.converter();
 			resolver = services.resolver();
+			LOGGER.debug("LaunchProjectileHandler services initialized");
 		});
 	}
 
@@ -91,11 +96,13 @@ public record LaunchProjectileHandler(
 			ItemStack arrowStack = getArrowStack(player, bowStack);
 
 			if (arrowStack.isEmpty()) {
+				LOGGER.debug("No arrow available for player {} to launch", player.getName().getString());
 				return;
 			}
 
 			float pullProgress = context.pullProgress();
 			if (pullProgress < 0.1f) {
+				LOGGER.trace("Pull progress too low ({}) for player {}", pullProgress, player.getName().getString());
 				return;
 			}
 
@@ -112,7 +119,8 @@ public record LaunchProjectileHandler(
 			float velocity = resolvedPower * pullProgress;
 			projectile.setVelocity(player, player.getPitch(), player.getYaw(), 0.0f, velocity, divergence);
 
-			if (pullProgress >= 1.0f) {
+			boolean isCritical = pullProgress >= 1.0f;
+			if (isCritical) {
 				projectile.setCritical(true);
 			}
 
@@ -120,6 +128,9 @@ public record LaunchProjectileHandler(
 
 			world.spawnEntity(projectile);
 			playSound(world, player, pullProgress);
+
+			LOGGER.debug("Launched projectile for player {}: velocity={}, divergence={}, critical={}, power={}, accuracy={}",
+					player.getName().getString(), velocity, divergence, isCritical, resolvedPower, resolvedAccuracy);
 
 			consumeArrow(player, bowStack, arrowStack);
 			damageBow(player, bowStack, context.hand());

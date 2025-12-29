@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.predicate.minecraft.standalone;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
@@ -45,6 +48,7 @@ public record RandomPredicate(
 		List<SeedSource> seedSources
 ) implements DynamicCondition {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(RandomPredicate.class);
 	public static final OpenIdentifier TYPE = new OpenIdentifier("forgero", "random");
 
 	private static final long FIXED_SEED = 0x12345678ABCDL;
@@ -70,7 +74,10 @@ public record RandomPredicate(
 			long seed = generateSeed(context);
 			random = new Random(seed);
 		}
-		return random.nextFloat() < chance;
+		float roll = random.nextFloat();
+		boolean result = roll < chance;
+		LOGGER.trace("RandomPredicate: chance={}, roll={}, result={}, seeded={}", chance, roll, result, !seedSources.isEmpty());
+		return result;
 	}
 
 	private long generateSeed(DynamicContext context) {

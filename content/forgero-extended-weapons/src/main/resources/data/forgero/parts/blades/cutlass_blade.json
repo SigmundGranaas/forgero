@@ -1,0 +1,52 @@
+{
+  "type": "forgero:part_template",
+  "name": "cutlass_blade",
+  "tags": [
+    "forgero:parts/blade",
+    "forgero:parts/cutlass_blade"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-cutlass_blade"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-cutlass_blade",
+    "slots": {
+      "material": {
+        "type": "forgero:tool_material",
+        "default_tag": "forgero:materials/tool_material"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:cutlass_blade-reinforcement",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/reinforcement"],
+      "description": "slot.forgero.reinforcement"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:cutlass_blade-rarity",
+      "type": "forgero:rarity",
+      "computation": {"value": 30, "operation": "addition"}
+    },
+    {
+      "id": "forgero:cutlass_blade-attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": {"value": 1.1, "operation": "multiplication"},
+      "condition": {
+        "static": [{"type": "forgero:is_root"}]
+      }
+    },
+    {
+      "id": "forgero:cutlass_blade-weight",
+      "type": "forgero:weight",
+      "computation": {"value": 0.85, "operation": "multiplication"},
+      "condition": {
+        "static": [{"type": "forgero:is_root"}]
+      }
+    }
+  ]
+}

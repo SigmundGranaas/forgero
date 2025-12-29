@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.bows;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.sigmundgranaas.forgero.bows.handlers.ConsumeProjectileHandler;
 import com.sigmundgranaas.forgero.bows.handlers.LaunchProjectileHandler;
 import com.sigmundgranaas.forgero.bows.handlers.MountProjectileHandler;
@@ -24,6 +27,7 @@ import net.minecraft.item.Item;
  * </ul>
  */
 public class BowPlugin implements DataPlugin {
+	private static final Logger LOGGER = LoggerFactory.getLogger(BowPlugin.class);
 	public static final String BOW_ITEM_CLASS = "forgero:bow_item";
 
 	static {

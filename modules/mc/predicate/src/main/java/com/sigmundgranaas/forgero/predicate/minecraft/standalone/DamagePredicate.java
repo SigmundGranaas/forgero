@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.predicate.minecraft.standalone;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
@@ -33,6 +36,7 @@ import net.minecraft.item.ItemStack;
  */
 public record DamagePredicate(float percentage) implements DynamicCondition {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(DamagePredicate.class);
 	public static final OpenIdentifier TYPE = new OpenIdentifier("forgero", "damage");
 
 	public static final Codec<DamagePredicate> CODEC = RecordCodecBuilder.create(instance ->
@@ -44,23 +48,32 @@ public record DamagePredicate(float percentage) implements DynamicCondition {
 	public boolean test(DynamicContext context) {
 		return context.get(MinecraftContextKeys.STACK)
 				.map(this::testStack)
-				.orElse(false);
+				.orElseGet(() -> {
+					LOGGER.debug("DamagePredicate: No ItemStack in context");
+					return false;
+				});
 	}
 
 	private boolean testStack(ItemStack stack) {
 		if (!stack.isDamageable()) {
+			LOGGER.trace("DamagePredicate: Item {} is not damageable", stack.getItem());
 			return false;
 		}
 
 		float damageRatio = (float) stack.getDamage() / (float) stack.getMaxDamage();
+		boolean result;
 
 		if (percentage > 1) {
 			// Treat as 0-100 scale
-			return (damageRatio * 100) >= percentage;
+			result = (damageRatio * 100) >= percentage;
 		} else {
 			// Treat as 0-1 scale
-			return damageRatio >= percentage;
+			result = damageRatio >= percentage;
 		}
+
+		LOGGER.trace("DamagePredicate: item={}, damageRatio={}, threshold={}, result={}",
+				stack.getItem(), damageRatio, percentage, result);
+		return result;
 	}
 
 	@Override

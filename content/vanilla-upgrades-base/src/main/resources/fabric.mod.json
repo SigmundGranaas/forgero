@@ -17,7 +17,7 @@
   "environment": "*",
   "depends": {
     "forgero-core": "*",
-    "forgero-shared-materials": "*",
+    "forgero-materials": "*",
     "java": ">=17"
   },
   "custom": {

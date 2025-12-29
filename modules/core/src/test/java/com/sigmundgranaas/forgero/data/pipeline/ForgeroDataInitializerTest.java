@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.data.pipeline;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.HostData;
@@ -18,6 +21,8 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ForgeroDataInitializerTest {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(ForgeroDataInitializerTest.class);
 
 	private static final IdentifierFactory idFactory = new IdentifierFactory.Builder().defaultNamespace("forgero").build();
 
@@ -85,10 +90,10 @@ class ForgeroDataInitializerTest {
 		OpenIdentifier ironPickaxeHeadId = idFactory.of("forgero:iron-pickaxe_head");
 
 		// Debug: Print all generated host items
-		System.out.println("=== Generated Host Items ===");
+		LOGGER.debug("=== Generated Host Items ===");
 		bundle.hostItemMap().keySet().stream()
 				.filter(id -> bundle.hostItemMap().get(id).create() != null)
-				.forEach(id -> System.out.println("Generated: " + id));
+				.forEach(id -> LOGGER.debug("Generated: {}", id));
 
 		assertTrue(bundle.hostItemMap().containsKey(ironPickaxeHeadId), "Host map should contain generated part 'forgero:iron-pickaxe_head'");
 		HostData generatedPartHostData = bundle.hostItemMap().get(ironPickaxeHeadId);

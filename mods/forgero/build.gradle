@@ -47,9 +47,10 @@ dependencies {
     implementation(project(path: ":modules:mc:bows", configuration: 'namedElements'))
 
     // Content modules for testing - use same content as properties module for stability
-    runtimeOnly(project(":content:minecraft-vanilla-materials"))
+    runtimeOnly(project(":content:forgero-materials"))
     runtimeOnly(project(":content:minecraft-tools"))
-    runtimeOnly(project(":content:shared-materials"))
+    runtimeOnly(project(":content:forgero-base"))
+    runtimeOnly(project(":content:forgero-upgrades"))
 
     // Fabric
     modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
@@ -66,6 +67,8 @@ dependencies {
     // Forgero test utilities
     testImplementation(project(":modules:core:test-common"))
     implementation(project(path: ":modules:mc:test-common", configuration: 'namedElements'))
+    // Include test-common in the mod jar for gametest runtime
+    include(project(path: ":modules:mc:test-common", configuration: 'namedElements'))
 
     // Add vanilla-upgrades content for vanilla parity testing (include for GameTests)
     include(project(":content:vanilla-upgrades-base"))

@@ -137,27 +137,26 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 				return;
 			}
 
-			context.converter().toComponent(inputStack).ifPresent(component -> {
-				currentResult = disassemblyService.disassemble(component);
+			// Disassemble using the service (handles both components and recipes)
+			currentResult = disassemblyService.disassemble(inputStack);
 
-				// Place parts in result slots
-				List<ItemStack> parts = currentResult.parts();
-				for (int i = 0; i < Math.min(parts.size(), resultInventory.size()); i++) {
-					ItemStack part = parts.get(i).copy();
-					resultInventory.setStack(i, part);
+			// Place parts in result slots
+			List<ItemStack> parts = currentResult.parts();
+			for (int i = 0; i < Math.min(parts.size(), resultInventory.size()); i++) {
+				ItemStack part = parts.get(i).copy();
+				resultInventory.setStack(i, part);
 
-					// Sync to client
-					if (player instanceof ServerPlayerEntity serverPlayer) {
-						int slotIndex = i + 1; // +1 because slot 0 is input
-						serverPlayer.networkHandler.sendPacket(
-								new ScreenHandlerSlotUpdateS2CPacket(syncId, nextRevision(), slotIndex, part)
-						);
-					}
+				// Sync to client
+				if (player instanceof ServerPlayerEntity serverPlayer) {
+					int slotIndex = i + 1; // +1 because slot 0 is input
+					serverPlayer.networkHandler.sendPacket(
+							new ScreenHandlerSlotUpdateS2CPacket(syncId, nextRevision(), slotIndex, part)
+					);
 				}
+			}
 
-				// Consume the input item
-				inputSlot.markAsDisassembled();
-			});
+			// Consume the input item
+			inputSlot.markAsDisassembled();
 		});
 	}
 
@@ -272,11 +271,6 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 				return true; // Client-side
 			}
 
-			// Check if damaged
-			if (stack.getDamage() > 0) {
-				return false;
-			}
-
 			// Check if results are empty
 			for (int i = 0; i < resultInventory.size(); i++) {
 				if (!resultInventory.getStack(i).isEmpty()) {
@@ -284,10 +278,8 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 				}
 			}
 
-			// Check if can be disassembled
-			return context.converter().toComponent(stack)
-					.map(c -> DisassemblyService.create(context).canDisassemble(c))
-					.orElse(false);
+			// Check if can be disassembled (handles both components and recipes, includes damage check)
+			return DisassemblyService.create(context).canDisassemble(stack);
 		}
 	}
 

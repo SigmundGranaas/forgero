@@ -1,0 +1,50 @@
+{
+  "type": "forgero:material",
+  "name": "Magma Cream",
+  "tags": [
+    "forgero:materials/secondary",
+    "forgero:materials/hybrid",
+    "forgero:materials/goo",
+    "forgero:materials/nether",
+    "forgero:upgrade/binding"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:magma_cream"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:magma_cream-durability",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 55
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:binding_slot"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:magma_cream-weight",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 0.5
+      }
+    },
+    {
+      "id": "forgero:magma_cream-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 20
+      }
+    }
+  ]
+}

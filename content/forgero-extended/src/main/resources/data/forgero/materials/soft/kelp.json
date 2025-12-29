@@ -1,0 +1,49 @@
+{
+  "type": "forgero:material",
+  "name": "Kelp",
+  "tags": [
+    "forgero:materials/secondary",
+    "forgero:materials/soft",
+    "forgero:materials/plant",
+    "forgero:upgrade/binding"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:kelp"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:kelp-durability",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 25
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:binding_slot"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:kelp-weight",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 0.2
+      }
+    },
+    {
+      "id": "forgero:kelp-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 3
+      }
+    }
+  ]
+}

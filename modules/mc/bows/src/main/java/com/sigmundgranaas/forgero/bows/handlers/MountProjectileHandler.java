@@ -1,5 +1,8 @@
 package com.sigmundgranaas.forgero.bows.handlers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.SimpleUseHandler;
@@ -24,6 +27,7 @@ import net.minecraft.util.Hand;
  */
 public record MountProjectileHandler() implements SimpleUseHandler {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(MountProjectileHandler.class);
 	public static final String TYPE = "forgero:mount_projectile";
 
 	public static final Codec<MountProjectileHandler> CODEC = RecordCodecBuilder.create(instance ->
@@ -35,9 +39,12 @@ public record MountProjectileHandler() implements SimpleUseHandler {
 		if (user instanceof PlayerEntity player) {
 			boolean hasProjectile = !player.getProjectileType(stack).isEmpty();
 			if (!player.getAbilities().creativeMode && !hasProjectile) {
+				LOGGER.debug("Player {} cannot mount projectile: no projectile available and not in creative mode",
+						player.getName().getString());
 				return;
 			}
 			player.setCurrentHand(hand);
+			LOGGER.trace("Player {} mounted bow in hand {}", player.getName().getString(), hand);
 		}
 	}
 
