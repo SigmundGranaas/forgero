@@ -10,12 +10,14 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public class AwtPalettizedTextureGenerator implements PalettizedTextureGenerator {
+	private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(AwtPalettizedTextureGenerator.class);
 
 	private static final int PALETTE_COLOR_COUNT = 7; // The palette is 7 pixels wide.
 
 	@Override
 	public BufferedImage generate(BufferedImage template, BufferedImage palette) {
-
+		LOGGER.debug("Generating texture: template {}x{}, palette {}x{}",
+				template.getWidth(), template.getHeight(), palette.getWidth(), palette.getHeight());
 
 		Set<Integer> distinctTemplateGreys = new TreeSet<>();
 		int width = template.getWidth();
@@ -51,6 +53,7 @@ public class AwtPalettizedTextureGenerator implements PalettizedTextureGenerator
 
 		// Validate distinct greyscale values against expected set
 		List<Integer> sortedDistinctTemplateGreys = distinctTemplateGreys.stream().sorted().toList();
+		LOGGER.debug("Found {} distinct greyscale values: {}", sortedDistinctTemplateGreys.size(), sortedDistinctTemplateGreys);
 
 		if (sortedDistinctTemplateGreys.size() > paletteSize) {
 			throw new IllegalArgumentException(String.format(
@@ -60,6 +63,18 @@ public class AwtPalettizedTextureGenerator implements PalettizedTextureGenerator
 					paletteSize,
 					sortedDistinctTemplateGreys.stream().map(String::valueOf).collect(Collectors.joining(", "))
 			));
+		}
+
+		// Log the mapping for debugging
+		if (LOGGER.isDebugEnabled()) {
+			float scaleValue = (float) paletteSize / (float) sortedDistinctTemplateGreys.size();
+			StringBuilder mapping = new StringBuilder("Greyscale to palette mapping: ");
+			for (int i = 0; i < sortedDistinctTemplateGreys.size(); i++) {
+				int paletteIdx = Math.min(Math.round(scaleValue * i), paletteSize - 1);
+				mapping.append(sortedDistinctTemplateGreys.get(i)).append("->").append(paletteIdx);
+				if (i < sortedDistinctTemplateGreys.size() - 1) mapping.append(", ");
+			}
+			LOGGER.debug(mapping.toString());
 		}
 
 		// Second pass: Recolor the image
@@ -93,7 +108,11 @@ public class AwtPalettizedTextureGenerator implements PalettizedTextureGenerator
 	/**
 	 * Determines the correct 0-indexed palette column to use for a given greyscale value.
 	 * This works by finding the given grey's relative position within the template's *actual*
-	 * sorted distinct greyscale values, and mapping that to the 0-6 range of the palette.
+	 * sorted distinct greyscale values, and mapping that to the palette range.
+	 * <p>
+	 * Uses legacy scaling formula: scaleValue = paletteSize / greyScaleSize, then
+	 * normalizedIndex = scaleValue * templateIndex. This matches the original
+	 * DefaultRecolorStrategy behavior for consistency with existing templates.
 	 *
 	 * @param pixelGrey The greyscale value of the current pixel (0-255).
 	 * @param distinctGreysInTemplate A sorted list of all distinct greyscale values found in the template.
@@ -118,10 +137,11 @@ public class AwtPalettizedTextureGenerator implements PalettizedTextureGenerator
 			templateValueIndex = Math.max(0, Math.min(templateValueIndex, distinctGreysInTemplate.size() - 1)); // Ensure bounds
 		}
 
-
-		// Now, map this index (0 to N-1, where N is distinctGreysInTemplate.size())
-		// to the 0 to 6 range of the palette.
-		float ratio = (float) templateValueIndex / (distinctGreysInTemplate.size() - 1);
+		// Map template greyscale index to palette index using normalized ratio.
+		// This ensures the full palette range is used: darkest grey -> palette[0],
+		// lightest grey -> palette[paletteSize-1].
+		float ratio = (distinctGreysInTemplate.size() == 1) ? 0f :
+				(float) templateValueIndex / (distinctGreysInTemplate.size() - 1);
 		int paletteIndex = Math.round(ratio * (paletteSize - 1));
 
 		return Math.max(0, Math.min(paletteIndex, paletteSize - 1));

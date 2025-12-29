@@ -1,0 +1,61 @@
+{
+  "type": "forgero:composite_model",
+  "id": "forgero:item/wooden_handle",
+  "target": "forgero:wooden_handle",
+  "layers": [
+    {
+      "order": 10,
+      "textures": {
+        "default": "forgero:item/oak-handle",
+        "variants": [
+          {
+            "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/pickaxe" }],
+            "texture": "forgero:item/oak-pickaxe_handle"
+          },
+          {
+            "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/axe" }],
+            "texture": "forgero:item/oak-axe_handle"
+          },
+          {
+            "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/hoe" }],
+            "texture": "forgero:item/oak-hoe_handle"
+          },
+          {
+            "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/shovel" }],
+            "texture": "forgero:item/oak-medium_handle"
+          },
+          {
+            "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/sword" }],
+            "texture": "forgero:item/oak-short_handle"
+          }
+        ]
+      }
+    }
+  ],
+  "slots": [
+    {
+      "id": "grip_slot",
+      "order": 25,
+      "renderer": {
+        "type": "forgero:component",
+        "context": "grip"
+      }
+    },
+    {
+      "id": "pommel_slot",
+      "order": 5,
+      "renderer": {
+        "type": "forgero:component",
+        "context": "pommel"
+      }
+    },
+    {
+      "id": "handle-cosmetic",
+      "order": 15,
+      "renderer": {
+        "type": "forgero:component",
+        "context": "handle_dye"
+      }
+    }
+  ]
+}

@@ -42,6 +42,9 @@ public class RecursiveModelResolver implements ItemModelResolver {
 
 	private List<RenderableTexture> resolveComponent(Component component, ModelResolutionContext context) {
 		Optional<Model> modelOpt = modelRegistry.find(component.id());
+		if (modelOpt.isEmpty()) {
+			LOGGER.debug("No model found for component '{}' in registry", component.id());
+		}
 		return modelOpt.map(model -> collectTexturesFromKnownModel(model, component, 0, context))
 				.orElse(Collections.emptyList());
 	}
@@ -126,11 +129,18 @@ public class RecursiveModelResolver implements ItemModelResolver {
 				.flatMap(ctx -> modelRegistry.find(child.id(), ctx))
 				.or(() -> modelRegistry.find(child.id()));
 
+		LOGGER.debug("Resolving slot '{}' for child component '{}': model found = {}",
+				slot.id(), child.id(), modelOpt.isPresent());
+
 		if (modelOpt.isEmpty()) {
 			// Fallback: If no model is found for the child, resolve it independently. Mount points won't apply.
-			return resolveComponent(child, childContext).stream()
+			LOGGER.debug("No model found for slot '{}' child '{}', falling back to independent resolution",
+					slot.id(), child.id());
+			List<RenderableTexture> fallbackTextures = resolveComponent(child, childContext).stream()
 					.map(tex -> tex.withOrder(baseOrder + slot.order() + tex.order()))
 					.toList();
+			LOGGER.debug("Fallback resolution for '{}' returned {} textures", child.id(), fallbackTextures.size());
+			return fallbackTextures;
 		}
 
 		Model childModel = modelOpt.get();
