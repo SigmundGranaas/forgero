@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-base",
+  "version": "${version}",
+  "name": "Forgero Base",
+  "description": "Base part templates, equipment templates, and tags for Forgero",
+  "authors": [
+    "Sigmund Granaas Sandring"
+  ],
+  "contact": {
+    "homepage": "https://sigmundgranaas.com",
+    "sources": "https://github.com/sigmundgranaas/forgero",
+    "issues": "https://github.com/sigmundgranaas/forgero/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/forgero/icon.png",
+  "environment": "*",
+  "depends": {
+    "java": ">=17"
+  },
+  "custom": {
+    "forgeroResource": true,
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/v6sDsftE9N"
+      },
+      "badges": [
+        "library"
+      ],
+      "parent": {
+        "id": "forgero",
+        "name": "Forgero",
+        "description": "Equipment crafting expansion mod for Fabric!",
+        "icon": "assets/forgero/icon.png"
+      }
+    }
+  }
+}

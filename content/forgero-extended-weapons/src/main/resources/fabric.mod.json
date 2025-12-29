@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-extended-weapons",
+  "version": "${version}",
+  "name": "Forgero Extended Weapons",
+  "description": "Extended weapon types for Forgero - includes exotic weapons like katana, rapier, broadsword, scythe, and more. This is an optional addon that can be removed without affecting core functionality.",
+  "authors": ["sigmundgranaas"],
+  "environment": "*",
+  "depends": {
+    "java": ">=17",
+    "forgero-base": "*"
+  },
+  "custom": {
+    "forgeroResource": true
+  }
+}

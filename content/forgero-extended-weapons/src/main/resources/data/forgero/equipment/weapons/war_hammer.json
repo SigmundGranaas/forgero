@@ -1,0 +1,41 @@
+{
+  "type": "forgero:equipment_template",
+  "name": "war_hammer",
+  "tags": [
+    "forgero:weapons/war_hammer",
+    "forgero:weapons/blunt",
+    "forgero:tool"
+  ],
+  "host_template": {
+    "class": "forgero:sword_item",
+    "id": "forgero:{head.material.name}-war_hammer"
+  },
+  "structure": {
+    "id": "forgero:{head.material.name}-war_hammer",
+    "slots": {
+      "head": {
+        "type": "forgero:war_hammer_head",
+        "default_tag": "forgero:parts/war_hammer_head"
+      },
+      "handle": {
+        "type": "forgero:handle",
+        "default_tag": "forgero:parts/handle"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:war_hammer-binding",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/binding"],
+      "description": "slot.forgero.binding"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:war_hammer-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": {"value": -3.2}
+    }
+  ]
+}

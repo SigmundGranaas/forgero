@@ -1,0 +1,28 @@
+{
+  "type": "forgero:static_part",
+  "name": "Stone Axe",
+  "tags": [
+    "forgero:tools/axe",
+    "forgero:vanilla_tool"
+  ],
+  "host": {
+    "identifiers": [
+      { "type": "item", "id": "minecraft:stone_axe" }
+    ]
+  },
+  "attributes": [
+    { "id": "forgero:stone-axe-durability", "type": "forgero:durability", "computation": 131 },
+    { "id": "forgero:stone-axe-attack_damage", "type": "forgero:attack_damage", "computation": 9 },
+    { "id": "forgero:stone-axe-attack_speed", "type": "forgero:attack_speed", "computation": 0.8 },
+    { "id": "forgero:stone-axe-mining_speed", "type": "forgero:mining_speed", "computation": 4 },
+    { "id": "forgero:stone-axe-mining_level", "type": "forgero:mining_level", "computation": 1 }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:binding-slot",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/binding"],
+      "description": "slot.forgero.binding"
+    }
+  ]
+}

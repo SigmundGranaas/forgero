@@ -1,0 +1,24 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    // Depend on core module for Component, Property types
+    api(project(":modules:core"))
+
+    // JUnit 5
+    api("org.junit.jupiter:junit-jupiter-api:5.9.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
+
+    // SLF4J for logging in tests
+    api("org.slf4j:slf4j-api:1.7.25")
+    testImplementation("com.github.valfirst:slf4j-test:3.0.1")
+}
+
+test {
+    useJUnitPlatform()
+}
+
+java {
+    withSourcesJar()
+}

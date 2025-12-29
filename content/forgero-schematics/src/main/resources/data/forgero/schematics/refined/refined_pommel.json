@@ -1,0 +1,58 @@
+{
+  "type": "forgero:schematic",
+  "name": "Refined Pommel",
+  "tags": [
+    "forgero:schematics/pommels",
+    "forgero:schematics/refined"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:refined-pommel-rarity-local",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 50,
+        "operation": "addition"
+      }
+    },
+    {
+      "id": "forgero:refined-pommel-rarity-composite",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 1.25,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:refined-pommel-durability-composite",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 1.25,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:refined-cosmetic-slot",
+      "type": "forgero:dye",
+      "tags": [
+        "forgero:upgrade/cosmetic"
+      ],
+      "description": "slot.forgero.cosmetic"
+    }
+  ]
+}

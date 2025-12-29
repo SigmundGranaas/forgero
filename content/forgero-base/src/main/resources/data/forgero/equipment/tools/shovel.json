@@ -1,0 +1,40 @@
+{
+  "type": "forgero:equipment_template",
+  "name": "shovel",
+  "tags": [
+    "forgero:tools/shovel",
+    "forgero:tool"
+  ],
+  "host_template": {
+    "class": "forgero:shovel_item",
+    "id": "forgero:{head.material.name}-shovel"
+  },
+  "structure": {
+    "id": "forgero:{head.material.name}-shovel",
+    "slots": {
+      "head": {
+        "type": "forgero:shovel_head",
+        "default_tag": "forgero:parts/shovel_head"
+      },
+      "handle": {
+        "type": "forgero:handle",
+        "default_tag": "forgero:parts/handle"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:shovel-binding",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/binding"],
+      "description": "slot.forgero.binding"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:shovel-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": {"value": -3.0}
+    }
+  ]
+}

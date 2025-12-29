@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-gems",
+  "version": "${version}",
+  "name": "Forgero Gems",
+  "description": "Gem upgrade materials for Forgero - includes amethyst (mining level), diamond (durability), emerald (attack speed), lapis (reach), prismarine (attack damage), quartz (armor), and echo (mining speed). Each gem has 5 quality tiers from chipped to perfect. This is an optional addon that can be removed without affecting core functionality.",
+  "authors": [
+    "sigmundgranaas"
+  ],
+  "environment": "*",
+  "license": "MIT",
+  "icon": "assets/forgero/icon.png",
+  "depends": {
+    "java": ">=17",
+    "forgero-base": "*"
+  },
+  "custom": {
+    "forgeroResource": true
+  }
+}

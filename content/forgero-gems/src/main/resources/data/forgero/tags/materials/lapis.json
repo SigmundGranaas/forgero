@@ -1,0 +1,10 @@
+{
+  "parents": ["forgero:materials/gem"],
+  "values": [
+    "forgero:chipped_lapis",
+    "forgero:flawed_lapis",
+    "forgero:lapis_gem",
+    "forgero:flawless_lapis",
+    "forgero:perfect_lapis"
+  ]
+}

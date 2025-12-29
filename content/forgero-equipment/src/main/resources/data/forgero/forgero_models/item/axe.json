@@ -1,0 +1,19 @@
+{
+  "type": "AXE",
+  "models": [
+    {
+      "target": [
+        "type:AXE"
+      ],
+      "modelType": "COMPOSITE"
+    },
+    {
+      "target": [
+        "type:TOOL_BINDING",
+        "slot:0"
+      ],
+      "modelType": "UPGRADE",
+      "template": "binding"
+    }
+  ]
+}

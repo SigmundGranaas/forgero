@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "repair-kit",
+  "version": "${version}",
+  "name": "Repair Kit",
+  "description": "Tiered repair kits that can be filled with materials to repair tools and equipment. Works with vanilla items and is extensible for mod compatibility.",
+  "authors": [
+    "Sigmund Granaas Sandring"
+  ],
+  "contact": {
+    "homepage": "https://sigmundgranaas.com",
+    "sources": "https://github.com/sigmundgranaas/forgero",
+    "issues": "https://github.com/sigmundgranaas/forgero/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/repair-kit/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.sigmundgranaas.repairkit.RepairKitMod"
+    ]
+  },
+  "mixins": [
+    "repair-kit.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "minecraft": "1.20.1",
+    "java": ">=17",
+    "fabric": "*"
+  },
+  "suggests": {
+    "forgero": "*",
+    "vanilla-upgrades": "*"
+  }
+}

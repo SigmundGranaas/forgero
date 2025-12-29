@@ -234,6 +234,112 @@ Tests use JUnit 5:
 - Unit tests: `src/test/java/` in each module
 - Test resources: `src/test/resources/`
 
+### Test Utilities
+
+Forgero provides two test utility modules to simplify writing tests:
+
+#### modules/core/test-common
+
+Platform-agnostic test utilities with zero Minecraft dependencies. Ideal for pure Java unit tests of core components.
+
+**Add to dependencies**:
+```gradle
+dependencies {
+    testImplementation(project(":modules:core:test-common"))
+}
+```
+
+**Key Features**:
+- **PropertyFixtures**: Factory methods for test attributes (`attackDamage(5.0f)`, `durability(1000)`)
+- **MaterialFixtures**: Pre-configured materials (`iron()`, `diamond()`, `oak()`)
+- **ComponentBuilder**: Fluent API for building test components
+- **ComponentAssertions**: Chainable assertions for validation
+
+**Example**:
+```java
+import static com.sigmundgranaas.forgero.testcommon.fixtures.MaterialFixtures.*;
+import static com.sigmundgranaas.forgero.testcommon.fixtures.PropertyFixtures.*;
+import static com.sigmundgranaas.forgero.testcommon.assertions.ComponentAssertions.*;
+
+@Test
+void test_component_structure() {
+    // Build a component with fluent API
+    Component pickaxe = ComponentBuilder.create()
+        .id("test-pickaxe")
+        .type(Type.PICKAXE)
+        .part(ComponentBuilder.simplePickaxeHead(iron()))
+        .part(ComponentBuilder.simpleHandle(oak()))
+        .upgradeSlot(Type.GEM, 2)
+        .build();
+
+    // Fluent assertions
+    assertThat(pickaxe)
+        .hasType(Type.PICKAXE)
+        .isCustomizable()
+        .asCustomizable()
+        .hasPartCount(2)
+        .hasSlotCount(2)
+        .hasSlotOfType(Type.GEM);
+}
+```
+
+#### modules/mc/test-common
+
+Minecraft-specific test utilities for GameTests and ItemStack testing.
+
+**Add to dependencies**:
+```gradle
+dependencies {
+    testImplementation(project(path: ":modules:mc:test-common", configuration: 'namedElements'))
+}
+```
+
+**Key Features**:
+- **ForgeroGameTest**: Base interface with easy access to ForgeroServices
+- **ForgeroTestContext**: Enhanced TestContext with Component/ItemStack conversion
+- **PlayerFactory**: Fluent builder for creating test players
+- **TestPos/TestPosCollection**: Position utilities for GameTest coordinates
+- **ItemStackAssertions**: Fluent assertions for ItemStacks
+
+**Example**:
+```java
+import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroGameTest;
+import static com.sigmundgranaas.forgero.mc.testcommon.assertions.ItemStackAssertions.*;
+
+public class MyTest implements ForgeroGameTest {
+
+    @GameTest(templateName = EMPTY_STRUCTURE)
+    public void test_component_conversion(TestContext context) {
+        // Enhanced context with Forgero utilities
+        var ctx = forgero(context);
+
+        // Look up and convert components
+        var component = ctx.component("forgero:iron-pickaxe_head").orElseThrow();
+        var stack = ctx.toStack(component).orElseThrow();
+
+        // Fluent ItemStack assertions
+        assertThat(stack)
+            .isNotEmpty()
+            .hasItem(Items.IRON_PICKAXE)
+            .isDamageable()
+            .convertsToComponent();
+
+        // Create test player with fluent API
+        ServerPlayerEntity player = PlayerFactory.create(context)
+            .at(1, 64, 1)
+            .holding(stack)
+            .survival()
+            .build();
+
+        ctx.complete();
+    }
+}
+```
+
+**Documentation**:
+- See `modules/core/test-common/README.md` for core utilities
+- See `modules/mc/test-common/README.md` for MC utilities
+
 ## Mixins
 
 Mixins are used to inject into Minecraft code. Mixin configuration files (`.mixin.json`) are located in `src/main/resources/` and referenced in `fabric.mod.json`.

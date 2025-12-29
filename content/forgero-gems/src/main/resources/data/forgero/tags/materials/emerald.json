@@ -1,0 +1,10 @@
+{
+  "parents": ["forgero:materials/gem"],
+  "values": [
+    "forgero:chipped_emerald",
+    "forgero:flawed_emerald",
+    "forgero:emerald_gem",
+    "forgero:flawless_emerald",
+    "forgero:perfect_emerald"
+  ]
+}

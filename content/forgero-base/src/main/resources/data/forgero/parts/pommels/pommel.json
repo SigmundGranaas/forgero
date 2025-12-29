@@ -1,0 +1,32 @@
+{
+  "type": "forgero:part_template",
+  "name": "pommel",
+  "tags": [
+    "forgero:parts/pommel"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-pommel"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-pommel",
+    "slots": {
+      "material": {
+        "type": "forgero:upgrade_material",
+        "default_tag": "forgero:upgrade/pommel"
+      }
+    }
+  },
+  "attributes": [
+    {
+      "id": "forgero:pommel-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": {"value": 0.05, "operation": "addition"}
+    },
+    {
+      "id": "forgero:pommel-rarity",
+      "type": "forgero:rarity",
+      "computation": {"value": 3, "operation": "addition"}
+    }
+  ]
+}

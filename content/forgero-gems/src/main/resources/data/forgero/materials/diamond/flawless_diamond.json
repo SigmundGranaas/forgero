@@ -1,0 +1,46 @@
+{
+  "type": "forgero:material",
+  "name": "Flawless Diamond",
+  "tags": [
+    "forgero:materials/gem",
+    "forgero:materials/diamond",
+    "forgero:upgrade/reinforcement"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:flawless_diamond-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 75,
+        "operation": "addition"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:flawless_diamond-durability",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 1500,
+        "operation": "addition"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    }
+  ],
+  "palette": {
+    "name": "diamond_gem"
+  }
+}

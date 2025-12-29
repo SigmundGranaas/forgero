@@ -1,0 +1,45 @@
+{
+  "type": "forgero:equipment_template",
+  "name": "spear",
+  "tags": [
+    "forgero:weapons/spear",
+    "forgero:tool"
+  ],
+  "host_template": {
+    "class": "forgero:sword_item",
+    "id": "forgero:{head.material.name}-spear"
+  },
+  "structure": {
+    "id": "forgero:{head.material.name}-spear",
+    "slots": {
+      "head": {
+        "type": "forgero:spear_head",
+        "default_tag": "forgero:parts/spear_head"
+      },
+      "handle": {
+        "type": "forgero:handle",
+        "default_tag": "forgero:parts/handle"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:spear-binding",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/binding"],
+      "description": "slot.forgero.binding"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:spear-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": {"value": -2.6}
+    },
+    {
+      "id": "forgero:spear-reach",
+      "type": "forgero:reach",
+      "computation": {"value": 1.5}
+    }
+  ]
+}

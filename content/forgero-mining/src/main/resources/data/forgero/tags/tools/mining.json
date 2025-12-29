@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "forgero:hammer",
+    "forgero:felling_axe",
+    "forgero:mandrill_pickaxe",
+    "forgero:spade"
+  ]
+}

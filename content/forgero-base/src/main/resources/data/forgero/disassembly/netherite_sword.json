@@ -1,0 +1,8 @@
+{
+  "input": "minecraft:netherite_sword",
+  "results": [
+    "forgero:netherite-sword_blade",
+    "forgero:oak-handle",
+    "forgero:netherite-sword_guard"
+  ]
+}

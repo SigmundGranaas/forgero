@@ -1,0 +1,54 @@
+{
+  "type": "forgero:material",
+  "name": "Flawed Lapis",
+  "tags": [
+    "forgero:materials/gem",
+    "forgero:materials/lapis",
+    "forgero:upgrade/reinforcement"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:lapis_lazuli"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:flawed_lapis-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 45,
+        "operation": "addition"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:flawed_lapis-reach",
+      "type": "forgero:reach",
+      "computation": {
+        "value": 1.0,
+        "operation": "addition"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    }
+  ],
+  "palette": {
+    "name": "lapis_gem"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "repair-kit-gametest",
+  "version": "1.0.0",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-gametest": [
+      "com.sigmundgranaas.repairkit.gametest.RepairKitFillTest",
+      "com.sigmundgranaas.repairkit.gametest.RepairKitRepairTest",
+      "com.sigmundgranaas.repairkit.gametest.TierMultiplierTest",
+      "com.sigmundgranaas.repairkit.gametest.PlayerInteractionTest"
+    ]
+  }
+}

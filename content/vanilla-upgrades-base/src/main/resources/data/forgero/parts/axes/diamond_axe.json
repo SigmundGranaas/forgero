@@ -3,7 +3,6 @@
   "name": "Diamond Axe",
   "tags": [
     "forgero:tools/axe",
-    "minecraft:tool/axe",
     "forgero:vanilla_tool"
   ],
   "host": {

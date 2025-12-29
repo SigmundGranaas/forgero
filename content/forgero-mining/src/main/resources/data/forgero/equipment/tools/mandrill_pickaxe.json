@@ -1,0 +1,67 @@
+{
+  "type": "forgero:equipment_template",
+  "name": "mandrill_pickaxe",
+  "tags": [
+    "forgero:tools/mandrill_pickaxe",
+    "forgero:tools/pickaxe_like",
+    "forgero:tools/mining",
+    "forgero:tool"
+  ],
+  "host_template": {
+    "class": "forgero:pickaxe_item",
+    "id": "forgero:{head.material.name}-mandrill_pickaxe"
+  },
+  "structure": {
+    "id": "forgero:{head.material.name}-mandrill_pickaxe",
+    "slots": {
+      "head": {
+        "type": "forgero:mandrill_pickaxe_head",
+        "default_tag": "forgero:parts/mandrill_pickaxe_head"
+      },
+      "handle": {
+        "type": "forgero:handle",
+        "default_tag": "forgero:parts/handle"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:mandrill_pickaxe-binding",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/binding"],
+      "description": "slot.forgero.binding"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:mandrill_pickaxe-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": {
+        "value": -3.0
+      }
+    }
+  ],
+  "properties": [
+    {
+      "type": "minecraft:block_breaking",
+      "selector": {
+        "type": "forgero:radius",
+        "filter": [
+          "forgero:can_mine",
+          {
+            "type": "minecraft:block",
+            "tag": "forgero:vein_mining_ores"
+          }
+        ],
+        "radius": 1
+      },
+      "speed": "forgero:all",
+      "predicate": {
+        "type": "minecraft:block",
+        "tag": "forgero:vein_mining_ores"
+      },
+      "title": "feature.forgero.vein_mining.title",
+      "description": "feature.forgero.ore_vein_mining.description"
+    }
+  ]
+}

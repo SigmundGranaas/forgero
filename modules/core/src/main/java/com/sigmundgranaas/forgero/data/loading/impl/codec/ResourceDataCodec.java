@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.data.loading.impl.codec;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.loading.api.data.ResourceData;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.UpgradeSlotData;
@@ -28,6 +29,15 @@ import static com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants.
  * </ul>
  */
 public class ResourceDataCodec {
+
+	/**
+	 * Extracts the deprecated target field for backwards compatibility with old JSON files.
+	 * This field is deprecated but must still be parsed to support legacy schematic definitions.
+	 */
+	@SuppressWarnings("deprecation")
+	private static Optional<OpenIdentifier> getTargetForBackwardsCompat(ResourceData data) {
+		return Optional.ofNullable(data.target());
+	}
 
 	/**
 	 * Creates a codec for ResourceData with the provided attribute and upgrade codecs.
@@ -61,7 +71,7 @@ public class ResourceDataCodec {
 						upgradeSlotCodec.optionalFieldOf("upgrades")
 								.forGetter(data -> Optional.ofNullable(data.upgrades())),
 						OPEN_IDENTIFIER_CODEC.optionalFieldOf("target")
-								.forGetter(data -> Optional.ofNullable(data.target()))
+								.forGetter(ResourceDataCodec::getTargetForBackwardsCompat)
 				).apply(instance, (type, name, include, tags, localTags, host, attributes, localAttributes, properties, upgrades, target) ->
 						new ResourceData(
 								type,
@@ -107,7 +117,7 @@ public class ResourceDataCodec {
 						Codec.unboundedMap(Codec.STRING, JSON_ELEMENT_CODEC).optionalFieldOf("properties")
 								.forGetter(data -> Optional.ofNullable(data.properties())),
 						OPEN_IDENTIFIER_CODEC.optionalFieldOf("target")
-								.forGetter(data -> Optional.ofNullable(data.target()))
+								.forGetter(ResourceDataCodec::getTargetForBackwardsCompat)
 				).apply(instance, (type, name, include, tags, localTags, host, attributes, localAttributes, properties, target) ->
 						new ResourceData(
 								type,

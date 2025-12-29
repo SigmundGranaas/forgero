@@ -40,29 +40,23 @@ dependencies {
     implementation(project(path: ":modules:mc:armor", configuration: 'namedElements'))
     implementation(project(path: ":modules:mc:bows", configuration: 'namedElements'))
 
-    // Shared content (included in JAR and on runtime classpath for development)
+    // NEW Content modules (clean, uses new JSON format)
+    // These are the only content modules the forgero mod depends on
     include(project(":content:forgero-materials"))
     include(project(":content:forgero-upgrades"))
+    include(project(":content:forgero-base"))
+    include(project(":content:forgero-gems"))
     runtimeOnly(project(":content:forgero-materials"))
     runtimeOnly(project(":content:forgero-upgrades"))
+    runtimeOnly(project(":content:forgero-base"))
+    runtimeOnly(project(":content:forgero-gems"))
 
-    // Forgero content (included in JAR and on runtime classpath for development)
-    include(project(":content:forgero-schematics"))
-    include(project(":content:forgero-equipment"))
-    include(project(":content:forgero-tools-content"))
-    include(project(":content:forgero-armor-content"))
-    include(project(":content:forgero-models"))
-    include(project(":content:forgero-armor"))
-    include(project(":content:forgero-extended"))
-    include(project(":content:forgero-compat"))
-    runtimeOnly(project(":content:forgero-schematics"))
-    runtimeOnly(project(":content:forgero-equipment"))
-    runtimeOnly(project(":content:forgero-tools-content"))
-    runtimeOnly(project(":content:forgero-armor-content"))
-    runtimeOnly(project(":content:forgero-models"))
-    runtimeOnly(project(":content:forgero-armor"))
-    runtimeOnly(project(":content:forgero-extended"))
-    runtimeOnly(project(":content:forgero-compat"))
+    // NOTE: Legacy content modules have been removed from dependencies
+    // They are kept in the repository as READ-ONLY references for migration
+    // When migration is complete, delete these from settings.gradle:
+    // - forgero-schematics, forgero-equipment, forgero-tools-content
+    // - forgero-armor-content, forgero-models, forgero-armor
+    // - forgero-extended, forgero-compat
 
     // Fabric
     modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
@@ -75,6 +69,14 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
     testImplementation("net.fabricmc:fabric-loader-junit:${project.loader_version}")
+
+    // Forgero test utilities
+    testImplementation(project(":modules:core:test-common"))
+    implementation(project(path: ":modules:mc:test-common", configuration: 'namedElements'))
+
+    // Add vanilla-upgrades content for vanilla parity testing (include for GameTests)
+    include(project(":content:vanilla-upgrades-base"))
+    runtimeOnly(project(":content:vanilla-upgrades-base"))
 }
 
 loom {

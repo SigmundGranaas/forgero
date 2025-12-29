@@ -1,0 +1,52 @@
+{
+  "type": "forgero:part_template",
+  "name": "dagger_blade",
+  "tags": [
+    "forgero:parts/blade",
+    "forgero:parts/dagger_blade"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-dagger_blade"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-dagger_blade",
+    "slots": {
+      "material": {
+        "type": "forgero:tool_material",
+        "default_tag": "forgero:materials/tool_material"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:dagger_blade-reinforcement",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/reinforcement"],
+      "description": "slot.forgero.reinforcement"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:dagger_blade-rarity",
+      "type": "forgero:rarity",
+      "computation": {"value": 20, "operation": "addition"}
+    },
+    {
+      "id": "forgero:dagger_blade-attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": {"value": 0.8, "operation": "multiplication"},
+      "condition": {
+        "static": [{"type": "forgero:is_root"}]
+      }
+    },
+    {
+      "id": "forgero:dagger_blade-weight",
+      "type": "forgero:weight",
+      "computation": {"value": 0.6, "operation": "multiplication"},
+      "condition": {
+        "static": [{"type": "forgero:is_root"}]
+      }
+    }
+  ]
+}

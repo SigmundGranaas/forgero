@@ -1,0 +1,10 @@
+{
+  "parents": ["forgero:materials/gem"],
+  "values": [
+    "forgero:chipped_amethyst",
+    "forgero:flawed_amethyst",
+    "forgero:amethyst",
+    "forgero:flawless_amethyst",
+    "forgero:perfect_amethyst"
+  ]
+}

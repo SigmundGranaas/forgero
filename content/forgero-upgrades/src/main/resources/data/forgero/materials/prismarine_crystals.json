@@ -15,6 +15,27 @@
       }
     ]
   },
+  "properties": [
+    {
+      "type": "minecraft:on_tick",
+      "selector": {
+        "type": "forgero:aoe",
+        "radius": 5
+      },
+      "effects": [
+        { "type": "forgero:status_effect", "effect": "minecraft:water_breathing", "duration": 40, "amplifier": 0 }
+      ],
+      "interval": 20,
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    }
+  ],
   "attributes": [
     {
       "id": "forgero:crystal-rarity-upgrade",

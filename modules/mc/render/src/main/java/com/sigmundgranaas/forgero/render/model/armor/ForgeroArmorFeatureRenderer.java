@@ -71,10 +71,12 @@ public class ForgeroArmorFeatureRenderer<T extends LivingEntity, M extends Biped
 			Identifier texture = textureManager.getTexture(armorModel, component);
 
 			// 4. Configure and render this specific piece.
-			if (model instanceof BipedEntityModel biped) {
-				this.getContextModel().copyBipedStateTo(biped);
-				biped.setAngles(entity, limbAngle, limbDistance, animationProgress, headYaw, headPitch);
-				setVisible(biped, slot);
+			if (model instanceof BipedEntityModel<?> biped) {
+				@SuppressWarnings("unchecked")
+				BipedEntityModel<T> typedBiped = (BipedEntityModel<T>) biped;
+				this.getContextModel().copyBipedStateTo(typedBiped);
+				typedBiped.setAngles(entity, limbAngle, limbDistance, animationProgress, headYaw, headPitch);
+				setVisible(typedBiped, slot);
 			}
 
 			model.render(matrices, vertexConsumers.getBuffer(RenderLayer.getArmorCutoutNoCull(texture)), light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);

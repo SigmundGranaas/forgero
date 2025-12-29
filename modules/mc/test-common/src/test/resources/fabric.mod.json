@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-mc-test-common-tests",
+  "version": "${version}",
+  "name": "Forgero MC Test Common Tests",
+  "description": "Tests for Forgero MC Test Common module",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-gametest": [
+      "com.sigmundgranaas.forgero.mc.testcommon.ForgeroContextTests",
+      "com.sigmundgranaas.forgero.mc.testcommon.PlayerFactoryTests",
+      "com.sigmundgranaas.forgero.mc.testcommon.PositionUtilityTests"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "minecraft": "1.20.1",
+    "java": ">=17",
+    "fabric-api": "*"
+  }
+}

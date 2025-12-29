@@ -13,6 +13,7 @@ include("${mod_id}-core")
 // Modules
 include ("modules")
 include("modules:core")
+include("modules:core:test-common")
 
 // MC modules
 include("modules:mc")
@@ -26,12 +27,20 @@ include "modules:mc:predicate"
 include "modules:mc:development"
 include "modules:mc:bows"
 include "modules:mc:blocks"
+include "modules:mc:test-common"
 // DRP is a standalone mod - see mods:drp
 
-// Content - New Structure
+// Content - New Structure (clean modules for new mods)
 include("content")
 include("content:forgero-materials")
 include("content:forgero-upgrades")
+include("content:forgero-base")
+include("content:vanilla-upgrades-base")
+include("content:forgero-extended-weapons")
+include("content:forgero-mining")
+include("content:forgero-gems")
+
+// Content - Legacy (READ ONLY - for reference during migration, will be deleted)
 include("content:forgero-schematics")
 include("content:forgero-equipment")
 include("content:forgero-tools-content")
@@ -41,7 +50,6 @@ include("content:${mod_id}-extended")
 include("content:${mod_id}-compat")
 include("content:${mod_id}-armor")
 include("content:${mod_id}-structures")
-include("content:vanilla-upgrades-base")
 
 // Content - Legacy (to be removed)
 include("content:${mod_id}-vanilla")
@@ -56,6 +64,7 @@ include 'mods:drp'
 include 'mods:recipe-generator'
 include 'mods:vanilla-upgrades'
 include 'mods:forgero'
+include 'mods:repair-kit'
 
 // LEGACY
 // Fabric

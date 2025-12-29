@@ -1,0 +1,35 @@
+{
+  "type": "forgero:part_template",
+  "name": "handle",
+  "tags": [
+    "forgero:parts/handle"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-handle"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-handle",
+    "slots": {
+      "material": {
+        "type": "forgero:tool_material",
+        "default_tag": "forgero:materials/tool_material"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:handle-cosmetic",
+      "type": "forgero:dye",
+      "tags": ["forgero:upgrade/cosmetic"],
+      "description": "slot.forgero.cosmetic"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:handle-rarity",
+      "type": "forgero:rarity",
+      "computation": {"value": 10, "operation": "addition"}
+    }
+  ]
+}

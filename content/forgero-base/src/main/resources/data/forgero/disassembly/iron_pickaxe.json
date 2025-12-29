@@ -1,0 +1,7 @@
+{
+  "input": "minecraft:iron_pickaxe",
+  "results": [
+    "forgero:iron-pickaxe_head",
+    "forgero:oak-handle"
+  ]
+}

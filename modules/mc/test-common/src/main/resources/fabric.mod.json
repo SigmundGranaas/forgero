@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-mc-test-common",
+  "version": "${version}",
+  "name": "Forgero MC Test Common",
+  "description": "Common test utilities for Minecraft-based Forgero tests including GameTest helpers, fixtures, and assertions.",
+  "authors": [
+    "Sigmund Granaas"
+  ],
+  "contact": {
+    "homepage": "https://sigmundgranaas.com",
+    "sources": "https://github.com/sigmundgranaas/forgero",
+    "issues": "https://github.com/sigmundgranaas/forgero/issues"
+  },
+  "license": "MIT",
+  "environment": "*",
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "minecraft": "1.20.1",
+    "java": ">=17"
+  }
+}

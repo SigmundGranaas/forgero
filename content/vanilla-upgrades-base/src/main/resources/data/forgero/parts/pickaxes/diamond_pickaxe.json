@@ -3,7 +3,6 @@
   "name": "Diamond Pickaxe",
   "tags": [
     "forgero:tools/pickaxe",
-    "minecraft:tool/pickaxe",
     "forgero:vanilla_tool"
   ],
   "host": {

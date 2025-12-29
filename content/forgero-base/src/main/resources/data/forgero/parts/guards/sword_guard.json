@@ -1,0 +1,33 @@
+{
+  "type": "forgero:part_template",
+  "name": "sword_guard",
+  "tags": [
+    "forgero:parts/sword_guard",
+    "forgero:parts/guard"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-sword_guard"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-sword_guard",
+    "slots": {
+      "material": {
+        "type": "forgero:upgrade_material",
+        "default_tag": "forgero:upgrade/guard"
+      }
+    }
+  },
+  "attributes": [
+    {
+      "id": "forgero:sword_guard-durability",
+      "type": "forgero:durability",
+      "computation": {"value": 0.1, "operation": "multiply"}
+    },
+    {
+      "id": "forgero:sword_guard-rarity",
+      "type": "forgero:rarity",
+      "computation": {"value": 5, "operation": "addition"}
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-mining",
+  "version": "${version}",
+  "name": "Forgero Mining Tools",
+  "description": "Extended mining tools for Forgero - includes broad mining tools like hammer (3x3), felling axe (tree vein mining), mandrill pickaxe (ore vein mining), and spade (excavation). This is an optional addon that can be removed without affecting core functionality.",
+  "authors": [
+    "sigmundgranaas"
+  ],
+  "environment": "*",
+  "license": "MIT",
+  "icon": "assets/forgero/icon.png",
+  "depends": {
+    "java": ">=17",
+    "forgero-base": "*"
+  },
+  "custom": {
+    "forgeroResource": true
+  }
+}

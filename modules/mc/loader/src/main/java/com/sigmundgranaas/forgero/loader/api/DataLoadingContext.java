@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.common.nbt.ComponentNbtConverter;
 import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.common.tags.engine.TaggedRegistry;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.component.api.slot.SlotManager;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
 import com.sigmundgranaas.forgero.data.pipeline.api.ForgeroDataBundle;
@@ -23,94 +24,92 @@ import java.util.Optional;
 public interface DataLoadingContext extends ForgeroServices {
 
 	// ============================================================
-	// ForgeroServices implementation (preferred API)
+	// ForgeroServices methods (preferred API) - implemented by DataLoadingContextImpl
 	// ============================================================
 
 	@Override
-	default TagResolver tagResolver() {
-		return getDataBundle().tagResolver();
-	}
+	TagResolver tagResolver();
 
 	@Override
-	default ComponentConverter converter() {
-		return getConverter();
-	}
+	ComponentConverter converter();
 
 	@Override
-	default Resolver resolver() {
-		return getResolver();
-	}
+	Resolver resolver();
 
 	@Override
-	default ComponentRegistry componentRegistry() {
-		return getComponentRegistry();
-	}
+	ComponentRegistry componentRegistry();
 
 	@Override
-	default TaggedRegistry<Component> taggedComponents() {
-		return getTaggedComponentRegistry();
-	}
+	TaggedRegistry<Component> taggedComponents();
 
 	@Override
-	default ComponentNbtConverter nbtConverter() {
-		return getNbtConverter();
-	}
+	ComponentNbtConverter nbtConverter();
 
 	@Override
-	default Optional<Component> component(ItemStack stack) {
-		return getComponent(stack);
-	}
+	Optional<Component> component(ItemStack stack);
 
 	@Override
-	default com.sigmundgranaas.forgero.core.component.api.slot.SlotManager slotManager() {
-		return getSlotManager();
-	}
+	SlotManager slotManager();
 
 	// ============================================================
-	// Legacy API (for backward compatibility)
+	// Legacy API (deprecated - delegates to new methods)
 	// ============================================================
 
 	/**
 	 * @deprecated Use {@link #componentRegistry()} instead
 	 */
 	@Deprecated(forRemoval = true)
-	ComponentRegistry getComponentRegistry();
+	default ComponentRegistry getComponentRegistry() {
+		return componentRegistry();
+	}
 
 	/**
 	 * @deprecated Use {@link #taggedComponents()} instead
 	 */
 	@Deprecated(forRemoval = true)
-	TaggedRegistry<Component> getTaggedComponentRegistry();
+	default TaggedRegistry<Component> getTaggedComponentRegistry() {
+		return taggedComponents();
+	}
 
 	/**
 	 * @deprecated Use {@link #resolver()} instead
 	 */
 	@Deprecated(forRemoval = true)
-	Resolver getResolver();
+	default Resolver getResolver() {
+		return resolver();
+	}
 
 	/**
 	 * @deprecated Use {@link #component(ItemStack)} instead
 	 */
 	@Deprecated(forRemoval = true)
-	Optional<Component> getComponent(ItemStack stack);
+	default Optional<Component> getComponent(ItemStack stack) {
+		return component(stack);
+	}
 
 	/**
 	 * @deprecated Use {@link #converter()} instead
 	 */
 	@Deprecated(forRemoval = true)
-	ComponentConverter getConverter();
+	default ComponentConverter getConverter() {
+		return converter();
+	}
 
 	/**
 	 * @deprecated Use {@link #nbtConverter()} instead
 	 */
 	@Deprecated(forRemoval = true)
-	ComponentNbtConverter getNbtConverter();
+	default ComponentNbtConverter getNbtConverter() {
+		return nbtConverter();
+	}
 
 	/**
 	 * @deprecated Use {@link #slotManager()} instead
 	 */
 	@Deprecated(forRemoval = true)
-	com.sigmundgranaas.forgero.core.component.api.slot.SlotManager getSlotManager();
+	default SlotManager getSlotManager() {
+		return slotManager();
+	}
 
 	/**
 	 * Get the original data bundle for modules that need raw data access.

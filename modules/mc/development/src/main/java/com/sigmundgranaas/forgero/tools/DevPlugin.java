@@ -23,7 +23,7 @@ public class DevPlugin implements PostLoadPlugin {
 
 	@Override
 	public void onDataLoaded(DataLoadingContext context) {
-		ComponentSlottingHandler slottingHandler = new ComponentSlottingHandler(context.getConverter());
+		ComponentSlottingHandler slottingHandler = new ComponentSlottingHandler(context.converter());
 		UseItemCallback.EVENT.register(slottingHandler::handle);
 		LOGGER.info("Registered component slotting handler for item use events.");
 
@@ -34,7 +34,7 @@ public class DevPlugin implements PostLoadPlugin {
 			server.execute(() -> {
 				ItemStack stackInHand = player.getStackInHand(hand);
 
-				if (!stackInHand.isEmpty() && context.getConverter().toComponent(stackInHand).isPresent()) {
+				if (!stackInHand.isEmpty() && context.converter().toComponent(stackInHand).isPresent()) {
 					ItemStack newStack = stackInHand.copy();
 					newStack.setNbt(newNbt);
 					player.setStackInHand(hand, newStack);

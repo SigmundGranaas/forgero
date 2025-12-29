@@ -1,0 +1,46 @@
+{
+  "type": "forgero:equipment_template",
+  "name": "sword",
+  "tags": [
+    "forgero:tools/sword",
+    "forgero:tool"
+  ],
+  "host_template": {
+    "class": "forgero:sword_item",
+    "id": "forgero:{blade.material.name}-sword"
+  },
+  "structure": {
+    "id": "forgero:{blade.material.name}-sword",
+    "slots": {
+      "blade": {
+        "type": "forgero:sword_blade",
+        "default_tag": "forgero:parts/sword_blade"
+      },
+      "handle": {
+        "type": "forgero:handle",
+        "default_tag": "forgero:parts/handle"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:sword-binding",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/binding"],
+      "description": "slot.forgero.binding"
+    },
+    {
+      "id": "forgero:sword-guard",
+      "type": "forgero:sword_guard",
+      "tags": ["forgero:upgrade/guard"],
+      "description": "slot.forgero.guard"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:sword-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": {"value": -2.4}
+    }
+  ]
+}

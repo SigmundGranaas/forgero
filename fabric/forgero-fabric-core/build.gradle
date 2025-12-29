@@ -33,6 +33,12 @@ dependencies {
 	// Test dependencies - ForgeroServices API tests
 	testImplementation(project(path: ":modules:mc:loader", configuration: 'namedElements'))
 	testImplementation(project(":modules:core"))
+
+	// Content modules needed for tests
+	testRuntimeOnly(project(":content:forgero-materials"))
+	testRuntimeOnly(project(":content:forgero-upgrades"))
+	testRuntimeOnly(project(":content:forgero-base"))
+	testRuntimeOnly(project(":content:forgero-gems"))
 }
 
 sourceSets {

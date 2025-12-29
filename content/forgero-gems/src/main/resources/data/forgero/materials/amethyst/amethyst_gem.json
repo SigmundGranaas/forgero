@@ -1,0 +1,54 @@
+{
+  "type": "forgero:material",
+  "name": "Amethyst Gem",
+  "tags": [
+    "forgero:materials/gem",
+    "forgero:materials/amethyst",
+    "forgero:upgrade/reinforcement"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:amethyst_shard"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:amethyst_gem-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 60,
+        "operation": "addition"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:amethyst_gem-mining_level",
+      "type": "forgero:mining_level",
+      "computation": {
+        "value": 3,
+        "operation": "addition"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    }
+  ],
+  "palette": {
+    "name": "amethyst_gem"
+  }
+}

@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
  * It creates front-facing quads only for the visible pixels of each layer and side-facing quads only for the
  * final silhouette of the model, eliminating Z-fighting and reducing the polygon count for optimal performance.
  */
+@SuppressWarnings("deprecation") // Uses SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE which is deprecated but still functional
 public class ForgeroModelRenderer {
 	private static final BakedQuadFactory QUAD_FACTORY = new BakedQuadFactory();
 	private final Function<SpriteIdentifier, Sprite> textureGetter;

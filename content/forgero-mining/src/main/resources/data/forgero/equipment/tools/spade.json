@@ -1,0 +1,66 @@
+{
+  "type": "forgero:equipment_template",
+  "name": "spade",
+  "tags": [
+    "forgero:tools/spade",
+    "forgero:tools/shovel_like",
+    "forgero:tools/mining",
+    "forgero:tool"
+  ],
+  "host_template": {
+    "class": "forgero:shovel_item",
+    "id": "forgero:{head.material.name}-spade"
+  },
+  "structure": {
+    "id": "forgero:{head.material.name}-spade",
+    "slots": {
+      "head": {
+        "type": "forgero:spade_head",
+        "default_tag": "forgero:parts/spade_head"
+      },
+      "handle": {
+        "type": "forgero:handle",
+        "default_tag": "forgero:parts/handle"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:spade-binding",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/binding"],
+      "description": "slot.forgero.binding"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:spade-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": {
+        "value": -3.0
+      }
+    }
+  ],
+  "properties": [
+    {
+      "type": "minecraft:block_breaking",
+      "selector": {
+        "type": "forgero:pattern",
+        "pattern": [
+          "xxx",
+          "xxx",
+          "xxx"
+        ],
+        "depth": 1,
+        "direction": "multi",
+        "filter": "forgero:can_mine"
+      },
+      "speed": "forgero:all",
+      "predicate": {
+        "type": "forgero:can_mine"
+      },
+      "title": "feature.forgero.pattern_mining.title",
+      "description": "feature.forgero.pattern_mining.3x3-description"
+    }
+  ]
+}

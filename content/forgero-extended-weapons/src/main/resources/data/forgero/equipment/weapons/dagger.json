@@ -1,0 +1,41 @@
+{
+  "type": "forgero:equipment_template",
+  "name": "dagger",
+  "tags": [
+    "forgero:weapons/dagger",
+    "forgero:weapons/swordlike",
+    "forgero:tool"
+  ],
+  "host_template": {
+    "class": "forgero:sword_item",
+    "id": "forgero:{blade.material.name}-dagger"
+  },
+  "structure": {
+    "id": "forgero:{blade.material.name}-dagger",
+    "slots": {
+      "blade": {
+        "type": "forgero:dagger_blade",
+        "default_tag": "forgero:parts/dagger_blade"
+      },
+      "handle": {
+        "type": "forgero:handle",
+        "default_tag": "forgero:parts/handle"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:dagger-binding",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/binding"],
+      "description": "slot.forgero.binding"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:dagger-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": {"value": -1.5}
+    }
+  ]
+}

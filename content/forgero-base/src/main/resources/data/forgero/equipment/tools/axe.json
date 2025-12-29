@@ -1,0 +1,40 @@
+{
+  "type": "forgero:equipment_template",
+  "name": "axe",
+  "tags": [
+    "forgero:tools/axe",
+    "forgero:tool"
+  ],
+  "host_template": {
+    "class": "forgero:axe_item",
+    "id": "forgero:{head.material.name}-axe"
+  },
+  "structure": {
+    "id": "forgero:{head.material.name}-axe",
+    "slots": {
+      "head": {
+        "type": "forgero:axe_head",
+        "default_tag": "forgero:parts/axe_head"
+      },
+      "handle": {
+        "type": "forgero:handle",
+        "default_tag": "forgero:parts/handle"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:axe-binding",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/binding"],
+      "description": "slot.forgero.binding"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:axe-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": {"value": -3.0}
+    }
+  ]
+}

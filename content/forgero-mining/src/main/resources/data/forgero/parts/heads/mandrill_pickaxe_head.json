@@ -1,0 +1,69 @@
+{
+  "type": "forgero:part_template",
+  "name": "mandrill_pickaxe_head",
+  "tags": [
+    "forgero:parts/head",
+    "forgero:parts/mandrill_pickaxe_head"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-mandrill_pickaxe_head"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-mandrill_pickaxe_head",
+    "slots": {
+      "material": {
+        "type": "forgero:tool_material",
+        "default_tag": "forgero:materials/tool_material"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:mandrill_pickaxe_head-reinforcement",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/reinforcement"],
+      "description": "slot.forgero.reinforcement"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:mandrill_pickaxe_head-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 75,
+        "operation": "addition"
+      }
+    },
+    {
+      "id": "forgero:mandrill_pickaxe_head-mining_speed",
+      "type": "forgero:mining_speed",
+      "computation": {
+        "value": 1.45,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:mandrill_pickaxe_head-durability",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 1.75,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    }
+  ]
+}

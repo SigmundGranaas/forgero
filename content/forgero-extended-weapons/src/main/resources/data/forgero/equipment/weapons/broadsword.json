@@ -1,0 +1,47 @@
+{
+  "type": "forgero:equipment_template",
+  "name": "broadsword",
+  "tags": [
+    "forgero:weapons/broadsword",
+    "forgero:weapons/swordlike",
+    "forgero:tool"
+  ],
+  "host_template": {
+    "class": "forgero:sword_item",
+    "id": "forgero:{blade.material.name}-broadsword"
+  },
+  "structure": {
+    "id": "forgero:{blade.material.name}-broadsword",
+    "slots": {
+      "blade": {
+        "type": "forgero:broadsword_blade",
+        "default_tag": "forgero:parts/broadsword_blade"
+      },
+      "handle": {
+        "type": "forgero:handle",
+        "default_tag": "forgero:parts/handle"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:broadsword-binding",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/binding"],
+      "description": "slot.forgero.binding"
+    },
+    {
+      "id": "forgero:broadsword-guard",
+      "type": "forgero:sword_guard",
+      "tags": ["forgero:upgrade/guard"],
+      "description": "slot.forgero.guard"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:broadsword-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": {"value": -2.8}
+    }
+  ]
+}

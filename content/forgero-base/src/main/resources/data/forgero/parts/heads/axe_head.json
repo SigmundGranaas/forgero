@@ -1,0 +1,36 @@
+{
+  "type": "forgero:part_template",
+  "name": "axe_head",
+  "tags": [
+    "forgero:parts/head",
+    "forgero:parts/axe_head"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-axe_head"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-axe_head",
+    "slots": {
+      "material": {
+        "type": "forgero:tool_material",
+        "default_tag": "forgero:materials/tool_material"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:axe_head-reinforcement",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/reinforcement"],
+      "description": "slot.forgero.reinforcement"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:axe_head-rarity",
+      "type": "forgero:rarity",
+      "computation": {"value": 25, "operation": "addition"}
+    }
+  ]
+}

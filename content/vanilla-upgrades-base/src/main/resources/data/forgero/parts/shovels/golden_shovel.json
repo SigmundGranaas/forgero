@@ -1,0 +1,34 @@
+{
+  "type": "forgero:static_part",
+  "name": "Golden Shovel",
+  "tags": [
+    "forgero:tools/shovel",
+    "forgero:vanilla_tool"
+  ],
+  "host": {
+    "identifiers": [
+      { "type": "item", "id": "minecraft:golden_shovel" }
+    ]
+  },
+  "attributes": [
+    { "id": "forgero:golden-shovel-durability", "type": "forgero:durability", "computation": 32 },
+    { "id": "forgero:golden-shovel-attack_damage", "type": "forgero:attack_damage", "computation": 2.5 },
+    { "id": "forgero:golden-shovel-attack_speed", "type": "forgero:attack_speed", "computation": 1.0 },
+    { "id": "forgero:golden-shovel-mining_speed", "type": "forgero:mining_speed", "computation": 12 },
+    { "id": "forgero:golden-shovel-mining_level", "type": "forgero:mining_level", "computation": 0 }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:binding-slot",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/binding"],
+      "description": "slot.forgero.binding"
+    },
+    {
+      "id": "forgero:gem-slot",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/gem"],
+      "description": "slot.forgero.gem"
+    }
+  ]
+}

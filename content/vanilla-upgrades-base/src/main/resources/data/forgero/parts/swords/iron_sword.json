@@ -3,7 +3,6 @@
   "name": "Iron Sword",
   "tags": [
     "forgero:tools/sword",
-    "minecraft:tool/sword",
     "forgero:vanilla_tool"
   ],
   "host": {

@@ -1,0 +1,60 @@
+{
+  "type": "forgero:part_template",
+  "name": "battle_axe_head",
+  "tags": [
+    "forgero:parts/head",
+    "forgero:parts/battle_axe_head"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-battle_axe_head"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-battle_axe_head",
+    "slots": {
+      "material": {
+        "type": "forgero:tool_material",
+        "default_tag": "forgero:materials/tool_material"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:battle_axe_head-reinforcement",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/reinforcement"],
+      "description": "slot.forgero.reinforcement"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:battle_axe_head-rarity",
+      "type": "forgero:rarity",
+      "computation": {"value": 65, "operation": "addition"}
+    },
+    {
+      "id": "forgero:battle_axe_head-attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": {"value": 1.9, "operation": "multiplication"},
+      "condition": {
+        "static": [{"type": "forgero:is_root"}]
+      }
+    },
+    {
+      "id": "forgero:battle_axe_head-mining_speed",
+      "type": "forgero:mining_speed",
+      "computation": {"value": 1.1, "operation": "multiplication"},
+      "condition": {
+        "static": [{"type": "forgero:is_root"}]
+      }
+    },
+    {
+      "id": "forgero:battle_axe_head-weight",
+      "type": "forgero:weight",
+      "computation": {"value": 1.6, "operation": "multiplication"},
+      "condition": {
+        "static": [{"type": "forgero:is_root"}]
+      }
+    }
+  ]
+}

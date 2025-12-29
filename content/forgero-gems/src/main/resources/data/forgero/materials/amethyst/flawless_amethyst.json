@@ -1,0 +1,46 @@
+{
+  "type": "forgero:material",
+  "name": "Flawless Amethyst",
+  "tags": [
+    "forgero:materials/gem",
+    "forgero:materials/amethyst",
+    "forgero:upgrade/reinforcement"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:flawless_amethyst-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 75,
+        "operation": "addition"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:flawless_amethyst-mining_level",
+      "type": "forgero:mining_level",
+      "computation": {
+        "value": 4,
+        "operation": "addition"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    }
+  ],
+  "palette": {
+    "name": "amethyst_gem"
+  }
+}

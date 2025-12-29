@@ -1,19 +1,25 @@
-// DataLoadingContextImpl.java
 package com.sigmundgranaas.forgero.loader.impl;
 
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
-import com.sigmundgranaas.forgero.loader.api.DataLoadingContext;
 import com.sigmundgranaas.forgero.common.nbt.ComponentNbtConverter;
+import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.common.tags.engine.TaggedRegistry;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.slot.SlotManager;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
 import com.sigmundgranaas.forgero.data.pipeline.api.ForgeroDataBundle;
+import com.sigmundgranaas.forgero.loader.api.DataLoadingContext;
 import net.minecraft.item.ItemStack;
 
 import java.util.Optional;
 
+/**
+ * Implementation of {@link DataLoadingContext} providing access to all Forgero services.
+ * <p>
+ * This class implements the new ForgeroServices API methods. The deprecated getter methods
+ * in the interface delegate to these implementations via default methods.
+ */
 public class DataLoadingContextImpl implements DataLoadingContext {
 	private ComponentRegistry componentRegistry;
 	private TaggedRegistry<Component> taggedComponentRegistry;
@@ -40,38 +46,47 @@ public class DataLoadingContextImpl implements DataLoadingContext {
 		this.dataBundle = dataBundle;
 	}
 
+	// ============================================================
+	// ForgeroServices API (new preferred methods)
+	// ============================================================
+
 	@Override
-	public ComponentRegistry getComponentRegistry() {
-		return componentRegistry;
+	public TagResolver tagResolver() {
+		return dataBundle.tagResolver();
 	}
 
 	@Override
-	public TaggedRegistry<Component> getTaggedComponentRegistry() {
-		return taggedComponentRegistry;
-	}
-
-	@Override
-	public Resolver getResolver() {
-		return resolver;
-	}
-
-	@Override
-	public Optional<Component> getComponent(ItemStack stack) {
-		return componentConverter.toComponent(stack);
-	}
-
-	@Override
-	public ComponentConverter getConverter() {
+	public ComponentConverter converter() {
 		return componentConverter;
 	}
 
 	@Override
-	public ComponentNbtConverter getNbtConverter() {
+	public Resolver resolver() {
+		return resolver;
+	}
+
+	@Override
+	public ComponentRegistry componentRegistry() {
+		return componentRegistry;
+	}
+
+	@Override
+	public TaggedRegistry<Component> taggedComponents() {
+		return taggedComponentRegistry;
+	}
+
+	@Override
+	public ComponentNbtConverter nbtConverter() {
 		return nbtConverter;
 	}
 
 	@Override
-	public SlotManager getSlotManager() {
+	public Optional<Component> component(ItemStack stack) {
+		return componentConverter.toComponent(stack);
+	}
+
+	@Override
+	public SlotManager slotManager() {
 		return slotManager;
 	}
 

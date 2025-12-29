@@ -1,0 +1,27 @@
+{
+  "type": "forgero:part_template",
+  "name": "binding",
+  "tags": [
+    "forgero:parts/binding"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-binding"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-binding",
+    "slots": {
+      "material": {
+        "type": "forgero:upgrade_material",
+        "default_tag": "forgero:upgrade/binding"
+      }
+    }
+  },
+  "attributes": [
+    {
+      "id": "forgero:binding-rarity",
+      "type": "forgero:rarity",
+      "computation": {"value": 5, "operation": "addition"}
+    }
+  ]
+}

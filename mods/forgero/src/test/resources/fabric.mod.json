@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-test",
+  "version": "1.0.0",
+  "name": "Forgero Test",
+  "description": "Test mod for Forgero module - New Architecture Tests",
+  "authors": ["Test"],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-gametest": [
+      "com.sigmundgranaas.forgero.tests.ComponentSmokeTest",
+      "com.sigmundgranaas.forgero.tests.VanillaToolParityTest",
+      "com.sigmundgranaas.forgero.tests.UpgradeEffectivenessTest",
+      "com.sigmundgranaas.forgero.tests.UpgradeValueTest",
+      "com.sigmundgranaas.forgero.tests.MaxedOutToolTest"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "fabric-api": "*",
+    "minecraft": "1.20.1",
+    "forgero": "*"
+  }
+}

@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.loader.plugin;
 
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
+import com.sigmundgranaas.forgero.core.status.api.StatusModifierSlot;
 import com.sigmundgranaas.forgero.loader.api.DataPlugin;
 import com.sigmundgranaas.forgero.loader.api.PluginRegistrationContext;
 
@@ -20,6 +21,12 @@ public class CoreSlotTypesPlugin implements DataPlugin {
 		context.registerSlotCodec(
 				ComponentUpgradeSlot.TYPE,
 				ComponentUpgradeSlot.CODEC
+		);
+
+		// Register the StatusModifierSlot type for status modifiers (sharp, durable, broken, etc.)
+		context.registerSlotCodec(
+				StatusModifierSlot.TYPE,
+				StatusModifierSlot.CODEC
 		);
 	}
 

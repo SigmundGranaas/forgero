@@ -1,0 +1,40 @@
+{
+  "type": "forgero:equipment_template",
+  "name": "hoe",
+  "tags": [
+    "forgero:tools/hoe",
+    "forgero:tool"
+  ],
+  "host_template": {
+    "class": "forgero:hoe_item",
+    "id": "forgero:{head.material.name}-hoe"
+  },
+  "structure": {
+    "id": "forgero:{head.material.name}-hoe",
+    "slots": {
+      "head": {
+        "type": "forgero:hoe_head",
+        "default_tag": "forgero:parts/hoe_head"
+      },
+      "handle": {
+        "type": "forgero:handle",
+        "default_tag": "forgero:parts/handle"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:hoe-binding",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/binding"],
+      "description": "slot.forgero.binding"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:hoe-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": {"value": -1.0}
+    }
+  ]
+}

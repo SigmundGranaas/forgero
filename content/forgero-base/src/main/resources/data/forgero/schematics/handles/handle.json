@@ -1,0 +1,22 @@
+{
+  "type": "forgero:schematic",
+  "name": "Handle",
+  "tags": [
+    "forgero:schematics/handles"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:schematic-rarity",
+      "type": "forgero:rarity",
+      "computation": {"value": 10, "operation": "addition"}
+    }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:cosmetic-slot",
+      "type": "forgero:dye",
+      "tags": ["forgero:upgrade/cosmetic"],
+      "description": "slot.forgero.cosmetic"
+    }
+  ]
+}

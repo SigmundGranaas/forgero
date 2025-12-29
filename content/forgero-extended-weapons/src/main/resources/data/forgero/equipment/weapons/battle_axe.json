@@ -1,0 +1,40 @@
+{
+  "type": "forgero:equipment_template",
+  "name": "battle_axe",
+  "tags": [
+    "forgero:weapons/battle_axe",
+    "forgero:tool"
+  ],
+  "host_template": {
+    "class": "forgero:axe_item",
+    "id": "forgero:{head.material.name}-battle_axe"
+  },
+  "structure": {
+    "id": "forgero:{head.material.name}-battle_axe",
+    "slots": {
+      "head": {
+        "type": "forgero:battle_axe_head",
+        "default_tag": "forgero:parts/battle_axe_head"
+      },
+      "handle": {
+        "type": "forgero:handle",
+        "default_tag": "forgero:parts/handle"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:battle_axe-binding",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/binding"],
+      "description": "slot.forgero.binding"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:battle_axe-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": {"value": -3.4}
+    }
+  ]
+}

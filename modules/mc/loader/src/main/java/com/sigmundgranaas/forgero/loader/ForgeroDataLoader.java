@@ -111,8 +111,8 @@ public class ForgeroDataLoader implements ModInitializer {
 
 			// Phase 7: Setup item registration callbacks
 			ItemRegistrar itemRegistrar = new ItemRegistrar(
-					context.getComponentRegistry(),
-					context.getResolver(),
+					context.componentRegistry(),
+					context.resolver(),
 					LOGGER
 			);
 			plugins.setupItemCallbacks(itemRegistrar);
@@ -129,7 +129,7 @@ public class ForgeroDataLoader implements ModInitializer {
 			initializeRecipes(dataConfig);
 
 			initialized = true;
-			ForgeroTooltipRenderer.initialize(context.getConverter(), context.getResolver());
+			ForgeroTooltipRenderer.initialize(context.converter(), context.resolver());
 
 			// Phase 11: Fire initialization event (external subscribers via ForgeroInitializedCallback)
 			apiInitializer.fireInitializationEvent(context);
@@ -197,8 +197,8 @@ public class ForgeroDataLoader implements ModInitializer {
 
 	private void initializeRecipes(ForgeroDataInitializer.Config dataConfig) {
 		RecipeServices recipeServices = new RecipeServices(
-				context.getComponentRegistry(),
-				context.getConverter(),
+				context.componentRegistry(),
+				context.converter(),
 				componentMutater
 		);
 

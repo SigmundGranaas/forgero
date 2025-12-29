@@ -1,0 +1,54 @@
+{
+  "type": "forgero:material",
+  "name": "Perfect Quartz",
+  "tags": [
+    "forgero:materials/gem",
+    "forgero:materials/quartz",
+    "forgero:upgrade/reinforcement"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:quartz"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:perfect_quartz-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 100,
+        "operation": "addition"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:perfect_quartz-armor",
+      "type": "forgero:armor",
+      "computation": {
+        "value": 5,
+        "operation": "addition"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    }
+  ],
+  "palette": {
+    "name": "quartz_gem"
+  }
+}

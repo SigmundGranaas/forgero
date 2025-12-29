@@ -1,0 +1,54 @@
+{
+  "type": "forgero:material",
+  "name": "Flawed Echo",
+  "tags": [
+    "forgero:materials/gem",
+    "forgero:materials/echo",
+    "forgero:upgrade/reinforcement"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:echo_shard"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:flawed_echo-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 45,
+        "operation": "addition"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:flawed_echo-mining_speed",
+      "type": "forgero:mining_speed",
+      "computation": {
+        "value": 2,
+        "operation": "addition"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    }
+  ],
+  "palette": {
+    "name": "echo_gem"
+  }
+}

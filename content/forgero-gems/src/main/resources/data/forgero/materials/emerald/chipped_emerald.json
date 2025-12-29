@@ -1,0 +1,54 @@
+{
+  "type": "forgero:material",
+  "name": "Chipped Emerald",
+  "tags": [
+    "forgero:materials/gem",
+    "forgero:materials/emerald",
+    "forgero:upgrade/reinforcement"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:emerald"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:chipped_emerald-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 30,
+        "operation": "addition"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:chipped_emerald-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": {
+        "value": 0.15,
+        "operation": "addition"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:upgrade_material"
+          }
+        ]
+      }
+    }
+  ],
+  "palette": {
+    "name": "emerald_gem"
+  }
+}

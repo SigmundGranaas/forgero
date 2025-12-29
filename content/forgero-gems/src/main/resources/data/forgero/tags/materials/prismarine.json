@@ -1,0 +1,10 @@
+{
+  "parents": ["forgero:materials/gem"],
+  "values": [
+    "forgero:chipped_prismarine",
+    "forgero:flawed_prismarine",
+    "forgero:prismarine_gem",
+    "forgero:flawless_prismarine",
+    "forgero:perfect_prismarine"
+  ]
+}

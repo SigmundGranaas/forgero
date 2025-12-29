@@ -8,6 +8,8 @@ import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
+import com.sigmundgranaas.forgero.core.status.api.StatusModifiableComponent;
+import com.sigmundgranaas.forgero.core.status.api.StatusModifierSlot;
 
 import java.util.*;
 
@@ -25,6 +27,7 @@ public class ResolutionContext {
 	private final Map<Component, ComponentPart> partMap;  // Contains components in IMMUTABLE structure parts
 	private final Map<Component, Component> parentMap;
 	private final Map<Component, Integer> depthMap;
+	private final Map<Component, List<StatusModifierSlot>> statusModifierSlotMap;  // Status modifier slots per component
 
 	/**
 	 * Constructs a new ResolutionContext. The constructor is responsible for performing
@@ -42,6 +45,7 @@ public class ResolutionContext {
 		this.partMap = new IdentityHashMap<>();
 		this.parentMap = new IdentityHashMap<>();
 		this.depthMap = new IdentityHashMap<>();
+		this.statusModifierSlotMap = new IdentityHashMap<>();
 		buildContextMaps(root, null, 0);
 	}
 
@@ -69,6 +73,16 @@ public class ResolutionContext {
 						buildContextMaps(child, current, depth + 1);
 					});
 				}
+			}
+		}
+
+		// Status modifier slots - status modifiers as PropertyHolders
+		// StatusModifierSlots contain StatusModifiers which ARE PropertyHolders
+		// but are NOT Components, so we don't recurse - we just register the slots
+		if (current instanceof StatusModifiableComponent modifiable) {
+			List<StatusModifierSlot> slots = modifiable.statusModifiers().allSlots();
+			if (!slots.isEmpty()) {
+				statusModifierSlotMap.put(current, slots);
 			}
 		}
 	}
@@ -140,4 +154,36 @@ public class ResolutionContext {
 
 	/** @return An Optional containing the direct parent of the 'self' component. Empty if 'self' is the root. */
 	public Optional<Component> getParent() { return Optional.ofNullable(parentMap.get(self)); }
+
+	/**
+	 * Returns the status modifier slots attached to the 'self' component.
+	 *
+	 * @return List of status modifier slots, or empty list if component doesn't support status modifiers.
+	 */
+	public List<StatusModifierSlot> getStatusModifierSlots() {
+		return statusModifierSlotMap.getOrDefault(self, Collections.emptyList());
+	}
+
+	/**
+	 * Returns all status modifier slots in the entire assembly (from root).
+	 *
+	 * @return List of all status modifier slots in the tree.
+	 */
+	public List<StatusModifierSlot> getAllStatusModifierSlots() {
+		return statusModifierSlotMap.values().stream()
+				.flatMap(List::stream)
+				.toList();
+	}
+
+	/**
+	 * Checks if the 'self' component has a specific status modifier applied.
+	 *
+	 * @param modifierId The identifier of the status modifier to check for.
+	 * @return true if the modifier is applied to self.
+	 */
+	public boolean hasStatusModifier(OpenIdentifier modifierId) {
+		return getStatusModifierSlots().stream()
+				.flatMap(slot -> slot.content().stream())
+				.anyMatch(modifier -> modifier.id().equals(modifierId));
+	}
 }

@@ -1,0 +1,52 @@
+{
+  "type": "forgero:part_template",
+  "name": "spear_head",
+  "tags": [
+    "forgero:parts/head",
+    "forgero:parts/spear_head"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-spear_head"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-spear_head",
+    "slots": {
+      "material": {
+        "type": "forgero:tool_material",
+        "default_tag": "forgero:materials/tool_material"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:spear_head-reinforcement",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/reinforcement"],
+      "description": "slot.forgero.reinforcement"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:spear_head-rarity",
+      "type": "forgero:rarity",
+      "computation": {"value": 40, "operation": "addition"}
+    },
+    {
+      "id": "forgero:spear_head-attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": {"value": 1.2, "operation": "multiplication"},
+      "condition": {
+        "static": [{"type": "forgero:is_root"}]
+      }
+    },
+    {
+      "id": "forgero:spear_head-reach",
+      "type": "forgero:reach",
+      "computation": {"value": 2.0, "operation": "addition"},
+      "condition": {
+        "static": [{"type": "forgero:is_root"}]
+      }
+    }
+  ]
+}

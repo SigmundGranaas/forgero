@@ -1,0 +1,36 @@
+{
+  "type": "forgero:part_template",
+  "name": "hoe_head",
+  "tags": [
+    "forgero:parts/head",
+    "forgero:parts/hoe_head"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-hoe_head"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-hoe_head",
+    "slots": {
+      "material": {
+        "type": "forgero:tool_material",
+        "default_tag": "forgero:materials/tool_material"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:hoe_head-reinforcement",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/reinforcement"],
+      "description": "slot.forgero.reinforcement"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:hoe_head-rarity",
+      "type": "forgero:rarity",
+      "computation": {"value": 15, "operation": "addition"}
+    }
+  ]
+}

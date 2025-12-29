@@ -1,0 +1,60 @@
+{
+  "type": "forgero:part_template",
+  "name": "broadsword_blade",
+  "tags": [
+    "forgero:parts/blade",
+    "forgero:parts/broadsword_blade"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-broadsword_blade"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-broadsword_blade",
+    "slots": {
+      "material": {
+        "type": "forgero:tool_material",
+        "default_tag": "forgero:materials/tool_material"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:broadsword_blade-reinforcement",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:upgrade/reinforcement"],
+      "description": "slot.forgero.reinforcement"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:broadsword_blade-rarity",
+      "type": "forgero:rarity",
+      "computation": {"value": 75, "operation": "addition"}
+    },
+    {
+      "id": "forgero:broadsword_blade-attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": {"value": 1.8, "operation": "multiplication"},
+      "condition": {
+        "static": [{"type": "forgero:is_root"}]
+      }
+    },
+    {
+      "id": "forgero:broadsword_blade-durability",
+      "type": "forgero:durability",
+      "computation": {"value": 1.15, "operation": "multiplication"},
+      "condition": {
+        "static": [{"type": "forgero:is_root"}]
+      }
+    },
+    {
+      "id": "forgero:broadsword_blade-weight",
+      "type": "forgero:weight",
+      "computation": {"value": 1.45, "operation": "multiplication"},
+      "condition": {
+        "static": [{"type": "forgero:is_root"}]
+      }
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "vanilla-upgrades-test",
+  "version": "1.0.0",
+  "name": "Vanilla Upgrades Test",
+  "description": "Test mod for Vanilla Upgrades module.",
+  "authors": ["Test"],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-gametest": [
+      "com.sigmundgranaas.vanillaupgrades.tests.MaterialLoadingTest",
+      "com.sigmundgranaas.vanillaupgrades.tests.VanillaToolTest",
+      "com.sigmundgranaas.vanillaupgrades.tests.UpgradeApplicationTest",
+      "com.sigmundgranaas.vanillaupgrades.tests.ToolLifecycleTest"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "fabric-api": "*",
+    "minecraft": "1.20.1",
+    "vanilla-upgrades": "*"
+  }
+}

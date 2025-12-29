@@ -40,7 +40,7 @@ public record ComponentUpgradeSlot(
 
 	@Override
 	public OpenIdentifier type() {
-		return OpenIdentifier.of(TYPE);
+		return OpenIdentifier.parse(TYPE);
 	}
 
 	// Implementation-specific API

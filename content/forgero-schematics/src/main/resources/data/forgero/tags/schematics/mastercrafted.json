@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "forgero:mastercrafted_sword_blade",
+    "forgero:mastercrafted_pickaxe_head",
+    "forgero:mastercrafted_axe_head",
+    "forgero:mastercrafted_shovel_head",
+    "forgero:mastercrafted_hoe_head",
+    "forgero:mastercrafted_handle",
+    "forgero:mastercrafted_sword_guard",
+    "forgero:mastercrafted_pommel"
+  ]
+}
