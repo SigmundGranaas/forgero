@@ -7,16 +7,40 @@
   ],
   "attributes": [
     {
-      "id": "forgero:shape-durability-mult",
+      "id": "forgero:pickaxe_head-durability-mult",
       "type": "forgero:durability",
       "composite": "forgero:part-composite",
       "computation": { "multiply": 1.0 }
     },
     {
-      "id": "forgero:shape-mining_speed-mult",
+      "id": "forgero:pickaxe_head-mining_speed-base",
+      "type": "forgero:mining_speed",
+      "composite": "forgero:part-composite",
+      "computation": { "value": 0, "operation": "addition" }
+    },
+    {
+      "id": "forgero:pickaxe_head-mining_speed-mult",
       "type": "forgero:mining_speed",
       "composite": "forgero:part-composite",
       "computation": { "multiply": 1.2 }
+    },
+    {
+      "id": "forgero:pickaxe_head-attack_damage-base",
+      "type": "forgero:attack_damage",
+      "composite": "forgero:part-composite",
+      "computation": { "value": 1.0, "operation": "addition" }
+    },
+    {
+      "id": "forgero:pickaxe_head-attack_speed-base",
+      "type": "forgero:attack_speed",
+      "composite": "forgero:part-composite",
+      "computation": { "value": 1.0, "operation": "addition" }
+    },
+    {
+      "id": "forgero:pickaxe_head-mining_level-base",
+      "type": "forgero:mining_level",
+      "composite": "forgero:part-composite",
+      "computation": { "value": 0, "operation": "addition" }
     }
   ]
 }

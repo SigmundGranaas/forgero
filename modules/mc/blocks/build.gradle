@@ -22,6 +22,9 @@ dependencies {
 	testRuntimeOnly(project(":content:forgero-materials"))
 	testRuntimeOnly(project(":content:minecraft-tools"))
 	testRuntimeOnly(project(":content:forgero-base"))
+
+	// Forgero test utilities
+	testImplementation(project(":modules:mc:test-common"))
 }
 
 loom {

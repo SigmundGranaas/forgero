@@ -31,6 +31,31 @@
       "id": "forgero:pickaxe_head-rarity",
       "type": "forgero:rarity",
       "computation": {"value": 25, "operation": "addition"}
+    },
+    {
+      "id": "forgero:pickaxe_head-durability-base",
+      "type": "forgero:durability",
+      "computation": {"value": 0, "operation": "addition"}
+    },
+    {
+      "id": "forgero:pickaxe_head-attack_damage-base",
+      "type": "forgero:attack_damage",
+      "computation": {"value": 1.0, "operation": "addition"}
+    },
+    {
+      "id": "forgero:pickaxe_head-attack_speed-base",
+      "type": "forgero:attack_speed",
+      "computation": {"value": 1.0, "operation": "addition"}
+    },
+    {
+      "id": "forgero:pickaxe_head-mining_speed-base",
+      "type": "forgero:mining_speed",
+      "computation": {"value": 0, "operation": "addition"}
+    },
+    {
+      "id": "forgero:pickaxe_head-mining_level-base",
+      "type": "forgero:mining_level",
+      "computation": {"value": 0, "operation": "addition"}
     }
   ]
 }

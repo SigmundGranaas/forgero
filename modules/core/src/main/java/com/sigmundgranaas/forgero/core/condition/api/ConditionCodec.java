@@ -96,56 +96,115 @@ public final class ConditionCodec implements Codec<Condition> {
 
 	@Override
 	public <T> DataResult<Pair<Condition, T>> decode(DynamicOps<T> ops, T input) {
+		// First, try to parse as wrapper format: { "static": [...], "dynamic": [...] }
+		var wrapperResult = tryDecodeWrapperFormat(ops, input);
+		if (wrapperResult.result().isPresent()) {
+			return wrapperResult;
+		}
+
+		// Fall back to legacy direct predicate list format
 		return PREDICATE_LIST_CODEC.decode(ops, input).flatMap(pair -> {
 			List<JsonElement> predicates = pair.getFirst();
 			List<StaticCondition> staticResults = new ArrayList<>();
 			List<DynamicCondition> dynamicResults = new ArrayList<>();
 
 			for (JsonElement predicateJson : predicates) {
-				if (!predicateJson.isJsonObject() || predicateJson.getAsJsonObject().get("type") == null) {
-					return DataResult.error(() -> "Predicate must be a JSON object with a 'type' field: " + predicateJson);
-				}
-				String type = predicateJson.getAsJsonObject().get("type").getAsString();
-
-				LogicalConditionHandler handler = logicalHandlers.get(type);
-				if (handler != null) {
-					DataResult<Condition> logicalResult = handler.codecFactory().apply(this).parse(JsonOps.INSTANCE, predicateJson);
-					logicalResult.result().ifPresent(condition -> {
-						Object result = handler.fromFactory().apply(condition);
-						if (result instanceof StaticCondition sc) {
-							staticResults.add(sc);
-						} else if (result instanceof DynamicCondition dc) {
-							dynamicResults.add(dc);
-						}
-					});
-					logicalResult.error().ifPresent(error -> LOGGER.warn("Failed to parse logical condition: {}", error.message()));
-				} else {
-					// Try static first, then dynamic
-					DataResult<StaticCondition> staticResult = staticDispatcher.parse(JsonOps.INSTANCE, predicateJson);
-					DataResult<DynamicCondition> dynamicResult = dynamicDispatcher.parse(JsonOps.INSTANCE, predicateJson);
-
-					boolean parsedAny = false;
-					if (staticResult.result().isPresent()) {
-						staticResults.add(staticResult.result().get());
-						parsedAny = true;
-					}
-					if (dynamicResult.result().isPresent()) {
-						dynamicResults.add(dynamicResult.result().get());
-						parsedAny = true;
-					}
-
-					// CRITICAL: Log error if neither static nor dynamic codec recognized the type
-					// This prevents silent failures where conditions are silently dropped
-					if (!parsedAny) {
-						LOGGER.error("CONDITION PARSE FAILURE: Unknown condition type '{}'. " +
-								"This condition will be IGNORED, which may cause attribute leaks! " +
-								"Ensure the condition codec is registered. JSON: {}",
-								type, predicateJson);
-					}
-				}
+				parsePredicateJson(predicateJson, staticResults, dynamicResults);
 			}
 			return DataResult.success(Pair.of(new Condition(staticResults, dynamicResults), pair.getSecond()));
 		});
+	}
+
+	/**
+	 * Attempts to decode the wrapper format: { "static": [...], "dynamic": [...] }
+	 * This is the primary format used in material JSON files.
+	 */
+	private <T> DataResult<Pair<Condition, T>> tryDecodeWrapperFormat(DynamicOps<T> ops, T input) {
+		// Check if input has "static" or "dynamic" keys
+		var staticKeyResult = ops.get(input, "static");
+		var dynamicKeyResult = ops.get(input, "dynamic");
+
+		boolean hasStaticKey = staticKeyResult.result().isPresent();
+		boolean hasDynamicKey = dynamicKeyResult.result().isPresent();
+
+		if (!hasStaticKey && !hasDynamicKey) {
+			return DataResult.error(() -> "Not a wrapper format");
+		}
+
+		List<StaticCondition> staticResults = new ArrayList<>();
+		List<DynamicCondition> dynamicResults = new ArrayList<>();
+
+		// Parse static conditions
+		if (hasStaticKey) {
+			T staticList = staticKeyResult.result().get();
+			var listResult = Codec.list(JsonElementCodec.INSTANCE).decode(ops, staticList);
+			listResult.result().ifPresent(pair -> {
+				for (JsonElement predicateJson : pair.getFirst()) {
+					parsePredicateJson(predicateJson, staticResults, dynamicResults);
+				}
+			});
+		}
+
+		// Parse dynamic conditions
+		if (hasDynamicKey) {
+			T dynamicList = dynamicKeyResult.result().get();
+			var listResult = Codec.list(JsonElementCodec.INSTANCE).decode(ops, dynamicList);
+			listResult.result().ifPresent(pair -> {
+				for (JsonElement predicateJson : pair.getFirst()) {
+					parsePredicateJson(predicateJson, staticResults, dynamicResults);
+				}
+			});
+		}
+
+		return DataResult.success(Pair.of(new Condition(staticResults, dynamicResults), ops.empty()));
+	}
+
+	/**
+	 * Parses a single predicate JSON element and adds it to the appropriate list.
+	 */
+	private void parsePredicateJson(JsonElement predicateJson, List<StaticCondition> staticResults, List<DynamicCondition> dynamicResults) {
+		if (!predicateJson.isJsonObject() || predicateJson.getAsJsonObject().get("type") == null) {
+			LOGGER.error("Predicate must be a JSON object with a 'type' field: {}", predicateJson);
+			return;
+		}
+		String type = predicateJson.getAsJsonObject().get("type").getAsString();
+
+		LogicalConditionHandler handler = logicalHandlers.get(type);
+		if (handler != null) {
+			DataResult<Condition> logicalResult = handler.codecFactory().apply(this).parse(JsonOps.INSTANCE, predicateJson);
+			logicalResult.result().ifPresent(condition -> {
+				Object result = handler.fromFactory().apply(condition);
+				if (result instanceof StaticCondition sc) {
+					staticResults.add(sc);
+				} else if (result instanceof DynamicCondition dc) {
+					dynamicResults.add(dc);
+				}
+			});
+			logicalResult.error().ifPresent(error -> LOGGER.warn("Failed to parse logical condition: {}", error.message()));
+		} else {
+			// Try static first, then dynamic
+			DataResult<StaticCondition> staticResult = staticDispatcher.parse(JsonOps.INSTANCE, predicateJson);
+			DataResult<DynamicCondition> dynamicResult = dynamicDispatcher.parse(JsonOps.INSTANCE, predicateJson);
+
+			boolean parsedAny = false;
+			if (staticResult.result().isPresent()) {
+				staticResults.add(staticResult.result().get());
+				parsedAny = true;
+			}
+			if (dynamicResult.result().isPresent()) {
+				dynamicResults.add(dynamicResult.result().get());
+				parsedAny = true;
+			}
+
+			// CRITICAL: Log error if neither static nor dynamic codec recognized the type
+			// This prevents silent failures where conditions are silently dropped
+			if (!parsedAny) {
+				LOGGER.error("CONDITION PARSE FAILURE: Unknown condition type '{}'. " +
+						"This condition will be IGNORED, which may cause attribute leaks! " +
+						"Ensure the condition codec is registered. JSON: {}",
+						type, predicateJson);
+			}
+		}
 	}
 
 

@@ -21,6 +21,7 @@ dependencies {
     include(project(path: ":modules:mc:properties", configuration: 'namedElements'))
     include(project(path: ":modules:mc:render", configuration: 'namedElements'))
     include(project(path: ":modules:mc:predicate", configuration: 'namedElements'))
+    include(project(path: ":modules:mc:blocks", configuration: 'namedElements'))
 
     // Forgero-specific modules (custom tool/armor/bow items)
     include(project(path: ":modules:mc:tools", configuration: 'namedElements'))
@@ -41,6 +42,7 @@ dependencies {
     implementation(project(path: ":modules:mc:properties", configuration: 'namedElements'))
     implementation(project(path: ":modules:mc:render", configuration: 'namedElements'))
     implementation(project(path: ":modules:mc:predicate", configuration: 'namedElements'))
+    implementation(project(path: ":modules:mc:blocks", configuration: 'namedElements'))
     implementation(project(path: ":mods:drp", configuration: 'namedElements'))
     implementation(project(path: ":modules:mc:tools", configuration: 'namedElements'))
     implementation(project(path: ":modules:mc:armor", configuration: 'namedElements'))

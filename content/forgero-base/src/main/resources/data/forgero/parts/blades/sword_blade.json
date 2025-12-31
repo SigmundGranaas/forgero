@@ -31,6 +31,21 @@
       "id": "forgero:sword_blade-rarity",
       "type": "forgero:rarity",
       "computation": {"value": 30, "operation": "addition"}
+    },
+    {
+      "id": "forgero:sword_blade-durability-base",
+      "type": "forgero:durability",
+      "computation": {"value": 0, "operation": "addition"}
+    },
+    {
+      "id": "forgero:sword_blade-attack_damage-base",
+      "type": "forgero:attack_damage",
+      "computation": {"value": 1.0, "operation": "addition"}
+    },
+    {
+      "id": "forgero:sword_blade-attack_speed-base",
+      "type": "forgero:attack_speed",
+      "computation": {"value": 1.0, "operation": "addition"}
     }
   ]
 }

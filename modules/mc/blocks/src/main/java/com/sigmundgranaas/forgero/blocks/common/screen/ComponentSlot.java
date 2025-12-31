@@ -63,6 +63,12 @@ public class ComponentSlot extends Slot {
 	private boolean enabled;
 
 	/**
+	 * The parent slot in the hierarchy (for drawing connection lines).
+	 */
+	@Nullable
+	private Slot parentSlot;
+
+	/**
 	 * Creates a new component slot.
 	 *
 	 * @param inventory The backing inventory
@@ -89,11 +95,25 @@ public class ComponentSlot extends Slot {
 	 * @param context     Station context for validation
 	 */
 	public void configure(ComponentUpgradeSlot forgeroSlot, int x, int y, StationContext context) {
+		configure(forgeroSlot, x, y, context, null);
+	}
+
+	/**
+	 * Configures this slot for use in the active tree with parent tracking.
+	 *
+	 * @param forgeroSlot The Forgero upgrade slot to wrap
+	 * @param x           X position from layout engine
+	 * @param y           Y position from layout engine
+	 * @param context     Station context for validation
+	 * @param parentSlot  The parent slot in the hierarchy
+	 */
+	public void configure(ComponentUpgradeSlot forgeroSlot, int x, int y, StationContext context, @Nullable Slot parentSlot) {
 		this.forgeroSlot = forgeroSlot;
 		this.dynamicX = x;
 		this.dynamicY = y;
 		this.context = context;
 		this.enabled = true;
+		this.parentSlot = parentSlot;
 	}
 
 	/**
@@ -105,6 +125,7 @@ public class ComponentSlot extends Slot {
 		this.enabled = false;
 		this.dynamicX = 0;
 		this.dynamicY = 0;
+		this.parentSlot = null;
 		this.inventory.setStack(0, ItemStack.EMPTY);
 	}
 
@@ -189,5 +210,15 @@ public class ComponentSlot extends Slot {
 	@Nullable
 	public com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier getSlotType() {
 		return forgeroSlot != null ? forgeroSlot.slotType() : null;
+	}
+
+	/**
+	 * Gets the parent slot in the hierarchy.
+	 *
+	 * @return The parent slot, or null if this is a root slot
+	 */
+	@Nullable
+	public Slot getParentSlot() {
+		return parentSlot;
 	}
 }

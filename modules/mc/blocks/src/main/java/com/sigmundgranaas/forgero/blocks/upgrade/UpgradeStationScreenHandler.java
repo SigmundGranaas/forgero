@@ -118,7 +118,7 @@ public class UpgradeStationScreenHandler extends AbstractStationScreenHandler {
 	 */
 	private void rebuildSlotPool(SlotTree tree, SlotLayoutEngine layout) {
 		// Use the slot pool to create/configure slots
-		slotPool.rebuild(tree, layout);
+		slotPool.rebuild(tree, layout, compositeSlot);
 
 		// Add inventory change listeners to each active slot
 		for (ComponentSlot slot : slotPool.getActiveSlots()) {

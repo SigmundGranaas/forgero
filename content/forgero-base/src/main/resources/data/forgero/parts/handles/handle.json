@@ -30,6 +30,11 @@
       "id": "forgero:handle-rarity",
       "type": "forgero:rarity",
       "computation": {"value": 10, "operation": "addition"}
+    },
+    {
+      "id": "forgero:handle-durability-base",
+      "type": "forgero:durability",
+      "computation": {"value": 0, "operation": "addition"}
     }
   ]
 }

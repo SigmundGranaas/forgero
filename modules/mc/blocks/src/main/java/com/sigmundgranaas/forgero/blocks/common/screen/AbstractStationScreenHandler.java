@@ -273,8 +273,30 @@ public abstract class AbstractStationScreenHandler extends ScreenHandler {
 						return ItemStack.EMPTY;
 					}
 				} else {
-					// From player inventory -> to component slot (slot 0)
-					if (!this.insertItem(originalStack, 0, 1, false)) {
+					// From player inventory -> try component slot first, then upgrade slots
+					boolean inserted = false;
+
+					// First try the main component slot (slot 0)
+					if (this.insertItem(originalStack, 0, 1, false)) {
+						inserted = true;
+					}
+
+					// If that didn't work, try inserting into compatible upgrade slots
+					if (!inserted && !originalStack.isEmpty()) {
+						for (ComponentSlot upgradeSlot : slotPool.getActiveSlots()) {
+							if (upgradeSlot.canInsert(originalStack)) {
+								int upgradeSlotIndex = slotPool.getSlotIndex(upgradeSlot);
+								if (upgradeSlotIndex >= 0) {
+									if (this.insertItem(originalStack, upgradeSlotIndex, upgradeSlotIndex + 1, false)) {
+										inserted = true;
+										break;
+									}
+								}
+							}
+						}
+					}
+
+					if (!inserted) {
 						return ItemStack.EMPTY;
 					}
 				}

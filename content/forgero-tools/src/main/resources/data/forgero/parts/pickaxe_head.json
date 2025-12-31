@@ -30,6 +30,33 @@
       "tags": ["forgero:materials/tool_material"]
     }
   ],
+  "attributes": [
+    {
+      "id": "forgero:pickaxe_head_template-durability-base",
+      "type": "forgero:durability",
+      "computation": {"value": 0, "operation": "addition"}
+    },
+    {
+      "id": "forgero:pickaxe_head_template-attack_damage-base",
+      "type": "forgero:attack_damage",
+      "computation": {"value": 1.0, "operation": "addition"}
+    },
+    {
+      "id": "forgero:pickaxe_head_template-attack_speed-base",
+      "type": "forgero:attack_speed",
+      "computation": {"value": 1.0, "operation": "addition"}
+    },
+    {
+      "id": "forgero:pickaxe_head_template-mining_speed-base",
+      "type": "forgero:mining_speed",
+      "computation": {"value": 0, "operation": "addition"}
+    },
+    {
+      "id": "forgero:pickaxe_head_template-mining_level-base",
+      "type": "forgero:mining_level",
+      "computation": {"value": 0, "operation": "addition"}
+    }
+  ],
   "properties": {
     "forgero:block_breaking": [
       {
