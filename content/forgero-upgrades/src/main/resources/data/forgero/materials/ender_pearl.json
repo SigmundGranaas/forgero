@@ -3,9 +3,11 @@
   "name": "Ender Pearl",
   "tags": [
     "forgero:upgrade/gem",
+    "forgero:upgrade/binding",
     "forgero:materials/hard",
     "forgero:materials/mineral",
-    "forgero:materials/upgrade_material"
+    "forgero:materials/upgrade_material",
+    "forgero:upgrade_material"
   ],
   "host": {
     "identifiers": [
@@ -15,25 +17,22 @@
       }
     ]
   },
-  "properties": [
-    {
-      "type": "minecraft:on_hit",
-      "selector": {
-        "type": "forgero:single_target"
-      },
-      "effects": [
-        { "type": "forgero:teleport", "target": "target", "random": true, "maxDistance": 8 }
-      ],
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
+  "properties": {
+    "minecraft:on_hit": [
+      {
+        "selector": {
+          "type": "forgero:single_target"
+        },
+        "effects": [
+          { "type": "forgero:teleport", "target": "target", "random": true, "maxDistance": 8 }
+        ],
+        "condition": {
+          "type": "forgero:in_slot_type",
+          "slot_type": "forgero:upgrade_material"
+        }
       }
-    }
-  ],
+    ]
+  },
   "attributes": [
     {
       "id": "forgero:pearl-rarity-upgrade",
@@ -41,14 +40,7 @@
       "computation": {
         "value": 20
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:pearl-weight-upgrade",
@@ -56,14 +48,7 @@
       "computation": {
         "value": 0.5
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:pearl-attack_speed-offensive-upgrade",
@@ -71,14 +56,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:pearl-attack_damage-offensive-upgrade",
@@ -86,14 +64,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:pearl-mining_speed-offensive-upgrade",
@@ -101,14 +72,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:pearl-mining_level-offensive-upgrade",
@@ -116,14 +80,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:pearl-durability-offensive-upgrade",
@@ -131,14 +88,7 @@
       "computation": {
         "value": 105
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:pearl-attack_speed-utility-upgrade",
@@ -146,14 +96,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:pearl-attack_damage-utility-upgrade",
@@ -161,14 +104,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:pearl-mining_speed-utility-upgrade",
@@ -176,14 +112,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:pearl-mining_level-utility-upgrade",
@@ -191,14 +120,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:pearl-durability-utility-upgrade",
@@ -206,14 +128,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:pearl-draw_power-offensive-upgrade",
@@ -221,14 +136,7 @@
       "computation": {
         "value": 0.33
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:pearl-draw_speed-offensive-upgrade",
@@ -236,14 +144,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     }
   ]
 }

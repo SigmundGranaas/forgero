@@ -142,6 +142,7 @@ class ExtensionMergerTest {
 					Optional.of(id("forgero:iron-durability")),
 					id("forgero:durability"),
 					new ComputationData(250f, null, null),
+					Optional.empty(),
 					Optional.empty()
 			);
 
@@ -157,6 +158,7 @@ class ExtensionMergerTest {
 					Optional.of(id("forgero:iron-mining-speed")),
 					id("forgero:mining_speed"),
 					new ComputationData(6f, null, null),
+					Optional.empty(),
 					Optional.empty()
 			);
 

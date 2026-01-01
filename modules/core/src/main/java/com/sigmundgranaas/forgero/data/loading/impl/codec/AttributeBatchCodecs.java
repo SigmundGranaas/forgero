@@ -137,7 +137,8 @@ public class AttributeBatchCodecs {
 			Optional<Condition> expandedCondition = batch.condition()
 					.map(cond -> injectAttributeType(cond, attrTypeId));
 
-			return new AttributeDataImpl(id, attrTypeId, computation, expandedCondition);
+			// Batch attributes inherit context from the batch (default: empty)
+			return new AttributeDataImpl(id, attrTypeId, computation, Optional.empty(), expandedCondition);
 		}
 
 		/**

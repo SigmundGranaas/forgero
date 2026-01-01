@@ -73,7 +73,7 @@ class MaterialSlotConditionValidationTest extends ForgeroTest {
 		Condition condition = new Condition(List.of(whenInCondition), Collections.emptyList());
 		return new SimpleAttribute(Optional.empty(), type, value,
 				com.sigmundgranaas.forgero.core.attribute.api.operator.AdditionOperator.getInstance(),
-				0, Optional.of(condition));
+				0, Optional.empty(), Optional.of(condition));
 	}
 
 	// ==================== ARMOR VS TOOL SLOT TESTS ====================

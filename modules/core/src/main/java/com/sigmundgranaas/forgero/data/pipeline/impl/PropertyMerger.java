@@ -67,17 +67,41 @@ public class PropertyMerger {
 				mergedTags.addAll(dto.localTags());
 			}
 
-			if (dto.attributes() != null && !isTemplateBasedMerge) {
-				mergedAttributes.addAll(dto.attributes());
+			// Handle attributes based on merge type
+			if (dto.attributes() != null) {
+				if (isTemplateBasedMerge) {
+					// For template-based merges, only include the TEMPLATE's own attributes.
+					// Material/shape attributes stay on their respective components in the structure.
+					// This allows context-based composition to work correctly.
+					if (dto instanceof TemplateData) {
+						mergedAttributes.addAll(dto.attributes());
+					}
+				} else {
+					// For non-template merges (e.g., includes), merge all attributes
+					mergedAttributes.addAll(dto.attributes());
+				}
 			}
 
 			// Add local_attributes ONLY from the final DTO (not inherited)
-			if (isLastDto && dto.localAttributes() != null && !isTemplateBasedMerge) {
-				mergedAttributes.addAll(dto.localAttributes());
+			if (isLastDto && dto.localAttributes() != null) {
+				if (isTemplateBasedMerge) {
+					if (dto instanceof TemplateData) {
+						mergedAttributes.addAll(dto.localAttributes());
+					}
+				} else {
+					mergedAttributes.addAll(dto.localAttributes());
+				}
 			}
 
-			if (dto.properties() != null && !isTemplateBasedMerge) {
-				mergedJsonProperties.putAll(dto.properties());
+			// Handle properties similarly
+			if (dto.properties() != null) {
+				if (isTemplateBasedMerge) {
+					if (dto instanceof TemplateData) {
+						mergedJsonProperties.putAll(dto.properties());
+					}
+				} else {
+					mergedJsonProperties.putAll(dto.properties());
+				}
 			}
 			if (dto.host() != null) {
 				hostData = dto.host();
@@ -116,6 +140,7 @@ public class PropertyMerger {
 				computation.value(),
 				operator,
 				order,
+				data.context(),
 				data.condition()
 		);
 	}

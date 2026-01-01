@@ -21,18 +21,7 @@
       "computation": {
         "value": 2.0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:attack_speed"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:copper-attack_damage",
@@ -40,18 +29,7 @@
       "computation": {
         "value": 3.5
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:attack_damage"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:copper-mining_speed",
@@ -59,18 +37,7 @@
       "computation": {
         "value": 5.0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:mining_speed"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:copper-mining_level",
@@ -78,18 +45,7 @@
       "computation": {
         "value": 2
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:mining_level"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:copper-durability",
@@ -97,18 +53,7 @@
       "computation": {
         "value": 320
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:durability"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:copper-rarity",
@@ -116,18 +61,7 @@
       "computation": {
         "value": 30
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:rarity"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:copper-weight",
@@ -135,18 +69,7 @@
       "computation": {
         "value": 5.8
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:weight"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:copper-draw_speed",
@@ -154,18 +77,7 @@
       "computation": {
         "value": 1.25
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:draw_speed"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:copper-draw_power",
@@ -173,18 +85,7 @@
       "computation": {
         "value": 3.5
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:draw_power"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:copper-armor",
@@ -192,17 +93,10 @@
       "computation": {
         "value": 6
       },
+      "context": "forgero:part-composite",
       "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:armor_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:armor"
-          }
-        ]
+        "type": "forgero:in_slot_type",
+        "slot_type": "forgero:armor_material"
       }
     }
   ]

@@ -53,6 +53,8 @@ dependencies {
     runtimeOnly(project(":content:minecraft-tools"))
     runtimeOnly(project(":content:forgero-base"))
     runtimeOnly(project(":content:forgero-upgrades"))
+    runtimeOnly(project(":content:forgero-armor-content"))
+    runtimeOnly(project(":content:forgero-tools"))  // Adds armor_material tag to metals
 
     // Fabric
     modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")

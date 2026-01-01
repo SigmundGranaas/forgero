@@ -82,6 +82,7 @@ public class AttributeCodecs {
 						CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("id").forGetter(AttributeData::id),
 						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(AttributeData::type),
 						COMPUTATION_CODEC.fieldOf("computation").forGetter(AttributeData::computation),
+						CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("context").forGetter(AttributeData::context),
 						conditionCodec.optionalFieldOf("condition").forGetter(AttributeData::condition)
 				).apply(instance, AttributeDataImpl::new)
 		);

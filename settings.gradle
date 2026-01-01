@@ -14,6 +14,7 @@ include("${mod_id}-core")
 include ("modules")
 include("modules:core")
 include("modules:core:test-common")
+include("modules:model")
 
 // MC modules
 include("modules:mc")

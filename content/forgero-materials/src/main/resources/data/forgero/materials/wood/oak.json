@@ -20,18 +20,7 @@
       "computation": {
         "value": 2.0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:attack_speed"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:oak-attack_damage",
@@ -39,18 +28,7 @@
       "computation": {
         "value": 2.0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:attack_damage"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:oak-mining_speed",
@@ -58,18 +36,7 @@
       "computation": {
         "value": 2.0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:mining_speed"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:oak-mining_level",
@@ -77,18 +44,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:mining_level"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:oak-durability",
@@ -96,18 +52,7 @@
       "computation": {
         "value": 50
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:durability"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:oak-rarity",
@@ -115,18 +60,7 @@
       "computation": {
         "value": 10
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:rarity"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:oak-weight",
@@ -134,18 +68,7 @@
       "computation": {
         "value": 2.0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:weight"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:oak-draw_speed",
@@ -153,18 +76,7 @@
       "computation": {
         "value": 1.2
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:draw_speed"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:oak-draw_power",
@@ -172,18 +84,7 @@
       "computation": {
         "value": 3.0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:draw_power"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:oak-armor",
@@ -191,17 +92,10 @@
       "computation": {
         "value": 0
       },
+      "context": "forgero:part-composite",
       "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:armor_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:armor"
-          }
-        ]
+        "type": "forgero:in_slot_type",
+        "slot_type": "forgero:armor_material"
       }
     }
   ],

@@ -41,24 +41,25 @@
       }
     }
   ],
-  "properties": [
-    {
-      "type": "minecraft:block_breaking",
-      "selector": {
-        "type": "forgero:pattern",
-        "pattern": [
-          "XXX",
-          "XXX",
-          "XXX"
-        ],
-        "filter": "forgero:can_mine"
-      },
-      "speed": "forgero:all",
-      "predicate": {
-        "type": "forgero:can_mine"
-      },
-      "title": "feature.forgero.pattern_mining.title",
-      "description": "feature.forgero.pattern_mining.3x3-description"
-    }
-  ]
+  "properties": {
+    "minecraft:block_breaking": [
+      {
+        "selector": {
+          "type": "forgero:pattern",
+          "pattern": [
+            "XXX",
+            "XXX",
+            "XXX"
+          ],
+          "filter": "forgero:can_mine"
+        },
+        "speed": "forgero:all",
+        "predicate": {
+          "type": "forgero:can_mine"
+        },
+        "title": "feature.forgero.pattern_mining.title",
+        "description": "feature.forgero.pattern_mining.3x3-description"
+      }
+    ]
+  }
 }

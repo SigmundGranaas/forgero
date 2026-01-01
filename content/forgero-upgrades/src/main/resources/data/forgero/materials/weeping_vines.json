@@ -4,7 +4,9 @@
   "tags": [
     "forgero:materials/soft",
     "forgero:materials/plant",
-    "forgero:materials/upgrade_material"
+    "forgero:materials/upgrade_material",
+    "forgero:upgrade_material",
+    "forgero:upgrade/binding"
   ],
   "host": {
     "identifiers": [
@@ -22,11 +24,7 @@
         "value": 15
       },
       "condition": {
-        "static": [
-          {
-            "type": "forgero:is_root"
-          }
-        ]
+        "type": "forgero:is_root"
       }
     },
     {
@@ -36,11 +34,7 @@
         "value": 120
       },
       "condition": {
-        "static": [
-          {
-            "type": "forgero:is_root"
-          }
-        ]
+        "type": "forgero:is_root"
       }
     },
     {
@@ -50,11 +44,7 @@
         "value": 1
       },
       "condition": {
-        "static": [
-          {
-            "type": "forgero:is_root"
-          }
-        ]
+        "type": "forgero:is_root"
       }
     },
     {
@@ -63,14 +53,7 @@
       "computation": {
         "value": 7.5
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:soft_plant-weight-upgrade",
@@ -78,14 +61,7 @@
       "computation": {
         "value": 0.5
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:soft_plant-attack_speed-offensive-upgrade",
@@ -93,14 +69,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:soft_plant-attack_damage-offensive-upgrade",
@@ -108,14 +77,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:soft_plant-mining_speed-offensive-upgrade",
@@ -123,14 +85,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:soft_plant-mining_level-offensive-upgrade",
@@ -138,14 +93,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:soft_plant-durability-offensive-upgrade",
@@ -153,14 +101,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:soft_plant-attack_speed-utility-upgrade",
@@ -168,14 +109,7 @@
       "computation": {
         "value": 0.1
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:soft_plant-attack_damage-utility-upgrade",
@@ -183,14 +117,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:soft_plant-mining_speed-utility-upgrade",
@@ -198,14 +125,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:soft_plant-mining_level-utility-upgrade",
@@ -213,14 +133,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:soft_plant-durability-utility-upgrade",
@@ -228,14 +141,7 @@
       "computation": {
         "value": 60
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:soft_plant-accuracy-utility-upgrade",
@@ -243,14 +149,7 @@
       "computation": {
         "value": 2
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:soft_plant-draw_speed-utility-upgrade",
@@ -258,14 +157,7 @@
       "computation": {
         "value": 0.15
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:soft_plant-rarity-composite",
@@ -274,11 +166,7 @@
         "value": 30
       },
       "condition": {
-        "static": [
-          {
-            "type": "forgero:is_root"
-          }
-        ]
+        "type": "forgero:is_root"
       }
     },
     {
@@ -288,11 +176,7 @@
         "value": 110
       },
       "condition": {
-        "static": [
-          {
-            "type": "forgero:is_root"
-          }
-        ]
+        "type": "forgero:is_root"
       }
     },
     {
@@ -301,14 +185,7 @@
       "computation": {
         "value": 15
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:soft_plant-attack_speed-utility-upgrade",
@@ -316,14 +193,7 @@
       "computation": {
         "value": 0.1
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:soft_plant-attack_damage-utility-upgrade",
@@ -331,14 +201,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:soft_plant-mining_speed-utility-upgrade",
@@ -346,14 +209,7 @@
       "computation": {
         "value": 0.25
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:soft_plant-mining_level-utility-upgrade",
@@ -361,14 +217,7 @@
       "computation": {
         "value": 1
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:soft_plant-durability-utility-upgrade",
@@ -376,14 +225,7 @@
       "computation": {
         "value": 55
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:soft_plant-draw_speed-utility-upgrade",
@@ -391,14 +233,7 @@
       "computation": {
         "value": 0.2
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     }
   ]
 }

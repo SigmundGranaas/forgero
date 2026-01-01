@@ -6,7 +6,7 @@
     {
       "id": "forgero:shape-padding-durability",
       "type": "forgero:durability",
-      "composite": "forgero:part-composite",
+      "context": "forgero:part-composite",
       "computation": { "multiply": 0.5 }
     }
   ]

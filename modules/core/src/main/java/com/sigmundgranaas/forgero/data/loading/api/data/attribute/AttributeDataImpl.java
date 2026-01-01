@@ -9,6 +9,19 @@ public record AttributeDataImpl(
 		Optional<OpenIdentifier> id,
 		OpenIdentifier type,
 		ComputationData computation,
+		Optional<OpenIdentifier> context,
 		Optional<Condition> condition
 ) implements AttributeData {
+
+	/**
+	 * Creates an AttributeDataImpl with no context (default behavior).
+	 */
+	public static AttributeDataImpl withoutContext(
+			Optional<OpenIdentifier> id,
+			OpenIdentifier type,
+			ComputationData computation,
+			Optional<Condition> condition
+	) {
+		return new AttributeDataImpl(id, type, computation, Optional.empty(), condition);
+	}
 }

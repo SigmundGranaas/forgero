@@ -19,18 +19,7 @@
       "computation": {
         "value": 2.0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:attack_speed"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:crying_obsidian-attack_damage",
@@ -38,18 +27,7 @@
       "computation": {
         "value": 4.0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:attack_damage"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:crying_obsidian-mining_speed",
@@ -57,18 +35,7 @@
       "computation": {
         "value": 6.0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:mining_speed"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:crying_obsidian-mining_level",
@@ -76,18 +43,7 @@
       "computation": {
         "value": 3
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:mining_level"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:crying_obsidian-durability",
@@ -95,18 +51,7 @@
       "computation": {
         "value": 1880
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:durability"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:crying_obsidian-rarity",
@@ -114,18 +59,7 @@
       "computation": {
         "value": 70
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:rarity"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:crying_obsidian-weight",
@@ -133,18 +67,7 @@
       "computation": {
         "value": 5.0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:weight"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:crying_obsidian-emissive",
@@ -152,18 +75,7 @@
       "computation": {
         "value": 4
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:emissive"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     }
   ]
 }

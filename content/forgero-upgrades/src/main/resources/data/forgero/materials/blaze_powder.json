@@ -4,7 +4,9 @@
   "tags": [
     "forgero:materials/soft",
     "forgero:materials/mineral",
-    "forgero:materials/upgrade_material"
+    "forgero:materials/upgrade_material",
+    "forgero:upgrade_material",
+    "forgero:upgrade/binding"
   ],
   "host": {
     "identifiers": [
@@ -21,14 +23,7 @@
       "computation": {
         "value": 25
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:dust-weight-upgrade",
@@ -36,14 +31,7 @@
       "computation": {
         "value": 1
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:dust-attack_speed-offensive-upgrade",
@@ -51,14 +39,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:dust-attack_damage-offensive-upgrade",
@@ -66,14 +47,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:dust-mining_speed-offensive-upgrade",
@@ -81,14 +55,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:dust-mining_level-offensive-upgrade",
@@ -96,14 +63,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:dust-durability-offensive-upgrade",
@@ -111,14 +71,7 @@
       "computation": {
         "value": 15
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:dust-attack_speed-utility-upgrade",
@@ -126,14 +79,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:dust-attack_damage-utility-upgrade",
@@ -141,14 +87,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:dust-mining_speed-utility-upgrade",
@@ -156,14 +95,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:dust-mining_level-utility-upgrade",
@@ -171,14 +103,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:dust-durability-utility-upgrade",
@@ -186,14 +111,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:dust-draw_power-offensive-upgrade",
@@ -201,14 +119,7 @@
       "computation": {
         "value": 0.15
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:dust-draw_speed-offensive-upgrade",
@@ -216,14 +127,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:dust-rarity-upgrade",
@@ -231,14 +135,7 @@
       "computation": {
         "value": 30
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:dust-weight-upgrade",
@@ -246,14 +143,7 @@
       "computation": {
         "value": 1.5
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:dust-attack_damage-offensive-upgrade",
@@ -261,14 +151,7 @@
       "computation": {
         "value": 0.2
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:dust-durability-offensive-upgrade",
@@ -276,14 +159,7 @@
       "computation": {
         "value": 140
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     }
   ]
 }

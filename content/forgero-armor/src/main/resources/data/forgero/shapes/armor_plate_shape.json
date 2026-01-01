@@ -9,19 +9,19 @@
     {
       "id": "forgero:shape-durability-mult",
       "type": "forgero:durability",
-      "composite": "forgero:part-composite",
+      "context": "forgero:part-composite",
       "computation": { "multiply": 1.0 }
     },
     {
       "id": "forgero:shape-armor-mult",
       "type": "forgero:armor",
-      "composite": "forgero:part-composite",
+      "context": "forgero:part-composite",
       "computation": { "multiply": 1.0 }
     },
     {
       "id": "forgero:shape-toughness-mult",
       "type": "forgero:armor_toughness",
-      "composite": "forgero:part-composite",
+      "context": "forgero:part-composite",
       "computation": { "multiply": 1.0 }
     }
   ]

@@ -4,6 +4,9 @@
   "tags": [
     "forgero:materials/armor_lining_material",
     "forgero:materials/leather",
+    "forgero:materials/soft",
+    "forgero:materials/upgrade_material",
+    "forgero:upgrade_material",
     "forgero:upgrade/binding",
     "forgero:upgrade/grip"
   ],
@@ -22,18 +25,7 @@
       "computation": {
         "value": 75
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:tool_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:durability"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:leather-armor",
@@ -41,17 +33,10 @@
       "computation": {
         "value": 1
       },
+      "context": "forgero:part-composite",
       "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:armor_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:armor"
-          }
-        ]
+        "type": "forgero:in_slot_type",
+        "slot_type": "forgero:armor_material"
       }
     },
     {
@@ -60,17 +45,10 @@
       "computation": {
         "value": 0
       },
+      "context": "forgero:part-composite",
       "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:armor_material"
-          },
-          {
-            "type": "forgero:has_other_contributor",
-            "attribute_type": "forgero:armor_toughness"
-          }
-        ]
+        "type": "forgero:in_slot_type",
+        "slot_type": "forgero:armor_material"
       }
     },
     {

@@ -14,14 +14,7 @@
         "value": 100,
         "operation": "addition"
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:perfect_diamond-durability",
@@ -30,14 +23,7 @@
         "value": 2250,
         "operation": "addition"
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     }
   ],
   "palette": {

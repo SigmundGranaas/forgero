@@ -4,6 +4,7 @@
 
 dependencies {
 	implementation(project(":modules:core"))
+	implementation(project(":modules:model"))
 	implementation(project(path: ":modules:mc:common", configuration: 'namedElements'))
 	implementation(project(path: ":modules:mc:loader", configuration: 'namedElements'))
 

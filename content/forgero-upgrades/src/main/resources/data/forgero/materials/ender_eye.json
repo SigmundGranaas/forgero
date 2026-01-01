@@ -3,7 +3,9 @@
   "name": "Ender Eye",
   "tags": [
     "forgero:materials/hybrid",
-    "forgero:materials/upgrade_material"
+    "forgero:materials/upgrade_material",
+    "forgero:upgrade_material",
+    "forgero:upgrade/binding"
   ],
   "host": {
     "identifiers": [
@@ -20,14 +22,7 @@
       "computation": {
         "value": 25
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:makeshift-weight-upgrade",
@@ -35,14 +30,7 @@
       "computation": {
         "value": 1.5
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:makeshift-attack_speed-offensive-upgrade",
@@ -50,14 +38,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:makeshift-attack_damage-offensive-upgrade",
@@ -65,14 +46,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:makeshift-mining_speed-offensive-upgrade",
@@ -80,14 +54,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:makeshift-mining_level-offensive-upgrade",
@@ -95,14 +62,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:makeshift-durability-offensive-upgrade",
@@ -110,14 +70,7 @@
       "computation": {
         "value": 340
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:makeshift-attack_speed-utility-upgrade",
@@ -125,14 +78,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:makeshift-attack_damage-utility-upgrade",
@@ -140,14 +86,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:makeshift-mining_speed-utility-upgrade",
@@ -155,14 +94,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:makeshift-mining_level-utility-upgrade",
@@ -170,14 +102,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:makeshift-durability-utility-upgrade",
@@ -185,14 +110,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:makeshift-draw_power-offensive-upgrade",
@@ -200,14 +118,7 @@
       "computation": {
         "value": 0.15
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:makeshift-draw_speed-offensive-upgrade",
@@ -215,14 +126,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:makeshift-rarity-upgrade",
@@ -230,14 +134,7 @@
       "computation": {
         "value": 37.5
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:makeshift-weight-upgrade",
@@ -245,14 +142,7 @@
       "computation": {
         "value": 1.5
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:makeshift-durability-offensive-upgrade",
@@ -260,14 +150,7 @@
       "computation": {
         "value": 245
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:makeshift-draw_power-offensive-upgrade",
@@ -275,14 +158,7 @@
       "computation": {
         "value": 0.66
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     }
   ]
 }

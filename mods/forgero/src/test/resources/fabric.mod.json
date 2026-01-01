@@ -14,7 +14,9 @@
       "com.sigmundgranaas.forgero.tests.UpgradeEffectivenessTest",
       "com.sigmundgranaas.forgero.tests.UpgradeValueTest",
       "com.sigmundgranaas.forgero.tests.MaxedOutToolTest",
-      "com.sigmundgranaas.forgero.tests.AttributeLeakRegressionTest"
+      "com.sigmundgranaas.forgero.tests.AttributeLeakRegressionTest",
+      "com.sigmundgranaas.forgero.tests.ArmorAttributeTest",
+      "com.sigmundgranaas.forgero.tests.OnHitEffectTest"
     ]
   },
   "depends": {

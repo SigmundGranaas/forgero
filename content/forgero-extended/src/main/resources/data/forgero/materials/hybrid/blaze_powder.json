@@ -24,12 +24,8 @@
         "value": 0.2
       },
       "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:coating_slot"
-          }
-        ]
+        "type": "forgero:in_slot_type",
+        "slot_type": "forgero:coating_slot"
       }
     },
     {

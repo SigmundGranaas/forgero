@@ -5,7 +5,9 @@
     "forgero:upgrade/gem",
     "forgero:materials/hard",
     "forgero:materials/mineral",
-    "forgero:materials/upgrade_material"
+    "forgero:materials/upgrade_material",
+    "forgero:upgrade_material",
+    "forgero:upgrade/binding"
   ],
   "host": {
     "identifiers": [
@@ -15,27 +17,24 @@
       }
     ]
   },
-  "properties": [
-    {
-      "type": "minecraft:on_tick",
-      "selector": {
-        "type": "forgero:aoe",
-        "radius": 5
-      },
-      "effects": [
-        { "type": "forgero:status_effect", "effect": "minecraft:water_breathing", "duration": 40, "amplifier": 0 }
-      ],
-      "interval": 20,
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
+  "properties": {
+    "minecraft:on_tick": [
+      {
+        "selector": {
+          "type": "forgero:aoe",
+          "radius": 5
+        },
+        "effects": [
+          { "type": "forgero:status_effect", "effect": "minecraft:water_breathing", "duration": 40, "amplifier": 0 }
+        ],
+        "interval": 20,
+        "condition": {
+          "type": "forgero:in_slot_type",
+          "slot_type": "forgero:upgrade_material"
+        }
       }
-    }
-  ],
+    ]
+  },
   "attributes": [
     {
       "id": "forgero:crystal-rarity-upgrade",
@@ -43,14 +42,7 @@
       "computation": {
         "value": 37.5
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:crystal-weight-upgrade",
@@ -58,14 +50,7 @@
       "computation": {
         "value": 1
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:crystal-attack_speed-offensive-upgrade",
@@ -73,14 +58,7 @@
       "computation": {
         "value": 0.2
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:crystal-attack_damage-offensive-upgrade",
@@ -88,14 +66,7 @@
       "computation": {
         "value": 1
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:crystal-mining_speed-offensive-upgrade",
@@ -103,14 +74,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:crystal-mining_level-offensive-upgrade",
@@ -118,14 +82,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:crystal-durability-offensive-upgrade",
@@ -133,14 +90,7 @@
       "computation": {
         "value": 287.5
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:crystal-attack_speed-utility-upgrade",
@@ -148,14 +98,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:crystal-attack_damage-utility-upgrade",
@@ -163,14 +106,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:crystal-mining_speed-utility-upgrade",
@@ -178,14 +114,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:crystal-mining_level-utility-upgrade",
@@ -193,14 +122,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:crystal-durability-utility-upgrade",
@@ -208,14 +130,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:crystal-draw_power-offensive-upgrade",
@@ -223,14 +138,7 @@
       "computation": {
         "value": 0.45
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:crystal-draw_speed-offensive-upgrade",
@@ -238,14 +146,7 @@
       "computation": {
         "value": 0
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     }
   ]
 }

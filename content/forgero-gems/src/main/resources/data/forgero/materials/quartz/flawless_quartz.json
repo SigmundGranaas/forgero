@@ -22,14 +22,7 @@
         "value": 75,
         "operation": "addition"
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     },
     {
       "id": "forgero:flawless_quartz-armor",
@@ -38,14 +31,7 @@
         "value": 4,
         "operation": "addition"
       },
-      "condition": {
-        "static": [
-          {
-            "type": "forgero:in_slot_type",
-            "slot_type": "forgero:upgrade_material"
-          }
-        ]
-      }
+      "context": "forgero:part-composite"
     }
   ],
   "palette": {

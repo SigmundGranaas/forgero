@@ -78,7 +78,7 @@ class HandleAttributeFilteringTest extends ForgeroTest {
 		Condition condition = new Condition(List.of(slotCondition, contributorCondition), Collections.emptyList());
 		return new SimpleAttribute(Optional.empty(), type, value,
 				com.sigmundgranaas.forgero.core.attribute.api.operator.AdditionOperator.getInstance(),
-				0, Optional.of(condition));
+				0, Optional.empty(), Optional.of(condition));
 	}
 
 	private StaticComponent createMaterial(OpenIdentifier id, OpenIdentifier tag, List<Attribute> attributes) {
