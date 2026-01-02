@@ -2,11 +2,9 @@
   "type": "forgero:material",
   "name": "Bamboo",
   "tags": [
-    "forgero:materials/secondary",
-    "forgero:materials/hard",
-    "forgero:materials/plant",
-    "forgero:upgrade/binding",
-    "forgero:upgrade/reinforcement"
+    "forgero:hard",
+    "forgero:binding",
+    "forgero:reinforcement"
   ],
   "host": {
     "identifiers": [

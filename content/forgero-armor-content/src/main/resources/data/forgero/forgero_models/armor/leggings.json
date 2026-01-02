@@ -1,7 +1,7 @@
 {
   "type": "forgero:armor_model_template",
   "target": {
-    "tag": "forgero:materials/armor_material"
+    "tag": "forgero:armor_material"
   },
   "model": {
     "id": "forgero:{target.name}-leggings",

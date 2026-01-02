@@ -2,9 +2,9 @@
   "type": "forgero:equipment_template",
   "name": "felling_axe",
   "tags": [
-    "forgero:tools/felling_axe",
-    "forgero:tools/axe_like",
-    "forgero:tools/mining",
+    "forgero:felling_axe",
+    "forgero:axe",
+    "forgero:mining",
     "forgero:tool"
   ],
   "host_template": {
@@ -28,7 +28,7 @@
     {
       "id": "forgero:felling_axe-binding",
       "type": "forgero:upgrade_material",
-      "tags": ["forgero:upgrade/binding"],
+      "tags": ["forgero:binding"],
       "description": "slot.forgero.binding"
     }
   ],

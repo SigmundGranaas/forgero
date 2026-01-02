@@ -2,7 +2,7 @@
   "type": "forgero:material",
   "name": "Crimson",
   "tags": [
-    "forgero:materials/wood"
+    "forgero:wood"
   ],
   "host": {
     "identifiers": [

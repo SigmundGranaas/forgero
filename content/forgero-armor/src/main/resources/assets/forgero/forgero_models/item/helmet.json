@@ -1,7 +1,7 @@
 {
   "type": "forgero:equipment_model_template",
   "target": {
-    "tag": "forgero:materials/armor_material"
+    "tag": "forgero:armor_material"
   },
   "models": [
   {

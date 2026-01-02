@@ -7,6 +7,8 @@ Minecraft-specific test utilities for Forgero. Provides GameTest infrastructure,
 - **ForgeroGameTest Interface**: Base interface providing easy access to ForgeroServices in GameTests
 - **ForgeroTestContext**: Enhanced TestContext wrapper with Forgero-specific utilities
 - **PlayerFactory**: Fluent builder for creating test players with custom configurations
+- **ScenarioBuilder**: Declarative API for writing readable gameplay tests (NEW!)
+- **EffectAssertions**: Fluent assertions for entity effects (fire, status effects, velocity, health) (NEW!)
 - **Position Utilities**: TestPos, TestPosCollection, and ContextSupplier for working with game coordinates
 - **ItemStack Assertions**: Fluent assertion API for validating ItemStacks
 - **Full Minecraft Integration**: Works with Fabric GameTest API
@@ -177,6 +179,74 @@ public void test_positions(TestContext context) {
 }
 ```
 
+### ScenarioBuilder (NEW!)
+
+**The easiest way to write deep gameplay tests.** Declarative API that eliminates 50% of test boilerplate:
+
+```java
+import com.sigmundgranaas.forgero.mc.testcommon.scenario.ScenarioBuilder;
+
+@GameTest(templateName = EMPTY_STRUCTURE)
+public void fireEffect_setsTargetOnFire(TestContext context) {
+    ItemStack fireSword = /* your fire sword */;
+
+    ScenarioBuilder.create(context)
+        .player()
+            .at(1, 64, 1)
+            .holding(fireSword)
+            .survival()
+        .target()
+            .entity(EntityType.PIG)
+            .at(2, 64, 2)
+        .action()
+            .attack()
+        .expect()
+            .targetOnFire(100) // 5 seconds
+            .targetHealth(13.0f, 1.0f)
+        .verify();
+}
+```
+
+**Benefits:**
+- **Reduces boilerplate**: No more repetitive player/entity setup
+- **Improves readability**: Tests read like specifications
+- **Type-safe**: Builder pattern prevents invalid configurations
+- **Comprehensive**: Covers player setup, target spawning, actions, and assertions
+
+See `ScenarioBuilderExampleTest.java` for 7 complete examples including:
+- Basic attack scenarios
+- Fire/poison/status effects
+- Life-steal mechanics
+- Combined effects
+- Passive OnTick effects
+
+### EffectAssertions (NEW!)
+
+Fluent assertions for entity effects (works great with ScenarioBuilder):
+
+```java
+import static com.sigmundgranaas.forgero.mc.testcommon.assertions.EffectAssertions.*;
+
+@GameTest
+public void test_combined_effects(TestContext context) {
+    // ... perform action that applies effects ...
+
+    assertEffect(target)
+        .hasFire(100)                                // On fire for 5 seconds
+        .hasStatusEffect(StatusEffects.POISON, 2, 200) // Poison II for 10 seconds
+        .hasVelocity(new Vec3d(0.5, 0.2, 0), 0.1)   // Knockback
+        .tookDamage(initialHealth, 5.0f)             // Took at least 5 damage
+        .isAlive();                                  // Still alive
+}
+```
+
+**Available assertions:**
+- `hasFire(ticks)`, `isOnFire()`, `isNotOnFire()`
+- `hasStatusEffect(effect)`, `hasStatusEffect(effect, level, duration)`
+- `hasVelocity(vec, tolerance)`, `hasVelocityToward(direction, minSpeed)`
+- `hasHealth(value)`, `tookDamage(initial, min)`, `wasHealed(initial, min)`
+- `isDead()`, `isAlive()`
+
 ### ItemStack Assertions
 
 Fluent assertion API for ItemStacks:
@@ -233,8 +303,15 @@ com.sigmundgranaas.forgero.mc.testcommon/
 │   └── ContextSupplier.java
 ├── helpers/          # Test helpers
 │   └── PlayerFactory.java
+├── scenario/         # Declarative test scenarios (NEW!)
+│   ├── ScenarioBuilder.java
+│   ├── PlayerBuilder.java
+│   ├── TargetBuilder.java
+│   ├── ActionBuilder.java
+│   └── ExpectationBuilder.java
 └── assertions/       # Minecraft assertions
-    └── ItemStackAssertions.java
+    ├── ItemStackAssertions.java
+    └── EffectAssertions.java (NEW!)
 ```
 
 ## Running Tests
@@ -269,7 +346,67 @@ Note: GameTest infrastructure is configured in `build.gradle` with the Loom plug
 
 5. **Type Safety**: Yarn mappings and strong typing prevent common mistakes
 
+## Writing Deep vs Shallow Tests
+
+### ❌ Shallow Test (Bad)
+Just checks that objects can be created:
+
+```java
+@GameTest
+public void screenHandler_canBeCreated(TestContext context) {
+    var handler = new MyScreenHandler(...);
+    context.assertTrue(handler != null, "Should be created");
+    context.complete();
+}
+```
+
+**Problem:** Doesn't test actual functionality!
+
+### ✅ Deep Test (Good)
+Tests real gameplay behavior:
+
+```java
+@GameTest
+public void fireSword_setsTargetOnFire(TestContext context) {
+    ScenarioBuilder.create(context)
+        .player()
+            .holding(createFireSword())  // Real item with properties
+        .target()
+            .entity(EntityType.PIG)
+        .action()
+            .attack()                     // Real player action
+        .expect()
+            .targetOnFire(100)            // Verify effect applied
+        .verify();
+}
+```
+
+**Benefits:** Tests the full pipeline (mixin → property → handler → effect)
+
 ## Common Patterns
+
+### Testing OnHit Effects (with ScenarioBuilder)
+
+```java
+@GameTest
+public void poisonEffect_appliesCorrectly(TestContext context) {
+    // Create item with poison OnHit property
+    ItemStack poisonSword = createPoisonSword(level: 2, duration: 200);
+
+    ScenarioBuilder.create(context)
+        .player()
+            .at(1, 64, 1)
+            .holding(poisonSword)
+        .target()
+            .entity(EntityType.COW)
+            .at(2, 64, 2)
+        .action()
+            .attack()
+        .expect()
+            .targetHasEffect(StatusEffects.POISON, 2, 200)
+        .verify();
+}
+```
 
 ### Testing Component Conversion
 

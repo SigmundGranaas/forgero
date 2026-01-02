@@ -1,0 +1,29 @@
+{
+  "type": "forgero:part_model_template",
+  "target": {
+    "tag": "forgero:materials/tool_material"
+  },
+  "model": {
+    "id": "forgero:item/{target.name}-scythe_blade",
+    "type": "forgero:composite_model",
+    "target": "forgero:{target.name}-scythe_blade",
+    "layers": [
+      {
+        "order": 20,
+        "template": "forgero:texture_template/parts/scythe_blade",
+        "palette": "forgero:palette/{target.name}",
+        "output": "forgero:item/{target.name}-scythe_blade"
+      }
+    ],
+    "slots": [
+      {
+        "id": "scythe_blade-reinforcement",
+        "order": 30,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "blade_reinforcement"
+        }
+      }
+    ]
+  }
+}

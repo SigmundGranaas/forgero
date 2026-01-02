@@ -1,0 +1,31 @@
+{
+  "type": "forgero:equipment_model_template",
+  "target": {
+    "tag": "forgero:materials/tool_material"
+  },
+  "model": {
+    "id": "forgero:item/{target.name}-mandrill_pickaxe",
+    "type": "forgero:composite_model",
+    "target": "forgero:{target.name}-mandrill_pickaxe",
+    "slots": [
+      {
+        "id": "head",
+        "order": 20,
+        "renderer": { "type": "forgero:component" }
+      },
+      {
+        "id": "handle",
+        "order": 10,
+        "renderer": { "type": "forgero:component" }
+      },
+      {
+        "id": "mandrill_pickaxe-binding",
+        "order": 15,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "tool_binding"
+        }
+      }
+    ]
+  }
+}

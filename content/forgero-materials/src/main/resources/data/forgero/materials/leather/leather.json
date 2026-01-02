@@ -2,13 +2,12 @@
   "type": "forgero:material",
   "name": "Leather",
   "tags": [
-    "forgero:materials/armor_lining_material",
-    "forgero:materials/leather",
-    "forgero:materials/soft",
-    "forgero:materials/upgrade_material",
+    "forgero:armor_lining_material",
+    "forgero:leather",
+    "forgero:soft",
     "forgero:upgrade_material",
-    "forgero:upgrade/binding",
-    "forgero:upgrade/grip"
+    "forgero:upgrade_material",
+    "forgero:binding"
   ],
   "host": {
     "identifiers": [

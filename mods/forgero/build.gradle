@@ -16,6 +16,7 @@ configurations.matching { !it.name.startsWith('mod') }.all {
 dependencies {
     // Core modules (included in JAR)
     include(project(":modules:core"))
+    include(project(":modules:model"))
     include(project(path: ":modules:mc:common", configuration: 'namedElements'))
     include(project(path: ":modules:mc:loader", configuration: 'namedElements'))
     include(project(path: ":modules:mc:properties", configuration: 'namedElements'))
@@ -37,6 +38,7 @@ dependencies {
 
     // Implementation dependencies (for compilation and development runtime)
     implementation(project(":modules:core"))
+    implementation(project(":modules:model"))
     implementation(project(path: ":modules:mc:common", configuration: 'namedElements'))
     implementation(project(path: ":modules:mc:loader", configuration: 'namedElements'))
     implementation(project(path: ":modules:mc:properties", configuration: 'namedElements'))
@@ -48,13 +50,20 @@ dependencies {
     implementation(project(path: ":modules:mc:armor", configuration: 'namedElements'))
     implementation(project(path: ":modules:mc:bows", configuration: 'namedElements'))
 
-    // Content modules for testing - use same content as properties module for stability
+    // Content modules - core content
     runtimeOnly(project(":content:forgero-materials"))
     runtimeOnly(project(":content:minecraft-tools"))
     runtimeOnly(project(":content:forgero-base"))
     runtimeOnly(project(":content:forgero-upgrades"))
+    runtimeOnly(project(":content:forgero-armor"))  // Armor texture templates
     runtimeOnly(project(":content:forgero-armor-content"))
     runtimeOnly(project(":content:forgero-tools"))  // Adds armor_material tag to metals
+
+    // Content modules - schematics and extended content
+    runtimeOnly(project(":content:forgero-schematics"))      // Refined and mastercrafted schematics
+    runtimeOnly(project(":content:forgero-extended"))        // Guard schematics, extended materials
+    runtimeOnly(project(":content:forgero-extended-weapons")) // Extended weapon schematics
+    runtimeOnly(project(":content:forgero-mining"))          // Mining tool schematics
 
     // Fabric
     modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")

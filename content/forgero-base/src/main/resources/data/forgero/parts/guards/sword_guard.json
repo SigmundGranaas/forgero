@@ -13,15 +13,8 @@
     "id": "forgero:{material.name}-sword_guard",
     "slots": {
       "material": {
-        "type": "forgero:upgrade_material",
-        "default_tag": "forgero:upgrade/guard"
-      }
-    }
-  },
-  "generation": {
-    "slots": {
-      "material": {
-        "require_any_tags": ["forgero:materials/tool_material"]
+        "type": "forgero:tool_material",
+        "default_tag": "forgero:tool_material"
       }
     }
   },

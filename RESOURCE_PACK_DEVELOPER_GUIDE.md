@@ -1285,8 +1285,8 @@ Used in `condition.static` array:
 // Has sibling
 { "type": "forgero:has_sibling", "sibling_id": "forgero:oak_handle" }
 
-// Has other contributor (for composite attributes - requires 2+ sources)
-{ "type": "forgero:has_other_contributor", "attribute_type": "forgero:durability" }
+// NOTE: For composite attributes, use the "context" field on the attribute instead of conditions.
+// See "Attribute Context" section below for the modern pattern.
 
 // Slot contains (check if root has slot with specific content)
 { "type": "forgero:slot_contains", "slot_type": "forgero:material", "tag": "forgero:metal" }
@@ -1295,29 +1295,30 @@ Used in `condition.static` array:
 { "type": "forgero:id_match", "id": "forgero:iron_pickaxe" }
 ```
 
-### Composite Attributes (2+ Source Requirement)
+### Attribute Context (Recommended Pattern)
 
-Material attributes should typically only apply when combined with other contributors.
-Use `has_other_contributor` to ensure attributes only activate when multiple sources
-contribute to the same attribute type:
+Use the `context` field on attributes to control when they apply during composition.
+This is the modern, preferred approach for material attributes:
 
 ```json
 {
   "id": "forgero:iron-durability",
   "type": "forgero:durability",
   "computation": { "value": 240 },
-  "condition": {
-    "static": [
-      { "type": "forgero:in_slot_type", "slot_type": "forgero:tool_material" },
-      { "type": "forgero:has_other_contributor", "attribute_type": "forgero:durability" }
-    ]
-  }
+  "context": "forgero:part-composite"
 }
 ```
 
-This ensures:
-1. The attribute only applies when the component is in a `tool_material` slot
-2. The attribute only applies if another component in the assembly also contributes `durability`
+### Available Contexts
+
+| Context | When Applied |
+|---------|--------------|
+| `forgero:part-composite` | Material + schematic intersection composition (recommended for materials) |
+| `forgero:local` | Only applies to the component itself |
+| `forgero:upgrade` | Only applies when installed as upgrade |
+
+Using `context` is simpler and more reliable than condition-based approaches for controlling
+attribute composition behavior.
 
 ### Dynamic Conditions (Game State)
 

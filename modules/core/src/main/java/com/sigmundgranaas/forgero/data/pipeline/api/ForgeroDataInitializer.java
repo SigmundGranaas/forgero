@@ -15,6 +15,7 @@ import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 import com.sigmundgranaas.forgero.data.loading.api.RawDefinition;
 import com.sigmundgranaas.forgero.data.loading.api.data.DefinitionData;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
+import com.sigmundgranaas.forgero.data.loading.api.data.host.CreateData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.HostData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.EquipmentTemplateData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.PartTemplateData;
@@ -129,6 +130,10 @@ public class ForgeroDataInitializer {
 			staticComponents.put(cof.id(), cof);
 			if (merged.host() != null) {
 				hostItemMap.put(cof.id(), merged.host());
+			} else if (isSchematic(def)) {
+				// Auto-generate host data for schematics so they can be registered as items
+				HostData autoHost = createSchematicHostData(cof.id());
+				hostItemMap.put(cof.id(), autoHost);
 			}
 		}
 		LOGGER.info("Processed {} static definitions.", staticComponents.size());
@@ -161,5 +166,26 @@ public class ForgeroDataInitializer {
 
 	public ForgeroDataBundle getDataBundle() {
 		return dataBundle;
+	}
+
+	/**
+	 * Checks if the definition represents a schematic type.
+	 */
+	private boolean isSchematic(RawDefinition def) {
+		OpenIdentifier type = def.data().type();
+		return type != null && type.path().equalsIgnoreCase("schematic");
+	}
+
+	/**
+	 * Creates default host data for a schematic so it can be registered as an item.
+	 * Schematics use the part_item class and go in the ingredients item group.
+	 */
+	private HostData createSchematicHostData(OpenIdentifier componentId) {
+		CreateData createData = new CreateData(
+				componentId,
+				"forgero:part_item",
+				"minecraft:ingredients"
+		);
+		return new HostData(null, createData);
 	}
 }

@@ -1,0 +1,29 @@
+{
+  "type": "forgero:part_model_template",
+  "target": {
+    "tag": "forgero:materials/tool_material"
+  },
+  "model": {
+    "id": "forgero:item/{target.name}-mace_head",
+    "type": "forgero:composite_model",
+    "target": "forgero:{target.name}-mace_head",
+    "layers": [
+      {
+        "order": 20,
+        "template": "forgero:texture_template/parts/mace_head",
+        "palette": "forgero:palette/{target.name}",
+        "output": "forgero:item/{target.name}-mace_head"
+      }
+    ],
+    "slots": [
+      {
+        "id": "mace_head-reinforcement",
+        "order": 30,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "head_reinforcement"
+        }
+      }
+    ]
+  }
+}

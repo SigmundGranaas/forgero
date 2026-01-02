@@ -3,7 +3,7 @@
   "name": "leggings",
   "tags": [
     "forgero:armor/leggings",
-    "forgero:parts/armor",
+    "forgero:armor",
     "minecraft:armor/leggings"
   ],
   "host_template": {
@@ -15,7 +15,7 @@
     "slots": {
       "material": {
         "type": "forgero:armor_material",
-        "default_tag": "forgero:materials/armor_material"
+        "default_tag": "forgero:armor_material"
       }
     }
   },
@@ -23,13 +23,13 @@
     {
       "id": "forgero:leggings-gem",
       "type": "forgero:upgrade_material",
-      "tags": ["forgero:upgrade/gem"],
+      "tags": ["forgero:gem"],
       "description": "slot.forgero.gem"
     },
     {
       "id": "forgero:leggings-lining",
       "type": "forgero:upgrade_material",
-      "tags": ["forgero:upgrade/lining"],
+      "tags": ["forgero:lining"],
       "description": "slot.forgero.lining"
     }
   ],

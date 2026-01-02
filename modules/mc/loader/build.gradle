@@ -51,4 +51,6 @@ test {
 	useJUnitPlatform()
 	testLogging.events("failed")
 	testLogging.info.events = ["failed", "skipped"]
+	// Exclude gametest classes - they must be run via runGameTest task
+	exclude '**/gametest/**'
 }

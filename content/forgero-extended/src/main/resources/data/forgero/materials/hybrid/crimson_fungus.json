@@ -2,11 +2,7 @@
   "type": "forgero:material",
   "name": "Crimson Fungus",
   "tags": [
-    "forgero:materials/secondary",
-    "forgero:materials/hybrid",
-    "forgero:materials/fungus",
-    "forgero:materials/nether",
-    "forgero:upgrade/binding"
+    "forgero:binding"
   ],
   "host": {
     "identifiers": [

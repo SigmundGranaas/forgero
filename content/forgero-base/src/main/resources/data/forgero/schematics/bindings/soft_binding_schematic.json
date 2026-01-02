@@ -1,0 +1,87 @@
+{
+  "type": "forgero:schematic",
+  "name": "Soft Binding",
+  "tags": [
+    "forgero:schematics/bindings"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:schematic-rarity-local",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 25,
+        "operation": "addition"
+      }
+    },
+    {
+      "id": "forgero:schematic-rarity-composite",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 1,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:schematic-durability-composite",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 1,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:schematic-weight-composite",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 0.75,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:upgrade-slot",
+      "type": "forgero:trinket",
+      "tags": [
+        "forgero:upgrade"
+      ],
+      "description": "slot.forgero.upgrade"
+    },
+    {
+      "id": "forgero:cosmetic-slot",
+      "type": "forgero:dye",
+      "tags": [
+        "forgero:upgrade/cosmetic"
+      ],
+      "description": "slot.forgero.cosmetic"
+    }
+  ],
+  "host": {
+    "create": {
+      "id": "forgero:soft_binding-schematic",
+      "class_name": "forgero:part_item",
+      "item_group": "forgero:ingredients"
+    }
+  }
+}

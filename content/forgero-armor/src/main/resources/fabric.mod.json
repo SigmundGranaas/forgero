@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "forgero-armor-content",
+  "id": "forgero-armor",
   "version": "${version}",
-  "name": "Forgero vanilla material pack",
-  "description": "Vanilla content pack for Forgero. Adds vanilla tools and materials.",
+  "name": "Forgero Armor Resources",
+  "description": "Armor texture templates and resources for Forgero.",
   "authors": [
     "Sigmund Granaas Sandring"
   ],

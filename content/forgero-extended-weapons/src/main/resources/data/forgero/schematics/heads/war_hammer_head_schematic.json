@@ -1,0 +1,30 @@
+{
+  "type": "forgero:schematic",
+  "name": "War Hammer Head",
+  "tags": [
+    "forgero:schematics/heads",
+    "forgero:schematics/extended",
+    "forgero:schematics/blunt"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:war_hammer-schematic-rarity",
+      "type": "forgero:rarity",
+      "computation": {"value": 60, "operation": "addition"}
+    }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:war_hammer-reinforcement-slot",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:reinforcement"],
+      "description": "slot.forgero.reinforcement"
+    },
+    {
+      "id": "forgero:war_hammer-cosmetic-slot",
+      "type": "forgero:dye",
+      "tags": ["forgero:upgrade/cosmetic"],
+      "description": "slot.forgero.cosmetic"
+    }
+  ]
+}

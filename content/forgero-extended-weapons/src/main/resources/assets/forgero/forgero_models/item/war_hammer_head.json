@@ -1,0 +1,29 @@
+{
+  "type": "forgero:part_model_template",
+  "target": {
+    "tag": "forgero:materials/tool_material"
+  },
+  "model": {
+    "id": "forgero:item/{target.name}-war_hammer_head",
+    "type": "forgero:composite_model",
+    "target": "forgero:{target.name}-war_hammer_head",
+    "layers": [
+      {
+        "order": 20,
+        "template": "forgero:texture_template/parts/war_hammer_head",
+        "palette": "forgero:palette/{target.name}",
+        "output": "forgero:item/{target.name}-war_hammer_head"
+      }
+    ],
+    "slots": [
+      {
+        "id": "war_hammer_head-reinforcement",
+        "order": 30,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "head_reinforcement"
+        }
+      }
+    ]
+  }
+}

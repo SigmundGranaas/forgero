@@ -2,9 +2,7 @@
   "type": "forgero:material",
   "name": "Red Dye",
   "tags": [
-    "forgero:materials/secondary",
-    "forgero:materials/dye",
-    "forgero:upgrade/coating"
+    "forgero:cosmetic"
   ],
   "host": {
     "identifiers": [

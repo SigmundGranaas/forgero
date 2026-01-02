@@ -13,7 +13,7 @@
     "slots": {
       "material": {
         "type": "forgero:tool_material",
-        "default_tag": "forgero:materials/tool_material"
+        "default_tag": "forgero:tool_material"
       }
     }
   },

@@ -2,9 +2,9 @@
   "type": "forgero:material",
   "name": "Chipped Prismarine",
   "tags": [
-    "forgero:materials/gem",
-    "forgero:materials/prismarine",
-    "forgero:upgrade/reinforcement"
+    "forgero:gem",
+    "forgero:prismarine",
+    "forgero:reinforcement"
   ],
   "host": {
     "identifiers": [

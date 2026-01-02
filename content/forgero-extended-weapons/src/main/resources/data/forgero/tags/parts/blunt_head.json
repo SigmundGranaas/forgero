@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "forgero:war_hammer_head",
+    "forgero:club_head",
+    "forgero:mace_head",
+    "forgero:hammer_head"
+  ]
+}

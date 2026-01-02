@@ -2,8 +2,8 @@
   "type": "forgero:material",
   "name": "Stone",
   "tags": [
-    "forgero:materials/stone",
-    "forgero:materials/tool_material"
+    "forgero:stone",
+    "forgero:tool_material"
   ],
   "host": {
     "identifiers": [

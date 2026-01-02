@@ -1,3 +1,3 @@
 {
-  "values": []
+  "parents": ["forgero:material", "forgero:tool_material"]
 }

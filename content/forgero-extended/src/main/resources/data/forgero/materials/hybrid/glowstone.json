@@ -2,11 +2,7 @@
   "type": "forgero:material",
   "name": "Glowstone Dust",
   "tags": [
-    "forgero:materials/secondary",
-    "forgero:materials/hybrid",
-    "forgero:materials/dust",
-    "forgero:materials/nether",
-    "forgero:upgrade/coating"
+    "forgero:cosmetic"
   ],
   "host": {
     "identifiers": [

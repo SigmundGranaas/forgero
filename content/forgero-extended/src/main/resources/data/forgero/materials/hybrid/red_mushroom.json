@@ -2,10 +2,7 @@
   "type": "forgero:material",
   "name": "Red Mushroom",
   "tags": [
-    "forgero:materials/secondary",
-    "forgero:materials/hybrid",
-    "forgero:materials/fungus",
-    "forgero:upgrade/binding"
+    "forgero:binding"
   ],
   "host": {
     "identifiers": [

@@ -2,9 +2,9 @@
   "type": "forgero:material",
   "name": "Perfect Echo",
   "tags": [
-    "forgero:materials/gem",
-    "forgero:materials/echo",
-    "forgero:upgrade/reinforcement"
+    "forgero:gem",
+    "forgero:echo",
+    "forgero:reinforcement"
   ],
   "host": {
     "identifiers": [

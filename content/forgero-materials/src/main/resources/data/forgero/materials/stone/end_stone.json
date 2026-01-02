@@ -2,7 +2,7 @@
   "type": "forgero:material",
   "name": "End Stone",
   "tags": [
-    "forgero:materials/stone"
+    "forgero:stone"
   ],
   "host": {
     "identifiers": [

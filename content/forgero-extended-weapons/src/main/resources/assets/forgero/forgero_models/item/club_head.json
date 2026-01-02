@@ -1,0 +1,29 @@
+{
+  "type": "forgero:part_model_template",
+  "target": {
+    "tag": "forgero:materials/tool_material"
+  },
+  "model": {
+    "id": "forgero:item/{target.name}-club_head",
+    "type": "forgero:composite_model",
+    "target": "forgero:{target.name}-club_head",
+    "layers": [
+      {
+        "order": 20,
+        "template": "forgero:texture_template/parts/club_head",
+        "palette": "forgero:palette/{target.name}",
+        "output": "forgero:item/{target.name}-club_head"
+      }
+    ],
+    "slots": [
+      {
+        "id": "club_head-reinforcement",
+        "order": 30,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "head_reinforcement"
+        }
+      }
+    ]
+  }
+}

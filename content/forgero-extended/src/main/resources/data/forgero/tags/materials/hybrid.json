@@ -1,4 +1,4 @@
 {
-  "parent": "forgero:materials/secondary",
+  "parent": "forgero:secondary",
   "description": "Hybrid materials with mixed properties"
 }

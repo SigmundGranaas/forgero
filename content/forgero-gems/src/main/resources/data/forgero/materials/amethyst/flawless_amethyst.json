@@ -2,9 +2,9 @@
   "type": "forgero:material",
   "name": "Flawless Amethyst",
   "tags": [
-    "forgero:materials/gem",
-    "forgero:materials/amethyst",
-    "forgero:upgrade/reinforcement"
+    "forgero:gem",
+    "forgero:amethyst",
+    "forgero:reinforcement"
   ],
   "attributes": [
     {

@@ -2,9 +2,9 @@
   "type": "forgero:material",
   "name": "Lapis Lazuli",
   "tags": [
-    "forgero:materials/gem",
-    "forgero:materials/lapis",
-    "forgero:upgrade/reinforcement"
+    "forgero:gem",
+    "forgero:lapis",
+    "forgero:reinforcement"
   ],
   "host": {
     "identifiers": [

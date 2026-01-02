@@ -2,9 +2,9 @@
   "type": "forgero:material",
   "name": "Perfect Emerald",
   "tags": [
-    "forgero:materials/gem",
-    "forgero:materials/emerald",
-    "forgero:upgrade/reinforcement"
+    "forgero:gem",
+    "forgero:emerald",
+    "forgero:reinforcement"
   ],
   "host": {
     "identifiers": [

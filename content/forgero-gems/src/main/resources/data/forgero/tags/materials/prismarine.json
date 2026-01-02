@@ -1,5 +1,5 @@
 {
-  "parents": ["forgero:materials/gem"],
+  "parents": ["forgero:gem"],
   "values": [
     "forgero:chipped_prismarine",
     "forgero:flawed_prismarine",

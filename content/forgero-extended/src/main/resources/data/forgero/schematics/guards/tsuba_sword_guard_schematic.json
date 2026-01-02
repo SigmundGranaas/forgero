@@ -1,0 +1,62 @@
+{
+  "type": "forgero:schematic",
+  "name": "Tsuba Sword Guard",
+  "tags": [
+    "forgero:guard",
+    "forgero:schematics/extended"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:tsuba-schematic-rarity-local",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 85,
+        "operation": "addition"
+      }
+    },
+    {
+      "id": "forgero:tsuba-schematic-rarity-composite",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 1.35,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [{ "type": "forgero:is_root" }]
+      }
+    },
+    {
+      "id": "forgero:tsuba-schematic-durability-composite",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 0.4,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [{ "type": "forgero:is_root" }]
+      }
+    },
+    {
+      "id": "forgero:tsuba-schematic-armor-composite",
+      "type": "forgero:armor",
+      "computation": {
+        "value": 0.45,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [{ "type": "forgero:is_root" }]
+      }
+    },
+    {
+      "id": "forgero:tsuba-schematic-weight-composite",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 0.3,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [{ "type": "forgero:is_root" }]
+      }
+    }
+  ]
+}

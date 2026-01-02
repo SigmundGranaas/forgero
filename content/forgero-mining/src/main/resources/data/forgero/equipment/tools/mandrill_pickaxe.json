@@ -2,9 +2,9 @@
   "type": "forgero:equipment_template",
   "name": "mandrill_pickaxe",
   "tags": [
-    "forgero:tools/mandrill_pickaxe",
-    "forgero:tools/pickaxe_like",
-    "forgero:tools/mining",
+    "forgero:mandrill_pickaxe",
+    "forgero:pickaxe",
+    "forgero:mining",
     "forgero:tool"
   ],
   "host_template": {
@@ -28,7 +28,7 @@
     {
       "id": "forgero:mandrill_pickaxe-binding",
       "type": "forgero:upgrade_material",
-      "tags": ["forgero:upgrade/binding"],
+      "tags": ["forgero:binding"],
       "description": "slot.forgero.binding"
     }
   ],

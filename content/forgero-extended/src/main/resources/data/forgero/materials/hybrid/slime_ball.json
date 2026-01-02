@@ -2,10 +2,7 @@
   "type": "forgero:material",
   "name": "Slimeball",
   "tags": [
-    "forgero:materials/secondary",
-    "forgero:materials/hybrid",
-    "forgero:materials/goo",
-    "forgero:upgrade/binding"
+    "forgero:binding"
   ],
   "host": {
     "identifiers": [

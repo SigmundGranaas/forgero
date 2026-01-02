@@ -14,7 +14,7 @@
     "slots": {
       "material": {
         "type": "forgero:tool_material",
-        "default_tag": "forgero:materials/tool_material"
+        "default_tag": "forgero:tool_material"
       }
     }
   },
@@ -22,7 +22,7 @@
     {
       "id": "forgero:rapier_blade-reinforcement",
       "type": "forgero:upgrade_material",
-      "tags": ["forgero:upgrade/reinforcement"],
+      "tags": ["forgero:reinforcement"],
       "description": "slot.forgero.reinforcement"
     }
   ],

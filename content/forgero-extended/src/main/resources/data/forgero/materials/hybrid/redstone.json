@@ -2,10 +2,7 @@
   "type": "forgero:material",
   "name": "Redstone",
   "tags": [
-    "forgero:materials/secondary",
-    "forgero:materials/hybrid",
-    "forgero:materials/dust",
-    "forgero:upgrade/coating"
+    "forgero:cosmetic"
   ],
   "host": {
     "identifiers": [

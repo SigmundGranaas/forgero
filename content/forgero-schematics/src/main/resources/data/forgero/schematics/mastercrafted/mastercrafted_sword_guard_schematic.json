@@ -1,0 +1,58 @@
+{
+  "type": "forgero:schematic",
+  "name": "Mastercrafted Sword Guard",
+  "tags": [
+    "forgero:guard",
+    "forgero:schematics/mastercrafted"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:mastercrafted-guard-rarity-local",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 100,
+        "operation": "addition"
+      }
+    },
+    {
+      "id": "forgero:mastercrafted-guard-rarity-composite",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 1.5,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:mastercrafted-guard-durability-composite",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 1.5,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:mastercrafted-cosmetic-slot",
+      "type": "forgero:dye",
+      "tags": [
+        "forgero:upgrade/cosmetic"
+      ],
+      "description": "slot.forgero.cosmetic"
+    }
+  ]
+}

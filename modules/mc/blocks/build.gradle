@@ -24,7 +24,7 @@ dependencies {
 	testRuntimeOnly(project(":content:forgero-base"))
 
 	// Forgero test utilities
-	testImplementation(project(":modules:mc:test-common"))
+	testImplementation(project(path: ":modules:mc:test-common", configuration: 'namedElements'))
 }
 
 loom {
@@ -61,4 +61,6 @@ test {
 	maxParallelForks = 32
 	testLogging.events("failed")
 	testLogging.info.events = ["failed", "skipped"]
+	// Exclude gametest classes - they must be run via runGameTest task
+	exclude '**/gametest/**'
 }

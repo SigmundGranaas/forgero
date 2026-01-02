@@ -13,11 +13,11 @@
     "id": "forgero:{plate.material.name}-chestplate",
     "slots": {
       "plate": {
-        "type": "forgero:parts/armor_plate_type",
+        "type": "forgero:armor_plate_type",
         "default_tag": "forgero:default_armor_plate"
       },
       "lining": {
-        "type": "forgero:parts/armor_lining_type",
+        "type": "forgero:armor_lining_type",
         "default_tag": "forgero:default_armor_lining"
       }
     }

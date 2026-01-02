@@ -29,6 +29,9 @@
   "entrypoints": {
     "main": [
       "com.sigmundgranaas.forgero.mod.ForgeroMod"
+    ],
+    "forgero:post_load_plugin": [
+      "com.sigmundgranaas.forgero.mod.RecipeGenPlugin"
     ]
   },
   "mixins": [],

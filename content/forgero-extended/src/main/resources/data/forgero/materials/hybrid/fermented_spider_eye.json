@@ -2,10 +2,8 @@
   "type": "forgero:material",
   "name": "Fermented Spider Eye",
   "tags": [
-    "forgero:materials/secondary",
-    "forgero:materials/hybrid",
-    "forgero:materials/magical",
-    "forgero:upgrade/coating"
+    "forgero:magical",
+    "forgero:cosmetic"
   ],
   "host": {
     "identifiers": [

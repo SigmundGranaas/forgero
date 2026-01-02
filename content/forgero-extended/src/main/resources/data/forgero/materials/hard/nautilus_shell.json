@@ -2,11 +2,8 @@
   "type": "forgero:material",
   "name": "Nautilus Shell",
   "tags": [
-    "forgero:materials/secondary",
-    "forgero:materials/hard",
-    "forgero:materials/shell",
-    "forgero:materials/ocean",
-    "forgero:upgrade/reinforcement"
+    "forgero:hard",
+    "forgero:reinforcement"
   ],
   "host": {
     "identifiers": [

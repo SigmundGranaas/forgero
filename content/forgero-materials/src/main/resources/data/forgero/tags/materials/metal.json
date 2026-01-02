@@ -1,3 +1,3 @@
 {
-  "parents": ["forgero:materials/material"]
+  "parents": ["forgero:material", "forgero:tool_material"]
 }

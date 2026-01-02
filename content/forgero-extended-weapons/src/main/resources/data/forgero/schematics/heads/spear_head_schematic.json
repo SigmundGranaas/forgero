@@ -1,0 +1,29 @@
+{
+  "type": "forgero:schematic",
+  "name": "Spear Head",
+  "tags": [
+    "forgero:schematics/heads",
+    "forgero:schematics/extended"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:spear-schematic-rarity",
+      "type": "forgero:rarity",
+      "computation": {"value": 40, "operation": "addition"}
+    }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:spear-reinforcement-slot",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:reinforcement"],
+      "description": "slot.forgero.reinforcement"
+    },
+    {
+      "id": "forgero:spear-cosmetic-slot",
+      "type": "forgero:dye",
+      "tags": ["forgero:upgrade/cosmetic"],
+      "description": "slot.forgero.cosmetic"
+    }
+  ]
+}

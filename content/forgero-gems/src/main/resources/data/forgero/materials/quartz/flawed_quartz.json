@@ -2,9 +2,9 @@
   "type": "forgero:material",
   "name": "Flawed Quartz",
   "tags": [
-    "forgero:materials/gem",
-    "forgero:materials/quartz",
-    "forgero:upgrade/reinforcement"
+    "forgero:gem",
+    "forgero:quartz",
+    "forgero:reinforcement"
   ],
   "host": {
     "identifiers": [

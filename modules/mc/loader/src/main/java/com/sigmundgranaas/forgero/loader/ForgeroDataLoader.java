@@ -210,6 +210,14 @@ public class ForgeroDataLoader implements ModInitializer {
 				ForgeroShapedRecipeSerializer.INSTANCE
 		);
 		LOGGER.info("Registered Forgero shaped recipe serializer.");
+
+		// Register schematic part crafting recipe serializer
+		Registry.register(
+				Registries.RECIPE_SERIALIZER,
+				com.sigmundgranaas.forgero.common.recipe.SchematicPartRecipe.ID,
+				com.sigmundgranaas.forgero.common.recipe.SchematicPartRecipe.SERIALIZER
+		);
+		LOGGER.info("Registered schematic part crafting recipe serializer.");
 	}
 
 	public Map<Identifier, Item> getRegisteredItems() {

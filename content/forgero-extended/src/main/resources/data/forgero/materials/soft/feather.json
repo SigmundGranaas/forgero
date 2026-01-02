@@ -2,11 +2,8 @@
   "type": "forgero:material",
   "name": "Feather",
   "tags": [
-    "forgero:materials/secondary",
-    "forgero:materials/soft",
-    "forgero:materials/hide",
-    "forgero:upgrade/binding",
-    "forgero:upgrade/fletching"
+    "forgero:soft",
+    "forgero:binding"
   ],
   "host": {
     "identifiers": [

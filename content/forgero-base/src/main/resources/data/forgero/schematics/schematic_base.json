@@ -1,0 +1,11 @@
+{
+  "type": "forgero:schematic",
+  "name": "schematic_base",
+  "host": {
+    "create": {
+      "id": "{this.id}",
+      "class_name": "forgero:part_item",
+      "item_group": "forgero:ingredients"
+    }
+  }
+}

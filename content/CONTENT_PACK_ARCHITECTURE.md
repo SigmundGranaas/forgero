@@ -236,25 +236,14 @@ schematics/
 
 ## Attribute System
 
-### Conditional Attributes Pattern
+### Attribute Context Pattern (Recommended)
 
 ```json
 {
   "id": "forgero:iron-attack_damage",
   "type": "forgero:attack_damage",
   "computation": { "value": 4.0 },
-  "condition": {
-    "static": [
-      {
-        "type": "forgero:in_slot_type",
-        "slot_type": "forgero:tool_material"
-      },
-      {
-        "type": "forgero:has_other_contributor",
-        "attribute_type": "forgero:attack_damage"
-      }
-    ]
-  }
+  "context": "forgero:part-composite"
 }
 ```
 
@@ -332,11 +321,14 @@ Foundation → Components → Enhancements → Integration
 - Any item with matching tags can fill slot
 - Enables easy extension without modifying templates
 
-### 5. Conditional Attribute Application
-- Attributes only apply when conditions met
-- `in_slot_type`: Apply based on where material is used
-- `has_other_contributor`: Apply only if composition contributes
-- `is_root`: Apply only at top-level component
+### 5. Attribute Context and Conditions
+- Use `context` field on attributes to control application:
+  - `forgero:part-composite`: Apply during material + schematic composition
+  - `forgero:local`: Apply only to the component itself
+  - `forgero:upgrade`: Apply only when installed as upgrade
+- Use conditions for slot-based restrictions:
+  - `in_slot_type`: Apply based on where component is used
+  - `is_root`: Apply only at top-level component
 
 ### 6. Template Variable Expansion
 ```

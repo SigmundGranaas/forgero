@@ -1,4 +1,4 @@
 {
-  "parent": "forgero:materials/secondary",
+  "parent": "forgero:secondary",
   "description": "Soft materials like hides, strings, and plants"
 }

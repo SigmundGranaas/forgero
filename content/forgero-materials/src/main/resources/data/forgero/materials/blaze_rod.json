@@ -2,13 +2,20 @@
   "type": "forgero:material",
   "name": "Blaze Rod",
   "tags": [
-    "forgero:upgrade/binding",
-    "forgero:upgrade/tip_reinforcement",
-    "forgero:materials/hard",
-    "forgero:materials/upgrade_material",
+    "forgero:binding",
+    "forgero:tip_reinforcement",
+    "forgero:hard",
+    "forgero:upgrade_material",
     "forgero:upgrade_material"
   ],
-  "host": { "identifiers": [{ "type": "item", "id": "minecraft:blaze_rod" }] },
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:blaze_rod"
+      }
+    ]
+  },
   "properties": {
     "minecraft:on_loot_drop": [
       {
@@ -41,7 +48,10 @@
           "type": "forgero:single_target"
         },
         "effects": [
-          { "type": "forgero:fire", "duration": 3 }
+          {
+            "type": "forgero:fire",
+            "duration": 3
+          }
         ],
         "condition": {
           "type": "forgero:in_slot_type",

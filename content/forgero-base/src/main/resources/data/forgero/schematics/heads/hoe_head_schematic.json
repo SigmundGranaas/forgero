@@ -1,0 +1,34 @@
+{
+  "type": "forgero:schematic",
+  "name": "Hoe Head",
+  "tags": [
+    "forgero:schematics/heads"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:schematic-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 15,
+        "operation": "addition"
+      }
+    }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:reinforcement-slot",
+      "type": "forgero:upgrade_material",
+      "tags": [
+        "forgero:reinforcement"
+      ],
+      "description": "slot.forgero.reinforcement"
+    }
+  ],
+  "host": {
+    "create": {
+      "id": "forgero:hoe_head-schematic",
+      "class_name": "forgero:part_item",
+      "item_group": "forgero:ingredients"
+    }
+  }
+}

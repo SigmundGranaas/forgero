@@ -2,7 +2,7 @@
   "type": "forgero:material",
   "name": "Amethyst",
   "tags": [
-    "forgero:materials/mineral"
+    "forgero:mineral"
   ],
   "host": {
     "identifiers": [

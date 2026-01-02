@@ -2,9 +2,9 @@
   "type": "forgero:material",
   "name": "Copper",
   "tags": [
-    "forgero:materials/metal",
-    "forgero:materials/tool_material",
-    "forgero:upgrade/tip_reinforcement"
+    "forgero:metal",
+    "forgero:tool_material",
+    "forgero:tip_reinforcement"
   ],
   "host": {
     "identifiers": [

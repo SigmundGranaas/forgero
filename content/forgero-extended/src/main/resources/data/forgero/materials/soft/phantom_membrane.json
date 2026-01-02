@@ -2,10 +2,8 @@
   "type": "forgero:material",
   "name": "Phantom Membrane",
   "tags": [
-    "forgero:materials/secondary",
-    "forgero:materials/soft",
-    "forgero:materials/hide",
-    "forgero:upgrade/binding"
+    "forgero:soft",
+    "forgero:binding"
   ],
   "host": {
     "identifiers": [

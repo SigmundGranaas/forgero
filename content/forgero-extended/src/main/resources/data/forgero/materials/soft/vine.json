@@ -2,10 +2,8 @@
   "type": "forgero:material",
   "name": "Vine",
   "tags": [
-    "forgero:materials/secondary",
-    "forgero:materials/soft",
-    "forgero:materials/plant",
-    "forgero:upgrade/binding"
+    "forgero:soft",
+    "forgero:binding"
   ],
   "host": {
     "identifiers": [

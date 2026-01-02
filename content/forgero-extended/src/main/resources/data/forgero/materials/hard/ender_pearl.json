@@ -2,11 +2,9 @@
   "type": "forgero:material",
   "name": "Ender Pearl",
   "tags": [
-    "forgero:materials/secondary",
-    "forgero:materials/hard",
-    "forgero:materials/magical",
-    "forgero:materials/end",
-    "forgero:upgrade/gem"
+    "forgero:hard",
+    "forgero:magical",
+    "forgero:gem"
   ],
   "host": {
     "identifiers": [

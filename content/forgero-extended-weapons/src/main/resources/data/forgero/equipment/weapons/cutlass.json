@@ -28,7 +28,7 @@
     {
       "id": "forgero:cutlass-binding",
       "type": "forgero:upgrade_material",
-      "tags": ["forgero:upgrade/binding"],
+      "tags": ["forgero:binding"],
       "description": "slot.forgero.binding"
     }
   ],

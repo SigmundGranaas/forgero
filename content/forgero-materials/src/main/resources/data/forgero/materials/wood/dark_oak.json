@@ -2,7 +2,7 @@
   "type": "forgero:material",
   "name": "Dark Oak",
   "tags": [
-    "forgero:materials/wood"
+    "forgero:wood"
   ],
   "host": {
     "identifiers": [

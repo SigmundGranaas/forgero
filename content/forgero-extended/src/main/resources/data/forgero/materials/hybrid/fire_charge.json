@@ -2,11 +2,8 @@
   "type": "forgero:material",
   "name": "Fire Charge",
   "tags": [
-    "forgero:materials/secondary",
-    "forgero:materials/hybrid",
-    "forgero:materials/magical",
-    "forgero:materials/nether",
-    "forgero:upgrade/gem"
+    "forgero:magical",
+    "forgero:gem"
   ],
   "host": {
     "identifiers": [

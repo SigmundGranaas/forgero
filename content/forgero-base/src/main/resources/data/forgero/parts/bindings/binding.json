@@ -13,7 +13,7 @@
     "slots": {
       "material": {
         "type": "forgero:upgrade_material",
-        "default_tag": "forgero:upgrade/binding"
+        "default_tag": "forgero:binding"
       }
     }
   },

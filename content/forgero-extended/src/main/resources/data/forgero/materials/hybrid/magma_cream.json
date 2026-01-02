@@ -2,11 +2,7 @@
   "type": "forgero:material",
   "name": "Magma Cream",
   "tags": [
-    "forgero:materials/secondary",
-    "forgero:materials/hybrid",
-    "forgero:materials/goo",
-    "forgero:materials/nether",
-    "forgero:upgrade/binding"
+    "forgero:binding"
   ],
   "host": {
     "identifiers": [

@@ -1,7 +1,7 @@
 {
   "type": "forgero:equipment_template",
   "name": "Pickaxe",
-  "tags": ["forgero:tool/pickaxe"],
+  "tags": ["forgero:pickaxe"],
   "host_template": {
     "create": {
       "id": "forgero:{head.material.name}-pickaxe",
@@ -13,11 +13,11 @@
     "id": "forgero:{head.material.name}-pickaxe",
     "slots": {
       "head": {
-        "type": "forgero:parts/pickaxe_head_type",
-        "default_tag": "forgero:parts/default_pickaxe_head"
+        "type": "forgero:pickaxe_head_type",
+        "default_tag": "forgero:default_pickaxe_head"
       },
       "handle": {
-        "type": "forgero:parts/handle_type",
+        "type": "forgero:handle_type",
         "default": "forgero:wooden_handle"
       }
     }
@@ -26,7 +26,7 @@
     {
       "id": "binding_slot",
       "type": "forgero:binding",
-      "tags": ["forgero:parts/binding_type"]
+      "tags": ["forgero:binding_type"]
     }
   ]
 }

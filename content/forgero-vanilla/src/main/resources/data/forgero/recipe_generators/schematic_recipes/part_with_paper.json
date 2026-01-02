@@ -7,7 +7,7 @@
     },
     "part": ["pickaxe_head", "axe_head", "hoe_head", "shovel_head", "handle", "binding", "sword_blade", "sword_guard"]
   },
-  "type": "minecraft:crafting_shapeless",
+  "type": "forgero:schematic_part_crafting",
   "ingredients": [
     {
       "item": "forgero:${material.name}-${part}"

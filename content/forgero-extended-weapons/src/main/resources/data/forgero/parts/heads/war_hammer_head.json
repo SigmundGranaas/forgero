@@ -4,7 +4,7 @@
   "tags": [
     "forgero:parts/head",
     "forgero:parts/war_hammer_head",
-    "forgero:parts/blunt_head"
+    "forgero:blunt"
   ],
   "host_template": {
     "class": "forgero:part_item",
@@ -15,7 +15,7 @@
     "slots": {
       "material": {
         "type": "forgero:tool_material",
-        "default_tag": "forgero:materials/tool_material"
+        "default_tag": "forgero:tool_material"
       }
     }
   },
@@ -23,7 +23,7 @@
     {
       "id": "forgero:war_hammer_head-reinforcement",
       "type": "forgero:upgrade_material",
-      "tags": ["forgero:upgrade/reinforcement"],
+      "tags": ["forgero:reinforcement"],
       "description": "slot.forgero.reinforcement"
     }
   ],

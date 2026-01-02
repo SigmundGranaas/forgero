@@ -1,4 +1,4 @@
 {
-  "parent": "forgero:materials/secondary",
+  "parent": "forgero:secondary",
   "description": "Dye materials for cosmetic upgrades"
 }

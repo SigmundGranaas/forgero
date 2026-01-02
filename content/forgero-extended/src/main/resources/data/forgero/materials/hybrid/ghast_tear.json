@@ -2,11 +2,7 @@
   "type": "forgero:material",
   "name": "Ghast Tear",
   "tags": [
-    "forgero:materials/secondary",
-    "forgero:materials/hybrid",
-    "forgero:materials/goo",
-    "forgero:materials/nether",
-    "forgero:upgrade/gem"
+    "forgero:gem"
   ],
   "host": {
     "identifiers": [

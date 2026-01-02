@@ -2,9 +2,9 @@
   "type": "forgero:material",
   "name": "Flawless Emerald",
   "tags": [
-    "forgero:materials/gem",
-    "forgero:materials/emerald",
-    "forgero:upgrade/reinforcement"
+    "forgero:gem",
+    "forgero:emerald",
+    "forgero:reinforcement"
   ],
   "host": {
     "identifiers": [
@@ -28,7 +28,7 @@
       "id": "forgero:flawless_emerald-attack_speed",
       "type": "forgero:attack_speed",
       "computation": {
-        "value": 0.60,
+        "value": 0.6,
         "operation": "addition"
       },
       "context": "forgero:part-composite"

@@ -12,7 +12,7 @@
       "hoe"
     ]
   },
-  "type": "forgero:state_crafting_recipe",
+  "type": "forgero:schematic_part_crafting",
   "pattern": [
     " a",
     "b "

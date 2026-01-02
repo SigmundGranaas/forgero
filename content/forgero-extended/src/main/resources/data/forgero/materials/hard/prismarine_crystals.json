@@ -2,11 +2,8 @@
   "type": "forgero:material",
   "name": "Prismarine Crystals",
   "tags": [
-    "forgero:materials/secondary",
-    "forgero:materials/hard",
-    "forgero:materials/crystal",
-    "forgero:materials/ocean",
-    "forgero:upgrade/gem"
+    "forgero:hard",
+    "forgero:gem"
   ],
   "host": {
     "identifiers": [

@@ -1,5 +1,5 @@
 {
-  "parents": ["forgero:materials/gem"],
+  "parents": ["forgero:gem"],
   "values": [
     "forgero:chipped_quartz",
     "forgero:flawed_quartz",

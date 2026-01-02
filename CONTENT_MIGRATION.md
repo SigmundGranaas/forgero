@@ -1,5 +1,7 @@
 # Forgero Content Migration Status
 
+> **Status: COMPLETE** - This document is historical reference. The migration from legacy pack format to modern JSON format is complete. See `docs/RESOURCE_BEST_PRACTICES.md` for current patterns.
+
 This document tracks the migration of content from legacy pack format to modern JSON format.
 
 ---

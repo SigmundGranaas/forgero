@@ -12,15 +12,8 @@
     "id": "forgero:{material.name}-pommel",
     "slots": {
       "material": {
-        "type": "forgero:upgrade_material",
-        "default_tag": "forgero:upgrade/pommel"
-      }
-    }
-  },
-  "generation": {
-    "slots": {
-      "material": {
-        "require_any_tags": ["forgero:materials/metal"]
+        "type": "forgero:metal",
+        "default_tag": "forgero:metal"
       }
     }
   },

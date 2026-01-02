@@ -2,7 +2,7 @@
   "type": "forgero:material",
   "name": "Blackstone",
   "tags": [
-    "forgero:materials/stone"
+    "forgero:stone"
   ],
   "host": {
     "identifiers": [

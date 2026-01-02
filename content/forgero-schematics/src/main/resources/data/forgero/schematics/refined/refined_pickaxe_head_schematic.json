@@ -1,0 +1,81 @@
+{
+  "type": "forgero:schematic",
+  "name": "Refined Pickaxe Head",
+  "tags": [
+    "forgero:schematics/heads",
+    "forgero:schematics/refined"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:refined-pickaxe-rarity-local",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 50,
+        "operation": "addition"
+      }
+    },
+    {
+      "id": "forgero:refined-pickaxe-rarity-composite",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 1.25,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:refined-pickaxe-mining_speed-composite",
+      "type": "forgero:mining_speed",
+      "computation": {
+        "value": 1.25,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:refined-pickaxe-durability-composite",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 1.25,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:refined-reinforcement-slot",
+      "type": "forgero:upgrade_material",
+      "tags": [
+        "forgero:reinforcement"
+      ],
+      "description": "slot.forgero.reinforcement"
+    },
+    {
+      "id": "forgero:refined-cosmetic-slot",
+      "type": "forgero:dye",
+      "tags": [
+        "forgero:upgrade/cosmetic"
+      ],
+      "description": "slot.forgero.cosmetic"
+    }
+  ]
+}

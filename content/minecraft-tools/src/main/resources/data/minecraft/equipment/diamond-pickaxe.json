@@ -38,7 +38,7 @@
     {
       "id": "binding_slot",
       "type": "forgero:binding_slot",
-      "tags": ["forgero:upgrade/binding"]
+      "tags": ["forgero:binding"]
     },
     {
       "id": "handle_grip_slot",
