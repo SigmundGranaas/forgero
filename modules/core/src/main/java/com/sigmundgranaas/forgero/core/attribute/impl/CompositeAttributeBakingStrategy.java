@@ -107,11 +107,9 @@ public class CompositeAttributeBakingStrategy implements AttributeBakingStrategy
 			Component child = part.getContent();
 			String slotName = part.id().toString();
 
-			List<Attribute> childAttrs = child.properties(KEY).stream()
-					.filter(attr -> attr.context()
-							.map(ctx -> ctx.equals(AttributeContext.PART_COMPOSITE))
-							.orElse(false))
-					.toList();
+			// Recursively collect part-composite attributes from child and all its descendants
+			// This handles nested structures like iron-pickaxe_head containing iron material
+			List<Attribute> childAttrs = collectPartCompositeAttributesRecursively(child);
 
 			if (!childAttrs.isEmpty()) {
 				sources.put(slotName, childAttrs);
@@ -128,5 +126,33 @@ public class CompositeAttributeBakingStrategy implements AttributeBakingStrategy
 		}
 
 		return List.of();
+	}
+
+	/**
+	 * Recursively collects all part-composite attributes from a component and all its descendants.
+	 * This ensures that nested structures (e.g., a part containing a material) have all their
+	 * attributes properly included in composition.
+	 *
+	 * @param component The component to collect from
+	 * @return List of all part-composite attributes from this component and its descendants
+	 */
+	private List<Attribute> collectPartCompositeAttributesRecursively(Component component) {
+		List<Attribute> result = new ArrayList<>();
+
+		// Add component's own part-composite attributes
+		result.addAll(component.properties(KEY).stream()
+				.filter(attr -> attr.context()
+						.map(ctx -> ctx.equals(AttributeContext.PART_COMPOSITE))
+						.orElse(false))
+				.toList());
+
+		// Recursively collect from children if this is a structured component
+		if (component instanceof StructuredComponent structured) {
+			for (ComponentPart part : structured.structure().allParts()) {
+				result.addAll(collectPartCompositeAttributesRecursively(part.getContent()));
+			}
+		}
+
+		return result;
 	}
 }
