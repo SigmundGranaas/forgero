@@ -7,6 +7,8 @@ import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroGameTest;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -16,6 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * These tests ensure the upgrade system correctly stacks multiple upgrades.
  */
 public class MaxedOutToolTest implements ForgeroGameTest {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MaxedOutToolTest.class);
+
     private float getAttributeValue(Component component, String attributeType) {
         return component.properties(Attribute.KEY).stream()
                 .filter(attr -> attr.type().toString().equals(attributeType))
@@ -181,9 +185,9 @@ public class MaxedOutToolTest implements ForgeroGameTest {
         assertTrue(uniqueSlotTypes >= 1,
                 "Diamond pickaxe should have at least 1 slot type (has " + uniqueSlotTypes + ")");
 
-        // Print slot types for debugging
-        System.out.println("Diamond pickaxe slot types:");
-        slots.forEach(slot -> System.out.println("  - " + slot.slotType()));
+        // Log slot types for debugging
+        LOGGER.debug("Diamond pickaxe slot types: count={}", slots.size());
+        slots.forEach(slot -> LOGGER.debug("  - slotType={}", slot.slotType()));
 
         context.complete();
     }

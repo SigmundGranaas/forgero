@@ -46,7 +46,8 @@ public class AttributeManager {
 	 */
 	public static void initialize(ComponentConverter converter, Resolver resolver) {
 		if (initialized) {
-			LOGGER.warn("ForgeroAttributeManager is being initialized more than once. This may indicate an issue.");
+			LOGGER.warn("ForgeroAttributeManager is being initialized more than once. " +
+					"This may indicate a mod lifecycle issue - the attribute manager should only be initialized once during mod setup.");
 			return;
 		}
 		AttributeManager.converter = converter;
@@ -111,7 +112,10 @@ public class AttributeManager {
 
 		// Handle tool attributes, which apply only in the main hand.
 		if (slot == EquipmentSlot.MAINHAND) {
-			handleAttribute(map, DefaultAttributes.ATTACK_DAMAGE, EntityAttributes.GENERIC_ATTACK_DAMAGE, Item.ATTACK_DAMAGE_MODIFIER_ID, "Forgero Attack Damage", attributes, val -> val, EntityAttributeModifier.Operation.ADDITION);
+			// Attack damage: Forgero stores total damage (e.g., 7 for diamond sword).
+			// Minecraft's ADDITION modifier adds to base player damage (1.0).
+			// So we subtract 1 to get the correct modifier value (7 - 1 = 6).
+			handleAttribute(map, DefaultAttributes.ATTACK_DAMAGE, EntityAttributes.GENERIC_ATTACK_DAMAGE, Item.ATTACK_DAMAGE_MODIFIER_ID, "Forgero Attack Damage", attributes, val -> val - 1.0f, EntityAttributeModifier.Operation.ADDITION);
 			handleAttribute(map, DefaultAttributes.ATTACK_SPEED, EntityAttributes.GENERIC_ATTACK_SPEED, Item.ATTACK_SPEED_MODIFIER_ID, "Forgero Attack Speed", attributes, val -> val - 4.0f, EntityAttributeModifier.Operation.ADDITION); // Value is desired speed, modifier is delta from base 4.0
 		}
 

@@ -71,7 +71,8 @@ public class ForgeroModelResourceListener implements IdentifiableResourceReloadL
 
 					// Check if data has been initialized yet
 					if (taggedComponents == null || tagResolver == null) {
-						LOGGER.warn("Forgero data not initialized during resource reload. Skipping model reload.");
+						LOGGER.warn("Forgero data not initialized during resource reload - skipping model reload. " +
+								"Forgero items may appear without custom textures until data is loaded.");
 						return null;
 					}
 

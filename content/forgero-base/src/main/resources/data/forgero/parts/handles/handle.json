@@ -2,7 +2,8 @@
   "type": "forgero:part_template",
   "name": "handle",
   "tags": [
-    "forgero:parts/handle"
+    "forgero:parts/handle",
+    "forgero:parts/categories/handle"
   ],
   "host_template": {
     "class": "forgero:part_item",
@@ -12,8 +13,8 @@
     "id": "forgero:{material.name}-handle",
     "slots": {
       "material": {
-        "type": "forgero:tool_material",
-        "default_tag": "forgero:tool_material"
+        "type": "forgero:materials/roles/tool_material",
+        "default_tag": "forgero:materials/roles/tool_material"
       }
     }
   },
@@ -32,9 +33,10 @@
       "computation": {"value": 10, "operation": "addition"}
     },
     {
-      "id": "forgero:handle-durability-base",
+      "id": "forgero:handle-durability-mult",
       "type": "forgero:durability",
-      "computation": {"value": 0, "operation": "addition"}
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
     }
   ]
 }

@@ -3,8 +3,8 @@
   "name": "leggings",
   "tags": [
     "forgero:armor/leggings",
-    "forgero:armor",
-    "minecraft:armor/leggings"
+    "forgero:armors",
+    "forgero:leggings"
   ],
   "host_template": {
     "class": "forgero:armor_item",
@@ -14,30 +14,37 @@
     "id": "forgero:{material.name}-leggings",
     "slots": {
       "material": {
-        "type": "forgero:armor_material",
-        "default_tag": "forgero:armor_material"
+        "type": "forgero:materials/roles/armor_material",
+        "default_tag": "forgero:materials/roles/armor_material"
       }
     }
   },
   "upgrades": [
     {
       "id": "forgero:leggings-gem",
-      "type": "forgero:upgrade_material",
-      "tags": ["forgero:gem"],
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/gem"],
       "description": "slot.forgero.gem"
     },
     {
       "id": "forgero:leggings-lining",
-      "type": "forgero:upgrade_material",
+      "type": "forgero:materials/roles/upgrade_material",
       "tags": ["forgero:lining"],
       "description": "slot.forgero.lining"
     }
   ],
   "attributes": [
     {
-      "id": "forgero:leggings-armor-base",
+      "id": "forgero:leggings-armor-mult",
       "type": "forgero:armor",
-      "computation": {"value": 5, "operation": "addition"}
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 2.5}
+    },
+    {
+      "id": "forgero:leggings-durability-mult",
+      "type": "forgero:durability",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
     }
   ]
 }

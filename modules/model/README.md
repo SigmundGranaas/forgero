@@ -254,6 +254,103 @@ Format: `{component.property.nested}`
 3. Map template grayscale values to palette colors
 4. Write output texture
 
+## Model Extensions
+
+Extensions add visual elements to existing models without modifying the original files.
+
+### ModelExtensionDTO
+
+```typescript
+{
+  "type": "forgero:model_extension",  // Required
+  "target": string,                    // Model ID to extend (required)
+  "priority"?: number,                 // Merge priority (default: 0)
+  "layers"?: LayerDTO[],               // Layers to append
+  "slots"?: SlotDTO[],                 // Slots to add/override
+  "mount_points"?: MountPointDTO[]     // Mount points to add/override
+}
+```
+
+### Merge Semantics
+
+Extensions are applied in priority order (lowest first).
+
+| Field | Strategy |
+|-------|----------|
+| `layers` | Appended after target layers |
+| `slots` | By ID: extension wins (warning logged for duplicates) |
+| `mount_points` | By name: extension wins (warning logged for duplicates) |
+
+### Extension Examples
+
+**Adding an overlay layer**:
+```json
+{
+  "type": "forgero:model_extension",
+  "target": "forgero:parts/iron-pickaxe_head",
+  "priority": 100,
+  "layers": [
+    {
+      "order": 50,
+      "textures": {
+        "default": "forgero:item/overlays/dye_overlay",
+        "variants": [
+          {
+            "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:dyed" }],
+            "texture": "forgero:item/overlays/dye_overlay_active"
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+**Adding a slot to equipment**:
+```json
+{
+  "type": "forgero:model_extension",
+  "target": "forgero:equipment/iron-pickaxe",
+  "slots": [
+    {
+      "id": "dye_slot",
+      "order": 5,
+      "renderer": { "type": "forgero:component" }
+    }
+  ]
+}
+```
+
+**Adding a mount point**:
+```json
+{
+  "type": "forgero:model_extension",
+  "target": "forgero:parts/handle",
+  "mount_points": [
+    {
+      "name": "charm_mount",
+      "position": [8, 2]
+    }
+  ]
+}
+```
+
+### Multiple Extensions
+
+When multiple extensions target the same model, they are merged in priority order:
+
+```json
+// Extension A (priority: 0) - applied first
+{ "type": "forgero:model_extension", "target": "forgero:parts/iron-head", "priority": 0,
+  "layers": [{ "order": 10, "textures": { "default": "mod_a:overlay" } }] }
+
+// Extension B (priority: 100) - applied second
+{ "type": "forgero:model_extension", "target": "forgero:parts/iron-head", "priority": 100,
+  "layers": [{ "order": 20, "textures": { "default": "mod_b:overlay" } }] }
+
+// Result: iron-head has both layers appended (mod_a first, then mod_b)
+```
+
 ## File Locations
 
 ```

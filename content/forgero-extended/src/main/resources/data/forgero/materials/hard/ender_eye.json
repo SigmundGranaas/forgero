@@ -2,9 +2,9 @@
   "type": "forgero:material",
   "name": "Eye of Ender",
   "tags": [
-    "forgero:hard",
-    "forgero:magical",
-    "forgero:gem"
+    "forgero:materials/properties/hard",
+    "forgero:materials/properties/magical",
+    "forgero:upgrades/types/gem"
   ],
   "host": {
     "identifiers": [

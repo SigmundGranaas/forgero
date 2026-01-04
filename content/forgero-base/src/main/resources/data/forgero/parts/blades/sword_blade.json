@@ -3,7 +3,9 @@
   "name": "sword_blade",
   "tags": [
     "forgero:parts/blade",
-    "forgero:parts/sword_blade"
+    "forgero:parts/sword_blade",
+    "forgero:parts/types/sword_blade",
+    "forgero:parts/categories/blade"
   ],
   "host_template": {
     "class": "forgero:part_item",
@@ -13,16 +15,16 @@
     "id": "forgero:{material.name}-sword_blade",
     "slots": {
       "material": {
-        "type": "forgero:tool_material",
-        "default_tag": "forgero:tool_material"
+        "type": "forgero:materials/roles/tool_material",
+        "default_tag": "forgero:materials/roles/tool_material"
       }
     }
   },
   "upgrades": [
     {
       "id": "forgero:sword_blade-reinforcement",
-      "type": "forgero:upgrade_material",
-      "tags": ["forgero:reinforcement"],
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/reinforcement"],
       "description": "slot.forgero.reinforcement"
     }
   ],
@@ -33,9 +35,10 @@
       "computation": {"value": 30, "operation": "addition"}
     },
     {
-      "id": "forgero:sword_blade-durability-base",
+      "id": "forgero:sword_blade-durability-mult",
       "type": "forgero:durability",
-      "computation": {"value": 0, "operation": "addition"}
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
     },
     {
       "id": "forgero:sword_blade-attack_damage-base",

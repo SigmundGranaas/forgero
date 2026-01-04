@@ -63,9 +63,9 @@
   "upgrades": [
     {
       "id": "forgero:mastercrafted-reinforcement-slot",
-      "type": "forgero:upgrade_material",
+      "type": "forgero:materials/roles/upgrade_material",
       "tags": [
-        "forgero:reinforcement"
+        "forgero:upgrades/types/reinforcement"
       ],
       "description": "slot.forgero.reinforcement"
     },
@@ -73,7 +73,7 @@
       "id": "forgero:mastercrafted-cosmetic-slot",
       "type": "forgero:dye",
       "tags": [
-        "forgero:upgrade/cosmetic"
+        "forgero:upgrades/types/cosmetic"
       ],
       "description": "slot.forgero.cosmetic"
     }

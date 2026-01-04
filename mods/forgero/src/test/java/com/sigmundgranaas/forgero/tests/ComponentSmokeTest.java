@@ -6,6 +6,8 @@ import net.minecraft.registry.Registries;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.Identifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * These tests fail fast when core functionality is broken.
  */
 public class ComponentSmokeTest implements ForgeroGameTest {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ComponentSmokeTest.class);
 
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void component_system_is_functional(TestContext context) {
@@ -147,18 +150,18 @@ public class ComponentSmokeTest implements ForgeroGameTest {
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void debug_list_forgero_items_in_registry(TestContext context) {
         int count = 0;
-        System.out.println("=== Forgero items in Minecraft registry ===");
+        LOGGER.debug("=== Forgero items in Minecraft registry ===");
         for (Identifier id : Registries.ITEM.getIds()) {
             if (id.getNamespace().equals("forgero")) {
-                System.out.println("  - " + id);
+                LOGGER.debug("  Registered item: {}", id);
                 count++;
             }
         }
-        System.out.println("Total Forgero items: " + count);
+        LOGGER.debug("Total Forgero items in registry: count={}", count);
 
         // This is a diagnostic test - always pass but warn if no items found
         if (count == 0) {
-            System.out.println("WARNING: No Forgero items found in Minecraft registry!");
+            LOGGER.warn("No Forgero items found in Minecraft registry - item registration may have failed");
         }
 
         context.complete();
@@ -173,11 +176,11 @@ public class ComponentSmokeTest implements ForgeroGameTest {
 
         var diamondPickaxe = ctx.component("forgero:diamond-pickaxe");
         if (diamondPickaxe.isPresent()) {
-            System.out.println("Diamond pickaxe slot types:");
+            LOGGER.debug("Diamond pickaxe slot types:");
             var component = diamondPickaxe.get();
             if (component instanceof com.sigmundgranaas.forgero.core.component.api.StructuredComponent structured) {
                 for (var slot : structured.structure().allParts()) {
-                    System.out.println("  - " + slot.partType());
+                    LOGGER.debug("  Slot: partType={}", slot.partType());
                 }
             }
         }
@@ -199,7 +202,7 @@ public class ComponentSmokeTest implements ForgeroGameTest {
         assertTrue(ironPickaxe.isPresent(), "Iron pickaxe must exist");
 
         // DEBUG: Print component tree
-        System.out.println("=== Iron Pickaxe Component Tree ===");
+        LOGGER.debug("=== Iron Pickaxe Component Tree ===");
         printComponentTree(ironPickaxe.get(), 0);
 
         var stack = ctx.toStack(ironPickaxe.get());
@@ -209,21 +212,21 @@ public class ComponentSmokeTest implements ForgeroGameTest {
 
         // Iron pickaxe should NOT have armor (it's a tool, not armor!)
         int armor = query.getArmor(ironStack);
-        System.out.println("Iron pickaxe armor: " + armor);
+        LOGGER.debug("Iron pickaxe attributes: armor={}", armor);
         assertEquals(0, armor, "Iron pickaxe should have 0 armor, but has: " + armor);
 
         // Note: forgero-base content uses a simplified model without shape composition.
         // Durability comes primarily from the handle (~50 for wooden).
         // With shape composition (forgero-tools content), iron pickaxe would have ~250.
         int durability = query.getMaxDurability(ironStack);
-        System.out.println("Iron pickaxe durability: " + durability);
+        LOGGER.debug("Iron pickaxe attributes: durability={}", durability);
         assertTrue(durability > 30 && durability < 1000,
                 "Iron pickaxe durability should be reasonable (>30), but is: " + durability);
 
         // Note: Without shape composition, mining speed comes from base values only.
         // With shape composition (forgero-tools content), iron pickaxe would have ~6 mining speed.
         float miningSpeed = query.getMiningSpeed(ironStack);
-        System.out.println("Iron pickaxe mining speed: " + miningSpeed);
+        LOGGER.debug("Iron pickaxe attributes: miningSpeed={}", miningSpeed);
         assertTrue(miningSpeed >= 0.0f && miningSpeed < 20.0f,
                 "Iron pickaxe mining speed should be >= 0, but is: " + miningSpeed);
 
@@ -232,14 +235,13 @@ public class ComponentSmokeTest implements ForgeroGameTest {
 
     private void printComponentTree(com.sigmundgranaas.forgero.core.component.api.Component comp, int depth) {
         String indent = "  ".repeat(depth);
-        System.out.println(indent + "- " + comp.id() + " (type: " + comp.getTypeIdentifier() + ")");
+        LOGGER.debug("{}Component: id={}, type={}", indent, comp.id(), comp.getTypeIdentifier());
         // Print direct attributes
         var attrs = comp.properties(com.sigmundgranaas.forgero.core.attribute.api.Attribute.KEY);
         if (!attrs.isEmpty()) {
-            System.out.println(indent + "  Attributes:");
             for (var attr : attrs) {
-                System.out.println(indent + "    " + attr.type().path() + " = " + attr.value() +
-                    (attr.condition().isPresent() ? " (conditioned)" : " (NO CONDITION!)"));
+                LOGGER.debug("{}  Attribute: {}={} (conditioned={})", indent,
+                    attr.type().path(), attr.value(), attr.condition().isPresent());
             }
         }
         // Recurse into children
@@ -266,7 +268,7 @@ public class ComponentSmokeTest implements ForgeroGameTest {
 
         // Oak pickaxe should have wood-tier durability (~59, NOT 1600!)
         int durability = query.getMaxDurability(oakStack);
-        System.out.println("Oak pickaxe durability: " + durability);
+        LOGGER.debug("Oak pickaxe attributes: durability={}", durability);
         assertTrue(durability > 30 && durability < 200,
                 "Oak pickaxe durability should be ~59 (wood tier), but is: " + durability);
 

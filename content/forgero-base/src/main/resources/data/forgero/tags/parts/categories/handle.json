@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:parts/categories"
+  ],
+  "description": "Parts handle"
+}

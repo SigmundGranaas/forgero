@@ -112,8 +112,8 @@ public class DefinitionCodecRegistry {
 		registry.register("equipment_template", EquipmentTemplateCodecs.create(attributeCodec, upgradeSlotCodec));
 		registry.register("tool_template", EquipmentTemplateCodecs.create(attributeCodec, upgradeSlotCodec)); // Legacy
 
-		// Extension type
-		registry.register("extension", ExtensionCodecs.create(attributeCodec));
+		// Extension type (now supports upgrades for template extensions)
+		registry.register("extension", ExtensionCodecs.create(attributeCodec, upgradeSlotCodec));
 
 		return registry;
 	}
@@ -148,8 +148,8 @@ public class DefinitionCodecRegistry {
 		registry.register("equipment_template", EquipmentTemplateCodecs.create(attributeCodec, upgradeSlotCodec));
 		registry.register("tool_template", EquipmentTemplateCodecs.create(attributeCodec, upgradeSlotCodec)); // Legacy
 
-		// Extension type
-		registry.register("extension", ExtensionCodecs.create(attributeCodec));
+		// Extension type (now supports upgrades for template extensions)
+		registry.register("extension", ExtensionCodecs.create(attributeCodec, upgradeSlotCodec));
 
 		return registry;
 	}

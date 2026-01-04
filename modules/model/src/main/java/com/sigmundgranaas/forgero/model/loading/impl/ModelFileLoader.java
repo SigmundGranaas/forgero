@@ -9,8 +9,11 @@ import com.sigmundgranaas.forgero.model.api.armor.ArmorModel;
 import com.sigmundgranaas.forgero.model.api.item.Model;
 import com.sigmundgranaas.forgero.model.loading.impl.codec.ArmorModelCodecs;
 import com.sigmundgranaas.forgero.model.loading.impl.codec.ModelCodecs;
+import com.sigmundgranaas.forgero.model.loading.impl.codec.ModelExtensionCodecs;
 import com.sigmundgranaas.forgero.model.loading.impl.codec.ModelTemplateCodecs;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.ArmorModelTranslator;
+import com.sigmundgranaas.forgero.model.loading.impl.dto.ModelDTO;
+import com.sigmundgranaas.forgero.model.loading.impl.dto.ModelExtensionDTO;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.ArmorModelTemplateDTO;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.PartModelTemplateDTO;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.UpgradeModelTemplateDTO;
@@ -41,6 +44,8 @@ public class ModelFileLoader {
 	private final List<ArmorModelTemplateDTO> armorTemplates = new ArrayList<>();
 	private final List<Model> manualItemModels = new ArrayList<>();
 	private final List<ArmorModel> manualArmorModels = new ArrayList<>();
+	private final List<ModelDTO> manualItemModelDTOs = new ArrayList<>();
+	private final List<ModelExtensionDTO> modelExtensions = new ArrayList<>();
 
 	/**
 	 * Creates a loader with inheritance-aware tag predicates.
@@ -60,8 +65,8 @@ public class ModelFileLoader {
 
 	public void load() {
 		resourceProvider.getNamespaces().forEach(this::loadModelsFromNamespace);
-		LOGGER.info("Loaded {} item templates, {} upgrade templates, {} armor templates, {} manual item models, and {} manual armor models from all namespaces.",
-				itemTemplates.size(), upgradeTemplates.size(), armorTemplates.size(), manualItemModels.size(), manualArmorModels.size());
+		LOGGER.info("Loaded {} item templates, {} upgrade templates, {} armor templates, {} manual item models, {} manual armor models, and {} model extensions from all namespaces.",
+				itemTemplates.size(), upgradeTemplates.size(), armorTemplates.size(), manualItemModels.size(), manualArmorModels.size(), modelExtensions.size());
 	}
 
 	private void loadModelsFromNamespace(String namespace) {
@@ -118,6 +123,11 @@ public class ModelFileLoader {
 							.resultOrPartial(err -> LOGGER.error("Failed to parse template {}: {}", id, err))
 							.ifPresent(armorTemplates::add);
 
+			case "forgero:model_extension" ->
+					ModelExtensionCodecs.MODEL_EXTENSION_CODEC.parse(JsonOps.INSTANCE, json)
+							.resultOrPartial(err -> LOGGER.error("Failed to parse model extension {}: {}", id, err))
+							.ifPresent(modelExtensions::add);
+
 			case "forgero:armor_model" -> parseManualArmorModel(id, json);
 			default -> parseManualItemModel(id, json);
 		}
@@ -157,8 +167,26 @@ public class ModelFileLoader {
 
 		ModelCodecs.MODEL_DTO_CODEC_DISPATCHER.parse(JsonOps.INSTANCE, json)
 				.resultOrPartial(err -> LOGGER.error("Failed to parse manual item model {}: {}", id, err))
-				.map(dto -> itemModelTranslator.toDomain(derivedId, dto))
-				.ifPresent(manualItemModels::add);
+				.ifPresent(dto -> {
+					// Store raw DTO with ID embedded for extension merging
+					ModelDTO withId = new ModelDTO(
+							derivedId.toString(),
+							dto.type(),
+							dto.layers(),
+							dto.slots(),
+							dto.mountPoints(),
+							dto.texture(),
+							dto.textures(),
+							dto.target(),
+							dto.context(),
+							dto.parent(),
+							dto.display()
+					);
+					manualItemModelDTOs.add(withId);
+
+					// Also translate and store domain model for backward compatibility
+					manualItemModels.add(itemModelTranslator.toDomain(derivedId, dto));
+				});
 	}
 
 	public List<PartModelTemplateDTO> getItemTemplates() { return itemTemplates; }
@@ -166,4 +194,6 @@ public class ModelFileLoader {
 	public List<ArmorModelTemplateDTO> getArmorTemplates() { return armorTemplates; }
 	public List<Model> getManualItemModels() { return manualItemModels; }
 	public List<ArmorModel> getManualArmorModels() { return manualArmorModels; }
+	public List<ModelDTO> getManualItemModelDTOs() { return manualItemModelDTOs; }
+	public List<ModelExtensionDTO> getModelExtensions() { return modelExtensions; }
 }

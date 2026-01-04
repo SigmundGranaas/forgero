@@ -2,7 +2,7 @@
   "type": "forgero:schematic",
   "name": "Mastercrafted Pommel",
   "tags": [
-    "forgero:pommel",
+    "forgero:upgrades/types/pommel",
     "forgero:schematics/mastercrafted"
   ],
   "attributes": [
@@ -50,7 +50,7 @@
       "id": "forgero:mastercrafted-cosmetic-slot",
       "type": "forgero:dye",
       "tags": [
-        "forgero:upgrade/cosmetic"
+        "forgero:upgrades/types/cosmetic"
       ],
       "description": "slot.forgero.cosmetic"
     }

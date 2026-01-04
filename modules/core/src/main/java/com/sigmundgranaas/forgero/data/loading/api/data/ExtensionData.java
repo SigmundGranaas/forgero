@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.HostData;
+import com.sigmundgranaas.forgero.data.loading.api.data.template.UpgradeSlotData;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.Map;
  *   <li><strong>Tags:</strong> Union (extension tags added to target)</li>
  *   <li><strong>Attributes:</strong> Concatenate (extension attributes appended)</li>
  *   <li><strong>Properties:</strong> Deep merge (objects merged recursively, arrays concatenated)</li>
+ *   <li><strong>Upgrades:</strong> Concatenate with override (duplicate IDs: extension wins with warning)</li>
  * </ul>
  *
  * <h3>Example Use Case:</h3>
@@ -43,6 +45,7 @@ import java.util.Map;
  * @param tags       Optional list of tags to add to the target.
  * @param attributes Optional list of attributes to add to the target.
  * @param properties Optional map of properties to merge into the target.
+ * @param upgrades   Optional list of upgrade slots to add to the target (for templates).
  */
 public record ExtensionData(
 		OpenIdentifier type,
@@ -50,7 +53,8 @@ public record ExtensionData(
 		int priority,
 		@Nullable List<OpenIdentifier> tags,
 		@Nullable List<AttributeData> attributes,
-		@Nullable Map<String, JsonElement> properties
+		@Nullable Map<String, JsonElement> properties,
+		@Nullable List<UpgradeSlotData> upgrades
 ) implements DefinitionData, ResourceTypeData {
 
 	/**
@@ -64,7 +68,7 @@ public record ExtensionData(
 	public static final int DEFAULT_PRIORITY = 0;
 
 	/**
-	 * Creates an ExtensionData with default priority.
+	 * Creates an ExtensionData with default priority and no upgrades.
 	 */
 	public ExtensionData(
 			OpenIdentifier type,
@@ -73,7 +77,36 @@ public record ExtensionData(
 			@Nullable List<AttributeData> attributes,
 			@Nullable Map<String, JsonElement> properties
 	) {
-		this(type, target, DEFAULT_PRIORITY, tags, attributes, properties);
+		this(type, target, DEFAULT_PRIORITY, tags, attributes, properties, null);
+	}
+
+	/**
+	 * Creates an ExtensionData with specified priority but no upgrades.
+	 * Backward compatibility constructor for existing tests and usage.
+	 */
+	public ExtensionData(
+			OpenIdentifier type,
+			OpenIdentifier target,
+			int priority,
+			@Nullable List<OpenIdentifier> tags,
+			@Nullable List<AttributeData> attributes,
+			@Nullable Map<String, JsonElement> properties
+	) {
+		this(type, target, priority, tags, attributes, properties, null);
+	}
+
+	/**
+	 * Creates an ExtensionData with default priority.
+	 */
+	public ExtensionData(
+			OpenIdentifier type,
+			OpenIdentifier target,
+			@Nullable List<OpenIdentifier> tags,
+			@Nullable List<AttributeData> attributes,
+			@Nullable Map<String, JsonElement> properties,
+			@Nullable List<UpgradeSlotData> upgrades
+	) {
+		this(type, target, DEFAULT_PRIORITY, tags, attributes, properties, upgrades);
 	}
 
 	// ResourceTypeData implementation

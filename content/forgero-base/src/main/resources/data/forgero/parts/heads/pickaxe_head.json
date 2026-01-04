@@ -3,7 +3,9 @@
   "name": "pickaxe_head",
   "tags": [
     "forgero:parts/head",
-    "forgero:parts/pickaxe_head"
+    "forgero:parts/pickaxe_head",
+    "forgero:parts/types/pickaxe_head",
+    "forgero:parts/categories/head"
   ],
   "host_template": {
     "class": "forgero:part_item",
@@ -13,16 +15,16 @@
     "id": "forgero:{material.name}-pickaxe_head",
     "slots": {
       "material": {
-        "type": "forgero:tool_material",
-        "default_tag": "forgero:tool_material"
+        "type": "forgero:materials/roles/tool_material",
+        "default_tag": "forgero:materials/roles/tool_material"
       }
     }
   },
   "upgrades": [
     {
       "id": "forgero:pickaxe_head-reinforcement",
-      "type": "forgero:upgrade_material",
-      "tags": ["forgero:reinforcement"],
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/reinforcement"],
       "description": "slot.forgero.reinforcement"
     }
   ],
@@ -33,9 +35,10 @@
       "computation": {"value": 25, "operation": "addition"}
     },
     {
-      "id": "forgero:pickaxe_head-durability-base",
+      "id": "forgero:pickaxe_head-durability-mult",
       "type": "forgero:durability",
-      "computation": {"value": 0, "operation": "addition"}
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
     },
     {
       "id": "forgero:pickaxe_head-attack_damage-base",
@@ -48,9 +51,10 @@
       "computation": {"value": 1.0, "operation": "addition"}
     },
     {
-      "id": "forgero:pickaxe_head-mining_speed-base",
+      "id": "forgero:pickaxe_head-mining_speed-mult",
       "type": "forgero:mining_speed",
-      "computation": {"value": 0, "operation": "addition"}
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.2}
     },
     {
       "id": "forgero:pickaxe_head-mining_level-base",

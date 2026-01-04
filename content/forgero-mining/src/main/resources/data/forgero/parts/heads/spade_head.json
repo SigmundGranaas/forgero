@@ -13,16 +13,16 @@
     "id": "forgero:{material.name}-spade_head",
     "slots": {
       "material": {
-        "type": "forgero:tool_material",
-        "default_tag": "forgero:tool_material"
+        "type": "forgero:materials/roles/tool_material",
+        "default_tag": "forgero:materials/roles/tool_material"
       }
     }
   },
   "upgrades": [
     {
       "id": "forgero:spade_head-reinforcement",
-      "type": "forgero:upgrade_material",
-      "tags": ["forgero:reinforcement"],
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/reinforcement"],
       "description": "slot.forgero.reinforcement"
     }
   ],

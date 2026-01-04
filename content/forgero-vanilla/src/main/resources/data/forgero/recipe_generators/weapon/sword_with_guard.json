@@ -6,7 +6,7 @@
       "type": "TOOL_MATERIAL"
     }
   },
-  "type": "forgero:schematic_part_crafting",
+  "type": "forgero:shaped_recipe",
   "pattern": [
     "  a",
     " b ",
@@ -14,17 +14,26 @@
   ],
   "key": {
     "a": {
-      "tag": "forgero:${material.name}-sword_blade"
+      "tag": "forgero:parts/types/sword_blade"
     },
     "b": {
       "tag": "forgero:sword_guard"
     },
     "c": {
-      "tag": "forgero:handle"
+      "tag": "forgero:parts/categories/handle"
     }
   },
   "result": {
     "item": "forgero:${material.name}-sword",
-    "count": 1
+    "structure": {
+      "forgero:blade": "a",
+      "forgero:handle": "c"
+    },
+    "upgrades": [
+      {
+        "slot": "forgero:sword-guard",
+        "component": "b"
+      }
+    ]
   }
 }

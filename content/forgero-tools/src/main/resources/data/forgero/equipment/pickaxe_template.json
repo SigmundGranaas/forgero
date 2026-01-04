@@ -25,7 +25,7 @@
   "upgrades": [
     {
       "id": "binding_slot",
-      "type": "forgero:binding",
+      "type": "forgero:materials/types/binding",
       "tags": ["forgero:binding_type"]
     }
   ]

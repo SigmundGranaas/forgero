@@ -19,8 +19,16 @@
         "renderer": { "type": "forgero:component" }
       },
       {
-        "id": "rapier-binding",
+        "id": "rapier-guard",
         "order": 15,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "sword_guard"
+        }
+      },
+      {
+        "id": "rapier-binding",
+        "order": 12,
         "renderer": {
           "type": "forgero:component",
           "context": "tool_binding"

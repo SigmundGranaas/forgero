@@ -13,8 +13,8 @@
     "id": "forgero:{material.name}-kunai_blade",
     "slots": {
       "material": {
-        "type": "forgero:tool_material",
-        "default_tag": "forgero:tool_material"
+        "type": "forgero:materials/roles/tool_material",
+        "default_tag": "forgero:materials/roles/tool_material"
       }
     }
   },

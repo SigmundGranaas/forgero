@@ -95,6 +95,16 @@ public record ResourceData(
 			List<AttributeData> mergedAttributes,
 			Map<String, JsonElement> mergedProperties
 	) {
+		return withMergedExtension(mergedTags, mergedAttributes, mergedProperties, upgrades);
+	}
+
+	@Override
+	public DefinitionData withMergedExtension(
+			List<OpenIdentifier> mergedTags,
+			List<AttributeData> mergedAttributes,
+			Map<String, JsonElement> mergedProperties,
+			List<UpgradeSlotData> mergedUpgrades
+	) {
 		return new ResourceData(
 				type,
 				name,
@@ -105,7 +115,7 @@ public record ResourceData(
 				mergedAttributes,
 				localAttributes,
 				mergedProperties,
-				upgrades,
+				mergedUpgrades,
 				target
 		);
 	}

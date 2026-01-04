@@ -40,6 +40,7 @@ import com.sigmundgranaas.forgero.fabric.initialization.registrar.TreasureLootRe
 import com.sigmundgranaas.forgero.fabric.registry.RecipeRegistry;
 import com.sigmundgranaas.forgero.fabric.resources.ForgeroResourceGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.AllPartToAllSchematicsGenerator;
+import com.sigmundgranaas.forgero.fabric.resources.dynamic.ForgeroTagGraphToMinecraftTagGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.MaterialPartTagGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartToSchematicGenerator;
 import com.sigmundgranaas.forgero.fabric.resources.dynamic.PartTypeTagGenerator;
@@ -282,6 +283,10 @@ public class ForgeroPostInit implements ForgeroInitializedEntryPoint {
 		ForgeroResourceGenerator.register(() -> new MaterialPartTagGenerator(service));
 		ForgeroResourceGenerator.register(() -> new SchematicPartTagGenerator(service));
 		ForgeroResourceGenerator.register(() -> new PartTypeTagGenerator(service));
+
+		// Register TagGraph generator via ForgeroInitializedCallback (runs after TagResolver is available)
+		ForgeroTagGraphToMinecraftTagGenerator.register(service);
+
 		ForgeroResourceGenerator.generate(service);
 	}
 }

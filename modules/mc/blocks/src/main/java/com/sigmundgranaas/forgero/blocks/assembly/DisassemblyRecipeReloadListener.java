@@ -28,7 +28,7 @@ public class DisassemblyRecipeReloadListener implements SimpleSynchronousResourc
 			int count = DisassemblyRecipeLoader.getRecipes().size();
 			LOGGER.info("Loaded {} disassembly recipe(s)", count);
 		} catch (Exception e) {
-			LOGGER.error("Failed to reload disassembly recipes", e);
+			LOGGER.error("Failed to reload disassembly recipes - Forgero's upgrade station may not function correctly", e);
 		}
 	}
 

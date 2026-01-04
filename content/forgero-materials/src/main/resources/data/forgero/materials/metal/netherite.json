@@ -2,9 +2,10 @@
   "type": "forgero:material",
   "name": "Netherite",
   "tags": [
-    "forgero:metal",
-    "forgero:tool_material",
-    "forgero:tip_reinforcement"
+    "forgero:materials/types/metal",
+    "forgero:materials/roles/tool_material",
+    "forgero:materials/roles/armor_material",
+    "forgero:upgrades/types/tip_reinforcement"
   ],
   "host": {
     "identifiers": [
@@ -96,7 +97,7 @@
       "context": "forgero:part-composite",
       "condition": {
         "type": "forgero:in_slot_type",
-        "slot_type": "forgero:armor_material"
+        "slot_type": "forgero:materials/roles/armor_material"
       }
     }
   ]

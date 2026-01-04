@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:blocks/categories"
+  ],
+  "description": "Blocks vein mining dirt"
+}

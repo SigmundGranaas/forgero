@@ -12,7 +12,7 @@
   "structure": {
     "id": "forgero:{material.name}-{shape.name}_lining",
     "slots": {
-      "material": { "type": "forgero:armor_lining_material" },
+      "material": { "type": "forgero:materials/roles/armor_lining_material" },
       "shape": { "type": "forgero:armor_lining_shape" }
     }
   }

@@ -2,7 +2,8 @@
   "type": "forgero:material",
   "name": "Jungle",
   "tags": [
-    "forgero:wood"
+    "forgero:materials/types/wood",
+    "forgero:materials/roles/tool_material"
   ],
   "host": {
     "identifiers": [
@@ -94,7 +95,7 @@
       "context": "forgero:part-composite",
       "condition": {
         "type": "forgero:in_slot_type",
-        "slot_type": "forgero:armor_material"
+        "slot_type": "forgero:materials/roles/armor_material"
       }
     }
   ]

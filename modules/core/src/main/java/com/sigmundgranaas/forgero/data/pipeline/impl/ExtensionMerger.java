@@ -8,6 +8,7 @@ import com.sigmundgranaas.forgero.data.loading.api.RawDefinition;
 import com.sigmundgranaas.forgero.data.loading.api.data.DefinitionData;
 import com.sigmundgranaas.forgero.data.loading.api.data.ExtensionData;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
+import com.sigmundgranaas.forgero.data.loading.api.data.template.UpgradeSlotData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
  *   <li><strong>Tags:</strong> Union (all tags combined)</li>
  *   <li><strong>Attributes:</strong> Concatenate (extension attributes appended)</li>
  *   <li><strong>Properties:</strong> Deep merge (objects merged recursively, arrays concatenated)</li>
+ *   <li><strong>Upgrades:</strong> Concatenate with override (duplicate IDs: extension wins with warning)</li>
  * </ul>
  */
 public class ExtensionMerger {
@@ -100,8 +102,7 @@ public class ExtensionMerger {
 	 * Merges an extension's data into a target definition using polymorphic dispatch.
 	 *
 	 * <p>Uses the {@link DefinitionData#withMergedExtension} method to create a new
-	 * definition with merged tags, attributes, and properties. Types that don't support
-	 * extension merging (like templates) return themselves unchanged.</p>
+	 * definition with merged tags, attributes, properties, and upgrade slots.</p>
 	 *
 	 * @param target    The target definition data
 	 * @param extension The extension to merge
@@ -111,8 +112,9 @@ public class ExtensionMerger {
 		List<OpenIdentifier> mergedTags = mergeTags(target.tags(), extension.tags());
 		List<AttributeData> mergedAttributes = mergeAttributes(target.attributes(), extension.attributes());
 		Map<String, JsonElement> mergedProperties = mergeProperties(target.properties(), extension.properties());
+		List<UpgradeSlotData> mergedUpgrades = mergeUpgrades(target.upgrades(), extension.upgrades());
 
-		return target.withMergedExtension(mergedTags, mergedAttributes, mergedProperties);
+		return target.withMergedExtension(mergedTags, mergedAttributes, mergedProperties, mergedUpgrades);
 	}
 
 	/**
@@ -145,6 +147,35 @@ public class ExtensionMerger {
 		List<AttributeData> merged = new ArrayList<>(target);
 		merged.addAll(extension);
 		return merged;
+	}
+
+	/**
+	 * Merges upgrade slots by concatenation.
+	 * Duplicate IDs: extension slot wins with warning.
+	 */
+	private List<UpgradeSlotData> mergeUpgrades(List<UpgradeSlotData> target, List<UpgradeSlotData> extension) {
+		if (extension == null || extension.isEmpty()) {
+			return target;
+		}
+		if (target == null || target.isEmpty()) {
+			return extension;
+		}
+
+		// Build map of existing slots by ID
+		Map<OpenIdentifier, UpgradeSlotData> slotMap = new LinkedHashMap<>();
+		for (UpgradeSlotData slot : target) {
+			slotMap.put(slot.id(), slot);
+		}
+
+		// Extension slots override with warning
+		for (UpgradeSlotData slot : extension) {
+			if (slotMap.containsKey(slot.id())) {
+				LOGGER.warn("Extension overriding upgrade slot ID '{}' in target", slot.id());
+			}
+			slotMap.put(slot.id(), slot);
+		}
+
+		return new ArrayList<>(slotMap.values());
 	}
 
 	/**

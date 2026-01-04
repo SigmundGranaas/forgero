@@ -1,0 +1,207 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://forgero.sigmundgranaas.com/schemas/model.json",
+  "title": "Forgero Model",
+  "description": "Model definition for item rendering with layers, slots, and mount points",
+  "type": "object",
+  "required": ["type"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Optional model identifier"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["forgero:texture_model", "forgero:composite_model", "forgero:contextual_model"],
+      "description": "Model type identifier"
+    },
+    "parent": {
+      "type": "string",
+      "description": "Parent model to inherit from"
+    },
+    "target": {
+      "type": "string",
+      "description": "Target component (for contextual models)"
+    },
+    "context": {
+      "type": "string",
+      "description": "Context identifier (for contextual models)"
+    },
+    "texture": {
+      "type": "string",
+      "description": "Single texture path (for texture_model)"
+    },
+    "layers": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/layer" },
+      "description": "Texture layers for composite models"
+    },
+    "slots": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/slot" },
+      "description": "Child component slots"
+    },
+    "mount_points": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/mountPoint" },
+      "description": "Named positions for component attachment"
+    },
+    "display": {
+      "type": "object",
+      "description": "Minecraft display transforms",
+      "additionalProperties": true
+    }
+  },
+  "definitions": {
+    "layer": {
+      "type": "object",
+      "description": "A texture layer in a composite model",
+      "required": ["order"],
+      "properties": {
+        "order": {
+          "type": "integer",
+          "description": "Render order (lower = rendered first/bottom)"
+        },
+        "textures": {
+          "$ref": "#/definitions/textures",
+          "description": "Texture configuration"
+        },
+        "template": {
+          "type": "string",
+          "description": "Texture template path (for generation)"
+        },
+        "palette": {
+          "type": "string",
+          "description": "Palette path (for generation)"
+        },
+        "output": {
+          "type": "string",
+          "description": "Output texture path (for generation)"
+        },
+        "offset": {
+          "type": "array",
+          "items": { "type": "integer" },
+          "minItems": 2,
+          "maxItems": 2,
+          "description": "Pixel offset [x, y]"
+        }
+      }
+    },
+    "textures": {
+      "type": "object",
+      "description": "Texture configuration with optional variants",
+      "required": ["default"],
+      "properties": {
+        "default": {
+          "type": "string",
+          "description": "Default texture path"
+        },
+        "variants": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/variant" },
+          "description": "Conditional texture variants"
+        }
+      }
+    },
+    "variant": {
+      "type": "object",
+      "description": "A conditional texture variant",
+      "required": ["predicate"],
+      "properties": {
+        "predicate": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/predicate" },
+          "description": "Conditions that must all match (AND logic)"
+        },
+        "texture": {
+          "type": "string",
+          "description": "Texture to use when predicate matches"
+        },
+        "model": {
+          "type": "string",
+          "description": "Model to use when predicate matches"
+        },
+        "offset": {
+          "type": "array",
+          "items": { "type": "integer" },
+          "minItems": 2,
+          "maxItems": 2
+        }
+      }
+    },
+    "predicate": {
+      "type": "object",
+      "description": "A condition for texture/model selection",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "forgero:root_tag",
+            "forgero:child_tag",
+            "forgero:bow_pulling",
+            "forgero:bow_pull"
+          ]
+        },
+        "tag": { "type": "string" },
+        "pulling": { "type": "boolean" },
+        "pull": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "slot": {
+      "type": "object",
+      "description": "A slot for child component rendering",
+      "required": ["id", "order", "renderer"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Slot identifier (matches component part ID)"
+        },
+        "order": {
+          "type": "integer",
+          "description": "Render order"
+        },
+        "renderer": {
+          "$ref": "#/definitions/renderer"
+        },
+        "mount": {
+          "type": "string",
+          "description": "Parent mount point name"
+        },
+        "child_mount": {
+          "type": "string",
+          "description": "Child mount point name"
+        }
+      }
+    },
+    "renderer": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["forgero:component", "forgero:default"]
+        },
+        "context": { "type": "string" }
+      }
+    },
+    "mountPoint": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "position": {
+          "type": "array",
+          "items": { "type": "integer" },
+          "minItems": 2,
+          "maxItems": 2,
+          "default": [0, 0]
+        }
+      }
+    }
+  }
+}

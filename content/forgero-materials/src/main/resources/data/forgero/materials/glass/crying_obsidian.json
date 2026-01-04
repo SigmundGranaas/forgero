@@ -2,7 +2,7 @@
   "type": "forgero:material",
   "name": "Crying Obsidian",
   "tags": [
-    "forgero:glass"
+    "forgero:materials/types/glass"
   ],
   "host": {
     "identifiers": [

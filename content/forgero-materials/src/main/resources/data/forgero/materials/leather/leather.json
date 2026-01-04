@@ -2,12 +2,12 @@
   "type": "forgero:material",
   "name": "Leather",
   "tags": [
-    "forgero:armor_lining_material",
-    "forgero:leather",
-    "forgero:soft",
-    "forgero:upgrade_material",
-    "forgero:upgrade_material",
-    "forgero:binding"
+    "forgero:materials/roles/armor_lining_material",
+    "forgero:materials/types/leather",
+    "forgero:materials/properties/soft",
+    "forgero:materials/roles/upgrade_material",
+    "forgero:materials/roles/upgrade_material",
+    "forgero:materials/types/binding"
   ],
   "host": {
     "identifiers": [
@@ -35,7 +35,7 @@
       "context": "forgero:part-composite",
       "condition": {
         "type": "forgero:in_slot_type",
-        "slot_type": "forgero:armor_material"
+        "slot_type": "forgero:materials/roles/armor_material"
       }
     },
     {
@@ -47,7 +47,7 @@
       "context": "forgero:part-composite",
       "condition": {
         "type": "forgero:in_slot_type",
-        "slot_type": "forgero:armor_material"
+        "slot_type": "forgero:materials/roles/armor_material"
       }
     },
     {

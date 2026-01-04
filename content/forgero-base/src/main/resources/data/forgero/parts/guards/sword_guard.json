@@ -13,16 +13,17 @@
     "id": "forgero:{material.name}-sword_guard",
     "slots": {
       "material": {
-        "type": "forgero:tool_material",
-        "default_tag": "forgero:tool_material"
+        "type": "forgero:materials/roles/tool_material",
+        "default_tag": "forgero:materials/roles/tool_material"
       }
     }
   },
   "attributes": [
     {
-      "id": "forgero:sword_guard-durability",
+      "id": "forgero:sword_guard-durability-mult",
       "type": "forgero:durability",
-      "computation": {"value": 0.1, "operation": "multiply"}
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 0.1}
     },
     {
       "id": "forgero:sword_guard-rarity",

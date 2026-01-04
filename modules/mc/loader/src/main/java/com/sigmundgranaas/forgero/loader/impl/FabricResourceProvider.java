@@ -1,6 +1,10 @@
 package com.sigmundgranaas.forgero.loader.impl;
 
+import static com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceConstants.*;
+
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceFilter;
+import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourcePath;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceProvider;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
@@ -11,7 +15,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -21,27 +27,41 @@ import java.util.stream.Stream;
  * <p>
  * This provider uses Fabric's ModContainer API to properly access resources
  * from nested JARs and development classpath entries.
+ * <p>
+ * Supports the unified resource loading architecture with configurable filtering
+ * and priority-based composition.
  */
 public class FabricResourceProvider implements ResourceProvider {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FabricResourceProvider.class);
-	private static final String FORGERO_RESOURCE_KEY = "forgeroResource";
 
 	private final String topLevelDirectory;
 	private final List<ModContainer> forgeroResourceMods;
+	private final int providerPriority;
 
 	/**
-	 * Creates a new FabricResourceProvider.
+	 * Creates a new FabricResourceProvider with specified priority.
 	 *
 	 * @param topLevelDirectory The root directory within mod resources (e.g., "data").
+	 * @param priority          The provider priority for composite ordering.
 	 */
-	public FabricResourceProvider(String topLevelDirectory) {
+	public FabricResourceProvider(String topLevelDirectory, int priority) {
 		this.topLevelDirectory = topLevelDirectory.replaceAll("^/|/$", "");
+		this.providerPriority = priority;
 		this.forgeroResourceMods = discoverForgeroResourceMods();
 		LOGGER.info("FabricResourceProvider initialized with {} Forgero resource mods: {}",
 				forgeroResourceMods.size(),
 				forgeroResourceMods.stream()
 						.map(m -> m.getMetadata().getId())
 						.collect(Collectors.joining(", ")));
+	}
+
+	/**
+	 * Creates a new FabricResourceProvider with default priority.
+	 *
+	 * @param topLevelDirectory The root directory within mod resources (e.g., "data").
+	 */
+	public FabricResourceProvider(String topLevelDirectory) {
+		this(topLevelDirectory, PRIORITY_MOD);
 	}
 
 	/**
@@ -57,13 +77,13 @@ public class FabricResourceProvider implements ResourceProvider {
 	private boolean isForgeroResourceMod(ModContainer container) {
 		var metadata = container.getMetadata();
 		// Include Minecraft for vanilla data
-		if (metadata.getId().equals("minecraft")) {
+		if (metadata.getId().equals(NAMESPACE_MINECRAFT)) {
 			return true;
 		}
 		// Check for forgeroResource custom value
-		if (metadata.containsCustomValue(FORGERO_RESOURCE_KEY)) {
+		if (metadata.containsCustomValue(FABRIC_FORGERO_RESOURCE_KEY)) {
 			try {
-				return metadata.getCustomValue(FORGERO_RESOURCE_KEY).getAsBoolean();
+				return metadata.getCustomValue(FABRIC_FORGERO_RESOURCE_KEY).getAsBoolean();
 			} catch (Exception e) {
 				LOGGER.warn("Mod {} has invalid forgeroResource value", metadata.getId());
 				return false;
@@ -74,17 +94,23 @@ public class FabricResourceProvider implements ResourceProvider {
 
 	@Override
 	public Set<String> getNamespaces() {
-		return Set.of("forgero", "minecraft");
+		return DEFAULT_NAMESPACES;
+	}
+
+	@Override
+	public Stream<ResourcePath> list(ResourcePath path, boolean recursive, ResourceFilter filter) {
+		return forgeroResourceMods.stream()
+				.flatMap(mod -> listFromMod(mod, path, recursive, filter));
 	}
 
 	@Override
 	public Stream<OpenIdentifier> list(OpenIdentifier path, boolean recursive) {
-		return forgeroResourceMods.stream()
-				.flatMap(mod -> listFromMod(mod, path, recursive));
+		return list(ResourcePath.directory(path.namespace(), path.path()), recursive, ResourceFilter.JSON)
+				.map(ResourcePath::toIdentifier);
 	}
 
-	private Stream<OpenIdentifier> listFromMod(ModContainer mod, OpenIdentifier path, boolean recursive) {
-		// Build the full path: topLevelDirectory/namespace/path
+	private Stream<ResourcePath> listFromMod(ModContainer mod, ResourcePath path, boolean recursive, ResourceFilter filter) {
+		// Build the full path: topLevelDirectory/namespace/directory
 		String fullPath = buildFullPath(path);
 
 		Optional<Path> rootPath = mod.findPath(fullPath);
@@ -113,13 +139,13 @@ public class FabricResourceProvider implements ResourceProvider {
 			try (Stream<Path> walk = Files.walk(startPath, maxDepth)) {
 				return walk
 						.filter(Files::isRegularFile)
-						.filter(p -> p.toString().endsWith(".json"))
 						.map(filePath -> {
 							// Get path relative to namespace root
 							Path relativePath = namespaceBase.relativize(filePath);
 							String relativePathString = relativePath.toString().replace('\\', '/');
-							return new OpenIdentifier(path.namespace(), relativePathString);
+							return ResourcePath.fromIdentifier(new OpenIdentifier(path.namespace(), relativePathString));
 						})
+						.filter(filter)
 						.toList().stream(); // Collect to list to avoid stream closed issues
 			}
 		} catch (IOException e) {
@@ -130,8 +156,8 @@ public class FabricResourceProvider implements ResourceProvider {
 	}
 
 	@Override
-	public Optional<InputStream> read(OpenIdentifier identifier) {
-		String fullPath = topLevelDirectory + "/" + identifier.namespace() + "/" + identifier.path();
+	public Optional<InputStream> read(ResourcePath path) {
+		String fullPath = topLevelDirectory + "/" + path.namespace() + "/" + path.fullPath();
 
 		for (ModContainer mod : forgeroResourceMods) {
 			Optional<Path> resourcePath = mod.findPath(fullPath);
@@ -148,10 +174,25 @@ public class FabricResourceProvider implements ResourceProvider {
 		return Optional.empty();
 	}
 
-	private String buildFullPath(OpenIdentifier path) {
-		if (path.path().isEmpty()) {
+	@Override
+	public Optional<InputStream> read(OpenIdentifier identifier) {
+		return read(ResourcePath.fromIdentifier(identifier));
+	}
+
+	@Override
+	public int priority() {
+		return providerPriority;
+	}
+
+	@Override
+	public String name() {
+		return "FabricResourceProvider[" + topLevelDirectory + "]";
+	}
+
+	private String buildFullPath(ResourcePath path) {
+		if (path.directory().isEmpty()) {
 			return topLevelDirectory + "/" + path.namespace();
 		}
-		return topLevelDirectory + "/" + path.namespace() + "/" + path.path();
+		return topLevelDirectory + "/" + path.namespace() + "/" + path.directory();
 	}
 }

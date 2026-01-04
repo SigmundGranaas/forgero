@@ -64,6 +64,7 @@ dependencies {
     runtimeOnly(project(":content:forgero-extended"))        // Guard schematics, extended materials
     runtimeOnly(project(":content:forgero-extended-weapons")) // Extended weapon schematics
     runtimeOnly(project(":content:forgero-mining"))          // Mining tool schematics
+    runtimeOnly(project(":content:forgero-gems"))            // Gem upgrades (diamond_gem, etc.)
 
     // Fabric
     modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")

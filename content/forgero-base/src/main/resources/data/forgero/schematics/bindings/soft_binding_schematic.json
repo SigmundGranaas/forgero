@@ -72,7 +72,7 @@
       "id": "forgero:cosmetic-slot",
       "type": "forgero:dye",
       "tags": [
-        "forgero:upgrade/cosmetic"
+        "forgero:upgrades/types/cosmetic"
       ],
       "description": "slot.forgero.cosmetic"
     }

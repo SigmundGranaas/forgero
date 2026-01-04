@@ -1,0 +1,209 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://forgero.sigmundgranaas.com/schemas/part-template.json",
+  "title": "Forgero Part Template",
+  "description": "Template that defines how composite parts are assembled from materials and shapes",
+  "type": "object",
+  "required": ["type", "name"],
+  "properties": {
+    "type": {
+      "const": "forgero:part_template",
+      "description": "Type identifier for part templates"
+    },
+    "name": {
+      "type": "string",
+      "description": "Unique template name",
+      "examples": ["Pickaxe Head", "Handle", "Binding"]
+    },
+    "include": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "IDs to inherit from"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Tags for this template"
+    },
+    "local_tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Tags NOT inherited"
+    },
+    "host_template": {
+      "$ref": "#/definitions/hostTemplate",
+      "description": "Template for item creation"
+    },
+    "structure": {
+      "$ref": "#/definitions/structure",
+      "description": "Defines slot composition"
+    },
+    "upgrades": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/upgradeSlot" },
+      "description": "Upgrade slot definitions"
+    },
+    "attributes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/attribute" },
+      "description": "Attributes for generated parts"
+    },
+    "properties": {
+      "type": "object",
+      "description": "Properties for generated parts",
+      "additionalProperties": true
+    },
+    "generation": {
+      "$ref": "#/definitions/generation",
+      "description": "Controls which combinations generate"
+    }
+  },
+  "definitions": {
+    "hostTemplate": {
+      "type": "object",
+      "properties": {
+        "identifiers": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/hostIdentifier" }
+        },
+        "create": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "ID template with placeholders"
+            },
+            "class_name": {
+              "type": "string",
+              "description": "Item class to use"
+            },
+            "item_group": {
+              "type": "string",
+              "description": "Creative tab group"
+            }
+          }
+        }
+      }
+    },
+    "hostIdentifier": {
+      "type": "object",
+      "required": ["type", "id"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["item", "tag"]
+        },
+        "id": { "type": "string" }
+      }
+    },
+    "structure": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID template for generated parts"
+        },
+        "slots": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/definitions/structureSlot" },
+          "description": "Map of slot_name -> slot definition"
+        }
+      }
+    },
+    "structureSlot": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Slot type tag (required)"
+        },
+        "default_tag": {
+          "type": "string",
+          "description": "Tag identifying default parts pool"
+        },
+        "default": {
+          "type": "string",
+          "description": "Specific default part ID"
+        },
+        "count": {
+          "type": "integer",
+          "description": "Amount needed"
+        },
+        "description": {
+          "type": "string",
+          "description": "Translatable description key"
+        }
+      }
+    },
+    "upgradeSlot": {
+      "type": "object",
+      "required": ["id", "type"],
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string" },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "tier": { "type": "integer" },
+        "description": { "type": "string" }
+      }
+    },
+    "attribute": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string" },
+        "computation": {
+          "oneOf": [
+            { "type": "number" },
+            { "type": "object" }
+          ]
+        },
+        "condition": { "type": "object" },
+        "context": { "type": "string" }
+      }
+    },
+    "generation": {
+      "type": "object",
+      "properties": {
+        "slots": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/definitions/generationFilter" },
+          "description": "Filters for each slot"
+        }
+      }
+    },
+    "generationFilter": {
+      "type": "object",
+      "properties": {
+        "require_all_tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "All tags must be present"
+        },
+        "require_any_tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "At least one tag must be present"
+        },
+        "exclude_any_tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "None of these tags can be present"
+        },
+        "exclude_all_tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Can't have all of these tags"
+        },
+        "explicit_list": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Only these IDs are allowed"
+        }
+      }
+    }
+  }
+}

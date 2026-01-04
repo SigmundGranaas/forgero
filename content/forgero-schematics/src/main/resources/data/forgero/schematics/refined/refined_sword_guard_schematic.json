@@ -2,7 +2,7 @@
   "type": "forgero:schematic",
   "name": "Refined Sword Guard",
   "tags": [
-    "forgero:guard",
+    "forgero:upgrades/types/guard",
     "forgero:schematics/refined"
   ],
   "attributes": [
@@ -50,7 +50,7 @@
       "id": "forgero:refined-cosmetic-slot",
       "type": "forgero:dye",
       "tags": [
-        "forgero:upgrade/cosmetic"
+        "forgero:upgrades/types/cosmetic"
       ],
       "description": "slot.forgero.cosmetic"
     }

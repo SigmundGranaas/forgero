@@ -1,0 +1,169 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://forgero.sigmundgranaas.com/schemas/extension.json",
+  "title": "Forgero Data Extension",
+  "description": "Extension that adds properties to existing data definitions without modifying original files",
+  "type": "object",
+  "required": ["type", "target"],
+  "properties": {
+    "type": {
+      "const": "forgero:extension",
+      "description": "Type identifier for data extensions"
+    },
+    "target": {
+      "type": "string",
+      "description": "ID of the definition to extend (e.g., 'forgero:materials/iron')",
+      "pattern": "^[a-z_-]+:[a-z_/-]+$",
+      "examples": ["forgero:materials/iron", "forgero:parts/pickaxe_head"]
+    },
+    "priority": {
+      "type": "integer",
+      "default": 0,
+      "description": "Merge priority - lower values are applied first"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Tags to add to the target definition"
+    },
+    "attributes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/attribute" },
+      "description": "Attributes to add to the target definition"
+    },
+    "properties": {
+      "type": "object",
+      "description": "Properties to merge into the target definition",
+      "additionalProperties": true
+    },
+    "upgrades": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/upgradeSlot" },
+      "description": "Upgrade slots to add or override (by ID)"
+    }
+  },
+  "definitions": {
+    "attribute": {
+      "type": "object",
+      "description": "An attribute definition with type, value, and optional conditions",
+      "required": ["type"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for this attribute"
+        },
+        "type": {
+          "type": "string",
+          "description": "Attribute type identifier",
+          "enum": [
+            "forgero:durability",
+            "forgero:attack_damage",
+            "forgero:attack_speed",
+            "forgero:mining_speed",
+            "forgero:mining_level",
+            "forgero:armor",
+            "forgero:armor_toughness",
+            "forgero:rarity",
+            "forgero:weight",
+            "forgero:draw_speed",
+            "forgero:draw_power"
+          ]
+        },
+        "computation": {
+          "oneOf": [
+            { "type": "number" },
+            {
+              "type": "object",
+              "properties": {
+                "add": { "type": "number" },
+                "subtract": { "type": "number" },
+                "multiply": { "type": "number" },
+                "divide": { "type": "number" },
+                "value": { "type": "number" },
+                "operator": { "type": "string" },
+                "order": { "type": "string" }
+              }
+            }
+          ],
+          "description": "The value and operation for this attribute"
+        },
+        "condition": {
+          "$ref": "#/definitions/condition",
+          "description": "Condition for when this attribute applies"
+        },
+        "context": {
+          "type": "string",
+          "description": "Context for attribute application",
+          "enum": ["forgero:part-composite", "forgero:local", "forgero:upgrade"]
+        }
+      }
+    },
+    "upgradeSlot": {
+      "type": "object",
+      "description": "An upgrade slot definition",
+      "required": ["id", "type"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for this slot"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of component that fits in this slot"
+        },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Tags that upgrade must have to fit"
+        },
+        "tier": {
+          "type": "integer",
+          "description": "Tier requirement for this slot"
+        },
+        "description": {
+          "type": "string",
+          "description": "Translatable description key"
+        }
+      }
+    },
+    "condition": {
+      "type": "object",
+      "description": "A condition that determines when something applies",
+      "properties": {
+        "static": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/staticCondition" },
+          "description": "Static conditions based on component structure"
+        },
+        "type": {
+          "type": "string",
+          "description": "Dynamic condition type"
+        }
+      }
+    },
+    "staticCondition": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "forgero:in_slot_type",
+            "forgero:is_root",
+            "forgero:at_depth",
+            "forgero:self_has_tag",
+            "forgero:root_has_tag",
+            "forgero:has_sibling",
+            "forgero:slot_contains",
+            "forgero:id_match"
+          ]
+        },
+        "slot_type": { "type": "string" },
+        "depth": { "type": "integer" },
+        "tag": { "type": "string" },
+        "sibling_id": { "type": "string" },
+        "id": { "type": "string" }
+      }
+    }
+  }
+}

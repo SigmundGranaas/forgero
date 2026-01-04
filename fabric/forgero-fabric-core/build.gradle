@@ -9,6 +9,10 @@ dependencies {
 	// Fabric generator module
 	api(project(path: ":fabric:modules:generator", configuration: 'namedElements'))
 
+	// Forgero modules - needed for ForgeroApi, TagResolver, etc.
+	api(project(path: ":modules:mc:loader", configuration: 'namedElements'))
+	api(project(":modules:core"))
+
 	// Bow and arrows
 	// Arrows and bow tests are still in the core fabric module. This dependency is needed until they are moved to their own module.
 	// Ref: https://github.com/SigmundGranaas/forgero/issues/933

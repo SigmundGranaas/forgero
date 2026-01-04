@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:parts/defaults"
+  ],
+  "description": "Parts default armor plate"
+}

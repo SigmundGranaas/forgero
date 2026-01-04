@@ -3,7 +3,7 @@
   "name": "spear",
   "tags": [
     "forgero:weapons/spear",
-    "forgero:tool"
+    "forgero:tools"
   ],
   "host_template": {
     "class": "forgero:sword_item",
@@ -17,7 +17,7 @@
         "default_tag": "forgero:parts/spear_head"
       },
       "handle": {
-        "type": "forgero:handle",
+        "type": "forgero:parts/categories/handle",
         "default": "forgero:wooden_handle"
       }
     }
@@ -25,8 +25,8 @@
   "upgrades": [
     {
       "id": "forgero:spear-binding",
-      "type": "forgero:upgrade_material",
-      "tags": ["forgero:binding"],
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:materials/types/binding"],
       "description": "slot.forgero.binding"
     }
   ],

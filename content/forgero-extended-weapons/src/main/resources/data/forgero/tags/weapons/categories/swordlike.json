@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:weapons/categories"
+  ],
+  "description": "Sword-like weapons (swords, daggers, katanas)"
+}

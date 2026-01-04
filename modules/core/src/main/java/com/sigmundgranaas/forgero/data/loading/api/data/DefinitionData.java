@@ -6,6 +6,7 @@ import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.HostData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.EquipmentTemplateData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.PartTemplateData;
+import com.sigmundgranaas.forgero.data.loading.api.data.template.UpgradeSlotData;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -109,6 +110,17 @@ public interface DefinitionData {
 	}
 
 	/**
+	 * Upgrade slots associated with this definition.
+	 *
+	 * <p>Applicable to templates and static parts.
+	 * Resources without upgrade slots return null by default.</p>
+	 */
+	@Nullable
+	default List<UpgradeSlotData> upgrades() {
+		return null;
+	}
+
+	/**
 	 * Creates a copy of this definition with merged extension fields.
 	 *
 	 * <p>This method is used by the extension merging process to apply
@@ -129,5 +141,27 @@ public interface DefinitionData {
 			Map<String, JsonElement> mergedProperties
 	) {
 		return this;
+	}
+
+	/**
+	 * Creates a copy of this definition with merged extension fields including upgrade slots.
+	 *
+	 * <p>This overload supports template types that have upgrade slots.
+	 * The default implementation delegates to the 3-parameter version,
+	 * ignoring upgrade slots for types that don't support them.</p>
+	 *
+	 * @param mergedTags       The combined tags after merging
+	 * @param mergedAttributes The combined attributes after merging
+	 * @param mergedProperties The combined properties after merging
+	 * @param mergedUpgrades   The combined upgrade slots after merging
+	 * @return A new definition with merged fields, or {@code this} if merging is not supported
+	 */
+	default DefinitionData withMergedExtension(
+			List<OpenIdentifier> mergedTags,
+			List<AttributeData> mergedAttributes,
+			Map<String, JsonElement> mergedProperties,
+			List<UpgradeSlotData> mergedUpgrades
+	) {
+		return withMergedExtension(mergedTags, mergedAttributes, mergedProperties);
 	}
 }

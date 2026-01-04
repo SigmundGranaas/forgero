@@ -2,7 +2,7 @@
   "type": "forgero:schematic",
   "name": "Swept Sword Guard",
   "tags": [
-    "forgero:guard",
+    "forgero:upgrades/types/guard",
     "forgero:schematics/extended"
   ],
   "attributes": [

@@ -2,7 +2,7 @@
   "type": "forgero:material",
   "name": "Blaze Powder",
   "tags": [
-    "forgero:cosmetic"
+    "forgero:upgrades/types/cosmetic"
   ],
   "host": {
     "identifiers": [

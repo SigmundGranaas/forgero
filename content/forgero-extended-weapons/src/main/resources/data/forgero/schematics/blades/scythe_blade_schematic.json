@@ -15,14 +15,14 @@
   "upgrades": [
     {
       "id": "forgero:scythe-reinforcement-slot",
-      "type": "forgero:upgrade_material",
-      "tags": ["forgero:reinforcement"],
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/reinforcement"],
       "description": "slot.forgero.reinforcement"
     },
     {
       "id": "forgero:scythe-cosmetic-slot",
       "type": "forgero:dye",
-      "tags": ["forgero:upgrade/cosmetic"],
+      "tags": ["forgero:upgrades/types/cosmetic"],
       "description": "slot.forgero.cosmetic"
     }
   ]

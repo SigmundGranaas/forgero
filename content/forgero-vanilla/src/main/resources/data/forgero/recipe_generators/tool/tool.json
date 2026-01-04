@@ -1,6 +1,6 @@
 {
   "generator_type": "forgero:mapped_recipe_generator",
-  "identifier": "forgero:${material.name}-${tool}_head-handle",
+  "identifier": "forgero:${material.name}-${tool}_head-${handle_material.name}-handle",
   "variables": {
     "material": {
       "type": "TOOL_MATERIAL"
@@ -10,23 +10,29 @@
       "pickaxe",
       "shovel",
       "hoe"
-    ]
+    ],
+    "handle_material": {
+      "type": "TOOL_MATERIAL"
+    }
   },
-  "type": "forgero:schematic_part_crafting",
+  "type": "forgero:shaped_recipe",
   "pattern": [
-    " a",
-    "b "
+    "a",
+    "b"
   ],
   "key": {
     "a": {
-      "tag": "forgero:${material.name}-${tool}_head"
+      "item": "forgero:${material.name}-${tool}_head"
     },
     "b": {
-      "tag": "forgero:handle"
+      "item": "forgero:${handle_material.name}-handle"
     }
   },
   "result": {
     "item": "forgero:${material.name}-${tool}",
-    "count": 1
+    "structure": {
+      "forgero:head": "a",
+      "forgero:handle": "b"
+    }
   }
 }

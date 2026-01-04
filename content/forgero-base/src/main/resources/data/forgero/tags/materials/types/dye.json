@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:materials/types"
+  ],
+  "description": "Dye materials for cosmetic upgrades"
+}

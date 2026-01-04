@@ -2,8 +2,8 @@
   "type": "forgero:material",
   "name": "Scute",
   "tags": [
-    "forgero:hard",
-    "forgero:reinforcement"
+    "forgero:materials/properties/hard",
+    "forgero:upgrades/types/reinforcement"
   ],
   "host": {
     "identifiers": [

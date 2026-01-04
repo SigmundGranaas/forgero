@@ -441,9 +441,20 @@ Equipment templates define complete tools/armor from parts. Type: `forgero:equip
 
 ## Extensions
 
-Extensions add properties to existing definitions without modifying them. Type: `forgero:extension`
+Extensions add properties to existing definitions without modifying the original files. Forgero supports two extension systems: **Data Extensions** for component behavior and **Model Extensions** for visual representation.
 
-### Extension Structure
+### Extension Priority System
+
+All extensions are applied in priority order (lowest first). When multiple extensions target the same definition:
+- Priority 0 is applied first
+- Priority 100 is applied last
+- Negative priorities are supported
+
+### Data Extensions
+
+Data extensions modify component data (materials, templates, etc.). Type: `forgero:extension`
+
+#### Data Extension Structure
 
 ```json
 {
@@ -467,25 +478,146 @@ Extensions add properties to existing definitions without modifying them. Type: 
         ]
       }
     ]
-  }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:custom-slot",
+      "type": "forgero:upgrade_material",
+      "tags": ["forgero:materials/gem"],
+      "tier": 1
+    }
+  ]
 }
 ```
 
-### Extension Fields
+#### Data Extension Fields
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `target` | string | ID of definition to extend (required) |
-| `priority` | int | Merge order (lower applied first, default: 0) |
-| `tags` | array | Tags to add to target |
-| `attributes` | array | Attributes to add to target |
-| `properties` | object | Properties to merge into target |
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `type` | string | Yes | - | Always `"forgero:extension"` |
+| `target` | string | Yes | - | ID of definition to extend |
+| `priority` | int | No | 0 | Merge order (lower applied first) |
+| `tags` | array | No | - | Tags to add to target |
+| `attributes` | array | No | - | Attributes to add to target |
+| `properties` | object | No | - | Properties to merge into target |
+| `upgrades` | array | No | - | Upgrade slots to add/override |
 
-### Merge Semantics
+### Model Extensions
 
-- **Tags**: Union (appended)
-- **Attributes**: Concatenation (appended)
-- **Properties**: Deep merge (objects merged, arrays concatenated)
+Model extensions add visual elements (layers, slots, mount points) to existing models. Type: `forgero:model_extension`
+
+**File Location**: `assets/<namespace>/forgero_models/` or `assets/<namespace>/model_templates/`
+
+#### Model Extension Structure
+
+```json
+{
+  "type": "forgero:model_extension",
+  "target": "forgero:parts/iron-pickaxe_head",
+  "priority": 100,
+  "layers": [
+    {
+      "order": 50,
+      "textures": {
+        "default": "forgero:item/overlays/dye_overlay"
+      }
+    }
+  ],
+  "slots": [
+    {
+      "id": "dye_slot",
+      "order": 5,
+      "renderer": { "type": "forgero:component" }
+    }
+  ],
+  "mount_points": [
+    {
+      "name": "charm_mount",
+      "position": [8, 2]
+    }
+  ]
+}
+```
+
+#### Model Extension Fields
+
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `type` | string | Yes | - | Always `"forgero:model_extension"` |
+| `target` | string | Yes | - | Model ID to extend |
+| `priority` | int | No | 0 | Merge order (lower applied first) |
+| `layers` | array | No | - | Layers to add (appended after target layers) |
+| `slots` | array | No | - | Slots to add (by ID, extension wins) |
+| `mount_points` | array | No | - | Mount points to add (by name, extension wins) |
+
+#### Model Extension Example: Adding Dye Overlay
+
+Add a dye overlay layer to all iron pickaxe heads:
+
+```json
+{
+  "type": "forgero:model_extension",
+  "target": "forgero:parts/iron-pickaxe_head",
+  "priority": 100,
+  "layers": [
+    {
+      "order": 50,
+      "textures": {
+        "default": "forgero:item/overlays/dye_overlay",
+        "variants": [
+          {
+            "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:dyed" }],
+            "texture": "forgero:item/overlays/dye_overlay_active"
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+#### Model Extension Example: Adding Slot
+
+Add a custom slot to equipment models:
+
+```json
+{
+  "type": "forgero:model_extension",
+  "target": "forgero:equipment/iron-pickaxe",
+  "slots": [
+    {
+      "id": "charm",
+      "order": 40,
+      "renderer": { "type": "forgero:component" },
+      "mount": "charm_mount"
+    }
+  ]
+}
+```
+
+### Merge Semantics Comparison
+
+| System | Field | Strategy |
+|--------|-------|----------|
+| **Data** | `tags` | Union (extension tags added) |
+| **Data** | `attributes` | Concatenate (appended) |
+| **Data** | `properties` | Deep merge (objects merged, arrays concatenated) |
+| **Data** | `upgrades` | By ID: extension wins |
+| **Model** | `layers` | Concatenate (appended after target layers) |
+| **Model** | `slots` | By ID: extension wins (warning logged) |
+| **Model** | `mount_points` | By name: extension wins (warning logged) |
+
+### Extension Use Cases
+
+**Data Extensions**:
+- Add properties to vanilla materials without modifying original files
+- Add upgrade slots to existing templates
+- Add conditional effects to materials from other mods
+
+**Model Extensions**:
+- Add overlay textures for dye/enchantment effects
+- Add new render slots for accessories/charms
+- Override mount point positions for custom part alignment
 
 ---
 

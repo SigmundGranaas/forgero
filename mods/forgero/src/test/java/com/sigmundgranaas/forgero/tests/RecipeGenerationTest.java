@@ -9,6 +9,8 @@ import net.minecraft.recipe.RecipeManager;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.Identifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
@@ -22,6 +24,7 @@ import java.util.Optional;
  * - Injects recipes into the game via DRP
  */
 public class RecipeGenerationTest implements ForgeroGameTest {
+	private static final Logger LOGGER = LoggerFactory.getLogger(RecipeGenerationTest.class);
 
 	/**
 	 * Verifies that RecipeGenApi singleton is available and initialized.
@@ -108,7 +111,7 @@ public class RecipeGenerationTest implements ForgeroGameTest {
 		context.assertTrue(forgeroRecipeCount > 0,
 				String.format("Expected at least 1 Forgero recipe, found %d", forgeroRecipeCount));
 
-		System.out.println("✓ Found " + forgeroRecipeCount + " Forgero recipes");
+		LOGGER.debug("Forgero recipes loaded: count={}", forgeroRecipeCount);
 
 		context.complete();
 	}
@@ -137,8 +140,7 @@ public class RecipeGenerationTest implements ForgeroGameTest {
 		context.assertTrue(recipe.isPresent(),
 				"Recipe 'forgero:iron-pickaxe_head' should exist from template expansion");
 
-		System.out.println("✓ Found recipe: " + recipeId);
-		System.out.println("  Type: " + recipe.get().getType());
+		LOGGER.debug("Recipe verified: id={}, type={}", recipeId, recipe.get().getType());
 
 		context.complete();
 	}
@@ -168,7 +170,7 @@ public class RecipeGenerationTest implements ForgeroGameTest {
 		context.assertTrue(toolRecipeCount > 0,
 				String.format("Expected tool assembly recipes, found %d", toolRecipeCount));
 
-		System.out.println("✓ Found " + toolRecipeCount + " tool assembly recipes");
+		LOGGER.debug("Tool assembly recipes found: count={}", toolRecipeCount);
 
 		context.complete();
 	}
@@ -195,7 +197,7 @@ public class RecipeGenerationTest implements ForgeroGameTest {
 
 		// Variant recipes might not be loaded in all test environments
 		// So we just log the count rather than asserting > 0
-		System.out.println("✓ Found " + variantRecipeCount + " variant recipes");
+		LOGGER.debug("Variant recipes found: count={}", variantRecipeCount);
 
 		context.complete();
 	}
@@ -220,7 +222,7 @@ public class RecipeGenerationTest implements ForgeroGameTest {
 		context.assertTrue(forgeroRecipeCount >= 10,
 				String.format("Expected at least 10 Forgero recipes for testing, found %d", forgeroRecipeCount));
 
-		System.out.println("✓ Total Forgero recipes: " + forgeroRecipeCount);
+		LOGGER.debug("Total Forgero recipes: count={}", forgeroRecipeCount);
 
 		context.complete();
 	}
@@ -236,22 +238,21 @@ public class RecipeGenerationTest implements ForgeroGameTest {
 		RecipeManager recipeManager = context.getWorld().getServer().getRecipeManager();
 		var allRecipes = recipeManager.values();
 
-		System.out.println("=== FORGERO RECIPES ===");
+		LOGGER.debug("=== FORGERO RECIPES (first 50) ===");
 
 		allRecipes.stream()
 				.filter(recipe -> recipe.getId().getNamespace().equals("forgero"))
 				.sorted((a, b) -> a.getId().toString().compareTo(b.getId().toString()))
 				.limit(50)  // Limit output to first 50 for readability
 				.forEach(recipe -> {
-					System.out.println("  - " + recipe.getId() + " (type: " + recipe.getType() + ")");
+					LOGGER.debug("  Recipe: id={}, type={}", recipe.getId(), recipe.getType());
 				});
 
 		long total = allRecipes.stream()
 				.filter(recipe -> recipe.getId().getNamespace().equals("forgero"))
 				.count();
 
-		System.out.println("Total: " + total + " recipes");
-		System.out.println("======================");
+		LOGGER.debug("Total Forgero recipes: count={}", total);
 
 		context.complete();
 	}

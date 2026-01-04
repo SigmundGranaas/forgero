@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.bows.entity.DynamicArrowEntity;
+import com.sigmundgranaas.forgero.bows.item.ForgeroArrowItem;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.useinteraction.UseContext;
@@ -97,17 +98,9 @@ public record LaunchProjectileHandler(
 	 * @return true if DynamicArrowEntity should be used, false for vanilla arrow entity
 	 */
 	private boolean shouldUseDynamicArrow(ItemStack arrowStack) {
-		// Any arrow that converts to a Forgero Component is a custom arrow
-		// Custom arrows need DynamicArrowEntity for custom models and property system integration
-		if (converter == null) {
-			LOGGER.error("ComponentConverter is null in shouldUseDynamicArrow - cannot detect Forgero arrows");
-			return false;
-		}
-
-		boolean isComponent = converter.toComponent(arrowStack).isPresent();
-		LOGGER.debug("shouldUseDynamicArrow check: arrow={}, isComponent={}",
-			arrowStack.getItem().getTranslationKey(), isComponent);
-		return isComponent;
+		// Only use DynamicArrowEntity for ForgeroArrowItem instances
+		// This ensures vanilla arrows always use vanilla arrow entities
+		return arrowStack.getItem() instanceof ForgeroArrowItem;
 	}
 
 	@Override

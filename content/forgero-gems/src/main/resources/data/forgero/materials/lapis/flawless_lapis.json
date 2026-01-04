@@ -2,9 +2,9 @@
   "type": "forgero:material",
   "name": "Flawless Lapis",
   "tags": [
-    "forgero:gem",
-    "forgero:lapis",
-    "forgero:reinforcement"
+    "forgero:upgrades/types/gem",
+    "forgero:materials/types/lapis",
+    "forgero:upgrades/types/reinforcement"
   ],
   "host": {
     "identifiers": [

@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:tools/types"
+  ],
+  "description": "Tools sword"
+}

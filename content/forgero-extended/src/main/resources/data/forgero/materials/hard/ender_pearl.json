@@ -2,9 +2,10 @@
   "type": "forgero:material",
   "name": "Ender Pearl",
   "tags": [
-    "forgero:hard",
-    "forgero:magical",
-    "forgero:gem"
+    "forgero:materials/properties/hard",
+    "forgero:materials/properties/magical",
+    "forgero:materials/roles/upgrade_material",
+    "forgero:upgrades/types/gem"
   ],
   "host": {
     "identifiers": [
@@ -15,6 +16,13 @@
     ]
   },
   "attributes": [
+    {
+      "id": "forgero:ender_pearl-durability",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 105
+      }
+    },
     {
       "id": "forgero:ender_pearl-attack_damage",
       "type": "forgero:attack_damage",

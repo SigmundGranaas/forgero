@@ -5,6 +5,8 @@ import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroGameTest;
 import net.minecraft.item.ItemStack;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Tests that armor items have correct protection values and attributes.
  */
 public class ArmorAttributeTest implements ForgeroGameTest {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ArmorAttributeTest.class);
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
 	public void iron_helmet_exists_and_has_armor(TestContext context) {
@@ -20,12 +23,8 @@ public class ArmorAttributeTest implements ForgeroGameTest {
 		var query = ForgeroApi.itemQuery();
 
 		var ironHelmet = ctx.component("forgero:iron-helmet");
-		if (ironHelmet.isEmpty()) {
-			// Armor content may not be loaded - skip test gracefully
-			System.out.println("SKIPPED: Iron helmet not found - armor content may not be loaded");
-			context.complete();
-			return;
-		}
+		assertTrue(ironHelmet.isPresent(),
+				"iron-helmet component must exist - check armor content loading");
 
 		var stack = ctx.toStack(ironHelmet.get());
 		assertTrue(stack.isPresent(), "Iron helmet must convert to ItemStack");
@@ -35,7 +34,7 @@ public class ArmorAttributeTest implements ForgeroGameTest {
 
 		// Helmet should provide armor protection
 		int armor = query.getArmor(itemStack);
-		System.out.println("Iron helmet armor: " + armor);
+		LOGGER.debug("Iron helmet attributes: armor={}", armor);
 		assertTrue(armor > 0, "Iron helmet should have positive armor value, got: " + armor);
 
 		context.complete();
@@ -49,11 +48,10 @@ public class ArmorAttributeTest implements ForgeroGameTest {
 		var ironHelmet = ctx.component("forgero:iron-helmet");
 		var ironChestplate = ctx.component("forgero:iron-chestplate");
 
-		if (ironHelmet.isEmpty() || ironChestplate.isEmpty()) {
-			System.out.println("SKIPPED: Iron armor not found - armor content may not be loaded");
-			context.complete();
-			return;
-		}
+		assertTrue(ironHelmet.isPresent(),
+				"iron-helmet component must exist - check armor content loading");
+		assertTrue(ironChestplate.isPresent(),
+				"iron-chestplate component must exist - check armor content loading");
 
 		var helmetStack = ctx.toStack(ironHelmet.get());
 		var chestplateStack = ctx.toStack(ironChestplate.get());
@@ -64,8 +62,7 @@ public class ArmorAttributeTest implements ForgeroGameTest {
 		int helmetArmor = query.getArmor(helmetStack.get());
 		int chestplateArmor = query.getArmor(chestplateStack.get());
 
-		System.out.println("Iron helmet armor: " + helmetArmor);
-		System.out.println("Iron chestplate armor: " + chestplateArmor);
+		LOGGER.debug("Iron armor comparison: helmetArmor={}, chestplateArmor={}", helmetArmor, chestplateArmor);
 
 		// Chestplate should provide more protection than helmet
 		assertTrue(chestplateArmor >= helmetArmor,
@@ -82,11 +79,10 @@ public class ArmorAttributeTest implements ForgeroGameTest {
 		var ironChestplate = ctx.component("forgero:iron-chestplate");
 		var diamondChestplate = ctx.component("forgero:diamond-chestplate");
 
-		if (ironChestplate.isEmpty() || diamondChestplate.isEmpty()) {
-			System.out.println("SKIPPED: Armor components not found - armor content may not be loaded");
-			context.complete();
-			return;
-		}
+		assertTrue(ironChestplate.isPresent(),
+				"iron-chestplate component must exist - check armor content loading");
+		assertTrue(diamondChestplate.isPresent(),
+				"diamond-chestplate component must exist - check armor content loading");
 
 		var ironStack = ctx.toStack(ironChestplate.get());
 		var diamondStack = ctx.toStack(diamondChestplate.get());
@@ -97,8 +93,7 @@ public class ArmorAttributeTest implements ForgeroGameTest {
 		int ironArmor = query.getArmor(ironStack.get());
 		int diamondArmor = query.getArmor(diamondStack.get());
 
-		System.out.println("Iron chestplate armor: " + ironArmor);
-		System.out.println("Diamond chestplate armor: " + diamondArmor);
+		LOGGER.debug("Material armor comparison: ironArmor={}, diamondArmor={}", ironArmor, diamondArmor);
 
 		// Diamond should provide more protection than iron
 		assertTrue(diamondArmor >= ironArmor,
@@ -114,11 +109,8 @@ public class ArmorAttributeTest implements ForgeroGameTest {
 
 		var netheriteChestplate = ctx.component("forgero:netherite-chestplate");
 
-		if (netheriteChestplate.isEmpty()) {
-			System.out.println("SKIPPED: Netherite chestplate not found - armor content may not be loaded");
-			context.complete();
-			return;
-		}
+		assertTrue(netheriteChestplate.isPresent(),
+				"netherite-chestplate component must exist - check armor content loading");
 
 		var stack = ctx.toStack(netheriteChestplate.get());
 		assertTrue(stack.isPresent(), "Netherite chestplate must convert to ItemStack");
@@ -126,8 +118,7 @@ public class ArmorAttributeTest implements ForgeroGameTest {
 		int armor = query.getArmor(stack.get());
 		int durability = query.getMaxDurability(stack.get());
 
-		System.out.println("Netherite chestplate armor: " + armor);
-		System.out.println("Netherite chestplate durability: " + durability);
+		LOGGER.debug("Netherite chestplate attributes: armor={}, durability={}", armor, durability);
 
 		assertTrue(armor > 0, "Netherite chestplate should have positive armor");
 		assertTrue(durability > 0, "Netherite chestplate should have positive durability");
@@ -146,24 +137,17 @@ public class ArmorAttributeTest implements ForgeroGameTest {
 				"forgero:iron-boots"
 		};
 
-		int foundCount = 0;
 		for (String pieceId : armorPieces) {
 			var component = ctx.component(pieceId);
-			if (component.isPresent()) {
-				foundCount++;
-				var stack = ctx.toStack(component.get());
-				assertTrue(stack.isPresent(), pieceId + " must convert to ItemStack");
-				System.out.println("Found: " + pieceId);
-			} else {
-				System.out.println("Missing: " + pieceId);
-			}
+			assertTrue(component.isPresent(),
+					pieceId + " component must exist - check armor content loading");
+
+			var stack = ctx.toStack(component.get());
+			assertTrue(stack.isPresent(), pieceId + " must convert to ItemStack");
+			LOGGER.debug("Verified armor piece: {}", pieceId);
 		}
 
-		if (foundCount == 0) {
-			System.out.println("SKIPPED: No iron armor pieces found - armor content may not be loaded");
-		} else {
-			System.out.println("Found " + foundCount + "/4 iron armor pieces");
-		}
+		LOGGER.debug("Iron armor set check: all 4 pieces verified");
 
 		context.complete();
 	}
@@ -175,11 +159,8 @@ public class ArmorAttributeTest implements ForgeroGameTest {
 
 		var ironChestplate = ctx.component("forgero:iron-chestplate");
 
-		if (ironChestplate.isEmpty()) {
-			System.out.println("SKIPPED: Iron chestplate not found - armor content may not be loaded");
-			context.complete();
-			return;
-		}
+		assertTrue(ironChestplate.isPresent(),
+				"iron-chestplate component must exist - check armor content loading");
 
 		var stack = ctx.toStack(ironChestplate.get());
 		assertTrue(stack.isPresent(), "Iron chestplate must convert to ItemStack");
@@ -188,8 +169,8 @@ public class ArmorAttributeTest implements ForgeroGameTest {
 		float miningSpeed = query.getMiningSpeed(stack.get());
 		float attackDamage = query.getAttackDamage(stack.get());
 
-		System.out.println("Iron chestplate mining speed: " + miningSpeed);
-		System.out.println("Iron chestplate attack damage: " + attackDamage);
+		LOGGER.debug("Iron chestplate tool attributes (should be ~0): miningSpeed={}, attackDamage={}",
+				miningSpeed, attackDamage);
 
 		// Mining speed and attack damage should be zero or minimal for armor
 		assertTrue(miningSpeed <= 1.0f,

@@ -2,7 +2,7 @@
   "type": "forgero:schematic",
   "name": "Sword Guard",
   "tags": [
-    "forgero:guard"
+    "forgero:upgrades/types/guard"
   ],
   "attributes": [
     {
@@ -79,7 +79,7 @@
       "id": "forgero:reinforcement-slot",
       "type": "forgero:material",
       "tags": [
-        "forgero:reinforcement"
+        "forgero:upgrades/types/reinforcement"
       ],
       "description": "slot.forgero.reinforcement"
     },
@@ -95,7 +95,7 @@
       "id": "forgero:cosmetic-slot",
       "type": "forgero:dye",
       "tags": [
-        "forgero:upgrade/cosmetic"
+        "forgero:upgrades/types/cosmetic"
       ],
       "description": "slot.forgero.cosmetic"
     }

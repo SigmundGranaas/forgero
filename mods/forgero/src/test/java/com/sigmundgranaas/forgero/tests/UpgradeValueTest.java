@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 /**
- * Tests that validate upgrades provide EXACT value changes.
+ * Tests that validate upgrades provide value changes.
  * These tests ensure the upgrade system produces correct, predictable results.
  */
 public class UpgradeValueTest implements ForgeroGameTest {

@@ -2,11 +2,11 @@
   "type": "forgero:material",
   "name": "Blaze Rod",
   "tags": [
-    "forgero:binding",
-    "forgero:tip_reinforcement",
-    "forgero:hard",
-    "forgero:upgrade_material",
-    "forgero:upgrade_material"
+    "forgero:materials/types/binding",
+    "forgero:materials/properties/hard",
+    "forgero:materials/properties/magical",
+    "forgero:materials/roles/upgrade_material",
+    "forgero:upgrades/types/tip_reinforcement"
   ],
   "host": {
     "identifiers": [
@@ -55,7 +55,7 @@
         ],
         "condition": {
           "type": "forgero:in_slot_type",
-          "slot_type": "forgero:upgrade_material"
+          "slot_type": "forgero:materials/roles/upgrade_material"
         }
       }
     ]

@@ -301,8 +301,19 @@ public class RecipeGenPlugin implements PostLoadPlugin {
 		 * @return List of components matching the type
 		 */
 		private List<Component> findComponentsByType(String type) {
+			// Map legacy type names to new tag paths (Phase 2 migration compatibility)
+			String tagPath = switch (type.toUpperCase()) {
+				case "TOOL_MATERIAL" -> "materials/roles/tool_material";
+				case "WOOD" -> "materials/types/wood";
+				case "STONE" -> "materials/types/stone";
+				case "METAL" -> "materials/types/metal";
+				case "MINERAL" -> "materials/types/mineral";
+				case "UPGRADE_MATERIAL" -> "materials/roles/upgrade_material";
+				default -> type.toLowerCase();
+			};
+
 			// Try to find components by tag first
-			OpenIdentifier typeTag = OpenIdentifier.parse("forgero:" + type.toLowerCase());
+			OpenIdentifier typeTag = OpenIdentifier.parse("forgero:" + tagPath);
 			List<Component> taggedComponents = context.taggedComponents().findByTag(typeTag);
 
 			if (!taggedComponents.isEmpty()) {

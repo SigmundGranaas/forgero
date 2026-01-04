@@ -3,7 +3,7 @@
   "name": "Golden Axe",
   "tags": [
     "forgero:tools/axe",
-    "forgero:vanilla_tool"
+    "forgero:uncategorized/vanilla_tool"
   ],
   "host": {
     "identifiers": [
@@ -20,14 +20,14 @@
   "upgrades": [
     {
       "id": "forgero:binding-slot",
-      "type": "forgero:upgrade_material",
-      "tags": ["forgero:binding"],
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:materials/types/binding"],
       "description": "slot.forgero.binding"
     },
     {
       "id": "forgero:gem-slot",
-      "type": "forgero:upgrade_material",
-      "tags": ["forgero:gem"],
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/gem"],
       "description": "slot.forgero.gem"
     }
   ]

@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:materials/roles"
+  ],
+  "description": "Secondary materials for upgrades and bindings"
+}

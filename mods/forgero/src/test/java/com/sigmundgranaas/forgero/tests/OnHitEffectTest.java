@@ -12,6 +12,8 @@ import com.sigmundgranaas.forgero.properties.minecraft.onhit.OnHitProperty;
 import net.minecraft.item.ItemStack;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -26,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * resolver system - they are NOT simple existence checks.
  */
 public class OnHitEffectTest implements ForgeroGameTest {
+	private static final Logger LOGGER = LoggerFactory.getLogger(OnHitEffectTest.class);
 
 	/**
 	 * Tests that installing a blaze_rod upgrade on a sword adds fire on-hit effect.
@@ -46,19 +49,11 @@ public class OnHitEffectTest implements ForgeroGameTest {
 
 		// Get iron sword - a tool with upgrade slots
 		var ironSwordOpt = ctx.component("forgero:iron-sword");
-		if (ironSwordOpt.isEmpty()) {
-			System.out.println("SKIPPED: Iron sword not found - tools content may not be loaded");
-			context.complete();
-			return;
-		}
+		assertTrue(ironSwordOpt.isPresent(), "iron-sword component must exist - check tools content loading");
 
 		// Get blaze rod - an upgrade material with fire effect
 		var blazeRodOpt = ctx.component("forgero:blaze_rod");
-		if (blazeRodOpt.isEmpty()) {
-			System.out.println("SKIPPED: Blaze rod not found - upgrades content may not be loaded");
-			context.complete();
-			return;
-		}
+		assertTrue(blazeRodOpt.isPresent(), "blaze_rod component must exist - check upgrades content loading");
 
 		// Convert to ItemStacks
 		var swordStackOpt = ctx.toStack(ironSwordOpt.get());
@@ -72,18 +67,15 @@ public class OnHitEffectTest implements ForgeroGameTest {
 
 		// Verify sword has upgrade slots
 		int slotCount = query.getUpgradeSlotCount(sword);
-		System.out.println("Iron sword upgrade slot count: " + slotCount);
+		LOGGER.debug("Iron sword upgrade slots: count={}", slotCount);
 		assertTrue(slotCount > 0, "Iron sword should have upgrade slots, got: " + slotCount);
 
 		// Check if we can install the upgrade
 		boolean canInstall = mutate.canInstallUpgrade(sword, blazeRod);
-		System.out.println("Can install blaze rod on sword: " + canInstall);
+		LOGGER.debug("Upgrade compatibility check: sword={}, upgrade=blaze_rod, canInstall={}",
+				sword.getItem().toString(), canInstall);
 
-		if (!canInstall) {
-			System.out.println("SKIPPED: Cannot install blaze rod on sword - slot type mismatch or no empty slots");
-			context.complete();
-			return;
-		}
+		assertTrue(canInstall, "Must be able to install blaze_rod on iron-sword - check slot type configuration");
 
 		// Install the upgrade
 		ItemStack upgradedSword = mutate.installUpgrade(sword, blazeRod);
@@ -100,7 +92,7 @@ public class OnHitEffectTest implements ForgeroGameTest {
 		var onHitEngine = new OnHitProperty.Engine();
 		List<OnHitProperty> onHitProperties = resolver.resolve(upgradedComponent, onHitEngine, DynamicContext.empty());
 
-		System.out.println("On-hit properties after blaze rod upgrade: " + onHitProperties.size());
+		LOGGER.debug("Resolved on-hit properties after blaze_rod upgrade: count={}", onHitProperties.size());
 
 		// Verify fire effect is present
 		boolean hasFireEffect = onHitProperties.stream()
@@ -109,7 +101,7 @@ public class OnHitEffectTest implements ForgeroGameTest {
 
 		for (OnHitProperty prop : onHitProperties) {
 			for (var effect : prop.effects()) {
-				System.out.println("  Effect: " + effect.getClass().getSimpleName());
+				LOGGER.debug("  Resolved effect: type={}", effect.getClass().getSimpleName());
 			}
 		}
 
@@ -131,19 +123,11 @@ public class OnHitEffectTest implements ForgeroGameTest {
 
 		// Get iron sword
 		var ironSwordOpt = ctx.component("forgero:iron-sword");
-		if (ironSwordOpt.isEmpty()) {
-			System.out.println("SKIPPED: Iron sword not found");
-			context.complete();
-			return;
-		}
+		assertTrue(ironSwordOpt.isPresent(), "iron-sword component must exist");
 
 		// Get slime ball
 		var slimeBallOpt = ctx.component("forgero:slime_ball");
-		if (slimeBallOpt.isEmpty()) {
-			System.out.println("SKIPPED: Slime ball not found");
-			context.complete();
-			return;
-		}
+		assertTrue(slimeBallOpt.isPresent(), "slime_ball component must exist");
 
 		var swordStackOpt = ctx.toStack(ironSwordOpt.get());
 		var slimeBallStackOpt = ctx.toStack(slimeBallOpt.get());
@@ -154,11 +138,8 @@ public class OnHitEffectTest implements ForgeroGameTest {
 		ItemStack sword = swordStackOpt.get();
 		ItemStack slimeBall = slimeBallStackOpt.get();
 
-		if (!mutate.canInstallUpgrade(sword, slimeBall)) {
-			System.out.println("SKIPPED: Cannot install slime ball on sword");
-			context.complete();
-			return;
-		}
+		assertTrue(mutate.canInstallUpgrade(sword, slimeBall),
+				"Must be able to install slime_ball on iron-sword");
 
 		// Install and resolve
 		ItemStack upgradedSword = mutate.installUpgrade(sword, slimeBall);
@@ -171,7 +152,7 @@ public class OnHitEffectTest implements ForgeroGameTest {
 				DynamicContext.empty()
 		);
 
-		System.out.println("On-hit properties after slime ball upgrade: " + onHitProperties.size());
+		LOGGER.debug("Resolved on-hit properties after slime_ball upgrade: count={}", onHitProperties.size());
 
 		// Verify slowness effect
 		boolean hasSlownessEffect = onHitProperties.stream()
@@ -182,9 +163,9 @@ public class OnHitEffectTest implements ForgeroGameTest {
 
 		for (OnHitProperty prop : onHitProperties) {
 			for (var effect : prop.effects()) {
-				System.out.println("  Effect: " + effect.getClass().getSimpleName());
+				LOGGER.debug("  Resolved effect: type={}", effect.getClass().getSimpleName());
 				if (effect instanceof StatusEffectHandler seh) {
-					System.out.println("    Status effect: " + seh.effect().toString());
+					LOGGER.debug("    Status effect: id={}", seh.effect().toString());
 				}
 			}
 		}
@@ -205,11 +186,7 @@ public class OnHitEffectTest implements ForgeroGameTest {
 		Resolver resolver = ctx.api().resolver();
 
 		var ironSwordOpt = ctx.component("forgero:iron-sword");
-		if (ironSwordOpt.isEmpty()) {
-			System.out.println("SKIPPED: Iron sword not found");
-			context.complete();
-			return;
-		}
+		assertTrue(ironSwordOpt.isPresent(), "iron-sword component must exist");
 
 		Component baseSword = ironSwordOpt.get();
 
@@ -220,7 +197,7 @@ public class OnHitEffectTest implements ForgeroGameTest {
 				DynamicContext.empty()
 		);
 
-		System.out.println("Base iron sword on-hit properties: " + onHitProperties.size());
+		LOGGER.debug("Base iron-sword on-hit properties: count={}", onHitProperties.size());
 
 		// Base sword should have NO on-hit effects
 		assertEquals(0, onHitProperties.size(),
@@ -242,66 +219,49 @@ public class OnHitEffectTest implements ForgeroGameTest {
 
 		// Get diamond sword - should have multiple upgrade slots
 		var diamondSwordOpt = ctx.component("forgero:diamond-sword");
-		if (diamondSwordOpt.isEmpty()) {
-			System.out.println("SKIPPED: Diamond sword not found");
-			context.complete();
-			return;
-		}
+		assertTrue(diamondSwordOpt.isPresent(), "diamond-sword component must exist");
 
 		var swordStackOpt = ctx.toStack(diamondSwordOpt.get());
 		assertTrue(swordStackOpt.isPresent(), "Diamond sword must convert to ItemStack");
 		ItemStack sword = swordStackOpt.get();
 
 		int slotCount = query.getUpgradeSlotCount(sword);
-		System.out.println("Diamond sword upgrade slots: " + slotCount);
+		LOGGER.debug("Diamond sword upgrade slots: count={}", slotCount);
 
-		if (slotCount < 2) {
-			System.out.println("SKIPPED: Diamond sword has fewer than 2 upgrade slots");
-			context.complete();
-			return;
-		}
+		assertTrue(slotCount >= 2,
+				"diamond-sword must have at least 2 upgrade slots for this test, got: " + slotCount);
 
-		// Try to install two different effect upgrades
+		// Get both effect upgrades
 		var blazeRodOpt = ctx.component("forgero:blaze_rod");
 		var slimeBallOpt = ctx.component("forgero:slime_ball");
 
-		if (blazeRodOpt.isEmpty() || slimeBallOpt.isEmpty()) {
-			System.out.println("SKIPPED: Upgrade materials not found");
-			context.complete();
-			return;
-		}
+		assertTrue(blazeRodOpt.isPresent(), "blaze_rod component must exist");
+		assertTrue(slimeBallOpt.isPresent(), "slime_ball component must exist");
 
 		var blazeRodStackOpt = ctx.toStack(blazeRodOpt.get());
 		var slimeBallStackOpt = ctx.toStack(slimeBallOpt.get());
 
-		if (blazeRodStackOpt.isEmpty() || slimeBallStackOpt.isEmpty()) {
-			System.out.println("SKIPPED: Upgrade materials don't convert to ItemStack");
-			context.complete();
-			return;
-		}
+		assertTrue(blazeRodStackOpt.isPresent(), "blaze_rod must convert to ItemStack");
+		assertTrue(slimeBallStackOpt.isPresent(), "slime_ball must convert to ItemStack");
 
 		ItemStack currentSword = sword;
 		int installedCount = 0;
 
-		// Install blaze rod if possible
-		if (mutate.canInstallUpgrade(currentSword, blazeRodStackOpt.get())) {
-			currentSword = mutate.installUpgrade(currentSword, blazeRodStackOpt.get());
-			installedCount++;
-			System.out.println("Installed blaze rod");
-		}
+		// Install blaze rod
+		assertTrue(mutate.canInstallUpgrade(currentSword, blazeRodStackOpt.get()),
+				"Must be able to install blaze_rod on diamond-sword");
+		currentSword = mutate.installUpgrade(currentSword, blazeRodStackOpt.get());
+		installedCount++;
+		LOGGER.debug("Installed upgrade: blaze_rod");
 
-		// Install slime ball if possible
-		if (mutate.canInstallUpgrade(currentSword, slimeBallStackOpt.get())) {
-			currentSword = mutate.installUpgrade(currentSword, slimeBallStackOpt.get());
-			installedCount++;
-			System.out.println("Installed slime ball");
-		}
+		// Install slime ball
+		assertTrue(mutate.canInstallUpgrade(currentSword, slimeBallStackOpt.get()),
+				"Must be able to install slime_ball on diamond-sword (after blaze_rod)");
+		currentSword = mutate.installUpgrade(currentSword, slimeBallStackOpt.get());
+		installedCount++;
+		LOGGER.debug("Installed upgrade: slime_ball");
 
-		if (installedCount < 2) {
-			System.out.println("SKIPPED: Could only install " + installedCount + " upgrades (need 2)");
-			context.complete();
-			return;
-		}
+		assertEquals(2, installedCount, "Both upgrades must be installed");
 
 		// Resolve on-hit effects
 		var upgradedComponentOpt = ctx.toComponent(currentSword);
@@ -313,7 +273,7 @@ public class OnHitEffectTest implements ForgeroGameTest {
 				DynamicContext.empty()
 		);
 
-		System.out.println("On-hit properties after 2 upgrades: " + onHitProperties.size());
+		LOGGER.debug("On-hit properties after 2 upgrades: count={}", onHitProperties.size());
 
 		// Count distinct effect types
 		boolean hasFireEffect = onHitProperties.stream()
@@ -326,8 +286,7 @@ public class OnHitEffectTest implements ForgeroGameTest {
 				.map(effect -> (StatusEffectHandler) effect)
 				.anyMatch(handler -> handler.effect().getPath().contains("slowness"));
 
-		System.out.println("Has fire effect: " + hasFireEffect);
-		System.out.println("Has slowness effect: " + hasSlownessEffect);
+		LOGGER.debug("Effect validation: hasFireEffect={}, hasSlownessEffect={}", hasFireEffect, hasSlownessEffect);
 
 		// With both upgrades installed, we should have both effects
 		assertTrue(hasFireEffect && hasSlownessEffect,
@@ -350,29 +309,20 @@ public class OnHitEffectTest implements ForgeroGameTest {
 		var ironSwordOpt = ctx.component("forgero:iron-sword");
 		var blazeRodOpt = ctx.component("forgero:blaze_rod");
 
-		if (ironSwordOpt.isEmpty() || blazeRodOpt.isEmpty()) {
-			System.out.println("SKIPPED: Required components not found");
-			context.complete();
-			return;
-		}
+		assertTrue(ironSwordOpt.isPresent(), "iron-sword component must exist");
+		assertTrue(blazeRodOpt.isPresent(), "blaze_rod component must exist");
 
 		var swordStackOpt = ctx.toStack(ironSwordOpt.get());
 		var blazeRodStackOpt = ctx.toStack(blazeRodOpt.get());
 
-		if (swordStackOpt.isEmpty() || blazeRodStackOpt.isEmpty()) {
-			System.out.println("SKIPPED: Components don't convert to ItemStack");
-			context.complete();
-			return;
-		}
+		assertTrue(swordStackOpt.isPresent(), "iron-sword must convert to ItemStack");
+		assertTrue(blazeRodStackOpt.isPresent(), "blaze_rod must convert to ItemStack");
 
 		ItemStack sword = swordStackOpt.get();
 		ItemStack blazeRod = blazeRodStackOpt.get();
 
-		if (!mutate.canInstallUpgrade(sword, blazeRod)) {
-			System.out.println("SKIPPED: Cannot install blaze rod on sword");
-			context.complete();
-			return;
-		}
+		assertTrue(mutate.canInstallUpgrade(sword, blazeRod),
+				"Must be able to install blaze_rod on iron-sword");
 
 		// Install upgrade
 		ItemStack upgradedSword = mutate.installUpgrade(sword, blazeRod);
@@ -390,7 +340,7 @@ public class OnHitEffectTest implements ForgeroGameTest {
 				.flatMap(p -> p.effects().stream())
 				.anyMatch(e -> e instanceof FireHandler);
 
-		System.out.println("Fire effect before removal: " + hasFireBefore);
+		LOGGER.debug("Fire effect before removal: hasFireEffect={}", hasFireBefore);
 		assertTrue(hasFireBefore, "Sword with blaze rod should have fire effect");
 
 		// Remove all upgrades
@@ -409,7 +359,7 @@ public class OnHitEffectTest implements ForgeroGameTest {
 				.flatMap(p -> p.effects().stream())
 				.anyMatch(e -> e instanceof FireHandler);
 
-		System.out.println("Fire effect after removal: " + hasFireAfter);
+		LOGGER.debug("Fire effect after removal: hasFireEffect={}", hasFireAfter);
 		assertFalse(hasFireAfter,
 				"Sword after upgrade removal should NOT have fire effect");
 
@@ -429,36 +379,20 @@ public class OnHitEffectTest implements ForgeroGameTest {
 		var ironSwordOpt = ctx.component("forgero:iron-sword");
 		var fireChargeOpt = ctx.component("forgero:fire_charge");
 
-		if (ironSwordOpt.isEmpty()) {
-			System.out.println("SKIPPED: Iron sword not found");
-			context.complete();
-			return;
-		}
-
-		if (fireChargeOpt.isEmpty()) {
-			System.out.println("SKIPPED: Fire charge not found - may not be defined as upgrade material");
-			context.complete();
-			return;
-		}
+		assertTrue(ironSwordOpt.isPresent(), "iron-sword component must exist");
+		assertTrue(fireChargeOpt.isPresent(), "fire_charge component must exist as upgrade material");
 
 		var swordStackOpt = ctx.toStack(ironSwordOpt.get());
 		var fireChargeStackOpt = ctx.toStack(fireChargeOpt.get());
 
-		if (swordStackOpt.isEmpty() || fireChargeStackOpt.isEmpty()) {
-			System.out.println("SKIPPED: Components don't convert to ItemStack");
-			context.complete();
-			return;
-		}
+		assertTrue(swordStackOpt.isPresent(), "iron-sword must convert to ItemStack");
+		assertTrue(fireChargeStackOpt.isPresent(), "fire_charge must convert to ItemStack");
 
 		ItemStack sword = swordStackOpt.get();
 		ItemStack fireCharge = fireChargeStackOpt.get();
 
-		if (!mutate.canInstallUpgrade(sword, fireCharge)) {
-			System.out.println("INFO: Fire charge cannot be installed on sword - checking if it has on-hit defined");
-			// Just verify the material has properties defined, even if not installable
-			context.complete();
-			return;
-		}
+		assertTrue(mutate.canInstallUpgrade(sword, fireCharge),
+				"Must be able to install fire_charge on iron-sword");
 
 		ItemStack upgradedSword = mutate.installUpgrade(sword, fireCharge);
 		var upgradedCompOpt = ctx.toComponent(upgradedSword);
@@ -470,7 +404,7 @@ public class OnHitEffectTest implements ForgeroGameTest {
 				DynamicContext.empty()
 		);
 
-		System.out.println("On-hit properties after fire charge upgrade: " + onHitProperties.size());
+		LOGGER.debug("On-hit properties after fire_charge upgrade: count={}", onHitProperties.size());
 
 		boolean hasFireEffect = onHitProperties.stream()
 				.flatMap(prop -> prop.effects().stream())
@@ -493,23 +427,19 @@ public class OnHitEffectTest implements ForgeroGameTest {
 		ItemQueryApi query = api.itemQuery();
 		Resolver resolver = api.resolver();
 
-		System.out.println("=== Upgrade Installation Debug ===");
+		LOGGER.debug("=== Upgrade Installation Debug ===");
 
 		var ironSwordOpt = ctx.component("forgero:iron-sword");
-		if (ironSwordOpt.isEmpty()) {
-			System.out.println("ERROR: Iron sword not found!");
-			context.complete();
-			return;
-		}
+		assertTrue(ironSwordOpt.isPresent(), "iron-sword component must exist for debug test");
 
 		var swordStackOpt = ctx.toStack(ironSwordOpt.get());
 		assertTrue(swordStackOpt.isPresent(), "Iron sword must convert to ItemStack");
 		ItemStack sword = swordStackOpt.get();
 
-		System.out.println("Iron sword:");
-		System.out.println("  Total slots: " + query.getUpgradeSlotCount(sword));
-		System.out.println("  Empty slots: " + query.getEmptySlotCount(sword));
-		System.out.println("  Filled slots: " + query.getFilledSlotCount(sword));
+		LOGGER.debug("Iron sword slots: total={}, empty={}, filled={}",
+				query.getUpgradeSlotCount(sword),
+				query.getEmptySlotCount(sword),
+				query.getFilledSlotCount(sword));
 
 		// Test upgrades
 		String[] upgradeIds = {"forgero:blaze_rod", "forgero:slime_ball", "forgero:magma_cream", "forgero:ender_pearl"};
@@ -517,18 +447,18 @@ public class OnHitEffectTest implements ForgeroGameTest {
 		for (String upgradeId : upgradeIds) {
 			var upgradeOpt = ctx.component(upgradeId);
 			if (upgradeOpt.isEmpty()) {
-				System.out.println("  " + upgradeId + ": NOT FOUND");
+				LOGGER.debug("Upgrade check: id={}, status=NOT_FOUND", upgradeId);
 				continue;
 			}
 
 			var upgradeStackOpt = ctx.toStack(upgradeOpt.get());
 			if (upgradeStackOpt.isEmpty()) {
-				System.out.println("  " + upgradeId + ": Cannot convert to ItemStack");
+				LOGGER.debug("Upgrade check: id={}, status=STACK_CONVERSION_FAILED", upgradeId);
 				continue;
 			}
 
 			boolean canInstall = mutate.canInstallUpgrade(sword, upgradeStackOpt.get());
-			System.out.println("  " + upgradeId + ": canInstall=" + canInstall);
+			LOGGER.debug("Upgrade check: id={}, canInstall={}", upgradeId, canInstall);
 
 			if (canInstall) {
 				ItemStack upgraded = mutate.installUpgrade(sword, upgradeStackOpt.get());
@@ -539,10 +469,10 @@ public class OnHitEffectTest implements ForgeroGameTest {
 							new OnHitProperty.Engine(),
 							DynamicContext.empty()
 					);
-					System.out.println("    On-hit properties: " + props.size());
+					LOGGER.debug("  On-hit properties after {}: count={}", upgradeId, props.size());
 					for (OnHitProperty prop : props) {
 						for (var effect : prop.effects()) {
-							System.out.println("      Effect: " + effect.getClass().getSimpleName());
+							LOGGER.debug("    Effect: type={}", effect.getClass().getSimpleName());
 						}
 					}
 				}

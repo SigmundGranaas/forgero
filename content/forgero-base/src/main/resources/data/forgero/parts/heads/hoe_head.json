@@ -3,7 +3,9 @@
   "name": "hoe_head",
   "tags": [
     "forgero:parts/head",
-    "forgero:parts/hoe_head"
+    "forgero:parts/hoe_head",
+    "forgero:parts/types/hoe_head",
+    "forgero:parts/categories/head"
   ],
   "host_template": {
     "class": "forgero:part_item",
@@ -13,16 +15,16 @@
     "id": "forgero:{material.name}-hoe_head",
     "slots": {
       "material": {
-        "type": "forgero:tool_material",
-        "default_tag": "forgero:tool_material"
+        "type": "forgero:materials/roles/tool_material",
+        "default_tag": "forgero:materials/roles/tool_material"
       }
     }
   },
   "upgrades": [
     {
       "id": "forgero:hoe_head-reinforcement",
-      "type": "forgero:upgrade_material",
-      "tags": ["forgero:reinforcement"],
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/reinforcement"],
       "description": "slot.forgero.reinforcement"
     }
   ],
@@ -33,9 +35,10 @@
       "computation": {"value": 15, "operation": "addition"}
     },
     {
-      "id": "forgero:hoe_head-durability-base",
+      "id": "forgero:hoe_head-durability-mult",
       "type": "forgero:durability",
-      "computation": {"value": 0, "operation": "addition"}
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
     },
     {
       "id": "forgero:hoe_head-attack_damage-base",
@@ -48,9 +51,10 @@
       "computation": {"value": 1.0, "operation": "addition"}
     },
     {
-      "id": "forgero:hoe_head-mining_speed-base",
+      "id": "forgero:hoe_head-mining_speed-mult",
       "type": "forgero:mining_speed",
-      "computation": {"value": 0, "operation": "addition"}
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
     },
     {
       "id": "forgero:hoe_head-mining_level-base",

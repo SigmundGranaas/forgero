@@ -5,7 +5,7 @@
     "forgero:weapons/rapier",
     "forgero:weapons/swordlike",
     "forgero:weapons/extended",
-    "forgero:tool"
+    "forgero:tools"
   ],
   "host_template": {
     "class": "forgero:sword_item",
@@ -19,7 +19,7 @@
         "default_tag": "forgero:parts/rapier_blade"
       },
       "handle": {
-        "type": "forgero:handle",
+        "type": "forgero:parts/categories/handle",
         "default": "forgero:wooden_handle"
       }
     }
@@ -27,7 +27,7 @@
   "upgrades": [
     {
       "id": "forgero:rapier-guard",
-      "type": "forgero:upgrade_material",
+      "type": "forgero:materials/roles/upgrade_material",
       "tags": ["forgero:upgrade/guard"],
       "description": "slot.forgero.guard"
     }

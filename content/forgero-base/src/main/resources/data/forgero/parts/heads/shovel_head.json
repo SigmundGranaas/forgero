@@ -3,7 +3,9 @@
   "name": "shovel_head",
   "tags": [
     "forgero:parts/head",
-    "forgero:parts/shovel_head"
+    "forgero:parts/shovel_head",
+    "forgero:parts/types/shovel_head",
+    "forgero:parts/categories/head"
   ],
   "host_template": {
     "class": "forgero:part_item",
@@ -13,16 +15,16 @@
     "id": "forgero:{material.name}-shovel_head",
     "slots": {
       "material": {
-        "type": "forgero:tool_material",
-        "default_tag": "forgero:tool_material"
+        "type": "forgero:materials/roles/tool_material",
+        "default_tag": "forgero:materials/roles/tool_material"
       }
     }
   },
   "upgrades": [
     {
       "id": "forgero:shovel_head-reinforcement",
-      "type": "forgero:upgrade_material",
-      "tags": ["forgero:reinforcement"],
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/reinforcement"],
       "description": "slot.forgero.reinforcement"
     }
   ],
@@ -33,9 +35,10 @@
       "computation": {"value": 20, "operation": "addition"}
     },
     {
-      "id": "forgero:shovel_head-durability-base",
+      "id": "forgero:shovel_head-durability-mult",
       "type": "forgero:durability",
-      "computation": {"value": 0, "operation": "addition"}
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
     },
     {
       "id": "forgero:shovel_head-attack_damage-base",
@@ -48,9 +51,10 @@
       "computation": {"value": 1.0, "operation": "addition"}
     },
     {
-      "id": "forgero:shovel_head-mining_speed-base",
+      "id": "forgero:shovel_head-mining_speed-mult",
       "type": "forgero:mining_speed",
-      "computation": {"value": 0, "operation": "addition"}
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
     },
     {
       "id": "forgero:shovel_head-mining_level-base",

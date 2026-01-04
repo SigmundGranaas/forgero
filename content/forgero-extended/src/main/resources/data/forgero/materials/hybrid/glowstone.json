@@ -2,7 +2,10 @@
   "type": "forgero:material",
   "name": "Glowstone Dust",
   "tags": [
-    "forgero:cosmetic"
+    "forgero:materials/types/mineral",
+    "forgero:materials/properties/hybrid",
+    "forgero:materials/roles/upgrade_material",
+    "forgero:upgrades/types/cosmetic"
   ],
   "host": {
     "identifiers": [
@@ -13,6 +16,13 @@
     ]
   },
   "attributes": [
+    {
+      "id": "forgero:glowstone-durability",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 15
+      }
+    },
     {
       "id": "forgero:glowstone-emissive",
       "type": "forgero:emissive",

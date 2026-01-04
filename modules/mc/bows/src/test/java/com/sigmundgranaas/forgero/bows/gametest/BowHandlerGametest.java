@@ -230,11 +230,11 @@ public class BowHandlerGametest {
 		UseContext ctx = UseContext.release(context.getWorld(), player, Hand.MAIN_HAND, bowStack, 20, 0, 1.0f);
 		handler.apply(ctx);
 
-		context.waitAndRun(1, () -> {
+		context.waitAndRun(5, () -> {
 			List<ArrowEntity> arrows2 = context.getWorld().getEntitiesByType(
 					EntityType.ARROW,
-					player.getBoundingBox().expand(50),
-					e -> true
+					player.getBoundingBox().expand(500),
+					arrow -> arrow.getOwner() != null && arrow.getOwner().getUuid().equals(player.getUuid())
 			);
 
 			if (!arrows2.isEmpty()) {

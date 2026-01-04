@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:materials/properties"
+  ],
+  "description": "Materials magical"
+}

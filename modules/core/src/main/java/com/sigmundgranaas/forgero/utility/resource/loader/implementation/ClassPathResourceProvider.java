@@ -1,6 +1,10 @@
 package com.sigmundgranaas.forgero.utility.resource.loader.implementation;
 
+import static com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceConstants.*;
+
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceFilter;
+import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourcePath;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,54 +20,113 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
+/**
+ * A ResourceProvider for classpath and filesystem resources.
+ * <p>
+ * Supports two modes:
+ * <ul>
+ *   <li>Classpath mode: Loads resources from JARs and classpath entries</li>
+ *   <li>Filesystem mode: Loads resources from a local directory (for development)</li>
+ * </ul>
+ * <p>
+ * For new code, consider using {@link FileSystemResourceProvider} for filesystem access
+ * and this class only for classpath/JAR access.
+ */
 public class ClassPathResourceProvider implements ResourceProvider {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClassPathResourceProvider.class);
 
 	private final Path rootPath;
 	private final String topLevelDirectory;
 	private final ClassLoader classLoader;
+	private final int providerPriority;
+	private final Set<String> namespaces;
 
 	/**
-	 * Constructor for Classpath-based loading.
+	 * Constructor for Classpath-based loading with full configuration.
 	 *
-	 * @param topLevelDirectory The root directory within the classpath (e.g., "/assets").
+	 * @param topLevelDirectory The root directory within the classpath (e.g., "data").
+	 * @param namespaces        The namespaces this provider serves.
+	 * @param priority          The provider priority for composite ordering.
 	 */
-	public ClassPathResourceProvider(String topLevelDirectory) {
+	public ClassPathResourceProvider(String topLevelDirectory, Set<String> namespaces, int priority) {
 		this.topLevelDirectory = topLevelDirectory.replaceAll("^/|/$", "");
 		this.classLoader = Thread.currentThread().getContextClassLoader();
 		this.rootPath = null;
+		this.namespaces = Set.copyOf(namespaces);
+		this.providerPriority = priority;
 	}
 
 	/**
-	 * Constructor for FileSystem-based loading.
+	 * Constructor for Classpath-based loading with default settings.
 	 *
-	 * @param rootPath The absolute path to the root directory to scan (e.g., ".../src/main/resources").
+	 * @param topLevelDirectory The root directory within the classpath (e.g., "data").
+	 */
+	public ClassPathResourceProvider(String topLevelDirectory) {
+		this(topLevelDirectory, DEFAULT_NAMESPACES, PRIORITY_BASE);
+	}
+
+	/**
+	 * Constructor for FileSystem-based loading with full configuration.
+	 *
+	 * @param rootPath   The absolute path to the root directory to scan.
+	 * @param namespaces The namespaces this provider serves.
+	 * @param priority   The provider priority for composite ordering.
+	 */
+	public ClassPathResourceProvider(Path rootPath, Set<String> namespaces, int priority) {
+		this.rootPath = rootPath;
+		this.topLevelDirectory = "";
+		this.classLoader = null;
+		this.namespaces = Set.copyOf(namespaces);
+		this.providerPriority = priority;
+	}
+
+	/**
+	 * Constructor for FileSystem-based loading with default settings.
+	 *
+	 * @param rootPath The absolute path to the root directory to scan.
 	 */
 	public ClassPathResourceProvider(Path rootPath) {
-		this.rootPath = rootPath;
-		this.topLevelDirectory = ""; // The root path already points to the resource root, no need to add anything.
-		this.classLoader = null;
+		this(rootPath, DEFAULT_NAMESPACES, PRIORITY_BASE);
 	}
 
 	@Override
 	public Set<String> getNamespaces() {
-		return Set.of("forgero", "minecraft");
+		return namespaces;
 	}
 
 	@Override
-	public Stream<OpenIdentifier> list(OpenIdentifier path, boolean recursive) {
+	public Stream<ResourcePath> list(ResourcePath path, boolean recursive, ResourceFilter filter) {
 		if (this.rootPath != null) {
-			return listFromFileSystemRoot(path, recursive);
+			return listFromFileSystemRoot(path, recursive, filter);
 		} else {
-			return listFromClasspath(path, recursive);
+			return listFromClasspath(path, recursive, filter);
 		}
 	}
 
 	@Override
-	public Optional<InputStream> read(OpenIdentifier identifier) {
+	public Stream<OpenIdentifier> list(OpenIdentifier path, boolean recursive) {
+		return list(ResourcePath.directory(path.namespace(), path.path()), recursive, ResourceFilter.JSON)
+				.map(ResourcePath::toIdentifier);
+	}
+
+	@Override
+	public int priority() {
+		return providerPriority;
+	}
+
+	@Override
+	public String name() {
+		if (rootPath != null) {
+			return "ClassPath[FileSystem:" + rootPath + "]";
+		}
+		return "ClassPath[" + topLevelDirectory + "]";
+	}
+
+	@Override
+	public Optional<InputStream> read(ResourcePath path) {
 		String relativePath = topLevelDirectory.isEmpty() ?
-				identifier.namespace() + "/" + identifier.path() :
-				topLevelDirectory + "/" + identifier.namespace() + "/" + identifier.path();
+				path.namespace() + "/" + path.fullPath() :
+				topLevelDirectory + "/" + path.namespace() + "/" + path.fullPath();
 
 		if (this.rootPath != null) {
 			Path resourcePath = this.rootPath.resolve(relativePath);
@@ -82,7 +145,12 @@ public class ClassPathResourceProvider implements ResourceProvider {
 		}
 	}
 
-	private Path getSearchRoot(OpenIdentifier path) {
+	@Override
+	public Optional<InputStream> read(OpenIdentifier identifier) {
+		return read(ResourcePath.fromIdentifier(identifier));
+	}
+
+	private Path getSearchRoot(ResourcePath path) {
 		Path searchRoot = this.rootPath;
 		if (!topLevelDirectory.isEmpty()) {
 			searchRoot = searchRoot.resolve(topLevelDirectory);
@@ -90,22 +158,22 @@ public class ClassPathResourceProvider implements ResourceProvider {
 		return searchRoot.resolve(path.namespace());
 	}
 
-	private Stream<OpenIdentifier> listFromFileSystemRoot(OpenIdentifier path, boolean recursive) {
+	private Stream<ResourcePath> listFromFileSystemRoot(ResourcePath path, boolean recursive, ResourceFilter filter) {
 		try {
 			Path searchRoot = getSearchRoot(path);
 			URL rootUrl = searchRoot.toUri().toURL();
-			return listResourcesFromUrl(rootUrl, path.path(), path.namespace(), recursive);
+			return listResourcesFromUrl(rootUrl, path.directory(), path.namespace(), recursive, filter);
 		} catch (Exception e) {
 			LOGGER.error("Failed to list resources from file system path: {}", rootPath, e);
 			return Stream.empty();
 		}
 	}
 
-	private Stream<OpenIdentifier> listFromClasspath(OpenIdentifier path, boolean recursive) {
+	private Stream<ResourcePath> listFromClasspath(ResourcePath path, boolean recursive, ResourceFilter filter) {
 		// Build full path including target directory since getResources() doesn't work reliably for directories
 		String fullPath = (topLevelDirectory.isEmpty() ? "" : topLevelDirectory + "/") +
 						  path.namespace() + "/" +
-						  (path.path().isEmpty() ? "" : path.path() + "/");
+						  (path.directory().isEmpty() ? "" : path.directory() + "/");
 		try {
 			Enumeration<URL> urls = classLoader.getResources(fullPath);
 			if (urls == null || !urls.hasMoreElements()) {
@@ -119,7 +187,7 @@ public class ClassPathResourceProvider implements ResourceProvider {
 				return Collections.list(urls).stream()
 						.flatMap(url -> {
 							try {
-								return listResourcesFromUrl(url, path.path(), path.namespace(), recursive);
+								return listResourcesFromUrl(url, path.directory(), path.namespace(), recursive, filter);
 							} catch (Exception e) {
 								LOGGER.error("Failed to list resources from URL: {}", url, e);
 								return Stream.empty();
@@ -131,7 +199,7 @@ public class ClassPathResourceProvider implements ResourceProvider {
 			return Collections.list(urls).stream()
 					.flatMap(url -> {
 						try {
-							return listResourcesFromUrl(url, path.path(), path.namespace(), recursive);
+							return listResourcesFromUrl(url, path.directory(), path.namespace(), recursive, filter);
 						} catch (Exception e) {
 							LOGGER.error("Failed to list resources from URL: {}", url, e);
 							return Stream.empty();
@@ -143,16 +211,16 @@ public class ClassPathResourceProvider implements ResourceProvider {
 		}
 	}
 
-	private Stream<OpenIdentifier> listResourcesFromUrl(URL namespaceRootUrl, String targetDirectory, String namespace, boolean recursive) throws Exception {
+	private Stream<ResourcePath> listResourcesFromUrl(URL namespaceRootUrl, String targetDirectory, String namespace, boolean recursive, ResourceFilter filter) throws Exception {
 		URI uri = namespaceRootUrl.toURI();
 		if ("jar".equals(uri.getScheme())) {
-			return listResourcesFromJar(uri, targetDirectory, namespace, recursive);
+			return listResourcesFromJar(uri, targetDirectory, namespace, recursive, filter);
 		} else {
-			return listResourcesFromFileSystem(Paths.get(uri), targetDirectory, namespace, recursive);
+			return listResourcesFromFileSystem(Paths.get(uri), targetDirectory, namespace, recursive, filter);
 		}
 	}
 
-	private Stream<OpenIdentifier> listResourcesFromFileSystem(Path namespaceRootPath, String targetDirectory, String namespace, boolean recursive) throws IOException {
+	private Stream<ResourcePath> listResourcesFromFileSystem(Path namespaceRootPath, String targetDirectory, String namespace, boolean recursive, ResourceFilter filter) throws IOException {
 		// Check if namespaceRootPath already ends with targetDirectory (happens when URL already points to target)
 		Path startPath;
 		Path effectiveNamespaceRoot;
@@ -173,18 +241,18 @@ public class ClassPathResourceProvider implements ResourceProvider {
 		try (Stream<Path> walk = Files.walk(startPath, maxDepth)) {
 			return walk
 					.filter(Files::isRegularFile)
-					.filter(p -> p.toString().endsWith(".json"))
 					.map(filePath -> {
 						// Relativize from effectiveNamespaceRoot to include the full path from namespace root
 						Path relativePath = effectiveNamespaceRoot.relativize(filePath);
 						String relativePathString = relativePath.toString().replace('\\', '/');
-						return new OpenIdentifier(namespace, relativePathString);
+						return ResourcePath.fromIdentifier(new OpenIdentifier(namespace, relativePathString));
 					})
+					.filter(filter)
 					.toList().stream();
 		}
 	}
 
-	private Stream<OpenIdentifier> listResourcesFromJar(URI namespaceRootUri, String targetDirectory, String namespace, boolean recursive) throws Exception {
+	private Stream<ResourcePath> listResourcesFromJar(URI namespaceRootUri, String targetDirectory, String namespace, boolean recursive, ResourceFilter filter) throws Exception {
 		FileSystem fs = getFileSystem(namespaceRootUri);
 		String[] uriParts = namespaceRootUri.toString().split("!");
 		if (uriParts.length < 2) {
@@ -204,13 +272,13 @@ public class ClassPathResourceProvider implements ResourceProvider {
 		try (Stream<Path> walk = Files.walk(startPathInJar, maxDepth)) {
 			return walk
 					.filter(Files::isRegularFile)
-					.filter(p -> p.toString().endsWith(".json"))
 					.map(filePath -> {
 						// Relativize from namespaceRootInJar to include the full path from namespace root
 						Path relativePath = namespaceRootInJar.relativize(filePath);
 						String relativePathString = relativePath.toString().replace('\\', '/');
-						return new OpenIdentifier(namespace, relativePathString);
+						return ResourcePath.fromIdentifier(new OpenIdentifier(namespace, relativePathString));
 					})
+					.filter(filter)
 					.toList().stream();
 		}
 	}

@@ -12,7 +12,7 @@
       "hoe"
     ]
   },
-  "type": "forgero:schematic_part_crafting",
+  "type": "forgero:shaped_recipe",
   "pattern": [
     "  a",
     " b ",
@@ -20,17 +20,26 @@
   ],
   "key": {
     "a": {
-      "tag": "forgero:${material.name}-${tool}_head"
+      "tag": "forgero:parts/types/${tool}_head"
     },
     "b": {
       "tag": "forgero:tool_binding"
     },
     "c": {
-      "tag": "forgero:handle"
+      "tag": "forgero:parts/categories/handle"
     }
   },
   "result": {
     "item": "forgero:${material.name}-${tool}",
-    "count": 1
+    "structure": {
+      "forgero:head": "a",
+      "forgero:handle": "c"
+    },
+    "upgrades": [
+      {
+        "slot": "forgero:${tool}-binding",
+        "component": "b"
+      }
+    ]
   }
 }

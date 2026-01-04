@@ -37,7 +37,8 @@ public final class ForgeroTooltipRenderer {
 	 */
 	public static void initialize(ComponentConverter converter, Resolver resolver) {
 		if (initialized) {
-			LOGGER.warn("ForgeroTooltipRenderer is being initialized more than once.");
+			LOGGER.warn("ForgeroTooltipRenderer is being initialized more than once. " +
+					"This may indicate a lifecycle issue - tooltip renderer should only be initialized once during mod setup.");
 			return;
 		}
 		ForgeroTooltipRenderer.converter = converter;

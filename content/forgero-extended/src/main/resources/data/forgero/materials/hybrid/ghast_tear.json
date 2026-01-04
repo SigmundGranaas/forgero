@@ -2,7 +2,7 @@
   "type": "forgero:material",
   "name": "Ghast Tear",
   "tags": [
-    "forgero:gem"
+    "forgero:upgrades/types/gem"
   ],
   "host": {
     "identifiers": [

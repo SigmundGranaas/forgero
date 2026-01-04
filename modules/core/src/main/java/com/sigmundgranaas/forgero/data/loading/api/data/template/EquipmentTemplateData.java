@@ -42,4 +42,24 @@ public record EquipmentTemplateData(
 		@Nullable
 		Map<String, JsonElement> properties
 ) implements DefinitionData, TemplateData {
+
+	@Override
+	public DefinitionData withMergedExtension(
+			List<OpenIdentifier> mergedTags,
+			List<AttributeData> mergedAttributes,
+			Map<String, JsonElement> mergedProperties,
+			List<UpgradeSlotData> mergedUpgrades
+	) {
+		return new EquipmentTemplateData(
+				type,
+				name,
+				include,
+				mergedTags,
+				host_template,
+				structure,
+				mergedUpgrades,
+				mergedAttributes,
+				mergedProperties
+		);
+	}
 }

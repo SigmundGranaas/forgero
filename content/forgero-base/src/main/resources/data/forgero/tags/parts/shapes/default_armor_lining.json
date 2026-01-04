@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:parts/shapes"
+  ],
+  "description": "Parts default armor lining"
+}

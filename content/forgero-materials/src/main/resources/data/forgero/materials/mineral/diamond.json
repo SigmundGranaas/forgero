@@ -2,8 +2,10 @@
   "type": "forgero:material",
   "name": "Diamond",
   "tags": [
-    "forgero:mineral",
-    "forgero:tool_material"
+    "forgero:materials/types/mineral",
+    "forgero:materials/roles/tool_material",
+    "forgero:materials/roles/armor_material",
+    "forgero:materials/properties/hard"
   ],
   "host": {
     "identifiers": [
@@ -50,7 +52,8 @@
       "id": "forgero:diamond-durability",
       "type": "forgero:durability",
       "computation": {
-        "value": 1550
+        "value": 1550,
+        "operation": "addition"
       },
       "context": "forgero:part-composite"
     },
@@ -79,7 +82,7 @@
       "context": "forgero:part-composite",
       "condition": {
         "type": "forgero:in_slot_type",
-        "slot_type": "forgero:armor_material"
+        "slot_type": "forgero:materials/roles/armor_material"
       }
     }
   ]

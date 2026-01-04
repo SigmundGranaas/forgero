@@ -2,8 +2,9 @@
   "type": "forgero:material",
   "name": "Fermented Spider Eye",
   "tags": [
-    "forgero:magical",
-    "forgero:cosmetic"
+    "forgero:materials/properties/magical",
+    "forgero:materials/roles/upgrade_material",
+    "forgero:upgrades/types/cosmetic"
   ],
   "host": {
     "identifiers": [
@@ -39,5 +40,26 @@
         "value": 15
       }
     }
-  ]
+  ],
+  "properties": {
+    "minecraft:on_hit": [
+      {
+        "selector": {
+          "type": "forgero:single_target"
+        },
+        "effects": [
+          {
+            "type": "forgero:status_effect",
+            "effect": "minecraft:poison",
+            "duration": 100,
+            "amplifier": 0
+          }
+        ],
+        "condition": {
+          "type": "forgero:in_slot_type",
+          "slot_type": "forgero:materials/roles/upgrade_material"
+        }
+      }
+    ]
+  }
 }

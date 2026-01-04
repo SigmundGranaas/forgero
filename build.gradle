@@ -289,3 +289,23 @@ tasks.register('cleanExtractedSources') {
 		}
 	}
 }
+
+// ==============================================================================
+// Tag Validation Tasks
+// ==============================================================================
+
+tasks.register('validateTags') {
+	group = 'verification'
+	description = 'Validate Forgero tag definitions for cycles, undefined parents, and orphans'
+
+	// Depend on compiling core module
+	dependsOn ':modules:core:classes'
+
+	doLast {
+		javaexec {
+			classpath = project(':modules:core').sourceSets.main.runtimeClasspath
+			mainClass = 'com.sigmundgranaas.forgero.validation.TagValidationRunner'
+			args = [projectDir.absolutePath]
+		}
+	}
+}

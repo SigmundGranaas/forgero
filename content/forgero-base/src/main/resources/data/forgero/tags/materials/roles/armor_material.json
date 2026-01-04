@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:materials/roles"
+  ],
+  "description": "Materials armor material"
+}

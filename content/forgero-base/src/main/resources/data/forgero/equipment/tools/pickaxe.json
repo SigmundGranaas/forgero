@@ -3,7 +3,7 @@
   "name": "pickaxe",
   "tags": [
     "forgero:tools/pickaxe",
-    "forgero:tool"
+    "forgero:tools"
   ],
   "host_template": {
     "class": "forgero:pickaxe_item",
@@ -13,11 +13,11 @@
     "id": "forgero:{head.material.name}-pickaxe",
     "slots": {
       "head": {
-        "type": "forgero:pickaxe_head",
-        "default_tag": "forgero:parts/pickaxe_head"
+        "type": "forgero:parts/types/pickaxe_head",
+        "default_tag": "forgero:parts/types/pickaxe_head"
       },
       "handle": {
-        "type": "forgero:handle",
+        "type": "forgero:parts/categories/handle",
         "default": "forgero:wooden_handle"
       }
     }
@@ -25,9 +25,15 @@
   "upgrades": [
     {
       "id": "forgero:pickaxe-binding",
-      "type": "forgero:upgrade_material",
-      "tags": ["forgero:binding"],
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:materials/types/binding"],
       "description": "slot.forgero.binding"
+    },
+    {
+      "id": "forgero:pickaxe-gem",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/gem"],
+      "description": "slot.forgero.gem"
     }
   ],
   "attributes": [

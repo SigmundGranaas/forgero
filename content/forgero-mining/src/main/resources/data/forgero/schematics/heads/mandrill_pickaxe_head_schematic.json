@@ -18,14 +18,14 @@
   "upgrades": [
     {
       "id": "forgero:mandrill_pickaxe_head-reinforcement-slot",
-      "type": "forgero:upgrade_material",
-      "tags": ["forgero:reinforcement"],
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/reinforcement"],
       "description": "slot.forgero.reinforcement"
     },
     {
       "id": "forgero:mandrill_pickaxe_head-cosmetic-slot",
       "type": "forgero:dye",
-      "tags": ["forgero:upgrade/cosmetic"],
+      "tags": ["forgero:upgrades/types/cosmetic"],
       "description": "slot.forgero.cosmetic"
     }
   ]

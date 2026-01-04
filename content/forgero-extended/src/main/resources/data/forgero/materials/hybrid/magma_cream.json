@@ -2,7 +2,10 @@
   "type": "forgero:material",
   "name": "Magma Cream",
   "tags": [
-    "forgero:binding"
+    "forgero:materials/types/binding",
+    "forgero:materials/properties/hybrid",
+    "forgero:materials/properties/magical",
+    "forgero:materials/roles/upgrade_material"
   ],
   "host": {
     "identifiers": [
@@ -38,5 +41,24 @@
         "value": 20
       }
     }
-  ]
+  ],
+  "properties": {
+    "minecraft:on_hit": [
+      {
+        "selector": {
+          "type": "forgero:single_target"
+        },
+        "effects": [
+          {
+            "type": "forgero:fire",
+            "duration": 2
+          }
+        ],
+        "condition": {
+          "type": "forgero:in_slot_type",
+          "slot_type": "forgero:materials/roles/upgrade_material"
+        }
+      }
+    ]
+  }
 }

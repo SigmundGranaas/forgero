@@ -15,7 +15,7 @@
     "id": "forgero:{material.name}-{shape.name}_plate",
     "slots": {
       "material": {
-        "type": "forgero:armor_material"
+        "type": "forgero:materials/roles/armor_material"
       },
       "shape": {
         "type": "forgero:armor_plate_shape"

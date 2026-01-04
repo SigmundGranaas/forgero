@@ -2,9 +2,9 @@
   "type": "forgero:material",
   "name": "Flawless Diamond",
   "tags": [
-    "forgero:gem",
-    "forgero:diamond",
-    "forgero:reinforcement"
+    "forgero:upgrades/types/gem",
+    "forgero:materials/types/diamond",
+    "forgero:upgrades/types/reinforcement"
   ],
   "attributes": [
     {

@@ -1,0 +1,205 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://forgero.sigmundgranaas.com/schemas/equipment-template.json",
+  "title": "Forgero Equipment Template",
+  "description": "Template that defines complete tools or armor from parts",
+  "type": "object",
+  "required": ["type", "name"],
+  "properties": {
+    "type": {
+      "const": "forgero:equipment_template",
+      "description": "Type identifier for equipment templates"
+    },
+    "name": {
+      "type": "string",
+      "description": "Unique template name",
+      "examples": ["Pickaxe", "Sword", "Helmet"]
+    },
+    "include": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "IDs to inherit from"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Tags for this template",
+      "examples": ["forgero:tools/pickaxe", "forgero:armor/helmet"]
+    },
+    "local_tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Tags NOT inherited"
+    },
+    "host_template": {
+      "$ref": "#/definitions/hostTemplate",
+      "description": "Template for item creation"
+    },
+    "structure": {
+      "$ref": "#/definitions/structure",
+      "description": "Defines slot composition"
+    },
+    "upgrades": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/upgradeSlot" },
+      "description": "Upgrade slot definitions"
+    },
+    "attributes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/attribute" },
+      "description": "Attributes for generated equipment"
+    },
+    "properties": {
+      "type": "object",
+      "description": "Properties for generated equipment",
+      "additionalProperties": true
+    },
+    "generation": {
+      "$ref": "#/definitions/generation",
+      "description": "Controls which combinations generate"
+    }
+  },
+  "definitions": {
+    "hostTemplate": {
+      "type": "object",
+      "properties": {
+        "identifiers": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/hostIdentifier" }
+        },
+        "create": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "ID template with placeholders (e.g., 'forgero:{head.material.name}-pickaxe')"
+            },
+            "class_name": {
+              "type": "string",
+              "description": "Item class to use",
+              "examples": ["forgero:pickaxe_item", "forgero:sword_item", "forgero:armor_item"]
+            },
+            "item_group": {
+              "type": "string",
+              "description": "Creative tab group"
+            }
+          }
+        }
+      }
+    },
+    "hostIdentifier": {
+      "type": "object",
+      "required": ["type", "id"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["item", "tag"]
+        },
+        "id": { "type": "string" }
+      }
+    },
+    "structure": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID template for generated equipment"
+        },
+        "slots": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/definitions/structureSlot" },
+          "description": "Map of slot_name -> slot definition (e.g., head, handle, binding)"
+        }
+      }
+    },
+    "structureSlot": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Slot type tag (e.g., 'forgero:parts/pickaxe_head_type')"
+        },
+        "default_tag": {
+          "type": "string",
+          "description": "Tag identifying default parts pool"
+        },
+        "default": {
+          "type": "string",
+          "description": "Specific default part ID"
+        },
+        "count": {
+          "type": "integer",
+          "description": "Amount needed"
+        },
+        "description": {
+          "type": "string",
+          "description": "Translatable description key"
+        }
+      }
+    },
+    "upgradeSlot": {
+      "type": "object",
+      "required": ["id", "type"],
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string" },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "tier": { "type": "integer" },
+        "description": { "type": "string" }
+      }
+    },
+    "attribute": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string" },
+        "computation": {
+          "oneOf": [
+            { "type": "number" },
+            { "type": "object" }
+          ]
+        },
+        "condition": { "type": "object" },
+        "context": { "type": "string" }
+      }
+    },
+    "generation": {
+      "type": "object",
+      "properties": {
+        "slots": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/definitions/generationFilter" }
+        }
+      }
+    },
+    "generationFilter": {
+      "type": "object",
+      "properties": {
+        "require_all_tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "require_any_tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "exclude_any_tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "exclude_all_tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "explicit_list": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

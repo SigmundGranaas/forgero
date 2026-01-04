@@ -40,7 +40,8 @@ public class SimilarBlockFilter implements BlockFilter {
 		try {
 			return similarityCache.get(currentBlock.getBlock().hashCode() + rootBlock.getBlock().hashCode(), () -> evaluateSimilarity(currentBlock, rootBlock));
 		} catch (ExecutionException e) {
-			LOGGER.error("Exception when filtering similarityCache", e);
+			LOGGER.error("Exception when computing block similarity between '{}' and '{}' - defaulting to not similar",
+					currentBlock.getBlock(), rootBlock.getBlock(), e);
 			return false;
 		}
 	}

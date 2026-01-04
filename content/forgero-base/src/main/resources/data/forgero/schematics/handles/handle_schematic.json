@@ -2,7 +2,7 @@
   "type": "forgero:schematic",
   "name": "Handle",
   "tags": [
-    "forgero:handle"
+    "forgero:parts/categories/handle"
   ],
   "attributes": [
     {
@@ -19,7 +19,7 @@
       "id": "forgero:cosmetic-slot",
       "type": "forgero:dye",
       "tags": [
-        "forgero:upgrade/cosmetic"
+        "forgero:upgrades/types/cosmetic"
       ],
       "description": "slot.forgero.cosmetic"
     }

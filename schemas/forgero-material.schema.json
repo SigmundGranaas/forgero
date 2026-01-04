@@ -1,0 +1,158 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://forgero.sigmundgranaas.com/schemas/material.json",
+  "title": "Forgero Material",
+  "description": "Material definition with stats, properties, and host mapping",
+  "type": "object",
+  "required": ["type", "name"],
+  "properties": {
+    "type": {
+      "const": "forgero:material",
+      "description": "Type identifier for materials"
+    },
+    "name": {
+      "type": "string",
+      "description": "Unique material name",
+      "examples": ["Iron", "Diamond", "Oak"]
+    },
+    "include": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "IDs to inherit from (cascades tags/attributes)"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Tags inherited via include",
+      "examples": ["forgero:materials/tool_material", "forgero:materials/metal"]
+    },
+    "local_tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Tags NOT inherited via include"
+    },
+    "host": {
+      "$ref": "#/definitions/host",
+      "description": "Maps to vanilla/platform items"
+    },
+    "attributes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/attribute" },
+      "description": "Attributes inherited via include"
+    },
+    "local_attributes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/attribute" },
+      "description": "Attributes NOT inherited via include"
+    },
+    "properties": {
+      "type": "object",
+      "description": "Event handlers and behaviors",
+      "additionalProperties": true
+    }
+  },
+  "definitions": {
+    "host": {
+      "type": "object",
+      "description": "Host mapping configuration",
+      "properties": {
+        "identifiers": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/hostIdentifier" },
+          "description": "Vanilla/platform item mappings"
+        },
+        "create": {
+          "$ref": "#/definitions/hostCreate",
+          "description": "Create a new item for this material"
+        }
+      }
+    },
+    "hostIdentifier": {
+      "type": "object",
+      "required": ["type", "id"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["item", "tag"],
+          "description": "Identifier type"
+        },
+        "id": {
+          "type": "string",
+          "description": "Item or tag ID",
+          "examples": ["minecraft:iron_ingot", "c:iron_ingots"]
+        }
+      }
+    },
+    "hostCreate": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID for the created item"
+        },
+        "class_name": {
+          "type": "string",
+          "description": "Item class to use"
+        },
+        "item_group": {
+          "type": "string",
+          "description": "Creative tab group"
+        }
+      }
+    },
+    "attribute": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for this attribute"
+        },
+        "type": {
+          "type": "string",
+          "description": "Attribute type identifier",
+          "enum": [
+            "forgero:durability",
+            "forgero:attack_damage",
+            "forgero:attack_speed",
+            "forgero:mining_speed",
+            "forgero:mining_level",
+            "forgero:armor",
+            "forgero:armor_toughness",
+            "forgero:rarity",
+            "forgero:weight",
+            "forgero:draw_speed",
+            "forgero:draw_power"
+          ]
+        },
+        "computation": {
+          "oneOf": [
+            { "type": "number" },
+            {
+              "type": "object",
+              "properties": {
+                "add": { "type": "number" },
+                "subtract": { "type": "number" },
+                "multiply": { "type": "number" },
+                "divide": { "type": "number" },
+                "value": { "type": "number" },
+                "operator": { "type": "string" },
+                "order": { "type": "string" }
+              }
+            }
+          ],
+          "description": "The value and operation for this attribute"
+        },
+        "condition": {
+          "type": "object",
+          "description": "Condition for when this attribute applies"
+        },
+        "context": {
+          "type": "string",
+          "enum": ["forgero:part-composite", "forgero:local", "forgero:upgrade"],
+          "description": "Context for attribute application"
+        }
+      }
+    }
+  }
+}

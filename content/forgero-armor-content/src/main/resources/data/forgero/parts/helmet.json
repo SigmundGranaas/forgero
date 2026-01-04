@@ -3,8 +3,8 @@
   "name": "helmet",
   "tags": [
     "forgero:armor/helmet",
-    "forgero:armor",
-    "minecraft:armor/helmet"
+    "forgero:armors",
+    "forgero:helmet"
   ],
   "host_template": {
     "class": "forgero:armor_item",
@@ -14,30 +14,37 @@
     "id": "forgero:{material.name}-helmet",
     "slots": {
       "material": {
-        "type": "forgero:armor_material",
-        "default_tag": "forgero:armor_material"
+        "type": "forgero:materials/roles/armor_material",
+        "default_tag": "forgero:materials/roles/armor_material"
       }
     }
   },
   "upgrades": [
     {
       "id": "forgero:helmet-gem",
-      "type": "forgero:upgrade_material",
-      "tags": ["forgero:gem"],
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/gem"],
       "description": "slot.forgero.gem"
     },
     {
       "id": "forgero:helmet-lining",
-      "type": "forgero:upgrade_material",
+      "type": "forgero:materials/roles/upgrade_material",
       "tags": ["forgero:lining"],
       "description": "slot.forgero.lining"
     }
   ],
   "attributes": [
     {
-      "id": "forgero:helmet-armor-base",
+      "id": "forgero:helmet-armor-mult",
       "type": "forgero:armor",
-      "computation": {"value": 2, "operation": "addition"}
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
+    },
+    {
+      "id": "forgero:helmet-durability-mult",
+      "type": "forgero:durability",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
     }
   ]
 }

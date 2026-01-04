@@ -2,9 +2,9 @@
   "type": "forgero:material",
   "name": "Perfect Prismarine",
   "tags": [
-    "forgero:gem",
-    "forgero:prismarine",
-    "forgero:reinforcement"
+    "forgero:upgrades/types/gem",
+    "forgero:materials/types/prismarine",
+    "forgero:upgrades/types/reinforcement"
   ],
   "host": {
     "identifiers": [

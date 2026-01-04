@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:weapons"
+  ],
+  "description": "Weapons types"
+}

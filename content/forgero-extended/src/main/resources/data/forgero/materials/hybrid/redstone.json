@@ -2,7 +2,7 @@
   "type": "forgero:material",
   "name": "Redstone",
   "tags": [
-    "forgero:cosmetic"
+    "forgero:upgrades/types/cosmetic"
   ],
   "host": {
     "identifiers": [

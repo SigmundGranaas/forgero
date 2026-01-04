@@ -3,8 +3,8 @@
   "name": "boots",
   "tags": [
     "forgero:armor/boots",
-    "forgero:armor",
-    "minecraft:armor/boots"
+    "forgero:armors",
+    "forgero:boots"
   ],
   "host_template": {
     "class": "forgero:armor_item",
@@ -14,30 +14,37 @@
     "id": "forgero:{material.name}-boots",
     "slots": {
       "material": {
-        "type": "forgero:armor_material",
-        "default_tag": "forgero:armor_material"
+        "type": "forgero:materials/roles/armor_material",
+        "default_tag": "forgero:materials/roles/armor_material"
       }
     }
   },
   "upgrades": [
     {
       "id": "forgero:boots-gem",
-      "type": "forgero:upgrade_material",
-      "tags": ["forgero:gem"],
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/gem"],
       "description": "slot.forgero.gem"
     },
     {
       "id": "forgero:boots-lining",
-      "type": "forgero:upgrade_material",
+      "type": "forgero:materials/roles/upgrade_material",
       "tags": ["forgero:lining"],
       "description": "slot.forgero.lining"
     }
   ],
   "attributes": [
     {
-      "id": "forgero:boots-armor-base",
+      "id": "forgero:boots-armor-mult",
       "type": "forgero:armor",
-      "computation": {"value": 2, "operation": "addition"}
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
+    },
+    {
+      "id": "forgero:boots-durability-mult",
+      "type": "forgero:durability",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
     }
   ]
 }

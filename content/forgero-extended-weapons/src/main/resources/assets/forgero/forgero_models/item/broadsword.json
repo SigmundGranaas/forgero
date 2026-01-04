@@ -19,8 +19,16 @@
         "renderer": { "type": "forgero:component" }
       },
       {
-        "id": "broadsword-binding",
+        "id": "broadsword-guard",
         "order": 15,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "sword_guard"
+        }
+      },
+      {
+        "id": "broadsword-binding",
+        "order": 12,
         "renderer": {
           "type": "forgero:component",
           "context": "tool_binding"

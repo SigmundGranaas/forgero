@@ -2,9 +2,11 @@
   "type": "forgero:material",
   "name": "Gold",
   "tags": [
-    "forgero:metal",
-    "forgero:tool_material",
-    "forgero:tip_reinforcement"
+    "forgero:materials/types/metal",
+    "forgero:materials/roles/tool_material",
+    "forgero:materials/roles/armor_material",
+    "forgero:materials/properties/soft",
+    "forgero:upgrades/types/tip_reinforcement"
   ],
   "host": {
     "identifiers": [
@@ -91,12 +93,13 @@
       "id": "forgero:gold-armor",
       "type": "forgero:armor",
       "computation": {
-        "value": 0
+        "value": 2,
+        "operation": "addition"
       },
       "context": "forgero:part-composite",
       "condition": {
         "type": "forgero:in_slot_type",
-        "slot_type": "forgero:armor_material"
+        "slot_type": "forgero:materials/roles/armor_material"
       }
     }
   ]

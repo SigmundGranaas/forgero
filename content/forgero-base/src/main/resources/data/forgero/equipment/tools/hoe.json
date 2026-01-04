@@ -3,7 +3,7 @@
   "name": "hoe",
   "tags": [
     "forgero:tools/hoe",
-    "forgero:tool"
+    "forgero:tools"
   ],
   "host_template": {
     "class": "forgero:hoe_item",
@@ -13,11 +13,11 @@
     "id": "forgero:{head.material.name}-hoe",
     "slots": {
       "head": {
-        "type": "forgero:hoe_head",
-        "default_tag": "forgero:parts/hoe_head"
+        "type": "forgero:parts/types/hoe_head",
+        "default_tag": "forgero:parts/types/hoe_head"
       },
       "handle": {
-        "type": "forgero:handle",
+        "type": "forgero:parts/categories/handle",
         "default": "forgero:wooden_handle"
       }
     }
@@ -25,8 +25,8 @@
   "upgrades": [
     {
       "id": "forgero:hoe-binding",
-      "type": "forgero:upgrade_material",
-      "tags": ["forgero:binding"],
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:materials/types/binding"],
       "description": "slot.forgero.binding"
     }
   ],

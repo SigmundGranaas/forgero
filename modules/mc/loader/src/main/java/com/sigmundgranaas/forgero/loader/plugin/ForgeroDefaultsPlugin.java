@@ -50,6 +50,12 @@ public class ForgeroDefaultsPlugin implements DataPlugin {
 		// The factory for TagMatchCondition.codec is now registered.
 		context.registerStaticConditionCodec("forgero:self_has_tag", TagMatchCondition::codec);
 		context.registerStaticConditionCodec("forgero:root_has_tag", TagMatchCondition::codec);
+
+		// Multi-tag conditions for multi-axis taxonomy (Phase 3)
+		context.registerStaticConditionCodec("forgero:self_has_all_tags", AllTagsMatchCondition::codec);
+		context.registerStaticConditionCodec("forgero:root_has_all_tags", AllTagsMatchCondition::codec);
+		context.registerStaticConditionCodec("forgero:self_has_any_tag", AnyTagMatchCondition::codec);
+		context.registerStaticConditionCodec("forgero:root_has_any_tag", AnyTagMatchCondition::codec);
 	}
 
 	@Override

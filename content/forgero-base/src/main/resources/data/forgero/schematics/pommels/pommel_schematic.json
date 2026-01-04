@@ -2,7 +2,7 @@
   "type": "forgero:schematic",
   "name": "Pommel",
   "tags": [
-    "forgero:pommel"
+    "forgero:upgrades/types/pommel"
   ],
   "attributes": [
     {
@@ -64,7 +64,7 @@
       "id": "forgero:cosmetic-slot",
       "type": "forgero:dye",
       "tags": [
-        "forgero:upgrade/cosmetic"
+        "forgero:upgrades/types/cosmetic"
       ],
       "description": "slot.forgero.cosmetic"
     }

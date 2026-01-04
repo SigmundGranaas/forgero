@@ -1,0 +1,201 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://forgero.sigmundgranaas.com/schemas/model-extension.json",
+  "title": "Forgero Model Extension",
+  "description": "Extension that adds visual elements (layers, slots, mount points) to existing models",
+  "type": "object",
+  "required": ["type", "target"],
+  "properties": {
+    "type": {
+      "const": "forgero:model_extension",
+      "description": "Type identifier for model extensions"
+    },
+    "target": {
+      "type": "string",
+      "description": "ID of the model to extend (e.g., 'forgero:parts/iron-pickaxe_head')",
+      "pattern": "^[a-z_-]+:[a-z_/-]+$",
+      "examples": ["forgero:parts/iron-pickaxe_head", "forgero:equipment/iron-pickaxe"]
+    },
+    "priority": {
+      "type": "integer",
+      "default": 0,
+      "description": "Merge priority - lower values are applied first"
+    },
+    "layers": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/layer" },
+      "description": "Layers to append after target layers"
+    },
+    "slots": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/slot" },
+      "description": "Slots to add or override (by ID)"
+    },
+    "mount_points": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/mountPoint" },
+      "description": "Mount points to add or override (by name)"
+    }
+  },
+  "definitions": {
+    "layer": {
+      "type": "object",
+      "description": "A texture layer in a composite model",
+      "required": ["order", "textures"],
+      "properties": {
+        "order": {
+          "type": "integer",
+          "description": "Render order (lower = rendered first/bottom)"
+        },
+        "textures": {
+          "$ref": "#/definitions/textures",
+          "description": "Texture configuration for this layer"
+        },
+        "offset": {
+          "type": "array",
+          "items": { "type": "integer" },
+          "minItems": 2,
+          "maxItems": 2,
+          "description": "Pixel offset [x, y]"
+        }
+      }
+    },
+    "textures": {
+      "type": "object",
+      "description": "Texture configuration with optional variants",
+      "required": ["default"],
+      "properties": {
+        "default": {
+          "type": "string",
+          "description": "Default texture path",
+          "examples": ["forgero:item/iron-pickaxe_head"]
+        },
+        "variants": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/variant" },
+          "description": "Conditional texture variants"
+        }
+      }
+    },
+    "variant": {
+      "type": "object",
+      "description": "A conditional texture variant",
+      "required": ["predicate"],
+      "properties": {
+        "predicate": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/predicate" },
+          "description": "Conditions that must all match (AND logic)"
+        },
+        "texture": {
+          "type": "string",
+          "description": "Texture to use when predicate matches"
+        },
+        "model": {
+          "type": "string",
+          "description": "Model to use when predicate matches"
+        },
+        "offset": {
+          "type": "array",
+          "items": { "type": "integer" },
+          "minItems": 2,
+          "maxItems": 2,
+          "description": "Pixel offset [x, y]"
+        }
+      }
+    },
+    "predicate": {
+      "type": "object",
+      "description": "A condition for texture/model selection",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "forgero:root_tag",
+            "forgero:child_tag",
+            "forgero:bow_pulling",
+            "forgero:bow_pull"
+          ],
+          "description": "Predicate type"
+        },
+        "tag": {
+          "type": "string",
+          "description": "Tag to check (for tag predicates)"
+        },
+        "pulling": {
+          "type": "boolean",
+          "description": "Whether bow is being pulled (for bow_pulling)"
+        },
+        "pull": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Bow pull amount 0.0-1.0 (for bow_pull)"
+        }
+      }
+    },
+    "slot": {
+      "type": "object",
+      "description": "A slot for child component rendering",
+      "required": ["id", "order", "renderer"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Slot identifier (matches component part ID)"
+        },
+        "order": {
+          "type": "integer",
+          "description": "Render order"
+        },
+        "renderer": {
+          "$ref": "#/definitions/renderer",
+          "description": "How to render the child component"
+        },
+        "mount": {
+          "type": "string",
+          "description": "Parent mount point name"
+        },
+        "child_mount": {
+          "type": "string",
+          "description": "Child mount point name"
+        }
+      }
+    },
+    "renderer": {
+      "type": "object",
+      "description": "Renderer configuration for a slot",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["forgero:component", "forgero:default"],
+          "description": "Renderer type"
+        },
+        "context": {
+          "type": "string",
+          "description": "Context for contextual models"
+        }
+      }
+    },
+    "mountPoint": {
+      "type": "object",
+      "description": "A named position for component attachment",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Mount point name"
+        },
+        "position": {
+          "type": "array",
+          "items": { "type": "integer" },
+          "minItems": 2,
+          "maxItems": 2,
+          "default": [0, 0],
+          "description": "Position [x, y] in pixels"
+        }
+      }
+    }
+  }
+}

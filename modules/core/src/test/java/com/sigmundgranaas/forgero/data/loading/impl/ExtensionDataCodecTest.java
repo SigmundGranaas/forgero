@@ -10,9 +10,11 @@ import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 import com.sigmundgranaas.forgero.data.loading.api.data.ExtensionData;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
+import com.sigmundgranaas.forgero.data.loading.api.data.template.UpgradeSlotData;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.AttributeCodecs;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.ExtensionCodecs;
+import com.sigmundgranaas.forgero.data.loading.impl.codec.PartTemplateCodecs;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -34,8 +36,9 @@ class ExtensionDataCodecTest {
 		ConditionCodec conditionCodec = new ConditionCodec(staticCodecs, dynamicCodecs);
 
 		Codec<List<AttributeData>> attributeListCodec = Codec.list(AttributeCodecs.create(conditionCodec));
+		Codec<List<UpgradeSlotData>> upgradeSlotCodec = Codec.list(PartTemplateCodecs.UPGRADE_SLOT_DATA_CODEC);
 
-		this.extensionDataCodec = ExtensionCodecs.create(attributeListCodec);
+		this.extensionDataCodec = ExtensionCodecs.create(attributeListCodec, upgradeSlotCodec);
 	}
 
 	private <T> T parseSuccess(Codec<T> codec, String json) {
@@ -180,5 +183,47 @@ class ExtensionDataCodecTest {
 		assertEquals(List.of(), data.localTags());
 		assertEquals(List.of(), data.localAttributes());
 		assertNull(data.host());
+	}
+
+	@Test
+	void testParseExtensionWithUpgradeSlots() {
+		String json = """
+				{
+				  "type": "forgero:extension",
+				  "target": "forgero:equipment/pickaxe",
+				  "priority": 100,
+				  "upgrades": [
+				    {
+				      "id": "dye_slot",
+				      "type": "forgero:dye_material",
+				      "tags": ["forgero:dye"],
+				      "description": "forgero.slot.dye"
+				    },
+				    {
+				      "id": "gem_slot",
+				      "type": "forgero:gem_material"
+				    }
+				  ]
+				}
+				""";
+
+		ExtensionData data = parseSuccess(extensionDataCodec, json);
+		assertEquals(id("forgero:equipment/pickaxe"), data.target());
+		assertEquals(100, data.priority());
+
+		assertNotNull(data.upgrades());
+		assertEquals(2, data.upgrades().size());
+
+		UpgradeSlotData dyeSlot = data.upgrades().get(0);
+		assertEquals(id("dye_slot"), dyeSlot.id());
+		assertEquals(id("forgero:dye_material"), dyeSlot.type());
+		assertNotNull(dyeSlot.tags());
+		assertEquals(1, dyeSlot.tags().size());
+		assertEquals("forgero.slot.dye", dyeSlot.description());
+
+		UpgradeSlotData gemSlot = data.upgrades().get(1);
+		assertEquals(id("gem_slot"), gemSlot.id());
+		assertEquals(id("forgero:gem_material"), gemSlot.type());
+		assertNull(gemSlot.tags());
 	}
 }

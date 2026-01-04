@@ -12,8 +12,8 @@
     "id": "forgero:{material.name}-binding",
     "slots": {
       "material": {
-        "type": "forgero:upgrade_material",
-        "default_tag": "forgero:binding"
+        "type": "forgero:materials/roles/upgrade_material",
+        "default_tag": "forgero:materials/types/binding"
       }
     }
   },

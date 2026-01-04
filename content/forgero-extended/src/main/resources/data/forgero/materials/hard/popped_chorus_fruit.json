@@ -2,9 +2,10 @@
   "type": "forgero:material",
   "name": "Popped Chorus Fruit",
   "tags": [
-    "forgero:hard",
-    "forgero:binding",
-    "forgero:reinforcement"
+    "forgero:materials/properties/hard",
+    "forgero:materials/types/binding",
+    "forgero:materials/roles/upgrade_material",
+    "forgero:upgrades/types/reinforcement"
   ],
   "host": {
     "identifiers": [
@@ -40,5 +41,27 @@
         "value": 25
       }
     }
-  ]
+  ],
+  "properties": {
+    "minecraft:on_hit": [
+      {
+        "selector": {
+          "type": "forgero:single_target"
+        },
+        "effects": [
+          {
+            "type": "forgero:teleport",
+            "target": "target",
+            "random": true,
+            "onGround": true,
+            "maxDistance": 8
+          }
+        ],
+        "condition": {
+          "type": "forgero:in_slot_type",
+          "slot_type": "forgero:materials/roles/upgrade_material"
+        }
+      }
+    ]
+  }
 }
