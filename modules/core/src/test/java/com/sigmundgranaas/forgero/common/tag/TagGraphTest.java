@@ -189,4 +189,129 @@ class TagGraphTest {
 		assertTrue(parents.contains(material));
 		assertFalse(parents.contains(tool));
 	}
+
+	// ========== Robustness Tests (Phase 4.3) ==========
+
+	@Test
+	void handlesCircularDependencies() {
+		// Create a circular dependency: A -> B -> C -> A
+		OpenIdentifier tagA = new OpenIdentifier("test", "tag_a");
+		OpenIdentifier tagB = new OpenIdentifier("test", "tag_b");
+		OpenIdentifier tagC = new OpenIdentifier("test", "tag_c");
+
+		Map<OpenIdentifier, Set<OpenIdentifier>> circular = new HashMap<>();
+		circular.put(tagA, Set.of(tagB));
+		circular.put(tagB, Set.of(tagC));
+		circular.put(tagC, Set.of(tagA)); // Creates cycle
+
+		// Constructor should not throw
+		TagGraph circularGraph = new TagGraph(circular);
+		assertNotNull(circularGraph);
+
+		// Should be able to get descendants without infinite loop
+		Set<OpenIdentifier> descendants = circularGraph.getDescendants(tagA);
+		assertFalse(descendants.isEmpty());
+		assertTrue(descendants.size() <= 3, "Should not infinitely loop through circular dependency");
+	}
+
+	@Test
+	void preventsInfiniteLoopsInTraversal() {
+		// Create complex graph with potential for infinite traversal
+		OpenIdentifier root = new OpenIdentifier("test", "root");
+		OpenIdentifier child1 = new OpenIdentifier("test", "child1");
+		OpenIdentifier child2 = new OpenIdentifier("test", "child2");
+		OpenIdentifier grandchild = new OpenIdentifier("test", "grandchild");
+
+		Map<OpenIdentifier, Set<OpenIdentifier>> relationships = new HashMap<>();
+		relationships.put(child1, Set.of(root));
+		relationships.put(child2, Set.of(root));
+		relationships.put(grandchild, Set.of(child1, child2)); // Diamond shape
+
+		TagGraph diamondGraph = new TagGraph(relationships);
+
+		// Traversal should visit each node only once
+		Taggable item = new TaggableItem(Set.of(grandchild));
+
+		// Should correctly identify all tags without infinite loop
+		assertTrue(diamondGraph.isTagged(item, grandchild));
+		assertTrue(diamondGraph.isTagged(item, child1));
+		assertTrue(diamondGraph.isTagged(item, child2));
+		assertTrue(diamondGraph.isTagged(item, root));
+	}
+
+	@Test
+	void handlesLargeGraphs() {
+		// Create a large graph with 1000+ tags in a deep hierarchy
+		Map<OpenIdentifier, Set<OpenIdentifier>> largeGraph = new HashMap<>();
+		OpenIdentifier previous = new OpenIdentifier("test", "root");
+
+		for (int i = 0; i < 1000; i++) {
+			OpenIdentifier current = new OpenIdentifier("test", "tag_" + i);
+			largeGraph.put(current, Set.of(previous));
+			previous = current;
+		}
+
+		// Constructor and operations should handle large graph efficiently
+		TagGraph bigGraph = new TagGraph(largeGraph);
+		// Should have 1000 tags (tag_0 through tag_999) + 1 root = 1001 total,
+		// but root may not be included if it has no parents
+		assertTrue(bigGraph.getAllIdentifiers().size() >= 1000,
+			"Should handle at least 1000 tags efficiently");
+
+		// Should be able to query deep hierarchy
+		OpenIdentifier leaf = new OpenIdentifier("test", "tag_999");
+		OpenIdentifier root = new OpenIdentifier("test", "root");
+		Taggable item = new TaggableItem(Set.of(leaf));
+
+		// Should find tag at root of deep hierarchy without stack overflow
+		assertTrue(bigGraph.isTagged(item, root));
+	}
+
+	@Test
+	void mergeWithConflictingRelationships() {
+		// Create first graph: metal -> material
+		Map<OpenIdentifier, Set<OpenIdentifier>> graph1 = new HashMap<>();
+		graph1.put(metal, Set.of(material));
+		TagGraph tagGraph1 = new TagGraph(graph1);
+
+		// Create second graph: metal -> tool (conflicting parent)
+		Map<OpenIdentifier, Set<OpenIdentifier>> graph2 = new HashMap<>();
+		graph2.put(metal, Set.of(tool));
+		TagGraph tagGraph2 = new TagGraph(graph2);
+
+		// Merge graphs
+		var merged = tagGraph1.merge(tagGraph2);
+
+		// After merge, metal should have both parents
+		Set<OpenIdentifier> metalParents = merged.getParents(metal);
+		assertTrue(metalParents.contains(material), "Should preserve original parent");
+		assertTrue(metalParents.contains(tool), "Should include merged parent");
+		assertEquals(2, metalParents.size());
+	}
+
+	@Test
+	void visitorSetPreventsDuplicateVisits() {
+		// Create a graph where multiple paths lead to the same tag
+		OpenIdentifier common = new OpenIdentifier("test", "common");
+		OpenIdentifier path1 = new OpenIdentifier("test", "path1");
+		OpenIdentifier path2 = new OpenIdentifier("test", "path2");
+		OpenIdentifier leaf = new OpenIdentifier("test", "leaf");
+
+		Map<OpenIdentifier, Set<OpenIdentifier>> relationships = new HashMap<>();
+		relationships.put(path1, Set.of(common));
+		relationships.put(path2, Set.of(common));
+		relationships.put(leaf, Set.of(path1, path2)); // Both paths lead to common
+
+		TagGraph multiPathGraph = new TagGraph(relationships);
+
+		// Get descendants should visit common only once
+		Set<OpenIdentifier> descendants = multiPathGraph.getDescendants(common);
+		assertTrue(descendants.contains(common));
+		assertTrue(descendants.contains(path1));
+		assertTrue(descendants.contains(path2));
+		assertTrue(descendants.contains(leaf));
+		assertEquals(4, descendants.size(), "Each tag should be visited exactly once");
+	}
+
+	// ========== End Robustness Tests ==========
 }
