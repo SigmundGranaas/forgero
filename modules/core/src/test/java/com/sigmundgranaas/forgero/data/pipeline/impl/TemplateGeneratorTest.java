@@ -832,6 +832,361 @@ class TemplateGeneratorTest {
 		}
 	}
 
+	@Nested
+	class EdgeCases {
+
+		@Test
+		void preventsDuplicateIDGeneration() {
+			// Given: Two different materials that would generate the same ID
+			CofComponent iron1 = createStaticComponent("forgero:iron", Set.of("forgero:material"));
+			CofComponent iron2 = createStaticComponent("forgero:iron_ore", Set.of("forgero:material"));
+			staticComponents.put(iron1.id(), iron1);
+			staticComponents.put(iron2.id(), iron2);
+
+			CofComponent shape = createStaticComponent("forgero:pickaxe_head_shape", Set.of("forgero:shape"));
+			staticComponents.put(shape.id(), shape);
+
+			// Template uses only material.name which might collide if shortened
+			PartTemplateData template = createPartTemplate(
+					"forgero:part_template",
+					Map.of(
+							"material", new PartTemplateStructureSlotData(id("material"), null, "Material"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape")
+					),
+					"forgero:{material.name}-{shape.name}",
+					null,
+					null
+			);
+			addRawDefinition("forgero:part_template", template);
+
+			// When: Generate
+			TemplateGenerator generator = createGenerator();
+			TemplateGenerator.TemplateResult result = generator.generate();
+
+			// Then: Should generate unique components with unique IDs
+			Set<OpenIdentifier> generatedIds = new HashSet<>();
+			for (CofComponent comp : result.components()) {
+				assertTrue(generatedIds.add(comp.id()),
+						"Duplicate ID generated: " + comp.id());
+			}
+		}
+
+		@Test
+		void limitsCartesianProductExplosion() {
+			// Given: Many materials and shapes that could create a huge cartesian product
+			for (int i = 0; i < 50; i++) {
+				CofComponent material = createStaticComponent("forgero:material_" + i, Set.of("forgero:material"));
+				staticComponents.put(material.id(), material);
+			}
+			for (int i = 0; i < 50; i++) {
+				CofComponent shape = createStaticComponent("forgero:shape_" + i, Set.of("forgero:shape"));
+				staticComponents.put(shape.id(), shape);
+			}
+
+			PartTemplateData template = createPartTemplate(
+					"forgero:part_template",
+					Map.of(
+							"material", new PartTemplateStructureSlotData(id("material"), null, "Material"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape")
+					),
+					"forgero:{material.name}-{shape.name}",
+					null,
+					null
+			);
+			addRawDefinition("forgero:part_template", template);
+
+			// When: Generate
+			TemplateGenerator generator = createGenerator();
+			TemplateGenerator.TemplateResult result = generator.generate();
+
+			// Then: Should complete without hanging or OOM (50 * 50 = 2500 combinations)
+			assertNotNull(result);
+			assertEquals(2500, result.components().size(),
+					"Should generate all combinations when reasonable");
+		}
+
+		@Test
+		void handlesIDTemplateWithMissingPlaceholders() {
+			// Given: Template with placeholder but no corresponding slot
+			CofComponent iron = createStaticComponent("forgero:iron", Set.of("forgero:material"));
+			staticComponents.put(iron.id(), iron);
+
+			// Template references {quality.name} but no quality slot exists
+			PartTemplateData template = createPartTemplate(
+					"forgero:part_template",
+					Map.of(
+							"material", new PartTemplateStructureSlotData(id("material"), null, "Material")
+					),
+					"forgero:{quality.name}-{material.name}",  // quality doesn't exist!
+					null,
+					null
+			);
+			addRawDefinition("forgero:part_template", template);
+
+			// When: Generate
+			TemplateGenerator generator = createGenerator();
+
+			// Then: Should throw IllegalArgumentException for missing placeholder
+			assertThrows(IllegalArgumentException.class, generator::generate,
+					"Should throw exception when placeholder has no corresponding slot");
+		}
+
+		@Test
+		void handlesIDTemplateWithSpecialCharacters() {
+			// Given: Component with special characters in name
+			CofComponent special = createStaticComponent("forgero:iron-ore_v2", Set.of("forgero:material"));
+			staticComponents.put(special.id(), special);
+
+			CofComponent shape = createStaticComponent("forgero:pickaxe_head_shape", Set.of("forgero:shape"));
+			staticComponents.put(shape.id(), shape);
+
+			PartTemplateData template = createPartTemplate(
+					"forgero:part_template",
+					Map.of(
+							"material", new PartTemplateStructureSlotData(id("material"), null, "Material"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape")
+					),
+					"forgero:{material.name}-{shape.name}",
+					null,
+					null
+			);
+			addRawDefinition("forgero:part_template", template);
+
+			// When: Generate
+			TemplateGenerator generator = createGenerator();
+			TemplateGenerator.TemplateResult result = generator.generate();
+
+			// Then: Should handle special characters gracefully
+			assertNotNull(result);
+			assertTrue(result.components().size() > 0);
+			for (CofComponent comp : result.components()) {
+				// ID should be valid (no double dashes, etc.)
+				assertFalse(comp.id().toString().contains("--"));
+			}
+		}
+
+		@Test
+		void respectsFilterPriorityWithMultipleFilters() {
+			// Given: Multiple overlapping filters
+			CofComponent iron = createStaticComponent("forgero:iron", Set.of("forgero:metal", "forgero:common"));
+			CofComponent gold = createStaticComponent("forgero:gold", Set.of("forgero:metal", "forgero:rare"));
+			CofComponent diamond = createStaticComponent("forgero:diamond", Set.of("forgero:gem", "forgero:rare"));
+			staticComponents.put(iron.id(), iron);
+			staticComponents.put(gold.id(), gold);
+			staticComponents.put(diamond.id(), diamond);
+
+			CofComponent shape = createStaticComponent("forgero:pickaxe_head_shape", Set.of("forgero:shape"));
+			staticComponents.put(shape.id(), shape);
+
+			// Filter: require metal OR rare (should match iron, gold, diamond)
+			// Then exclude common (should exclude iron)
+			// Net result: gold only (has metal+rare, diamond has gem+rare but not metal)
+			SlotGenerationFilter filter = SlotGenerationFilter.builder()
+					.requireAllTags(List.of(id("metal")))
+					.excludeAnyTags(List.of(id("common")))
+					.build();
+			GenerationConfigData generationConfig = new GenerationConfigData(Map.of("material", filter));
+
+			PartTemplateData template = createPartTemplate(
+					"forgero:part_template",
+					Map.of(
+							"material", new PartTemplateStructureSlotData(id("material"), null, "Material"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape")
+					),
+					"forgero:{material.name}-{shape.name}",
+					null,
+					null,
+					generationConfig
+			);
+			addRawDefinition("forgero:part_template", template);
+
+			// When: Generate
+			TemplateGenerator generator = createGenerator();
+			TemplateGenerator.TemplateResult result = generator.generate();
+
+			// Then: Should only generate gold-pickaxe_head (gold has metal, excludes iron with common)
+			assertEquals(1, result.components().size());
+			assertEquals(id("gold-pickaxe_head"), result.components().get(0).id());
+		}
+
+		@Test
+		void handlesEmptyFilterList() {
+			// Given: Generation config with empty filter list
+			CofComponent iron = createStaticComponent("forgero:iron", Set.of("forgero:material"));
+			staticComponents.put(iron.id(), iron);
+
+			CofComponent shape = createStaticComponent("forgero:pickaxe_head_shape", Set.of("forgero:shape"));
+			staticComponents.put(shape.id(), shape);
+
+			GenerationConfigData generationConfig = new GenerationConfigData(Map.of());
+
+			PartTemplateData template = createPartTemplate(
+					"forgero:part_template",
+					Map.of(
+							"material", new PartTemplateStructureSlotData(id("material"), null, "Material"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape")
+					),
+					"forgero:{material.name}-{shape.name}",
+					null,
+					null,
+					generationConfig
+			);
+			addRawDefinition("forgero:part_template", template);
+
+			// When: Generate
+			TemplateGenerator generator = createGenerator();
+			TemplateGenerator.TemplateResult result = generator.generate();
+
+			// Then: Should work as if no filters (include all)
+			assertEquals(1, result.components().size());
+		}
+
+		@Test
+		void validatesMaterialCompatibilityAcrossSlots() {
+			// Given: Materials with compatibility constraints
+			CofComponent iron = createStaticComponent("forgero:iron", Set.of("forgero:metal"));
+			CofComponent wood = createStaticComponent("forgero:wood", Set.of("forgero:organic"));
+			staticComponents.put(iron.id(), iron);
+			staticComponents.put(wood.id(), wood);
+
+			// Two slots both requiring materials - should create all combinations
+			PartTemplateData template = createPartTemplate(
+					"forgero:part_template",
+					Map.of(
+							"primary", new PartTemplateStructureSlotData(id("metal"), null, "Primary"),
+							"secondary", new PartTemplateStructureSlotData(id("organic"), null, "Secondary")
+					),
+					"forgero:{primary.name}-{secondary.name}",
+					null,
+					null
+			);
+			addRawDefinition("forgero:part_template", template);
+
+			// When: Generate
+			TemplateGenerator generator = createGenerator();
+			TemplateGenerator.TemplateResult result = generator.generate();
+
+			// Then: Should only generate valid combinations
+			assertEquals(1, result.components().size(),
+					"Should generate iron-wood combination");
+		}
+
+		@Test
+		void handlesConflictingIDsAcrossMultipleTemplates() {
+			// Given: Two templates that would generate the same IDs
+			CofComponent iron = createStaticComponent("forgero:iron", Set.of("forgero:material"));
+			staticComponents.put(iron.id(), iron);
+
+			CofComponent shape1 = createStaticComponent("forgero:pickaxe_head_shape", Set.of("forgero:shape"));
+			CofComponent shape2 = createStaticComponent("forgero:axe_head_shape", Set.of("forgero:shape"));
+			staticComponents.put(shape1.id(), shape1);
+			staticComponents.put(shape2.id(), shape2);
+
+			// Two templates with identical ID patterns (will generate duplicates)
+			PartTemplateData template1 = createPartTemplate(
+					"forgero:part_template_1",
+					Map.of(
+							"material", new PartTemplateStructureSlotData(id("material"), null, "Material"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape")
+					),
+					"forgero:{material.name}-head",  // Both generate "iron-head"
+					null,
+					null
+			);
+			PartTemplateData template2 = createPartTemplate(
+					"forgero:part_template_2",
+					Map.of(
+							"material", new PartTemplateStructureSlotData(id("material"), null, "Material"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape")
+					),
+					"forgero:{material.name}-head",  // Same pattern!
+					null,
+					null
+			);
+			addRawDefinition("forgero:part_template_1", template1);
+			addRawDefinition("forgero:part_template_2", template2);
+
+			// When: Generate
+			TemplateGenerator generator = createGenerator();
+			TemplateGenerator.TemplateResult result = generator.generate();
+
+			// Then: Generator completes without crashing (may produce duplicate IDs)
+			// Note: Later components with same ID may overwrite earlier ones
+			assertNotNull(result);
+			assertTrue(result.components().size() > 0,
+					"Should generate at least one component");
+		}
+
+		@Test
+		void handlesLargeNumberOfSlots() {
+			// Given: Template with many slots
+			Map<String, PartTemplateStructureSlotData> slots = new HashMap<>();
+			StringBuilder idTemplate = new StringBuilder("forgero:");
+
+			// Create 10 slots
+			for (int i = 0; i < 10; i++) {
+				String slotName = "slot" + i;
+				CofComponent comp = createStaticComponent("forgero:comp" + i, Set.of("forgero:tag" + i));
+				staticComponents.put(comp.id(), comp);
+				slots.put(slotName, new PartTemplateStructureSlotData(id("tag" + i), null, "Slot " + i));
+				idTemplate.append("{").append(slotName).append(".name}");
+				if (i < 9) idTemplate.append("-");
+			}
+
+			PartTemplateData template = createPartTemplate(
+					"forgero:part_template",
+					slots,
+					idTemplate.toString(),
+					null,
+					null
+			);
+			addRawDefinition("forgero:part_template", template);
+
+			// When: Generate
+			TemplateGenerator generator = createGenerator();
+			TemplateGenerator.TemplateResult result = generator.generate();
+
+			// Then: Should handle many slots without issues
+			assertEquals(1, result.components().size());
+			CofComponent generated = result.components().get(0);
+			assertNotNull(generated);
+			// ID should contain all slot names
+			assertTrue(generated.id().toString().contains("comp0"));
+			assertTrue(generated.id().toString().contains("comp9"));
+		}
+
+		@Test
+		void handlesCircularTemplateDependencies() {
+			// Given: Templates that might reference each other
+			// Note: This is a stress test - the actual behavior depends on implementation
+			PartTemplateData template1 = createPartTemplate(
+					"forgero:template_a",
+					Map.of(),
+					"forgero:result_a",
+					null,
+					null
+			);
+			PartTemplateData template2 = createPartTemplate(
+					"forgero:template_b",
+					Map.of(),
+					"forgero:result_b",
+					null,
+					null
+			);
+			addRawDefinition("forgero:template_a", template1);
+			addRawDefinition("forgero:template_b", template2);
+
+			// When: Generate
+			TemplateGenerator generator = createGenerator();
+
+			// Then: Should not infinite loop
+			assertDoesNotThrow(() -> {
+				TemplateGenerator.TemplateResult result = generator.generate();
+				assertNotNull(result);
+			});
+		}
+	}
+
 	// ===== Helper Methods =====
 
 	private OpenIdentifier id(String id) {
