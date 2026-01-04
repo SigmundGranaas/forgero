@@ -214,6 +214,52 @@ class ComputationChainTest {
 		assertThrows(ArithmeticException.class, () -> chain.compute(0f));
 	}
 
+	// ========== Edge Case Tests (Phase 4.2) ==========
+
+	@Test
+	void handlesFloatingPointPrecision() {
+		// Test with floating point operations that may have precision issues
+		var attributes = List.of(
+				new SimpleAttribute(DefaultAttributes.ATTACK_DAMAGE, 0.1f, AdditionOperator.getInstance(), 0, Condition.ALWAYS_TRUE),
+				new SimpleAttribute(DefaultAttributes.ATTACK_DAMAGE, 0.2f, AdditionOperator.getInstance(), 0, Condition.ALWAYS_TRUE),
+				new SimpleAttribute(DefaultAttributes.ATTACK_DAMAGE, 0.3f, MultiplicationOperator.getInstance(), 0, Condition.ALWAYS_TRUE)
+		);
+		var chain = new ComputationChain(attributes);
+		// 0 + 0.1 = 0.1, 0.1 + 0.2 = 0.3, 0.3 * 0.3 = 0.09
+		// Use delta for floating point comparison
+		assertEquals(0.09f, chain.compute(0f), 0.0001f);
+	}
+
+	@Test
+	void handlesNaNPropagation() {
+		// Test that NaN values are handled (0/0 produces NaN)
+		var attributes = List.of(
+				new SimpleAttribute(DefaultAttributes.ATTACK_DAMAGE, 0f, AdditionOperator.getInstance(), 0, Condition.ALWAYS_TRUE), // 0 + 0 = 0
+				new SimpleAttribute(DefaultAttributes.ATTACK_DAMAGE, 0f, DivisionOperator.getInstance(), 0, Condition.ALWAYS_TRUE)  // 0 / 0 = NaN (division by zero)
+		);
+		var chain = new ComputationChain(attributes);
+
+		// Division by zero should throw ArithmeticException (as verified by computesWithZeroDivisionHandled test)
+		// but if it were to produce NaN, subsequent operations would propagate it
+		assertThrows(ArithmeticException.class, () -> chain.compute(0f));
+	}
+
+	@Test
+	void handlesInfinityValues() {
+		// Test with very large numbers that could overflow to infinity
+		var attributes = List.of(
+				new SimpleAttribute(DefaultAttributes.ATTACK_DAMAGE, Float.MAX_VALUE, AdditionOperator.getInstance(), 0, Condition.ALWAYS_TRUE),
+				new SimpleAttribute(DefaultAttributes.ATTACK_DAMAGE, 2f, MultiplicationOperator.getInstance(), 0, Condition.ALWAYS_TRUE)
+		);
+		var chain = new ComputationChain(attributes);
+		// 0 + Float.MAX_VALUE = Float.MAX_VALUE
+		// Float.MAX_VALUE * 2 = Infinity (overflow)
+		float result = chain.compute(0f);
+		assertTrue(Float.isInfinite(result), "Result should be infinity due to overflow");
+	}
+
+	// ========== End Edge Case Tests ==========
+
 	/**
 	 * This test demonstrates the use of CalculationVisualizer.
 	 * It's disabled by default as its purpose is to print debug output, not to assert a value.
