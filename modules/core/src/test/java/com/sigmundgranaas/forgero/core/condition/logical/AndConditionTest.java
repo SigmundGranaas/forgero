@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.core.condition.logical;
 
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
@@ -15,14 +16,89 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AndConditionTest {
 
+	// Test helper classes
+	private static final OpenIdentifier TEST_TYPE = new OpenIdentifier("forgero", "test");
+
+	private record TestStaticCondition(boolean result) implements StaticCondition {
+		@Override
+		public boolean test(ResolutionContext context) {
+			return result;
+		}
+
+		@Override
+		public OpenIdentifier type() {
+			return TEST_TYPE;
+		}
+	}
+
+	private static class TrackingStaticCondition implements StaticCondition {
+		private final boolean result;
+		private boolean wasCalled = false;
+
+		TrackingStaticCondition(boolean result) {
+			this.result = result;
+		}
+
+		@Override
+		public boolean test(ResolutionContext context) {
+			wasCalled = true;
+			return result;
+		}
+
+		@Override
+		public OpenIdentifier type() {
+			return TEST_TYPE;
+		}
+
+		boolean wasCalled() {
+			return wasCalled;
+		}
+	}
+
+	private record TestDynamicCondition(boolean result) implements DynamicCondition {
+		@Override
+		public boolean test(DynamicContext context) {
+			return result;
+		}
+
+		@Override
+		public OpenIdentifier type() {
+			return TEST_TYPE;
+		}
+	}
+
+	private static class TrackingDynamicCondition implements DynamicCondition {
+		private final boolean result;
+		private boolean wasCalled = false;
+
+		TrackingDynamicCondition(boolean result) {
+			this.result = result;
+		}
+
+		@Override
+		public boolean test(DynamicContext context) {
+			wasCalled = true;
+			return result;
+		}
+
+		@Override
+		public OpenIdentifier type() {
+			return TEST_TYPE;
+		}
+
+		boolean wasCalled() {
+			return wasCalled;
+		}
+	}
+
 	@Nested
 	@DisplayName("AndStatic")
 	class AndStaticTests {
 
 		@Test
 		void returnsTrueWhenAllConditionsAreTrue() {
-			StaticCondition alwaysTrue1 = ctx -> true;
-			StaticCondition alwaysTrue2 = ctx -> true;
+			StaticCondition alwaysTrue1 = new TestStaticCondition(true);
+			StaticCondition alwaysTrue2 = new TestStaticCondition(true);
 
 			AndCondition.AndStatic and = new AndCondition.AndStatic(List.of(alwaysTrue1, alwaysTrue2));
 
@@ -31,8 +107,8 @@ class AndConditionTest {
 
 		@Test
 		void returnsFalseWhenAnyConditionIsFalse() {
-			StaticCondition alwaysTrue = ctx -> true;
-			StaticCondition alwaysFalse = ctx -> false;
+			StaticCondition alwaysTrue = new TestStaticCondition(true);
+			StaticCondition alwaysFalse = new TestStaticCondition(false);
 
 			AndCondition.AndStatic and = new AndCondition.AndStatic(List.of(alwaysTrue, alwaysFalse));
 
@@ -41,8 +117,8 @@ class AndConditionTest {
 
 		@Test
 		void returnsFalseWhenAllConditionsAreFalse() {
-			StaticCondition alwaysFalse1 = ctx -> false;
-			StaticCondition alwaysFalse2 = ctx -> false;
+			StaticCondition alwaysFalse1 = new TestStaticCondition(false);
+			StaticCondition alwaysFalse2 = new TestStaticCondition(false);
 
 			AndCondition.AndStatic and = new AndCondition.AndStatic(List.of(alwaysFalse1, alwaysFalse2));
 
@@ -59,19 +135,13 @@ class AndConditionTest {
 
 		@Test
 		void shortCircuitsOnFirstFalse() {
-			// Use a flag to track if second condition is evaluated
-			boolean[] secondEvaluated = {false};
-
-			StaticCondition alwaysFalse = ctx -> false;
-			StaticCondition trackingCondition = ctx -> {
-				secondEvaluated[0] = true;
-				return true;
-			};
+			TrackingStaticCondition alwaysFalse = new TrackingStaticCondition(false);
+			TrackingStaticCondition trackingCondition = new TrackingStaticCondition(true);
 
 			AndCondition.AndStatic and = new AndCondition.AndStatic(List.of(alwaysFalse, trackingCondition));
 
 			assertFalse(and.test(null));
-			assertFalse(secondEvaluated[0], "AND should short-circuit and not evaluate second condition");
+			assertFalse(trackingCondition.wasCalled(), "AND should short-circuit and not evaluate second condition");
 		}
 
 		@Test
@@ -88,8 +158,8 @@ class AndConditionTest {
 
 		@Test
 		void returnsTrueWhenAllDynamicConditionsAreTrue() {
-			DynamicCondition alwaysTrue1 = ctx -> true;
-			DynamicCondition alwaysTrue2 = ctx -> true;
+			DynamicCondition alwaysTrue1 = new TestDynamicCondition(true);
+			DynamicCondition alwaysTrue2 = new TestDynamicCondition(true);
 
 			AndCondition.AndDynamic and = new AndCondition.AndDynamic(List.of(), List.of(alwaysTrue1, alwaysTrue2));
 
@@ -98,8 +168,8 @@ class AndConditionTest {
 
 		@Test
 		void returnsFalseWhenAnyDynamicConditionIsFalse() {
-			DynamicCondition alwaysTrue = ctx -> true;
-			DynamicCondition alwaysFalse = ctx -> false;
+			DynamicCondition alwaysTrue = new TestDynamicCondition(true);
+			DynamicCondition alwaysFalse = new TestDynamicCondition(false);
 
 			AndCondition.AndDynamic and = new AndCondition.AndDynamic(List.of(), List.of(alwaysTrue, alwaysFalse));
 
@@ -116,18 +186,13 @@ class AndConditionTest {
 
 		@Test
 		void shortCircuitsOnFirstFalseDynamic() {
-			boolean[] secondEvaluated = {false};
-
-			DynamicCondition alwaysFalse = ctx -> false;
-			DynamicCondition trackingCondition = ctx -> {
-				secondEvaluated[0] = true;
-				return true;
-			};
+			TrackingDynamicCondition alwaysFalse = new TrackingDynamicCondition(false);
+			TrackingDynamicCondition trackingCondition = new TrackingDynamicCondition(true);
 
 			AndCondition.AndDynamic and = new AndCondition.AndDynamic(List.of(), List.of(alwaysFalse, trackingCondition));
 
 			assertFalse(and.test(DynamicContext.empty()));
-			assertFalse(secondEvaluated[0], "AND should short-circuit on dynamic conditions");
+			assertFalse(trackingCondition.wasCalled(), "AND should short-circuit on dynamic conditions");
 		}
 
 		@Test
@@ -144,7 +209,7 @@ class AndConditionTest {
 
 		@Test
 		void createsAndStaticWhenAllChildrenAreStatic() {
-			StaticCondition staticCond = ctx -> true;
+			StaticCondition staticCond = new TestStaticCondition(true);
 			Condition condition = new Condition(List.of(staticCond), List.of());
 
 			LogicalConditionResult result = AndCondition.from(condition);
@@ -154,8 +219,8 @@ class AndConditionTest {
 
 		@Test
 		void createsAndDynamicWhenAnyChildIsDynamic() {
-			StaticCondition staticCond = ctx -> true;
-			DynamicCondition dynamicCond = ctx -> true;
+			StaticCondition staticCond = new TestStaticCondition(true);
+			DynamicCondition dynamicCond = new TestDynamicCondition(true);
 			Condition condition = new Condition(List.of(staticCond), List.of(dynamicCond));
 
 			LogicalConditionResult result = AndCondition.from(condition);
