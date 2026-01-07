@@ -69,10 +69,7 @@ public class TagLoadingService {
 					tagRelativePath = tagRelativePath.substring(0, tagRelativePath.length() - JSON_EXTENSION.length());
 				}
 
-				// Create the canonical OpenIdentifier for the tag.
-				// The factory.of() method will now handle the final normalization to a single-group name.
-				// So, "materials/material" becomes "material" here.
-				OpenIdentifier tagId = factory.of(id.namespace(), tagRelativePath);
+				OpenIdentifier tagId = new OpenIdentifier(id.namespace(), tagRelativePath);
 
 				String content = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
 				TagDefinition definition = tagParser.parse(content);
@@ -97,12 +94,8 @@ public class TagLoadingService {
 		Stream<IdentifiableTagDefinition> definitions = resourceLoader.load(rootPath, true);
 
 		definitions.forEach(def -> {
-			// When resolving parent IDs from strings (like "forgero:materials/material" from JSON),
-			// the factory.of(String) method is used. This method will automatically
-			// canonicalize these parent IDs (e.g., "forgero:materials/material" -> "forgero:material").
-			// This ensures all IDs in the TagGraph are canonical.
 			Set<OpenIdentifier> parentIds = def.parents().stream()
-					.map(factory::of)
+					.map(TagLoadingService::parseTagIdentifier)
 					.collect(Collectors.toSet());
 			builder.add(def.id(), parentIds);
 		});
@@ -110,9 +103,13 @@ public class TagLoadingService {
 		return builder.build();
 	}
 
-	/**
-	 * Internal DTO to hold a parsed tag definition along with its identifier.
-	 */
+	private static OpenIdentifier parseTagIdentifier(String id) {
+		if (id.contains(":")) {
+			return OpenIdentifier.parse(id);
+		}
+		return new OpenIdentifier("forgero", id);
+	}
+
 	private record IdentifiableTagDefinition(OpenIdentifier id, Set<String> parents) implements Identifiable {
 	}
 }

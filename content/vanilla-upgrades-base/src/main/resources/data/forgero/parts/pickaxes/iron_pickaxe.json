@@ -18,10 +18,22 @@
   ],
   "upgrades": [
     {
-      "id": "forgero:binding-slot",
+      "id": "forgero:iron_pickaxe-binding",
       "type": "forgero:materials/roles/upgrade_material",
       "tags": ["forgero:materials/types/binding"],
       "description": "slot.forgero.binding"
+    },
+    {
+      "id": "forgero:iron_pickaxe-gem",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/gem"],
+      "description": "slot.forgero.gem"
+    },
+    {
+      "id": "forgero:iron_pickaxe-reinforcement",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/reinforcement"],
+      "description": "slot.forgero.reinforcement"
     }
   ]
 }

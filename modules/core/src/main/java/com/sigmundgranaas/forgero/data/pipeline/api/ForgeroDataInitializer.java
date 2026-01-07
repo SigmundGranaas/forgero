@@ -42,6 +42,7 @@ public class ForgeroDataInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(ForgeroDataInitializer.class);
 
 	private final ForgeroDataBundle dataBundle;
+	private final DataPipelineResult pipelineResult;
 
 	/**
 	 * Configuration record for the data initializer, providing all necessary dependencies.
@@ -160,12 +161,24 @@ public class ForgeroDataInitializer {
 		components.forEach(registryBuilder::add);
 		this.dataBundle = new ForgeroDataBundle(registryBuilder.build(), tagResolver, Collections.unmodifiableMap(hostItemMap));
 
+		// 9. STORE PIPELINE RESULT FOR VALIDATION
+		this.pipelineResult = new DataPipelineResult(
+				Collections.unmodifiableMap(rawDefinitions),
+				templateResult.expansionResult(),
+				this.dataBundle,
+				List.of()
+		);
+
 		long endTime = System.currentTimeMillis();
 		LOGGER.info("Forgero data initialization complete. Total time: {}ms", endTime - startTime);
 	}
 
 	public ForgeroDataBundle getDataBundle() {
 		return dataBundle;
+	}
+
+	public DataPipelineResult getPipelineResult() {
+		return pipelineResult;
 	}
 
 	/**

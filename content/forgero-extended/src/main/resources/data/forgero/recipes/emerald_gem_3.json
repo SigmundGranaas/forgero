@@ -1,8 +1,0 @@
-{
-    "type": "minecraft:stonecutting",
-    "ingredient": {
-        "item": "forgero:emerald_gem_2"
-    },
-    "result": "forgero:emerald_gem_3",
-    "count": 1
-}

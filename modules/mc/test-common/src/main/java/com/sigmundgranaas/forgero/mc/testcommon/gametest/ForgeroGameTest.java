@@ -3,57 +3,36 @@ package com.sigmundgranaas.forgero.mc.testcommon.gametest;
 import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
 import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
-import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 
 /**
  * Base interface for Forgero GameTests.
  * Provides convenient access to ForgeroServices and enhanced test context.
  *
+ * <p>Due to Fabric's Knot classloader issues with interface static methods, the actual
+ * implementation is in {@link ForgeroTestUtils}. This interface delegates to that utility class.
+ *
  * <p>Example usage:
  * <pre>{@code
  * public class MyTest implements ForgeroGameTest {
  *
- *     @GameTest(template = EMPTY_STRUCTURE)
- *     public void test_something(GameTestHelper helper) {
- *         // Easy access to ForgeroServices
- *         var registry = services().registry();
- *
- *         // Enhanced context with Forgero utilities
- *         var ctx = forgero(helper);
+ *     @GameTest(templateName = EMPTY_STRUCTURE)
+ *     public void test_something(TestContext context) {
+ *         var ctx = ForgeroGameTest.forgero(context);
  *         var component = ctx.component("forgero:iron_pickaxe_head");
- *
- *         ctx.assertTrue(component.isPresent(), "Component should exist");
- *         ctx.succeed();
+ *         context.assertTrue(component.isPresent(), "Component should exist");
+ *         context.complete();
  *     }
  * }
  * }</pre>
  */
 public interface ForgeroGameTest extends FabricGameTest {
 
-    /**
-     * Common empty structure template for tests that don't need a specific structure.
-     * Inherited from FabricGameTest.EMPTY_STRUCTURE
-     */
-
-    /**
-     * Gets the ForgeroServices instance.
-     * Provides access to all Forgero services (registry, converter, resolver, etc.).
-     *
-     * @return the ForgeroServices instance
-     */
-    default ForgeroServices services() {
-        return ForgeroApi.services();
+    static ForgeroServices services() {
+        return ForgeroTestUtils.services();
     }
 
-    /**
-     * Wraps a TestContext in a ForgeroTestContext for enhanced functionality.
-     * The ForgeroTestContext provides Forgero-specific utilities on top of the standard GameTest helpers.
-     *
-     * @param context the TestContext to wrap
-     * @return an enhanced ForgeroTestContext
-     */
-    default ForgeroTestContext forgero(TestContext context) {
-        return new ForgeroTestContext(context);
+    static ForgeroTestContext forgero(TestContext context) {
+        return ForgeroTestUtils.forgero(context);
     }
 }

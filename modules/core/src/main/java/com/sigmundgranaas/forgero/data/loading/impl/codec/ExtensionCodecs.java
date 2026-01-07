@@ -11,6 +11,7 @@ import java.util.Optional;
 
 import static com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants.JSON_ELEMENT_CODEC;
 import static com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants.OPEN_IDENTIFIER_CODEC;
+import static com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants.TAG_IDENTIFIER_CODEC;
 
 /**
  * Codec factory for {@link ExtensionData}.
@@ -42,7 +43,7 @@ public class ExtensionCodecs {
 						OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(ExtensionData::type),
 						OPEN_IDENTIFIER_CODEC.fieldOf("target").forGetter(ExtensionData::target),
 						Codec.INT.optionalFieldOf("priority", ExtensionData.DEFAULT_PRIORITY).forGetter(ExtensionData::priority),
-						Codec.list(OPEN_IDENTIFIER_CODEC).optionalFieldOf("tags").forGetter(data -> Optional.ofNullable(data.tags())),
+						Codec.list(TAG_IDENTIFIER_CODEC).optionalFieldOf("tags").forGetter(data -> Optional.ofNullable(data.tags())),
 						attributeCodec.optionalFieldOf("attributes").forGetter(data -> Optional.ofNullable(data.attributes())),
 						Codec.unboundedMap(Codec.STRING, JSON_ELEMENT_CODEC).optionalFieldOf("properties").forGetter(data -> Optional.ofNullable(data.properties())),
 						upgradeSlotCodec.optionalFieldOf("upgrades").forGetter(data -> Optional.ofNullable(data.upgrades()))

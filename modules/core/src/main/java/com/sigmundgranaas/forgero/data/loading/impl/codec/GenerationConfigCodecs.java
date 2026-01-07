@@ -10,16 +10,13 @@ import java.util.Optional;
 
 public class GenerationConfigCodecs {
 
-	/**
-	 * Codec for SlotGenerationFilter.
-	 */
 	public static final Codec<SlotGenerationFilter> SLOT_GENERATION_FILTER_CODEC =
 			RecordCodecBuilder.create(instance ->
 					instance.group(
-							Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("require_all_tags").forGetter(data -> Optional.ofNullable(data.requireAllTags())),
-							Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("require_any_tags").forGetter(data -> Optional.ofNullable(data.requireAnyTags())),
-							Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("exclude_any_tags").forGetter(data -> Optional.ofNullable(data.excludeAnyTags())),
-							Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("exclude_all_tags").forGetter(data -> Optional.ofNullable(data.excludeAllTags())),
+							Codec.list(CodecConstants.TAG_IDENTIFIER_CODEC).optionalFieldOf("require_all_tags").forGetter(data -> Optional.ofNullable(data.requireAllTags())),
+							Codec.list(CodecConstants.TAG_IDENTIFIER_CODEC).optionalFieldOf("require_any_tags").forGetter(data -> Optional.ofNullable(data.requireAnyTags())),
+							Codec.list(CodecConstants.TAG_IDENTIFIER_CODEC).optionalFieldOf("exclude_any_tags").forGetter(data -> Optional.ofNullable(data.excludeAnyTags())),
+							Codec.list(CodecConstants.TAG_IDENTIFIER_CODEC).optionalFieldOf("exclude_all_tags").forGetter(data -> Optional.ofNullable(data.excludeAllTags())),
 							Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("explicit_list").forGetter(data -> Optional.ofNullable(data.explicitList()))
 					).apply(instance, (requireAll, requireAny, excludeAny, excludeAll, explicit) ->
 							new SlotGenerationFilter(

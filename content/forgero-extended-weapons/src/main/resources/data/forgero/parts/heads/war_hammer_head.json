@@ -34,28 +34,40 @@
       "computation": {"value": 60, "operation": "addition"}
     },
     {
-      "id": "forgero:war_hammer_head-attack_damage",
-      "type": "forgero:attack_damage",
-      "computation": {"value": 2.0, "operation": "multiplication"},
-      "condition": {
-        "static": [{"type": "forgero:is_root"}]
-      }
-    },
-    {
-      "id": "forgero:war_hammer_head-durability",
+      "id": "forgero:war_hammer_head-durability-mult",
       "type": "forgero:durability",
-      "computation": {"value": 1.3, "operation": "multiplication"},
-      "condition": {
-        "static": [{"type": "forgero:is_root"}]
-      }
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.3}
     },
     {
-      "id": "forgero:war_hammer_head-weight",
+      "id": "forgero:war_hammer_head-attack_damage-mult",
+      "type": "forgero:attack_damage",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 2.0}
+    },
+    {
+      "id": "forgero:war_hammer_head-attack_speed-mult",
+      "type": "forgero:attack_speed",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
+    },
+    {
+      "id": "forgero:war_hammer_head-mining_speed-mult",
+      "type": "forgero:mining_speed",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
+    },
+    {
+      "id": "forgero:war_hammer_head-mining_level-mult",
+      "type": "forgero:mining_level",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
+    },
+    {
+      "id": "forgero:war_hammer_head-weight-mult",
       "type": "forgero:weight",
-      "computation": {"value": 1.8, "operation": "multiplication"},
-      "condition": {
-        "static": [{"type": "forgero:is_root"}]
-      }
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.8}
     }
   ]
 }

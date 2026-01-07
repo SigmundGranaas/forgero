@@ -1,4 +1,4 @@
 dependencies {
-	implementation project(":content:${rootProject.mod_id}-vanilla")
-	testImplementation project(":content:${rootProject.mod_id}-vanilla")
+	implementation project(":content:${rootProject.mod_id}-vanilla-legacy-read-only")
+	testImplementation project(":content:${rootProject.mod_id}-vanilla-legacy-read-only")
 }

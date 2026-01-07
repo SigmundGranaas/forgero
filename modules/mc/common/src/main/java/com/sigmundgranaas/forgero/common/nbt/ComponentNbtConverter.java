@@ -33,9 +33,17 @@ public class ComponentNbtConverter {
 	 * @return An Optional containing the deserialized Component, or empty if the key is not present or deserialization fails.
 	 */
 	public Optional<Component> fromNbt(NbtCompound nbt) {
-		if (nbt == null || !nbt.contains(FORGERO_NBT_KEY, NbtElement.COMPOUND_TYPE)) {
+		if (nbt == null) {
 			return Optional.empty();
 		}
+
+		boolean hasCompound = nbt.contains(FORGERO_NBT_KEY, NbtElement.COMPOUND_TYPE);
+		boolean hasString = nbt.contains(FORGERO_NBT_KEY, NbtElement.STRING_TYPE);
+
+		if (!hasCompound && !hasString) {
+			return Optional.empty();
+		}
+
 		NbtElement forgeroNbt = nbt.get(FORGERO_NBT_KEY);
 
 		var logger = LoggerFactory.getLogger(ComponentNbtConverter.class);

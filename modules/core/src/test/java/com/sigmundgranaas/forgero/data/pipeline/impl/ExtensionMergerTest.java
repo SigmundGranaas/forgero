@@ -454,7 +454,7 @@ class ExtensionMergerTest {
 
 		private PartTemplateStructureData createMinimalPartStructure() {
 			Map<String, PartTemplateStructureSlotData> slots = Map.of(
-					"material", new PartTemplateStructureSlotData(id("forgero:tool_material"), 1, null)
+					"material", new PartTemplateStructureSlotData(id("forgero:tool_material"), null, 1, null)
 			);
 			return new PartTemplateStructureData("forgero:{material.name}-pickaxe_head", slots);
 		}
@@ -464,7 +464,7 @@ class ExtensionMergerTest {
 			UpgradeSlotData bindingSlot = new UpgradeSlotData(
 					id("binding_slot"),
 					id("forgero:binding_type"),
-					null, null, null
+					null, null, null, null
 			);
 
 			EquipmentTemplateData pickaxe = new EquipmentTemplateData(
@@ -484,7 +484,8 @@ class ExtensionMergerTest {
 					id("forgero:dye_material"),
 					List.of(id("forgero:dye")),
 					null,
-					"forgero.slot.dye"
+					"forgero.slot.dye",
+					null
 			);
 
 			ExtensionData extension = new ExtensionData(
@@ -528,7 +529,8 @@ class ExtensionMergerTest {
 					id("forgero:gem_material"),
 					List.of(id("forgero:gem")),
 					null,
-					"forgero.slot.gem"
+					"forgero.slot.gem",
+					null
 			);
 
 			ExtensionData extension = new ExtensionData(
@@ -557,7 +559,7 @@ class ExtensionMergerTest {
 			UpgradeSlotData originalSlot = new UpgradeSlotData(
 					id("binding_slot"),
 					id("forgero:binding_type"),
-					null, 1, "original"
+					null, 1, "original", null
 			);
 
 			EquipmentTemplateData pickaxe = new EquipmentTemplateData(
@@ -574,7 +576,8 @@ class ExtensionMergerTest {
 					id("forgero:special_binding"),
 					List.of(id("forgero:special")),
 					2,
-					"override"
+					"override",
+					null
 			);
 
 			ExtensionData extension = new ExtensionData(
@@ -682,7 +685,7 @@ class ExtensionMergerTest {
 			UpgradeSlotData existingSlot = new UpgradeSlotData(
 					id("gem_slot"),
 					id("forgero:gem"),
-					null, null, null
+					null, null, null, null
 			);
 
 			ResourceData staticPart = new ResourceData(
@@ -698,7 +701,7 @@ class ExtensionMergerTest {
 			UpgradeSlotData newSlot = new UpgradeSlotData(
 					id("wrap_slot"),
 					id("forgero:wrap_material"),
-					null, null, null
+					null, null, null, null
 			);
 
 			ExtensionData extension = new ExtensionData(

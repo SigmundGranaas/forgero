@@ -2,9 +2,9 @@
   "type": "forgero:equipment_template",
   "name": "rapier",
   "tags": [
-    "forgero:weapons/rapier",
-    "forgero:weapons/swordlike",
-    "forgero:weapons/extended",
+    "forgero:weapons/types/rapier",
+    "forgero:weapons/categories/swordlike",
+    "forgero:weapons/categories/extended",
     "forgero:tools"
   ],
   "host_template": {
@@ -15,7 +15,7 @@
     "id": "forgero:{blade.material.name}-rapier",
     "slots": {
       "blade": {
-        "type": "forgero:rapier_blade",
+        "type": "forgero:parts/rapier_blade",
         "default_tag": "forgero:parts/rapier_blade"
       },
       "handle": {
@@ -27,9 +27,15 @@
   "upgrades": [
     {
       "id": "forgero:rapier-guard",
-      "type": "forgero:materials/roles/upgrade_material",
-      "tags": ["forgero:upgrade/guard"],
+      "type": "forgero:parts/binding",
+      "tags": ["forgero:parts/guard"],
       "description": "slot.forgero.guard"
+    },
+    {
+      "id": "forgero:rapier-gem",
+      "type": "forgero:upgrades/types/gem",
+      "tags": ["forgero:upgrades/types/gem"],
+      "description": "slot.forgero.gem"
     }
   ],
   "attributes": [

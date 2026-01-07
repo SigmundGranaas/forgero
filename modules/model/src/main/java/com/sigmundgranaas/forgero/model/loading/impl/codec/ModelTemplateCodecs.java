@@ -14,7 +14,7 @@ public class ModelTemplateCodecs {
 
 	public static final Codec<TargetDTO> TARGET_DTO_CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(
-					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("tag").forGetter(TargetDTO::tag)
+					CodecConstants.TAG_IDENTIFIER_CODEC.fieldOf("tag").forGetter(TargetDTO::tag)
 			).apply(instance, TargetDTO::new));
 
 	/**

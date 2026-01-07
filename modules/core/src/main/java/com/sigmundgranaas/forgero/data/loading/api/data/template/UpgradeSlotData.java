@@ -13,6 +13,9 @@ import java.util.List;
  * @param tags        Optional list of tags that an accepted upgrade must possess.
  * @param tier        Optional tier requirement for the upgrade.
  * @param description Optional translatable description key for the slot.
+ * @param context     Optional context identifier for attribute filtering (e.g., "forgero:offensive", "forgero:defensive", "forgero:utility").
+ *                    When an upgrade is installed in a slot with a context, only attributes matching that context
+ *                    (via tag hierarchy resolution) will be applied.
  */
 public record UpgradeSlotData(
 		OpenIdentifier id,
@@ -22,6 +25,8 @@ public record UpgradeSlotData(
 		@Nullable
 		Integer tier,
 		@Nullable
-		String description
+		String description,
+		@Nullable
+		OpenIdentifier context
 ) {
 }

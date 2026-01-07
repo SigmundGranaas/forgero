@@ -1,7 +1,7 @@
 {
   "type": "forgero:part_model_template",
   "target": {
-    "tag": "forgero:materials/soft"
+    "tag": "forgero:materials/properties/soft"
   },
   "model": {
     "id": "forgero:item/{target.name}-soft_binding",

@@ -18,24 +18,36 @@
   ],
   "upgrades": [
     {
-      "id": "forgero:binding-slot",
+      "id": "forgero:netherite_pickaxe-binding",
       "type": "forgero:materials/roles/upgrade_material",
       "tags": ["forgero:materials/types/binding"],
       "description": "slot.forgero.binding"
     },
     {
-      "id": "forgero:tip-reinforcement-slot",
+      "id": "forgero:netherite_pickaxe-gem-1",
       "type": "forgero:materials/roles/upgrade_material",
-      "tags": ["forgero:upgrade/tip_reinforcement"],
-      "tier": 2,
-      "description": "slot.forgero.tip_reinforcement"
+      "tags": ["forgero:upgrades/types/gem"],
+      "description": "slot.forgero.gem"
     },
     {
-      "id": "forgero:gem-slot",
+      "id": "forgero:netherite_pickaxe-gem-2",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/gem"],
+      "tier": 2,
+      "description": "slot.forgero.gem"
+    },
+    {
+      "id": "forgero:netherite_pickaxe-gem-3",
       "type": "forgero:materials/roles/upgrade_material",
       "tags": ["forgero:upgrades/types/gem"],
       "tier": 3,
       "description": "slot.forgero.gem"
+    },
+    {
+      "id": "forgero:netherite_pickaxe-reinforcement",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/reinforcement"],
+      "description": "slot.forgero.reinforcement"
     }
   ]
 }

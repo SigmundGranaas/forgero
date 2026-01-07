@@ -2,9 +2,8 @@
   "type": "forgero:equipment_template",
   "name": "felling_axe",
   "tags": [
-    "forgero:felling_axe",
-    "forgero:axe",
-    "forgero:mining",
+    "forgero:tools/types/felling_axe",
+    "forgero:tools/axe",
     "forgero:tools"
   ],
   "host_template": {
@@ -15,7 +14,7 @@
     "id": "forgero:{head.material.name}-felling_axe",
     "slots": {
       "head": {
-        "type": "forgero:felling_axe_head",
+        "type": "forgero:parts/felling_axe_head",
         "default_tag": "forgero:parts/felling_axe_head"
       },
       "handle": {
@@ -27,9 +26,15 @@
   "upgrades": [
     {
       "id": "forgero:felling_axe-binding",
-      "type": "forgero:materials/roles/upgrade_material",
-      "tags": ["forgero:materials/types/binding"],
+      "type": "forgero:parts/binding",
+      "tags": ["forgero:parts/binding"],
       "description": "slot.forgero.binding"
+    },
+    {
+      "id": "forgero:felling_axe-gem",
+      "type": "forgero:upgrades/types/gem",
+      "tags": ["forgero:upgrades/types/gem"],
+      "description": "slot.forgero.gem"
     }
   ],
   "attributes": [

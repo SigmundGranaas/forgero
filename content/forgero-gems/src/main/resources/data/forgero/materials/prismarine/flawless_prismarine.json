@@ -4,7 +4,8 @@
   "tags": [
     "forgero:upgrades/types/gem",
     "forgero:materials/types/prismarine",
-    "forgero:upgrades/types/reinforcement"
+    "forgero:upgrades/types/reinforcement",
+    "forgero:materials/roles/upgrade_material"
   ],
   "host": {
     "identifiers": [

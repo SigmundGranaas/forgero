@@ -1,3 +1,5 @@
 {
-  "values": []
+  "parents": [
+    "forgero:schematics"
+  ]
 }

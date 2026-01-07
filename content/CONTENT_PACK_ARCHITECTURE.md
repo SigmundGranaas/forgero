@@ -15,19 +15,24 @@ content/
 │   └── forgero-armor-content/ # Armor models and extended definitions
 │
 ├── ENHANCEMENT LAYER
-│   ├── forgero-extended/          # Extended content (soft/hard/hybrid materials)
-│   ├── forgero-mining/            # Mining tools (hammer, mandrill, spade)
-│   ├── forgero-extended-weapons/  # Weapon variants (katana, rapier, etc.)
-│   ├── forgero-gems/              # Gem materials with quality tiers
-│   └── forgero-upgrades/          # Upgrade material definitions
+│   ├── forgero-secondary-materials/   # Secondary materials (soft, hard, hybrid, dyes)
+│   ├── forgero-schematics/            # Quality schematics (refined, mastercrafted)
+│   ├── forgero-extended-schematics/   # Extended schematics (blades, heads, guards, bindings)
+│   ├── forgero-mining/                # Mining tools (hammer, mandrill, spade)
+│   ├── forgero-extended-weapons/      # Weapon variants (katana, rapier, etc.)
+│   ├── forgero-gems/                  # Gem materials with quality tiers
+│   └── forgero-upgrades/              # Upgrade material definitions
 │
 ├── INTEGRATION LAYER
-│   ├── vanilla-upgrades-base/     # Wraps vanilla tools as static parts
-│   ├── forgero-vanilla/           # Recipe generators, pack system
-│   └── minecraft-tools/           # Minecraft tool integrations
+│   ├── vanilla-upgrades-base/         # Wraps vanilla tools as static parts
+│   └── minecraft-tools/               # Minecraft tool integrations
+│
+├── LEGACY LAYER (Read-Only Reference)
+│   ├── forgero-vanilla-legacy-read-only/   # Old pack format - recipe generators
+│   ├── forgero-extended-legacy-read-only/  # Old pack format - reference only
+│   └── forgero-compat-legacy-read-only/    # Old mod compatibility
 │
 └── SPECIALTY LAYER
-    ├── forgero-compat/            # Mod compatibility
     ├── forgero-structures/        # World generation (forges, smithies)
     └── forgero-deprecated/        # Legacy content
 ```

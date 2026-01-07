@@ -3,7 +3,8 @@
   "name": "sword_guard",
   "tags": [
     "forgero:parts/sword_guard",
-    "forgero:parts/guard"
+    "forgero:parts/guard",
+    "forgero:parts/binding"
   ],
   "host_template": {
     "class": "forgero:part_item",

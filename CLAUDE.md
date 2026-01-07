@@ -133,14 +133,28 @@ Forgero uses a multi-module architecture with strict dependency rules:
   - Provides runtime implementation of Forgero for vanilla items
 
 ### Content Modules (JSON Data Packs)
-- **`content/minecraft-vanilla-materials/`** - Vanilla Minecraft materials with Forgero properties
-- **`content/minecraft-tools/`** - Vanilla tool definitions
-- **`content/forgero-vanilla/`** - Base Forgero content
-- **`content/forgero-extended/`** - Extended content pack
-- **`content/forgero-tools/`** - Additional tool definitions
-- **`content/forgero-armor/`** - Armor definitions
-- **`content/forgero-compat/`** - Mod compatibility definitions
-- **`content/forgero-structures/`** - Structure templates
+
+**Active Content Packs (Modern Format)**
+- **`content/forgero-base/`** - Core tags, templates, and upgrade slots
+- **`content/forgero-materials/`** - 41 primary materials (metals, woods, stones, etc.)
+- **`content/forgero-upgrades/`** - Upgrade material definitions
+- **`content/minecraft-tools/`** - Vanilla tool integration
+- **`content/forgero-tools/`** - Tool definitions (adds armor_material tag to metals)
+- **`content/forgero-armor/`** - Armor texture templates
+- **`content/forgero-armor-content/`** - Armor models
+- **`content/forgero-schematics/`** - Quality schematics (refined, mastercrafted)
+- **`content/forgero-extended-schematics/`** - Extended schematics (weapon blades, tool heads, guards, bindings)
+- **`content/forgero-secondary-materials/`** - Secondary materials (soft, hard, hybrid, dyes)
+- **`content/forgero-extended-weapons/`** - Extended weapon parts & equipment (katana, rapier, etc.)
+- **`content/forgero-mining/`** - Mining tool parts & equipment (hammer, spade, etc.)
+- **`content/forgero-gems/`** - Gem upgrades
+- **`content/vanilla-upgrades-base/`** - Static parts for vanilla items
+
+**Legacy Content Packs (Old Format - Reference Only)**
+- **`content/forgero-vanilla-legacy-read-only/`** - Old pack format (recipe generators)
+- **`content/forgero-extended-legacy-read-only/`** - Old pack format (reference only)
+- **`content/forgero-compat-legacy-read-only/`** - Old mod compatibility
+- **`content/forgero-structures/`** - Structure templates (world generation)
 - **`content/forgero-deprecated/`** - Deprecated content
 
 ### Dependency Rules
@@ -554,6 +568,8 @@ Component updated = component.with(builder -> builder.name("new name"));
 ## Important Context Documents
 
 - **`FORGERO_AI_CONTEXT.md`** - Comprehensive technical reference with real code examples, JSON patterns, codec implementations, and debugging guides. This is your primary reference for implementation details.
+- **`docs/CONTENT_MIGRATION_GAP_ANALYSIS.md`** - Analysis of content migration status, gaps, and priorities. Critical for understanding what content exists vs what's missing.
+- **`docs/CONTENT_PACK_USAGE.md`** - How content packs are used by mods
 - **`README.md`** - User-facing documentation and project overview
 - **`CONTRIBUTING.md`** - Contribution guidelines
 

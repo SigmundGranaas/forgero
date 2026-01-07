@@ -12,7 +12,7 @@ public class ForgeroContextTests implements ForgeroGameTest {
 
     @GameTest(templateName = EMPTY_STRUCTURE)
     public void services_shouldProvideValidForgeroServices(TestContext context) {
-        var services = services();
+        var services = ForgeroGameTest.services();
 
         context.assertTrue(services != null, "ForgeroServices should not be null");
         context.assertTrue(services.componentRegistry() != null, "ComponentRegistry should not be null");
@@ -22,7 +22,7 @@ public class ForgeroContextTests implements ForgeroGameTest {
 
     @GameTest(templateName = EMPTY_STRUCTURE)
     public void forgero_shouldWrapContext(TestContext context) {
-        ForgeroTestContext ctx = forgero(context);
+        ForgeroTestContext ctx = ForgeroGameTest.forgero(context);
 
         context.assertTrue(ctx != null, "ForgeroTestContext should not be null");
         context.assertTrue(ctx.context() == context, "Should return the original context");
@@ -32,7 +32,7 @@ public class ForgeroContextTests implements ForgeroGameTest {
 
     @GameTest(templateName = EMPTY_STRUCTURE)
     public void context_assertionMethods_shouldDelegate(TestContext context) {
-        ForgeroTestContext ctx = forgero(context);
+        ForgeroTestContext ctx = ForgeroGameTest.forgero(context);
 
         // Test assertTrue - should not throw
         ctx.assertTrue(true, "True condition should pass");

@@ -15,9 +15,9 @@ public class EquipmentTemplateCodecs {
 
 	public static final Codec<EquipmentTemplateSlotData> EQUIPMENT_TEMPLATE_SLOT_DATA_CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(
-					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(EquipmentTemplateSlotData::type),
-					CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("default_tag").forGetter(data -> Optional.ofNullable(data.defaultTag())),
-					CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("default").forGetter(data -> Optional.ofNullable(data.defaultComponent()))
+					CodecConstants.TAG_IDENTIFIER_CODEC.fieldOf("type").forGetter(EquipmentTemplateSlotData::type),
+					CodecConstants.TAG_IDENTIFIER_CODEC.optionalFieldOf("default_tag").forGetter(data -> Optional.ofNullable(data.defaultTag())),
+					CodecConstants.TAG_IDENTIFIER_CODEC.optionalFieldOf("default").forGetter(data -> Optional.ofNullable(data.defaultComponent()))
 			).apply(instance, (type, defaultTag, defaultId) ->
 					new EquipmentTemplateSlotData(type, defaultTag.orElse(null), defaultId.orElse(null))));
 
@@ -34,7 +34,7 @@ public class EquipmentTemplateCodecs {
 						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(EquipmentTemplateData::type),
 						Codec.STRING.fieldOf("name").forGetter(EquipmentTemplateData::name),
 						Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("include").forGetter(data -> Optional.ofNullable(data.include())),
-						Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("tags").forGetter(data -> Optional.ofNullable(data.tags())),
+						Codec.list(CodecConstants.TAG_IDENTIFIER_CODEC).optionalFieldOf("tags").forGetter(data -> Optional.ofNullable(data.tags())),
 						HostCodecs.HOST_TEMPLATE_DATA_CODEC.optionalFieldOf("host_template").forGetter(data -> Optional.ofNullable(data.host_template())),
 						EQUIPMENT_TEMPLATE_STRUCTURE_DATA_CODEC.fieldOf("structure").forGetter(EquipmentTemplateData::structure),
 						upgradeSlotCodec.optionalFieldOf("upgrades").forGetter(data -> Optional.ofNullable(data.upgrades())),

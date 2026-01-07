@@ -2,9 +2,8 @@
   "type": "forgero:equipment_template",
   "name": "mandrill_pickaxe",
   "tags": [
-    "forgero:mandrill_pickaxe",
-    "forgero:pickaxe",
-    "forgero:mining",
+    "forgero:tools/types/mandrill_pickaxe",
+    "forgero:tools/pickaxe",
     "forgero:tools"
   ],
   "host_template": {
@@ -15,7 +14,7 @@
     "id": "forgero:{head.material.name}-mandrill_pickaxe",
     "slots": {
       "head": {
-        "type": "forgero:mandrill_pickaxe_head",
+        "type": "forgero:parts/mandrill_pickaxe_head",
         "default_tag": "forgero:parts/mandrill_pickaxe_head"
       },
       "handle": {
@@ -27,9 +26,15 @@
   "upgrades": [
     {
       "id": "forgero:mandrill_pickaxe-binding",
-      "type": "forgero:materials/roles/upgrade_material",
-      "tags": ["forgero:materials/types/binding"],
+      "type": "forgero:parts/binding",
+      "tags": ["forgero:parts/binding"],
       "description": "slot.forgero.binding"
+    },
+    {
+      "id": "forgero:mandrill_pickaxe-gem",
+      "type": "forgero:upgrades/types/gem",
+      "tags": ["forgero:upgrades/types/gem"],
+      "description": "slot.forgero.gem"
     }
   ],
   "attributes": [

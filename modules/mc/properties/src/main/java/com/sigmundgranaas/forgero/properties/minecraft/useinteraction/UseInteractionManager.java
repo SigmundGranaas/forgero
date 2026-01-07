@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
+import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
+import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
@@ -37,8 +40,15 @@ public final class UseInteractionManager {
 	private static ComponentConverter converter;
 	private static Resolver resolver;
 
+	// 20 ticks = 1 second in Minecraft; this is vanilla bow charge time
+	private static final int BASE_CHARGE_TIME_TICKS = 20;
+	private static final int MIN_CHARGE_TIME_TICKS = 2;
+	private static final float MIN_DRAW_SPEED = 0.1f;
+	private static final float WEIGHT_REDUCTION_DIVISOR = 10.0f;
+	private static final OpenIdentifier DRAW_SPEED_ATTR = new OpenIdentifier("forgero", "draw_speed");
+	private static final OpenIdentifier WEIGHT_ATTR = new OpenIdentifier("forgero", "weight");
+
 	private UseInteractionManager() {
-		// Static utility class
 	}
 
 	/**
@@ -100,7 +110,7 @@ public final class UseInteractionManager {
 
 		UseInteractionProperty prop = property.get();
 		int chargeTime = prop.maxUseTime() - remainingUseTicks;
-		float pullProgress = calculatePullProgress(chargeTime, prop.maxUseTime());
+		float pullProgress = calculatePullProgress(chargeTime, prop.maxUseTime(), stack);
 
 		Hand hand = user.getActiveHand();
 		UseContext context = UseContext.tick(world, user, hand, stack, chargeTime, remainingUseTicks, pullProgress);
@@ -125,7 +135,7 @@ public final class UseInteractionManager {
 
 		UseInteractionProperty prop = property.get();
 		int chargeTime = prop.maxUseTime() - remainingUseTicks;
-		float pullProgress = calculatePullProgress(chargeTime, prop.maxUseTime());
+		float pullProgress = calculatePullProgress(chargeTime, prop.maxUseTime(), stack);
 
 		Hand hand = user.getActiveHand();
 		UseContext context = UseContext.release(world, user, hand, stack, chargeTime, remainingUseTicks, pullProgress);
@@ -215,16 +225,33 @@ public final class UseInteractionManager {
 		}
 	}
 
-	/**
-	 * Calculates pull progress (0.0 to 1.0) based on charge time.
-	 */
-	private static float calculatePullProgress(int chargeTime, int maxUseTime) {
+	private static float calculatePullProgress(int chargeTime, int maxUseTime, ItemStack stack) {
 		if (maxUseTime <= 0) {
 			return 0f;
 		}
-		// Default to 1 second (20 ticks) for full charge
-		int fullChargeTime = Math.min(maxUseTime, 20);
+		float drawSpeed = resolveDrawSpeed(stack);
+		int fullChargeTime = Math.max(MIN_CHARGE_TIME_TICKS, (int) (BASE_CHARGE_TIME_TICKS / drawSpeed));
+		fullChargeTime = Math.min(maxUseTime, fullChargeTime);
 		return Math.min((float) chargeTime / fullChargeTime, 1.0f);
+	}
+
+	private static float resolveDrawSpeed(ItemStack stack) {
+		return converter.toComponent(stack)
+				.map(component -> {
+					AttributeQueryResult result = resolver.resolve(component, new AttributeEngine());
+					float baseDrawSpeed = result.getValue(DRAW_SPEED_ATTR);
+					float weight = result.getValue(WEIGHT_ATTR);
+					
+					if (baseDrawSpeed <= 0) {
+						baseDrawSpeed = 1.0f;
+					}
+					
+					float weightReduction = weight / WEIGHT_REDUCTION_DIVISOR;
+					float adjustedDrawSpeed = baseDrawSpeed - weightReduction;
+					
+					return Math.max(MIN_DRAW_SPEED, adjustedDrawSpeed);
+				})
+				.orElse(1.0f);
 	}
 
 	/**

@@ -33,28 +33,40 @@
       "computation": {"value": 40, "operation": "addition"}
     },
     {
-      "id": "forgero:katana_blade-attack_damage",
-      "type": "forgero:attack_damage",
-      "computation": {"value": 1.4, "operation": "multiplication"},
-      "condition": {
-        "static": [{"type": "forgero:is_root"}]
-      }
-    },
-    {
-      "id": "forgero:katana_blade-durability",
+      "id": "forgero:katana_blade-durability-mult",
       "type": "forgero:durability",
-      "computation": {"value": 1.3, "operation": "multiplication"},
-      "condition": {
-        "static": [{"type": "forgero:is_root"}]
-      }
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.3}
     },
     {
-      "id": "forgero:katana_blade-weight",
+      "id": "forgero:katana_blade-attack_damage-mult",
+      "type": "forgero:attack_damage",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.4}
+    },
+    {
+      "id": "forgero:katana_blade-attack_speed-mult",
+      "type": "forgero:attack_speed",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
+    },
+    {
+      "id": "forgero:katana_blade-mining_speed-mult",
+      "type": "forgero:mining_speed",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
+    },
+    {
+      "id": "forgero:katana_blade-mining_level-mult",
+      "type": "forgero:mining_level",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
+    },
+    {
+      "id": "forgero:katana_blade-weight-mult",
       "type": "forgero:weight",
-      "computation": {"value": 0.75, "operation": "multiplication"},
-      "condition": {
-        "static": [{"type": "forgero:is_root"}]
-      }
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 0.75}
     }
   ]
 }

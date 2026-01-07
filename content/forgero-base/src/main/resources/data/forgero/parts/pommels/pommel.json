@@ -12,8 +12,8 @@
     "id": "forgero:{material.name}-pommel",
     "slots": {
       "material": {
-        "type": "forgero:metal",
-        "default_tag": "forgero:metal"
+        "type": "forgero:materials/types/metal",
+        "default_tag": "forgero:materials/types/metal"
       }
     }
   },

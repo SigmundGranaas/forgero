@@ -14,6 +14,35 @@
       }
     }
   ],
+  "upgrades": [
+    {
+      "id": "forgero:gem-slot",
+      "type": "forgero:trinket",
+      "tags": [
+        "forgero:upgrades/types/gem"
+      ],
+      "context": "forgero:contexts/defensive",
+      "description": "slot.forgero.gem"
+    },
+    {
+      "id": "forgero:reinforcement-slot",
+      "type": "forgero:material",
+      "tags": [
+        "forgero:upgrades/types/reinforcement"
+      ],
+      "context": "forgero:contexts/defensive",
+      "description": "slot.forgero.reinforcement"
+    },
+    {
+      "id": "forgero:cosmetic-slot",
+      "type": "forgero:dye",
+      "tags": [
+        "forgero:upgrades/types/cosmetic"
+      ],
+      "context": "forgero:contexts/utility",
+      "description": "slot.forgero.cosmetic"
+    }
+  ],
   "host": {
     "create": {
       "id": "forgero:binding-schematic",

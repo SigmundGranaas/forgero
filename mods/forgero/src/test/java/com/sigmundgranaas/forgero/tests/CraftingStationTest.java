@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.tests;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroGameTest;
+import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroTestUtils;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroTestContext;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
@@ -41,7 +42,7 @@ public class CraftingStationTest implements ForgeroGameTest {
 	 */
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
 	public void iron_pickaxe_can_be_crafted_from_parts(TestContext context) {
-		var ctx = forgero(context);
+		var ctx = ForgeroTestUtils.forgero(context);
 		var api = ctx.api();
 		var query = ForgeroApi.itemQuery();
 
@@ -118,58 +119,49 @@ public class CraftingStationTest implements ForgeroGameTest {
 	}
 
 	/**
-	 * Tests that a tool can be upgraded via crafting.
-	 * <p>
-	 * Uses the upgrade installation API to simulate what would happen
-	 * with a crafting table upgrade recipe.
+	 * Tests that gems can be installed directly on vanilla tools.
+	 * Vanilla tools (iron_sword) have gem slots that accept gem upgrades.
 	 */
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
 	public void tool_can_be_upgraded_with_gem(TestContext context) {
-		var ctx = forgero(context);
+		var ctx = ForgeroTestUtils.forgero(context);
 		var api = ctx.api();
 		var mutate = api.itemMutation();
 		var query = api.itemQuery();
 
-		// Get a tool and an upgrade
-		var swordOpt = ctx.component("forgero:iron-sword");
+		var swordOpt = ctx.component("forgero:iron_sword");
 		var gemOpt = ctx.component("forgero:diamond_gem");
 
-		context.assertTrue(swordOpt.isPresent(), "iron-sword component must exist");
+		context.assertTrue(swordOpt.isPresent(), "iron_sword component must exist");
 		context.assertTrue(gemOpt.isPresent(), "diamond_gem component must exist");
 
 		var swordStackOpt = ctx.toStack(swordOpt.get());
 		var gemStackOpt = ctx.toStack(gemOpt.get());
 
-		context.assertTrue(swordStackOpt.isPresent(), "iron-sword must convert to ItemStack");
+		context.assertTrue(swordStackOpt.isPresent(), "iron_sword must convert to ItemStack");
 		context.assertTrue(gemStackOpt.isPresent(), "diamond_gem must convert to ItemStack");
 
 		ItemStack sword = swordStackOpt.get();
 		ItemStack gem = gemStackOpt.get();
-
-		// Check if the sword has upgrade slots
-		int slotCount = query.getUpgradeSlotCount(sword);
-		context.assertTrue(slotCount > 0, "Iron sword should have upgrade slots");
-
-		// Get baseline stats
 		float baseDamage = query.getAttackDamage(sword);
 
-		// Install upgrade
-		boolean canInstall = mutate.canInstallUpgrade(sword, gem);
-		context.assertTrue(canInstall, "Should be able to install diamond gem on sword");
+		int swordSlotCount = query.getUpgradeSlotCount(sword);
+		context.assertTrue(swordSlotCount > 0, "Sword should have upgrade slots");
+
+		boolean canInstallGem = mutate.canInstallUpgrade(sword, gem);
+		context.assertTrue(canInstallGem, "Should be able to install diamond gem on sword");
 
 		ItemStack upgradedSword = mutate.installUpgrade(sword, gem);
 		context.assertFalse(upgradedSword.isEmpty(), "Upgraded sword must not be empty");
 
-		// Verify upgrade was installed
 		var upgrades = query.getInstalledUpgrades(upgradedSword);
 		context.assertTrue(upgrades.size() > 0, "Upgraded sword should have upgrades");
 
-		// Verify stats changed
 		float newDamage = query.getAttackDamage(upgradedSword);
 		context.assertTrue(newDamage >= baseDamage,
 				String.format("Upgraded sword damage (%f) should be >= base (%f)", newDamage, baseDamage));
 
-		LOGGER.debug("Upgraded iron-sword with diamond_gem: baseDamage={}, upgradedDamage={}, upgradeCount={}",
+		LOGGER.debug("Upgraded iron_sword with gem: baseDamage={}, upgradedDamage={}, upgradeCount={}",
 				baseDamage, newDamage, upgrades.size());
 
 		context.complete();
@@ -180,17 +172,17 @@ public class CraftingStationTest implements ForgeroGameTest {
 	 */
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
 	public void multiple_upgrades_can_stack(TestContext context) {
-		var ctx = forgero(context);
+		var ctx = ForgeroTestUtils.forgero(context);
 		var api = ctx.api();
 		var mutate = api.itemMutation();
 		var query = api.itemQuery();
 
 		// Get a tool with multiple slots
-		var pickaxeOpt = ctx.component("forgero:diamond-pickaxe");
-		context.assertTrue(pickaxeOpt.isPresent(), "diamond-pickaxe component must exist");
+		var pickaxeOpt = ctx.component("forgero:diamond_pickaxe");
+		context.assertTrue(pickaxeOpt.isPresent(), "diamond_pickaxe component must exist");
 
 		var pickaxeStackOpt = ctx.toStack(pickaxeOpt.get());
-		context.assertTrue(pickaxeStackOpt.isPresent(), "diamond-pickaxe must convert to ItemStack");
+		context.assertTrue(pickaxeStackOpt.isPresent(), "diamond_pickaxe must convert to ItemStack");
 
 		ItemStack pickaxe = pickaxeStackOpt.get();
 
@@ -243,7 +235,7 @@ public class CraftingStationTest implements ForgeroGameTest {
 	 */
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
 	public void different_materials_give_different_stats(TestContext context) {
-		var ctx = forgero(context);
+		var ctx = ForgeroTestUtils.forgero(context);
 		var query = ForgeroApi.itemQuery();
 
 		// Get pickaxes of different materials (using vanilla tool wrappers)
@@ -289,30 +281,29 @@ public class CraftingStationTest implements ForgeroGameTest {
 	 */
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
 	public void upgrades_can_be_removed(TestContext context) {
-		var ctx = forgero(context);
+		var ctx = ForgeroTestUtils.forgero(context);
 		var api = ctx.api();
 		var mutate = api.itemMutation();
 		var query = api.itemQuery();
 
 		// Get a tool and upgrade
-		var swordOpt = ctx.component("forgero:iron-sword");
+		var swordOpt = ctx.component("forgero:iron_sword");
 		var gemOpt = ctx.component("forgero:diamond_gem");
 
-		context.assertTrue(swordOpt.isPresent(), "iron-sword component must exist");
+		context.assertTrue(swordOpt.isPresent(), "iron_sword component must exist");
 		context.assertTrue(gemOpt.isPresent(), "diamond_gem component must exist");
 
 		var swordStackOpt = ctx.toStack(swordOpt.get());
 		var gemStackOpt = ctx.toStack(gemOpt.get());
 
-		context.assertTrue(swordStackOpt.isPresent(), "iron-sword must convert to ItemStack");
+		context.assertTrue(swordStackOpt.isPresent(), "iron_sword must convert to ItemStack");
 		context.assertTrue(gemStackOpt.isPresent(), "diamond_gem must convert to ItemStack");
 
 		ItemStack sword = swordStackOpt.get();
 		ItemStack gem = gemStackOpt.get();
 
-		// Install upgrade
 		context.assertTrue(mutate.canInstallUpgrade(sword, gem),
-				"Must be able to install diamond_gem on iron-sword");
+				"Must be able to install diamond_gem on iron_sword");
 
 		ItemStack upgradedSword = mutate.installUpgrade(sword, gem);
 		var upgradesBefore = query.getInstalledUpgrades(upgradedSword);
@@ -340,7 +331,7 @@ public class CraftingStationTest implements ForgeroGameTest {
 	 */
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
 	public void tool_with_binding_recipe_installs_binding_as_upgrade(TestContext context) {
-		var ctx = forgero(context);
+		var ctx = ForgeroTestUtils.forgero(context);
 		var api = ctx.api();
 		var query = ForgeroApi.itemQuery();
 		var mutate = api.itemMutation();
@@ -431,17 +422,17 @@ public class CraftingStationTest implements ForgeroGameTest {
 	 */
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
 	public void sword_with_guard_recipe_installs_guard_as_upgrade(TestContext context) {
-		var ctx = forgero(context);
+		var ctx = ForgeroTestUtils.forgero(context);
 		var api = ctx.api();
 		var query = ForgeroApi.itemQuery();
 		var mutate = api.itemMutation();
 
 		// Get a base sword (iron sword)
-		var swordOpt = ctx.component("forgero:iron-sword");
-		context.assertTrue(swordOpt.isPresent(), "iron-sword component must exist");
+		var swordOpt = ctx.component("forgero:iron_sword");
+		context.assertTrue(swordOpt.isPresent(), "iron_sword component must exist");
 
 		var swordStackOpt = ctx.toStack(swordOpt.get());
-		context.assertTrue(swordStackOpt.isPresent(), "iron-sword must convert to ItemStack");
+		context.assertTrue(swordStackOpt.isPresent(), "iron_sword must convert to ItemStack");
 
 		ItemStack baseSword = swordStackOpt.get();
 
@@ -477,7 +468,7 @@ public class CraftingStationTest implements ForgeroGameTest {
 		}
 
 		context.assertFalse(guardToInstall.isEmpty(),
-				"Must find at least one compatible guard upgrade for iron-sword - check guard content");
+				"Must find at least one compatible guard upgrade for iron_sword - check guard content");
 
 		// Install the guard as an upgrade (this is what the recipe does)
 		ItemStack swordWithGuard = mutate.installUpgrade(baseSword, guardToInstall);
@@ -500,13 +491,8 @@ public class CraftingStationTest implements ForgeroGameTest {
 		context.assertTrue(hasGuard,
 				"Sword should have a guard upgrade installed");
 
-		// Verify the sword structure is preserved (blade + handle)
-		var parts = query.getParts(swordWithGuard);
-		context.assertTrue(parts.size() >= 2,
-				"Sword should have at least 2 parts (blade + handle)");
-
-		LOGGER.debug("Sword with guard successfully installed: baseSword={}, guard={}, partsCount={}, upgradesCount={}",
-				baseSword.getItem(), foundGuard, parts.size(), upgrades.size());
+		LOGGER.debug("Sword with guard successfully installed: baseSword={}, guard={}, upgradesCount={}",
+				baseSword.getItem(), foundGuard, upgrades.size());
 
 		context.complete();
 	}

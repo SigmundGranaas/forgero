@@ -1,9 +1,13 @@
 package com.sigmundgranaas.forgero.bows.item;
 
 import com.sigmundgranaas.forgero.common.item.ForgeroHostItem;
+import com.sigmundgranaas.forgero.common.name.NameResolver;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
 
 import net.minecraft.item.BowItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
 
 /**
  * A Forgero-specific bow item. It extends the vanilla BowItem but is also a
@@ -25,5 +29,18 @@ public class ForgeroBowItem extends BowItem implements ForgeroHostItem {
 	@Override
 	public Component getForgeroComponent() {
 		return component;
+	}
+
+	@Override
+	public Text getName() {
+		return NameResolver.resolve(component);
+	}
+
+	@Override
+	public Text getName(ItemStack stack) {
+		return ForgeroApi.converter()
+				.toComponent(stack)
+				.map(NameResolver::resolve)
+				.orElseGet(this::getName);
 	}
 }

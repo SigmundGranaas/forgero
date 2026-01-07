@@ -33,20 +33,40 @@
       "computation": {"value": 45, "operation": "addition"}
     },
     {
-      "id": "forgero:mace_head-attack_damage",
-      "type": "forgero:attack_damage",
-      "computation": {"value": 1.5, "operation": "multiplication"},
-      "condition": {
-        "static": [{"type": "forgero:is_root"}]
-      }
+      "id": "forgero:mace_head-durability-mult",
+      "type": "forgero:durability",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.1}
     },
     {
-      "id": "forgero:mace_head-weight",
+      "id": "forgero:mace_head-attack_damage-mult",
+      "type": "forgero:attack_damage",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.5}
+    },
+    {
+      "id": "forgero:mace_head-attack_speed-mult",
+      "type": "forgero:attack_speed",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
+    },
+    {
+      "id": "forgero:mace_head-mining_speed-mult",
+      "type": "forgero:mining_speed",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
+    },
+    {
+      "id": "forgero:mace_head-mining_level-mult",
+      "type": "forgero:mining_level",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
+    },
+    {
+      "id": "forgero:mace_head-weight-mult",
       "type": "forgero:weight",
-      "computation": {"value": 1.3, "operation": "multiplication"},
-      "condition": {
-        "static": [{"type": "forgero:is_root"}]
-      }
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.3}
     }
   ]
 }

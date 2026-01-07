@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.tests;
 
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroGameTest;
+import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroTestUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.test.GameTest;
@@ -20,13 +21,13 @@ public class ComponentSmokeTest implements ForgeroGameTest {
 
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void component_system_is_functional(TestContext context) {
-        var ctx = forgero(context);
+        var ctx = ForgeroTestUtils.forgero(context);
 
         // Verify component registry is initialized
-        assertNotNull(services().componentRegistry(), "Component registry must be initialized");
+        assertNotNull(ForgeroTestUtils.services().componentRegistry(), "Component registry must be initialized");
 
         // Verify components are loaded
-        assertTrue(services().componentRegistry().all().size() > 0,
+        assertTrue(ForgeroTestUtils.services().componentRegistry().all().size() > 0,
                 "At least some components must be loaded");
 
         // Verify a known component exists (iron material)
@@ -50,7 +51,7 @@ public class ComponentSmokeTest implements ForgeroGameTest {
      */
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void items_are_registered_and_usable(TestContext context) {
-        var ctx = forgero(context);
+        var ctx = ForgeroTestUtils.forgero(context);
 
         // Get a known tool component (template-generated use hyphen format)
         var ironPickaxe = ctx.component("forgero:iron-pickaxe");
@@ -85,7 +86,7 @@ public class ComponentSmokeTest implements ForgeroGameTest {
      */
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void multiple_tools_are_registered(TestContext context) {
-        var ctx = forgero(context);
+        var ctx = ForgeroTestUtils.forgero(context);
 
         // Template-generated pickaxes use hyphen format
         String[] tools = {
@@ -168,11 +169,39 @@ public class ComponentSmokeTest implements ForgeroGameTest {
     }
 
     /**
+     * DEBUG: Lists all components containing "pickaxe" to verify registration.
+     */
+    @GameTest(templateName = EMPTY_STRUCTURE, required = true)
+    public void debug_list_pickaxe_components(TestContext context) {
+        var registry = ForgeroTestUtils.services().componentRegistry();
+        int count = 0;
+        LOGGER.info("=== Forgero components containing 'pickaxe' ===");
+        for (var comp : registry.all()) {
+            String id = comp.id().toString();
+            if (id.contains("pickaxe")) {
+                LOGGER.info("  Component: {}", id);
+                count++;
+            }
+        }
+        LOGGER.info("Total pickaxe components: {}", count);
+        
+        // Also check specifically for iron_pickaxe (underscore)
+        var ironUnder = registry.get(com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier.parse("forgero:iron_pickaxe"));
+        LOGGER.info("forgero:iron_pickaxe (underscore) exists: {}", ironUnder.isPresent());
+        
+        // And iron-pickaxe (hyphen)
+        var ironHyphen = registry.get(com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier.parse("forgero:iron-pickaxe"));
+        LOGGER.info("forgero:iron-pickaxe (hyphen) exists: {}", ironHyphen.isPresent());
+        
+        context.complete();
+    }
+    
+    /**
      * Lists pickaxe slot types for debugging default handle selection.
      */
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void debug_pickaxe_slot_types(TestContext context) {
-        var ctx = forgero(context);
+        var ctx = ForgeroTestUtils.forgero(context);
 
         var diamondPickaxe = ctx.component("forgero:diamond-pickaxe");
         if (diamondPickaxe.isPresent()) {
@@ -194,7 +223,7 @@ public class ComponentSmokeTest implements ForgeroGameTest {
      */
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void tool_attributes_are_reasonable(TestContext context) {
-        var ctx = forgero(context);
+        var ctx = ForgeroTestUtils.forgero(context);
         var query = com.sigmundgranaas.forgero.loader.api.ForgeroApi.itemQuery();
 
         // Test iron pickaxe attributes
@@ -255,7 +284,7 @@ public class ComponentSmokeTest implements ForgeroGameTest {
      */
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void oak_pickaxe_has_wood_tier_attributes(TestContext context) {
-        var ctx = forgero(context);
+        var ctx = ForgeroTestUtils.forgero(context);
         var query = com.sigmundgranaas.forgero.loader.api.ForgeroApi.itemQuery();
 
         var oakPickaxe = ctx.component("forgero:oak-pickaxe");

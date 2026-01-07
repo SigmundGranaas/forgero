@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.tests;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroGameTest;
+import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroTestUtils;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 
@@ -30,7 +31,7 @@ public class VanillaToolParityTest implements ForgeroGameTest {
 
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void iron_pickaxe_has_vanilla_stats(TestContext context) {
-        var ctx = forgero(context);
+        var ctx = ForgeroTestUtils.forgero(context);
         var pickaxe = ctx.component("forgero:iron_pickaxe");
 
         assertTrue(pickaxe.isPresent(), "Iron pickaxe must exist");
@@ -50,7 +51,7 @@ public class VanillaToolParityTest implements ForgeroGameTest {
 
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void iron_sword_has_vanilla_stats(TestContext context) {
-        var ctx = forgero(context);
+        var ctx = ForgeroTestUtils.forgero(context);
         var sword = ctx.component("forgero:iron_sword");
 
         assertTrue(sword.isPresent(), "Iron sword must exist");
@@ -68,7 +69,7 @@ public class VanillaToolParityTest implements ForgeroGameTest {
 
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void iron_axe_has_vanilla_stats(TestContext context) {
-        var ctx = forgero(context);
+        var ctx = ForgeroTestUtils.forgero(context);
         var axe = ctx.component("forgero:iron_axe");
 
         assertTrue(axe.isPresent(), "Iron axe must exist");
@@ -86,7 +87,7 @@ public class VanillaToolParityTest implements ForgeroGameTest {
 
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void iron_shovel_has_vanilla_stats(TestContext context) {
-        var ctx = forgero(context);
+        var ctx = ForgeroTestUtils.forgero(context);
         var shovel = ctx.component("forgero:iron_shovel");
 
         assertTrue(shovel.isPresent(), "Iron shovel must exist");
@@ -106,7 +107,7 @@ public class VanillaToolParityTest implements ForgeroGameTest {
 
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void diamond_pickaxe_has_vanilla_stats(TestContext context) {
-        var ctx = forgero(context);
+        var ctx = ForgeroTestUtils.forgero(context);
         var pickaxe = ctx.component("forgero:diamond_pickaxe");
 
         assertTrue(pickaxe.isPresent(), "Diamond pickaxe must exist");
@@ -126,7 +127,7 @@ public class VanillaToolParityTest implements ForgeroGameTest {
 
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void diamond_sword_has_vanilla_stats(TestContext context) {
-        var ctx = forgero(context);
+        var ctx = ForgeroTestUtils.forgero(context);
         var sword = ctx.component("forgero:diamond_sword");
 
         assertTrue(sword.isPresent(), "Diamond sword must exist");
@@ -144,7 +145,7 @@ public class VanillaToolParityTest implements ForgeroGameTest {
 
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void diamond_axe_has_vanilla_stats(TestContext context) {
-        var ctx = forgero(context);
+        var ctx = ForgeroTestUtils.forgero(context);
         var axe = ctx.component("forgero:diamond_axe");
 
         assertTrue(axe.isPresent(), "Diamond axe must exist");
@@ -164,7 +165,7 @@ public class VanillaToolParityTest implements ForgeroGameTest {
 
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void netherite_pickaxe_has_vanilla_stats(TestContext context) {
-        var ctx = forgero(context);
+        var ctx = ForgeroTestUtils.forgero(context);
         var pickaxe = ctx.component("forgero:netherite_pickaxe");
 
         assertTrue(pickaxe.isPresent(), "Netherite pickaxe must exist");
@@ -184,7 +185,7 @@ public class VanillaToolParityTest implements ForgeroGameTest {
 
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void netherite_sword_has_vanilla_stats(TestContext context) {
-        var ctx = forgero(context);
+        var ctx = ForgeroTestUtils.forgero(context);
         var sword = ctx.component("forgero:netherite_sword");
 
         assertTrue(sword.isPresent(), "Netherite sword must exist");
@@ -204,7 +205,7 @@ public class VanillaToolParityTest implements ForgeroGameTest {
 
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void gold_pickaxe_has_vanilla_stats(TestContext context) {
-        var ctx = forgero(context);
+        var ctx = ForgeroTestUtils.forgero(context);
         var pickaxe = ctx.component("forgero:golden_pickaxe");
 
         assertTrue(pickaxe.isPresent(), "Gold pickaxe must exist");
@@ -224,7 +225,7 @@ public class VanillaToolParityTest implements ForgeroGameTest {
 
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void gold_sword_has_vanilla_stats(TestContext context) {
-        var ctx = forgero(context);
+        var ctx = ForgeroTestUtils.forgero(context);
         var sword = ctx.component("forgero:golden_sword");
 
         assertTrue(sword.isPresent(), "Gold sword must exist");
@@ -245,10 +246,10 @@ public class VanillaToolParityTest implements ForgeroGameTest {
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void tool_tiers_ordered_correctly_by_durability(TestContext context) {
         // Load all pickaxes
-        var gold = forgero(context).component("forgero:golden_pickaxe").orElseThrow();
-        var iron = forgero(context).component("forgero:iron_pickaxe").orElseThrow();
-        var diamond = forgero(context).component("forgero:diamond_pickaxe").orElseThrow();
-        var netherite = forgero(context).component("forgero:netherite_pickaxe").orElseThrow();
+        var gold = ForgeroTestUtils.forgero(context).component("forgero:golden_pickaxe").orElseThrow();
+        var iron = ForgeroTestUtils.forgero(context).component("forgero:iron_pickaxe").orElseThrow();
+        var diamond = ForgeroTestUtils.forgero(context).component("forgero:diamond_pickaxe").orElseThrow();
+        var netherite = ForgeroTestUtils.forgero(context).component("forgero:netherite_pickaxe").orElseThrow();
 
         float goldDur = getAttributeValue(gold, "forgero:durability");
         float ironDur = getAttributeValue(iron, "forgero:durability");
@@ -266,10 +267,10 @@ public class VanillaToolParityTest implements ForgeroGameTest {
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void tool_tiers_ordered_correctly_by_damage(TestContext context) {
         // Load all swords
-        var gold = forgero(context).component("forgero:golden_sword").orElseThrow();
-        var iron = forgero(context).component("forgero:iron_sword").orElseThrow();
-        var diamond = forgero(context).component("forgero:diamond_sword").orElseThrow();
-        var netherite = forgero(context).component("forgero:netherite_sword").orElseThrow();
+        var gold = ForgeroTestUtils.forgero(context).component("forgero:golden_sword").orElseThrow();
+        var iron = ForgeroTestUtils.forgero(context).component("forgero:iron_sword").orElseThrow();
+        var diamond = ForgeroTestUtils.forgero(context).component("forgero:diamond_sword").orElseThrow();
+        var netherite = ForgeroTestUtils.forgero(context).component("forgero:netherite_sword").orElseThrow();
 
         float goldDmg = getAttributeValue(gold, "forgero:attack_damage");
         float ironDmg = getAttributeValue(iron, "forgero:attack_damage");

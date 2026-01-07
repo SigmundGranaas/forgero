@@ -1,0 +1,3 @@
+// Forgero armor content module
+// Contains armor texture templates and resources for Forgero armor items
+// Inherits java-library plugin and processResources configuration from parent projects

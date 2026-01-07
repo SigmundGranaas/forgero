@@ -70,8 +70,8 @@ public class TemplateGeneratorMinimalTest {
 			new PartTemplateStructureData(
 				"forgero:{material.name}-{shape.name}",
 				Map.of(
-					"material", new PartTemplateStructureSlotData(idFactory.of("material"), null, "Material"),
-					"shape", new PartTemplateStructureSlotData(idFactory.of("shape"), null, "Shape")
+					"material", new PartTemplateStructureSlotData(idFactory.of("material"), null, null, "Material"),
+					"shape", new PartTemplateStructureSlotData(idFactory.of("shape"), null, null, "Shape")
 				)
 			),
 			null, null, null, null

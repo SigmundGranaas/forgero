@@ -2,9 +2,9 @@
   "type": "forgero:equipment_template",
   "name": "knife",
   "tags": [
-    "forgero:weapons/knife",
-    "forgero:weapons/swordlike",
-    "forgero:weapons/extended",
+    "forgero:weapons/types/knife",
+    "forgero:weapons/categories/swordlike",
+    "forgero:weapons/categories/extended",
     "forgero:tools"
   ],
   "host_template": {
@@ -15,7 +15,7 @@
     "id": "forgero:{blade.material.name}-knife",
     "slots": {
       "blade": {
-        "type": "forgero:knife_blade",
+        "type": "forgero:parts/knife_blade",
         "default_tag": "forgero:parts/knife_blade"
       },
       "handle": {
@@ -24,6 +24,14 @@
       }
     }
   },
+  "upgrades": [
+    {
+      "id": "forgero:knife-gem",
+      "type": "forgero:upgrades/types/gem",
+      "tags": ["forgero:upgrades/types/gem"],
+      "description": "slot.forgero.gem"
+    }
+  ],
   "attributes": [
     {
       "id": "forgero:knife-attack_speed",

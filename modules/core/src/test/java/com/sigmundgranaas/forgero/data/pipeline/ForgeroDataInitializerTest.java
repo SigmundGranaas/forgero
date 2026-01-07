@@ -49,26 +49,23 @@ class ForgeroDataInitializerTest {
 	 */
 	@Test
 	void testInitializeData() {
-		// Create TagGraph with all tags referenced by test resources
 		var tagMap = new HashMap<OpenIdentifier, java.util.Set<OpenIdentifier>>();
-		// Tags from shape/material files
 		tagMap.put(idFactory.of("forgero:armor_plate_shape"), new java.util.HashSet<>());
 		tagMap.put(idFactory.of("forgero:pickaxe_head_shape"), new java.util.HashSet<>());
 		tagMap.put(idFactory.of("forgero:default_pickaxe_head"), new java.util.HashSet<>());
 		tagMap.put(idFactory.of("forgero:default_armor_plate"), new java.util.HashSet<>());
 		tagMap.put(idFactory.of("forgero:base_shape"), new java.util.HashSet<>());
 		tagMap.put(idFactory.of("forgero:mastercrafted"), new java.util.HashSet<>());
-		tagMap.put(idFactory.of("forgero:materials/tool_material"), new java.util.HashSet<>());
-		tagMap.put(idFactory.of("forgero:materials/metal"), new java.util.HashSet<>());
-		tagMap.put(idFactory.of("forgero:materials/armor_material"), new java.util.HashSet<>());
-		// Tags from template/part files (slot types)
-		tagMap.put(idFactory.of("forgero:parts/handle_type"), new java.util.HashSet<>());
-		tagMap.put(idFactory.of("forgero:parts/pickaxe_head_type"), new java.util.HashSet<>());
-		tagMap.put(idFactory.of("forgero:parts/armor_plate_type"), new java.util.HashSet<>());
 		tagMap.put(idFactory.of("forgero:default_handle"), new java.util.HashSet<>());
 		tagMap.put(idFactory.of("forgero:handle"), new java.util.HashSet<>());
-		tagMap.put(idFactory.of("forgero:tools/pickaxe"), new java.util.HashSet<>());
-		tagMap.put(idFactory.of("forgero:armor/chest_plate"), new java.util.HashSet<>());
+		tagMap.put(OpenIdentifier.parse("forgero:materials/tool_material"), new java.util.HashSet<>());
+		tagMap.put(OpenIdentifier.parse("forgero:materials/metal"), new java.util.HashSet<>());
+		tagMap.put(OpenIdentifier.parse("forgero:materials/armor_material"), new java.util.HashSet<>());
+		tagMap.put(OpenIdentifier.parse("forgero:parts/handle_type"), new java.util.HashSet<>());
+		tagMap.put(OpenIdentifier.parse("forgero:parts/pickaxe_head_type"), new java.util.HashSet<>());
+		tagMap.put(OpenIdentifier.parse("forgero:parts/armor_plate_type"), new java.util.HashSet<>());
+		tagMap.put(OpenIdentifier.parse("forgero:tools/pickaxe"), new java.util.HashSet<>());
+		tagMap.put(OpenIdentifier.parse("forgero:armor/chest_plate"), new java.util.HashSet<>());
 		var tagGraph = new com.sigmundgranaas.forgero.common.tags.engine.TagGraph(tagMap);
 
 		// Note: Empty condition codec maps mean template conditions (like in_slot_type)
@@ -110,8 +107,6 @@ class ForgeroDataInitializerTest {
 		assertEquals(1, woodenHandleData.identifiers().size());
 		assertEquals("minecraft:stick", woodenHandleData.identifiers().get(0).id().toString());
 
-		// Verify the expected number of static host items (materials + static parts)
-		// Template-generated items require condition codecs which are not provided in this unit test
 		assertEquals(3, bundle.hostItemMap().size(),
 				"Should have 3 static host items (iron material + static_oak_handle + wooden_handle)");
 	}

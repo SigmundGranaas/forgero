@@ -41,14 +41,16 @@
       "computation": {"multiply": 1.0}
     },
     {
-      "id": "forgero:sword_blade-attack_damage-base",
+      "id": "forgero:sword_blade-attack_damage-mult",
       "type": "forgero:attack_damage",
-      "computation": {"value": 1.0, "operation": "addition"}
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
     },
     {
-      "id": "forgero:sword_blade-attack_speed-base",
+      "id": "forgero:sword_blade-attack_speed-mult",
       "type": "forgero:attack_speed",
-      "computation": {"value": 1.0, "operation": "addition"}
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
     }
   ]
 }

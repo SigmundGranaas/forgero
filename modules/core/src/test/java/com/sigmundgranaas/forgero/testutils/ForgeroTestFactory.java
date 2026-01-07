@@ -64,19 +64,19 @@ public class ForgeroTestFactory {
 	}
 
 	public static ComponentUpgradeSlot upgradeSlot(String id, OpenIdentifier type) {
-		return new ComponentUpgradeSlot(TestIdentifiers.id(id), type, "", SlotValidator.ACCEPT_ALL, Optional.empty());
+		return new ComponentUpgradeSlot(TestIdentifiers.id(id), type, "", Optional.empty(), SlotValidator.ACCEPT_ALL, Optional.empty());
 	}
 
 	public static ComponentUpgradeSlot upgradeSlot(String id, OpenIdentifier type, Predicate<Component> filter) {
-		return new ComponentUpgradeSlot(TestIdentifiers.id(id), type, "", SlotValidator.custom(filter), Optional.empty());
+		return new ComponentUpgradeSlot(TestIdentifiers.id(id), type, "", Optional.empty(), SlotValidator.custom(filter), Optional.empty());
 	}
 
 	public static ComponentUpgradeSlot upgradeSlot(String id, OpenIdentifier type, Predicate<Component> filter, Component content) {
-		return new ComponentUpgradeSlot(TestIdentifiers.id(id), type, "", SlotValidator.custom(filter), Optional.of(content));
+		return new ComponentUpgradeSlot(TestIdentifiers.id(id), type, "", Optional.empty(), SlotValidator.custom(filter), Optional.of(content));
 	}
 
 	public static ComponentUpgradeSlot upgradeSlot(OpenIdentifier id, OpenIdentifier type, Predicate<Component> filter, Optional<Component> content) {
-		return new ComponentUpgradeSlot(id, type, "", SlotValidator.custom(filter), content);
+		return new ComponentUpgradeSlot(id, type, "", Optional.empty(), SlotValidator.custom(filter), content);
 	}
 
 	// =============================================================================================

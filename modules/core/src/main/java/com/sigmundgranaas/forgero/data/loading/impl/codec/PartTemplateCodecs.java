@@ -15,21 +15,23 @@ public class PartTemplateCodecs {
 
 	public static final Codec<UpgradeSlotData> UPGRADE_SLOT_DATA_CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(
-					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("id").forGetter(UpgradeSlotData::id),
-					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(UpgradeSlotData::type),
-					Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("tags").forGetter(data -> Optional.ofNullable(data.tags())),
+					CodecConstants.TAG_IDENTIFIER_CODEC.fieldOf("id").forGetter(UpgradeSlotData::id),
+					CodecConstants.TAG_IDENTIFIER_CODEC.fieldOf("type").forGetter(UpgradeSlotData::type),
+					Codec.list(CodecConstants.TAG_IDENTIFIER_CODEC).optionalFieldOf("tags").forGetter(data -> Optional.ofNullable(data.tags())),
 					Codec.INT.optionalFieldOf("tier").forGetter(data -> Optional.ofNullable(data.tier())),
-					Codec.STRING.optionalFieldOf("description").forGetter(data -> Optional.ofNullable(data.description()))
-			).apply(instance, (id, type, tags, tier, description) ->
-					new UpgradeSlotData(id, type, tags.orElse(null), tier.orElse(null), description.orElse(null))));
+					Codec.STRING.optionalFieldOf("description").forGetter(data -> Optional.ofNullable(data.description())),
+					CodecConstants.TAG_IDENTIFIER_CODEC.optionalFieldOf("context").forGetter(data -> Optional.ofNullable(data.context()))
+			).apply(instance, (id, type, tags, tier, description, context) ->
+					new UpgradeSlotData(id, type, tags.orElse(null), tier.orElse(null), description.orElse(null), context.orElse(null))));
 
 	public static final Codec<PartTemplateStructureSlotData> PART_TEMPLATE_STRUCTURE_MATERIAL_DATA_CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(
-					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(PartTemplateStructureSlotData::type),
+					CodecConstants.TAG_IDENTIFIER_CODEC.fieldOf("type").forGetter(PartTemplateStructureSlotData::type),
+					CodecConstants.TAG_IDENTIFIER_CODEC.optionalFieldOf("default_tag").forGetter(data -> Optional.ofNullable(data.defaultTag())),
 					Codec.INT.optionalFieldOf("count").forGetter(data -> Optional.ofNullable(data.count())),
 					Codec.STRING.optionalFieldOf("description").forGetter(data -> Optional.ofNullable(data.description()))
-			).apply(instance, (type, count, description) ->
-					new PartTemplateStructureSlotData(type, count.orElse(null), description.orElse(null))));
+			).apply(instance, (type, defaultTag, count, description) ->
+					new PartTemplateStructureSlotData(type, defaultTag.orElse(null), count.orElse(null), description.orElse(null))));
 
 	public static final Codec<PartTemplateStructureData> PART_TEMPLATE_STRUCTURE_DATA_CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(
@@ -45,7 +47,7 @@ public class PartTemplateCodecs {
 						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(PartTemplateData::type),
 						Codec.STRING.fieldOf("name").forGetter(PartTemplateData::name),
 						Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("include").forGetter(data -> Optional.ofNullable(data.include())),
-						Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("tags").forGetter(data -> Optional.ofNullable(data.tags())),
+						Codec.list(CodecConstants.TAG_IDENTIFIER_CODEC).optionalFieldOf("tags").forGetter(data -> Optional.ofNullable(data.tags())),
 						HostCodecs.HOST_TEMPLATE_DATA_CODEC.optionalFieldOf("host_template").forGetter(data -> Optional.ofNullable(data.host_template())),
 						PART_TEMPLATE_STRUCTURE_DATA_CODEC.fieldOf("structure").forGetter(PartTemplateData::structure),
 						upgradeSlotCodec.optionalFieldOf("upgrades").forGetter(data -> Optional.ofNullable(data.upgrades())),

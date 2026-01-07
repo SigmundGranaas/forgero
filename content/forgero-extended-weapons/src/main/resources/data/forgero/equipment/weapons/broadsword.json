@@ -2,8 +2,8 @@
   "type": "forgero:equipment_template",
   "name": "broadsword",
   "tags": [
-    "forgero:weapons/broadsword",
-    "forgero:weapons/swordlike",
+    "forgero:weapons/types/broadsword",
+    "forgero:weapons/categories/swordlike",
     "forgero:tools"
   ],
   "host_template": {
@@ -14,7 +14,7 @@
     "id": "forgero:{blade.material.name}-broadsword",
     "slots": {
       "blade": {
-        "type": "forgero:broadsword_blade",
+        "type": "forgero:parts/broadsword_blade",
         "default_tag": "forgero:parts/broadsword_blade"
       },
       "handle": {
@@ -25,16 +25,16 @@
   },
   "upgrades": [
     {
-      "id": "forgero:broadsword-binding",
-      "type": "forgero:materials/roles/upgrade_material",
-      "tags": ["forgero:materials/types/binding"],
-      "description": "slot.forgero.binding"
+      "id": "forgero:broadsword-guard",
+      "type": "forgero:parts/binding",
+      "tags": ["forgero:parts/guard"],
+      "description": "slot.forgero.guard"
     },
     {
-      "id": "forgero:broadsword-guard",
-      "type": "forgero:sword_guard",
-      "tags": ["forgero:upgrade/guard"],
-      "description": "slot.forgero.guard"
+      "id": "forgero:broadsword-gem",
+      "type": "forgero:upgrades/types/gem",
+      "tags": ["forgero:upgrades/types/gem"],
+      "description": "slot.forgero.gem"
     }
   ],
   "attributes": [

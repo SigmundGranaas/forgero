@@ -1,1 +1,1 @@
-{ "parents": ["test-tags:tags/wood", "test-tags:tags/flammable"] }
+{ "parents": ["test-tags:wood", "test-tags:flammable"] }

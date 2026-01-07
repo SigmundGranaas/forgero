@@ -59,12 +59,14 @@ dependencies {
     runtimeOnly(project(":content:forgero-armor-content"))
     runtimeOnly(project(":content:forgero-tools"))  // Adds armor_material tag to metals
 
-    // Content modules - schematics and extended content
-    runtimeOnly(project(":content:forgero-schematics"))      // Refined and mastercrafted schematics
-    runtimeOnly(project(":content:forgero-extended"))        // Guard schematics, extended materials
-    runtimeOnly(project(":content:forgero-extended-weapons")) // Extended weapon schematics
-    runtimeOnly(project(":content:forgero-mining"))          // Mining tool schematics
-    runtimeOnly(project(":content:forgero-gems"))            // Gem upgrades (diamond_gem, etc.)
+    // Content modules - schematics and extended content (modern format only)
+    runtimeOnly(project(":content:forgero-schematics"))           // Quality schematics (refined, mastercrafted)
+    runtimeOnly(project(":content:forgero-extended-schematics"))  // Extended schematics (weapon blades, tool heads, guards, bindings)
+    runtimeOnly(project(":content:forgero-secondary-materials"))  // Secondary materials (soft, hard, hybrid, dyes)
+    runtimeOnly(project(":content:forgero-extended-weapons"))     // Extended weapon parts and equipment (katana, rapier, etc.)
+    runtimeOnly(project(":content:forgero-mining"))               // Mining tool parts and equipment (hammer, spade, etc.)
+    runtimeOnly(project(":content:forgero-gems"))                 // Gem upgrades (diamond_gem, etc.)
+    runtimeOnly(project(":content:forgero-bows"))                 // Bow and arrow parts and equipment
 
     // Fabric
     modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
@@ -80,9 +82,8 @@ dependencies {
 
     // Forgero test utilities
     testImplementation(project(":modules:core:test-common"))
-    implementation(project(path: ":modules:mc:test-common", configuration: 'namedElements'))
-    // Include test-common in the mod jar for gametest runtime
-    include(project(path: ":modules:mc:test-common", configuration: 'namedElements'))
+    // Note: mc:test-common classes are duplicated locally in test sources to avoid 
+    // Knot classloader issues with remapped JAR method signatures
 
     // Add vanilla-upgrades content for vanilla parity testing (include for GameTests)
     include(project(":content:vanilla-upgrades-base"))

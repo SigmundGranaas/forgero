@@ -16,11 +16,39 @@
   ],
   "upgrades": [
     {
+      "id": "forgero:pommel-slot",
+      "type": "forgero:trinket",
+      "tags": [
+        "forgero:upgrades/types/pommel"
+      ],
+      "context": "forgero:contexts/utility",
+      "description": "slot.forgero.pommel"
+    },
+    {
+      "id": "forgero:grip-slot",
+      "type": "forgero:trinket",
+      "tags": [
+        "forgero:upgrades/types/grip"
+      ],
+      "context": "forgero:contexts/utility",
+      "description": "slot.forgero.grip"
+    },
+    {
+      "id": "forgero:reinforcement-slot",
+      "type": "forgero:material",
+      "tags": [
+        "forgero:upgrades/types/reinforcement"
+      ],
+      "context": "forgero:contexts/utility",
+      "description": "slot.forgero.reinforcement"
+    },
+    {
       "id": "forgero:cosmetic-slot",
       "type": "forgero:dye",
       "tags": [
         "forgero:upgrades/types/cosmetic"
       ],
+      "context": "forgero:contexts/utility",
       "description": "slot.forgero.cosmetic"
     }
   ],

@@ -62,7 +62,7 @@ public class CofComponentConverter {
 			return null;
 		}
 		var slots = upgradeDataList.stream()
-				.map(upgrade -> new CofSlot(upgrade.id(), upgrade.type(), upgrade.description(), null, upgrade.tags()))
+				.map(upgrade -> new CofSlot(upgrade.id(), upgrade.type(), upgrade.description(), upgrade.context(), null, upgrade.tags()))
 				.toList();
 		return new CofUpgrades(slots);
 	}

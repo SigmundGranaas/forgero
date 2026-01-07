@@ -1,7 +1,7 @@
 {
   "type": "forgero:equipment_model_template",
   "target": {
-    "tag": "forgero:materials/tool_material"
+    "tag": "forgero:materials/roles/tool_material"
   },
   "model": {
     "id": "forgero:item/{target.name}-spade",

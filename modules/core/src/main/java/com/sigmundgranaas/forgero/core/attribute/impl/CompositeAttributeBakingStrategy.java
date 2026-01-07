@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.core.attribute.impl;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeContext;
+import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.attribute.composition.PartCompositeContextHandler;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
@@ -102,14 +103,16 @@ public class CompositeAttributeBakingStrategy implements AttributeBakingStrategy
 			sources.put("self", selfAttrs);
 		}
 
-		// Collect part-composite attributes from each structure slot child
+		// Collect attributes from each structure slot child
+		// For structured children (like blades), compose their attributes first
 		for (ComponentPart part : structured.structure().allParts()) {
 			Component child = part.getContent();
 			String slotName = part.id().toString();
 
-			// Recursively collect part-composite attributes from child and all its descendants
-			// This handles nested structures like iron-pickaxe_head containing iron material
-			List<Attribute> childAttrs = collectPartCompositeAttributesRecursively(child);
+			// If child is structured, compose it first and use the composed result
+			// This handles the hierarchy: tool → part → material
+			// Where the part has template multipliers and material has base values
+			List<Attribute> childAttrs = collectOrComposeChildAttributes(child);
 
 			if (!childAttrs.isEmpty()) {
 				sources.put(slotName, childAttrs);
@@ -118,14 +121,60 @@ public class CompositeAttributeBakingStrategy implements AttributeBakingStrategy
 
 		// Compose if we have attributes from multiple sources
 		if (sources.size() >= 2) {
-			return partCompositeHandler.compose(sources);
+			// Try intersection composition (shape × material pattern)
+			List<Attribute> composed = partCompositeHandler.compose(sources);
+			
+			// If intersection fails (e.g., equipment with already-composed parts), 
+			// fall back to additive composition (sum all values of same type)
+			if (composed.isEmpty()) {
+				composed = additiveCompose(sources);
+			}
+			return composed;
 		} else if (sources.size() == 1) {
-			// Only one source - can't compose, but still include as defaults
-			// This handles edge cases where only shape OR only material is present
-			return List.of();
+			// Only one source - return those attributes directly
+			// This handles: equipment with single part (blade inherits composed values)
+			return sources.values().iterator().next();
 		}
 
 		return List.of();
+	}
+
+	/**
+	 * Additive composition: sums all values of the same attribute type across sources.
+	 * Used when intersection composition fails (e.g., equipment with already-composed parts).
+	 *
+	 * Example: pickaxe with head (durability=240) and handle (durability=50) → durability=290
+	 */
+	private List<Attribute> additiveCompose(Map<String, List<Attribute>> sources) {
+		Map<OpenIdentifier, Float> sums = new HashMap<>();
+		
+		for (List<Attribute> attrs : sources.values()) {
+			for (Attribute attr : attrs) {
+				sums.merge(attr.type(), attr.value(), Float::sum);
+			}
+		}
+		
+		return sums.entrySet().stream()
+			.<Attribute>map(e -> SimpleAttribute.resolved(e.getKey(), e.getValue()))
+			.toList();
+	}
+
+	/**
+	 * For structured children: compose their attributes first and return the composed result.
+	 * For non-structured children: collect raw part-composite attributes.
+	 *
+	 * This is the key to supporting the hierarchy: tool → part → material
+	 * When a blade contains a material, we compose the blade's attributes first,
+	 * so the tool sees already-composed values instead of raw part-composite attrs.
+	 */
+	private List<Attribute> collectOrComposeChildAttributes(Component child) {
+		if (child instanceof StructuredComponent structuredChild) {
+			List<Attribute> composed = composePartAttributes(structuredChild);
+			if (!composed.isEmpty()) {
+				return composed;
+			}
+		}
+		return collectPartCompositeAttributesRecursively(child);
 	}
 
 	/**

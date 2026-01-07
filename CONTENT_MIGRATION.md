@@ -1,8 +1,14 @@
 # Forgero Content Migration Status
 
-> **Status: COMPLETE** - This document is historical reference. The migration from legacy pack format to modern JSON format is complete. See `docs/RESOURCE_BEST_PRACTICES.md` for current patterns.
+> **Status: PARTIALLY COMPLETE** - The migration from legacy pack format to modern JSON format is ~70% complete. Critical gaps remain in recipe generators, loot tables, and some schematics. See `docs/CONTENT_MIGRATION_GAP_ANALYSIS.md` for detailed analysis of remaining work.
 
 This document tracks the migration of content from legacy pack format to modern JSON format.
+
+## Related Documentation
+
+- **[Gap Analysis](docs/CONTENT_MIGRATION_GAP_ANALYSIS.md)** - Detailed analysis of what's migrated vs missing
+- **[Content Pack Usage](docs/CONTENT_PACK_USAGE.md)** - How content packs are used by mods
+- **[Resource Best Practices](docs/RESOURCE_BEST_PRACTICES.md)** - Current patterns for new content
 
 ---
 

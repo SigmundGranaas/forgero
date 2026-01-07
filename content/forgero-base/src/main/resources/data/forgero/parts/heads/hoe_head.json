@@ -41,14 +41,16 @@
       "computation": {"multiply": 1.0}
     },
     {
-      "id": "forgero:hoe_head-attack_damage-base",
+      "id": "forgero:hoe_head-attack_damage-mult",
       "type": "forgero:attack_damage",
-      "computation": {"value": 1.0, "operation": "addition"}
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
     },
     {
-      "id": "forgero:hoe_head-attack_speed-base",
+      "id": "forgero:hoe_head-attack_speed-mult",
       "type": "forgero:attack_speed",
-      "computation": {"value": 1.0, "operation": "addition"}
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
     },
     {
       "id": "forgero:hoe_head-mining_speed-mult",
@@ -57,9 +59,10 @@
       "computation": {"multiply": 1.0}
     },
     {
-      "id": "forgero:hoe_head-mining_level-base",
+      "id": "forgero:hoe_head-mining_level-mult",
       "type": "forgero:mining_level",
-      "computation": {"value": 0, "operation": "addition"}
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
     }
   ]
 }

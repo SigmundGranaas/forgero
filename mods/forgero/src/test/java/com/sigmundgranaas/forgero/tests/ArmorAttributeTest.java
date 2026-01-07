@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.tests;
 
 import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroGameTest;
+import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroTestUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
@@ -19,12 +20,12 @@ public class ArmorAttributeTest implements ForgeroGameTest {
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
 	public void iron_helmet_exists_and_has_armor(TestContext context) {
-		var ctx = forgero(context);
+		var ctx = ForgeroTestUtils.forgero(context);
 		var query = ForgeroApi.itemQuery();
 
-		var ironHelmet = ctx.component("forgero:iron-helmet");
+		var ironHelmet = ctx.component("forgero:iron_helmet");
 		assertTrue(ironHelmet.isPresent(),
-				"iron-helmet component must exist - check armor content loading");
+				"iron_helmet component must exist - check armor content loading");
 
 		var stack = ctx.toStack(ironHelmet.get());
 		assertTrue(stack.isPresent(), "Iron helmet must convert to ItemStack");
@@ -42,16 +43,16 @@ public class ArmorAttributeTest implements ForgeroGameTest {
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
 	public void iron_chestplate_has_higher_armor_than_helmet(TestContext context) {
-		var ctx = forgero(context);
+		var ctx = ForgeroTestUtils.forgero(context);
 		var query = ForgeroApi.itemQuery();
 
-		var ironHelmet = ctx.component("forgero:iron-helmet");
-		var ironChestplate = ctx.component("forgero:iron-chestplate");
+		var ironHelmet = ctx.component("forgero:iron_helmet");
+		var ironChestplate = ctx.component("forgero:iron_chestplate");
 
 		assertTrue(ironHelmet.isPresent(),
-				"iron-helmet component must exist - check armor content loading");
+				"iron_helmet component must exist - check armor content loading");
 		assertTrue(ironChestplate.isPresent(),
-				"iron-chestplate component must exist - check armor content loading");
+				"iron_chestplate component must exist - check armor content loading");
 
 		var helmetStack = ctx.toStack(ironHelmet.get());
 		var chestplateStack = ctx.toStack(ironChestplate.get());
@@ -73,16 +74,16 @@ public class ArmorAttributeTest implements ForgeroGameTest {
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
 	public void diamond_armor_better_than_iron(TestContext context) {
-		var ctx = forgero(context);
+		var ctx = ForgeroTestUtils.forgero(context);
 		var query = ForgeroApi.itemQuery();
 
-		var ironChestplate = ctx.component("forgero:iron-chestplate");
-		var diamondChestplate = ctx.component("forgero:diamond-chestplate");
+		var ironChestplate = ctx.component("forgero:iron_chestplate");
+		var diamondChestplate = ctx.component("forgero:diamond_chestplate");
 
 		assertTrue(ironChestplate.isPresent(),
-				"iron-chestplate component must exist - check armor content loading");
+				"iron_chestplate component must exist - check armor content loading");
 		assertTrue(diamondChestplate.isPresent(),
-				"diamond-chestplate component must exist - check armor content loading");
+				"diamond_chestplate component must exist - check armor content loading");
 
 		var ironStack = ctx.toStack(ironChestplate.get());
 		var diamondStack = ctx.toStack(diamondChestplate.get());
@@ -104,13 +105,13 @@ public class ArmorAttributeTest implements ForgeroGameTest {
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
 	public void netherite_armor_has_toughness(TestContext context) {
-		var ctx = forgero(context);
+		var ctx = ForgeroTestUtils.forgero(context);
 		var query = ForgeroApi.itemQuery();
 
-		var netheriteChestplate = ctx.component("forgero:netherite-chestplate");
+		var netheriteChestplate = ctx.component("forgero:netherite_chestplate");
 
 		assertTrue(netheriteChestplate.isPresent(),
-				"netherite-chestplate component must exist - check armor content loading");
+				"netherite_chestplate component must exist - check armor content loading");
 
 		var stack = ctx.toStack(netheriteChestplate.get());
 		assertTrue(stack.isPresent(), "Netherite chestplate must convert to ItemStack");
@@ -128,13 +129,13 @@ public class ArmorAttributeTest implements ForgeroGameTest {
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
 	public void all_armor_pieces_exist_for_iron(TestContext context) {
-		var ctx = forgero(context);
+		var ctx = ForgeroTestUtils.forgero(context);
 
 		String[] armorPieces = {
-				"forgero:iron-helmet",
-				"forgero:iron-chestplate",
-				"forgero:iron-leggings",
-				"forgero:iron-boots"
+				"forgero:iron_helmet",
+				"forgero:iron_chestplate",
+				"forgero:iron_leggings",
+				"forgero:iron_boots"
 		};
 
 		for (String pieceId : armorPieces) {
@@ -154,13 +155,13 @@ public class ArmorAttributeTest implements ForgeroGameTest {
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
 	public void armor_does_not_have_tool_attributes(TestContext context) {
-		var ctx = forgero(context);
+		var ctx = ForgeroTestUtils.forgero(context);
 		var query = ForgeroApi.itemQuery();
 
-		var ironChestplate = ctx.component("forgero:iron-chestplate");
+		var ironChestplate = ctx.component("forgero:iron_chestplate");
 
 		assertTrue(ironChestplate.isPresent(),
-				"iron-chestplate component must exist - check armor content loading");
+				"iron_chestplate component must exist - check armor content loading");
 
 		var stack = ctx.toStack(ironChestplate.get());
 		assertTrue(stack.isPresent(), "Iron chestplate must convert to ItemStack");

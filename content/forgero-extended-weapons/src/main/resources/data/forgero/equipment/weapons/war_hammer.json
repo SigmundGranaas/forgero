@@ -2,8 +2,9 @@
   "type": "forgero:equipment_template",
   "name": "war_hammer",
   "tags": [
-    "forgero:weapons/war_hammer",
-    "forgero:weapons/blunt",
+    "forgero:weapons/types/war_hammer",
+    "forgero:weapons/types/blunt",
+    "forgero:weapons/categories/extended",
     "forgero:tools"
   ],
   "host_template": {
@@ -14,7 +15,7 @@
     "id": "forgero:{head.material.name}-war_hammer",
     "slots": {
       "head": {
-        "type": "forgero:war_hammer_head",
+        "type": "forgero:parts/war_hammer_head",
         "default_tag": "forgero:parts/war_hammer_head"
       },
       "handle": {
@@ -26,9 +27,15 @@
   "upgrades": [
     {
       "id": "forgero:war_hammer-binding",
-      "type": "forgero:materials/roles/upgrade_material",
-      "tags": ["forgero:materials/types/binding"],
+      "type": "forgero:parts/binding",
+      "tags": ["forgero:parts/binding"],
       "description": "slot.forgero.binding"
+    },
+    {
+      "id": "forgero:war_hammer-gem",
+      "type": "forgero:upgrades/types/gem",
+      "tags": ["forgero:upgrades/types/gem"],
+      "description": "slot.forgero.gem"
     }
   ],
   "attributes": [

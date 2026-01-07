@@ -17,10 +17,11 @@
   "upgrades": [
     {
       "id": "forgero:reinforcement-slot",
-      "type": "forgero:materials/roles/upgrade_material",
+      "type": "forgero:material",
       "tags": [
         "forgero:upgrades/types/reinforcement"
       ],
+      "context": "forgero:contexts/offensive",
       "description": "slot.forgero.reinforcement"
     }
   ],

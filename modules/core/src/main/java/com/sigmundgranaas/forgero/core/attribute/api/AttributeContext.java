@@ -87,4 +87,83 @@ public final class AttributeContext {
 	public static boolean isFilterContext(OpenIdentifier context) {
 		return LOCAL.equals(context) || UPGRADE.equals(context);
 	}
+
+	/**
+	 * Checks if an attribute's context matches a slot's context for upgrade filtering.
+	 * Uses simple equality matching without tag hierarchy resolution.
+	 *
+	 * <p>Matching rules:</p>
+	 * <ul>
+	 *   <li>Attribute with no context → matches any slot (default behavior)</li>
+	 *   <li>Attribute with {@link #UPGRADE} context → matches any upgrade slot</li>
+	 *   <li>Attribute with specific context → matches only if contexts are equal</li>
+	 * </ul>
+	 *
+	 * @param attributeContext The attribute's context (may be empty for default attributes)
+	 * @param slotContext The slot's context (may be empty for unfiltered slots)
+	 * @return true if the attribute should be included for this slot
+	 */
+	public static boolean matchesSlotContext(java.util.Optional<OpenIdentifier> attributeContext, java.util.Optional<OpenIdentifier> slotContext) {
+		if (attributeContext.isEmpty()) {
+			return true;
+		}
+
+		OpenIdentifier attrCtx = attributeContext.get();
+
+		if (UPGRADE.equals(attrCtx)) {
+			return true;
+		}
+
+		if (slotContext.isEmpty()) {
+			return true;
+		}
+
+		return attrCtx.equals(slotContext.get());
+	}
+
+	/**
+	 * Checks if an attribute's context matches a slot's context using tag hierarchy resolution.
+	 *
+	 * <p>Matching rules:</p>
+	 * <ul>
+	 *   <li>Attribute with no context → matches any slot (default behavior)</li>
+	 *   <li>Attribute with {@link #UPGRADE} context → matches any upgrade slot</li>
+	 *   <li>Attribute context matches if equal to slot context OR is a descendant of slot context</li>
+	 * </ul>
+	 *
+	 * <p>Example: Slot with context "forgero:offensive" matches attributes with context
+	 * "forgero:offensive" or any child context like "forgero:melee_offensive".</p>
+	 *
+	 * @param attributeContext The attribute's context (may be empty for default attributes)
+	 * @param slotContext The slot's context (may be empty for unfiltered slots)
+	 * @param tagResolver The tag resolver for checking tag hierarchy relationships
+	 * @return true if the attribute should be included for this slot
+	 */
+	public static boolean matchesSlotContext(
+			java.util.Optional<OpenIdentifier> attributeContext,
+			java.util.Optional<OpenIdentifier> slotContext,
+			com.sigmundgranaas.forgero.common.tags.api.TagResolver tagResolver
+	) {
+		if (attributeContext.isEmpty()) {
+			return true;
+		}
+
+		OpenIdentifier attrCtx = attributeContext.get();
+
+		if (UPGRADE.equals(attrCtx)) {
+			return true;
+		}
+
+		if (slotContext.isEmpty()) {
+			return true;
+		}
+
+		OpenIdentifier slotCtx = slotContext.get();
+
+		if (attrCtx.equals(slotCtx)) {
+			return true;
+		}
+
+		return tagResolver.getDescendants(slotCtx).contains(attrCtx);
+	}
 }

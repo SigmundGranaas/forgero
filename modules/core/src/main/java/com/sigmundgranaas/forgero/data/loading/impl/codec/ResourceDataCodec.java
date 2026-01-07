@@ -14,6 +14,7 @@ import java.util.Optional;
 
 import static com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants.JSON_ELEMENT_CODEC;
 import static com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants.OPEN_IDENTIFIER_CODEC;
+import static com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants.TAG_IDENTIFIER_CODEC;
 
 /**
  * Unified codec for all resource types (materials, shapes, schematics, casts, static parts).
@@ -58,9 +59,9 @@ public class ResourceDataCodec {
 						Codec.STRING.fieldOf("name").forGetter(ResourceData::name),
 						Codec.list(OPEN_IDENTIFIER_CODEC).optionalFieldOf("include")
 								.forGetter(data -> Optional.ofNullable(data.include())),
-						Codec.list(OPEN_IDENTIFIER_CODEC).optionalFieldOf("tags")
+						Codec.list(TAG_IDENTIFIER_CODEC).optionalFieldOf("tags")
 								.forGetter(data -> Optional.ofNullable(data.tags())),
-						Codec.list(OPEN_IDENTIFIER_CODEC).optionalFieldOf("local_tags")
+						Codec.list(TAG_IDENTIFIER_CODEC).optionalFieldOf("local_tags")
 								.forGetter(data -> Optional.ofNullable(data.localTags())),
 						HostCodecs.HOST_DATA_CODEC.optionalFieldOf("host")
 								.forGetter(data -> Optional.ofNullable(data.host())),
@@ -106,9 +107,9 @@ public class ResourceDataCodec {
 						Codec.STRING.fieldOf("name").forGetter(ResourceData::name),
 						Codec.list(OPEN_IDENTIFIER_CODEC).optionalFieldOf("include")
 								.forGetter(data -> Optional.ofNullable(data.include())),
-						Codec.list(OPEN_IDENTIFIER_CODEC).optionalFieldOf("tags")
+						Codec.list(TAG_IDENTIFIER_CODEC).optionalFieldOf("tags")
 								.forGetter(data -> Optional.ofNullable(data.tags())),
-						Codec.list(OPEN_IDENTIFIER_CODEC).optionalFieldOf("local_tags")
+						Codec.list(TAG_IDENTIFIER_CODEC).optionalFieldOf("local_tags")
 								.forGetter(data -> Optional.ofNullable(data.localTags())),
 						HostCodecs.HOST_DATA_CODEC.optionalFieldOf("host")
 								.forGetter(data -> Optional.ofNullable(data.host())),
@@ -161,13 +162,12 @@ public class ResourceDataCodec {
 						Codec.STRING.fieldOf("name").forGetter(ResourceData::name),
 						Codec.list(OPEN_IDENTIFIER_CODEC).optionalFieldOf("include")
 								.forGetter(data -> Optional.ofNullable(data.include())),
-						Codec.list(OPEN_IDENTIFIER_CODEC).optionalFieldOf("tags")
+						Codec.list(TAG_IDENTIFIER_CODEC).optionalFieldOf("tags")
 								.forGetter(data -> Optional.ofNullable(data.tags())),
-						Codec.list(OPEN_IDENTIFIER_CODEC).optionalFieldOf("local_tags")
+						Codec.list(TAG_IDENTIFIER_CODEC).optionalFieldOf("local_tags")
 								.forGetter(data -> Optional.ofNullable(data.localTags())),
 						HostCodecs.HOST_DATA_CODEC.optionalFieldOf("host")
 								.forGetter(data -> Optional.ofNullable(data.host())),
-						// Traditional attributes
 						traditionalCodec.optionalFieldOf("attributes")
 								.forGetter(data -> Optional.ofNullable(data.attributes())),
 						traditionalCodec.optionalFieldOf("local_attributes")

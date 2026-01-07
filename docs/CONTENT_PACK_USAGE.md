@@ -19,14 +19,14 @@ The rearchitected mod system uses a modular content pack approach where:
 
 ### mods:forgero (Full Forgero Experience)
 
-**11 content packs included:**
+**13 content packs included:**
 
 ```
 mods/forgero/build.gradle
 
 FOUNDATION (Core system)
 ├── forgero-base           [runtimeOnly]  Tags, templates, upgrade slots
-├── forgero-materials      [runtimeOnly]  48 materials (metal, wood, stone, etc.)
+├── forgero-materials      [runtimeOnly]  41 materials (metal, wood, stone, etc.)
 ├── forgero-upgrades       [runtimeOnly]  Upgrade material definitions
 └── minecraft-tools        [runtimeOnly]  Vanilla tool integration
 
@@ -35,11 +35,15 @@ EQUIPMENT (Item definitions)
 ├── forgero-armor          [runtimeOnly]  Armor texture templates
 └── forgero-armor-content  [runtimeOnly]  Armor models
 
-ENHANCEMENT (Extended content)
-├── forgero-schematics     [runtimeOnly]  Refined & mastercrafted variants
-├── forgero-extended       [runtimeOnly]  Soft/hard materials, guard schematics
-├── forgero-extended-weapons [runtimeOnly] Katana, rapier, scythe, etc.
-└── forgero-mining         [runtimeOnly]  Hammer, mandrill, spade
+SCHEMATICS
+├── forgero-schematics           [runtimeOnly]  Quality schematics (refined, mastercrafted)
+└── forgero-extended-schematics  [runtimeOnly]  Extended schematics (weapon blades, tool heads, guards, bindings)
+
+EXTENDED CONTENT
+├── forgero-secondary-materials  [runtimeOnly]  Secondary materials (soft, hard, hybrid, dyes)
+├── forgero-extended-weapons     [runtimeOnly]  Extended weapon parts & equipment (katana, rapier, etc.)
+├── forgero-mining               [runtimeOnly]  Mining tool parts & equipment (hammer, spade, etc.)
+└── forgero-gems                 [runtimeOnly]  Gem upgrades (diamond_gem, etc.)
 
 VANILLA INTEGRATION
 └── vanilla-upgrades-base  [include + runtimeOnly]  Static parts for vanilla items
@@ -72,24 +76,32 @@ mods/vanilla-upgrades/build.gradle
         |                      |                      |
         v                      v                      v
   forgero-materials    forgero-upgrades      minecraft-tools
-  (48 materials)       (upgrade mats)        (vanilla integration)
+  (41 materials)       (upgrade mats)        (vanilla integration)
         |                      |                      |
         +----------+-----------+                      |
                    |                                  |
         +----------+----------+----------+------------+
         |          |          |          |
         v          v          v          v
-  forgero-   forgero-   forgero-   forgero-armor
-  tools      schematics extended   forgero-armor-content
+  forgero-   forgero-   forgero-      forgero-armor
+  tools      schematics secondary-    forgero-armor-content
+             (quality)  materials
         |          |          |
-        +----------+----------+
-                   |
-        +----------+----------+----------+
-        |          |          |          |
-        v          v          v          v
-  forgero-   forgero-   forgero-   vanilla-
-  mining     extended   gems       upgrades-
-             -weapons              base
+        +----+-----+----------+
+             |
+        +----+----+
+        |         |
+        v         v
+  forgero-   forgero-
+  extended-  extended-
+  schematics weapons
+        |         |
+        +----+----+----+----+
+             |         |    |
+             v         v    v
+       forgero-   forgero-  vanilla-
+       mining     gems      upgrades-
+                            base
 
 Legend:
   [forgero-base] = Included by BOTH mods
@@ -118,10 +130,11 @@ tags/
 | Pack | Defines | References |
 |------|---------|------------|
 | forgero-base | All root tags + hierarchy | - |
-| forgero-materials | 48 materials | `materials/types/*`, `materials/roles/*` |
+| forgero-materials | 41 materials | `materials/types/*`, `materials/roles/*` |
 | forgero-tools | Tool templates | `tools/types/*`, `parts/types/*` |
-| forgero-schematics | Refined/mastercrafted | `schematics/categories/*` |
-| forgero-extended | Soft/hard materials | `materials/properties/*` |
+| forgero-schematics | Refined/mastercrafted schematics | `schematics/categories/*` |
+| forgero-extended-schematics | Extended schematics (blades, heads, guards, bindings) | `schematics/*` |
+| forgero-secondary-materials | Soft/hard/hybrid/dye materials | `materials/properties/*` |
 | vanilla-upgrades-base | Static parts | `tools/*`, `uncategorized/vanilla_tool` |
 
 ### Example: Tag Flow for Iron Pickaxe
@@ -244,34 +257,38 @@ Wraps existing vanilla items as Forgero components:
 
 ---
 
-## Active vs Deprecated Packs
+## Active vs Legacy Packs
 
-### Active (Used by mods)
+### Active (Used by mods - Modern Format)
 
 | Pack | Used By | Purpose |
 |------|---------|---------|
 | forgero-base | Both | Core tags, templates |
-| forgero-materials | Both | Material definitions |
+| forgero-materials | Both | Material definitions (41 primary materials) |
 | forgero-upgrades | Both | Upgrade materials |
 | vanilla-upgrades-base | Both | Vanilla item wrapping |
 | forgero-tools | forgero | Tool definitions |
 | forgero-armor | forgero | Armor templates |
 | forgero-armor-content | forgero | Armor models |
-| forgero-schematics | forgero | Quality variants |
-| forgero-extended | forgero | Extended materials |
-| forgero-extended-weapons | forgero | Weapon variants |
-| forgero-mining | forgero | Mining tools |
+| forgero-schematics | forgero | Quality schematics (refined, mastercrafted) |
+| forgero-extended-schematics | forgero | Extended schematics (weapon blades, tool heads, guards, bindings) |
+| forgero-secondary-materials | forgero | Secondary materials (soft, hard, hybrid, dyes) |
+| forgero-extended-weapons | forgero | Extended weapon parts & equipment |
+| forgero-mining | forgero | Mining tool parts & equipment |
+| forgero-gems | forgero | Gem upgrades |
 | minecraft-tools | forgero | Vanilla integration |
 
-### Not Included by Either Mod
+### Legacy (Old Pack Format - Not Used by Modern Mods)
 
 | Pack | Status | Notes |
 |------|--------|-------|
-| forgero-gems | Available | Gem quality tiers (optional) |
-| forgero-vanilla | Transitional | Recipe generators |
-| forgero-compat | Available | Mod compatibility |
+| forgero-vanilla-legacy-read-only | Legacy | Old pack format - recipe generators (renamed) |
+| forgero-extended-legacy-read-only | Legacy | Old pack format - kept for reference only (renamed) |
+| forgero-compat-legacy-read-only | Available | Mod compatibility (old format, renamed) |
 | forgero-structures | Available | World generation |
 | forgero-deprecated | Legacy | Old content |
+
+**Note**: Legacy modules have been renamed with `-legacy-read-only` suffix to clearly indicate they are preserved for reference but not actively maintained or included in modern builds.
 
 ---
 

@@ -33,28 +33,40 @@
       "computation": {"value": 75, "operation": "addition"}
     },
     {
-      "id": "forgero:broadsword_blade-attack_damage",
-      "type": "forgero:attack_damage",
-      "computation": {"value": 1.8, "operation": "multiplication"},
-      "condition": {
-        "static": [{"type": "forgero:is_root"}]
-      }
-    },
-    {
-      "id": "forgero:broadsword_blade-durability",
+      "id": "forgero:broadsword_blade-durability-mult",
       "type": "forgero:durability",
-      "computation": {"value": 1.15, "operation": "multiplication"},
-      "condition": {
-        "static": [{"type": "forgero:is_root"}]
-      }
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.15}
     },
     {
-      "id": "forgero:broadsword_blade-weight",
+      "id": "forgero:broadsword_blade-attack_damage-mult",
+      "type": "forgero:attack_damage",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.8}
+    },
+    {
+      "id": "forgero:broadsword_blade-attack_speed-mult",
+      "type": "forgero:attack_speed",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
+    },
+    {
+      "id": "forgero:broadsword_blade-mining_speed-mult",
+      "type": "forgero:mining_speed",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
+    },
+    {
+      "id": "forgero:broadsword_blade-mining_level-mult",
+      "type": "forgero:mining_level",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
+    },
+    {
+      "id": "forgero:broadsword_blade-weight-mult",
       "type": "forgero:weight",
-      "computation": {"value": 1.45, "operation": "multiplication"},
-      "condition": {
-        "static": [{"type": "forgero:is_root"}]
-      }
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.45}
     }
   ]
 }

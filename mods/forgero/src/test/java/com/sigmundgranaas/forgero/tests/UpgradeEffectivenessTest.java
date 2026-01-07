@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroGameTest;
+import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroTestUtils;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 
@@ -33,7 +34,7 @@ public class UpgradeEffectivenessTest implements ForgeroGameTest {
      */
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void iron_pickaxe_has_upgrade_slot(TestContext context) {
-        var ctx = forgero(context);
+        var ctx = ForgeroTestUtils.forgero(context);
         var pickaxe = ctx.component("forgero:iron_pickaxe");
 
         assertTrue(pickaxe.isPresent(), "Iron pickaxe must exist");
@@ -59,8 +60,8 @@ public class UpgradeEffectivenessTest implements ForgeroGameTest {
      */
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void diamond_pickaxe_is_better_than_iron_pickaxe(TestContext context) {
-        Component iron = forgero(context).component("forgero:iron_pickaxe").orElseThrow();
-        Component diamond = forgero(context).component("forgero:diamond_pickaxe").orElseThrow();
+        Component iron = ForgeroTestUtils.forgero(context).component("forgero:iron_pickaxe").orElseThrow();
+        Component diamond = ForgeroTestUtils.forgero(context).component("forgero:diamond_pickaxe").orElseThrow();
 
         float ironDurability = getAttributeValue(iron, "forgero:durability");
         float diamondDurability = getAttributeValue(diamond, "forgero:durability");
@@ -92,9 +93,9 @@ public class UpgradeEffectivenessTest implements ForgeroGameTest {
      */
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void netherite_is_best_vanilla_tier(TestContext context) {
-        Component iron = forgero(context).component("forgero:iron_pickaxe").orElseThrow();
-        Component diamond = forgero(context).component("forgero:diamond_pickaxe").orElseThrow();
-        Component netherite = forgero(context).component("forgero:netherite_pickaxe").orElseThrow();
+        Component iron = ForgeroTestUtils.forgero(context).component("forgero:iron_pickaxe").orElseThrow();
+        Component diamond = ForgeroTestUtils.forgero(context).component("forgero:diamond_pickaxe").orElseThrow();
+        Component netherite = ForgeroTestUtils.forgero(context).component("forgero:netherite_pickaxe").orElseThrow();
 
         float ironDur = getAttributeValue(iron, "forgero:durability");
         float diamondDur = getAttributeValue(diamond, "forgero:durability");
@@ -119,9 +120,9 @@ public class UpgradeEffectivenessTest implements ForgeroGameTest {
      */
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void gold_is_weak_but_fast(TestContext context) {
-        Component gold = forgero(context).component("forgero:golden_pickaxe").orElseThrow();
-        Component iron = forgero(context).component("forgero:iron_pickaxe").orElseThrow();
-        Component diamond = forgero(context).component("forgero:diamond_pickaxe").orElseThrow();
+        Component gold = ForgeroTestUtils.forgero(context).component("forgero:golden_pickaxe").orElseThrow();
+        Component iron = ForgeroTestUtils.forgero(context).component("forgero:iron_pickaxe").orElseThrow();
+        Component diamond = ForgeroTestUtils.forgero(context).component("forgero:diamond_pickaxe").orElseThrow();
 
         float goldDur = getAttributeValue(gold, "forgero:durability");
         float ironDur = getAttributeValue(iron, "forgero:durability");
@@ -149,13 +150,13 @@ public class UpgradeEffectivenessTest implements ForgeroGameTest {
      */
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void all_vanilla_tool_types_exist_for_iron(TestContext context) {
-        assertTrue(forgero(context).component("forgero:iron_pickaxe").isPresent(),
+        assertTrue(ForgeroTestUtils.forgero(context).component("forgero:iron_pickaxe").isPresent(),
                 "Iron pickaxe must exist");
-        assertTrue(forgero(context).component("forgero:iron_sword").isPresent(),
+        assertTrue(ForgeroTestUtils.forgero(context).component("forgero:iron_sword").isPresent(),
                 "Iron sword must exist");
-        assertTrue(forgero(context).component("forgero:iron_axe").isPresent(),
+        assertTrue(ForgeroTestUtils.forgero(context).component("forgero:iron_axe").isPresent(),
                 "Iron axe must exist");
-        assertTrue(forgero(context).component("forgero:iron_shovel").isPresent(),
+        assertTrue(ForgeroTestUtils.forgero(context).component("forgero:iron_shovel").isPresent(),
                 "Iron shovel must exist");
 
         context.complete();
@@ -167,17 +168,17 @@ public class UpgradeEffectivenessTest implements ForgeroGameTest {
      */
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void all_vanilla_tiers_exist_for_pickaxe(TestContext context) {
-        assertTrue(forgero(context).component("forgero:wooden_pickaxe").isPresent(),
+        assertTrue(ForgeroTestUtils.forgero(context).component("forgero:wooden_pickaxe").isPresent(),
                 "Wooden pickaxe must exist");
-        assertTrue(forgero(context).component("forgero:stone_pickaxe").isPresent(),
+        assertTrue(ForgeroTestUtils.forgero(context).component("forgero:stone_pickaxe").isPresent(),
                 "Stone pickaxe must exist");
-        assertTrue(forgero(context).component("forgero:iron_pickaxe").isPresent(),
+        assertTrue(ForgeroTestUtils.forgero(context).component("forgero:iron_pickaxe").isPresent(),
                 "Iron pickaxe must exist");
-        assertTrue(forgero(context).component("forgero:golden_pickaxe").isPresent(),
+        assertTrue(ForgeroTestUtils.forgero(context).component("forgero:golden_pickaxe").isPresent(),
                 "Golden pickaxe must exist");
-        assertTrue(forgero(context).component("forgero:diamond_pickaxe").isPresent(),
+        assertTrue(ForgeroTestUtils.forgero(context).component("forgero:diamond_pickaxe").isPresent(),
                 "Diamond pickaxe must exist");
-        assertTrue(forgero(context).component("forgero:netherite_pickaxe").isPresent(),
+        assertTrue(ForgeroTestUtils.forgero(context).component("forgero:netherite_pickaxe").isPresent(),
                 "Netherite pickaxe must exist");
 
         context.complete();

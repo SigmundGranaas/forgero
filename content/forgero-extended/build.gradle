@@ -1,4 +1,0 @@
-dependencies {
-	implementation project(":content:${rootProject.mod_id}-vanilla")
-	testImplementation project(":content:${rootProject.mod_id}-vanilla")
-}

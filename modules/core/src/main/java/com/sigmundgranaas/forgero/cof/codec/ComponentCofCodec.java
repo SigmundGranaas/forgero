@@ -108,7 +108,7 @@ public class ComponentCofCodec implements Codec<Component> {
 			Map<OpenIdentifier, CofSlot> slotDtos = structured.structure().allParts().stream()
 					.collect(Collectors.toMap(
 							ComponentPart::id,
-							part -> new CofSlot(part.id(), part.partType(), part.description(), buildDtoFromComponent(part.content()), null)
+							part -> new CofSlot(part.id(), part.partType(), part.description(), null, buildDtoFromComponent(part.content()), null)
 					));
 			structureDto = new CofStructure(slotDtos);
 		}
@@ -118,13 +118,14 @@ public class ComponentCofCodec implements Codec<Component> {
 			List<CofSlot> upgradeDtos = customizable.upgrades().slots().all().stream()
 					.filter(slot -> slot instanceof ComponentUpgradeSlot)
 					.map(slot -> (ComponentUpgradeSlot) slot)
-					.map(upgradeSlot -> new CofSlot(
-							upgradeSlot.id(),
-							upgradeSlot.slotType(),
-							upgradeSlot.description(),
-							upgradeSlot.getContent().map(this::buildDtoFromComponent).orElse(null),
-							null // validTags are part of pristine definition, not serialized
-					))
+				.map(upgradeSlot -> new CofSlot(
+						upgradeSlot.id(),
+						upgradeSlot.slotType(),
+						upgradeSlot.description(),
+						upgradeSlot.context().orElse(null),
+						upgradeSlot.getContent().map(this::buildDtoFromComponent).orElse(null),
+						null
+				))
 					.toList();
 			upgradesDto = new CofUpgrades(upgradeDtos);
 		}
@@ -247,7 +248,7 @@ public class ComponentCofCodec implements Codec<Component> {
 			}
 
 			newSlots.add(new ComponentUpgradeSlot(slotDto.id(), slotDto.type(), slotDto.description(),
-					pristineSlot.validator(), contentResult.result().get()));
+					slotDto.contextOpt(), pristineSlot.validator(), contentResult.result().get()));
 		}
 
 		LOGGER.debug("Successfully built {} upgrade slots for component {}", newSlots.size(), parentDto.id());
@@ -282,7 +283,8 @@ public class ComponentCofCodec implements Codec<Component> {
 					slotDto.id(),
 					slotDto.type(),
 					slotDto.description(),
-					SlotValidator.ACCEPT_ALL,
+					slotDto.contextOpt(),
+					SlotValidator.requireTag(slotDto.type()),
 					contentResult.result().get()
 			));
 		}

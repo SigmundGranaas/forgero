@@ -1,6 +1,10 @@
 //file:noinspection GroovyAccessibility
 //file:noinspection GroovyAssignabilityCheck
 
+plugins {
+	id 'jacoco'
+}
+
 dependencies {
 	api group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.2.1'
 
@@ -26,6 +30,20 @@ processResources {
 
 test {
 	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+}
+
+jacoco {
+	toolVersion = "0.8.11"
+}
+
+jacocoTestReport {
+	dependsOn test
+	reports {
+		xml.required = true
+		html.required = true
+		csv.required = false
+	}
 }
 
 java {

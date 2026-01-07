@@ -8,16 +8,22 @@ import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
 import com.sigmundgranaas.forgero.loader.api.DataLoadingContext;
 import com.sigmundgranaas.forgero.loader.api.PostLoadPlugin;
+import com.sigmundgranaas.forgero.recipegen.api.GeneratedRecipe;
 import com.sigmundgranaas.forgero.recipegen.api.RecipeGenApi;
 import com.sigmundgranaas.forgero.recipegen.api.operation.OperationFactory;
 import com.sigmundgranaas.forgero.recipegen.api.template.TemplateLoader;
 import com.sigmundgranaas.forgero.recipegen.api.variable.VariableConverter;
 import com.sigmundgranaas.forgero.recipegen.impl.variable.converters.StringListConverter;
 import com.sigmundgranaas.forgero.recipegen.integration.DRPRecipeInjector;
+import com.sigmundgranaas.forgero.drp.api.DRPApi;
+import com.sigmundgranaas.forgero.drp.api.DynamicResourcePack;
+import com.sigmundgranaas.forgero.drp.api.lifecycle.ResourcePackPhase;
+import com.sigmundgranaas.forgero.drp.api.tag.TagBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.registry.Registries;
@@ -25,10 +31,15 @@ import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -45,17 +56,39 @@ import java.util.stream.StreamSupport;
 public class RecipeGenPlugin implements PostLoadPlugin {
 	private static final Logger LOGGER = LoggerFactory.getLogger("Forgero-RecipeGen");
 
+	/**
+	 * Static holder for generated recipes that the RecipeInjectionMixin can access.
+	 * This is populated during PostLoadPlugin execution, before RecipeManager.apply() is called
+	 * for the first time when a world loads.
+	 */
+	private static final Map<Identifier, JsonObject> GENERATED_RECIPES = new ConcurrentHashMap<>();
+
+	/**
+	 * Returns an unmodifiable view of the generated recipes for mixin injection.
+	 * Called by RecipeInjectionMixin during RecipeManager.apply().
+	 */
+	public static Map<Identifier, JsonObject> getGeneratedRecipes() {
+		return Collections.unmodifiableMap(GENERATED_RECIPES);
+	}
+
+	/**
+	 * Clears the generated recipes. Should be called after injection to free memory.
+	 */
+	public static void clearGeneratedRecipes() {
+		GENERATED_RECIPES.clear();
+	}
+
 	@Override
 	public void onDataLoaded(DataLoadingContext context) {
 		LOGGER.info("Initializing Forgero Recipe Generation...");
 
-		// Register converters and operations
 		registerVariableConverters(context);
 		registerOperations(context);
+		
+		int tagCount = generateItemTags(context);
+		LOGGER.info("Generated {} item tags from component tags", tagCount);
 
-		// Inject recipes from templates
 		int count = injectRecipes(context);
-
 		LOGGER.info("Generated {} recipes from templates", count);
 	}
 
@@ -64,17 +97,10 @@ public class RecipeGenPlugin implements PostLoadPlugin {
 		return "forgero:recipe_gen";
 	}
 
-	/**
-	 * Registers variable converters for recipe template expansion.
-	 */
 	private void registerVariableConverters(DataLoadingContext context) {
 		RecipeGenApi api = RecipeGenApi.getInstance();
-
-		// String list converter (for simple arrays)
 		api.variables().register("forgero:string_list", new StringListConverter());
-
-		// Forgero type converter (for TOOL_MATERIAL, WOOD, STONE, etc.)
-		api.variables().register("forgero:type_converter", new ForgeroTypeVariableConverter(context));
+		api.variables().register("forgero:tag_converter", new ForgeroTagVariableConverter(context));
 	}
 
 	/**
@@ -97,8 +123,16 @@ public class RecipeGenPlugin implements PostLoadPlugin {
 		};
 
 		Function<Component, String> tagOrItemOp = (component) -> {
-			// Check if component has tags, otherwise it's an item
-			return component.getTags().isEmpty() ? "item" : "tag";
+			String containerId = containerIdOp.apply(component);
+			Identifier id = new Identifier(containerId);
+			
+			// Check if this ID corresponds to an item tag (e.g., minecraft:planks, c:ingots/iron)
+			// If the item in the registry is AIR and the ID looks like a tag path, use tag
+			Item item = Registries.ITEM.get(id);
+			if (item == Items.AIR && !Registries.ITEM.containsId(id)) {
+				return "tag";
+			}
+			return "item";
 		};
 
 		Function<Component, String> materialOp = (component) -> {
@@ -126,27 +160,209 @@ public class RecipeGenPlugin implements PostLoadPlugin {
 		api.operations().register("forgero:component_material", "material",
 				OperationFactory.forClass(Component.class, materialOp));
 
-		// Edge case: wood materials use "_planks" suffix that needs removal
 		api.operations().register("forgero:component_name_replace_planks", "name_replace_planks",
 				OperationFactory.forClass(Component.class, (Component component) -> component.id().path().replace("_planks", "")));
 	}
 
-	/**
-	 * Injects generated recipes into the game via DRP.
-	 *
-	 * @param context The data loading context for accessing the resource manager
-	 * @return The number of recipes generated
-	 */
+	private int generateItemTags(DataLoadingContext context) {
+		DynamicResourcePack pack = DRPApi.getInstance()
+				.createPack("forgero:generated_item_tags")
+				.description("Auto-generated item tags from Forgero component tags")
+				.build();
+
+		ComponentConverter converter = context.converter();
+		var taggedComponents = context.taggedComponents();
+		
+		Set<String> partTagPatterns = Set.of(
+				"forgero:parts/binding",
+				"forgero:parts/sword_guard",
+				"forgero:parts/handle",
+				"forgero:parts/types/pickaxe_head",
+				"forgero:parts/types/axe_head",
+				"forgero:parts/types/shovel_head",
+				"forgero:parts/types/hoe_head",
+				"forgero:parts/types/sword_blade",
+				"forgero:parts/categories/handle",
+				"forgero:parts/categories/head",
+				"forgero:parts/categories/blade"
+		);
+
+		int count = 0;
+		for (String tagPattern : partTagPatterns) {
+			OpenIdentifier tagId = OpenIdentifier.parse(tagPattern);
+			List<Component> components = taggedComponents.findByTag(tagId);
+			
+			if (components.isEmpty()) {
+				LOGGER.debug("No components found for tag: {}", tagPattern);
+				continue;
+			}
+
+			var tagBuilder = TagBuilder.items(tagPattern);
+			for (Component component : components) {
+				converter.toStack(component).ifPresent(stack -> {
+					Identifier itemId = Registries.ITEM.getId(stack.getItem());
+					if (!itemId.equals(Registries.ITEM.getDefaultId())) {
+						tagBuilder.add(itemId);
+					}
+				});
+			}
+
+			if (!tagBuilder.getEntries().isEmpty()) {
+				pack.addTag(tagBuilder);
+				count++;
+				LOGGER.debug("Created item tag {} with {} entries", tagPattern, tagBuilder.getEntries().size());
+			}
+		}
+
+		pack.seal();
+		DRPApi.getInstance().register(pack, ResourcePackPhase.BEFORE_VANILLA);
+		
+		return count;
+	}
+
 	private int injectRecipes(DataLoadingContext context) {
-		return DRPRecipeInjector.builder()
-				.packId("forgero:generated_recipes")
-				.templateDirectory("recipe_generators")
+		Collection<GeneratedRecipe> allRecipes = RecipeGenApi.getInstance().processor()
+				.fromDirectory("recipe_generators")
 				.namespace("forgero")
-				.templateLoader(new MinecraftTemplateLoader(context))
-				.modLoadedCheck(FabricLoader.getInstance()::isModLoaded)
-				.enableHotReload(true) // Enable hot-reload during development
-				.build()
-				.inject();
+				.withLoader(new MinecraftTemplateLoader(context))
+				.withModLoadedCheck(FabricLoader.getInstance()::isModLoaded)
+				.process();
+
+		List<GeneratedRecipe> validRecipes = allRecipes.stream()
+				.filter(this::hasValidItems)
+				.toList();
+
+		int invalidCount = allRecipes.size() - validRecipes.size();
+		if (invalidCount > 0) {
+			LOGGER.warn("Filtered out {} recipes with non-existent result items", invalidCount);
+			
+			Set<String> missingItems = new java.util.HashSet<>();
+			for (GeneratedRecipe recipe : allRecipes) {
+				if (!hasValidItems(recipe)) {
+					collectMissingItems(recipe.json(), missingItems);
+				}
+			}
+			LOGGER.warn("Missing items referenced by recipes: {}", missingItems.stream().sorted().limit(50).toList());
+		}
+
+		// Store recipes in static holder for mixin injection
+		// This is accessed by RecipeInjectionMixin when RecipeManager.apply() is called
+		for (GeneratedRecipe recipe : validRecipes) {
+			GENERATED_RECIPES.put(recipe.id(), recipe.json());
+		}
+		
+		LOGGER.debug("Stored {} recipes for mixin injection", GENERATED_RECIPES.size());
+		return validRecipes.size();
+	}
+
+	private boolean hasValidItems(GeneratedRecipe recipe) {
+		JsonObject json = recipe.json();
+		return hasValidResultItem(json) && hasValidKeyItems(json) && hasValidIngredients(json);
+	}
+
+	private boolean hasValidResultItem(JsonObject json) {
+		if (!json.has("result")) {
+			return true;
+		}
+
+		JsonElement result = json.get("result");
+		String itemId = extractItemId(result);
+		return itemId == null || itemExists(itemId);
+	}
+
+	private boolean hasValidKeyItems(JsonObject json) {
+		if (!json.has("key")) {
+			return true;
+		}
+
+		JsonObject key = json.getAsJsonObject("key");
+		for (String keyName : key.keySet()) {
+			JsonElement keyElement = key.get(keyName);
+			if (keyElement.isJsonObject()) {
+				JsonObject keyObj = keyElement.getAsJsonObject();
+				if (keyObj.has("item") && !itemExists(keyObj.get("item").getAsString())) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	private boolean hasValidIngredients(JsonObject json) {
+		if (!json.has("ingredients")) {
+			return true;
+		}
+
+		JsonElement ingredients = json.get("ingredients");
+		if (!ingredients.isJsonArray()) {
+			return true;
+		}
+
+		for (JsonElement ingredient : ingredients.getAsJsonArray()) {
+			if (ingredient.isJsonObject()) {
+				JsonObject ingredientObj = ingredient.getAsJsonObject();
+				if (ingredientObj.has("item")) {
+					String itemId = ingredientObj.get("item").getAsString();
+					if (!itemExists(itemId)) {
+						LOGGER.debug("Invalid ingredient item: {}", itemId);
+						return false;
+					}
+				}
+			}
+		}
+		return true;
+	}
+
+	private String extractItemId(JsonElement element) {
+		if (element.isJsonObject()) {
+			JsonObject obj = element.getAsJsonObject();
+			return obj.has("item") ? obj.get("item").getAsString() : null;
+		} else if (element.isJsonPrimitive()) {
+			return element.getAsString();
+		}
+		return null;
+	}
+
+	private boolean itemExists(String itemId) {
+		Identifier id = new Identifier(itemId);
+		return Registries.ITEM.get(id) != Items.AIR;
+	}
+
+	private void collectMissingItems(JsonObject json, Set<String> missingItems) {
+		if (json.has("result")) {
+			String itemId = extractItemId(json.get("result"));
+			if (itemId != null && !itemExists(itemId)) {
+				missingItems.add(itemId);
+			}
+		}
+		if (json.has("key")) {
+			JsonObject key = json.getAsJsonObject("key");
+			for (String keyName : key.keySet()) {
+				JsonElement keyElement = key.get(keyName);
+				if (keyElement.isJsonObject()) {
+					JsonObject keyObj = keyElement.getAsJsonObject();
+					if (keyObj.has("item")) {
+						String itemId = keyObj.get("item").getAsString();
+						if (!itemExists(itemId)) {
+							missingItems.add(itemId);
+						}
+					}
+				}
+			}
+		}
+		if (json.has("ingredients") && json.get("ingredients").isJsonArray()) {
+			for (JsonElement ingredient : json.getAsJsonArray("ingredients")) {
+				if (ingredient.isJsonObject()) {
+					JsonObject ingredientObj = ingredient.getAsJsonObject();
+					if (ingredientObj.has("item")) {
+						String itemId = ingredientObj.get("item").getAsString();
+						if (!itemExists(itemId)) {
+							missingItems.add(itemId);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -179,8 +395,13 @@ public class RecipeGenPlugin implements PostLoadPlugin {
 				var mods = FabricLoader.getInstance().getAllMods();
 
 				for (var mod : mods) {
-					// Only load from mods that match the requested namespace or are marked as Forgero resources
-					boolean isTargetNamespace = mod.getMetadata().getId().equals(namespace);
+					String modId = mod.getMetadata().getId();
+					
+					if (isLegacyModule(modId)) {
+						continue;
+					}
+					
+					boolean isTargetNamespace = modId.equals(namespace);
 					boolean isForgeroResource = mod.getMetadata().containsCustomValue("forgeroResource");
 
 					if (!isTargetNamespace && !isForgeroResource) {
@@ -213,61 +434,53 @@ public class RecipeGenPlugin implements PostLoadPlugin {
 				}
 
 				LOGGER.info("Loaded {} recipe templates from {}/{}", templates.size(), namespace, path);
+		for (JsonObject template : templates) {
+			String type = template.has("type") ? template.get("type").getAsString() : "unknown";
+			String id = template.has("identifier") ? template.get("identifier").getAsString() : "unknown";
+			LOGGER.debug("Template: type={}, id={}", type, id);
+		}
 			} catch (Exception e) {
 				LOGGER.error("Failed to load recipe templates from {}/{}", namespace, path, e);
 			}
 
 			return templates;
 		}
+
+		private static final Set<String> LEGACY_MODULES = Set.of(
+				"forgero-vanilla",
+				"forgero-compat",
+				"forgero-fabric-core",
+				"forgero-fabric-compat",
+				"minecraft-common"
+		);
+
+		private boolean isLegacyModule(String modId) {
+			return LEGACY_MODULES.contains(modId);
+		}
 	}
 
-	/**
-	 * Variable converter that queries Forgero's component registry for components of a given type.
-	 * <p>
-	 * Supports type-based variable expansion like:
-	 * <pre>{@code
-	 * "variables": {
-	 *   "material": {"type": "TOOL_MATERIAL"}
-	 * }
-	 * }</pre>
-	 * <p>
-	 * Also supports filtering:
-	 * <pre>{@code
-	 * "variables": {
-	 *   "material": {
-	 *     "type": "WOOD",
-	 *     "filter": ["forgero:oak", "forgero:birch"]
-	 *   }
-	 * }
-	 * }</pre>
-	 */
-	private static class ForgeroTypeVariableConverter implements VariableConverter {
+	private static class ForgeroTagVariableConverter implements VariableConverter {
 		private final DataLoadingContext context;
 
-		public ForgeroTypeVariableConverter(DataLoadingContext context) {
+		public ForgeroTagVariableConverter(DataLoadingContext context) {
 			this.context = context;
 		}
 
 		@Override
 		public Collection<?> convert(JsonElement entry) {
 			var jsonObject = entry.getAsJsonObject();
-			JsonElement typeElement = jsonObject.get("type");
+			JsonElement tagElement = jsonObject.get("tag");
 
-			// Get components by type/tag
 			List<Component> components;
-			if (typeElement.isJsonArray()) {
-				// Multiple types: ["WOOD", "STONE"]
-				components = StreamSupport.stream(typeElement.getAsJsonArray().spliterator(), false)
-						.flatMap(type -> findComponentsByType(type.getAsString()).stream())
+			if (tagElement.isJsonArray()) {
+				components = StreamSupport.stream(tagElement.getAsJsonArray().spliterator(), false)
+						.flatMap(tag -> findComponentsByTag(tag.getAsString()).stream())
 						.distinct()
 						.collect(Collectors.toList());
 			} else {
-				// Single type: "TOOL_MATERIAL"
-				String type = typeElement.getAsString();
-				components = findComponentsByType(type);
+				components = findComponentsByTag(tagElement.getAsString());
 			}
 
-			// Apply filter if present
 			if (jsonObject.has("filter")) {
 				Set<String> exclusions = StreamSupport.stream(jsonObject.getAsJsonArray("filter").spliterator(), false)
 						.map(JsonElement::getAsString)
@@ -280,52 +493,21 @@ public class RecipeGenPlugin implements PostLoadPlugin {
 
 		@Override
 		public boolean matches(JsonElement entry) {
-			if (entry.isJsonObject()) {
-				return entry.getAsJsonObject().has("type");
-			}
-			return false;
+			return entry.isJsonObject() && entry.getAsJsonObject().has("tag");
 		}
 
 		@Override
 		public int priority() {
-			return 100; // High priority to ensure it matches before fallbacks
+			return 100;
 		}
 
-		/**
-		 * Finds all components of a given type from Forgero's registry.
-		 * <p>
-		 * First tries to find by tag (e.g., "forgero:TOOL_MATERIAL"),
-		 * then falls back to type category matching.
-		 *
-		 * @param type The type string (e.g., "TOOL_MATERIAL", "WOOD", "STONE")
-		 * @return List of components matching the type
-		 */
-		private List<Component> findComponentsByType(String type) {
-			// Map legacy type names to new tag paths (Phase 2 migration compatibility)
-			String tagPath = switch (type.toUpperCase()) {
-				case "TOOL_MATERIAL" -> "materials/roles/tool_material";
-				case "WOOD" -> "materials/types/wood";
-				case "STONE" -> "materials/types/stone";
-				case "METAL" -> "materials/types/metal";
-				case "MINERAL" -> "materials/types/mineral";
-				case "UPGRADE_MATERIAL" -> "materials/roles/upgrade_material";
-				default -> type.toLowerCase();
-			};
-
-			// Try to find components by tag first
-			OpenIdentifier typeTag = OpenIdentifier.parse("forgero:" + tagPath);
-			List<Component> taggedComponents = context.taggedComponents().findByTag(typeTag);
-
-			if (!taggedComponents.isEmpty()) {
-				return taggedComponents;
+		private List<Component> findComponentsByTag(String tagId) {
+			OpenIdentifier tag = OpenIdentifier.parse(tagId);
+			List<Component> result = context.taggedComponents().findByTag(tag);
+			if (result.isEmpty()) {
+				LOGGER.warn("No components found for tag: {}", tagId);
 			}
-
-			// Fallback: find by type in ID or tags
-			ComponentRegistry registry = context.componentRegistry();
-			return registry.all().stream()
-					.filter(component -> component.id().path().contains(type.toLowerCase()) ||
-							component.getTags().stream().anyMatch(tag -> tag.path().equalsIgnoreCase(type)))
-					.toList();
+			return result;
 		}
 	}
 }

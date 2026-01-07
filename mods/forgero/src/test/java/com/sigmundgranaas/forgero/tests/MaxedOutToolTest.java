@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroGameTest;
+import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroTestUtils;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 import org.slf4j.Logger;
@@ -33,8 +34,8 @@ public class MaxedOutToolTest implements ForgeroGameTest {
      */
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void iron_pickaxe_accepts_upgrades_in_all_slots(TestContext context) {
-        var ironPickaxe = forgero(context).component("forgero:iron_pickaxe").orElseThrow();
-        var enderPearl = forgero(context).component("forgero:ender_pearl").orElseThrow();
+        var ironPickaxe = ForgeroTestUtils.forgero(context).component("forgero:iron_pickaxe").orElseThrow();
+        var enderPearl = ForgeroTestUtils.forgero(context).component("forgero:ender_pearl").orElseThrow();
 
         assertTrue(ironPickaxe instanceof CustomizableComponent,
                 "Iron pickaxe must be customizable");
@@ -63,7 +64,7 @@ public class MaxedOutToolTest implements ForgeroGameTest {
      */
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void diamond_pickaxe_has_multiple_upgrade_slots(TestContext context) {
-        var diamondPickaxe = forgero(context).component("forgero:diamond_pickaxe").orElseThrow();
+        var diamondPickaxe = ForgeroTestUtils.forgero(context).component("forgero:diamond_pickaxe").orElseThrow();
 
         assertTrue(diamondPickaxe instanceof CustomizableComponent,
                 "Diamond pickaxe must be customizable");
@@ -92,9 +93,9 @@ public class MaxedOutToolTest implements ForgeroGameTest {
      */
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void netherite_has_most_upgrade_slots(TestContext context) {
-        var ironPickaxe = forgero(context).component("forgero:iron_pickaxe").orElseThrow();
-        var diamondPickaxe = forgero(context).component("forgero:diamond_pickaxe").orElseThrow();
-        var netheritePickaxe = forgero(context).component("forgero:netherite_pickaxe").orElseThrow();
+        var ironPickaxe = ForgeroTestUtils.forgero(context).component("forgero:iron_pickaxe").orElseThrow();
+        var diamondPickaxe = ForgeroTestUtils.forgero(context).component("forgero:diamond_pickaxe").orElseThrow();
+        var netheritePickaxe = ForgeroTestUtils.forgero(context).component("forgero:netherite_pickaxe").orElseThrow();
 
         int ironSlots = ((CustomizableComponent) ironPickaxe).upgrades().allUpgradeSlots().size();
         int diamondSlots = ((CustomizableComponent) diamondPickaxe).upgrades().allUpgradeSlots().size();
@@ -126,7 +127,7 @@ public class MaxedOutToolTest implements ForgeroGameTest {
         };
 
         for (String toolName : vanillaTools) {
-            Component tool = forgero(context).component("forgero:" + toolName).orElseThrow();
+            Component tool = ForgeroTestUtils.forgero(context).component("forgero:" + toolName).orElseThrow();
 
             assertTrue(tool instanceof CustomizableComponent,
                     toolName + " must be customizable");
@@ -151,7 +152,7 @@ public class MaxedOutToolTest implements ForgeroGameTest {
         };
 
         for (String materialName : upgradeMaterials) {
-            Component material = forgero(context).component("forgero:" + materialName).orElseThrow();
+            Component material = ForgeroTestUtils.forgero(context).component("forgero:" + materialName).orElseThrow();
 
             // All upgrade materials must exist in the registry
             assertNotNull(material, materialName + " must exist in component registry");
@@ -170,7 +171,7 @@ public class MaxedOutToolTest implements ForgeroGameTest {
      */
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void multiple_upgrade_slot_types_exist(TestContext context) {
-        var diamondPickaxe = forgero(context).component("forgero:diamond_pickaxe").orElseThrow();
+        var diamondPickaxe = ForgeroTestUtils.forgero(context).component("forgero:diamond_pickaxe").orElseThrow();
 
         CustomizableComponent customizable = (CustomizableComponent) diamondPickaxe;
         List<ComponentUpgradeSlot> slots = customizable.upgrades().allUpgradeSlots();

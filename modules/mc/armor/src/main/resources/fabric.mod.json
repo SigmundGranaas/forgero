@@ -29,6 +29,7 @@
   },
   "suggests": {},
   "custom": {
+    "forgeroResource": true,
     "modmenu": {
       "links": {
         "modmenu.discord": "https://discord.gg/v6sDsftE9N"

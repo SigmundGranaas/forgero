@@ -2,9 +2,9 @@
   "type": "forgero:equipment_template",
   "name": "mace",
   "tags": [
-    "forgero:weapons/mace",
-    "forgero:weapons/blunt",
-    "forgero:weapons/extended",
+    "forgero:weapons/types/mace",
+    "forgero:weapons/types/blunt",
+    "forgero:weapons/categories/extended",
     "forgero:tools"
   ],
   "host_template": {
@@ -15,7 +15,7 @@
     "id": "forgero:{head.material.name}-mace",
     "slots": {
       "head": {
-        "type": "forgero:mace_head",
+        "type": "forgero:parts/mace_head",
         "default_tag": "forgero:parts/mace_head"
       },
       "handle": {
@@ -27,9 +27,15 @@
   "upgrades": [
     {
       "id": "forgero:mace-binding",
-      "type": "forgero:materials/roles/upgrade_material",
-      "tags": ["forgero:materials/types/binding"],
+      "type": "forgero:parts/binding",
+      "tags": ["forgero:parts/binding"],
       "description": "slot.forgero.binding"
+    },
+    {
+      "id": "forgero:mace-gem",
+      "type": "forgero:upgrades/types/gem",
+      "tags": ["forgero:upgrades/types/gem"],
+      "description": "slot.forgero.gem"
     }
   ],
   "attributes": [

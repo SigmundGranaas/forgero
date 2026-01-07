@@ -2,9 +2,8 @@
   "type": "forgero:equipment_template",
   "name": "hammer",
   "tags": [
-    "forgero:hammer",
-    "forgero:pickaxe",
-    "forgero:mining",
+    "forgero:tools/types/hammer",
+    "forgero:tools/pickaxe",
     "forgero:tools"
   ],
   "host_template": {
@@ -15,7 +14,7 @@
     "id": "forgero:{head.material.name}-hammer",
     "slots": {
       "head": {
-        "type": "forgero:hammer_head",
+        "type": "forgero:parts/hammer_head",
         "default_tag": "forgero:parts/hammer_head"
       },
       "handle": {
@@ -27,9 +26,15 @@
   "upgrades": [
     {
       "id": "forgero:hammer-binding",
-      "type": "forgero:materials/roles/upgrade_material",
-      "tags": ["forgero:materials/types/binding"],
+      "type": "forgero:parts/binding",
+      "tags": ["forgero:parts/binding"],
       "description": "slot.forgero.binding"
+    },
+    {
+      "id": "forgero:hammer-gem",
+      "type": "forgero:upgrades/types/gem",
+      "tags": ["forgero:upgrades/types/gem"],
+      "description": "slot.forgero.gem"
     }
   ],
   "attributes": [

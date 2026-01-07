@@ -14,6 +14,7 @@ import com.sigmundgranaas.forgero.data.loading.api.data.host.CreateData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.HostData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.template.HostTemplateData;
 import com.sigmundgranaas.forgero.data.loading.api.data.template.*;
+import com.sigmundgranaas.forgero.data.pipeline.api.TemplateExpansionResult;
 import com.sigmundgranaas.forgero.data.pipeline.util.IdTemplateResolver;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -37,8 +38,17 @@ public class TemplateGenerator {
 	private final Map<OpenIdentifier, RawDefinition> rawDefinitions;
 	private final List<CofComponent> generatedComponents = new ArrayList<>();
 	private final Map<OpenIdentifier, HostData> generatedHostData = new HashMap<>();
+	private final Map<OpenIdentifier, Integer> templateResultCounts = new HashMap<>();
+	private final List<TemplateExpansionResult.TemplateWarning> templateWarnings = new ArrayList<>();
 
-	public record TemplateResult(List<CofComponent> components, Map<OpenIdentifier, HostData> hostData) {
+	/**
+	 * Result of template generation including per-template statistics.
+	 */
+	public record TemplateResult(
+			List<CofComponent> components,
+			Map<OpenIdentifier, HostData> hostData,
+			TemplateExpansionResult expansionResult
+	) {
 	}
 
 	public TemplateGenerator(IdentifierFactory idFactory, TagResolver tagResolver, PropertyMerger propertyMerger, IdTemplateResolver idTemplateResolver, Map<OpenIdentifier, CofComponent> staticComponents, Map<OpenIdentifier, RawDefinition> rawDefinitions) {
@@ -51,13 +61,10 @@ public class TemplateGenerator {
 	}
 
 	public TemplateResult generate() {
-		// Generate parts from part templates
 		rawDefinitions.values().stream()
 				.filter(def -> def.data() instanceof PartTemplateData)
 				.forEach(this::generatePartsFromTemplate);
 
-		// Generate equipment from equipment templates
-		// We need a map of all available parts for this step (static parts + newly generated parts)
 		Map<OpenIdentifier, CofComponent> allParts = new HashMap<>(staticComponents);
 		generatedComponents.forEach(comp -> allParts.put(comp.id(), comp));
 
@@ -65,12 +72,34 @@ public class TemplateGenerator {
 				.filter(def -> def.data() instanceof EquipmentTemplateData)
 				.forEach(def -> generateEquipmentFromTemplate(def, allParts));
 
-		return new TemplateResult(generatedComponents, generatedHostData);
+		List<OpenIdentifier> emptyTemplates = templateResultCounts.entrySet().stream()
+				.filter(e -> e.getValue() == 0)
+				.map(Map.Entry::getKey)
+				.toList();
+
+		TemplateExpansionResult expansionResult = new TemplateExpansionResult(
+				Map.copyOf(templateResultCounts),
+				emptyTemplates,
+				generatedComponents.size(),
+				List.copyOf(templateWarnings)
+		);
+
+		return new TemplateResult(generatedComponents, generatedHostData, expansionResult);
 	}
 
 	private void generatePartsFromTemplate(RawDefinition templateDef) {
 		PartTemplateData template = (PartTemplateData) templateDef.data();
 		List<Map<String, CofComponent>> combinations = findCombinationsForPart(template.structure().slots(), template.generation());
+
+		templateResultCounts.put(templateDef.id(), combinations.size());
+
+		if (combinations.isEmpty()) {
+			templateWarnings.add(new TemplateExpansionResult.TemplateWarning(
+					templateDef.id(),
+					null,
+					"Part template produced 0 combinations - check slot tag requirements"
+			));
+		}
 
 		for (Map<String, CofComponent> combination : combinations) {
 			CofComponent generatedPart = generatePart(templateDef, combination);
@@ -86,6 +115,16 @@ public class TemplateGenerator {
 	private void generateEquipmentFromTemplate(RawDefinition templateDef, Map<OpenIdentifier, CofComponent> availableParts) {
 		EquipmentTemplateData template = (EquipmentTemplateData) templateDef.data();
 		List<Map<String, CofComponent>> combinations = findCombinationsForEquipment(template.structure().slots(), availableParts);
+
+		templateResultCounts.put(templateDef.id(), combinations.size());
+
+		if (combinations.isEmpty()) {
+			templateWarnings.add(new TemplateExpansionResult.TemplateWarning(
+					templateDef.id(),
+					null,
+					"Equipment template produced 0 combinations - check slot tag requirements and available parts"
+			));
+		}
 
 		for (Map<String, CofComponent> combination : combinations) {
 			CofComponent generatedEquipment = generateEquipment(templateDef, combination);
@@ -115,7 +154,7 @@ public class TemplateGenerator {
 						entry -> {
 							CofComponent content = entry.getValue();
 							PartTemplateStructureSlotData slotInfo = template.structure().slots().get(entry.getKey());
-							return new CofSlot(idFactory.of(entry.getKey()), slotInfo.type(), slotInfo.description(), content, null);
+							return new CofSlot(idFactory.of(entry.getKey()), slotInfo.type(), slotInfo.description(), null, content, null);
 						}
 				));
 		CofStructure newStructure = new CofStructure(newSlots);
@@ -153,7 +192,7 @@ public class TemplateGenerator {
 						entry -> {
 							CofComponent content = entry.getValue();
 							EquipmentTemplateSlotData slotInfo = template.structure().slots().get(entry.getKey());
-							return new CofSlot(idFactory.of(entry.getKey()), slotInfo.type(), null, content, null);
+							return new CofSlot(idFactory.of(entry.getKey()), slotInfo.type(), null, null, content, null);
 						}
 				));
 		CofStructure newStructure = new CofStructure(newSlots);
@@ -287,17 +326,14 @@ public class TemplateGenerator {
 			return components;
 		}
 
-		// Validate filter for potential issues before applying
 		validateGenerationFilter(filter, components);
 
-		// If explicit list is provided, it overrides all tag filters
 		if (filter.explicitList() != null && !filter.explicitList().isEmpty()) {
 			Set<OpenIdentifier> allowedIds = new HashSet<>(filter.explicitList());
 			List<CofComponent> filtered = components.stream()
 					.filter(comp -> allowedIds.contains(comp.id()))
 					.toList();
 
-			// Warn if explicit list excludes all components
 			if (filtered.isEmpty() && !components.isEmpty()) {
 				LOGGER.warn("Generation filter with explicit list excluded all components. Explicit IDs: {}, Available components: {}",
 						filter.explicitList(), components.stream().map(c -> c.id().toString()).toList());
@@ -306,7 +342,6 @@ public class TemplateGenerator {
 			return filtered;
 		}
 
-		// Otherwise apply tag-based filters
 		List<CofComponent> filtered = components.stream()
 				.filter(comp -> {
 					Set<OpenIdentifier> componentTags = comp.tags().orElse(Set.of());
@@ -314,7 +349,6 @@ public class TemplateGenerator {
 						return false;
 					}
 
-					// requireAllTags: Component must have ALL of these tags
 					if (filter.requireAllTags() != null && !filter.requireAllTags().isEmpty()) {
 						boolean hasAllRequired = filter.requireAllTags().stream()
 								.allMatch(tag -> tagResolver.hasTag(() -> componentTags, tag));
@@ -323,7 +357,6 @@ public class TemplateGenerator {
 						}
 					}
 
-					// requireAnyTags: Component must have AT LEAST ONE of these tags
 					if (filter.requireAnyTags() != null && !filter.requireAnyTags().isEmpty()) {
 						boolean hasAnyRequired = filter.requireAnyTags().stream()
 								.anyMatch(tag -> tagResolver.hasTag(() -> componentTags, tag));
@@ -332,7 +365,6 @@ public class TemplateGenerator {
 						}
 					}
 
-					// excludeAnyTags: Component must NOT have ANY of these tags
 					if (filter.excludeAnyTags() != null && !filter.excludeAnyTags().isEmpty()) {
 						boolean hasAnyExcluded = filter.excludeAnyTags().stream()
 								.anyMatch(tag -> tagResolver.hasTag(() -> componentTags, tag));
@@ -341,7 +373,6 @@ public class TemplateGenerator {
 						}
 					}
 
-					// excludeAllTags: Component must NOT have ALL of these tags (can have some)
 					if (filter.excludeAllTags() != null && !filter.excludeAllTags().isEmpty()) {
 						boolean hasAllExcluded = filter.excludeAllTags().stream()
 								.allMatch(tag -> tagResolver.hasTag(() -> componentTags, tag));
@@ -354,7 +385,6 @@ public class TemplateGenerator {
 				})
 				.toList();
 
-		// Warn if filter excluded all components
 		if (filtered.isEmpty() && !components.isEmpty()) {
 			LOGGER.warn("Generation filter excluded all components. Filter: {}, Available components: {}{}",
 					formatFilter(filter),
@@ -441,7 +471,7 @@ public class TemplateGenerator {
 			return null;
 		}
 		var slots = upgradeDataList.stream()
-				.map(upgrade -> new CofSlot(upgrade.id(), upgrade.type(), upgrade.description(), null, upgrade.tags()))
+				.map(upgrade -> new CofSlot(upgrade.id(), upgrade.type(), upgrade.description(), upgrade.context(), null, upgrade.tags()))
 				.toList();
 		return new CofUpgrades(slots);
 	}

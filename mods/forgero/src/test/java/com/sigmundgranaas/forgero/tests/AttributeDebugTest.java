@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroGameTest;
+import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroTestUtils;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 import org.slf4j.Logger;
@@ -20,24 +21,26 @@ public class AttributeDebugTest implements ForgeroGameTest {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AttributeDebugTest.class);
 
 	private static final List<String> TEST_COMPONENTS = List.of(
+			// Materials
+			"forgero:iron",
+			"forgero:diamond",
 			// Handles
 			"forgero:oak-handle",
-			"forgero:iron-handle",
-			"forgero:netherite-handle",
-			"forgero:stone-handle",
 			// Pickaxe heads
 			"forgero:iron-pickaxe_head",
-			"forgero:netherite-pickaxe_head",
-			"forgero:stone-pickaxe_head",
 			// Full pickaxes
 			"forgero:iron-pickaxe",
-			"forgero:netherite-pickaxe",
-			"forgero:stone-pickaxe"
+			// Extended weapon blades (katana)
+			"forgero:iron-katana_blade",
+			"forgero:diamond-katana_blade",
+			// Full extended weapons
+			"forgero:iron-katana",
+			"forgero:diamond-katana"
 	);
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
 	public void debug_print_attribute_values(TestContext context) {
-		var ctx = forgero(context);
+		var ctx = ForgeroTestUtils.forgero(context);
 
 		LOGGER.debug("=== ATTRIBUTE DEBUG TEST - Component Values ===");
 
@@ -58,7 +61,7 @@ public class AttributeDebugTest implements ForgeroGameTest {
 	}
 
 	private void printComponentAttributes(String id, Component component) {
-		AttributeQueryResult attributes = services().resolver().resolve(component, new AttributeEngine());
+		AttributeQueryResult attributes = ForgeroTestUtils.services().resolver().resolve(component, new AttributeEngine());
 
 		LOGGER.debug("--- Component: {} ---", id);
 

@@ -17,17 +17,29 @@
   ],
   "upgrades": [
     {
-      "id": "forgero:binding-slot",
+      "id": "forgero:diamond_sword-binding-1",
       "type": "forgero:materials/roles/upgrade_material",
       "tags": ["forgero:materials/types/binding"],
       "description": "slot.forgero.binding"
     },
     {
-      "id": "forgero:gem-slot",
+      "id": "forgero:diamond_sword-binding-2",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:materials/types/binding"],
+      "description": "slot.forgero.binding"
+    },
+    {
+      "id": "forgero:diamond_sword-gem",
       "type": "forgero:materials/roles/upgrade_material",
       "tags": ["forgero:upgrades/types/gem"],
       "tier": 2,
       "description": "slot.forgero.gem"
+    },
+    {
+      "id": "forgero:diamond_sword-reinforcement",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/reinforcement"],
+      "description": "slot.forgero.reinforcement"
     }
   ]
 }

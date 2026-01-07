@@ -77,5 +77,12 @@
       ],
       "description": "slot.forgero.cosmetic"
     }
-  ]
+  ],
+  "host": {
+    "create": {
+      "id": "forgero:mastercrafted_sword_blade-schematic",
+      "class_name": "forgero:part_item",
+      "item_group": "forgero:ingredients"
+    }
+  }
 }

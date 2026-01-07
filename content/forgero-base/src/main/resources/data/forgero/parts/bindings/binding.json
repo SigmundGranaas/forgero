@@ -12,11 +12,19 @@
     "id": "forgero:{material.name}-binding",
     "slots": {
       "material": {
-        "type": "forgero:materials/roles/upgrade_material",
-        "default_tag": "forgero:materials/types/binding"
+        "type": "forgero:materials/roles/tool_material",
+        "default_tag": "forgero:materials/roles/tool_material"
       }
     }
   },
+  "upgrades": [
+    {
+      "id": "forgero:binding-gem",
+      "type": "forgero:upgrades/types/gem",
+      "tags": ["forgero:upgrades/types/gem"],
+      "description": "slot.forgero.gem"
+    }
+  ],
   "attributes": [
     {
       "id": "forgero:binding-rarity",

@@ -1,7 +1,7 @@
 {
   "type": "forgero:part_model_template",
   "target": {
-    "tag": "forgero:materials/metal"
+    "tag": "forgero:materials/types/metal"
   },
   "model": {
     "id": "forgero:item/{target.name}-pommel",

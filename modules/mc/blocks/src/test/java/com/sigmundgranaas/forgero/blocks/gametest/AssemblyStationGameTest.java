@@ -165,7 +165,7 @@ public class AssemblyStationGameTest implements ForgeroGameTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "assembly_station_disassembly")
 	public void forgeroPickaxe_canBeDisassembled(TestContext context) {
-		var ctx = forgero(context);
+		var ctx = ForgeroGameTest.forgero(context);
 
 		// Get a real Forgero pickaxe component
 		Optional<Component> pickaxeComp = ctx.component("forgero:iron-pickaxe");
@@ -181,7 +181,7 @@ public class AssemblyStationGameTest implements ForgeroGameTest {
 		);
 
 		// Create StationContext for disassembly
-		StationContext stationContext = StationContext.create(services(), null, null);
+		StationContext stationContext = StationContext.create(ForgeroGameTest.services(), null, null);
 
 		// Create disassembly service
 		DisassemblyService service = DisassemblyService.create(stationContext);
@@ -214,7 +214,7 @@ public class AssemblyStationGameTest implements ForgeroGameTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "assembly_station_validation")
 	public void damagedForgeroItem_cannotBeDisassembled(TestContext context) {
-		var ctx = forgero(context);
+		var ctx = ForgeroGameTest.forgero(context);
 
 		// Get a real Forgero tool
 		Optional<Component> toolComp = ctx.component("forgero:iron-pickaxe");
@@ -230,7 +230,7 @@ public class AssemblyStationGameTest implements ForgeroGameTest {
 		toolStack.setDamage(10);
 
 		// Create StationContext
-		StationContext stationContext = StationContext.create(services(), null, null);
+		StationContext stationContext = StationContext.create(ForgeroGameTest.services(), null, null);
 
 		// Create disassembly service
 		DisassemblyService service = DisassemblyService.create(stationContext);
@@ -251,7 +251,7 @@ public class AssemblyStationGameTest implements ForgeroGameTest {
 		ItemStack vanillaPickaxe = new ItemStack(Items.DIAMOND_PICKAXE);
 
 		// Create StationContext
-		StationContext stationContext = StationContext.create(services(), null, null);
+		StationContext stationContext = StationContext.create(ForgeroGameTest.services(), null, null);
 
 		// Create disassembly service
 		DisassemblyService service = DisassemblyService.create(stationContext);
@@ -270,7 +270,7 @@ public class AssemblyStationGameTest implements ForgeroGameTest {
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "assembly_station_upgrades")
 	public void toolWithUpgrades_preservesUpgradesInParts(TestContext context) {
-		var ctx = forgero(context);
+		var ctx = ForgeroGameTest.forgero(context);
 
 		// Get a Forgero tool
 		Optional<Component> toolComp = ctx.component("forgero:iron-sword");
@@ -305,7 +305,7 @@ public class AssemblyStationGameTest implements ForgeroGameTest {
 		}
 
 		// Create StationContext
-		StationContext stationContext = StationContext.create(services(), null, null);
+		StationContext stationContext = StationContext.create(ForgeroGameTest.services(), null, null);
 
 		// Disassemble
 		DisassemblyService service = DisassemblyService.create(stationContext);
@@ -336,7 +336,7 @@ public class AssemblyStationGameTest implements ForgeroGameTest {
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "assembly_station_validation")
 	public void emptyStack_cannotBeDisassembled(TestContext context) {
 		// Create StationContext
-		StationContext stationContext = StationContext.create(services(), null, null);
+		StationContext stationContext = StationContext.create(ForgeroGameTest.services(), null, null);
 
 		// Create disassembly service
 		DisassemblyService service = DisassemblyService.create(stationContext);

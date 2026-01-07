@@ -2,9 +2,9 @@
   "type": "forgero:equipment_template",
   "name": "katana",
   "tags": [
-    "forgero:weapons/katana",
-    "forgero:weapons/swordlike",
-    "forgero:weapons/extended",
+    "forgero:weapons/types/katana",
+    "forgero:weapons/categories/swordlike",
+    "forgero:weapons/categories/extended",
     "forgero:tools"
   ],
   "host_template": {
@@ -15,7 +15,7 @@
     "id": "forgero:{blade.material.name}-katana",
     "slots": {
       "blade": {
-        "type": "forgero:katana_blade",
+        "type": "forgero:parts/katana_blade",
         "default_tag": "forgero:parts/katana_blade"
       },
       "handle": {
@@ -26,10 +26,16 @@
   },
   "upgrades": [
     {
-      "id": "forgero:katana-binding",
-      "type": "forgero:materials/roles/upgrade_material",
-      "tags": ["forgero:materials/types/binding"],
-      "description": "slot.forgero.binding"
+      "id": "forgero:katana-guard",
+      "type": "forgero:parts/binding",
+      "tags": ["forgero:parts/guard"],
+      "description": "slot.forgero.guard"
+    },
+    {
+      "id": "forgero:katana-gem",
+      "type": "forgero:upgrades/types/gem",
+      "tags": ["forgero:upgrades/types/gem"],
+      "description": "slot.forgero.gem"
     }
   ],
   "attributes": [

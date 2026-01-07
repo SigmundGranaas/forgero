@@ -4,6 +4,7 @@ import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroGameTest;
+import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroTestUtils;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 
@@ -57,7 +58,7 @@ public class AttributeLeakRegressionTest implements ForgeroGameTest {
         };
 
         for (String toolName : tools) {
-            var toolOpt = forgero(context).component("forgero:" + toolName);
+            var toolOpt = ForgeroTestUtils.forgero(context).component("forgero:" + toolName);
             if (toolOpt.isEmpty()) {
                 continue; // Skip tools that don't exist in this configuration
             }
@@ -81,7 +82,7 @@ public class AttributeLeakRegressionTest implements ForgeroGameTest {
         };
 
         for (String toolName : tools) {
-            var toolOpt = forgero(context).component("forgero:" + toolName);
+            var toolOpt = ForgeroTestUtils.forgero(context).component("forgero:" + toolName);
             if (toolOpt.isEmpty()) {
                 continue;
             }
@@ -106,7 +107,7 @@ public class AttributeLeakRegressionTest implements ForgeroGameTest {
         String[] woodTools = {"oak_pickaxe", "oak_sword", "oak_axe", "oak_shovel", "oak_hoe"};
 
         for (String toolName : woodTools) {
-            var toolOpt = forgero(context).component("forgero:" + toolName);
+            var toolOpt = ForgeroTestUtils.forgero(context).component("forgero:" + toolName);
             if (toolOpt.isEmpty()) {
                 continue;
             }
@@ -130,7 +131,7 @@ public class AttributeLeakRegressionTest implements ForgeroGameTest {
         String[] ironTools = {"iron_pickaxe", "iron_sword", "iron_axe", "iron_shovel", "iron_hoe"};
 
         for (String toolName : ironTools) {
-            var toolOpt = forgero(context).component("forgero:" + toolName);
+            var toolOpt = ForgeroTestUtils.forgero(context).component("forgero:" + toolName);
             if (toolOpt.isEmpty()) {
                 continue;
             }
@@ -153,7 +154,7 @@ public class AttributeLeakRegressionTest implements ForgeroGameTest {
         String[] diamondTools = {"diamond_pickaxe", "diamond_sword", "diamond_axe", "diamond_shovel"};
 
         for (String toolName : diamondTools) {
-            var toolOpt = forgero(context).component("forgero:" + toolName);
+            var toolOpt = ForgeroTestUtils.forgero(context).component("forgero:" + toolName);
             if (toolOpt.isEmpty()) {
                 continue;
             }
@@ -181,7 +182,7 @@ public class AttributeLeakRegressionTest implements ForgeroGameTest {
         String[] tools = {"iron-pickaxe", "diamond-pickaxe", "netherite-pickaxe"};
 
         for (String toolName : tools) {
-            var toolOpt = forgero(context).component("forgero:" + toolName);
+            var toolOpt = ForgeroTestUtils.forgero(context).component("forgero:" + toolName);
             if (toolOpt.isEmpty()) {
                 continue;
             }
@@ -233,7 +234,7 @@ public class AttributeLeakRegressionTest implements ForgeroGameTest {
         };
 
         for (String toolName : allTools) {
-            var toolOpt = forgero(context).component("forgero:" + toolName);
+            var toolOpt = ForgeroTestUtils.forgero(context).component("forgero:" + toolName);
             if (toolOpt.isEmpty()) {
                 continue;
             }
@@ -263,7 +264,7 @@ public class AttributeLeakRegressionTest implements ForgeroGameTest {
         };
 
         for (String toolName : allTools) {
-            var toolOpt = forgero(context).component("forgero:" + toolName);
+            var toolOpt = ForgeroTestUtils.forgero(context).component("forgero:" + toolName);
             if (toolOpt.isEmpty()) {
                 continue;
             }

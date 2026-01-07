@@ -81,15 +81,17 @@
       "tags": [
         "forgero:upgrades/types/reinforcement"
       ],
+      "context": "forgero:contexts/defensive",
       "description": "slot.forgero.reinforcement"
     },
     {
-      "id": "forgero:upgrade-slot",
+      "id": "forgero:gem-slot",
       "type": "forgero:trinket",
       "tags": [
-        "forgero:upgrade"
+        "forgero:upgrades/types/gem"
       ],
-      "description": "slot.forgero.upgrade"
+      "context": "forgero:contexts/defensive",
+      "description": "slot.forgero.gem"
     },
     {
       "id": "forgero:cosmetic-slot",
@@ -97,6 +99,7 @@
       "tags": [
         "forgero:upgrades/types/cosmetic"
       ],
+      "context": "forgero:contexts/utility",
       "description": "slot.forgero.cosmetic"
     }
   ],

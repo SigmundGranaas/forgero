@@ -294,6 +294,89 @@ tasks.register('cleanExtractedSources') {
 // Tag Validation Tasks
 // ==============================================================================
 
+// ==============================================================================
+// Content Pack Validation Task
+// ==============================================================================
+
+tasks.register('validateContentPacks') {
+	group = 'verification'
+	description = 'Validate all Forgero content packs for JSON syntax, templates, tags, models, and textures'
+
+	// Depend on compiling validation module and its dependencies
+	dependsOn ':modules:core:classes'
+	dependsOn ':modules:model:classes'
+	dependsOn ':modules:validation:classes'
+
+	doLast {
+		// Build classpath from all required modules
+		def coreClasspath = project(':modules:core').sourceSets.main.runtimeClasspath
+		def modelClasspath = project(':modules:model').sourceSets.main.runtimeClasspath
+		def validationClasspath = project(':modules:validation').sourceSets.main.runtimeClasspath
+
+		def allUrls = (coreClasspath + modelClasspath + validationClasspath).collect { it.toURI().toURL() } as URL[]
+		def classLoader = new URLClassLoader(allUrls, getClass().classLoader)
+
+		// Load required classes
+		def ContentPackValidator = classLoader.loadClass('com.sigmundgranaas.forgero.validation.api.ContentPackValidator')
+		def ValidationReportFormatter = classLoader.loadClass('com.sigmundgranaas.forgero.validation.report.ValidationReportFormatter')
+
+		// Content packs to validate (modern format only)
+		def contentModulePaths = [
+			'content/forgero-base',
+			'content/forgero-materials',
+			'content/forgero-upgrades',
+			'content/forgero-tools',
+			'content/minecraft-tools',
+			'content/forgero-armor',
+			'content/forgero-armor-content',
+			'content/forgero-schematics',
+			'content/forgero-extended-schematics',
+			'content/forgero-secondary-materials',
+			'content/forgero-extended-weapons',
+			'content/forgero-mining',
+			'content/forgero-gems',
+			'content/vanilla-upgrades-base'
+		].collect { file("${projectDir}/${it}").toPath() }
+
+		// Filter to only existing paths
+		def existingPaths = contentModulePaths.findAll { java.nio.file.Files.exists(it) }
+
+		logger.lifecycle('[ContentPackValidation] Starting validation...')
+		logger.lifecycle("[ContentPackValidation] Found ${existingPaths.size()} content packs")
+
+		// Build and run validator
+		def builder = ContentPackValidator.getMethod('builder').invoke(null)
+		builder = builder.getClass().getMethod('contentPaths', List).invoke(builder, existingPaths)
+		builder = builder.getClass().getMethod('defaultNamespace', String).invoke(builder, 'forgero')
+		builder = builder.getClass().getMethod('validateModels', boolean.class).invoke(builder, true)
+		builder = builder.getClass().getMethod('validateTextures', boolean.class).invoke(builder, true)
+		builder = builder.getClass().getMethod('strictTemplateValidation', boolean.class).invoke(builder, true)
+
+		def validator = builder.getClass().getMethod('build').invoke(builder)
+		def result = validator.getClass().getMethod('validate').invoke(validator)
+
+		// Format and print report
+		def formatter = ValidationReportFormatter.getConstructor().newInstance()
+		def report = formatter.getClass().getMethod('format', result.getClass()).invoke(formatter, result)
+		logger.lifecycle(report.toString())
+
+		// Check for failures
+		def hasErrors = result.getClass().getMethod('hasErrors').invoke(result)
+		def errorCount = result.getClass().getMethod('errorCount').invoke(result)
+
+		if (hasErrors) {
+			throw new GradleException("[ContentPackValidation] FAILED: ${errorCount} error(s) found. See report above.")
+		} else {
+			def warningCount = result.getClass().getMethod('warningCount').invoke(result)
+			if (warningCount > 0) {
+				logger.lifecycle("[ContentPackValidation] PASSED with ${warningCount} warning(s)")
+			} else {
+				logger.lifecycle("[ContentPackValidation] PASSED: All content packs valid")
+			}
+		}
+	}
+}
+
 tasks.register('validateTags') {
 	group = 'verification'
 	description = 'Validate Forgero tag definitions for cycles, undefined parents, and orphans'
@@ -302,10 +385,93 @@ tasks.register('validateTags') {
 	dependsOn ':modules:core:classes'
 
 	doLast {
-		javaexec {
-			classpath = project(':modules:core').sourceSets.main.runtimeClasspath
-			mainClass = 'com.sigmundgranaas.forgero.validation.TagValidationRunner'
-			args = [projectDir.absolutePath]
+		// Use core module's classpath to access validation classes
+		def coreClasspath = project(':modules:core').sourceSets.main.runtimeClasspath
+		def urls = coreClasspath.collect { it.toURI().toURL() } as URL[]
+		def classLoader = new URLClassLoader(urls, getClass().classLoader)
+
+		// Load required classes
+		def IdentifierFactory = classLoader.loadClass('com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory')
+		def IdentifierFactoryBuilder = classLoader.loadClass('com.sigmundgranaas.forgero.common.identifier.api.IdentifierFactory$Builder')
+		def OpenIdentifier = classLoader.loadClass('com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier')
+		def TagResolver = classLoader.loadClass('com.sigmundgranaas.forgero.common.tags.api.TagResolver')
+		def TagLoadingService = classLoader.loadClass('com.sigmundgranaas.forgero.common.tags.engine.TagLoadingService')
+		def TagValidator = classLoader.loadClass('com.sigmundgranaas.forgero.common.tags.validation.TagValidator')
+		def ClassPathResourceProvider = classLoader.loadClass('com.sigmundgranaas.forgero.utility.resource.loader.implementation.ClassPathResourceProvider')
+
+		// Create identifier factory using Builder inner class
+		def factoryBuilder = IdentifierFactoryBuilder.getConstructor().newInstance()
+		factoryBuilder = IdentifierFactoryBuilder.getMethod('defaultNamespace', String).invoke(factoryBuilder, 'forgero')
+		def factory = IdentifierFactoryBuilder.getMethod('build').invoke(factoryBuilder)
+
+		// Content modules to validate
+		def contentModules = [
+			'content/forgero-base',
+			'content/forgero-secondary-materials',
+			'content/forgero-extended-schematics',
+			'content/forgero-extended-weapons',
+			'content/forgero-armor',
+			'content/forgero-armor-content',
+			'content/forgero-materials',
+			'content/forgero-gems',
+			'content/forgero-mining',
+			'content/forgero-tools'
+		]
+
+		logger.lifecycle('[TagValidation] Starting validation...')
+
+		// Collect all resolvers
+		def resolvers = []
+		def emptyResolver = TagResolver.getMethod('empty').invoke(null)
+
+		contentModules.each { modulePath ->
+			def dataDir = file("${projectDir}/${modulePath}/src/main/resources/data")
+			if (!dataDir.exists()) return
+
+			try {
+				def provider = ClassPathResourceProvider.getConstructor(java.nio.file.Path).newInstance(dataDir.toPath())
+				def loader = TagLoadingService.getConstructor(IdentifierFactory, classLoader.loadClass('com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceProvider'))
+					.newInstance(factory, provider)
+
+				def tagsId = OpenIdentifier.getMethod('of', String, String).invoke(null, 'forgero', 'tags')
+				def moduleResolver = loader.getClass().getMethod('loadTags', OpenIdentifier).invoke(loader, tagsId)
+				resolvers.add(moduleResolver)
+
+				def tagCount = moduleResolver.getClass().getMethod('getAllTags').invoke(moduleResolver).size()
+				logger.lifecycle("  [OK] ${modulePath}: ${tagCount} tags")
+			} catch (Exception e) {
+				logger.error("  [FAIL] ${modulePath}: ${e.message}")
+			}
+		}
+
+		// Merge all resolvers
+		def mergedResolver = resolvers.inject(emptyResolver) { acc, resolver ->
+			acc.getClass().getMethod('merge', TagResolver).invoke(acc, resolver)
+		}
+
+		def totalTags = mergedResolver.getClass().getMethod('getAllTags').invoke(mergedResolver).size()
+		logger.lifecycle("[TagValidation] Loaded ${totalTags} tags from content modules")
+
+		// Run validation
+		def validator = TagValidator.getConstructor(TagResolver).newInstance(mergedResolver)
+		def result = validator.getClass().getMethod('validate').invoke(validator)
+
+		// Print report
+		def report = result.getClass().getMethod('formatReport').invoke(result)
+		logger.lifecycle(report.toString())
+
+		// Check results
+		def hasErrors = result.getClass().getMethod('hasErrors').invoke(result)
+		def hasWarnings = result.getClass().getMethod('hasWarnings').invoke(result)
+
+		if (hasErrors) {
+			def errorCount = result.getClass().getMethod('errors').invoke(result).size()
+			throw new GradleException("[TagValidation] FAILED: ${errorCount} errors found")
+		} else if (hasWarnings) {
+			def warningCount = result.getClass().getMethod('warnings').invoke(result).size()
+			logger.lifecycle("[TagValidation] PASSED with ${warningCount} warnings")
+		} else {
+			logger.lifecycle("[TagValidation] PASSED: All tags valid")
 		}
 	}
 }

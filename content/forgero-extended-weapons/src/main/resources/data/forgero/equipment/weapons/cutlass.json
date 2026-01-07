@@ -2,9 +2,9 @@
   "type": "forgero:equipment_template",
   "name": "cutlass",
   "tags": [
-    "forgero:weapons/cutlass",
-    "forgero:weapons/swordlike",
-    "forgero:weapons/extended",
+    "forgero:weapons/types/cutlass",
+    "forgero:weapons/categories/swordlike",
+    "forgero:weapons/categories/extended",
     "forgero:tools"
   ],
   "host_template": {
@@ -15,7 +15,7 @@
     "id": "forgero:{blade.material.name}-cutlass",
     "slots": {
       "blade": {
-        "type": "forgero:cutlass_blade",
+        "type": "forgero:parts/cutlass_blade",
         "default_tag": "forgero:parts/cutlass_blade"
       },
       "handle": {
@@ -26,10 +26,16 @@
   },
   "upgrades": [
     {
-      "id": "forgero:cutlass-binding",
-      "type": "forgero:materials/roles/upgrade_material",
-      "tags": ["forgero:materials/types/binding"],
-      "description": "slot.forgero.binding"
+      "id": "forgero:cutlass-guard",
+      "type": "forgero:parts/binding",
+      "tags": ["forgero:parts/guard"],
+      "description": "slot.forgero.guard"
+    },
+    {
+      "id": "forgero:cutlass-gem",
+      "type": "forgero:upgrades/types/gem",
+      "tags": ["forgero:upgrades/types/gem"],
+      "description": "slot.forgero.gem"
     }
   ],
   "attributes": [

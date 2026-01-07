@@ -17,10 +17,28 @@
   ],
   "upgrades": [
     {
-      "id": "forgero:binding-slot",
+      "id": "forgero:iron_sword-binding",
       "type": "forgero:materials/roles/upgrade_material",
       "tags": ["forgero:materials/types/binding"],
       "description": "slot.forgero.binding"
+    },
+    {
+      "id": "forgero:iron_sword-gem",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/gem"],
+      "description": "slot.forgero.gem"
+    },
+    {
+      "id": "forgero:iron_sword-reinforcement",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/reinforcement"],
+      "description": "slot.forgero.reinforcement"
+    },
+    {
+      "id": "forgero:iron_sword-guard",
+      "type": "forgero:parts/sword_guard",
+      "tags": ["forgero:parts/sword_guard", "forgero:parts/guard"],
+      "description": "slot.forgero.guard"
     }
   ]
 }

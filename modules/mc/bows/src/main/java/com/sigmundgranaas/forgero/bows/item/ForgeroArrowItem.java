@@ -1,12 +1,15 @@
 package com.sigmundgranaas.forgero.bows.item;
 
 import com.sigmundgranaas.forgero.common.item.ForgeroHostItem;
+import com.sigmundgranaas.forgero.common.name.NameResolver;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ArrowItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
 /**
@@ -31,5 +34,18 @@ public class ForgeroArrowItem extends ArrowItem implements ForgeroHostItem {
 		// Return a vanilla arrow entity - the LaunchProjectileHandler will detect
 		// Forgero properties and spawn DynamicArrowEntity instead when appropriate
 		return super.createArrow(world, stack, shooter);
+	}
+
+	@Override
+	public Text getName() {
+		return NameResolver.resolve(component);
+	}
+
+	@Override
+	public Text getName(ItemStack stack) {
+		return ForgeroApi.converter()
+				.toComponent(stack)
+				.map(NameResolver::resolve)
+				.orElseGet(this::getName);
 	}
 }

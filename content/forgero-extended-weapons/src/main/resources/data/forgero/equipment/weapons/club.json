@@ -2,9 +2,9 @@
   "type": "forgero:equipment_template",
   "name": "club",
   "tags": [
-    "forgero:weapons/club",
-    "forgero:weapons/blunt",
-    "forgero:weapons/extended",
+    "forgero:weapons/types/club",
+    "forgero:weapons/types/blunt",
+    "forgero:weapons/categories/extended",
     "forgero:tools"
   ],
   "host_template": {
@@ -15,7 +15,7 @@
     "id": "forgero:{head.material.name}-club",
     "slots": {
       "head": {
-        "type": "forgero:club_head",
+        "type": "forgero:parts/club_head",
         "default_tag": "forgero:parts/club_head"
       },
       "handle": {
@@ -24,6 +24,20 @@
       }
     }
   },
+  "upgrades": [
+    {
+      "id": "forgero:club-binding",
+      "type": "forgero:parts/binding",
+      "tags": ["forgero:parts/binding"],
+      "description": "slot.forgero.binding"
+    },
+    {
+      "id": "forgero:club-gem",
+      "type": "forgero:upgrades/types/gem",
+      "tags": ["forgero:upgrades/types/gem"],
+      "description": "slot.forgero.gem"
+    }
+  ],
   "attributes": [
     {
       "id": "forgero:club-attack_speed",

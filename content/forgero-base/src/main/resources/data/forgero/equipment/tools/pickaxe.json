@@ -25,13 +25,13 @@
   "upgrades": [
     {
       "id": "forgero:pickaxe-binding",
-      "type": "forgero:materials/roles/upgrade_material",
-      "tags": ["forgero:materials/types/binding"],
+      "type": "forgero:parts/binding",
+      "tags": ["forgero:parts/binding"],
       "description": "slot.forgero.binding"
     },
     {
       "id": "forgero:pickaxe-gem",
-      "type": "forgero:materials/roles/upgrade_material",
+      "type": "forgero:upgrades/types/gem",
       "tags": ["forgero:upgrades/types/gem"],
       "description": "slot.forgero.gem"
     }

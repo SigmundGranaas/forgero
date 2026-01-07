@@ -2,9 +2,9 @@
   "type": "forgero:equipment_template",
   "name": "kunai",
   "tags": [
-    "forgero:weapons/kunai",
-    "forgero:weapons/swordlike",
-    "forgero:weapons/extended",
+    "forgero:weapons/types/kunai",
+    "forgero:weapons/categories/swordlike",
+    "forgero:weapons/categories/extended",
     "forgero:tools"
   ],
   "host_template": {
@@ -15,7 +15,7 @@
     "id": "forgero:{blade.material.name}-kunai",
     "slots": {
       "blade": {
-        "type": "forgero:kunai_blade",
+        "type": "forgero:parts/kunai_blade",
         "default_tag": "forgero:parts/kunai_blade"
       },
       "handle": {
@@ -24,6 +24,14 @@
       }
     }
   },
+  "upgrades": [
+    {
+      "id": "forgero:kunai-gem",
+      "type": "forgero:upgrades/types/gem",
+      "tags": ["forgero:upgrades/types/gem"],
+      "description": "slot.forgero.gem"
+    }
+  ],
   "attributes": [
     {
       "id": "forgero:kunai-attack_speed",

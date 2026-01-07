@@ -60,9 +60,10 @@ public class CofCodecs {
 						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("id").forGetter(CofSlot::id),
 						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(CofSlot::type),
 						Codec.STRING.optionalFieldOf("description").forGetter(slot -> Optional.ofNullable(slot.description())),
+						CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("context").forGetter(CofSlot::contextOpt),
 						recursiveComponentCodec.optionalFieldOf("content").forGetter(CofSlot::contentOpt),
-						Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).optionalFieldOf("valid_tags").forGetter(slot -> Optional.ofNullable(slot.validTags()))
-				).apply(instance, (id, type, desc, content, tags) -> new CofSlot(id, type, desc.orElse(null), content.orElse(null), tags.orElse(null)))
+						Codec.list(CodecConstants.TAG_IDENTIFIER_CODEC).optionalFieldOf("valid_tags").forGetter(slot -> Optional.ofNullable(slot.validTags()))
+				).apply(instance, (id, type, desc, context, content, tags) -> new CofSlot(id, type, desc.orElse(null), context.orElse(null), content.orElse(null), tags.orElse(null)))
 		);
 
 		// 3. Define the other DTO codecs using the slot codec.
@@ -81,7 +82,7 @@ public class CofCodecs {
 				instance.group(
 						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("id").forGetter(CofComponent::id),
 						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("component_type").forGetter(CofComponent::componentType),
-						Codec.list(CodecConstants.OPEN_IDENTIFIER_CODEC).xmap(java.util.Set::copyOf, java.util.List::copyOf).optionalFieldOf("tags").forGetter(CofComponent::tags),
+						Codec.list(CodecConstants.TAG_IDENTIFIER_CODEC).xmap(java.util.Set::copyOf, java.util.List::copyOf).optionalFieldOf("tags").forGetter(CofComponent::tags),
 						propertyMapCodec.optionalFieldOf("properties").forGetter(CofComponent::properties),
 						structureDtoCodec.optionalFieldOf("structure").forGetter(CofComponent::structure),
 						upgradesDtoCodec.optionalFieldOf("upgrades").forGetter(CofComponent::upgrades),

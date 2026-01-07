@@ -2,7 +2,8 @@
   "type": "forgero:equipment_template",
   "name": "spear",
   "tags": [
-    "forgero:weapons/spear",
+    "forgero:weapons/types/spear",
+    "forgero:weapons/categories/extended",
     "forgero:tools"
   ],
   "host_template": {
@@ -13,7 +14,7 @@
     "id": "forgero:{head.material.name}-spear",
     "slots": {
       "head": {
-        "type": "forgero:spear_head",
+        "type": "forgero:parts/spear_head",
         "default_tag": "forgero:parts/spear_head"
       },
       "handle": {
@@ -25,9 +26,15 @@
   "upgrades": [
     {
       "id": "forgero:spear-binding",
-      "type": "forgero:materials/roles/upgrade_material",
-      "tags": ["forgero:materials/types/binding"],
+      "type": "forgero:parts/binding",
+      "tags": ["forgero:parts/binding"],
       "description": "slot.forgero.binding"
+    },
+    {
+      "id": "forgero:spear-gem",
+      "type": "forgero:upgrades/types/gem",
+      "tags": ["forgero:upgrades/types/gem"],
+      "description": "slot.forgero.gem"
     }
   ],
   "attributes": [

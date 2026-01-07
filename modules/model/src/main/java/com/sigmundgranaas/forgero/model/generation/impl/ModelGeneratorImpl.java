@@ -20,7 +20,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ModelGeneratorImpl implements ModelGenerator {
-
 	private final TagResolver tagResolver;
 	private final PlaceholderResolver placeholderResolver;
 

@@ -2,7 +2,7 @@
   "type": "forgero:equipment_template",
   "name": "battle_axe",
   "tags": [
-    "forgero:weapons/battle_axe",
+    "forgero:weapons/types/battle_axe",
     "forgero:tools"
   ],
   "host_template": {
@@ -13,7 +13,7 @@
     "id": "forgero:{head.material.name}-battle_axe",
     "slots": {
       "head": {
-        "type": "forgero:battle_axe_head",
+        "type": "forgero:parts/battle_axe_head",
         "default_tag": "forgero:parts/battle_axe_head"
       },
       "handle": {
@@ -25,9 +25,15 @@
   "upgrades": [
     {
       "id": "forgero:battle_axe-binding",
-      "type": "forgero:materials/roles/upgrade_material",
-      "tags": ["forgero:materials/types/binding"],
+      "type": "forgero:parts/binding",
+      "tags": ["forgero:parts/binding"],
       "description": "slot.forgero.binding"
+    },
+    {
+      "id": "forgero:battle_axe-gem",
+      "type": "forgero:upgrades/types/gem",
+      "tags": ["forgero:upgrades/types/gem"],
+      "description": "slot.forgero.gem"
     }
   ],
   "attributes": [

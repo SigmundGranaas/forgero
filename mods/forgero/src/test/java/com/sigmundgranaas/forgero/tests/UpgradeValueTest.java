@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroGameTest;
+import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroTestUtils;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 
@@ -30,8 +31,8 @@ public class UpgradeValueTest implements ForgeroGameTest {
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void ender_pearl_adds_105_durability_to_tool(TestContext context) {
         // Get iron pickaxe and ender pearl
-        var ironPickaxe = forgero(context).component("forgero:iron_pickaxe").orElseThrow();
-        var enderPearl = forgero(context).component("forgero:ender_pearl").orElseThrow();
+        var ironPickaxe = ForgeroTestUtils.forgero(context).component("forgero:iron_pickaxe").orElseThrow();
+        var enderPearl = ForgeroTestUtils.forgero(context).component("forgero:ender_pearl").orElseThrow();
 
         // Verify base durability
         float baseDurability = getAttributeValue(ironPickaxe, "forgero:durability");
@@ -51,7 +52,7 @@ public class UpgradeValueTest implements ForgeroGameTest {
      */
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void glowstone_adds_15_durability(TestContext context) {
-        var glowstone = forgero(context).component("forgero:glowstone").orElseThrow();
+        var glowstone = ForgeroTestUtils.forgero(context).component("forgero:glowstone").orElseThrow();
 
         float glowstoneDurability = getAttributeValue(glowstone, "forgero:durability");
         assertEquals(15f, glowstoneDurability,
@@ -66,7 +67,7 @@ public class UpgradeValueTest implements ForgeroGameTest {
      */
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void slime_ball_reduces_offensive_stats(TestContext context) {
-        var slimeBall = forgero(context).component("forgero:slime_ball").orElseThrow();
+        var slimeBall = ForgeroTestUtils.forgero(context).component("forgero:slime_ball").orElseThrow();
 
         // Slime ball should give +105 durability but reduce offensive stats
         float durability = getAttributeValue(slimeBall, "forgero:durability");
@@ -94,7 +95,7 @@ public class UpgradeValueTest implements ForgeroGameTest {
         };
 
         for (String upgradeName : expectedUpgrades) {
-            var upgrade = forgero(context).component("forgero:" + upgradeName);
+            var upgrade = ForgeroTestUtils.forgero(context).component("forgero:" + upgradeName);
             assertTrue(upgrade.isPresent(),
                     "Upgrade material " + upgradeName + " must exist");
         }
@@ -108,9 +109,9 @@ public class UpgradeValueTest implements ForgeroGameTest {
      */
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void upgrade_materials_have_varied_durability_bonuses(TestContext context) {
-        var enderPearl = forgero(context).component("forgero:ender_pearl").orElseThrow();
-        var glowstone = forgero(context).component("forgero:glowstone").orElseThrow();
-        var slimeBall = forgero(context).component("forgero:slime_ball").orElseThrow();
+        var enderPearl = ForgeroTestUtils.forgero(context).component("forgero:ender_pearl").orElseThrow();
+        var glowstone = ForgeroTestUtils.forgero(context).component("forgero:glowstone").orElseThrow();
+        var slimeBall = ForgeroTestUtils.forgero(context).component("forgero:slime_ball").orElseThrow();
 
         float enderPearlDur = getAttributeValue(enderPearl, "forgero:durability");
         float glowstoneDur = getAttributeValue(glowstone, "forgero:durability");
@@ -138,8 +139,8 @@ public class UpgradeValueTest implements ForgeroGameTest {
      */
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void upgrade_slots_accept_upgrade_materials(TestContext context) {
-        var ironPickaxe = forgero(context).component("forgero:iron_pickaxe").orElseThrow();
-        var enderPearl = forgero(context).component("forgero:ender_pearl").orElseThrow();
+        var ironPickaxe = ForgeroTestUtils.forgero(context).component("forgero:iron_pickaxe").orElseThrow();
+        var enderPearl = ForgeroTestUtils.forgero(context).component("forgero:ender_pearl").orElseThrow();
 
         assertTrue(ironPickaxe instanceof CustomizableComponent,
                 "Iron pickaxe must be customizable");
@@ -151,7 +152,7 @@ public class UpgradeValueTest implements ForgeroGameTest {
 
         // Get the binding slot
         ComponentUpgradeSlot bindingSlot = slots.get(0);
-        assertEquals("forgero:upgrade_material", bindingSlot.slotType().toString(),
+        assertEquals("forgero:materials/roles/upgrade_material", bindingSlot.slotType().toString(),
                 "First slot must be upgrade_material type");
 
         // Verify ender_pearl has upgrade tags

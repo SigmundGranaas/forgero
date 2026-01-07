@@ -94,8 +94,8 @@ class TemplateGeneratorTest {
 			PartTemplateData template = createPartTemplate(
 					"forgero:part_template",
 					Map.of(
-							"material", new PartTemplateStructureSlotData(id("material"), null, "Material slot"),
-							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape slot")
+							"material", new PartTemplateStructureSlotData(id("material"), null, null, "Material slot"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, null, "Shape slot")
 					),
 					"forgero:{material.name}-{shape.name}",
 					null,
@@ -127,8 +127,8 @@ class TemplateGeneratorTest {
 			PartTemplateData template = createPartTemplate(
 					"forgero:part_template",
 					Map.of(
-							"material", new PartTemplateStructureSlotData(id("material"), null, "Material slot"),
-							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape slot")
+							"material", new PartTemplateStructureSlotData(id("material"), null, null, "Material slot"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, null, "Shape slot")
 					),
 					"forgero:{material.name}-{shape.name}",
 					null,
@@ -165,8 +165,8 @@ class TemplateGeneratorTest {
 			PartTemplateData template = createPartTemplate(
 					"forgero:part_template",
 					Map.of(
-							"material", new PartTemplateStructureSlotData(id("material"), null, "Material slot"),
-							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape slot")
+							"material", new PartTemplateStructureSlotData(id("material"), null, null, "Material slot"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, null, "Shape slot")
 					),
 					"forgero:{material.name}-{shape.name}",
 					null,
@@ -200,12 +200,12 @@ class TemplateGeneratorTest {
 			PartTemplateData template = createPartTemplate(
 					"forgero:part_template",
 					Map.of(
-							"material", new PartTemplateStructureSlotData(id("material"), null, "Material slot"),
-							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape slot")
+							"material", new PartTemplateStructureSlotData(id("material"), null, null, "Material slot"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, null, "Shape slot")
 					),
 					"forgero:{material.name}-{shape.name}",
 					null,
-					List.of(new UpgradeSlotData(id("reinforcement_slot"), id("gem"), null, null, "Reinforcement slot"))
+					List.of(new UpgradeSlotData(id("reinforcement_slot"), id("gem"), null, null, "Reinforcement slot", null))
 			);
 			addRawDefinition("forgero:part_template", template);
 
@@ -232,8 +232,8 @@ class TemplateGeneratorTest {
 			PartTemplateData template = createPartTemplate(
 					"forgero:part_template",
 					Map.of(
-							"material", new PartTemplateStructureSlotData(id("material"), null, "Material slot"),
-							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape slot")
+							"material", new PartTemplateStructureSlotData(id("material"), null, null, "Material slot"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, null, "Shape slot")
 					),
 					"forgero:{material.name}-{shape.name}",
 					null,
@@ -307,7 +307,7 @@ class TemplateGeneratorTest {
 									"handle", new EquipmentTemplateSlotData(id("handle"), null, null)
 							)
 					),
-					List.of(new UpgradeSlotData(id("binding_slot"), id("binding"), null, null, "Binding slot")),
+					List.of(new UpgradeSlotData(id("binding_slot"), id("binding"), null, null, "Binding slot", null)),
 					null,                      // attributes
 					null                       // properties
 			);
@@ -346,8 +346,8 @@ class TemplateGeneratorTest {
 					new PartTemplateStructureData(
 							"forgero:{material.name}-{shape.name}",
 							Map.of(
-									"material", new PartTemplateStructureSlotData(id("material"), null, "Material"),
-									"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape")
+									"material", new PartTemplateStructureSlotData(id("material"), null, null, "Material"),
+									"shape", new PartTemplateStructureSlotData(id("shape"), null, null, "Shape")
 							)
 					),
 					null, // upgrades
@@ -414,8 +414,8 @@ class TemplateGeneratorTest {
 			PartTemplateData template = createPartTemplate(
 					"forgero:part_template",
 					Map.of(
-							"material", new PartTemplateStructureSlotData(id("material"), null, "Material"),
-							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape")
+							"material", new PartTemplateStructureSlotData(id("material"), null, null, "Material"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, null, "Shape")
 					),
 					"forgero:{material.name}-{shape.name}",
 					null,
@@ -455,8 +455,8 @@ class TemplateGeneratorTest {
 			PartTemplateData template = createPartTemplate(
 					"forgero:part_template",
 					Map.of(
-							"material", new PartTemplateStructureSlotData(id("material"), null, "Material"),
-							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape")
+							"material", new PartTemplateStructureSlotData(id("material"), null, null, "Material"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, null, "Shape")
 					),
 					"forgero:{material.name}-{shape.name}",
 					null,
@@ -499,8 +499,8 @@ class TemplateGeneratorTest {
 			PartTemplateData template = createPartTemplate(
 					"forgero:part_template",
 					Map.of(
-							"material", new PartTemplateStructureSlotData(id("material"), null, "Material"),
-							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape")
+							"material", new PartTemplateStructureSlotData(id("material"), null, null, "Material"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, null, "Shape")
 					),
 					"forgero:{material.name}-{shape.name}",
 					null,
@@ -540,8 +540,8 @@ class TemplateGeneratorTest {
 			PartTemplateData template = createPartTemplate(
 					"forgero:part_template",
 					Map.of(
-							"material", new PartTemplateStructureSlotData(id("material"), null, "Material"),
-							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape")
+							"material", new PartTemplateStructureSlotData(id("material"), null, null, "Material"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, null, "Shape")
 					),
 					"forgero:{material.name}-{shape.name}",
 					null,
@@ -586,8 +586,8 @@ class TemplateGeneratorTest {
 			PartTemplateData template = createPartTemplate(
 					"forgero:part_template",
 					Map.of(
-							"material", new PartTemplateStructureSlotData(id("material"), null, "Material"),
-							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape")
+							"material", new PartTemplateStructureSlotData(id("material"), null, null, "Material"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, null, "Shape")
 					),
 					"forgero:{material.name}-{shape.name}",
 					null,
@@ -622,8 +622,8 @@ class TemplateGeneratorTest {
 			PartTemplateData template = createPartTemplate(
 					"forgero:part_template",
 					Map.of(
-							"material", new PartTemplateStructureSlotData(id("material"), null, "Material"),
-							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape")
+							"material", new PartTemplateStructureSlotData(id("material"), null, null, "Material"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, null, "Shape")
 					),
 					"forgero:{material.name}-{shape.name}",
 					null,
@@ -661,8 +661,8 @@ class TemplateGeneratorTest {
 			PartTemplateData template = createPartTemplate(
 					"forgero:part_template",
 					Map.of(
-							"material", new PartTemplateStructureSlotData(id("material"), null, "Material"),
-							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape")
+							"material", new PartTemplateStructureSlotData(id("material"), null, null, "Material"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, null, "Shape")
 					),
 					"forgero:{material.name}-{shape.name}",
 					null,
@@ -698,9 +698,9 @@ class TemplateGeneratorTest {
 			PartTemplateData template = createPartTemplate(
 					"forgero:part_template",
 					Map.of(
-							"material", new PartTemplateStructureSlotData(id("material"), null, "Material"),
-							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape"),
-							"quality", new PartTemplateStructureSlotData(id("quality"), null, "Quality")
+							"material", new PartTemplateStructureSlotData(id("material"), null, null, "Material"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, null, "Shape"),
+							"quality", new PartTemplateStructureSlotData(id("quality"), null, null, "Quality")
 					),
 					"forgero:{quality.name}-{material.name}-{shape.name}",
 					null,
@@ -725,8 +725,8 @@ class TemplateGeneratorTest {
 			PartTemplateData template = createPartTemplate(
 					"forgero:part_template",
 					Map.of(
-							"material", new PartTemplateStructureSlotData(id("material"), null, "Material"),
-							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape")
+							"material", new PartTemplateStructureSlotData(id("material"), null, null, "Material"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, null, "Shape")
 					),
 					"forgero:{material.name}-{shape.name}",
 					null,
@@ -752,7 +752,7 @@ class TemplateGeneratorTest {
 			PartTemplateData template = createPartTemplate(
 					"forgero:part_template",
 					Map.of(
-							"material", new PartTemplateStructureSlotData(id("material"), null, "Material")
+							"material", new PartTemplateStructureSlotData(id("material"), null, null, "Material")
 					),
 					"forgero:{material.name}",
 					null,
@@ -794,8 +794,8 @@ class TemplateGeneratorTest {
 			PartTemplateData template = createPartTemplate(
 					"forgero:part_template",
 					Map.of(
-							"material", new PartTemplateStructureSlotData(id("material"), null, "Material"),
-							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape")
+							"material", new PartTemplateStructureSlotData(id("material"), null, null, "Material"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, null, "Shape")
 					),
 					"forgero:{material.name}-{shape.name}",
 					null,
@@ -850,8 +850,8 @@ class TemplateGeneratorTest {
 			PartTemplateData template = createPartTemplate(
 					"forgero:part_template",
 					Map.of(
-							"material", new PartTemplateStructureSlotData(id("material"), null, "Material"),
-							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape")
+							"material", new PartTemplateStructureSlotData(id("material"), null, null, "Material"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, null, "Shape")
 					),
 					"forgero:{material.name}-{shape.name}",
 					null,
@@ -886,8 +886,8 @@ class TemplateGeneratorTest {
 			PartTemplateData template = createPartTemplate(
 					"forgero:part_template",
 					Map.of(
-							"material", new PartTemplateStructureSlotData(id("material"), null, "Material"),
-							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape")
+							"material", new PartTemplateStructureSlotData(id("material"), null, null, "Material"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, null, "Shape")
 					),
 					"forgero:{material.name}-{shape.name}",
 					null,
@@ -915,7 +915,7 @@ class TemplateGeneratorTest {
 			PartTemplateData template = createPartTemplate(
 					"forgero:part_template",
 					Map.of(
-							"material", new PartTemplateStructureSlotData(id("material"), null, "Material")
+							"material", new PartTemplateStructureSlotData(id("material"), null, null, "Material")
 					),
 					"forgero:{quality.name}-{material.name}",  // quality doesn't exist!
 					null,
@@ -943,8 +943,8 @@ class TemplateGeneratorTest {
 			PartTemplateData template = createPartTemplate(
 					"forgero:part_template",
 					Map.of(
-							"material", new PartTemplateStructureSlotData(id("material"), null, "Material"),
-							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape")
+							"material", new PartTemplateStructureSlotData(id("material"), null, null, "Material"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, null, "Shape")
 					),
 					"forgero:{material.name}-{shape.name}",
 					null,
@@ -990,8 +990,8 @@ class TemplateGeneratorTest {
 			PartTemplateData template = createPartTemplate(
 					"forgero:part_template",
 					Map.of(
-							"material", new PartTemplateStructureSlotData(id("material"), null, "Material"),
-							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape")
+							"material", new PartTemplateStructureSlotData(id("material"), null, null, "Material"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, null, "Shape")
 					),
 					"forgero:{material.name}-{shape.name}",
 					null,
@@ -1023,8 +1023,8 @@ class TemplateGeneratorTest {
 			PartTemplateData template = createPartTemplate(
 					"forgero:part_template",
 					Map.of(
-							"material", new PartTemplateStructureSlotData(id("material"), null, "Material"),
-							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape")
+							"material", new PartTemplateStructureSlotData(id("material"), null, null, "Material"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, null, "Shape")
 					),
 					"forgero:{material.name}-{shape.name}",
 					null,
@@ -1053,8 +1053,8 @@ class TemplateGeneratorTest {
 			PartTemplateData template = createPartTemplate(
 					"forgero:part_template",
 					Map.of(
-							"primary", new PartTemplateStructureSlotData(id("metal"), null, "Primary"),
-							"secondary", new PartTemplateStructureSlotData(id("organic"), null, "Secondary")
+							"primary", new PartTemplateStructureSlotData(id("metal"), null, null, "Primary"),
+							"secondary", new PartTemplateStructureSlotData(id("organic"), null, null, "Secondary")
 					),
 					"forgero:{primary.name}-{secondary.name}",
 					null,
@@ -1086,8 +1086,8 @@ class TemplateGeneratorTest {
 			PartTemplateData template1 = createPartTemplate(
 					"forgero:part_template_1",
 					Map.of(
-							"material", new PartTemplateStructureSlotData(id("material"), null, "Material"),
-							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape")
+							"material", new PartTemplateStructureSlotData(id("material"), null, null, "Material"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, null, "Shape")
 					),
 					"forgero:{material.name}-head",  // Both generate "iron-head"
 					null,
@@ -1096,8 +1096,8 @@ class TemplateGeneratorTest {
 			PartTemplateData template2 = createPartTemplate(
 					"forgero:part_template_2",
 					Map.of(
-							"material", new PartTemplateStructureSlotData(id("material"), null, "Material"),
-							"shape", new PartTemplateStructureSlotData(id("shape"), null, "Shape")
+							"material", new PartTemplateStructureSlotData(id("material"), null, null, "Material"),
+							"shape", new PartTemplateStructureSlotData(id("shape"), null, null, "Shape")
 					),
 					"forgero:{material.name}-head",  // Same pattern!
 					null,
@@ -1128,7 +1128,7 @@ class TemplateGeneratorTest {
 				String slotName = "slot" + i;
 				CofComponent comp = createStaticComponent("forgero:comp" + i, Set.of("forgero:tag" + i));
 				staticComponents.put(comp.id(), comp);
-				slots.put(slotName, new PartTemplateStructureSlotData(id("tag" + i), null, "Slot " + i));
+				slots.put(slotName, new PartTemplateStructureSlotData(id("tag" + i), null, null, "Slot " + i));
 				idTemplate.append("{").append(slotName).append(".name}");
 				if (i < 9) idTemplate.append("-");
 			}
