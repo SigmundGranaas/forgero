@@ -1,0 +1,78 @@
+{
+  "type": "forgero:material",
+  "name": "Diamond",
+  "tags": ["forgero:materials/tool_material", "forgero:materials/metal", "forgero:materials/armor_material"],
+  "attributes": [
+    {
+      "id": "forgero:diamond-durability",
+      "type": "forgero:durability",
+      "condition": {
+        "static": [{
+          "type": "forgero:in_slot_type",
+          "slot_type": "forgero:tool_material"
+        }]
+      },
+      "computation": {
+        "value": 1561
+      }
+    },
+    {
+      "id": "forgero:diamond-mining_speed",
+      "type": "forgero:mining_speed",
+      "condition": {
+        "static": [{
+          "type": "forgero:in_slot_type",
+          "slot_type": "forgero:tool_material"
+        }]
+      },
+      "computation": {
+        "value": 8
+      }
+    },
+    {
+      "id": "forgero:diamond-attack_damage",
+      "type": "forgero:attack_damage",
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:in_slot_type",
+            "slot_type": "forgero:tool_material"
+          },
+          {
+            "type": "forgero:has_other_contributor",
+            "attribute_type": "forgero:attack_damage"
+          }
+        ]
+      },
+      "computation": {
+        "value": 3
+      }
+    },
+    {
+      "id": "forgero:diamond-armor",
+      "type": "forgero:armor",
+      "condition": {
+        "static": [{
+          "type": "forgero:in_slot_type",
+          "slot_type": "forgero:armor_material"
+        }]
+      },
+      "computation": {
+        "value": 3
+      }
+    },
+    {
+      "id": "forgero:diamond-armor_toughness",
+      "type": "forgero:armor_toughness",
+      "condition": {
+        "static": [{
+          "type": "forgero:in_slot_type",
+          "slot_type": "forgero:armor_material"
+        }]
+      },
+      "computation": {
+        "value": 2
+      }
+    }
+  ]
+}

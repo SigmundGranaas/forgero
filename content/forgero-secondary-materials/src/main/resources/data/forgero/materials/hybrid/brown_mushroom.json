@@ -1,0 +1,42 @@
+{
+  "type": "forgero:material",
+  "name": "Brown Mushroom",
+  "tags": [
+    "forgero:materials/types/binding"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:brown_mushroom"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:brown_mushroom-durability",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 20
+      },
+      "condition": {
+        "type": "forgero:in_slot_type",
+        "slot_type": "forgero:binding_slot"
+      }
+    },
+    {
+      "id": "forgero:brown_mushroom-weight",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 0.15
+      }
+    },
+    {
+      "id": "forgero:brown_mushroom-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 3
+      }
+    }
+  ]
+}

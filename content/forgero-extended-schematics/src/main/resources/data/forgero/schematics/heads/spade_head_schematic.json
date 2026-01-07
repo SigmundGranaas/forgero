@@ -1,0 +1,43 @@
+{
+  "type": "forgero:schematic",
+  "name": "Spade Head",
+  "tags": [
+    "forgero:schematics/heads",
+    "forgero:schematics/mining"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:spade_head-schematic-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 75,
+        "operation": "addition"
+      }
+    }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:spade_head-reinforcement-slot",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": [
+        "forgero:upgrades/types/reinforcement"
+      ],
+      "description": "slot.forgero.reinforcement"
+    },
+    {
+      "id": "forgero:spade_head-cosmetic-slot",
+      "type": "forgero:dye",
+      "tags": [
+        "forgero:upgrades/types/cosmetic"
+      ],
+      "description": "slot.forgero.cosmetic"
+    }
+  ],
+  "host": {
+    "create": {
+      "id": "forgero:spade_head-schematic",
+      "class_name": "forgero:part_item",
+      "item_group": "forgero:ingredients"
+    }
+  }
+}

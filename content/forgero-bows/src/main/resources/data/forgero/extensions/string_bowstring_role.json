@@ -1,0 +1,33 @@
+{
+  "type": "forgero:extension",
+  "target": "forgero:string",
+  "tags": [
+    "forgero:materials/roles/bowstring_material"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:string-draw_speed",
+      "type": "forgero:draw_speed",
+      "computation": {
+        "value": 1.0
+      },
+      "context": "forgero:part-composite"
+    },
+    {
+      "id": "forgero:string-draw_power",
+      "type": "forgero:draw_power",
+      "computation": {
+        "value": 1.0
+      },
+      "context": "forgero:part-composite"
+    },
+    {
+      "id": "forgero:string-accuracy",
+      "type": "forgero:accuracy",
+      "computation": {
+        "value": 50
+      },
+      "context": "forgero:part-composite"
+    }
+  ]
+}

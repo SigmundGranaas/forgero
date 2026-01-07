@@ -1,0 +1,19 @@
+{
+  "generator_type": "forgero:mapped_recipe_generator",
+  "identifier": "forgero:string-bow_string-basic_recipe",
+  "variables": {},
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x",
+    "x",
+    "x"
+  ],
+  "key": {
+    "x": {
+      "item": "minecraft:string"
+    }
+  },
+  "result": {
+    "item": "forgero:string-bow_string"
+  }
+}

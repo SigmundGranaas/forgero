@@ -1,0 +1,7 @@
+{
+  "input": "minecraft:diamond_shovel",
+  "results": [
+    "forgero:diamond-shovel_head",
+    "forgero:oak-handle"
+  ]
+}

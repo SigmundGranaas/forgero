@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:parts/shapes"
+  ],
+  "description": "Tag for pickaxe head shapes"
+}

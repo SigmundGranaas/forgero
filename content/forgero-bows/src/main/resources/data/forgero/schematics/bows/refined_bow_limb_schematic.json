@@ -1,0 +1,127 @@
+{
+  "type": "forgero:schematic",
+  "name": "Refined Bow Limb",
+  "tags": [
+    "forgero:schematics/limbs",
+    "forgero:schematics/bow_limbs",
+    "forgero:schematics/refined"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:refined-bow_limb-schematic-rarity-local",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 50,
+        "operation": "addition"
+      }
+    },
+    {
+      "id": "forgero:refined-bow_limb-schematic-rarity-composite",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 1.25,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:refined-bow_limb-schematic-durability-composite",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 1.25,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:refined-bow_limb-schematic-draw_speed-composite",
+      "type": "forgero:draw_speed",
+      "computation": {
+        "value": 1.1,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:refined-bow_limb-schematic-draw_power-composite",
+      "type": "forgero:draw_power",
+      "computation": {
+        "value": 1.1,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:refined-bow_limb-schematic-accuracy-composite",
+      "type": "forgero:accuracy",
+      "computation": {
+        "value": 1.1,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:refined-bow_limb-grip-slot",
+      "type": "forgero:materials/types/soft",
+      "tags": [
+        "forgero:upgrades/types/grip"
+      ],
+      "description": "slot.forgero.grip"
+    },
+    {
+      "id": "forgero:refined-bow_limb-reinforcement-slot",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": [
+        "forgero:upgrades/types/reinforcement"
+      ],
+      "description": "slot.forgero.reinforcement"
+    },
+    {
+      "id": "forgero:refined-bow_limb-cosmetic-slot",
+      "type": "forgero:dye",
+      "tags": [
+        "forgero:upgrades/types/cosmetic"
+      ],
+      "description": "slot.forgero.cosmetic"
+    }
+  ],
+  "host": {
+    "create": {
+      "id": "forgero:refined_bow_limb-schematic",
+      "class_name": "forgero:part_item",
+      "item_group": "forgero:ingredients"
+    }
+  }
+}

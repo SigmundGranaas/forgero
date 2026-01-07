@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-extended-schematics",
+  "version": "${version}",
+  "name": "Forgero Extended Schematics",
+  "description": "Extended schematic definitions for Forgero - includes weapon blades (katana, rapier, etc.), tool heads (hammer, spade, etc.), guards, and bindings",
+  "authors": [
+    "Sigmund Granaas Sandring"
+  ],
+  "license": "MIT",
+  "environment": "*",
+  "depends": {
+    "java": ">=17"
+  },
+  "custom": {
+    "forgeroResource": true,
+    "modmenu": {
+      "badges": [
+        "library"
+      ],
+      "parent": {
+        "id": "forgero",
+        "name": "Forgero",
+        "description": "Equipment crafting expansion mod for Fabric!",
+        "icon": "assets/forgero/icon.png"
+      }
+    }
+  }
+}

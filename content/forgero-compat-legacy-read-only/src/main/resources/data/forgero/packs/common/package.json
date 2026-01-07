@@ -1,0 +1,27 @@
+{
+  "name": "compat_common",
+  "resource_type": "PACKAGE",
+  "priority": 4,
+  "namespace": "forgero",
+  "dependencies": {
+    "all": [
+      "minecraft",
+      "forgero"
+    ],
+    "any": [
+      "mythicmetals",
+      "natures_spirit",
+      "regions_unexplored",
+      "biomeswevegone",
+      "beachparty",
+      "modern_industrialization",
+      "create",
+      "techreborn",
+      "bloomingnature",
+      "ecologics",
+      "meadow",
+      "galosphere",
+      "bountifulfares"
+    ]
+  }
+}

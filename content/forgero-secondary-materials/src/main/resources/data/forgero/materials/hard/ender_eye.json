@@ -1,0 +1,44 @@
+{
+  "type": "forgero:material",
+  "name": "Eye of Ender",
+  "tags": [
+    "forgero:materials/properties/hard",
+    "forgero:materials/properties/magical",
+    "forgero:upgrades/types/gem"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:ender_eye"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:ender_eye-attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": {
+        "value": 0.5
+      },
+      "condition": {
+        "type": "forgero:in_slot_type",
+        "slot_type": "forgero:gem_slot"
+      }
+    },
+    {
+      "id": "forgero:ender_eye-weight",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 0.8
+      }
+    },
+    {
+      "id": "forgero:ender_eye-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 40
+      }
+    }
+  ]
+}

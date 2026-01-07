@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:schematics/categories/mastercrafted"
+  ],
+  "description": "Shortcut for forgero:schematics/categories/mastercrafted"
+}

@@ -1,0 +1,41 @@
+{
+  "type": "forgero:part_template",
+  "name": "fletching",
+  "tags": [
+    "forgero:parts/fletching",
+    "forgero:parts/types/fletching",
+    "forgero:parts/categories/feather"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-fletching"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-fletching",
+    "slots": {
+      "material": {
+        "type": "forgero:materials/roles/fletching_material",
+        "default_tag": "forgero:materials/roles/fletching_material"
+      }
+    }
+  },
+  "attributes": [
+    {
+      "id": "forgero:fletching-rarity",
+      "type": "forgero:rarity",
+      "computation": {"value": 5, "operation": "addition"}
+    },
+    {
+      "id": "forgero:fletching-accuracy-mult",
+      "type": "forgero:accuracy",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
+    },
+    {
+      "id": "forgero:fletching-weight-mult",
+      "type": "forgero:weight",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 0.5}
+    }
+  ]
+}

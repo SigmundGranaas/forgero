@@ -1,0 +1,42 @@
+{
+  "type": "forgero:material",
+  "name": "Crimson Fungus",
+  "tags": [
+    "forgero:materials/types/binding"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:crimson_fungus"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:crimson_fungus-durability",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 35
+      },
+      "condition": {
+        "type": "forgero:in_slot_type",
+        "slot_type": "forgero:binding_slot"
+      }
+    },
+    {
+      "id": "forgero:crimson_fungus-weight",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 0.25
+      }
+    },
+    {
+      "id": "forgero:crimson_fungus-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 10
+      }
+    }
+  ]
+}

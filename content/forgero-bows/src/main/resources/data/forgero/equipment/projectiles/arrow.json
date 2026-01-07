@@ -1,0 +1,41 @@
+{
+  "type": "forgero:equipment_template",
+  "name": "arrow",
+  "tags": [
+    "forgero:projectiles/arrow",
+    "forgero:projectiles"
+  ],
+  "host_template": {
+    "class": "forgero:arrow_item",
+    "id": "forgero:{head.material.name}-arrow"
+  },
+  "structure": {
+    "id": "forgero:{head.material.name}-arrow",
+    "slots": {
+      "head": {
+        "type": "forgero:parts/types/arrow_head",
+        "default_tag": "forgero:parts/types/arrow_head"
+      },
+      "shaft": {
+        "type": "forgero:parts/categories/handle",
+        "default": "forgero:wooden_handle"
+      },
+      "fletching": {
+        "type": "forgero:parts/types/fletching",
+        "default": "forgero:feather-fletching"
+      }
+    }
+  },
+  "attributes": [
+    {
+      "id": "forgero:arrow-base_attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": {"value": 2.0}
+    },
+    {
+      "id": "forgero:arrow-base_accuracy",
+      "type": "forgero:accuracy",
+      "computation": {"value": 50}
+    }
+  ]
+}

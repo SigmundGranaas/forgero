@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:parts/defaults/default_handle"
+  ],
+  "description": "Shortcut for forgero:parts/defaults/default_handle"
+}

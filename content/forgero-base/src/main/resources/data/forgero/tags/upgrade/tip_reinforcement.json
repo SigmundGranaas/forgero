@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:upgrades/types/tip_reinforcement"
+  ],
+  "description": "Shortcut for forgero:upgrades/types/tip_reinforcement"
+}

@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:materials/roles"
+  ],
+  "description": "Materials that can be used for arrow fletching (feathers)"
+}

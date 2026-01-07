@@ -1,0 +1,55 @@
+{
+  "type": "forgero:schematic",
+  "name": "String Binding",
+  "tags": [
+    "forgero:schematics/bindings",
+    "forgero:schematics/extended"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:string_binding-schematic-rarity-local",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 2,
+        "operation": "addition"
+      }
+    },
+    {
+      "id": "forgero:string_binding-schematic-durability-composite",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 0.7,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:string_binding-schematic-weight-composite",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 0.5,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    }
+  ],
+  "host": {
+    "create": {
+      "id": "forgero:string_binding-schematic",
+      "class_name": "forgero:part_item",
+      "item_group": "forgero:ingredients"
+    }
+  }
+}

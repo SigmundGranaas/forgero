@@ -1,0 +1,15 @@
+{
+  "parent": "SLOT_MATERIAL",
+  "name": "SOFT_MATERIAL",
+  "children": [
+    {
+      "name": "HIDE"
+    },
+    {
+      "name": "SOFT_PLANT"
+    },
+    {
+      "name": "STRING"
+    }
+  ]
+}

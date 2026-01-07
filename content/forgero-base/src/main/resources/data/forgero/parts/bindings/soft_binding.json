@@ -1,0 +1,36 @@
+{
+  "type": "forgero:part_template",
+  "name": "soft_binding",
+  "tags": [
+    "forgero:parts/binding",
+    "forgero:parts/soft_binding"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-soft_binding"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-soft_binding",
+    "slots": {
+      "material": {
+        "type": "forgero:materials/properties/soft",
+        "default_tag": "forgero:materials/properties/soft"
+      }
+    }
+  },
+  "attributes": [
+    {
+      "id": "forgero:soft_binding-rarity",
+      "type": "forgero:rarity",
+      "computation": {"value": 5, "operation": "addition"}
+    },
+    {
+      "id": "forgero:soft_binding-weight",
+      "type": "forgero:weight",
+      "computation": {"value": 0.75, "operation": "multiplication"},
+      "condition": {
+        "static": [{"type": "forgero:is_root"}]
+      }
+    }
+  ]
+}

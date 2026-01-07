@@ -1,0 +1,34 @@
+{
+  "type": "forgero:static_part",
+  "name": "Golden Hoe",
+  "tags": [
+    "forgero:tools/hoe",
+    "forgero:uncategorized/vanilla_tool"
+  ],
+  "host": {
+    "identifiers": [
+      { "type": "item", "id": "minecraft:golden_hoe" }
+    ]
+  },
+  "attributes": [
+    { "id": "forgero:golden-hoe-durability", "type": "forgero:durability", "computation": 32 },
+    { "id": "forgero:golden-hoe-attack_damage", "type": "forgero:attack_damage", "computation": 1 },
+    { "id": "forgero:golden-hoe-attack_speed", "type": "forgero:attack_speed", "computation": 1.0 },
+    { "id": "forgero:golden-hoe-mining_speed", "type": "forgero:mining_speed", "computation": 12 },
+    { "id": "forgero:golden-hoe-mining_level", "type": "forgero:mining_level", "computation": 0 }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:binding-slot",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:materials/types/binding"],
+      "description": "slot.forgero.binding"
+    },
+    {
+      "id": "forgero:gem-slot",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/gem"],
+      "description": "slot.forgero.gem"
+    }
+  ]
+}

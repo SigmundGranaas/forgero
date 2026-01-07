@@ -1,0 +1,53 @@
+{
+  "type": "WOOD",
+  "name": "stalagnate",
+  "parent": "wood_base",
+  "container": {
+    "type": "HOST",
+    "id": "betternether:stalagnate_planks"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "wood-durability-composite",
+            "type": "DURABILITY",
+            "value": 70
+          },
+          {
+            "id": "wood-rarity-composite",
+            "type": "RARITY",
+            "value": 25
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "wood-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 12.5
+          },
+          {
+            "id": "wood-durability-offensive-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "OFFENSIVE",
+            "value": 35
+          }
+        ]
+      }
+    ]
+  },
+  "palette": {
+    "name": "betternether/stalagnate"
+  }
+}

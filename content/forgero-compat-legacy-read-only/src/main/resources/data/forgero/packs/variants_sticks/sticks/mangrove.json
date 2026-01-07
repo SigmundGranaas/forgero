@@ -1,0 +1,13 @@
+{
+  "type": "HANDLE",
+  "name": "mangrove-stick",
+  "parent": "oak-simple_handle",
+  "container": {
+    "type": "HOST",
+    "id": "vsas:sticks/mangrove_stick"
+  },
+  "properties": {
+    "attributes": [
+    ]
+  }
+}

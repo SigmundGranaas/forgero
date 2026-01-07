@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:parts/types"
+  ],
+  "description": "Tag for tip type parts - used in upgrade slots"
+}

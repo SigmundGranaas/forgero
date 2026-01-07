@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:schematics/categories"
+  ],
+  "description": "Tag for blunt weapon schematics"
+}

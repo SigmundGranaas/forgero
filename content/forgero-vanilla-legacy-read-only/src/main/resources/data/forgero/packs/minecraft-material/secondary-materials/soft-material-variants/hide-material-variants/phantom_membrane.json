@@ -1,0 +1,107 @@
+{
+  "type": "HIDE",
+  "name": "phantom_membrane",
+  "parent": "hide_base",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:phantom_membrane"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+          {
+            "id": "hide-rarity-composite",
+            "type": "RARITY",
+            "value": 50
+          },
+          {
+            "id": "hide-durability-composite",
+            "type": "DURABILITY",
+            "value": 150
+          },
+          {
+            "id": "hide-weight-composite",
+            "type": "WEIGHT",
+            "value": -2
+          }
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+          {
+            "id": "hide-rarity-upgrade",
+            "type": "RARITY",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": 25
+          },
+          {
+            "id": "hide-weight-upgrade",
+            "type": "WEIGHT",
+            "order": "BASE",
+            "operation": "ADDITION",
+            "category": "ALL",
+            "value": -1
+          },
+          {
+            "id": "hide-attack_speed-utility-upgrade",
+            "type": "ATTACK_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.5
+          },
+          {
+            "id": "hide-mining_speed-utility-upgrade",
+            "type": "MINING_SPEED",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.25
+          },
+          {
+            "id": "hide-durability-utility-upgrade",
+            "type": "DURABILITY",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 75
+          },
+          {
+            "id": "hide-draw_speed-utility-upgrade",
+            "type": "forgero:draw_speed",
+            "operation": "ADDITION",
+            "category": "UTILITY",
+            "value": 0.15
+          }
+        ]
+      }
+    ],
+    "attributes": [
+    ],
+    "features": [
+      {
+        "type": "minecraft:on_hit",
+        "on_hit": {
+          "type": "minecraft:status_effect",
+          "duration": 50,
+          "target": "minecraft:targeted_entity",
+          "effect": "minecraft:slow_falling",
+          "level": 1
+        },
+        "after_use": {
+          "type": "minecraft:cooldown",
+          "duration": 75
+        },
+        "title": "feature.forgero.slow_falling",
+        "description": "feature.forgero.slow_falling.description"
+      }
+    ]
+  },
+  "palette": {
+    "name": "phantom_membrane"
+  }
+}

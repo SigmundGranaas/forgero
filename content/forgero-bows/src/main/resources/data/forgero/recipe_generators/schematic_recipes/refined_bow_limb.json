@@ -1,0 +1,27 @@
+{
+  "generator_type": "forgero:mapped_recipe_generator",
+  "identifier": "forgero:${material.name}-refined_bow_limb",
+  "variables": {
+    "material": {
+      "tag": "forgero:materials/types/wood"
+    }
+  },
+  "type": "forgero:schematic_part_crafting",
+  "ingredients": [
+    {
+      "item": "forgero:refined_bow_limb-schematic"
+    },
+    {
+      "${material.tagOrItem}": "${material.container_id}"
+    },
+    {
+      "${material.tagOrItem}": "${material.container_id}"
+    },
+    {
+      "${material.tagOrItem}": "${material.container_id}"
+    }
+  ],
+  "result": {
+    "item": "forgero:${material.name}-refined_bow_limb"
+  }
+}

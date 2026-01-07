@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:schematics/categories/refined"
+  ],
+  "description": "Shortcut for forgero:schematics/categories/refined"
+}

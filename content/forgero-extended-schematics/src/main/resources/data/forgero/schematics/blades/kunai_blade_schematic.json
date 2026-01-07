@@ -1,0 +1,25 @@
+{
+  "type": "forgero:schematic",
+  "name": "Kunai Blade",
+  "tags": [
+    "forgero:schematics/blades",
+    "forgero:schematics/extended"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:kunai-schematic-rarity-local",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 25,
+        "operation": "addition"
+      }
+    }
+  ],
+  "host": {
+    "create": {
+      "id": "forgero:kunai_blade-schematic",
+      "class_name": "forgero:part_item",
+      "item_group": "forgero:ingredients"
+    }
+  }
+}

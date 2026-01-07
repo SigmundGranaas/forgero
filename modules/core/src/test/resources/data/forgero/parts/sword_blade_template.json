@@ -1,0 +1,43 @@
+{
+  "type": "forgero:part_template",
+  "name": "Sword Blade",
+  "tags": [
+    "forgero:parts/pickaxe_head_type"
+  ],
+  "structure": {
+    "id": "forgero:{material.name}-{shape.shape_name}",
+    "slots": {
+      "material": {
+        "type": "forgero:tool_material",
+        "count": 2
+      },
+      "shape": {
+        "type": "forgero:pickaxe_head_shape"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:blade_gem_slot",
+      "type": "forgero:handle_type",
+      "tier": 1,
+      "description": "Socket for enhancing blade damage"
+    }
+  ],
+  "attributes": [
+    {
+      "type": "forgero:attack_damage",
+      "computation": {
+        "value": 1
+      },
+      "operator": "forgero:addition"
+    }
+  ],
+  "generation": {
+    "slots": {
+      "shape": {
+        "require_all_tags": ["forgero:pickaxe_head_shape", "forgero:base_shape"]
+      }
+    }
+  }
+}

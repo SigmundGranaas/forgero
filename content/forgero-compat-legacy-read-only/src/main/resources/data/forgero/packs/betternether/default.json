@@ -1,0 +1,8 @@
+{
+  "namespace": "betternether",
+  "dependencies": [
+    "minecraft",
+    "forgero",
+    "minecraft-vanilla"
+  ]
+}

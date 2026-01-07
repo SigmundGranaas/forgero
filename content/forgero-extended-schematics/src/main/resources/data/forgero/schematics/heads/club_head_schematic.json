@@ -1,0 +1,25 @@
+{
+  "type": "forgero:schematic",
+  "name": "Club Head",
+  "tags": [
+    "forgero:schematics/heads",
+    "forgero:schematics/extended"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:club-schematic-rarity-local",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 20,
+        "operation": "addition"
+      }
+    }
+  ],
+  "host": {
+    "create": {
+      "id": "forgero:club_head-schematic",
+      "class_name": "forgero:part_item",
+      "item_group": "forgero:ingredients"
+    }
+  }
+}

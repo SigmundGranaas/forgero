@@ -1,0 +1,29 @@
+{
+  "generator_type": "forgero:mapped_recipe_generator",
+  "identifier": "forgero:${material.name}-bow_limb-bow",
+  "variables": {
+    "material": {
+      "tag": "forgero:materials/types/wood"
+    }
+  },
+  "type": "forgero:shaped_recipe",
+  "pattern": [
+    "ab",
+    "  "
+  ],
+  "key": {
+    "a": {
+      "item": "forgero:${material.name}-bow_limb"
+    },
+    "b": {
+      "item": "forgero:string-bow_string"
+    }
+  },
+  "result": {
+    "item": "forgero:${material.name}-bow",
+    "structure": {
+      "forgero:limb": "a",
+      "forgero:string": "b"
+    }
+  }
+}

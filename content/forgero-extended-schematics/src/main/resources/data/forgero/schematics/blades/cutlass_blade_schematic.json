@@ -1,0 +1,25 @@
+{
+  "type": "forgero:schematic",
+  "name": "Cutlass Blade",
+  "tags": [
+    "forgero:schematics/blades",
+    "forgero:schematics/extended"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:cutlass-schematic-rarity-local",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 30,
+        "operation": "addition"
+      }
+    }
+  ],
+  "host": {
+    "create": {
+      "id": "forgero:cutlass_blade-schematic",
+      "class_name": "forgero:part_item",
+      "item_group": "forgero:ingredients"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:contexts"
+  ],
+  "description": "Protection-focused context - guard and binding slots"
+}

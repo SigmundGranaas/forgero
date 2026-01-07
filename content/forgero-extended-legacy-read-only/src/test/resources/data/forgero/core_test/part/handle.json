@@ -1,0 +1,8 @@
+{
+  "type": "HANDLE",
+  "name": "handle",
+  "resource_type": "CONSTRUCT_TEMPLATE",
+  "model": {
+    "type": "COMPOSITE"
+  }
+}

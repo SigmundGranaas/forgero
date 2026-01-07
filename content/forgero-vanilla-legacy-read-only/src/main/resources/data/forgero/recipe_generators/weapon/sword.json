@@ -1,0 +1,32 @@
+{
+  "generator_type": "forgero:mapped_recipe_generator",
+  "identifier": "forgero:${material.name}-sword_blade-${handle_material.name}-handle",
+  "variables": {
+    "material": {
+      "type": "TOOL_MATERIAL"
+    },
+    "handle_material": {
+      "type": "TOOL_MATERIAL"
+    }
+  },
+  "type": "forgero:shaped_recipe",
+  "pattern": [
+    "a",
+    "b"
+  ],
+  "key": {
+    "a": {
+      "item": "forgero:${material.name}-sword_blade"
+    },
+    "b": {
+      "item": "forgero:${handle_material.name}-handle"
+    }
+  },
+  "result": {
+    "item": "forgero:${material.name}-sword",
+    "structure": {
+      "forgero:blade": "a",
+      "forgero:handle": "b"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:schematics/categories/mining"
+  ],
+  "description": "Shortcut for forgero:schematics/categories/mining"
+}

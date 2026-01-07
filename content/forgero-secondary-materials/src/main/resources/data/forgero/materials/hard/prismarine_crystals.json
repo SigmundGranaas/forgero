@@ -1,0 +1,43 @@
+{
+  "type": "forgero:material",
+  "name": "Prismarine Crystals",
+  "tags": [
+    "forgero:materials/properties/hard",
+    "forgero:upgrades/types/gem"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:prismarine_crystals"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:prismarine_crystals-attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": {
+        "value": 0.5
+      },
+      "condition": {
+        "type": "forgero:in_slot_type",
+        "slot_type": "forgero:gem_slot"
+      }
+    },
+    {
+      "id": "forgero:prismarine_crystals-weight",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 0.8
+      }
+    },
+    {
+      "id": "forgero:prismarine_crystals-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 30
+      }
+    }
+  ]
+}

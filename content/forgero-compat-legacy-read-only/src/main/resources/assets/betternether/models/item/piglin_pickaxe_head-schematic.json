@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "forgero:item/variant_schematic_base",
+    "layer1": "forgero:item/pickaxe_outline_variant"
+  }
+}

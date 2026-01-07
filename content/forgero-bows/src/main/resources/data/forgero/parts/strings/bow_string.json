@@ -1,0 +1,47 @@
+{
+  "type": "forgero:part_template",
+  "name": "bow_string",
+  "tags": [
+    "forgero:parts/bow_string",
+    "forgero:parts/types/bow_string",
+    "forgero:parts/categories/string"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-bow_string"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-bow_string",
+    "slots": {
+      "material": {
+        "type": "forgero:materials/roles/bowstring_material",
+        "default_tag": "forgero:materials/roles/bowstring_material"
+      }
+    }
+  },
+  "attributes": [
+    {
+      "id": "forgero:bow_string-rarity",
+      "type": "forgero:rarity",
+      "computation": {"value": 10, "operation": "addition"}
+    },
+    {
+      "id": "forgero:bow_string-durability-mult",
+      "type": "forgero:durability",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 0.5}
+    },
+    {
+      "id": "forgero:bow_string-draw_speed-mult",
+      "type": "forgero:draw_speed",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
+    },
+    {
+      "id": "forgero:bow_string-accuracy-mult",
+      "type": "forgero:accuracy",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
+    }
+  ]
+}

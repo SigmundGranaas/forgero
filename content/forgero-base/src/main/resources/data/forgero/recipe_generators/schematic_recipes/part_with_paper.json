@@ -1,0 +1,22 @@
+{
+  "generator_type": "forgero:mapped_recipe_generator",
+  "identifier": "forgero:${material.name}_${part}-schematic-recipe",
+  "variables": {
+    "material": {
+      "tag": "forgero:materials/roles/tool_material"
+    },
+    "part": ["pickaxe_head", "axe_head", "hoe_head", "shovel_head", "handle", "binding", "sword_blade", "sword_guard"]
+  },
+  "type": "forgero:schematic_part_crafting",
+  "ingredients": [
+    {
+      "item": "forgero:${material.name}-${part}"
+    },
+    {
+      "item": "minecraft:paper"
+    }
+  ],
+  "result": {
+    "item": "forgero:${part}-schematic"
+  }
+}

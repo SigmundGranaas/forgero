@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:upgrades/types/cosmetic"
+  ],
+  "description": "Shortcut for forgero:upgrades/types/cosmetic"
+}

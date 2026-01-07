@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:tools/types/pickaxe"
+  ],
+  "description": "Shortcut for forgero:tools/types/pickaxe"
+}

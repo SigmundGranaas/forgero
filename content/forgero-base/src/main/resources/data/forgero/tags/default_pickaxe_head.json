@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:parts/defaults/default_pickaxe_head"
+  ],
+  "description": "Shortcut for forgero:parts/defaults/default_pickaxe_head"
+}

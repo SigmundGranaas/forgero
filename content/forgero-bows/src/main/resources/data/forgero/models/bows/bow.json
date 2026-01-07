@@ -1,0 +1,11 @@
+{
+  "type": "BOW",
+  "models": [
+    {
+      "target": [
+        "type:BOW"
+      ],
+      "modelType": "COMPOSITE"
+    }
+  ]
+}

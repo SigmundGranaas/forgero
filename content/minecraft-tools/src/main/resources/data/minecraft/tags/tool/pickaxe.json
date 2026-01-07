@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:tools/types/pickaxe"
+  ],
+  "description": "Minecraft pickaxe tool tag - links to Forgero's pickaxe type"
+}

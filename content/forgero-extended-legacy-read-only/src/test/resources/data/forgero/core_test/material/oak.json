@@ -1,0 +1,12 @@
+{
+  "type": "WOOD",
+  "name": "oak",
+  "resource_type": "DEFAULT",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:oak_planks"
+  },
+  "properties": {
+    "attributes": []
+  }
+}

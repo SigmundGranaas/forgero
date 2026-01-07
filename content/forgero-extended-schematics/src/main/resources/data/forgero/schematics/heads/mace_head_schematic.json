@@ -1,0 +1,25 @@
+{
+  "type": "forgero:schematic",
+  "name": "Mace Head",
+  "tags": [
+    "forgero:schematics/heads",
+    "forgero:schematics/extended"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:mace-schematic-rarity-local",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 45,
+        "operation": "addition"
+      }
+    }
+  ],
+  "host": {
+    "create": {
+      "id": "forgero:mace_head-schematic",
+      "class_name": "forgero:part_item",
+      "item_group": "forgero:ingredients"
+    }
+  }
+}

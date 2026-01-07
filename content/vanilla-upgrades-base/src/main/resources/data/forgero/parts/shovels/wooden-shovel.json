@@ -1,0 +1,28 @@
+{
+  "type": "forgero:static_part",
+  "name": "Wooden Shovel",
+  "tags": [
+    "forgero:tools/shovel",
+    "forgero:uncategorized/vanilla_tool"
+  ],
+  "host": {
+    "identifiers": [
+      { "type": "item", "id": "minecraft:wooden_shovel" }
+    ]
+  },
+  "attributes": [
+    { "id": "forgero:wooden-shovel-durability", "type": "forgero:durability", "computation": 59 },
+    { "id": "forgero:wooden-shovel-attack_damage", "type": "forgero:attack_damage", "computation": 2.5 },
+    { "id": "forgero:wooden-shovel-attack_speed", "type": "forgero:attack_speed", "computation": 1.0 },
+    { "id": "forgero:wooden-shovel-mining_speed", "type": "forgero:mining_speed", "computation": 2 },
+    { "id": "forgero:wooden-shovel-mining_level", "type": "forgero:mining_level", "computation": 0 }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:binding-slot",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:materials/types/binding"],
+      "description": "slot.forgero.binding"
+    }
+  ]
+}

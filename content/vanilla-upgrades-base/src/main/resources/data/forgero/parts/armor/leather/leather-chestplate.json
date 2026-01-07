@@ -1,0 +1,42 @@
+{
+  "type": "forgero:static_part",
+  "name": "Leather Chestplate",
+  "tags": [
+    "forgero:uncategorized/vanilla_armor"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:leather_chestplate"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:leather-chestplate-durability",
+      "type": "forgero:durability",
+      "computation": 80
+    },
+    {
+      "id": "forgero:leather-chestplate-armor",
+      "type": "forgero:armor",
+      "computation": 3
+    },
+    {
+      "id": "forgero:leather-chestplate-armor_toughness",
+      "type": "forgero:armor_toughness",
+      "computation": 0
+    }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:lining-slot",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": [
+        "forgero:materials/roles/armor_lining_material"
+      ],
+      "description": "slot.forgero.lining"
+    }
+  ]
+}

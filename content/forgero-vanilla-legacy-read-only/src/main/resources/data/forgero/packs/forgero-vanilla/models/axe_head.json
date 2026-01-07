@@ -1,0 +1,50 @@
+{
+  "type": "AXE_HEAD",
+  "models": [
+    {
+      "name": "axe_head",
+      "template": "axe_head.png",
+      "type": "GENERATE",
+      "palette": "TOOL_MATERIAL",
+      "order": 20
+    },
+    {
+      "name": "axe_head_material",
+      "type": "GENERATE",
+      "template": "axe_head_tip_reinforcement.png",
+      "palette": "MATERIAL",
+      "order": 30
+    },
+    {
+      "name": "axe_dye",
+      "template": "axe_head.png",
+      "type": "GENERATE",
+      "palette": "DYE",
+      "order": 25
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "type:AXE_HEAD_SCHEMATIC"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "axe_head"
+    },
+    {
+      "target": [
+        "type:MATERIAL",
+        "slot:0"
+      ],
+      "modelType": "UPGRADE",
+      "template": "axe_head_material"
+    },
+    {
+      "target": [
+        "type:DYE",
+        "slot:1"
+      ],
+      "modelType": "UPGRADE",
+      "template": "axe_dye"
+    }
+  ]
+}

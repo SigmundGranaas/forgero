@@ -1,0 +1,13 @@
+{
+  "type": "HANDLE",
+  "name": "jungle-stick",
+  "parent": "oak-simple_handle",
+  "container": {
+    "type": "HOST",
+    "id": "vsas:sticks/jungle_stick"
+  },
+  "properties": {
+    "attributes": [
+    ]
+  }
+}

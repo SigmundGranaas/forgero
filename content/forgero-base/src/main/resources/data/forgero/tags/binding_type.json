@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:parts/types"
+  ],
+  "description": "Tag for binding type parts"
+}

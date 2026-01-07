@@ -1,0 +1,38 @@
+{
+  "generator_type": "forgero:mapped_recipe_generator",
+  "identifier": "forgero:${material.name}-${tool}_head-${handle_material.name}-handle",
+  "variables": {
+    "material": {
+      "type": "TOOL_MATERIAL"
+    },
+    "tool": [
+      "axe",
+      "pickaxe",
+      "shovel",
+      "hoe"
+    ],
+    "handle_material": {
+      "type": "TOOL_MATERIAL"
+    }
+  },
+  "type": "forgero:shaped_recipe",
+  "pattern": [
+    "a",
+    "b"
+  ],
+  "key": {
+    "a": {
+      "item": "forgero:${material.name}-${tool}_head"
+    },
+    "b": {
+      "item": "forgero:${handle_material.name}-handle"
+    }
+  },
+  "result": {
+    "item": "forgero:${material.name}-${tool}",
+    "structure": {
+      "forgero:head": "a",
+      "forgero:handle": "b"
+    }
+  }
+}

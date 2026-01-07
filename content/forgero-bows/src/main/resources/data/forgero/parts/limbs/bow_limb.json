@@ -1,0 +1,74 @@
+{
+  "type": "forgero:part_template",
+  "name": "bow_limb",
+  "tags": [
+    "forgero:parts/bow_limb",
+    "forgero:parts/types/bow_limb",
+    "forgero:parts/categories/limb"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-bow_limb"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-bow_limb",
+    "slots": {
+      "material": {
+        "type": "forgero:materials/roles/tool_material",
+        "default_tag": "forgero:materials/types/wood"
+      }
+    }
+  },
+  "generation": {
+    "slots": {
+      "material": {
+        "require_all_tags": ["forgero:materials/types/wood"]
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:bow_limb-reinforcement",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/reinforcement"],
+      "description": "slot.forgero.reinforcement"
+    },
+    {
+      "id": "forgero:bow_limb-cosmetic",
+      "type": "forgero:dye",
+      "tags": ["forgero:upgrade/cosmetic"],
+      "description": "slot.forgero.cosmetic"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:bow_limb-rarity",
+      "type": "forgero:rarity",
+      "computation": {"value": 25, "operation": "addition"}
+    },
+    {
+      "id": "forgero:bow_limb-durability-mult",
+      "type": "forgero:durability",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
+    },
+    {
+      "id": "forgero:bow_limb-draw_speed-mult",
+      "type": "forgero:draw_speed",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
+    },
+    {
+      "id": "forgero:bow_limb-draw_power-mult",
+      "type": "forgero:draw_power",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
+    },
+    {
+      "id": "forgero:bow_limb-accuracy-mult",
+      "type": "forgero:accuracy",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
+    }
+  ]
+}

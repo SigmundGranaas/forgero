@@ -1,0 +1,23 @@
+{
+  "generator_type": "forgero:mapped_recipe_generator",
+  "identifier": "forgero:${wood.name}-bow_limb-basic_recipe",
+  "variables": {
+    "wood": {
+      "tag": "forgero:materials/types/wood"
+    }
+  },
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  x",
+    " x ",
+    "x  "
+  ],
+  "key": {
+    "x": {
+      "${wood.tagOrItem}": "${wood.container_id}"
+    }
+  },
+  "result": {
+    "item": "forgero:${wood.name}-bow_limb"
+  }
+}

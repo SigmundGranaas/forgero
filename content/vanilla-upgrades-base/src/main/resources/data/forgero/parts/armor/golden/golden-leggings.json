@@ -1,0 +1,51 @@
+{
+  "type": "forgero:static_part",
+  "name": "Golden Leggings",
+  "tags": [
+    "forgero:uncategorized/vanilla_armor"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:golden_leggings"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:golden-leggings-durability",
+      "type": "forgero:durability",
+      "computation": 105
+    },
+    {
+      "id": "forgero:golden-leggings-armor",
+      "type": "forgero:armor",
+      "computation": 3
+    },
+    {
+      "id": "forgero:golden-leggings-armor_toughness",
+      "type": "forgero:armor_toughness",
+      "computation": 0
+    }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:lining-slot",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": [
+        "forgero:materials/roles/armor_lining_material"
+      ],
+      "description": "slot.forgero.lining"
+    },
+    {
+      "id": "forgero:reinforcement-slot",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": [
+        "forgero:upgrades/types/reinforcement"
+      ],
+      "tier": 2,
+      "description": "slot.forgero.reinforcement"
+    }
+  ]
+}

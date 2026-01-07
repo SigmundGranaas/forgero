@@ -1,0 +1,20 @@
+{
+  "resource_type": "MODEL",
+  "type": "TOOL_BINDING",
+  "models": [
+    {
+      "target": [
+        "id:string-scrappy_binding"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "binding"
+    },
+    {
+      "target": [
+        "id:leather-scrappy_binding"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "binding"
+    }
+  ]
+}

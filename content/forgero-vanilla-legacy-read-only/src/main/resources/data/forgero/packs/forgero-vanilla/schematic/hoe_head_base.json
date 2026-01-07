@@ -1,0 +1,29 @@
+{
+  "name": "hoe_head_base",
+  "parent": "tool_part_head_schematic",
+  "resource_type": "ABSTRACT",
+  "properties": {
+    "attributes": [
+      {
+        "id": "schematic-reach",
+        "type": "forgero:reach",
+        "value": 4.5
+      },
+      {
+        "id": "schematic-attack_speed-composite",
+        "type": "ATTACK_SPEED",
+        "context": "COMPOSITE",
+        "operation": "ADDITION",
+        "value": -4
+      }
+    ],
+    "features": [
+      {
+        "type": "minecraft:block_effectiveness",
+        "tags": [
+          "minecraft:mineable/hoe"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:parts/categories"
+  ],
+  "description": "Tag for sword guard parts"
+}

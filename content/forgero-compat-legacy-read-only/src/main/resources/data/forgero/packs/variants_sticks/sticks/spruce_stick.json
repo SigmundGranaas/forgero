@@ -1,0 +1,13 @@
+{
+  "type": "HANDLE",
+  "name": "spruce-stick",
+  "parent": "oak-simple_handle",
+  "container": {
+    "type": "HOST",
+    "id": "vsas:sticks/spruce_stick"
+  },
+  "properties": {
+    "attributes": [
+    ]
+  }
+}

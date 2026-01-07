@@ -1,0 +1,24 @@
+{
+  "type": "forgero:extension",
+  "target": "forgero:materials/iron",
+  "tags": [
+    "forgero:materials/metal",
+    "forgero:materials/tool_material"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:iron-bonus-durability",
+      "type": "forgero:durability",
+      "condition": {
+        "static": [{
+          "type": "forgero:in_slot_type",
+          "slot_type": "forgero:tool_material"
+        }]
+      },
+      "computation": {
+        "value": 50
+      },
+      "operator": "forgero:addition"
+    }
+  ]
+}

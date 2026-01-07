@@ -1,0 +1,35 @@
+{
+  "generator_type": "forgero:mapped_recipe_generator",
+  "identifier": "forgero:${material.name}-arrow_head-arrow",
+  "variables": {
+    "material": {
+      "tag": "forgero:materials/roles/arrow_head_material"
+    }
+  },
+  "type": "forgero:shaped_recipe",
+  "pattern": [
+    "  a",
+    " b ",
+    "c  "
+  ],
+  "key": {
+    "a": {
+      "item": "forgero:${material.name}-arrow_head"
+    },
+    "b": {
+      "tag": "minecraft:planks"
+    },
+    "c": {
+      "item": "forgero:feather-fletching"
+    }
+  },
+  "result": {
+    "item": "forgero:${material.name}-arrow",
+    "count": 6,
+    "structure": {
+      "forgero:head": "a",
+      "forgero:shaft": "b",
+      "forgero:fletching": "c"
+    }
+  }
+}

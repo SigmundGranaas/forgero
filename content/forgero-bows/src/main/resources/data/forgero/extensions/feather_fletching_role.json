@@ -1,0 +1,7 @@
+{
+  "type": "forgero:extension",
+  "target": "forgero:feather",
+  "tags": [
+    "forgero:materials/roles/fletching_material"
+  ]
+}

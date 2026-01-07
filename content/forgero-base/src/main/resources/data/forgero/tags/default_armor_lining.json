@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:parts/defaults"
+  ],
+  "description": "Tag for default armor lining parts"
+}

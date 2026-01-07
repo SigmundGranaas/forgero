@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-secondary-materials",
+  "version": "${version}",
+  "name": "Forgero Secondary Materials",
+  "description": "Secondary materials (soft, hard, hybrid, dyes) and extended schematics (guards, bindings) for Forgero",
+  "authors": [
+    "Sigmund Granaas Sandring"
+  ],
+  "license": "MIT",
+  "environment": "*",
+  "depends": {
+    "java": ">=17"
+  },
+  "custom": {
+    "forgeroResource": true,
+    "modmenu": {
+      "badges": [
+        "library"
+      ],
+      "parent": {
+        "id": "forgero",
+        "name": "Forgero",
+        "description": "Equipment crafting expansion mod for Fabric!",
+        "icon": "assets/forgero/icon.png"
+      }
+    }
+  }
+}

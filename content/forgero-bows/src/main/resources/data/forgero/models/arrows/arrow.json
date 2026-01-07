@@ -1,0 +1,11 @@
+{
+  "type": "ARROW",
+  "models": [
+    {
+      "target": [
+        "type:ARROW"
+      ],
+      "modelType": "COMPOSITE"
+    }
+  ]
+}

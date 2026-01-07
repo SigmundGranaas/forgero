@@ -1,0 +1,12 @@
+{
+  "name": "applied-energistics-2-compat",
+  "resource_type": "PACKAGE",
+  "priority": 4,
+  "namespace": "forgero",
+  "dependencies": [
+    "minecraft",
+    "forgero",
+    "minecraft-vanilla",
+    "ae2"
+  ]
+}

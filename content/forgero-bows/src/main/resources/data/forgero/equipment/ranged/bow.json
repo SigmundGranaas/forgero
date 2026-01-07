@@ -1,0 +1,55 @@
+{
+  "type": "forgero:equipment_template",
+  "name": "bow",
+  "tags": [
+    "forgero:ranged/bow",
+    "forgero:ranged"
+  ],
+  "host_template": {
+    "class": "forgero:bow_item",
+    "id": "forgero:{limb.material.name}-bow"
+  },
+  "structure": {
+    "id": "forgero:{limb.material.name}-bow",
+    "slots": {
+      "limb": {
+        "type": "forgero:parts/types/bow_limb",
+        "default_tag": "forgero:parts/types/bow_limb"
+      },
+      "string": {
+        "type": "forgero:parts/types/bow_string",
+        "default": "forgero:string-bow_string"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:bow-gem",
+      "type": "forgero:upgrades/types/gem",
+      "tags": ["forgero:upgrades/types/gem"],
+      "description": "slot.forgero.gem"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:bow-base_durability",
+      "type": "forgero:durability",
+      "computation": {"value": 384}
+    }
+  ],
+  "properties": {
+    "forgero:use_interaction": {
+      "use_action": "bow",
+      "max_use_time": 72000,
+      "used_on_release": true,
+      "on_start": [
+        {"type": "forgero:mount_projectile"}
+      ],
+      "on_release": [
+        {"type": "forgero:launch_projectile", "base_power": 3.0, "base_divergence": 1.0},
+        {"type": "forgero:consume_projectile"},
+        {"type": "forgero:play_sound", "sound": "entity.arrow.shoot"}
+      ]
+    }
+  }
+}

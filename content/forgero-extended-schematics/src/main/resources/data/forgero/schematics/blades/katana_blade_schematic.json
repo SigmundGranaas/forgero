@@ -1,0 +1,25 @@
+{
+  "type": "forgero:schematic",
+  "name": "Katana Blade",
+  "tags": [
+    "forgero:schematics/blades",
+    "forgero:schematics/extended"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:katana-schematic-rarity-local",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 40,
+        "operation": "addition"
+      }
+    }
+  ],
+  "host": {
+    "create": {
+      "id": "forgero:katana_blade-schematic",
+      "class_name": "forgero:part_item",
+      "item_group": "forgero:ingredients"
+    }
+  }
+}

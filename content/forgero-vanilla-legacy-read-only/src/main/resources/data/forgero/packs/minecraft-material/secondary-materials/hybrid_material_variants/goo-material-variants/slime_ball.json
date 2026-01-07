@@ -1,0 +1,47 @@
+{
+  "type": "GOO",
+  "name": "slimeball",
+  "parent": "goo_base",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:slime_ball"
+  },
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "COMPOSITE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "UPGRADE",
+        "attributes": [
+        ]
+      }
+    ],
+    "attributes": [
+    ],
+    "features": [
+      {
+        "type": "minecraft:on_hit",
+        "on_hit": {
+          "type": "minecraft:knockback",
+          "target": "minecraft:targeted_entity",
+          "force": 3,
+          "direction": "push"
+        },
+        "after_use": {
+          "type": "minecraft:cooldown",
+          "duration": 75
+        },
+        "title": "feature.forgero.knockback",
+        "description": "feature.forgero.knockback.description"
+      }
+    ]
+  },
+  "palette": {
+    "name": "slime"
+  }
+}

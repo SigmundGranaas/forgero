@@ -1,0 +1,24 @@
+{
+  "type": "forgero:material",
+  "name": "Pink Dye",
+  "tags": [
+    "forgero:upgrades/types/cosmetic"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:pink_dye"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:pink_dye-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 2
+      }
+    }
+  ]
+}

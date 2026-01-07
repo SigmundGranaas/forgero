@@ -1,0 +1,13 @@
+{
+  "id": "mineshaft_arrows",
+  "tables": [
+    "minecraft:chests/abandoned_mineshaft"
+  ],
+  "types": [
+    "ARROW"
+  ],
+  "upper_rarity_limit": 40,
+  "lower_rarity_limit": 5,
+  "chance": 0.5,
+  "rolls": 2
+}

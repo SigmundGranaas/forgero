@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:parts/categories/handle"
+  ],
+  "description": "Shortcut for forgero:parts/categories/handle"
+}

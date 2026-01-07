@@ -1,0 +1,24 @@
+{
+  "type": "forgero:material",
+  "name": "Brown Dye",
+  "tags": [
+    "forgero:upgrades/types/cosmetic"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:brown_dye"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:brown_dye-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 2
+      }
+    }
+  ]
+}

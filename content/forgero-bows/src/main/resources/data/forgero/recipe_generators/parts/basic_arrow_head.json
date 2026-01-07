@@ -1,0 +1,21 @@
+{
+  "generator_type": "forgero:mapped_recipe_generator",
+  "identifier": "forgero:${material.name}-arrow_head-basic_recipe",
+  "variables": {
+    "material": {
+      "tag": "forgero:materials/roles/arrow_head_material"
+    }
+  },
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x"
+  ],
+  "key": {
+    "x": {
+      "${material.tagOrItem}": "${material.container_id}"
+    }
+  },
+  "result": {
+    "item": "forgero:${material.name}-arrow_head"
+  }
+}

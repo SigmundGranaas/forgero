@@ -1,0 +1,41 @@
+{
+  "type": "forgero:equipment_template",
+  "name": "Sword",
+  "tags": [
+    "forgero:tools/tool",
+    "forgero:tools/pickaxe"
+  ],
+  "structure": {
+    "id": "forgero:{blade.id}-{handle.id}",
+    "slots": {
+      "blade": {
+        "type": "forgero:pickaxe_head_type",
+        "default_tag": "forgero:parts/default_pickaxe_head"
+      },
+      "handle": {
+        "type": "forgero:handle_type",
+        "default_tag": "forgero:parts/default_handle"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:sword_binding_slot",
+      "type": "forgero:handle_type",
+      "description": "Optional binding for grip"
+    },
+    {
+      "id": "forgero:sword_pommel_slot",
+      "type": "forgero:handle_type",
+      "description": "Pommel for balance"
+    }
+  ],
+  "attributes": [
+    {
+      "type": "forgero:attack_speed",
+      "computation": {
+        "value": 1.6
+      }
+    }
+  ]
+}

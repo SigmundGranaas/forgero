@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:upgrades/types/grip"
+  ],
+  "description": "Shortcut for forgero:upgrades/types/grip"
+}

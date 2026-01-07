@@ -1,0 +1,85 @@
+{
+  "type": "forgero:schematic",
+  "name": "Mechanized Sword Guard",
+  "tags": [
+    "forgero:upgrades/types/guard",
+    "forgero:schematics/extended"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:mechanized-schematic-rarity-local",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 125,
+        "operation": "addition"
+      }
+    },
+    {
+      "id": "forgero:mechanized-schematic-rarity-composite",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 1.6,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:mechanized-schematic-durability-composite",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 0.55,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:mechanized-schematic-armor-composite",
+      "type": "forgero:armor",
+      "computation": {
+        "value": 0.4,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:mechanized-schematic-weight-composite",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 0.45,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    }
+  ],
+  "host": {
+    "create": {
+      "id": "forgero:mechanized_sword_guard-schematic",
+      "class_name": "forgero:part_item",
+      "item_group": "forgero:ingredients"
+    }
+  }
+}

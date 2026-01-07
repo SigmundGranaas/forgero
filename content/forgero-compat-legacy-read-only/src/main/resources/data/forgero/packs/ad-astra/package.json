@@ -1,0 +1,12 @@
+{
+  "name": "ad_astra-compat",
+  "resource_type": "PACKAGE",
+  "priority": 5,
+  "namespace": "forgero",
+  "dependencies": [
+    "minecraft",
+    "forgero",
+    "minecraft-vanilla",
+    "ad_astra"
+  ]
+}

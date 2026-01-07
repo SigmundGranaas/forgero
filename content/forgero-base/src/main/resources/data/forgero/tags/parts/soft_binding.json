@@ -1,0 +1,4 @@
+{
+  "parent": "forgero:parts/binding",
+  "description": "Tag for soft binding parts made from soft materials"
+}

@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:tools/types/sword"
+  ],
+  "description": "Minecraft sword weapon tag - links to Forgero's sword type"
+}

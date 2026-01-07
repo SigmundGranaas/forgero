@@ -1,0 +1,18 @@
+{
+  "parent": "SECONDARY_MATERIAL",
+  "name": "HARD_MATERIAL",
+  "children": [
+    {
+      "name": "SCALE"
+    },
+    {
+      "name": "CRYSTAL"
+    },
+    {
+      "name": "HARD_PLANT"
+    },
+    {
+      "name": "PEARL"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:materials/types/binding"
+  ],
+  "description": "Shortcut for forgero:materials/types/binding"
+}

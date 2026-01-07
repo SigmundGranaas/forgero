@@ -1,0 +1,21 @@
+{
+  "generator_type": "forgero:mapped_recipe_generator",
+  "identifier": "forgero:${material.name}-mastercrafted_arrow_head",
+  "variables": {
+    "material": {
+      "tag": "forgero:materials/roles/arrow_head_material"
+    }
+  },
+  "type": "forgero:schematic_part_crafting",
+  "ingredients": [
+    {
+      "item": "forgero:mastercrafted_arrow_head-schematic"
+    },
+    {
+      "${material.tagOrItem}": "${material.container_id}"
+    }
+  ],
+  "result": {
+    "item": "forgero:${material.name}-mastercrafted_arrow_head"
+  }
+}

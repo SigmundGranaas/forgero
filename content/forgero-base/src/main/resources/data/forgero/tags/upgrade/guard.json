@@ -1,0 +1,6 @@
+{
+  "parents": [
+    "forgero:upgrades/types/guard"
+  ],
+  "description": "Shortcut for forgero:upgrades/types/guard"
+}
