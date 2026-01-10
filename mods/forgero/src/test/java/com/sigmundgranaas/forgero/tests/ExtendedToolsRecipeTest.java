@@ -38,81 +38,80 @@ public class ExtendedToolsRecipeTest implements ForgeroGameTest {
 	// ============================================================
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
-	public void iron_katana_full_workflow(TestContext context) {
+	public void iron_spear_full_workflow(TestContext context) {
 		var ctx = ForgeroTestUtils.forgero(context);
 		var query = ForgeroApi.itemQuery();
 
-		// 1. Component must exist
-		Component katana = ctx.component("forgero:iron-katana")
-				.orElseThrow(() -> new AssertionError("Iron katana component must exist"));
+		// 1. Component must exist (spear is still a separate base type)
+		Component spear = ctx.component("forgero:iron-spear")
+				.orElseThrow(() -> new AssertionError("Iron spear component must exist"));
 
 		// 2. Must convert to ItemStack
-		ItemStack stack = ctx.toStack(katana)
-				.orElseThrow(() -> new AssertionError("Iron katana must convert to ItemStack"));
+		ItemStack stack = ctx.toStack(spear)
+				.orElseThrow(() -> new AssertionError("Iron spear must convert to ItemStack"));
 
-		assertFalse(stack.isEmpty(), "Iron katana ItemStack must not be empty");
+		assertFalse(stack.isEmpty(), "Iron spear ItemStack must not be empty");
 
 		// 3. Must be damageable (it's a weapon)
-		assertTrue(stack.isDamageable(), "Iron katana must be damageable");
+		assertTrue(stack.isDamageable(), "Iron spear must be damageable");
 
 		// 4. Must have reasonable durability (iron material ~250, handle adds more)
 		int durability = query.getMaxDurability(stack);
 		assertTrue(durability >= 50, 
-				"Iron katana durability must be >= 50, got: " + durability);
+				"Iron spear durability must be >= 50, got: " + durability);
 
 		// 5. Must display correct name
-		assertEquals("Iron Katana", stack.getName().getString(),
-				"Iron katana must display as 'Iron Katana'");
+		assertEquals("Iron Spear", stack.getName().getString(),
+				"Iron spear must display as 'Iron Spear'");
 
 		context.complete();
 	}
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
-	public void diamond_dagger_full_workflow(TestContext context) {
+	public void diamond_mace_full_workflow(TestContext context) {
 		var ctx = ForgeroTestUtils.forgero(context);
 		var query = ForgeroApi.itemQuery();
 
-		Component dagger = ctx.component("forgero:diamond-dagger")
-				.orElseThrow(() -> new AssertionError("Diamond dagger component must exist"));
+		Component mace = ctx.component("forgero:diamond-mace")
+				.orElseThrow(() -> new AssertionError("Diamond mace component must exist"));
 
-		ItemStack stack = ctx.toStack(dagger)
-				.orElseThrow(() -> new AssertionError("Diamond dagger must convert to ItemStack"));
+		ItemStack stack = ctx.toStack(mace)
+				.orElseThrow(() -> new AssertionError("Diamond mace must convert to ItemStack"));
 
-		assertFalse(stack.isEmpty(), "Diamond dagger ItemStack must not be empty");
-		assertTrue(stack.isDamageable(), "Diamond dagger must be damageable");
+		assertFalse(stack.isEmpty(), "Diamond mace ItemStack must not be empty");
+		assertTrue(stack.isDamageable(), "Diamond mace must be damageable");
 
 		// Diamond tier should have good durability
 		int durability = query.getMaxDurability(stack);
 		assertTrue(durability >= 100,
-				"Diamond dagger durability must be >= 100, got: " + durability);
+				"Diamond mace durability must be >= 100, got: " + durability);
 
-		assertEquals("Diamond Dagger", stack.getName().getString(),
-				"Diamond dagger must display as 'Diamond Dagger'");
+		assertEquals("Diamond Mace", stack.getName().getString(),
+				"Diamond mace must display as 'Diamond Mace'");
 
 		context.complete();
 	}
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
-	public void netherite_broadsword_full_workflow(TestContext context) {
+	public void netherite_spear_full_workflow(TestContext context) {
 		var ctx = ForgeroTestUtils.forgero(context);
 		var query = ForgeroApi.itemQuery();
 
-		Component broadsword = ctx.component("forgero:netherite-broadsword")
-				.orElseThrow(() -> new AssertionError("Netherite broadsword component must exist"));
+		Component spear = ctx.component("forgero:netherite-spear")
+				.orElseThrow(() -> new AssertionError("Netherite spear component must exist"));
 
-		ItemStack stack = ctx.toStack(broadsword)
-				.orElseThrow(() -> new AssertionError("Netherite broadsword must convert to ItemStack"));
+		ItemStack stack = ctx.toStack(spear)
+				.orElseThrow(() -> new AssertionError("Netherite spear must convert to ItemStack"));
 
-		assertFalse(stack.isEmpty(), "Netherite broadsword ItemStack must not be empty");
-		assertTrue(stack.isDamageable(), "Netherite broadsword must be damageable");
+		assertFalse(stack.isEmpty(), "Netherite spear ItemStack must not be empty");
+		assertTrue(stack.isDamageable(), "Netherite spear must be damageable");
 
-		// Netherite tier should have excellent durability
 		int durability = query.getMaxDurability(stack);
 		assertTrue(durability >= 200,
-				"Netherite broadsword durability must be >= 200, got: " + durability);
+				"Netherite spear durability must be >= 200, got: " + durability);
 
-		assertEquals("Netherite Broadsword", stack.getName().getString(),
-				"Netherite broadsword must display as 'Netherite Broadsword'");
+		assertEquals("Netherite Spear", stack.getName().getString(),
+				"Netherite spear must display as 'Netherite Spear'");
 
 		context.complete();
 	}
@@ -160,41 +159,37 @@ public class ExtendedToolsRecipeTest implements ForgeroGameTest {
 	// ============================================================
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
-	public void katana_can_be_assembled_from_blade_and_handle(TestContext context) {
+	public void katana_blade_assembles_to_sword_with_katana_display_name(TestContext context) {
 		var ctx = ForgeroTestUtils.forgero(context);
 		RecipeManager recipeManager = context.getWorld().getRecipeManager();
 
-		// Get the parts
 		ItemStack blade = getItemStackOrFail(ctx, "forgero:iron-katana_blade");
 		ItemStack handle = getItemStackOrFail(ctx, "forgero:oak-handle");
 
-		// Try assembly patterns
 		CraftingRecipe recipe = findAssemblyRecipe(context, recipeManager, blade, handle)
 				.orElseThrow(() -> new AssertionError(
-						"Assembly recipe for katana (blade + handle) must exist. " +
+						"Assembly recipe for katana blade + handle must exist. " +
 						"Tried vertical patterns in columns 0 and 1."));
 
-		// Craft the item
 		RecipeInputInventory inventory = createVerticalInventory(blade, handle);
 		ItemStack result = recipe.craft(inventory, context.getWorld().getRegistryManager());
 
-		// Verify result
-		assertFalse(result.isEmpty(), "Crafted katana must not be empty");
+		assertFalse(result.isEmpty(), "Crafted weapon must not be empty");
 
 		Component resultComp = ctx.toComponent(result)
 				.orElseThrow(() -> new AssertionError("Crafted item must be a Forgero component"));
 
-		assertTrue(resultComp.id().toString().contains("katana"),
-				"Crafted item must be a katana, got: " + resultComp.id());
+		assertTrue(resultComp.id().toString().contains("sword"),
+				"Crafted item must use sword base type, got: " + resultComp.id());
 
 		assertEquals("Iron Katana", result.getName().getString(),
-				"Assembled katana must display as 'Iron Katana'");
+				"Sword with katana blade must display as 'Iron Katana'");
 
 		context.complete();
 	}
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
-	public void dagger_can_be_assembled_from_blade_and_handle(TestContext context) {
+	public void dagger_blade_assembles_to_sword_with_dagger_display_name(TestContext context) {
 		var ctx = ForgeroTestUtils.forgero(context);
 		RecipeManager recipeManager = context.getWorld().getRecipeManager();
 
@@ -203,21 +198,21 @@ public class ExtendedToolsRecipeTest implements ForgeroGameTest {
 
 		CraftingRecipe recipe = findAssemblyRecipe(context, recipeManager, blade, handle)
 				.orElseThrow(() -> new AssertionError(
-						"Assembly recipe for dagger (blade + handle) must exist"));
+						"Assembly recipe for dagger blade + handle must exist"));
 
 		RecipeInputInventory inventory = createVerticalInventory(blade, handle);
 		ItemStack result = recipe.craft(inventory, context.getWorld().getRegistryManager());
 
-		assertFalse(result.isEmpty(), "Crafted dagger must not be empty");
+		assertFalse(result.isEmpty(), "Crafted weapon must not be empty");
 
 		Component resultComp = ctx.toComponent(result)
 				.orElseThrow(() -> new AssertionError("Crafted item must be a Forgero component"));
 
-		assertTrue(resultComp.id().toString().contains("dagger"),
-				"Crafted item must be a dagger, got: " + resultComp.id());
+		assertTrue(resultComp.id().toString().contains("sword"),
+				"Crafted item must use sword base type, got: " + resultComp.id());
 
 		assertEquals("Iron Dagger", result.getName().getString(),
-				"Assembled dagger must display as 'Iron Dagger'");
+				"Sword with dagger blade must display as 'Iron Dagger'");
 
 		context.complete();
 	}
@@ -227,37 +222,37 @@ public class ExtendedToolsRecipeTest implements ForgeroGameTest {
 	// ============================================================
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
-	public void diamond_katana_has_better_durability_than_iron(TestContext context) {
+	public void diamond_spear_has_better_durability_than_iron(TestContext context) {
 		var ctx = ForgeroTestUtils.forgero(context);
 		var query = ForgeroApi.itemQuery();
 
-		ItemStack ironKatana = getItemStackOrFail(ctx, "forgero:iron-katana");
-		ItemStack diamondKatana = getItemStackOrFail(ctx, "forgero:diamond-katana");
+		ItemStack ironSpear = getItemStackOrFail(ctx, "forgero:iron-spear");
+		ItemStack diamondSpear = getItemStackOrFail(ctx, "forgero:diamond-spear");
 
-		int ironDurability = query.getMaxDurability(ironKatana);
-		int diamondDurability = query.getMaxDurability(diamondKatana);
+		int ironDurability = query.getMaxDurability(ironSpear);
+		int diamondDurability = query.getMaxDurability(diamondSpear);
 
 		assertTrue(diamondDurability > ironDurability,
-				"Diamond katana durability (" + diamondDurability + 
-				") must be greater than iron katana (" + ironDurability + ")");
+				"Diamond spear durability (" + diamondDurability + 
+				") must be greater than iron spear (" + ironDurability + ")");
 
 		context.complete();
 	}
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
-	public void netherite_broadsword_has_better_durability_than_diamond(TestContext context) {
+	public void netherite_spear_has_better_durability_than_diamond(TestContext context) {
 		var ctx = ForgeroTestUtils.forgero(context);
 		var query = ForgeroApi.itemQuery();
 
-		ItemStack diamondBroadsword = getItemStackOrFail(ctx, "forgero:diamond-broadsword");
-		ItemStack netheriteBroadsword = getItemStackOrFail(ctx, "forgero:netherite-broadsword");
+		ItemStack diamondSpear = getItemStackOrFail(ctx, "forgero:diamond-spear");
+		ItemStack netheriteSpear = getItemStackOrFail(ctx, "forgero:netherite-spear");
 
-		int diamondDurability = query.getMaxDurability(diamondBroadsword);
-		int netheriteDurability = query.getMaxDurability(netheriteBroadsword);
+		int diamondDurability = query.getMaxDurability(diamondSpear);
+		int netheriteDurability = query.getMaxDurability(netheriteSpear);
 
 		assertTrue(netheriteDurability > diamondDurability,
-				"Netherite broadsword durability (" + netheriteDurability +
-				") must be greater than diamond broadsword (" + diamondDurability + ")");
+				"Netherite spear durability (" + netheriteDurability +
+				") must be greater than diamond spear (" + diamondDurability + ")");
 
 		context.complete();
 	}
@@ -270,13 +265,10 @@ public class ExtendedToolsRecipeTest implements ForgeroGameTest {
 	public void all_core_extended_weapons_exist_for_iron(TestContext context) {
 		var ctx = ForgeroTestUtils.forgero(context);
 
-		// These are the core extended weapons that MUST exist
+		// These are the core extended weapons that MUST exist (spear and mace are base types)
 		String[] requiredWeapons = {
-				"forgero:iron-katana",
-				"forgero:iron-dagger",
-				"forgero:iron-broadsword",
-				"forgero:iron-rapier",
-				"forgero:iron-spear"
+				"forgero:iron-spear",
+				"forgero:iron-mace"
 		};
 
 		for (String weaponId : requiredWeapons) {
@@ -331,15 +323,12 @@ public class ExtendedToolsRecipeTest implements ForgeroGameTest {
 	public void all_extended_weapons_display_correct_names(TestContext context) {
 		var ctx = ForgeroTestUtils.forgero(context);
 
-		// Map of component ID to expected display name
+		// Map of component ID to expected display name (only base types that still exist as components)
 		String[][] weaponNames = {
-				{"forgero:iron-katana", "Iron Katana"},
-				{"forgero:iron-dagger", "Iron Dagger"},
-				{"forgero:iron-broadsword", "Iron Broadsword"},
-				{"forgero:iron-rapier", "Iron Rapier"},
 				{"forgero:iron-spear", "Iron Spear"},
-				{"forgero:diamond-katana", "Diamond Katana"},
-				{"forgero:netherite-broadsword", "Netherite Broadsword"}
+				{"forgero:iron-mace", "Iron Mace"},
+				{"forgero:diamond-spear", "Diamond Spear"},
+				{"forgero:netherite-mace", "Netherite Mace"}
 		};
 
 		for (String[] entry : weaponNames) {
@@ -366,9 +355,8 @@ public class ExtendedToolsRecipeTest implements ForgeroGameTest {
 		var query = ForgeroApi.itemQuery();
 
 		String[] weapons = {
-				"forgero:iron-katana",
-				"forgero:iron-dagger",
-				"forgero:iron-broadsword"
+				"forgero:iron-spear",
+				"forgero:iron-mace"
 		};
 
 		for (String weaponId : weapons) {
@@ -387,9 +375,8 @@ public class ExtendedToolsRecipeTest implements ForgeroGameTest {
 		var ctx = ForgeroTestUtils.forgero(context);
 
 		String[] weapons = {
-				"forgero:iron-katana",
-				"forgero:iron-dagger",
-				"forgero:iron-broadsword"
+				"forgero:iron-spear",
+				"forgero:iron-mace"
 		};
 
 		for (String weaponId : weapons) {

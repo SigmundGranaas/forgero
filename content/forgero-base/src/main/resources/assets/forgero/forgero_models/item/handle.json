@@ -10,6 +10,31 @@
     "layers": [
       {
         "order": 10,
+        "textures": {
+          "default": "forgero:item/{target.name}-handle",
+          "variants": [
+            {
+              "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/pickaxe" }],
+              "texture": "forgero:item/{target.name}-pickaxe_handle"
+            },
+            {
+              "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/axe" }],
+              "texture": "forgero:item/{target.name}-axe_handle"
+            },
+            {
+              "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/hoe" }],
+              "texture": "forgero:item/{target.name}-hoe_handle"
+            },
+            {
+              "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/shovel" }],
+              "texture": "forgero:item/{target.name}-medium_handle"
+            },
+            {
+              "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:weapons/sword" }],
+              "texture": "forgero:item/{target.name}-short_handle"
+            }
+          ]
+        },
         "template": "forgero:texture_template/parts/handle",
         "palette": "forgero:palette/{target.name}",
         "output": "forgero:item/{target.name}-handle"
@@ -41,5 +66,32 @@
         }
       }
     ]
-  }
+  },
+  "texture_variants": [
+    {
+      "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/pickaxe" }],
+      "template": "forgero:texture_template/parts/pickaxe_handle",
+      "output_suffix": "-pickaxe_handle"
+    },
+    {
+      "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/axe" }],
+      "template": "forgero:texture_template/parts/axe_handle",
+      "output_suffix": "-axe_handle"
+    },
+    {
+      "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/hoe" }],
+      "template": "forgero:texture_template/parts/hoe_handle",
+      "output_suffix": "-hoe_handle"
+    },
+    {
+      "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/shovel" }],
+      "template": "forgero:texture_template/parts/medium_handle",
+      "output_suffix": "-medium_handle"
+    },
+    {
+      "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:weapons/sword" }],
+      "template": "forgero:texture_template/parts/short_handle",
+      "output_suffix": "-short_handle"
+    }
+  ]
 }

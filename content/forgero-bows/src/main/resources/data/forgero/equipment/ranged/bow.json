@@ -22,14 +22,7 @@
       }
     }
   },
-  "upgrades": [
-    {
-      "id": "forgero:bow-gem",
-      "type": "forgero:upgrades/types/gem",
-      "tags": ["forgero:upgrades/types/gem"],
-      "description": "slot.forgero.gem"
-    }
-  ],
+  "upgrades": [],
   "attributes": [
     {
       "id": "forgero:bow-base_durability",

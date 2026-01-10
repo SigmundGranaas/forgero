@@ -1,0 +1,41 @@
+{
+  "type": "forgero:part_template",
+  "name": "mastercrafted_arrow_head",
+  "tags": [
+    "forgero:parts/arrow_head",
+    "forgero:parts/types/arrow_head",
+    "forgero:parts/categories/head"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-mastercrafted_arrow_head"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-mastercrafted_arrow_head",
+    "slots": {
+      "material": {
+        "type": "forgero:materials/roles/arrow_head_material",
+        "default_tag": "forgero:materials/roles/arrow_head_material"
+      }
+    }
+  },
+  "attributes": [
+    {
+      "id": "forgero:mastercrafted_arrow_head-rarity",
+      "type": "forgero:rarity",
+      "computation": {"value": 65, "operation": "addition"}
+    },
+    {
+      "id": "forgero:mastercrafted_arrow_head-attack_damage-mult",
+      "type": "forgero:attack_damage",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.5}
+    },
+    {
+      "id": "forgero:mastercrafted_arrow_head-weight-mult",
+      "type": "forgero:weight",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
+    }
+  ]
+}

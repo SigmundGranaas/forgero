@@ -82,10 +82,15 @@ public record OpenIdentifier(String namespace, String path) {
 	/**
 	 * Creates an identifier in the default namespace ("forgero").
 	 *
-	 * @param path The path component
+	 * @param path The path component (must not contain ':')
 	 * @return A new OpenIdentifier with the default namespace
+	 * @throws IllegalArgumentException if path contains ':' (use parse() for full identifiers)
 	 */
 	public static OpenIdentifier of(String path) {
+		if (path.contains(":")) {
+			throw new IllegalArgumentException(
+					"Path cannot contain ':'. Got '" + path + "'. Use OpenIdentifier.parse() for full identifiers.");
+		}
 		return new OpenIdentifier(DEFAULT_NAMESPACE, path);
 	}
 

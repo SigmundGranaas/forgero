@@ -3,7 +3,8 @@
   "name": "rapier_blade",
   "tags": [
     "forgero:parts/blade",
-    "forgero:parts/rapier_blade"
+    "forgero:parts/rapier_blade",
+    "forgero:parts/types/sword_blade"
   ],
   "host_template": {
     "class": "forgero:part_item",
@@ -68,5 +69,10 @@
       "context": "forgero:part-composite",
       "computation": {"multiply": 0.6}
     }
-  ]
+  ],
+  "properties": {
+    "forgero:name_replacement": [
+      {"from": "sword", "to": "rapier"}
+    ]
+  }
 }

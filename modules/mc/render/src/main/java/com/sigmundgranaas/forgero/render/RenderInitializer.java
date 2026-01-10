@@ -60,15 +60,12 @@ public class RenderInitializer implements ClientModInitializer {
 		return resourcePack;
 	}
 
-	// Services received from ForgeroInitializedCallback
 	private static TaggedRegistry<Component> taggedComponents;
 	private static TagResolver tagResolver;
 	private static ComponentConverter converter;
 	private static ComponentRegistry componentRegistry;
 
 	static {
-		// Use registerAndReplay to handle the case where the callback already fired
-		// before this class was loaded (client initializers run after main initializers)
 		ForgeroInitializedCallback.registerAndReplay(services -> {
 			taggedComponents = services.taggedComponents();
 			tagResolver = services.tagResolver();
@@ -104,8 +101,6 @@ public class RenderInitializer implements ClientModInitializer {
 			ArmorModelRegistry armorModelRegistry = new MapBackedArmorModelRegistry();
 			ModelDataInitializer modelInitializer = new ModelDataInitializer(preloadProvider);
 
-			// Check if taggedComponents is available (data loading may not have completed yet)
-			// The ForgeroModelResourceListener will handle hot-reload once data is ready
 			if (taggedComponents != null && tagResolver != null) {
 				ModelInitializationResult initialResult = modelInitializer.initialize(
 						taggedComponents.all().stream().collect(Collectors.toMap(Component::id, Function.identity())),

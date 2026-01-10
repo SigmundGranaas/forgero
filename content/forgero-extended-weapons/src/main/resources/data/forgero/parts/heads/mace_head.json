@@ -3,7 +3,8 @@
   "name": "mace_head",
   "tags": [
     "forgero:parts/head",
-    "forgero:parts/mace_head"
+    "forgero:parts/mace_head",
+    "forgero:parts/types/mace_head"
   ],
   "host_template": {
     "class": "forgero:part_item",

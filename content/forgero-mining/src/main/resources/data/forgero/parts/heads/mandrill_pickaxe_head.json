@@ -3,7 +3,9 @@
   "name": "mandrill_pickaxe_head",
   "tags": [
     "forgero:parts/head",
-    "forgero:parts/mandrill_pickaxe_head"
+    "forgero:parts/mandrill_pickaxe_head",
+    "forgero:parts/types/pickaxe_head",
+    "forgero:parts/categories/head"
   ],
   "host_template": {
     "class": "forgero:part_item",

@@ -8,6 +8,7 @@ import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public class ModelTemplateCodecs {
@@ -79,7 +80,9 @@ public class ModelTemplateCodecs {
 					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(UpgradeModelTemplateDTO::type),
 					Codec.STRING.fieldOf("context").forGetter(UpgradeModelTemplateDTO::context),
 					TARGET_DTO_CODEC.fieldOf("target").forGetter(UpgradeModelTemplateDTO::target),
-					ITEM_MODELS_MAP_CODEC.forGetter(UpgradeModelTemplateDTO::models)
+					ITEM_MODELS_MAP_CODEC.forGetter(UpgradeModelTemplateDTO::models),
+					Codec.unboundedMap(Codec.STRING, Codec.STRING).optionalFieldOf("palette_map", java.util.Collections.emptyMap()).forGetter(UpgradeModelTemplateDTO::palette_map),
+					Codec.STRING.optionalFieldOf("palette_map_ref").forGetter(UpgradeModelTemplateDTO::palette_map_ref)
 			).apply(instance, UpgradeModelTemplateDTO::new));
 
 	public static final Codec<EquipmentModelTemplateDTO> EQUIPMENT_MODEL_TEMPLATE_CODEC = RecordCodecBuilder.create(instance ->

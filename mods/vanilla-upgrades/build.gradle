@@ -1,4 +1,4 @@
-archivesBaseName = "vanilla-upgrades"
+base.archivesName = "vanilla-upgrades"
 group = 'com.sigmundgranaas'
 version = project.version
 

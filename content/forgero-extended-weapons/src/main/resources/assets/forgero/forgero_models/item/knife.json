@@ -17,14 +17,6 @@
         "id": "handle",
         "order": 10,
         "renderer": { "type": "forgero:component" }
-      },
-      {
-        "id": "knife-binding",
-        "order": 15,
-        "renderer": {
-          "type": "forgero:component",
-          "context": "tool_binding"
-        }
       }
     ]
   }

@@ -1,0 +1,73 @@
+{
+  "type": "forgero:material",
+  "name": "Obsidian",
+  "tags": [
+    "forgero:materials/types/glass"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:obsidian"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:obsidian-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": {
+        "value": 2.0
+      },
+      "context": "forgero:part-composite"
+    },
+    {
+      "id": "forgero:obsidian-attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": {
+        "value": 4.0
+      },
+      "context": "forgero:part-composite"
+    },
+    {
+      "id": "forgero:obsidian-mining_speed",
+      "type": "forgero:mining_speed",
+      "computation": {
+        "value": 6.0
+      },
+      "context": "forgero:part-composite"
+    },
+    {
+      "id": "forgero:obsidian-mining_level",
+      "type": "forgero:mining_level",
+      "computation": {
+        "value": 3
+      },
+      "context": "forgero:part-composite"
+    },
+    {
+      "id": "forgero:obsidian-durability",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 1750
+      },
+      "context": "forgero:part-composite"
+    },
+    {
+      "id": "forgero:obsidian-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 60
+      },
+      "context": "forgero:part-composite"
+    },
+    {
+      "id": "forgero:obsidian-weight",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 5.0
+      },
+      "context": "forgero:part-composite"
+    }
+  ]
+}

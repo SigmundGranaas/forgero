@@ -355,7 +355,7 @@ Forgero uses Mojang's Codec system for type-safe JSON (de)serialization:
 - **Optional fields**: `.optionalFieldOf("field", defaultValue)`
 - **Polymorphic dispatch**: `DispatchCodecUtils.create()` for type-based routing
 
-See `FORGERO_AI_CONTEXT.md` for detailed codec patterns.
+See `docs/guides/creating-content-packs.md` for detailed codec patterns and JSON API reference.
 
 ### Property System
 Properties attach behaviors to components. They are resolved dynamically based on:
@@ -389,7 +389,7 @@ data/forgero/
 
 ### Common JSON Patterns
 
-See `FORGERO_AI_CONTEXT.md` for comprehensive JSON examples including:
+See `docs/guides/creating-content-packs.md` for comprehensive JSON examples including:
 - Material definitions with properties and attributes
 - OnHit effects with selectors and conditions
 - OnTick periodic effects
@@ -542,7 +542,7 @@ Mixins are used to inject into Minecraft code. Mixin configuration files (`.mixi
 
 1. **Create the handler** in `modules/mc/properties/src/main/java/com/sigmundgranaas/forgero/effects/entity/`
 2. **Implement** `EntityEffectHandler` or `ContextualEffectHandler`
-3. **Define the codec** (see `FORGERO_AI_CONTEXT.md` for patterns)
+3. **Define the codec** (see `docs/guides/creating-content-packs.md` for patterns)
 4. **Register in plugin** static block
 5. **Add plugin to** `fabric.mod.json` if new
 6. **Use in JSON** with `"type": "forgero:your_effect"`
@@ -567,10 +567,32 @@ Component updated = component.with(builder -> builder.name("new name"));
 
 ## Important Context Documents
 
-- **`FORGERO_AI_CONTEXT.md`** - Comprehensive technical reference with real code examples, JSON patterns, codec implementations, and debugging guides. This is your primary reference for implementation details.
-- **`docs/CONTENT_MIGRATION_GAP_ANALYSIS.md`** - Analysis of content migration status, gaps, and priorities. Critical for understanding what content exists vs what's missing.
-- **`docs/CONTENT_PACK_USAGE.md`** - How content packs are used by mods
-- **`README.md`** - User-facing documentation and project overview
+Documentation is organized in `docs/` by purpose. See **[docs/README.md](docs/README.md)** for the full index.
+
+### Guides (How-To)
+- **`docs/guides/creating-content-packs.md`** - Comprehensive JSON API guide with examples
+- **`docs/guides/best-practices.md`** - Common patterns and pitfalls
+
+### Reference
+- **`docs/reference/quick-reference.md`** - Quick lookup tables for JSON APIs
+- **`docs/reference/json-api/`** - Detailed JSON type documentation
+
+### Architecture
+- **`docs/architecture/attribute-resolution.md`** - Attribute computation pipeline
+- **`docs/architecture/tag-system.md`** - Graph-based tag system (DAG)
+- **`docs/architecture/data-pipeline.md`** - How content packs are loaded
+
+### Contributing
+- **`docs/contributing/testing.md`** - GameTest patterns and test utilities
+- **`docs/contributing/documentation-standards.md`** - Documentation standards
+
+### Status (Temporary)
+- **`docs/status/content-migration.md`** - ~80% complete (loot tables, block tags remaining)
+- **`docs/status/vanilla-upgrades.md`** - ~67% complete (ranged weapons pending)
+- **`docs/status/model-validation.md`** - ~60% complete (template chain pending)
+
+### Root-Level
+- **`README.md`** - Project overview
 - **`CONTRIBUTING.md`** - Contribution guidelines
 
 ## Version Information

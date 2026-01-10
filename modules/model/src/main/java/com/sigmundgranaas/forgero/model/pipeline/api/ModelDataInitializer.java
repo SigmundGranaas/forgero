@@ -1,4 +1,3 @@
-// FILE: forgero-core-2/src/main/java/com/sigmundgranaas/forgero/model/pipeline/api/ModelDataInitializer.java
 package com.sigmundgranaas.forgero.model.pipeline.api;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;

@@ -23,7 +23,7 @@
     }
   },
   "result": {
-    "item": "forgero:${material.name}-battle_axe",
+    "item": "forgero:${material.name}-axe",
     "structure": {
       "forgero:head": "a",
       "forgero:handle": "b"

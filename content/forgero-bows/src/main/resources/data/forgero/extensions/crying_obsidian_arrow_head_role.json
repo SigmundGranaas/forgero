@@ -1,0 +1,7 @@
+{
+  "type": "forgero:extension",
+  "target": "forgero:crying_obsidian",
+  "tags": [
+    "forgero:materials/roles/arrow_head_material"
+  ]
+}

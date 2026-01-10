@@ -2,7 +2,7 @@
 //file:noinspection GroovyAssignabilityCheck
 //file:noinspection DependencyNotationArgument
 
-archivesBaseName = "drp"
+base.archivesName = "drp"
 group = 'com.sigmundgranaas'
 version = project.version
 

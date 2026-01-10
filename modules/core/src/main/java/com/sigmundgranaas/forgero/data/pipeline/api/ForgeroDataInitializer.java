@@ -159,7 +159,11 @@ public class ForgeroDataInitializer {
 		// 8. CREATE FINAL BUNDLE
 		TaggedRegistry.Builder<Component> registryBuilder = new TaggedRegistry.Builder<>(tagResolver);
 		components.forEach(registryBuilder::add);
-		this.dataBundle = new ForgeroDataBundle(registryBuilder.build(), tagResolver, Collections.unmodifiableMap(hostItemMap));
+		this.dataBundle = new ForgeroDataBundle(
+				registryBuilder.build(),
+				tagResolver,
+				Collections.unmodifiableMap(hostItemMap)
+		);
 
 		// 9. STORE PIPELINE RESULT FOR VALIDATION
 		this.pipelineResult = new DataPipelineResult(
@@ -181,18 +185,11 @@ public class ForgeroDataInitializer {
 		return pipelineResult;
 	}
 
-	/**
-	 * Checks if the definition represents a schematic type.
-	 */
 	private boolean isSchematic(RawDefinition def) {
 		OpenIdentifier type = def.data().type();
 		return type != null && type.path().equalsIgnoreCase("schematic");
 	}
 
-	/**
-	 * Creates default host data for a schematic so it can be registered as an item.
-	 * Schematics use the part_item class and go in the ingredients item group.
-	 */
 	private HostData createSchematicHostData(OpenIdentifier componentId) {
 		CreateData createData = new CreateData(
 				componentId,

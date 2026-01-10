@@ -5,7 +5,7 @@
 // Ensure drp is evaluated first to avoid configuration-time JAR resolution issues
 evaluationDependsOn ':mods:drp'
 
-archivesBaseName = "recipe-generator"
+base.archivesName = "recipe-generator"
 group = 'com.sigmundgranaas'
 version = project.version
 

@@ -3,15 +3,16 @@ package com.sigmundgranaas.forgero.bows.client;
 import com.sigmundgranaas.forgero.bows.entity.DynamicArrowEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
-import static net.minecraft.client.render.model.json.ModelTransformationMode.GROUND;
 import static net.minecraft.util.math.RotationAxis.POSITIVE_Y;
 import static net.minecraft.util.math.RotationAxis.POSITIVE_Z;
 
@@ -40,26 +41,23 @@ public class DynamicArrowEntityRenderer extends EntityRenderer<DynamicArrowEntit
 
 	@Override
 	public void render(DynamicArrowEntity arrow, float f, float g, MatrixStack matrixStack,
-	                   VertexConsumerProvider vertexConsumerProvider, int i) {
+	                   VertexConsumerProvider vertexConsumerProvider, int light) {
 		matrixStack.push();
 
-		// Calculate orientation based on velocity
 		Vec3d velocity = arrow.getVelocity();
 		float yaw = (float) Math.toDegrees(Math.atan2(velocity.x, velocity.z));
 		float pitch = (float) Math.toDegrees(Math.atan2(velocity.y,
 				Math.sqrt(velocity.x * velocity.x + velocity.z * velocity.z)));
 
-		// Apply rotations for proper arrow orientation
 		matrixStack.multiply(POSITIVE_Y.rotationDegrees(yaw - 90.0F));
 		matrixStack.multiply(POSITIVE_Z.rotationDegrees(pitch));
-		matrixStack.multiply(POSITIVE_Z.rotationDegrees(-45.0F)); // Pitch adjustment
+		matrixStack.multiply(POSITIVE_Z.rotationDegrees(-45.0F));
 
-		// Render the arrow ItemStack as a GROUND item
-		this.renderer.renderItem(arrow.getStack(), GROUND, i, 0,
-				matrixStack, vertexConsumerProvider, arrow.getWorld(), i);
+		this.renderer.renderItem(arrow.getStack(), ModelTransformationMode.FIXED, light, OverlayTexture.DEFAULT_UV,
+				matrixStack, vertexConsumerProvider, arrow.getWorld(), arrow.getId());
 
 		matrixStack.pop();
-		super.render(arrow, f, g, matrixStack, vertexConsumerProvider, i);
+		super.render(arrow, f, g, matrixStack, vertexConsumerProvider, light);
 	}
 
 	@Override

@@ -3,7 +3,9 @@
   "name": "felling_axe_head",
   "tags": [
     "forgero:parts/head",
-    "forgero:parts/felling_axe_head"
+    "forgero:parts/felling_axe_head",
+    "forgero:parts/types/axe_head",
+    "forgero:parts/categories/head"
   ],
   "host_template": {
     "class": "forgero:part_item",

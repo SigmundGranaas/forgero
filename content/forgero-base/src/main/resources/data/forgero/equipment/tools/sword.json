@@ -14,7 +14,7 @@
     "slots": {
       "blade": {
         "type": "forgero:parts/types/sword_blade",
-        "default_tag": "forgero:parts/types/sword_blade"
+        "default_tag": "forgero:parts/sword_blade"
       },
       "handle": {
         "type": "forgero:parts/categories/handle",
@@ -28,12 +28,6 @@
       "type": "forgero:parts/binding",
       "tags": ["forgero:parts/guard"],
       "description": "slot.forgero.guard"
-    },
-    {
-      "id": "forgero:sword-gem",
-      "type": "forgero:upgrades/types/gem",
-      "tags": ["forgero:upgrades/types/gem"],
-      "description": "slot.forgero.gem"
     }
   ],
   "attributes": [

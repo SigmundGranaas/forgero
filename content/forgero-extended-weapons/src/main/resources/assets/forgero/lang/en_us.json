@@ -1,13 +1,11 @@
 {
   "item.forgero.katana": "Katana",
   "item.forgero.katana_blade": "Katana Blade",
-  "item.forgero.broadsword": "Broadsword",
   "item.forgero.broadsword_blade": "Broadsword Blade",
   "item.forgero.dagger": "Dagger",
   "item.forgero.dagger_blade": "Dagger Blade",
   "item.forgero.rapier": "Rapier",
   "item.forgero.rapier_blade": "Rapier Blade",
-  "item.forgero.cutlass": "Cutlass",
   "item.forgero.cutlass_blade": "Cutlass Blade",
   "item.forgero.knife": "Knife",
   "item.forgero.knife_blade": "Knife Blade",
@@ -19,10 +17,7 @@
   "item.forgero.spear_head": "Spear Head",
   "item.forgero.club": "Club",
   "item.forgero.club_head": "Club Head",
-  "item.forgero.scythe": "Scythe",
-  "item.forgero.scythe_blade": "Scythe Blade",
-  "item.forgero.war_hammer": "War Hammer",
+  "item.forgero.scythe_head": "Scythe Head",
   "item.forgero.war_hammer_head": "War Hammer Head",
-  "item.forgero.battle_axe": "Battle Axe",
   "item.forgero.battle_axe_head": "Battle Axe Head"
 }

@@ -12,19 +12,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 
-/**
- * Handler that initiates bow use by checking for available projectiles
- * and setting the player's current hand.
- *
- * <p>This is typically used in the "on_start" phase of UseInteractionProperty.</p>
- *
- * <h3>JSON Example:</h3>
- * <pre>
- * {
- *   "type": "forgero:mount_projectile"
- * }
- * </pre>
- */
 public record MountProjectileHandler() implements SimpleUseHandler {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MountProjectileHandler.class);
@@ -44,7 +31,7 @@ public record MountProjectileHandler() implements SimpleUseHandler {
 				return;
 			}
 			player.setCurrentHand(hand);
-			LOGGER.trace("Player {} mounted bow in hand {}", player.getName().getString(), hand);
+			LOGGER.trace("Player {} started using bow in hand {}", player.getName().getString(), hand);
 		}
 	}
 

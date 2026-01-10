@@ -3,7 +3,8 @@
   "name": "broadsword_blade",
   "tags": [
     "forgero:parts/blade",
-    "forgero:parts/broadsword_blade"
+    "forgero:parts/broadsword_blade",
+    "forgero:parts/types/sword_blade"
   ],
   "host_template": {
     "class": "forgero:part_item",
@@ -27,6 +28,11 @@
     }
   ],
   "attributes": [
+    {
+      "id": "forgero:broadsword_blade-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": {"value": -0.4}
+    },
     {
       "id": "forgero:broadsword_blade-rarity",
       "type": "forgero:rarity",
@@ -68,5 +74,10 @@
       "context": "forgero:part-composite",
       "computation": {"multiply": 1.45}
     }
-  ]
+  ],
+  "properties": {
+    "forgero:name_replacement": [
+      {"from": "sword", "to": "broadsword"}
+    ]
+  }
 }

@@ -37,15 +37,12 @@ import static com.sigmundgranaas.forgero.render.RenderInitializer.LOGGER;
 public class ForgeroModelResourceListener implements IdentifiableResourceReloadListener {
 	public static final Identifier ID = new Identifier("forgero", "model_reload_listener");
 
-	// Services received from ForgeroInitializedCallback
 	private static TaggedRegistry<Component> taggedComponents;
 	private static TagResolver tagResolver;
 	private static ComponentConverter converter;
 	private static ComponentRegistry componentRegistry;
 
 	static {
-		// Use registerAndReplay to handle the case where the callback already fired
-		// before this class was loaded (client initializers run after main initializers)
 		ForgeroInitializedCallback.registerAndReplay(services -> {
 			taggedComponents = services.taggedComponents();
 			tagResolver = services.tagResolver();
@@ -69,7 +66,6 @@ public class ForgeroModelResourceListener implements IdentifiableResourceReloadL
 					ArmorModelRegistry armorModelRegistry = new MapBackedArmorModelRegistry();
 					ModelDataInitializer modelInitializer = new ModelDataInitializer(resourceProvider);
 
-					// Check if data has been initialized yet
 					if (taggedComponents == null || tagResolver == null) {
 						LOGGER.warn("Forgero data not initialized during resource reload - skipping model reload. " +
 								"Forgero items may appear without custom textures until data is loaded.");

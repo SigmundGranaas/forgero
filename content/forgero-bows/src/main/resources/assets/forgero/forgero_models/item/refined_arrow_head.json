@@ -1,0 +1,19 @@
+{
+  "type": "forgero:part_model_template",
+  "target": {
+    "tag": "forgero:materials/roles/arrow_head_material"
+  },
+  "model": {
+    "id": "forgero:item/{target.name}-refined_arrow_head",
+    "type": "forgero:composite_model",
+    "target": "forgero:{target.name}-refined_arrow_head",
+    "layers": [
+      {
+        "order": 10,
+        "template": "forgero:texture_template/parts/refined_arrow_head",
+        "palette": "forgero:palette/{target.name}",
+        "output": "forgero:item/{target.name}-refined_arrow_head"
+      }
+    ]
+  }
+}

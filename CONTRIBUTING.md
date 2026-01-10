@@ -1,7 +1,9 @@
 # Contributing to Forgero
 
-If you want to improve a feature or fix a bug in Forgero, feel free to fork the repo and create a pull request.  
+If you want to improve a feature or fix a bug in Forgero, feel free to fork the repo and create a pull request.
 You can also simply open an issue with the tag `enhancement`.
+
+For detailed contributing documentation, see **[docs/contributing/](docs/contributing/README.md)**.
 
 1. [Fork](https://github.com/sigmundgranaas/forgero/fork) Forgero to your Github account
 2. Set up the project as described in the [development section](#development)

@@ -1,4 +1,4 @@
-archivesBaseName = "repair-kit"
+base.archivesName = "repair-kit"
 group = 'com.sigmundgranaas'
 version = project.version
 

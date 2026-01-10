@@ -3,7 +3,9 @@
   "name": "hammer_head",
   "tags": [
     "forgero:parts/head",
-    "forgero:parts/hammer_head"
+    "forgero:parts/hammer_head",
+    "forgero:parts/types/pickaxe_head",
+    "forgero:parts/categories/head"
   ],
   "host_template": {
     "class": "forgero:part_item",

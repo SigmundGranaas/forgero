@@ -29,12 +29,6 @@
       "type": "forgero:parts/binding",
       "tags": ["forgero:parts/binding"],
       "description": "slot.forgero.binding"
-    },
-    {
-      "id": "forgero:spear-gem",
-      "type": "forgero:upgrades/types/gem",
-      "tags": ["forgero:upgrades/types/gem"],
-      "description": "slot.forgero.gem"
     }
   ],
   "attributes": [

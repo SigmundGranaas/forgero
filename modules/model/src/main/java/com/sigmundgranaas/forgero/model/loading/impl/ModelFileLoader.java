@@ -25,7 +25,9 @@ import org.slf4j.LoggerFactory;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * A unified loader for all Forgero model and model template files.
@@ -65,17 +67,44 @@ public class ModelFileLoader {
 
 	public void load() {
 		resourceProvider.getNamespaces().forEach(this::loadModelsFromNamespace);
+		resolvePaletteMapRefs();
 		LOGGER.info("Loaded {} item templates, {} upgrade templates, {} armor templates, {} manual item models, {} manual armor models, and {} model extensions from all namespaces.",
 				itemTemplates.size(), upgradeTemplates.size(), armorTemplates.size(), manualItemModels.size(), manualArmorModels.size(), modelExtensions.size());
+	}
+
+	private void resolvePaletteMapRefs() {
+		PaletteMapLoader paletteMapLoader = new PaletteMapLoader(resourceProvider);
+		List<UpgradeModelTemplateDTO> resolved = upgradeTemplates.stream()
+				.map(template -> {
+					if (template.palette_map_ref().isPresent() && template.paletteMap().isEmpty()) {
+						Map<String, String> loadedMap = paletteMapLoader.load(template.palette_map_ref().get());
+						return template.withResolvedPaletteMap(loadedMap);
+					}
+					return template;
+				})
+				.collect(Collectors.toList());
+		upgradeTemplates.clear();
+		upgradeTemplates.addAll(resolved);
 	}
 
 	private void loadModelsFromNamespace(String namespace) {
 		// Scan both forgero_models and model_templates directories
 		OpenIdentifier modelsRoot = new OpenIdentifier(namespace, "forgero_models");
-		resourceProvider.list(modelsRoot, true).forEach(this::parseResource);
+		var modelsList = resourceProvider.list(modelsRoot, true).toList();
+		if (!modelsList.isEmpty()) {
+			LOGGER.info("Found {} model files in namespace '{}' under forgero_models", modelsList.size(), namespace);
+			if (LOGGER.isDebugEnabled()) {
+				modelsList.forEach(id -> LOGGER.debug("  - {}", id));
+			}
+		}
+		modelsList.forEach(this::parseResource);
 
 		OpenIdentifier templatesRoot = new OpenIdentifier(namespace, "model_templates");
-		resourceProvider.list(templatesRoot, true).forEach(this::parseResource);
+		var templatesList = resourceProvider.list(templatesRoot, true).toList();
+		if (!templatesList.isEmpty()) {
+			LOGGER.info("Found {} model files in namespace '{}' under model_templates", templatesList.size(), namespace);
+		}
+		templatesList.forEach(this::parseResource);
 	}
 
 	private void parseResource(OpenIdentifier id) {

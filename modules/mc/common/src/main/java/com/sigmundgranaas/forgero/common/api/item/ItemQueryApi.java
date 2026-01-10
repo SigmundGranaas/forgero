@@ -38,7 +38,7 @@ import java.util.Set;
  * float miningSpeed = query.getMiningSpeed(vanillaPickaxe); // Returns 0.0f
  *
  * // Check tags
- * if (query.hasTag(stack, OpenIdentifier.of("forgero:pickaxe"))) {
+ * if (query.hasTag(stack, OpenIdentifier.parse("forgero:pickaxe"))) {
  *     // Handle pickaxe-specific logic
  * }
  * }</pre>

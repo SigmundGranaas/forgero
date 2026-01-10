@@ -25,14 +25,6 @@
           "type": "forgero:component",
           "context": "sword_guard"
         }
-      },
-      {
-        "id": "sword-binding",
-        "order": 12,
-        "renderer": {
-          "type": "forgero:component",
-          "context": "tool_binding"
-        }
       }
     ]
   }

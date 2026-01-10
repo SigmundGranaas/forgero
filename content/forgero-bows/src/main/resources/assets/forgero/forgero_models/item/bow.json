@@ -1,0 +1,73 @@
+{
+  "type": "forgero:equipment_model_template",
+  "target": {
+    "tag": "forgero:materials/types/wood"
+  },
+  "model": {
+    "id": "forgero:item/{target.name}-bow",
+    "type": "forgero:composite_model",
+    "target": "forgero:{target.name}-bow",
+    "parent": "minecraft:item/bow",
+    "layers": [
+      {
+        "order": 12,
+        "textures": {
+          "variants": [
+            {
+              "predicate": [{ "type": "forgero:bow_pull", "pulling": true, "pull": 0.0 }],
+              "template": "forgero:texture_template/parts/arrow_shaft_in_bow",
+              "palette": "forgero:palette/{target.name}",
+              "output": "forgero:item/{target.name}-arrow_shaft_in_bow"
+            }
+          ]
+        }
+      },
+      {
+        "order": 13,
+        "textures": {
+          "variants": [
+            {
+              "predicate": [{ "type": "forgero:bow_pull", "pulling": true, "pull": 0.0 }],
+              "template": "forgero:texture_template/parts/arrow_head_in_bow",
+              "palette": "forgero:palette/flint",
+              "output": "forgero:item/flint-arrow_head_in_bow"
+            }
+          ]
+        }
+      },
+      {
+        "order": 14,
+        "textures": {
+          "variants": [
+            {
+              "predicate": [{ "type": "forgero:bow_pull", "pulling": true, "pull": 0.0 }],
+              "template": "forgero:texture_template/parts/arrow_feather_in_bow",
+              "palette": "forgero:palette/feather",
+              "output": "forgero:item/feather-arrow_feather_in_bow"
+            }
+          ]
+        }
+      }
+    ],
+    "slots": [
+      {
+        "id": "limb",
+        "order": 10,
+        "renderer": { "type": "forgero:component" }
+      },
+      {
+        "id": "string",
+        "order": 20,
+        "renderer": { "type": "forgero:component" }
+      },
+      {
+        "id": "bow-gem",
+        "order": 30,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "equipment_gem"
+        }
+      }
+    ]
+  }
+}

@@ -23,7 +23,7 @@
     }
   },
   "result": {
-    "item": "forgero:${material.name}-rapier",
+    "item": "forgero:${material.name}-sword",
     "structure": {
       "forgero:blade": "a",
       "forgero:handle": "b"

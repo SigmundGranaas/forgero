@@ -20,7 +20,7 @@ import java.util.function.Predicate;
  *
  * // Find all empty gem slots
  * List<ComponentUpgradeSlot> gemSlots = manager.queryUpgradeSlots(tool)
- *     .ofType(OpenIdentifier.of("forgero:gem"))
+ *     .ofType(OpenIdentifier.of("gem"))
  *     .onlyEmpty()
  *     .execute();
  *

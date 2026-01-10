@@ -12,6 +12,7 @@ import com.sigmundgranaas.forgero.model.loading.impl.dto.ArmorModelDTO;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.LayerDTO;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.ModelDTO;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.TexturesDTO;
+import com.sigmundgranaas.forgero.model.loading.impl.dto.VariantDTO;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.TemplateArmorModelDTO;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.TemplateModelDTO;
 
@@ -34,13 +35,8 @@ public class ModelGeneratorImpl implements ModelGenerator {
 		Map<OpenIdentifier, ArmorModelDTO> generatedArmorModels = new HashMap<>();
 		List<TextureGenerationTask> textureTasks = new ArrayList<>();
 
-		// Process unified Item Models (parts and equipment)
 		processItemTemplates(templateProvider.getItemTemplates(), components, generatedItemModels, textureTasks, c -> true);
-
-		// Process Upgrade Models
 		processItemTemplates(templateProvider.getUpgradeTemplates(), components, generatedItemModels, textureTasks, c -> true);
-
-		// Process Armor Models
 		processArmorTemplates(templateProvider.getArmorTemplates(), components, generatedArmorModels, textureTasks, c -> true);
 
 		return new ModelGenerationResult(generatedItemModels, generatedArmorModels, textureTasks);
@@ -53,10 +49,11 @@ public class ModelGeneratorImpl implements ModelGenerator {
 					.filter(componentFilter)
 					.toList();
 
+			Map<String, String> paletteMap = template.paletteMap();
 			for (Component component : compatibleComponents) {
 				Map<String, Component> generationContext = createGenerationContext(component);
 				for (TemplateModelDTO modelTemplate : template.models()) {
-					ModelDTO resolvedModel = mapTemplateToModel(modelTemplate, generationContext, tasks);
+					ModelDTO resolvedModel = mapTemplateToModel(modelTemplate, generationContext, tasks, paletteMap);
 					models.put(resolvedModel.getOpenIdentifierId().get(), resolvedModel);
 				}
 			}
@@ -70,10 +67,11 @@ public class ModelGeneratorImpl implements ModelGenerator {
 					.filter(componentFilter)
 					.toList();
 
+			Map<String, String> paletteMap = template.paletteMap();
 			for (Component component : compatibleComponents) {
 				Map<String, Component> generationContext = createGenerationContext(component);
 				for (TemplateArmorModelDTO modelTemplate : template.models()) {
-					ArmorModelDTO resolvedModel = mapTemplateToArmorModel(modelTemplate, generationContext, tasks);
+					ArmorModelDTO resolvedModel = mapTemplateToArmorModel(modelTemplate, generationContext, tasks, paletteMap);
 					models.put(resolvedModel.id(), resolvedModel);
 				}
 			}
@@ -96,28 +94,28 @@ public class ModelGeneratorImpl implements ModelGenerator {
 		return context;
 	}
 
-	private ArmorModelDTO mapTemplateToArmorModel(TemplateArmorModelDTO template, Map<String, Component> context, List<TextureGenerationTask> tasks) {
-		String rawId = template.id() != null ? placeholderResolver.resolve(template.id(), context) : null;
+	private ArmorModelDTO mapTemplateToArmorModel(TemplateArmorModelDTO template, Map<String, Component> context, List<TextureGenerationTask> tasks, Map<String, String> paletteMap) {
+		String rawId = template.id() != null ? placeholderResolver.resolve(template.id(), context, paletteMap) : null;
 		OpenIdentifier resolvedId = (rawId != null && !rawId.isEmpty()) ? OpenIdentifier.parse(rawId) : null;
 		if (resolvedId == null) {
 			throw new IllegalStateException("Generated armor model template missing 'id' field after resolution.");
 		}
 
-		String modelIdentifier = placeholderResolver.resolve(template.model(), context);
-		List<LayerDTO> finalLayers = processLayerTemplates(template.layers(), context, tasks);
-		String target = template.target() != null ? placeholderResolver.resolve(template.target(), context) : null;
-		String modelContext = template.context() != null ? placeholderResolver.resolve(template.context(), context) : null;
+		String modelIdentifier = placeholderResolver.resolve(template.model(), context, paletteMap);
+		List<LayerDTO> finalLayers = processLayerTemplates(template.layers(), context, tasks, paletteMap);
+		String target = template.target() != null ? placeholderResolver.resolve(template.target(), context, paletteMap) : null;
+		String modelContext = template.context() != null ? placeholderResolver.resolve(template.context(), context, paletteMap) : null;
 
 		return new ArmorModelDTO(resolvedId, "forgero:armor_model", modelIdentifier, finalLayers, template.slots(), target, modelContext);
 	}
 
-	private ModelDTO mapTemplateToModel(TemplateModelDTO template, Map<String, Component> context, List<TextureGenerationTask> tasks) {
-		String target = template.target() != null ? placeholderResolver.resolve(template.target(), context) : null;
-		String modelContext = template.context() != null ? placeholderResolver.resolve(template.context(), context) : null;
+	private ModelDTO mapTemplateToModel(TemplateModelDTO template, Map<String, Component> context, List<TextureGenerationTask> tasks, Map<String, String> paletteMap) {
+		String target = template.target() != null ? placeholderResolver.resolve(template.target(), context, paletteMap) : null;
+		String modelContext = template.context() != null ? placeholderResolver.resolve(template.context(), context, paletteMap) : null;
 
 		String rawId;
 		if (template.id() != null) {
-			rawId = placeholderResolver.resolve(template.id(), context);
+			rawId = placeholderResolver.resolve(template.id(), context, paletteMap);
 		} else if (target != null && modelContext != null) {
 			rawId = target + "-" + modelContext;
 		} else if (target != null) {
@@ -128,12 +126,10 @@ public class ModelGeneratorImpl implements ModelGenerator {
 
 		OpenIdentifier resolvedId = OpenIdentifier.parse(rawId);
 
-		// Process layers, which is now the only source of textures
-		List<LayerDTO> finalLayers = processLayerTemplates(template.layers(), context, tasks);
+		List<LayerDTO> finalLayers = processLayerTemplates(template.layers(), context, tasks, paletteMap);
 
 		TexturesDTO textures = null;
 		if (template.type().equals("forgero:texture_model") && !finalLayers.isEmpty()) {
-			// Find the layer with the lowest order that has a texture.
 			var texture = finalLayers.stream()
 					.filter(layer -> layer.textures() != null && layer.textures().defaultTexture() != null)
 					.min(Comparator.comparingInt(LayerDTO::order))
@@ -143,26 +139,51 @@ public class ModelGeneratorImpl implements ModelGenerator {
 			}
 		}
 
-
 		return new ModelDTO(resolvedId.toString(), template.type(), finalLayers, template.slots(), template.mountPoints(), null, textures, target, modelContext, template.parent(), template.display());
 	}
 
-	private List<LayerDTO> processLayerTemplates(List<TemplateModelDTO.TemplateLayerDTO> layerTemplates, Map<String, Component> context, List<TextureGenerationTask> tasks) {
+	private List<LayerDTO> processLayerTemplates(List<TemplateModelDTO.TemplateLayerDTO> layerTemplates, Map<String, Component> context, List<TextureGenerationTask> tasks, Map<String, String> paletteMap) {
 		if (layerTemplates == null) {
 			return Collections.emptyList();
 		}
 		return layerTemplates.stream()
 				.map(layerTemplate -> {
 					String texture = null;
+					
 					if (layerTemplate.template() != null && layerTemplate.palette() != null && layerTemplate.output() != null) {
-						String templatePath = placeholderResolver.resolve(layerTemplate.template(), context);
-						String palettePath = placeholderResolver.resolve(layerTemplate.palette(), context);
-						texture = placeholderResolver.resolve(layerTemplate.output(), context);
+						String templatePath = placeholderResolver.resolve(layerTemplate.template(), context, paletteMap);
+						String palettePath = placeholderResolver.resolve(layerTemplate.palette(), context, paletteMap);
+						texture = placeholderResolver.resolve(layerTemplate.output(), context, paletteMap);
 						tasks.add(new TextureGenerationTask(templatePath, palettePath, texture));
 					}
-					// Even if texture is null, create a TexturesDTO so LayerDTO is valid.
-					// A null texture string in TexturesDTO is handled by the model rendering system.
-					return new LayerDTO(layerTemplate.order(), new TexturesDTO(texture, null), null);
+					
+					List<VariantDTO> resolvedVariants = null;
+					if (layerTemplate.textures() != null) {
+						if (texture == null && layerTemplate.textures().defaultTexture() != null) {
+							texture = placeholderResolver.resolve(layerTemplate.textures().defaultTexture(), context, paletteMap);
+						}
+						
+					if (layerTemplate.textures().variants() != null) {
+						resolvedVariants = layerTemplate.textures().variants().stream()
+								.map(templateVariant -> {
+									String resolvedTexture = null;
+									
+									if (templateVariant.template() != null && templateVariant.palette() != null && templateVariant.output() != null) {
+										String variantTemplatePath = placeholderResolver.resolve(templateVariant.template(), context, paletteMap);
+										String variantPalettePath = placeholderResolver.resolve(templateVariant.palette(), context, paletteMap);
+										resolvedTexture = placeholderResolver.resolve(templateVariant.output(), context, paletteMap);
+										tasks.add(new TextureGenerationTask(variantTemplatePath, variantPalettePath, resolvedTexture));
+									} else if (templateVariant.texture() != null) {
+										resolvedTexture = placeholderResolver.resolve(templateVariant.texture(), context, paletteMap);
+									}
+									
+									return new VariantDTO(templateVariant.predicate(), resolvedTexture, null, null);
+								})
+								.collect(Collectors.toList());
+					}
+					}
+					
+					return new LayerDTO(layerTemplate.order(), new TexturesDTO(texture, resolvedVariants), null);
 				})
 				.collect(Collectors.toList());
 	}

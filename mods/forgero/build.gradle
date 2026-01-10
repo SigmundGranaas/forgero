@@ -3,7 +3,7 @@ plugins {
     id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
-archivesBaseName = "forgero"
+base.archivesName = "forgero"
 group = 'com.sigmundgranaas'
 version = project.version
 

@@ -45,15 +45,18 @@ public class BowPlugin implements DataPlugin {
 	public static final String ARROW_ITEM_CLASS = "forgero:arrow_item";
 
 	static {
-		// Register DynamicArrowEntity type FIRST (must be registered before use)
-		DynamicArrowEntityRegistry.register();
+		ensureEntityTypeRegistered();
 
-		// Register bow-specific handlers with the UseInteraction system
 		UseInteractionPropertiesPlugin.registerHandler(MountProjectileHandler.TYPE, MountProjectileHandler.CODEC);
 		UseInteractionPropertiesPlugin.registerHandler(LaunchProjectileHandler.TYPE, LaunchProjectileHandler.CODEC);
 		UseInteractionPropertiesPlugin.registerHandler(ConsumeProjectileHandler.TYPE, ConsumeProjectileHandler.CODEC);
 		UseInteractionPropertiesPlugin.registerHandler(PlaySoundHandler.TYPE, PlaySoundHandler.CODEC);
 		UseInteractionPropertiesPlugin.registerHandler(IncrementStatHandler.TYPE, IncrementStatHandler.CODEC);
+	}
+	
+	private static void ensureEntityTypeRegistered() {
+		var entityType = DynamicArrowEntityRegistry.DYNAMIC_ARROW_ENTITY;
+		LOGGER.debug("DynamicArrowEntity type initialized: {}", entityType);
 	}
 
 	@Override

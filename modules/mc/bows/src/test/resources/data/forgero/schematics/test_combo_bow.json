@@ -2,7 +2,10 @@
   "type": "forgero:equipment_template",
   "name": "test_combo_bow",
   "name_space": "forgero-test",
-  "tags": [],
+  "tags": [
+    "forgero:ranged/bow",
+    "forgero:ranged"
+  ],
   "host_template": {
     "class": "forgero:bow_item",
     "id": "forgero-test:test_combo_bow"
@@ -12,8 +15,23 @@
     "slots": {
       "material": {
         "type": "forgero:tool_material",
-        "default": "forgero:test_combo_bow_material"
+        "default": "forgero-test:test_combo_bow_material"
       }
+    }
+  },
+  "properties": {
+    "forgero:use_interaction": {
+      "use_action": "bow",
+      "max_use_time": 72000,
+      "used_on_release": true,
+      "on_start": [
+        {"type": "forgero:mount_projectile"}
+      ],
+      "on_release": [
+        {"type": "forgero:launch_projectile", "base_power": 8.0, "base_divergence": 0.5},
+        {"type": "forgero:consume_projectile"},
+        {"type": "forgero:play_sound", "sound": "entity.arrow.shoot"}
+      ]
     }
   }
 }

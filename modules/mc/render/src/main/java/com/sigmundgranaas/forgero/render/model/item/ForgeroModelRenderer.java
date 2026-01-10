@@ -48,8 +48,8 @@ public class ForgeroModelRenderer {
 	}
 
 	@Nullable
-	public BakedModel bake(Component component, boolean isSideLit, Sprite particleSprite) {
-		List<RenderableTexture> textures = resolver.resolve(component).orElse(Collections.emptyList());
+	public BakedModel bake(Component component, boolean isSideLit, Sprite particleSprite, Map<String, Object> dynamicState) {
+		List<RenderableTexture> textures = resolver.resolve(component, dynamicState).orElse(Collections.emptyList());
 		if (textures.isEmpty()) {
 			return null;
 		}

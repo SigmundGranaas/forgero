@@ -30,7 +30,6 @@ public class ForgeroModelProvider implements ModelResolver {
 		OpenIdentifier forgeroIdNoPrefix = new OpenIdentifier(requestedId.getNamespace(), pathWithoutPrefix);
 		OpenIdentifier forgeroIdNoPrefixNormalized = new OpenIdentifier(requestedId.getNamespace(), pathWithoutPrefix.replace("_", "-"));
 
-		// Try all ID variants: with and without item/ prefix, with and without underscore normalization
 		Optional<Model> modelOpt = services.modelRegistry().find(forgeroId)
 			.or(() -> services.modelRegistry().find(forgeroIdNormalized))
 			.or(() -> services.modelRegistry().find(forgeroIdNoPrefix))

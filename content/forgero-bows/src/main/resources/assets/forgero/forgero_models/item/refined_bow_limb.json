@@ -1,0 +1,45 @@
+{
+  "type": "forgero:part_model_template",
+  "target": {
+    "tag": "forgero:materials/types/wood"
+  },
+  "model": {
+    "id": "forgero:item/{target.name}-refined_bow_limb",
+    "type": "forgero:composite_model",
+    "target": "forgero:{target.name}-refined_bow_limb",
+    "layers": [
+      {
+        "order": 10,
+        "template": "forgero:texture_template/parts/refined_bow_limb",
+        "palette": "forgero:palette/{target.name}",
+        "output": "forgero:item/{target.name}-refined_bow_limb"
+      }
+    ],
+    "slots": [
+      {
+        "id": "refined_bow_limb-grip-slot",
+        "order": 15,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "grip"
+        }
+      },
+      {
+        "id": "refined_bow_limb-reinforcement",
+        "order": 20,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "part_reinforcement"
+        }
+      },
+      {
+        "id": "refined_bow_limb-cosmetic",
+        "order": 25,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "cosmetic"
+        }
+      }
+    ]
+  }
+}

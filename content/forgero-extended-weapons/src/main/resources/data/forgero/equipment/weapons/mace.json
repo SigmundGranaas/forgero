@@ -15,7 +15,7 @@
     "id": "forgero:{head.material.name}-mace",
     "slots": {
       "head": {
-        "type": "forgero:parts/mace_head",
+        "type": "forgero:parts/types/mace_head",
         "default_tag": "forgero:parts/mace_head"
       },
       "handle": {
@@ -30,12 +30,6 @@
       "type": "forgero:parts/binding",
       "tags": ["forgero:parts/binding"],
       "description": "slot.forgero.binding"
-    },
-    {
-      "id": "forgero:mace-gem",
-      "type": "forgero:upgrades/types/gem",
-      "tags": ["forgero:upgrades/types/gem"],
-      "description": "slot.forgero.gem"
     }
   ],
   "attributes": [

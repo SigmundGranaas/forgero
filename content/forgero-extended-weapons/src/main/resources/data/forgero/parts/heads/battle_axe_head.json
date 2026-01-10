@@ -3,7 +3,8 @@
   "name": "battle_axe_head",
   "tags": [
     "forgero:parts/head",
-    "forgero:parts/battle_axe_head"
+    "forgero:parts/battle_axe_head",
+    "forgero:parts/types/axe_head"
   ],
   "host_template": {
     "class": "forgero:part_item",
@@ -27,6 +28,11 @@
     }
   ],
   "attributes": [
+    {
+      "id": "forgero:battle_axe_head-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": {"value": -0.4}
+    },
     {
       "id": "forgero:battle_axe_head-rarity",
       "type": "forgero:rarity",
@@ -68,5 +74,10 @@
       "context": "forgero:part-composite",
       "computation": {"multiply": 1.6}
     }
-  ]
+  ],
+  "properties": {
+    "forgero:name_replacement": [
+      {"from": "axe", "to": "battle_axe"}
+    ]
+  }
 }

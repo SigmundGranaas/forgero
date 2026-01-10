@@ -57,10 +57,10 @@ public class NameResolutionGameTest implements ForgeroGameTest {
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
 	public void name_resolver_produces_exact_translation_for_extended_weapon(TestContext context) {
-		String resolved = NameResolver.resolve("iron-katana").getString();
+		String resolved = NameResolver.resolve("iron-spear").getString();
 
-		assertEquals("Iron Katana", resolved,
-				"NameResolver must produce 'Iron Katana' from 'iron-katana'");
+		assertEquals("Iron Spear", resolved,
+				"NameResolver must produce 'Iron Spear' from 'iron-spear'");
 
 		context.complete();
 	}
@@ -124,41 +124,41 @@ public class NameResolutionGameTest implements ForgeroGameTest {
 	// ============================================================
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
-	public void iron_katana_displays_as_Iron_Katana(TestContext context) {
-		ItemStack stack = getItemStackOrFail(context, "forgero:iron-katana");
+	public void iron_spear_displays_as_Iron_Spear(TestContext context) {
+		ItemStack stack = getItemStackOrFail(context, "forgero:iron-spear");
 
-		assertEquals("Iron Katana", stack.getName().getString(),
-				"Iron katana must display as 'Iron Katana' in inventory");
-
-		context.complete();
-	}
-
-	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
-	public void diamond_dagger_displays_as_Diamond_Dagger(TestContext context) {
-		ItemStack stack = getItemStackOrFail(context, "forgero:diamond-dagger");
-
-		assertEquals("Diamond Dagger", stack.getName().getString(),
-				"Diamond dagger must display as 'Diamond Dagger' in inventory");
+		assertEquals("Iron Spear", stack.getName().getString(),
+				"Iron spear must display as 'Iron Spear' in inventory");
 
 		context.complete();
 	}
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
-	public void netherite_broadsword_displays_as_Netherite_Broadsword(TestContext context) {
-		ItemStack stack = getItemStackOrFail(context, "forgero:netherite-broadsword");
+	public void diamond_mace_displays_as_Diamond_Mace(TestContext context) {
+		ItemStack stack = getItemStackOrFail(context, "forgero:diamond-mace");
 
-		assertEquals("Netherite Broadsword", stack.getName().getString(),
-				"Netherite broadsword must display as 'Netherite Broadsword' in inventory");
+		assertEquals("Diamond Mace", stack.getName().getString(),
+				"Diamond mace must display as 'Diamond Mace' in inventory");
 
 		context.complete();
 	}
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
-	public void iron_rapier_displays_as_Iron_Rapier(TestContext context) {
-		ItemStack stack = getItemStackOrFail(context, "forgero:iron-rapier");
+	public void netherite_spear_displays_as_Netherite_Spear(TestContext context) {
+		ItemStack stack = getItemStackOrFail(context, "forgero:netherite-spear");
 
-		assertEquals("Iron Rapier", stack.getName().getString(),
-				"Iron rapier must display as 'Iron Rapier' in inventory");
+		assertEquals("Netherite Spear", stack.getName().getString(),
+				"Netherite spear must display as 'Netherite Spear' in inventory");
+
+		context.complete();
+	}
+
+	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
+	public void iron_mace_displays_as_Iron_Mace(TestContext context) {
+		ItemStack stack = getItemStackOrFail(context, "forgero:iron-mace");
+
+		assertEquals("Iron Mace", stack.getName().getString(),
+				"Iron mace must display as 'Iron Mace' in inventory");
 
 		context.complete();
 	}
@@ -208,11 +208,11 @@ public class NameResolutionGameTest implements ForgeroGameTest {
 	}
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
-	public void iron_katana_blade_displays_as_Iron_Katana_Blade(TestContext context) {
-		ItemStack stack = getItemStackOrFail(context, "forgero:iron-katana_blade");
+	public void iron_spear_head_displays_as_Iron_Spear_Head(TestContext context) {
+		ItemStack stack = getItemStackOrFail(context, "forgero:iron-spear_head");
 
-		assertEquals("Iron Katana Blade", stack.getName().getString(),
-				"Iron katana blade must display as 'Iron Katana Blade' in inventory");
+		assertEquals("Iron Spear Head", stack.getName().getString(),
+				"Iron spear head must display as 'Iron Spear Head' in inventory");
 
 		context.complete();
 	}
@@ -228,15 +228,16 @@ public class NameResolutionGameTest implements ForgeroGameTest {
 	}
 
 	// ============================================================
-	// ItemStack Display Name Tests - Mining Tools
+	// ItemStack Display Name Tests - Mining Tools (Head Parts)
+	// Mining tools use part variants that work with base equipment.
 	// ============================================================
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
-	public void iron_hammer_displays_as_Iron_Hammer(TestContext context) {
-		ItemStack stack = getItemStackOrFail(context, "forgero:iron-hammer");
+	public void iron_hammer_head_displays_as_Iron_Hammer_Head(TestContext context) {
+		ItemStack stack = getItemStackOrFail(context, "forgero:iron-hammer_head");
 
-		assertEquals("Iron Hammer", stack.getName().getString(),
-				"Iron hammer must display as 'Iron Hammer' in inventory");
+		assertEquals("Iron Hammer Head", stack.getName().getString(),
+				"Iron hammer head must display as 'Iron Hammer Head' in inventory");
 
 		context.complete();
 	}
@@ -259,10 +260,6 @@ public class NameResolutionGameTest implements ForgeroGameTest {
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
 	public void all_extended_weapon_types_produce_correct_names(TestContext context) {
-		assertToolName(context, "forgero:iron-katana", "Iron Katana");
-		assertToolName(context, "forgero:iron-dagger", "Iron Dagger");
-		assertToolName(context, "forgero:iron-broadsword", "Iron Broadsword");
-		assertToolName(context, "forgero:iron-rapier", "Iron Rapier");
 		assertToolName(context, "forgero:iron-spear", "Iron Spear");
 		assertToolName(context, "forgero:iron-mace", "Iron Mace");
 
@@ -288,10 +285,10 @@ public class NameResolutionGameTest implements ForgeroGameTest {
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
 	public void name_must_not_be_raw_component_id(TestContext context) {
-		ItemStack stack = getItemStackOrFail(context, "forgero:iron-katana");
+		ItemStack stack = getItemStackOrFail(context, "forgero:iron-spear");
 		String name = stack.getName().getString();
 
-		assertNotEquals("iron-katana", name,
+		assertNotEquals("iron-spear", name,
 				"Display name must not be raw component ID");
 		assertFalse(name.contains("-"),
 				"Display name must not contain hyphens (indicates untranslated ID), got: " + name);

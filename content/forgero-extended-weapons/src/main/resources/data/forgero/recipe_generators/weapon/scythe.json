@@ -1,6 +1,6 @@
 {
   "generator_type": "forgero:mapped_recipe_generator",
-  "identifier": "forgero:${material.name}-scythe_blade-${handle_material.name}-handle",
+  "identifier": "forgero:${material.name}-scythe_head-${handle_material.name}-handle",
   "variables": {
     "material": {
       "tag": "forgero:materials/roles/tool_material"
@@ -16,16 +16,16 @@
   ],
   "key": {
     "a": {
-      "item": "forgero:${material.name}-scythe_blade"
+      "item": "forgero:${material.name}-scythe_head"
     },
     "b": {
       "item": "forgero:${handle_material.name}-handle"
     }
   },
   "result": {
-    "item": "forgero:${material.name}-scythe",
+    "item": "forgero:${material.name}-hoe",
     "structure": {
-      "forgero:blade": "a",
+      "forgero:head": "a",
       "forgero:handle": "b"
     }
   }

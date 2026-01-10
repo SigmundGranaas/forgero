@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.bows.entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sigmundgranaas.forgero.bows.ontick.OnTickProjectileManager;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
@@ -140,6 +141,9 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 		}
 
 		super.tick();
+
+		// Execute on-tick effects (e.g., particles, auras, status effects while in flight)
+		OnTickProjectileManager.handleTick(this, this.getStack(), this.age);
 
 		// Apply weight-based gravity while in flight
 		if (!this.noClip && !this.inGround) {

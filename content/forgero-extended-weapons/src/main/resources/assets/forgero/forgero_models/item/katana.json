@@ -19,11 +19,11 @@
         "renderer": { "type": "forgero:component" }
       },
       {
-        "id": "katana-binding",
+        "id": "katana-guard",
         "order": 15,
         "renderer": {
           "type": "forgero:component",
-          "context": "tool_binding"
+          "context": "sword_guard"
         }
       }
     ]

@@ -8,7 +8,7 @@ plugins {
 	id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
-archivesBaseName = "${rootProject.mod_id}-fabric"
+base.archivesName = "${rootProject.mod_id}-fabric"
 
 subprojects {
 	apply plugin: "fabric-loom"
@@ -72,7 +72,7 @@ allprojects {
 
 	jar {
 		from("LICENSE") {
-			rename { "${it}_${archivesBaseName}" }
+			rename { "${it}_${base.archivesName.get()}" }
 		}
 	}
 	java {

@@ -10,6 +10,7 @@ import com.sigmundgranaas.forgero.blocks.common.screen.CompositeSlot;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
+import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
 
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -18,9 +19,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.resource.featuretoggle.FeatureFlags;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * Screen handler for the Upgrade Station.
@@ -44,6 +45,19 @@ public class UpgradeStationScreenHandler extends AbstractStationScreenHandler {
 	public static final int PLAYER_HOTBAR_Y = 196;
 	public static final int PLAYER_INV_Y = 138;
 
+	/**
+	 * Supplier for ForgeroServices - set during initialization.
+	 * Used by client factory to create a context for tree building.
+	 */
+	private static Supplier<ForgeroServices> servicesSupplier = () -> null;
+
+	/**
+	 * Sets the services supplier. Called during mod initialization.
+	 */
+	public static void setServicesSupplier(Supplier<ForgeroServices> supplier) {
+		servicesSupplier = supplier;
+	}
+
 	private final CompositeSlot compositeSlot;
 	private final UpgradeTreeBuilder treeBuilder;
 	private final UpgradeOperationHandler operationHandler;
@@ -55,10 +69,20 @@ public class UpgradeStationScreenHandler extends AbstractStationScreenHandler {
 			new ScreenHandlerType<>(UpgradeStationScreenHandler::clientFactory, FeatureFlags.VANILLA_FEATURES);
 
 	/**
-	 * Client-side factory (no context available).
+	 * Client-side factory.
+	 * <p>
+	 * Creates a handler with a client-side context for tree building and rendering.
+	 * The context has null world/pos but provides access to converter and slotManager
+	 * for building the component tree on the client.
 	 */
 	private static UpgradeStationScreenHandler clientFactory(int syncId, PlayerInventory playerInventory) {
-		return new UpgradeStationScreenHandler(syncId, playerInventory, null, ScreenHandlerContext.EMPTY);
+		ForgeroServices services = servicesSupplier.get();
+		StationContext context = null;
+		if (services != null) {
+			// Create client-side context (null world is OK - only used for isServer() checks)
+			context = StationContext.create(services, null, null);
+		}
+		return new UpgradeStationScreenHandler(syncId, playerInventory, context, ScreenHandlerContext.EMPTY);
 	}
 
 	/**
@@ -66,7 +90,7 @@ public class UpgradeStationScreenHandler extends AbstractStationScreenHandler {
 	 *
 	 * @param syncId          Sync ID for networking
 	 * @param playerInventory Player's inventory
-	 * @param context         Station context (null on client)
+	 * @param context         Station context (may have null world on client)
 	 * @param screenContext   Screen handler context
 	 */
 	public UpgradeStationScreenHandler(
@@ -84,7 +108,7 @@ public class UpgradeStationScreenHandler extends AbstractStationScreenHandler {
 		// Add player inventory slots
 		addPlayerInventorySlots(playerInventory, PLAYER_INV_X, PLAYER_HOTBAR_Y, PLAYER_INV_Y);
 
-		// Initialize builders (context may be null on client)
+		// Initialize builders (context may be null if services not initialized)
 		if (context != null) {
 			this.treeBuilder = UpgradeTreeBuilder.create(context);
 			this.operationHandler = UpgradeOperationHandler.create(context);
@@ -120,9 +144,11 @@ public class UpgradeStationScreenHandler extends AbstractStationScreenHandler {
 		// Use the slot pool to create/configure slots
 		slotPool.rebuild(tree, layout, compositeSlot);
 
-		// Add inventory change listeners to each active slot
-		for (ComponentSlot slot : slotPool.getActiveSlots()) {
-			slot.inventory.addListener(createSlotListener(slot));
+		// Add inventory change listeners to each active slot (server-side only)
+		if (context != null && context.isServer()) {
+			for (ComponentSlot slot : slotPool.getActiveSlots()) {
+				slot.inventory.addListener(createSlotListener(slot));
+			}
 		}
 	}
 
@@ -141,6 +167,10 @@ public class UpgradeStationScreenHandler extends AbstractStationScreenHandler {
 				if (currentComponent == null || player == null) {
 					return;
 				}
+
+				// Store the result to update AFTER executeUpdate completes
+				// This allows the tree rebuild to happen when updateComponentStack triggers handleComponentInventoryChanged
+				final StationOperationResult[] resultHolder = new StationOperationResult[1];
 
 				executeUpdate(() -> {
 					ComponentUpgradeSlot forgeroSlot = slot.getForgeroSlot();
@@ -167,11 +197,15 @@ public class UpgradeStationScreenHandler extends AbstractStationScreenHandler {
 					if (result instanceof StationOperationResult.Success success) {
 						// Update component state
 						this.currentComponent = success.component();
-
-						// Update the main slot with the new item
-						updateComponentStack(success.stack());
+						resultHolder[0] = success;
 					}
 				});
+
+				// Update the main slot AFTER executeUpdate completes
+				// This allows handleComponentInventoryChanged to rebuild the tree with nested slots
+				if (resultHolder[0] instanceof StationOperationResult.Success success) {
+					updateComponentStack(success.stack());
+				}
 			});
 		};
 	}

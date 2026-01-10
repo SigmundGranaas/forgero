@@ -1,0 +1,59 @@
+{
+  "type": "forgero:part_model_template",
+  "target": {
+    "tag": "forgero:materials/types/wood"
+  },
+  "model": {
+    "id": "forgero:item/{target.name}-bow_limb",
+    "type": "forgero:composite_model",
+    "target": "forgero:{target.name}-bow_limb",
+    "layers": [
+      {
+        "order": 10,
+        "template": "forgero:texture_template/parts/bow_limb",
+        "palette": "forgero:palette/{target.name}",
+        "output": "forgero:item/{target.name}-bow_limb",
+        "textures": {
+          "variants": [
+            {
+              "predicate": [{ "type": "forgero:bow_pull", "pulling": true, "pull": 0.9 }],
+              "template": "forgero:texture_template/parts/bow_pull_2",
+              "palette": "forgero:palette/{target.name}",
+              "output": "forgero:item/{target.name}-bow_limb_pull_2"
+            },
+            {
+              "predicate": [{ "type": "forgero:bow_pull", "pulling": true, "pull": 0.65 }],
+              "template": "forgero:texture_template/parts/bow_pull_1",
+              "palette": "forgero:palette/{target.name}",
+              "output": "forgero:item/{target.name}-bow_limb_pull_1"
+            },
+            {
+              "predicate": [{ "type": "forgero:bow_pull", "pulling": true, "pull": 0.0 }],
+              "template": "forgero:texture_template/parts/bow_pull_0",
+              "palette": "forgero:palette/{target.name}",
+              "output": "forgero:item/{target.name}-bow_limb_pull_0"
+            }
+          ]
+        }
+      }
+    ],
+    "slots": [
+      {
+        "id": "bow_limb-reinforcement",
+        "order": 20,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "part_reinforcement"
+        }
+      },
+      {
+        "id": "bow_limb-cosmetic",
+        "order": 25,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "cosmetic"
+        }
+      }
+    ]
+  }
+}

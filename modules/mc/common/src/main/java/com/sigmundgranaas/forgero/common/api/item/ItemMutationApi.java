@@ -36,7 +36,7 @@ import net.minecraft.item.ItemStack;
  * }
  *
  * // Remove a specific upgrade by ID
- * OpenIdentifier upgradeId = OpenIdentifier.of("forgero:ruby_gem");
+ * OpenIdentifier upgradeId = OpenIdentifier.parse("forgero:ruby_gem");
  * ItemStack withoutGem = mutate.removeUpgrade(tool, upgradeId);
  *
  * // Remove all upgrades

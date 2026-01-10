@@ -14,7 +14,7 @@
     "slots": {
       "head": {
         "type": "forgero:parts/types/axe_head",
-        "default_tag": "forgero:parts/types/axe_head"
+        "default_tag": "forgero:parts/axe_head"
       },
       "handle": {
         "type": "forgero:parts/categories/handle",
@@ -28,12 +28,6 @@
       "type": "forgero:parts/binding",
       "tags": ["forgero:parts/binding"],
       "description": "slot.forgero.binding"
-    },
-    {
-      "id": "forgero:axe-gem",
-      "type": "forgero:upgrades/types/gem",
-      "tags": ["forgero:upgrades/types/gem"],
-      "description": "slot.forgero.gem"
     }
   ],
   "attributes": [

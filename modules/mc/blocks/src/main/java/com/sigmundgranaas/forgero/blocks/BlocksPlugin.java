@@ -1,8 +1,10 @@
 package com.sigmundgranaas.forgero.blocks;
 
 import com.sigmundgranaas.forgero.blocks.assembly.AssemblyStationBlock;
+import com.sigmundgranaas.forgero.blocks.assembly.AssemblyStationScreenHandler;
 import com.sigmundgranaas.forgero.blocks.registry.BlockRegistry;
 import com.sigmundgranaas.forgero.blocks.upgrade.UpgradeStationBlock;
+import com.sigmundgranaas.forgero.blocks.upgrade.UpgradeStationScreenHandler;
 import com.sigmundgranaas.forgero.loader.api.DataLoadingContext;
 import com.sigmundgranaas.forgero.loader.api.PostLoadPlugin;
 
@@ -20,7 +22,7 @@ import org.slf4j.LoggerFactory;
  * <ul>
  *   <li>Registers station blocks and items</li>
  *   <li>Registers screen handlers</li>
- *   <li>Sets up service suppliers for blocks</li>
+ *   <li>Sets up service suppliers for blocks and screen handlers</li>
  *   <li>Adds blocks to creative tabs</li>
  * </ul>
  */
@@ -40,6 +42,10 @@ public class BlocksPlugin implements PostLoadPlugin {
 		// Set up service suppliers for blocks (DataLoadingContext extends ForgeroServices)
 		UpgradeStationBlock.setServicesSupplier(() -> context);
 		AssemblyStationBlock.setServicesSupplier(() -> context);
+
+		// Set up service suppliers for screen handlers (needed for client-side tree building)
+		UpgradeStationScreenHandler.setServicesSupplier(() -> context);
+		AssemblyStationScreenHandler.setServicesSupplier(() -> context);
 
 		// Register blocks, items, and screen handlers
 		BlockRegistry.registerBlocks();

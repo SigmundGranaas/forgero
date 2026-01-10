@@ -23,7 +23,7 @@
     }
   },
   "result": {
-    "item": "forgero:${material.name}-club",
+    "item": "forgero:${material.name}-mace",
     "structure": {
       "forgero:head": "a",
       "forgero:handle": "b"

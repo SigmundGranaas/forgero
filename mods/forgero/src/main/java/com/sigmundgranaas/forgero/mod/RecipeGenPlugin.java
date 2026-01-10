@@ -122,6 +122,13 @@ public class RecipeGenPlugin implements PostLoadPlugin {
 					.orElse(component.id().toString());
 		};
 
+		Function<Component, String> containerNamespaceOp = (component) -> {
+			// Get the namespace of the host item (e.g., "minecraft" for minecraft:oak_planks)
+			return converter.toStack(component)
+					.map(stack -> Registries.ITEM.getId(stack.getItem()).getNamespace())
+					.orElse(component.id().namespace());
+		};
+
 		Function<Component, String> tagOrItemOp = (component) -> {
 			String containerId = containerIdOp.apply(component);
 			Identifier id = new Identifier(containerId);
@@ -155,6 +162,8 @@ public class RecipeGenPlugin implements PostLoadPlugin {
 				OperationFactory.forClass(Component.class, c -> c.id().toString()));
 		api.operations().register("forgero:component_identifier", "container_id",
 				OperationFactory.forClass(Component.class, containerIdOp));
+		api.operations().register("forgero:container_namespace", "container_namespace",
+				OperationFactory.forClass(Component.class, containerNamespaceOp));
 		api.operations().register("forgero:tag_or_item", "tagOrItem",
 				OperationFactory.forClass(Component.class, tagOrItemOp));
 		api.operations().register("forgero:component_material", "material",

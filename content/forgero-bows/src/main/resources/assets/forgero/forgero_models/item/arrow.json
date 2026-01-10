@@ -1,0 +1,31 @@
+{
+  "type": "forgero:equipment_model_template",
+  "target": {
+    "tag": "forgero:materials/roles/arrow_head_material"
+  },
+  "model": {
+    "id": "forgero:item/{target.name}-arrow",
+    "type": "forgero:composite_model",
+    "target": "forgero:{target.name}-arrow",
+    "slots": [
+      {
+        "id": "head",
+        "order": 20,
+        "renderer": { "type": "forgero:component" }
+      },
+      {
+        "id": "shaft",
+        "order": 10,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "arrow_shaft"
+        }
+      },
+      {
+        "id": "fletching",
+        "order": 15,
+        "renderer": { "type": "forgero:component" }
+      }
+    ]
+  }
+}

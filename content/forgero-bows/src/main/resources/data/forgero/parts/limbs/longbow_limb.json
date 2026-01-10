@@ -1,0 +1,80 @@
+{
+  "type": "forgero:part_template",
+  "name": "longbow_limb",
+  "tags": [
+    "forgero:parts/bow_limb",
+    "forgero:parts/types/bow_limb",
+    "forgero:parts/categories/limb"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-longbow_limb"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-longbow_limb",
+    "slots": {
+      "material": {
+        "type": "forgero:materials/roles/tool_material",
+        "default_tag": "forgero:materials/types/wood"
+      }
+    }
+  },
+  "generation": {
+    "slots": {
+      "material": {
+        "require_all_tags": ["forgero:materials/types/wood"]
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:longbow_limb-grip-slot",
+      "type": "forgero:materials/types/soft",
+      "tags": ["forgero:upgrades/types/grip"],
+      "description": "slot.forgero.grip"
+    },
+    {
+      "id": "forgero:longbow_limb-reinforcement",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/reinforcement"],
+      "description": "slot.forgero.reinforcement"
+    },
+    {
+      "id": "forgero:longbow_limb-cosmetic",
+      "type": "forgero:dye",
+      "tags": ["forgero:upgrades/types/cosmetic"],
+      "description": "slot.forgero.cosmetic"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:longbow_limb-rarity",
+      "type": "forgero:rarity",
+      "computation": {"value": 50, "operation": "addition"}
+    },
+    {
+      "id": "forgero:longbow_limb-durability-mult",
+      "type": "forgero:durability",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.3}
+    },
+    {
+      "id": "forgero:longbow_limb-draw_speed-mult",
+      "type": "forgero:draw_speed",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 0.7}
+    },
+    {
+      "id": "forgero:longbow_limb-draw_power-mult",
+      "type": "forgero:draw_power",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.3}
+    },
+    {
+      "id": "forgero:longbow_limb-accuracy-mult",
+      "type": "forgero:accuracy",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.1}
+    }
+  ]
+}

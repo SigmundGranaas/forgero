@@ -4,7 +4,8 @@
   "tags": [
     "forgero:parts/head",
     "forgero:parts/war_hammer_head",
-    "forgero:blunt"
+    "forgero:blunt",
+    "forgero:parts/types/mace_head"
   ],
   "host_template": {
     "class": "forgero:part_item",
@@ -28,6 +29,11 @@
     }
   ],
   "attributes": [
+    {
+      "id": "forgero:war_hammer_head-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": {"value": -0.2}
+    },
     {
       "id": "forgero:war_hammer_head-rarity",
       "type": "forgero:rarity",
@@ -69,5 +75,10 @@
       "context": "forgero:part-composite",
       "computation": {"multiply": 1.8}
     }
-  ]
+  ],
+  "properties": {
+    "forgero:name_replacement": [
+      {"from": "mace", "to": "war_hammer"}
+    ]
+  }
 }

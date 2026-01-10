@@ -19,11 +19,11 @@
         "renderer": { "type": "forgero:component" }
       },
       {
-        "id": "dagger-binding",
+        "id": "dagger-guard",
         "order": 15,
         "renderer": {
           "type": "forgero:component",
-          "context": "tool_binding"
+          "context": "sword_guard"
         }
       }
     ]

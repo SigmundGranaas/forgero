@@ -592,7 +592,7 @@ public class PropertyInteractionTests {
 				Set.of("sword"),
 				List.of(onHit, onTick),
 				java.util.Map.of(
-						com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier.of("forgero:attack_damage"),
+						com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier.of("forgero", "attack_damage"),
 						15.0f  // High attack damage attribute
 				)
 		);

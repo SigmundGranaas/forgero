@@ -18,6 +18,7 @@
     "BlockAttackMixin",
     "BlockItemUseMixin",
     "BlockLootMixin",
+    "BowItemMixin",
     "ItemBlockUseMixin",
     "ItemEntityUseMixin",
     "ItemUseInteractionMixin",

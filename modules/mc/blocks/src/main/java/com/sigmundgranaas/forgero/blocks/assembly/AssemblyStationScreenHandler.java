@@ -19,7 +19,10 @@ import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
+
+import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
 
 /**
  * Screen handler for the Assembly Station (disassembly station).
@@ -42,6 +45,19 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 	public static final int RESULT_COLS = 3;
 	public static final int RESULT_ROWS = 3;
 
+	/**
+	 * Supplier for ForgeroServices - set during initialization.
+	 * Used by client factory to create a context.
+	 */
+	private static Supplier<ForgeroServices> servicesSupplier = () -> null;
+
+	/**
+	 * Sets the services supplier. Called during mod initialization.
+	 */
+	public static void setServicesSupplier(Supplier<ForgeroServices> supplier) {
+		servicesSupplier = supplier;
+	}
+
 	private final StationContext context;
 	private final PlayerEntity player;
 	private final ScreenHandlerContext screenContext;
@@ -60,7 +76,12 @@ public class AssemblyStationScreenHandler extends ScreenHandler {
 			new ScreenHandlerType<>(AssemblyStationScreenHandler::clientFactory, FeatureFlags.VANILLA_FEATURES);
 
 	private static AssemblyStationScreenHandler clientFactory(int syncId, PlayerInventory inventory) {
-		return new AssemblyStationScreenHandler(syncId, inventory, null, ScreenHandlerContext.EMPTY);
+		ForgeroServices services = servicesSupplier.get();
+		StationContext context = null;
+		if (services != null) {
+			context = StationContext.create(services, null, null);
+		}
+		return new AssemblyStationScreenHandler(syncId, inventory, context, ScreenHandlerContext.EMPTY);
 	}
 
 	public AssemblyStationScreenHandler(

@@ -115,7 +115,6 @@ public class FabricResourceProvider implements ResourceProvider {
 
 		Optional<Path> rootPath = mod.findPath(fullPath);
 		if (rootPath.isEmpty()) {
-			LOGGER.trace("Path {} not found in mod {}", fullPath, mod.getMetadata().getId());
 			return Stream.empty();
 		}
 

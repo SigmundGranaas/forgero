@@ -7,6 +7,7 @@ import com.sigmundgranaas.forgero.core.component.api.Component;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -69,8 +70,8 @@ public final class NameResolver {
 	/**
 	 * Resolves a display name from a component.
 	 * <p>
-	 * If the component has {@link NameReplacementProperty} properties,
-	 * the replacements are applied to the name path before translation.
+	 * Collects {@link NameReplacementProperty} from the component and all children,
+	 * applies replacements to the name path, then translates.
 	 *
 	 * @param component The component to resolve the name for
 	 * @return A Text combining translated elements with any replacements applied
@@ -78,12 +79,18 @@ public final class NameResolver {
 	public static Text resolve(Component component) {
 		String namePath = component.id().path();
 
-		// Apply all name replacement properties in order
-		List<NameReplacementProperty> replacements = component.properties(NameReplacementProperty.PROPERTY_KEY);
-		for (NameReplacementProperty replacement : replacements) {
+		for (NameReplacementProperty replacement : collectNameReplacements(component)) {
 			namePath = namePath.replace(replacement.from(), replacement.to());
 		}
 
 		return resolve(namePath);
+	}
+
+	private static List<NameReplacementProperty> collectNameReplacements(Component component) {
+		List<NameReplacementProperty> result = new ArrayList<>(component.properties(NameReplacementProperty.PROPERTY_KEY));
+		for (Component child : component.getChildren()) {
+			result.addAll(collectNameReplacements(child));
+		}
+		return result;
 	}
 }

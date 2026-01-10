@@ -34,8 +34,5 @@
       },
       "context": "forgero:part-composite"
     }
-  ],
-  "palette": {
-    "name": "quartz_gem"
-  }
+  ]
 }

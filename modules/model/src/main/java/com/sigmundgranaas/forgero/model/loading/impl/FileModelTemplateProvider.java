@@ -1,4 +1,3 @@
-// FILE: forgero-core-2/src/main/java/com/sigmundgranaas/forgero/model/loading/impl/FileModelTemplateProvider.java
 package com.sigmundgranaas.forgero.model.loading.impl;
 
 import com.mojang.serialization.Codec;
@@ -18,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class FileModelTemplateProvider implements ModelTemplateProvider {
@@ -28,6 +28,8 @@ public class FileModelTemplateProvider implements ModelTemplateProvider {
 	private final List<ArmorModelTemplateDTO> armorTemplates;
 
 	public FileModelTemplateProvider(ResourceProvider resourceProvider) {
+		PaletteMapLoader paletteMapLoader = new PaletteMapLoader(resourceProvider);
+
 		List<PartModelTemplateDTO> partTemplates = loadAllFromNamespaces(resourceProvider, "item", ModelTemplateCodecs.PART_MODEL_TEMPLATE_CODEC);
 		List<EquipmentModelTemplateDTO> equipmentTemplates = loadAllFromNamespaces(resourceProvider, "item", ModelTemplateCodecs.EQUIPMENT_MODEL_TEMPLATE_CODEC);
 
@@ -36,11 +38,25 @@ public class FileModelTemplateProvider implements ModelTemplateProvider {
 				.map(equip -> new PartModelTemplateDTO(equip.type(), equip.target(), equip.models()))
 				.toList());
 
-		this.upgradeTemplates = loadAllFromNamespaces(resourceProvider, "upgrade", ModelTemplateCodecs.UPGRADE_MODEL_TEMPLATE_CODEC);
+		List<UpgradeModelTemplateDTO> rawUpgradeTemplates = loadAllFromNamespaces(resourceProvider, "upgrade", ModelTemplateCodecs.UPGRADE_MODEL_TEMPLATE_CODEC);
+		this.upgradeTemplates = resolvePaletteMapRefs(rawUpgradeTemplates, paletteMapLoader);
+
 		this.armorTemplates = loadAllFromNamespaces(resourceProvider, "armor", ModelTemplateCodecs.ARMOR_MODEL_TEMPLATE_CODEC);
 
 		LOGGER.info("Loaded {} item, {} upgrade, and {} armor model templates from all namespaces.",
 				itemTemplates.size(), upgradeTemplates.size(), armorTemplates.size());
+	}
+
+	private List<UpgradeModelTemplateDTO> resolvePaletteMapRefs(List<UpgradeModelTemplateDTO> templates, PaletteMapLoader loader) {
+		return templates.stream()
+				.map(template -> {
+					if (template.palette_map_ref().isPresent() && template.paletteMap().isEmpty()) {
+						Map<String, String> resolved = loader.load(template.palette_map_ref().get());
+						return template.withResolvedPaletteMap(resolved);
+					}
+					return template;
+				})
+				.collect(Collectors.toList());
 	}
 
 	private <T> List<T> loadAllFromNamespaces(ResourceProvider provider, String folder, Codec<T> codec) {

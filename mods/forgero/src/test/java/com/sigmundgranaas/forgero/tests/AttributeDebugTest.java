@@ -21,21 +21,15 @@ public class AttributeDebugTest implements ForgeroGameTest {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AttributeDebugTest.class);
 
 	private static final List<String> TEST_COMPONENTS = List.of(
-			// Materials
 			"forgero:iron",
 			"forgero:diamond",
-			// Handles
 			"forgero:oak-handle",
-			// Pickaxe heads
 			"forgero:iron-pickaxe_head",
-			// Full pickaxes
 			"forgero:iron-pickaxe",
-			// Extended weapon blades (katana)
-			"forgero:iron-katana_blade",
-			"forgero:diamond-katana_blade",
-			// Full extended weapons
-			"forgero:iron-katana",
-			"forgero:diamond-katana"
+			"forgero:iron-spear_head",
+			"forgero:diamond-spear_head",
+			"forgero:iron-spear",
+			"forgero:diamond-spear"
 	);
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)

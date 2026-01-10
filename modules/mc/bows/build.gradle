@@ -20,6 +20,11 @@ dependencies {
 	testRuntimeOnly(project(":content:forgero-materials"))
 	testRuntimeOnly(project(":content:minecraft-tools"))
 	testRuntimeOnly(project(":content:forgero-base"))
+	testRuntimeOnly(project(":content:forgero-bows"))
+	testRuntimeOnly(project(":content:forgero-secondary-materials"))
+
+	// Module plugins needed for item creators (part_item, bow_item, arrow_item, etc.)
+	testRuntimeOnly(project(path: ":modules:mc:tools", configuration: 'namedElements'))
 }
 
 loom {

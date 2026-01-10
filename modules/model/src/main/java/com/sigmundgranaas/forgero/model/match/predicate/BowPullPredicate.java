@@ -8,7 +8,7 @@ public record BowPullPredicate(float pull, boolean pulling) implements Predicate
 	public boolean test(ModelResolutionContext context) {
 		boolean pullingMatch = context.get("pulling")
 				.map(val -> (Boolean) val == this.pulling)
-				.orElse(!this.pulling); // If not specified, defaults to not pulling
+				.orElse(!this.pulling);
 
 		if (!pullingMatch) {
 			return false;
@@ -16,6 +16,6 @@ public record BowPullPredicate(float pull, boolean pulling) implements Predicate
 
 		return context.get("pull")
 				.map(val -> (Float) val >= this.pull)
-				.orElse(this.pull <= 0f); // if no pull value, only match if predicate is for 0 pull
+				.orElse(this.pull <= 0f);
 	}
 }

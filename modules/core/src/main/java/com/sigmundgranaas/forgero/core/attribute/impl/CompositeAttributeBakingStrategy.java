@@ -17,31 +17,30 @@ import java.util.stream.Stream;
 import static com.sigmundgranaas.forgero.core.attribute.api.Attribute.KEY;
 
 /**
- * A baking strategy that handles context-based attribute composition for structured components.
+ * Baking strategy for context-based attribute composition in structured components.
  *
- * <p><b>Context-Based Composition</b></p>
- * Attributes can declare a {@code context} that determines how they participate in composition:
- * <ul>
- *   <li>{@code forgero:part-composite} - Composed using intersection logic (shape × material)</li>
- *   <li>No context (default) - Passes through without special handling</li>
- * </ul>
+ * <h2>Attribute Flow for Part-Constructed Components</h2>
+ * <ol>
+ *   <li><b>Filter by context</b> - Collect attributes with part-composite context</li>
+ *   <li><b>Apply conditions</b> - Filter attributes by their static conditions (e.g., in_slot_type)</li>
+ *   <li><b>Combine and transform</b> - Compose attributes using intersection logic (base × multiplier)</li>
+ *   <li><b>Discard untransformed</b> - Remove any attributes with context that weren't composed</li>
+ *   <li><b>Pass through defaults</b> - Attributes without context pass through unchanged</li>
+ * </ol>
  *
- * <p><b>Part Composite Composition</b></p>
- * For StructuredComponents, attributes with {@code part-composite} context are composed:
- * <ul>
- *   <li>Collected from the component itself AND its structure slot children</li>
- *   <li>Grouped by source (e.g., "self" vs slot name)</li>
- *   <li>Intersection rule: only types with base+multiplier from DIFFERENT sources compose</li>
- *   <li>Result: composed attributes with no context (ready for propagation)</li>
- * </ul>
+ * <h2>Example: Iron Pickaxe Head</h2>
+ * <pre>
+ * Material (iron):
+ *   - mining_speed: 6.0 (context=part-composite, condition=in_slot_type:tool_material)
+ *   - armor: 2.0 (context=part-composite, condition=in_slot_type:armor_material)
  *
- * <p><b>Example</b></p>
- * A pickaxe_head (StructuredComponent) with material slot:
- * <ul>
- *   <li>Self (shape): mining_speed ×1.2, durability ×1.0</li>
- *   <li>Material (iron): mining_speed +6.0, durability +240, armor +5</li>
- *   <li>Composed: mining_speed=7.2, durability=240 (armor excluded - no shape multiplier)</li>
- * </ul>
+ * Shape (pickaxe_head):
+ *   - mining_speed: ×1.2 (context=part-composite)
+ *
+ * Result:
+ *   - mining_speed: 7.2 (composed: 6.0 × 1.2)
+ *   - armor: excluded (condition failed - wrong slot type)
+ * </pre>
  */
 public class CompositeAttributeBakingStrategy implements AttributeBakingStrategy {
 
@@ -54,154 +53,147 @@ public class CompositeAttributeBakingStrategy implements AttributeBakingStrategy
 			return List.of();
 		}
 		Component root = componentList.get(0);
-
 		List<Attribute> result = new ArrayList<>();
 
-		// Step 1: Handle context-based composition for the root if it's structured
 		if (root instanceof StructuredComponent structured) {
-			result.addAll(composePartAttributes(structured));
+			result.addAll(composeStructuredComponent(structured, root));
 		}
 
-		// Step 2: Collect default (no context) attributes from all components
-		// and filter by static conditions
-		for (Component component : componentList) {
-			ResolutionContext resCtx = new ResolutionContext(component, root);
-
-			List<Attribute> defaultAttributes = component.properties(KEY).stream()
-					// Only default attributes (no context)
-					.filter(attr -> attr.context().isEmpty())
-					// Filter by static conditions
-					.filter(attribute -> attribute.condition()
-							.map(Condition::staticConditions)
-							.map(resCtx::test)
-							.orElse(true))
-					.toList();
-
-			result.addAll(defaultAttributes);
-		}
+		collectDefaultAttributes(componentList, root, result);
 
 		return result;
 	}
 
-	/**
-	 * Composes part-composite attributes from a StructuredComponent and its structure children.
-	 *
-	 * @param structured The structured component (e.g., a part with shape+material)
-	 * @return Composed attributes with no context
-	 */
-	private List<Attribute> composePartAttributes(StructuredComponent structured) {
+	private List<Attribute> composeStructuredComponent(StructuredComponent structured, Component root) {
 		Map<String, List<Attribute>> sources = new HashMap<>();
 
-		// Collect part-composite attributes from self (shape/template attributes)
-		List<Attribute> selfAttrs = structured.properties(KEY).stream()
-				.filter(attr -> attr.context()
-						.map(ctx -> ctx.equals(AttributeContext.PART_COMPOSITE))
-						.orElse(false))
-				.toList();
-
+		List<Attribute> selfAttrs = collectAndFilterContextAttributes(structured, root);
 		if (!selfAttrs.isEmpty()) {
 			sources.put("self", selfAttrs);
 		}
 
-		// Collect attributes from each structure slot child
-		// For structured children (like blades), compose their attributes first
 		for (ComponentPart part : structured.structure().allParts()) {
 			Component child = part.getContent();
 			String slotName = part.id().toString();
 
-			// If child is structured, compose it first and use the composed result
-			// This handles the hierarchy: tool → part → material
-			// Where the part has template multipliers and material has base values
-			List<Attribute> childAttrs = collectOrComposeChildAttributes(child);
-
+			List<Attribute> childAttrs = collectChildAttributes(child, root);
 			if (!childAttrs.isEmpty()) {
 				sources.put(slotName, childAttrs);
 			}
 		}
 
-		// Compose if we have attributes from multiple sources
-		if (sources.size() >= 2) {
-			// Try intersection composition (shape × material pattern)
-			List<Attribute> composed = partCompositeHandler.compose(sources);
-			
-			// If intersection fails (e.g., equipment with already-composed parts), 
-			// fall back to additive composition (sum all values of same type)
-			if (composed.isEmpty()) {
-				composed = additiveCompose(sources);
-			}
-			return composed;
-		} else if (sources.size() == 1) {
-			// Only one source - return those attributes directly
-			// This handles: equipment with single part (blade inherits composed values)
-			return sources.values().iterator().next();
-		}
-
-		return List.of();
+		return composeFromSources(sources);
 	}
 
 	/**
-	 * Additive composition: sums all values of the same attribute type across sources.
-	 * Used when intersection composition fails (e.g., equipment with already-composed parts).
-	 *
-	 * Example: pickaxe with head (durability=240) and handle (durability=50) → durability=290
+	 * Step 1 & 2: Filter attributes by context, then apply conditions.
 	 */
-	private List<Attribute> additiveCompose(Map<String, List<Attribute>> sources) {
-		Map<OpenIdentifier, Float> sums = new HashMap<>();
-		
-		for (List<Attribute> attrs : sources.values()) {
-			for (Attribute attr : attrs) {
-				sums.merge(attr.type(), attr.value(), Float::sum);
-			}
-		}
-		
-		return sums.entrySet().stream()
-			.<Attribute>map(e -> SimpleAttribute.resolved(e.getKey(), e.getValue()))
-			.toList();
+	private List<Attribute> collectAndFilterContextAttributes(Component component, Component root) {
+		ResolutionContext ctx = new ResolutionContext(component, root);
+
+		return component.properties(KEY).stream()
+				.filter(attr -> attr.context()
+						.map(c -> c.equals(AttributeContext.PART_COMPOSITE))
+						.orElse(false))
+				.filter(attr -> attr.condition()
+						.map(Condition::staticConditions)
+						.map(ctx::test)
+						.orElse(true))
+				.toList();
 	}
 
-	/**
-	 * For structured children: compose their attributes first and return the composed result.
-	 * For non-structured children: collect raw part-composite attributes.
-	 *
-	 * This is the key to supporting the hierarchy: tool → part → material
-	 * When a blade contains a material, we compose the blade's attributes first,
-	 * so the tool sees already-composed values instead of raw part-composite attrs.
-	 */
-	private List<Attribute> collectOrComposeChildAttributes(Component child) {
+	private List<Attribute> collectChildAttributes(Component child, Component root) {
 		if (child instanceof StructuredComponent structuredChild) {
-			List<Attribute> composed = composePartAttributes(structuredChild);
+			List<Attribute> composed = composeStructuredComponent(structuredChild, root);
 			if (!composed.isEmpty()) {
 				return composed;
 			}
 		}
-		return collectPartCompositeAttributesRecursively(child);
+		return collectContextAttributesRecursively(child, root);
+	}
+
+	private List<Attribute> collectContextAttributesRecursively(Component component, Component root) {
+		List<Attribute> result = new ArrayList<>();
+		result.addAll(collectAndFilterContextAttributes(component, root));
+
+		if (component instanceof StructuredComponent structured) {
+			for (ComponentPart part : structured.structure().allParts()) {
+				result.addAll(collectContextAttributesRecursively(part.getContent(), root));
+			}
+		}
+		return result;
 	}
 
 	/**
-	 * Recursively collects all part-composite attributes from a component and all its descendants.
-	 * This ensures that nested structures (e.g., a part containing a material) have all their
-	 * attributes properly included in composition.
-	 *
-	 * @param component The component to collect from
-	 * @return List of all part-composite attributes from this component and its descendants
+	 * Step 3 & 4: Combine/transform composite attributes, discard untransformed.
 	 */
-	private List<Attribute> collectPartCompositeAttributesRecursively(Component component) {
-		List<Attribute> result = new ArrayList<>();
+	private List<Attribute> composeFromSources(Map<String, List<Attribute>> sources) {
+		if (sources.size() >= 2) {
+			List<Attribute> composed = partCompositeHandler.compose(sources);
+			if (composed.isEmpty()) {
+				composed = additiveComposeMultiSource(sources);
+			}
+			return composed;
+		} else if (sources.size() == 1) {
+			return discardContextAttributes(sources.values().iterator().next());
+		}
+		return List.of();
+	}
 
-		// Add component's own part-composite attributes
-		result.addAll(component.properties(KEY).stream()
-				.filter(attr -> attr.context()
-						.map(ctx -> ctx.equals(AttributeContext.PART_COMPOSITE))
-						.orElse(false))
-				.toList());
+	private List<Attribute> additiveComposeMultiSource(Map<String, List<Attribute>> sources) {
+		Map<OpenIdentifier, Set<String>> typeToSources = new HashMap<>();
+		Map<OpenIdentifier, Float> sums = new HashMap<>();
+		Map<OpenIdentifier, Boolean> hasResolved = new HashMap<>();
 
-		// Recursively collect from children if this is a structured component
-		if (component instanceof StructuredComponent structured) {
-			for (ComponentPart part : structured.structure().allParts()) {
-				result.addAll(collectPartCompositeAttributesRecursively(part.getContent()));
+		for (Map.Entry<String, List<Attribute>> entry : sources.entrySet()) {
+			String sourceName = entry.getKey();
+			for (Attribute attr : entry.getValue()) {
+				OpenIdentifier type = attr.type();
+				sums.merge(type, attr.value(), Float::sum);
+
+				if (attr.context().isEmpty()) {
+					hasResolved.put(type, true);
+				} else {
+					typeToSources.computeIfAbsent(type, k -> new HashSet<>()).add(sourceName);
+				}
 			}
 		}
 
-		return result;
+		return sums.entrySet().stream()
+				.filter(e -> {
+					OpenIdentifier type = e.getKey();
+					if (hasResolved.getOrDefault(type, false)) {
+						return true;
+					}
+					Set<String> contextSources = typeToSources.get(type);
+					return contextSources != null && contextSources.size() >= 2;
+				})
+				.<Attribute>map(e -> SimpleAttribute.resolved(e.getKey(), e.getValue()))
+				.toList();
+	}
+
+	private List<Attribute> discardContextAttributes(List<Attribute> attributes) {
+		return attributes.stream()
+				.filter(attr -> attr.context().isEmpty())
+				.toList();
+	}
+
+	/**
+	 * Step 5: Pass through default (no context) attributes unchanged.
+	 */
+	private void collectDefaultAttributes(List<Component> components, Component root, List<Attribute> result) {
+		for (Component component : components) {
+			ResolutionContext ctx = new ResolutionContext(component, root);
+
+			List<Attribute> defaults = component.properties(KEY).stream()
+					.filter(attr -> attr.context().isEmpty())
+					.filter(attr -> attr.condition()
+							.map(Condition::staticConditions)
+							.map(ctx::test)
+							.orElse(true))
+					.toList();
+
+			result.addAll(defaults);
+		}
 	}
 }

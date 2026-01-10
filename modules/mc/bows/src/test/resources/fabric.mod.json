@@ -13,7 +13,16 @@
     ],
     "fabric-gametest": [
       "com.sigmundgranaas.forgero.bows.gametest.BowHandlerGametest",
-      "com.sigmundgranaas.forgero.bows.gametest.DynamicArrowBehaviorTest"
+      "com.sigmundgranaas.forgero.bows.gametest.BowMixinIntegrationTest",
+      "com.sigmundgranaas.forgero.bows.gametest.DynamicArrowBehaviorTest",
+      "com.sigmundgranaas.forgero.bows.gametest.DynamicArrowEntityRegistrationTest",
+      "com.sigmundgranaas.forgero.bows.gametest.SchematicItemRegistrationTest",
+      "com.sigmundgranaas.forgero.bows.gametest.OnHitBlockEffectTest",
+      "com.sigmundgranaas.forgero.bows.gametest.OnHitEffectTest",
+      "com.sigmundgranaas.forgero.bows.gametest.ArrowPersistenceTest",
+      "com.sigmundgranaas.forgero.bows.gametest.ArrowItemRegistrationTest",
+      "com.sigmundgranaas.forgero.bows.gametest.ArrowRecipeSamplingTest",
+      "com.sigmundgranaas.forgero.bows.gametest.BowRecipeSamplingTest"
     ]
   },
   "custom": {

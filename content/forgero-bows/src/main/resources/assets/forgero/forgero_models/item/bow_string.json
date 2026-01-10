@@ -1,0 +1,41 @@
+{
+  "type": "forgero:part_model_template",
+  "target": {
+    "tag": "forgero:materials/roles/bowstring_material"
+  },
+  "model": {
+    "id": "forgero:item/{target.name}-bow_string",
+    "type": "forgero:composite_model",
+    "target": "forgero:{target.name}-bow_string",
+    "layers": [
+      {
+        "order": 10,
+        "template": "forgero:texture_template/parts/bow_string",
+        "palette": "forgero:palette/{target.name}",
+        "output": "forgero:item/{target.name}-bow_string",
+        "textures": {
+          "variants": [
+            {
+              "predicate": [{ "type": "forgero:bow_pull", "pulling": true, "pull": 0.9 }],
+              "template": "forgero:texture_template/parts/bow_string_pull_2",
+              "palette": "forgero:palette/{target.name}",
+              "output": "forgero:item/{target.name}-bow_string_pull_2"
+            },
+            {
+              "predicate": [{ "type": "forgero:bow_pull", "pulling": true, "pull": 0.65 }],
+              "template": "forgero:texture_template/parts/bow_string_pull_1",
+              "palette": "forgero:palette/{target.name}",
+              "output": "forgero:item/{target.name}-bow_string_pull_1"
+            },
+            {
+              "predicate": [{ "type": "forgero:bow_pull", "pulling": true, "pull": 0.0 }],
+              "template": "forgero:texture_template/parts/bow_string_pull_0",
+              "palette": "forgero:palette/{target.name}",
+              "output": "forgero:item/{target.name}-bow_string_pull_0"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

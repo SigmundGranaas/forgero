@@ -26,8 +26,5 @@
       },
       "context": "forgero:part-composite"
     }
-  ],
-  "palette": {
-    "name": "amethyst_gem"
-  }
+  ]
 }

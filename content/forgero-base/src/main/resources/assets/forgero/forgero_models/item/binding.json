@@ -17,15 +17,7 @@
     ],
     "slots": [
       {
-        "id": "reinforcement_slot",
-        "order": 50,
-        "renderer": {
-          "type": "forgero:component",
-          "context": "binding_reinforcement"
-        }
-      },
-      {
-        "id": "gem_slot",
+        "id": "binding-gem",
         "order": 90,
         "renderer": {
           "type": "forgero:component",

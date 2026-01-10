@@ -1,0 +1,41 @@
+{
+  "type": "forgero:part_template",
+  "name": "refined_arrow_head",
+  "tags": [
+    "forgero:parts/arrow_head",
+    "forgero:parts/types/arrow_head",
+    "forgero:parts/categories/head"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-refined_arrow_head"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-refined_arrow_head",
+    "slots": {
+      "material": {
+        "type": "forgero:materials/roles/arrow_head_material",
+        "default_tag": "forgero:materials/roles/arrow_head_material"
+      }
+    }
+  },
+  "attributes": [
+    {
+      "id": "forgero:refined_arrow_head-rarity",
+      "type": "forgero:rarity",
+      "computation": {"value": 40, "operation": "addition"}
+    },
+    {
+      "id": "forgero:refined_arrow_head-attack_damage-mult",
+      "type": "forgero:attack_damage",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.25}
+    },
+    {
+      "id": "forgero:refined_arrow_head-weight-mult",
+      "type": "forgero:weight",
+      "context": "forgero:part-composite",
+      "computation": {"multiply": 1.0}
+    }
+  ]
+}

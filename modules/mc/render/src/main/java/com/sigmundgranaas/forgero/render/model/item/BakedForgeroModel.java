@@ -28,7 +28,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class BakedForgeroModel implements BakedModel {
@@ -50,7 +52,7 @@ public class BakedForgeroModel implements BakedModel {
 			this.sideLit = false;
 			this.particleSprite = null;
 			this.defaultBakedModel = null;
-			this.overrides = new ForgeroItemModelOverrides(c -> null, itemToComponent);
+			this.overrides = new ForgeroItemModelOverrides((c, state) -> null, itemToComponent);
 			return;
 		}
 		var forgeroModel = forgeroModelOpt.get();
@@ -66,8 +68,9 @@ public class BakedForgeroModel implements BakedModel {
 		var renderer = new ForgeroModelRenderer(textureGetter, settings, resolver, modelId, this.transformation);
 
 		// Bake default model and setup overrides
-		this.defaultBakedModel = renderer.bake(baseline, this.sideLit, this.particleSprite);
-		Function<Component, BakedModel> componentBaker = component -> renderer.bake(component, this.sideLit, this.particleSprite);
+		this.defaultBakedModel = renderer.bake(baseline, this.sideLit, this.particleSprite, Collections.emptyMap());
+		BiFunction<Component, Map<String, Object>, BakedModel> componentBaker =
+				(component, dynamicState) -> renderer.bake(component, this.sideLit, this.particleSprite, dynamicState);
 		this.overrides = new ForgeroItemModelOverrides(componentBaker, itemToComponent);
 	}
 

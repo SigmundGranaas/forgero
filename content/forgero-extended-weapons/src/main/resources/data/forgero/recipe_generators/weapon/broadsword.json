@@ -23,7 +23,7 @@
     }
   },
   "result": {
-    "item": "forgero:${material.name}-broadsword",
+    "item": "forgero:${material.name}-sword",
     "structure": {
       "forgero:blade": "a",
       "forgero:handle": "b"

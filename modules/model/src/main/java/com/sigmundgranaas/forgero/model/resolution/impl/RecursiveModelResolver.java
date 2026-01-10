@@ -28,8 +28,11 @@ public class RecursiveModelResolver implements ItemModelResolver {
 	}
 
 	@Override
-	public Optional<List<RenderableTexture>> resolve(Component component) {
-		List<RenderableTexture> renderableTextures = resolveComponent(component, new ModelResolutionContext(component, component));
+	public Optional<List<RenderableTexture>> resolve(Component component, Map<String, Object> dynamicState) {
+		List<RenderableTexture> renderableTextures = resolveComponent(
+				component,
+				new ModelResolutionContext(component, component, Optional.empty(), dynamicState)
+		);
 		if (renderableTextures.isEmpty()) {
 			return Optional.empty();
 		}
@@ -66,7 +69,10 @@ public class RecursiveModelResolver implements ItemModelResolver {
 	private List<RenderableTexture> getTexturesFromComposite(CompositeModel composite, Component component, ModelResolutionContext context, int baseOrder) {
 		List<RenderableTexture> textures = new ArrayList<>();
 		for (ModelLayer layer : composite.layers()) {
-			textures.add(getLayerTexture(layer, context, baseOrder));
+			RenderableTexture layerTexture = getLayerTexture(layer, context, baseOrder);
+			if (layerTexture.texture() != null) {
+				textures.add(layerTexture);
+			}
 		}
 
 		if (component instanceof StructuredComponent structured) {
@@ -186,17 +192,20 @@ public class RecursiveModelResolver implements ItemModelResolver {
 
 
 	private RenderableTexture getLayerTexture(ModelLayer layer, ModelResolutionContext context, int baseOrder) {
-		return layer.getActiveVariant(context)
-				.map(variant -> new RenderableTexture(
-						variant.texture().orElse(layer.texture()),
-						baseOrder + layer.order(),
-						variant.offset().orElse(layer.offset().orElse(Offset.ZERO)))
-				)
-				.orElse(new RenderableTexture(
-						layer.texture(),
-						baseOrder + layer.order(),
-						layer.offset().orElse(Offset.ZERO))
-				);
+		Optional<ModelVariant> activeVariant = layer.getActiveVariant(context);
+		if (activeVariant.isPresent()) {
+			ModelVariant variant = activeVariant.get();
+			String resolvedTexture = variant.texture().orElse(layer.texture());
+			return new RenderableTexture(
+					resolvedTexture,
+					baseOrder + layer.order(),
+					variant.offset().orElse(layer.offset().orElse(Offset.ZERO)));
+		} else {
+			return new RenderableTexture(
+					layer.texture(),
+					baseOrder + layer.order(),
+					layer.offset().orElse(Offset.ZERO));
+		}
 	}
 
 	private List<RenderableTexture> getTexturesFromTextureModel(TextureModel model, ModelResolutionContext context, int baseOrder) {
