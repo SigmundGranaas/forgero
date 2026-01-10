@@ -1,0 +1,1093 @@
+{
+  "forgero:amethyst": {
+    "category": "materials/types",
+    "description": "",
+    "file_path": "content/forgero-gems/src/main/resources/data/forgero/tags/materials/amethyst.json",
+    "new_name": "forgero:materials/types/amethyst",
+    "old_name": "forgero:amethyst",
+    "parents": [
+      "forgero:gem"
+    ]
+  },
+  "forgero:armor": {
+    "category": "ROOT",
+    "description": "",
+    "file_path": "content/forgero-armor/src/main/resources/data/forgero/tags/armor/armor.json",
+    "new_name": "forgero:armors",
+    "old_name": "forgero:armor",
+    "parents": []
+  },
+  "forgero:armor_lining_material": {
+    "category": "materials/roles",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/materials/armor_lining_material.json",
+    "new_name": "forgero:materials/roles/armor_lining_material",
+    "old_name": "forgero:armor_lining_material",
+    "parents": []
+  },
+  "forgero:armor_lining_shape": {
+    "category": "parts/shapes",
+    "description": "",
+    "file_path": "content/forgero-armor/src/main/resources/data/forgero/tags/shape/armor_lining_shape.json",
+    "new_name": "forgero:parts/shapes/armor_lining_shape",
+    "old_name": "forgero:armor_lining_shape",
+    "parents": []
+  },
+  "forgero:armor_lining_type": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-armor/src/main/resources/data/forgero/tags/parts/armor_lining_type.json",
+    "new_name": "forgero:parts/types/armor_lining_type",
+    "old_name": "forgero:armor_lining_type",
+    "parents": []
+  },
+  "forgero:armor_material": {
+    "category": "materials/roles",
+    "description": "",
+    "file_path": "content/forgero-materials/src/main/resources/data/forgero/tags/materials/armor_material.json",
+    "new_name": "forgero:materials/roles/armor_material",
+    "old_name": "forgero:armor_material",
+    "parents": []
+  },
+  "forgero:armor_plate_shape": {
+    "category": "parts/shapes",
+    "description": "",
+    "file_path": "content/forgero-armor/src/main/resources/data/forgero/tags/shape/armor_plate_shape.json",
+    "new_name": "forgero:parts/shapes/armor_plate_shape",
+    "old_name": "forgero:armor_plate_shape",
+    "parents": []
+  },
+  "forgero:armor_plate_type": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-tools/src/main/resources/data/forgero/tags/parts/armor_plate_type.json",
+    "new_name": "forgero:parts/types/armor_plate_type",
+    "old_name": "forgero:armor_plate_type",
+    "parents": []
+  },
+  "forgero:armors": {
+    "category": "ROOT",
+    "description": "Root tag for all armor items",
+    "file_path": "content/forgero-armor-content/src/main/resources/data/forgero/tags/armor/armors.json",
+    "new_name": "forgero:armors",
+    "old_name": "forgero:armors",
+    "parents": []
+  },
+  "forgero:arrow": {
+    "category": "uncategorized",
+    "description": "Arrow types",
+    "file_path": "content/forgero-materials/src/main/resources/data/forgero/tags/arrow.json",
+    "new_name": "forgero:uncategorized/arrow",
+    "old_name": "forgero:arrow",
+    "parents": []
+  },
+  "forgero:axe": {
+    "category": "tools/types",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/tools/axe.json",
+    "new_name": "forgero:tools/types/axe",
+    "old_name": "forgero:axe",
+    "parents": [
+      "forgero:tool"
+    ]
+  },
+  "forgero:axe_head": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/parts/axe_head.json",
+    "new_name": "forgero:parts/types/axe_head",
+    "old_name": "forgero:axe_head",
+    "parents": [
+      "forgero:parts/head"
+    ]
+  },
+  "forgero:battle_axe": {
+    "category": "weapons/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/weapons/battle_axe.json",
+    "new_name": "forgero:weapons/types/battle_axe",
+    "old_name": "forgero:battle_axe",
+    "parents": [
+      "forgero:tool"
+    ]
+  },
+  "forgero:battle_axe_head": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/parts/battle_axe_head.json",
+    "new_name": "forgero:parts/types/battle_axe_head",
+    "old_name": "forgero:battle_axe_head",
+    "parents": [
+      "forgero:parts/head"
+    ]
+  },
+  "forgero:binding": {
+    "category": "materials/types",
+    "description": "",
+    "file_path": "content/forgero-upgrades/src/main/resources/data/forgero/tags/materials/binding.json",
+    "new_name": "forgero:materials/types/binding",
+    "old_name": "forgero:binding",
+    "parents": []
+  },
+  "forgero:binding_type": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-tools/src/main/resources/data/forgero/tags/parts/binding_type.json",
+    "new_name": "forgero:parts/types/binding_type",
+    "old_name": "forgero:binding_type",
+    "parents": []
+  },
+  "forgero:bindings": {
+    "category": "schematics/categories",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/schematics/bindings.json",
+    "new_name": "forgero:schematics/categories/bindings",
+    "old_name": "forgero:bindings",
+    "parents": []
+  },
+  "forgero:blade": {
+    "category": "parts/categories",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/parts/blade.json",
+    "new_name": "forgero:parts/categories/blade",
+    "old_name": "forgero:blade",
+    "parents": []
+  },
+  "forgero:blades": {
+    "category": "schematics/categories",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/schematics/blades.json",
+    "new_name": "forgero:schematics/categories/blades",
+    "old_name": "forgero:blades",
+    "parents": []
+  },
+  "forgero:blunt": {
+    "category": "weapons/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/weapons/blunt.json",
+    "new_name": "forgero:weapons/types/blunt",
+    "old_name": "forgero:blunt",
+    "parents": []
+  },
+  "forgero:blunt_head": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/parts/blunt_head.json",
+    "new_name": "forgero:parts/types/blunt_head",
+    "old_name": "forgero:blunt_head",
+    "parents": []
+  },
+  "forgero:bone": {
+    "category": "materials/types",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/materials/bone.json",
+    "new_name": "forgero:materials/types/bone",
+    "old_name": "forgero:bone",
+    "parents": []
+  },
+  "forgero:boots": {
+    "category": "armor/types",
+    "description": "",
+    "file_path": "content/forgero-armor/src/main/resources/data/forgero/tags/armor/boots.json",
+    "new_name": "forgero:armor/types/boots",
+    "old_name": "forgero:boots",
+    "parents": []
+  },
+  "forgero:broadsword": {
+    "category": "weapons/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/weapons/broadsword.json",
+    "new_name": "forgero:weapons/types/broadsword",
+    "old_name": "forgero:broadsword",
+    "parents": [
+      "forgero:tool"
+    ]
+  },
+  "forgero:broadsword_blade": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/parts/broadsword_blade.json",
+    "new_name": "forgero:parts/types/broadsword_blade",
+    "old_name": "forgero:broadsword_blade",
+    "parents": [
+      "forgero:parts/blade"
+    ]
+  },
+  "forgero:chestplate": {
+    "category": "armor/types",
+    "description": "",
+    "file_path": "content/forgero-armor/src/main/resources/data/forgero/tags/armor/chestplate.json",
+    "new_name": "forgero:armor/types/chestplate",
+    "old_name": "forgero:chestplate",
+    "parents": []
+  },
+  "forgero:club": {
+    "category": "weapons/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/weapons/club.json",
+    "new_name": "forgero:weapons/types/club",
+    "old_name": "forgero:club",
+    "parents": []
+  },
+  "forgero:club_head": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/parts/club_head.json",
+    "new_name": "forgero:parts/types/club_head",
+    "old_name": "forgero:club_head",
+    "parents": []
+  },
+  "forgero:cosmetic": {
+    "category": "upgrades/types",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/upgrade/cosmetic.json",
+    "new_name": "forgero:upgrades/types/cosmetic",
+    "old_name": "forgero:cosmetic",
+    "parents": []
+  },
+  "forgero:cutlass": {
+    "category": "weapons/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/weapons/cutlass.json",
+    "new_name": "forgero:weapons/types/cutlass",
+    "old_name": "forgero:cutlass",
+    "parents": []
+  },
+  "forgero:cutlass_blade": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/parts/cutlass_blade.json",
+    "new_name": "forgero:parts/types/cutlass_blade",
+    "old_name": "forgero:cutlass_blade",
+    "parents": []
+  },
+  "forgero:dagger": {
+    "category": "weapons/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/weapons/dagger.json",
+    "new_name": "forgero:weapons/types/dagger",
+    "old_name": "forgero:dagger",
+    "parents": [
+      "forgero:tool"
+    ]
+  },
+  "forgero:dagger_blade": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/parts/dagger_blade.json",
+    "new_name": "forgero:parts/types/dagger_blade",
+    "old_name": "forgero:dagger_blade",
+    "parents": [
+      "forgero:parts/blade"
+    ]
+  },
+  "forgero:default_armor_lining": {
+    "category": "parts/shapes",
+    "description": "",
+    "file_path": "content/forgero-armor/src/main/resources/data/forgero/tags/shape/default_armor_lining.json",
+    "new_name": "forgero:parts/shapes/default_armor_lining",
+    "old_name": "forgero:default_armor_lining",
+    "parents": []
+  },
+  "forgero:default_armor_plate": {
+    "category": "parts/defaults",
+    "description": "",
+    "file_path": "content/forgero-armor/src/main/resources/data/forgero/tags/parts/default_armor_plate.json",
+    "new_name": "forgero:parts/defaults/default_armor_plate",
+    "old_name": "forgero:default_armor_plate",
+    "parents": []
+  },
+  "forgero:default_binding": {
+    "category": "parts/defaults",
+    "description": "",
+    "file_path": "content/forgero-tools/src/main/resources/data/forgero/tags/parts/default_binding.json",
+    "new_name": "forgero:parts/defaults/default_binding",
+    "old_name": "forgero:default_binding",
+    "parents": []
+  },
+  "forgero:default_handle": {
+    "category": "parts/defaults",
+    "description": "",
+    "file_path": "content/forgero-tools/src/main/resources/data/forgero/tags/parts/default_handle.json",
+    "new_name": "forgero:parts/defaults/default_handle",
+    "old_name": "forgero:default_handle",
+    "parents": []
+  },
+  "forgero:default_pickaxe_head": {
+    "category": "parts/defaults",
+    "description": "",
+    "file_path": "content/forgero-tools/src/main/resources/data/forgero/tags/parts/default_pickaxe_head.json",
+    "new_name": "forgero:parts/defaults/default_pickaxe_head",
+    "old_name": "forgero:default_pickaxe_head",
+    "parents": []
+  },
+  "forgero:diamond": {
+    "category": "materials/types",
+    "description": "",
+    "file_path": "content/forgero-gems/src/main/resources/data/forgero/tags/materials/diamond.json",
+    "new_name": "forgero:materials/types/diamond",
+    "old_name": "forgero:diamond",
+    "parents": [
+      "forgero:gem"
+    ]
+  },
+  "forgero:dye": {
+    "category": "materials/types",
+    "description": "Dye materials for cosmetic upgrades",
+    "file_path": "content/forgero-extended/src/main/resources/data/forgero/tags/materials/dye.json",
+    "new_name": "forgero:materials/types/dye",
+    "old_name": "forgero:dye",
+    "parents": []
+  },
+  "forgero:echo": {
+    "category": "materials/types",
+    "description": "",
+    "file_path": "content/forgero-gems/src/main/resources/data/forgero/tags/materials/echo.json",
+    "new_name": "forgero:materials/types/echo",
+    "old_name": "forgero:echo",
+    "parents": [
+      "forgero:gem"
+    ]
+  },
+  "forgero:emerald": {
+    "category": "materials/types",
+    "description": "",
+    "file_path": "content/forgero-gems/src/main/resources/data/forgero/tags/materials/emerald.json",
+    "new_name": "forgero:materials/types/emerald",
+    "old_name": "forgero:emerald",
+    "parents": [
+      "forgero:gem"
+    ]
+  },
+  "forgero:extended": {
+    "category": "weapons/categories",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/weapons/extended.json",
+    "new_name": "forgero:weapons/categories/extended",
+    "old_name": "forgero:extended",
+    "parents": []
+  },
+  "forgero:felling_axe": {
+    "category": "tools/types",
+    "description": "",
+    "file_path": "content/forgero-mining/src/main/resources/data/forgero/tags/tools/felling_axe.json",
+    "new_name": "forgero:tools/types/felling_axe",
+    "old_name": "forgero:felling_axe",
+    "parents": [
+      "forgero:tool"
+    ]
+  },
+  "forgero:felling_axe_head": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-mining/src/main/resources/data/forgero/tags/parts/felling_axe_head.json",
+    "new_name": "forgero:parts/types/felling_axe_head",
+    "old_name": "forgero:felling_axe_head",
+    "parents": [
+      "forgero:parts/head"
+    ]
+  },
+  "forgero:gem": {
+    "category": "upgrades/types",
+    "description": "",
+    "file_path": "content/forgero-upgrades/src/main/resources/data/forgero/tags/upgrade/gem.json",
+    "new_name": "forgero:upgrades/types/gem",
+    "old_name": "forgero:gem",
+    "parents": []
+  },
+  "forgero:glass": {
+    "category": "materials/types",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/materials/glass.json",
+    "new_name": "forgero:materials/types/glass",
+    "old_name": "forgero:glass",
+    "parents": []
+  },
+  "forgero:grip": {
+    "category": "upgrades/types",
+    "description": "",
+    "file_path": "content/minecraft-tools/src/main/resources/data/forgero/tags/upgrade/grip.json",
+    "new_name": "forgero:upgrades/types/grip",
+    "old_name": "forgero:grip",
+    "parents": []
+  },
+  "forgero:guard": {
+    "category": "upgrades/types",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/upgrade/guard.json",
+    "new_name": "forgero:upgrades/types/guard",
+    "old_name": "forgero:guard",
+    "parents": []
+  },
+  "forgero:hammer": {
+    "category": "tools/types",
+    "description": "",
+    "file_path": "content/forgero-mining/src/main/resources/data/forgero/tags/tools/hammer.json",
+    "new_name": "forgero:tools/types/hammer",
+    "old_name": "forgero:hammer",
+    "parents": [
+      "forgero:tool"
+    ]
+  },
+  "forgero:hammer_head": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-mining/src/main/resources/data/forgero/tags/parts/hammer_head.json",
+    "new_name": "forgero:parts/types/hammer_head",
+    "old_name": "forgero:hammer_head",
+    "parents": [
+      "forgero:parts/head"
+    ]
+  },
+  "forgero:handle": {
+    "category": "parts/categories",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/parts/handle.json",
+    "new_name": "forgero:parts/categories/handle",
+    "old_name": "forgero:handle",
+    "parents": []
+  },
+  "forgero:handle_type": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-tools/src/main/resources/data/forgero/tags/parts/handle_type.json",
+    "new_name": "forgero:parts/types/handle_type",
+    "old_name": "forgero:handle_type",
+    "parents": []
+  },
+  "forgero:handles": {
+    "category": "schematics/categories",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/schematics/handles.json",
+    "new_name": "forgero:schematics/categories/handles",
+    "old_name": "forgero:handles",
+    "parents": []
+  },
+  "forgero:hard": {
+    "category": "materials/properties",
+    "description": "",
+    "file_path": "content/forgero-upgrades/src/main/resources/data/forgero/tags/materials/hard.json",
+    "new_name": "forgero:materials/properties/hard",
+    "old_name": "forgero:hard",
+    "parents": []
+  },
+  "forgero:head": {
+    "category": "parts/categories",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/parts/head.json",
+    "new_name": "forgero:parts/categories/head",
+    "old_name": "forgero:head",
+    "parents": []
+  },
+  "forgero:heads": {
+    "category": "schematics/categories",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/schematics/heads.json",
+    "new_name": "forgero:schematics/categories/heads",
+    "old_name": "forgero:heads",
+    "parents": []
+  },
+  "forgero:helmet": {
+    "category": "armor/types",
+    "description": "",
+    "file_path": "content/forgero-armor/src/main/resources/data/forgero/tags/armor/helmet.json",
+    "new_name": "forgero:armor/types/helmet",
+    "old_name": "forgero:helmet",
+    "parents": []
+  },
+  "forgero:hoe": {
+    "category": "tools/types",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/tools/hoe.json",
+    "new_name": "forgero:tools/types/hoe",
+    "old_name": "forgero:hoe",
+    "parents": [
+      "forgero:tool"
+    ]
+  },
+  "forgero:hoe_head": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/parts/hoe_head.json",
+    "new_name": "forgero:parts/types/hoe_head",
+    "old_name": "forgero:hoe_head",
+    "parents": [
+      "forgero:parts/head"
+    ]
+  },
+  "forgero:hybrid": {
+    "category": "materials/properties",
+    "description": "",
+    "file_path": "content/forgero-upgrades/src/main/resources/data/forgero/tags/materials/hybrid.json",
+    "new_name": "forgero:materials/properties/hybrid",
+    "old_name": "forgero:hybrid",
+    "parents": []
+  },
+  "forgero:katana": {
+    "category": "weapons/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/weapons/katana.json",
+    "new_name": "forgero:weapons/types/katana",
+    "old_name": "forgero:katana",
+    "parents": []
+  },
+  "forgero:katana_blade": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/parts/katana_blade.json",
+    "new_name": "forgero:parts/types/katana_blade",
+    "old_name": "forgero:katana_blade",
+    "parents": []
+  },
+  "forgero:knife": {
+    "category": "weapons/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/weapons/knife.json",
+    "new_name": "forgero:weapons/types/knife",
+    "old_name": "forgero:knife",
+    "parents": []
+  },
+  "forgero:knife_blade": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/parts/knife_blade.json",
+    "new_name": "forgero:parts/types/knife_blade",
+    "old_name": "forgero:knife_blade",
+    "parents": []
+  },
+  "forgero:kunai": {
+    "category": "weapons/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/weapons/kunai.json",
+    "new_name": "forgero:weapons/types/kunai",
+    "old_name": "forgero:kunai",
+    "parents": []
+  },
+  "forgero:kunai_blade": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/parts/kunai_blade.json",
+    "new_name": "forgero:parts/types/kunai_blade",
+    "old_name": "forgero:kunai_blade",
+    "parents": []
+  },
+  "forgero:lapis": {
+    "category": "materials/types",
+    "description": "",
+    "file_path": "content/forgero-gems/src/main/resources/data/forgero/tags/materials/lapis.json",
+    "new_name": "forgero:materials/types/lapis",
+    "old_name": "forgero:lapis",
+    "parents": [
+      "forgero:gem"
+    ]
+  },
+  "forgero:leather": {
+    "category": "materials/types",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/materials/leather.json",
+    "new_name": "forgero:materials/types/leather",
+    "old_name": "forgero:leather",
+    "parents": []
+  },
+  "forgero:leggings": {
+    "category": "armor/types",
+    "description": "",
+    "file_path": "content/forgero-armor/src/main/resources/data/forgero/tags/armor/leggings.json",
+    "new_name": "forgero:armor/types/leggings",
+    "old_name": "forgero:leggings",
+    "parents": []
+  },
+  "forgero:mace": {
+    "category": "weapons/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/weapons/mace.json",
+    "new_name": "forgero:weapons/types/mace",
+    "old_name": "forgero:mace",
+    "parents": []
+  },
+  "forgero:mace_head": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/parts/mace_head.json",
+    "new_name": "forgero:parts/types/mace_head",
+    "old_name": "forgero:mace_head",
+    "parents": []
+  },
+  "forgero:magical": {
+    "category": "materials/properties",
+    "description": "",
+    "file_path": "content/forgero-extended/src/main/resources/data/forgero/tags/materials/magical.json",
+    "new_name": "forgero:materials/properties/magical",
+    "old_name": "forgero:magical",
+    "parents": [
+      "forgero:material"
+    ]
+  },
+  "forgero:mandrill_pickaxe": {
+    "category": "tools/types",
+    "description": "",
+    "file_path": "content/forgero-mining/src/main/resources/data/forgero/tags/tools/mandrill_pickaxe.json",
+    "new_name": "forgero:tools/types/mandrill_pickaxe",
+    "old_name": "forgero:mandrill_pickaxe",
+    "parents": [
+      "forgero:tool"
+    ]
+  },
+  "forgero:mandrill_pickaxe_head": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-mining/src/main/resources/data/forgero/tags/parts/mandrill_pickaxe_head.json",
+    "new_name": "forgero:parts/types/mandrill_pickaxe_head",
+    "old_name": "forgero:mandrill_pickaxe_head",
+    "parents": [
+      "forgero:parts/head"
+    ]
+  },
+  "forgero:mastercrafted": {
+    "category": "schematics/categories",
+    "description": "",
+    "file_path": "content/forgero-schematics/src/main/resources/data/forgero/tags/schematics/mastercrafted.json",
+    "new_name": "forgero:schematics/categories/mastercrafted",
+    "old_name": "forgero:mastercrafted",
+    "parents": []
+  },
+  "forgero:material": {
+    "category": "materials/types",
+    "description": "",
+    "file_path": "content/forgero-tools/src/main/resources/data/forgero/tags/materials/material.json",
+    "new_name": "forgero:materials/types/material",
+    "old_name": "forgero:material",
+    "parents": []
+  },
+  "forgero:materials": {
+    "category": "ROOT",
+    "description": "Root tag for all material components",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/materials/materials.json",
+    "new_name": "forgero:materials",
+    "old_name": "forgero:materials",
+    "parents": []
+  },
+  "forgero:metal": {
+    "category": "materials/types",
+    "description": "",
+    "file_path": "content/forgero-tools/src/main/resources/data/forgero/tags/materials/metal.json",
+    "new_name": "forgero:materials/types/metal",
+    "old_name": "forgero:metal",
+    "parents": [
+      "forgero:material",
+      "forgero:tool_material"
+    ]
+  },
+  "forgero:mineral": {
+    "category": "materials/types",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/materials/mineral.json",
+    "new_name": "forgero:materials/types/mineral",
+    "old_name": "forgero:mineral",
+    "parents": []
+  },
+  "forgero:mining": {
+    "category": "schematics/categories",
+    "description": "",
+    "file_path": "content/forgero-mining/src/main/resources/data/forgero/tags/schematics/mining.json",
+    "new_name": "forgero:schematics/categories/mining",
+    "old_name": "forgero:mining",
+    "parents": []
+  },
+  "forgero:parts": {
+    "category": "ROOT",
+    "description": "Root tag for all part components",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/parts/parts.json",
+    "new_name": "forgero:parts",
+    "old_name": "forgero:parts",
+    "parents": []
+  },
+  "forgero:pickaxe": {
+    "category": "tools/types",
+    "description": "",
+    "file_path": "content/forgero-tools/src/main/resources/data/forgero/tags/tools/pickaxe.json",
+    "new_name": "forgero:tools/types/pickaxe",
+    "old_name": "forgero:pickaxe",
+    "parents": []
+  },
+  "forgero:pickaxe_head": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/parts/pickaxe_head.json",
+    "new_name": "forgero:parts/types/pickaxe_head",
+    "old_name": "forgero:pickaxe_head",
+    "parents": [
+      "forgero:parts/head"
+    ]
+  },
+  "forgero:pickaxe_head_shape": {
+    "category": "parts/shapes",
+    "description": "",
+    "file_path": "content/forgero-tools/src/main/resources/data/forgero/tags/shape/pickaxe_head_shape.json",
+    "new_name": "forgero:parts/shapes/pickaxe_head_shape",
+    "old_name": "forgero:pickaxe_head_shape",
+    "parents": []
+  },
+  "forgero:pickaxe_head_type": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-tools/src/main/resources/data/forgero/tags/parts/pickaxe_head_type.json",
+    "new_name": "forgero:parts/types/pickaxe_head_type",
+    "old_name": "forgero:pickaxe_head_type",
+    "parents": []
+  },
+  "forgero:plant": {
+    "category": "materials/types",
+    "description": "",
+    "file_path": "content/forgero-upgrades/src/main/resources/data/forgero/tags/materials/plant.json",
+    "new_name": "forgero:materials/types/plant",
+    "old_name": "forgero:plant",
+    "parents": []
+  },
+  "forgero:plants": {
+    "category": "blocks/categories",
+    "description": "",
+    "file_path": "content/forgero-extended/src/main/resources/data/forgero/tags/blocks/plants.json",
+    "new_name": "forgero:blocks/categories/plants",
+    "old_name": "forgero:plants",
+    "parents": []
+  },
+  "forgero:pommel": {
+    "category": "upgrades/types",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/upgrade/pommel.json",
+    "new_name": "forgero:upgrades/types/pommel",
+    "old_name": "forgero:pommel",
+    "parents": []
+  },
+  "forgero:prismarine": {
+    "category": "materials/types",
+    "description": "",
+    "file_path": "content/forgero-gems/src/main/resources/data/forgero/tags/materials/prismarine.json",
+    "new_name": "forgero:materials/types/prismarine",
+    "old_name": "forgero:prismarine",
+    "parents": [
+      "forgero:gem"
+    ]
+  },
+  "forgero:quartz": {
+    "category": "materials/types",
+    "description": "",
+    "file_path": "content/forgero-gems/src/main/resources/data/forgero/tags/materials/quartz.json",
+    "new_name": "forgero:materials/types/quartz",
+    "old_name": "forgero:quartz",
+    "parents": [
+      "forgero:gem"
+    ]
+  },
+  "forgero:rapier": {
+    "category": "weapons/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/weapons/rapier.json",
+    "new_name": "forgero:weapons/types/rapier",
+    "old_name": "forgero:rapier",
+    "parents": []
+  },
+  "forgero:rapier_blade": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/parts/rapier_blade.json",
+    "new_name": "forgero:parts/types/rapier_blade",
+    "old_name": "forgero:rapier_blade",
+    "parents": []
+  },
+  "forgero:refined": {
+    "category": "schematics/categories",
+    "description": "",
+    "file_path": "content/forgero-schematics/src/main/resources/data/forgero/tags/schematics/refined.json",
+    "new_name": "forgero:schematics/categories/refined",
+    "old_name": "forgero:refined",
+    "parents": []
+  },
+  "forgero:reinforcement": {
+    "category": "upgrades/types",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/upgrade/reinforcement.json",
+    "new_name": "forgero:upgrades/types/reinforcement",
+    "old_name": "forgero:reinforcement",
+    "parents": []
+  },
+  "forgero:scythe": {
+    "category": "weapons/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/weapons/scythe.json",
+    "new_name": "forgero:weapons/types/scythe",
+    "old_name": "forgero:scythe",
+    "parents": [
+      "forgero:tool"
+    ]
+  },
+  "forgero:scythe_blade": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/parts/scythe_blade.json",
+    "new_name": "forgero:parts/types/scythe_blade",
+    "old_name": "forgero:scythe_blade",
+    "parents": [
+      "forgero:parts/blade"
+    ]
+  },
+  "forgero:secondary": {
+    "category": "materials/roles",
+    "description": "Secondary materials for upgrades and bindings",
+    "file_path": "content/forgero-extended/src/main/resources/data/forgero/tags/materials/secondary.json",
+    "new_name": "forgero:materials/roles/secondary",
+    "old_name": "forgero:secondary",
+    "parents": []
+  },
+  "forgero:shovel": {
+    "category": "tools/types",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/tools/shovel.json",
+    "new_name": "forgero:tools/types/shovel",
+    "old_name": "forgero:shovel",
+    "parents": [
+      "forgero:tool"
+    ]
+  },
+  "forgero:shovel_head": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/parts/shovel_head.json",
+    "new_name": "forgero:parts/types/shovel_head",
+    "old_name": "forgero:shovel_head",
+    "parents": [
+      "forgero:parts/head"
+    ]
+  },
+  "forgero:soft": {
+    "category": "materials/properties",
+    "description": "",
+    "file_path": "content/forgero-upgrades/src/main/resources/data/forgero/tags/materials/soft.json",
+    "new_name": "forgero:materials/properties/soft",
+    "old_name": "forgero:soft",
+    "parents": []
+  },
+  "forgero:spade": {
+    "category": "tools/types",
+    "description": "",
+    "file_path": "content/forgero-mining/src/main/resources/data/forgero/tags/tools/spade.json",
+    "new_name": "forgero:tools/types/spade",
+    "old_name": "forgero:spade",
+    "parents": [
+      "forgero:tool"
+    ]
+  },
+  "forgero:spade_head": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-mining/src/main/resources/data/forgero/tags/parts/spade_head.json",
+    "new_name": "forgero:parts/types/spade_head",
+    "old_name": "forgero:spade_head",
+    "parents": [
+      "forgero:parts/head"
+    ]
+  },
+  "forgero:spear": {
+    "category": "weapons/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/weapons/spear.json",
+    "new_name": "forgero:weapons/types/spear",
+    "old_name": "forgero:spear",
+    "parents": [
+      "forgero:tool"
+    ]
+  },
+  "forgero:spear_head": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/parts/spear_head.json",
+    "new_name": "forgero:parts/types/spear_head",
+    "old_name": "forgero:spear_head",
+    "parents": [
+      "forgero:parts/head"
+    ]
+  },
+  "forgero:stone": {
+    "category": "materials/types",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/materials/stone.json",
+    "new_name": "forgero:materials/types/stone",
+    "old_name": "forgero:stone",
+    "parents": []
+  },
+  "forgero:sword": {
+    "category": "tools/types",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/tools/sword.json",
+    "new_name": "forgero:tools/types/sword",
+    "old_name": "forgero:sword",
+    "parents": [
+      "forgero:tool"
+    ]
+  },
+  "forgero:sword_blade": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/parts/sword_blade.json",
+    "new_name": "forgero:parts/types/sword_blade",
+    "old_name": "forgero:sword_blade",
+    "parents": [
+      "forgero:parts/blade"
+    ]
+  },
+  "forgero:sword_guard": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/parts/sword_guard.json",
+    "new_name": "forgero:parts/types/sword_guard",
+    "old_name": "forgero:sword_guard",
+    "parents": []
+  },
+  "forgero:swordlike": {
+    "category": "weapons/categories",
+    "description": "Sword-like weapons (swords, daggers, katanas)",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/weapons/swordlike.json",
+    "new_name": "forgero:weapons/categories/swordlike",
+    "old_name": "forgero:swordlike",
+    "parents": [
+      "forgero:weapons"
+    ]
+  },
+  "forgero:test-component": {
+    "category": "uncategorized",
+    "description": "Test components for automated testing",
+    "file_path": "content/forgero-materials/src/main/resources/data/forgero/tags/test-component.json",
+    "new_name": "forgero:uncategorized/test-component",
+    "old_name": "forgero:test-component",
+    "parents": []
+  },
+  "forgero:tip_reinforcement": {
+    "category": "upgrades/types",
+    "description": "",
+    "file_path": "content/minecraft-tools/src/main/resources/data/forgero/tags/upgrade/tip_reinforcement.json",
+    "new_name": "forgero:upgrades/types/tip_reinforcement",
+    "old_name": "forgero:tip_reinforcement",
+    "parents": []
+  },
+  "forgero:tool": {
+    "category": "ROOT",
+    "description": "",
+    "file_path": "content/forgero-tools/src/main/resources/data/forgero/tags/tools/tool.json",
+    "new_name": "forgero:tools",
+    "old_name": "forgero:tool",
+    "parents": []
+  },
+  "forgero:tool-material": {
+    "category": "materials/roles",
+    "description": "Tool materials (alias for tool_material)",
+    "file_path": "content/forgero-materials/src/main/resources/data/forgero/tags/materials/tool-material.json",
+    "new_name": "forgero:materials/roles/tool-material",
+    "old_name": "forgero:tool-material",
+    "parents": [
+      "forgero:tool_material"
+    ]
+  },
+  "forgero:tool_material": {
+    "category": "materials/roles",
+    "description": "",
+    "file_path": "content/forgero-tools/src/main/resources/data/forgero/tags/materials/tool_material.json",
+    "new_name": "forgero:materials/roles/tool_material",
+    "old_name": "forgero:tool_material",
+    "parents": [
+      "forgero:material"
+    ]
+  },
+  "forgero:tools": {
+    "category": "ROOT",
+    "description": "Root tag for all tool items",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/tools/tools.json",
+    "new_name": "forgero:tools",
+    "old_name": "forgero:tools",
+    "parents": []
+  },
+  "forgero:upgrade_material": {
+    "category": "materials/roles",
+    "description": "",
+    "file_path": "content/forgero-upgrades/src/main/resources/data/forgero/tags/materials/upgrade_material.json",
+    "new_name": "forgero:materials/roles/upgrade_material",
+    "old_name": "forgero:upgrade_material",
+    "parents": []
+  },
+  "forgero:upgrades": {
+    "category": "ROOT",
+    "description": "Root tag for all upgrade components",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/upgrades/upgrades.json",
+    "new_name": "forgero:upgrades",
+    "old_name": "forgero:upgrades",
+    "parents": []
+  },
+  "forgero:vanilla_tool": {
+    "category": "uncategorized",
+    "description": "",
+    "file_path": "content/vanilla-upgrades-base/src/main/resources/data/forgero/tags/vanilla_tool.json",
+    "new_name": "forgero:uncategorized/vanilla_tool",
+    "old_name": "forgero:vanilla_tool",
+    "parents": []
+  },
+  "forgero:vein_mining_dirt": {
+    "category": "blocks/categories",
+    "description": "",
+    "file_path": "content/forgero-extended/src/main/resources/data/forgero/tags/blocks/vein_mining_dirt.json",
+    "new_name": "forgero:blocks/categories/vein_mining_dirt",
+    "old_name": "forgero:vein_mining_dirt",
+    "parents": []
+  },
+  "forgero:vein_mining_logs": {
+    "category": "blocks/categories",
+    "description": "",
+    "file_path": "content/forgero-extended/src/main/resources/data/forgero/tags/blocks/vein_mining_logs.json",
+    "new_name": "forgero:blocks/categories/vein_mining_logs",
+    "old_name": "forgero:vein_mining_logs",
+    "parents": []
+  },
+  "forgero:vein_mining_ores": {
+    "category": "blocks/categories",
+    "description": "",
+    "file_path": "content/forgero-extended/src/main/resources/data/forgero/tags/blocks/vein_mining_ores.json",
+    "new_name": "forgero:blocks/categories/vein_mining_ores",
+    "old_name": "forgero:vein_mining_ores",
+    "parents": []
+  },
+  "forgero:war_hammer": {
+    "category": "weapons/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/weapons/war_hammer.json",
+    "new_name": "forgero:weapons/types/war_hammer",
+    "old_name": "forgero:war_hammer",
+    "parents": [
+      "forgero:tool"
+    ]
+  },
+  "forgero:war_hammer_head": {
+    "category": "parts/types",
+    "description": "",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/parts/war_hammer_head.json",
+    "new_name": "forgero:parts/types/war_hammer_head",
+    "old_name": "forgero:war_hammer_head",
+    "parents": [
+      "forgero:parts/head"
+    ]
+  },
+  "forgero:weapons": {
+    "category": "ROOT",
+    "description": "Root tag for all weapon items",
+    "file_path": "content/forgero-extended-weapons/src/main/resources/data/forgero/tags/weapons/weapons.json",
+    "new_name": "forgero:weapons",
+    "old_name": "forgero:weapons",
+    "parents": []
+  },
+  "forgero:wood": {
+    "category": "materials/types",
+    "description": "",
+    "file_path": "content/forgero-base/src/main/resources/data/forgero/tags/materials/wood.json",
+    "new_name": "forgero:materials/types/wood",
+    "old_name": "forgero:wood",
+    "parents": []
+  }
+}
