@@ -61,17 +61,6 @@ public class ForgeroServicesGameTest {
 	}
 
 	/**
-	 * Verifies that the Resolver is available for attribute computation.
-	 */
-	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "forgero_services", required = true)
-	public void testResolverAvailable(TestContext context) {
-		var resolver = ForgeroApi.resolver();
-		assertNotNull(resolver, "Resolver should be available");
-
-		context.complete();
-	}
-
-	/**
 	 * Verifies that the ComponentConverter is available.
 	 */
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "forgero_services", required = true)
@@ -116,8 +105,6 @@ public class ForgeroServicesGameTest {
 				"TagResolver should be the same instance");
 		assertSame(services.converter(), ForgeroApi.converter(),
 				"Converter should be the same instance");
-		assertSame(services.resolver(), ForgeroApi.resolver(),
-				"Resolver should be the same instance");
 		assertSame(services.componentRegistry(), ForgeroApi.componentRegistry(),
 				"ComponentRegistry should be the same instance");
 

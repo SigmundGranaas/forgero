@@ -256,6 +256,66 @@ public interface ItemQueryApi {
 	 */
 	int getEmptySlotCount(ItemStack stack);
 
+	// ========== Component Type Queries ==========
+
+	/**
+	 * Checks if the provided ItemStack applies its attributes when held or worn.
+	 * <p>
+	 * Only equipment components (swords, pickaxes, armor, etc.) apply attributes.
+	 * Parts and materials expose attributes for inspection and composition, but
+	 * do not apply them to the player when held.
+	 * <p>
+	 * This is useful for differentiating between:
+	 * <ul>
+	 *     <li>A diamond sword (applies +7 attack damage when held)</li>
+	 *     <li>A sword blade (exposes attack damage for viewing but doesn't apply it)</li>
+	 * </ul>
+	 *
+	 * @param stack The ItemStack to check
+	 * @return true if the item applies attributes when held, false otherwise
+	 * @see #getContributedAttackDamage(ItemStack)
+	 */
+	boolean appliesAttributes(ItemStack stack);
+
+	/**
+	 * Returns the contributed attack damage value of the provided ItemStack.
+	 * <p>
+	 * This method returns the attack damage value regardless of whether the item
+	 * is equipment or a part. Use this for displaying stats in tooltips or comparing
+	 * parts, even though the values won't be applied to the player when the item is held.
+	 * <p>
+	 * For equipment, this returns the same value as {@link #getAttackDamage(ItemStack)}.
+	 * For parts, this returns the attack damage they contribute to their parent equipment.
+	 *
+	 * @param stack The ItemStack to query
+	 * @return The contributed attack damage, or 0.0f for null/empty/non-Forgero items
+	 * @see #appliesAttributes(ItemStack)
+	 * @see #getAttackDamage(ItemStack)
+	 */
+	float getContributedAttackDamage(ItemStack stack);
+
+	/**
+	 * Returns the contributed mining speed value of the provided ItemStack.
+	 * <p>
+	 * Similar to {@link #getContributedAttackDamage(ItemStack)}, this returns the value
+	 * regardless of whether the item is equipment or a part.
+	 *
+	 * @param stack The ItemStack to query
+	 * @return The contributed mining speed, or 0.0f for null/empty/non-Forgero items
+	 */
+	float getContributedMiningSpeed(ItemStack stack);
+
+	/**
+	 * Returns the contributed durability value of the provided ItemStack.
+	 * <p>
+	 * Similar to {@link #getContributedAttackDamage(ItemStack)}, this returns the value
+	 * regardless of whether the item is equipment or a part.
+	 *
+	 * @param stack The ItemStack to query
+	 * @return The contributed durability, or 0 for null/empty/non-Forgero items
+	 */
+	int getContributedDurability(ItemStack stack);
+
 	// ========== Tag Queries ==========
 
 	/**

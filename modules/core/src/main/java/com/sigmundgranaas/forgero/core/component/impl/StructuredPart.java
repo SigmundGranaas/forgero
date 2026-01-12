@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.component.impl;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.component.api.ContributingComponent;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
@@ -19,7 +20,7 @@ public record StructuredPart(
 		Set<OpenIdentifier> tags,
 		Map<String, List<?>> properties,
 		ComponentStructure structure
-) implements StructuredComponent {
+) implements StructuredComponent, ContributingComponent {
 
 	private static final OpenIdentifier TYPE_IDENTIFIER = OpenIdentifier.of("structured_part");
 

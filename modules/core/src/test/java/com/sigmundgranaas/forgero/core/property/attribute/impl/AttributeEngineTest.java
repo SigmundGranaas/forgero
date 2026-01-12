@@ -6,21 +6,13 @@ import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.slot.SlotValidator;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.testutils.TestIdentifiers;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AttributeEngineTest extends ForgeroTest {
-	private Resolver resolver;
-
-	@BeforeEach
-	void setUp() {
-		resolver = resolver();
-	}
 
 	/**
 	 * Test case 1: Non-Structured Component (Default Strategy)
@@ -34,7 +26,7 @@ class AttributeEngineTest extends ForgeroTest {
 				.withAttribute(DefaultAttributes.ATTACK_SPEED, 1.2f)
 				.build();
 
-		AttributeQueryResult result = resolver.resolve(basicAxe, attributeEngine());
+		AttributeQueryResult result = attributeEngine().resolve(basicAxe);
 
 		assertEquals(10f, result.getValue(DefaultAttributes.ATTACK_DAMAGE));
 		assertEquals(1.2f, result.getValue(DefaultAttributes.ATTACK_SPEED));
@@ -63,7 +55,7 @@ class AttributeEngineTest extends ForgeroTest {
 				.withPart(handle, HANDLE_SLOT_ID.toString(), HANDLE_TAG)
 				.build();
 
-		AttributeQueryResult result = resolver.resolve(pickaxe, attributeEngine());
+		AttributeQueryResult result = attributeEngine().resolve(pickaxe);
 		assertEquals(10f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), "Total attack damage should be base + head + handle (3+5+2=10)");
 	}
 
@@ -90,7 +82,7 @@ class AttributeEngineTest extends ForgeroTest {
 				.withPart(handle, HANDLE_SLOT_ID.toString(), HANDLE_TAG)
 				.build();
 
-		AttributeQueryResult result = resolver.resolve(tool, attributeEngine());
+		AttributeQueryResult result = attributeEngine().resolve(tool);
 
 		assertEquals(5.0f, result.getValue(DefaultAttributes.MINING_SPEED), "Mining Speed should be base + head (2.0 + 3.0 = 5.0)");
 		assertEquals(5.0f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), "Attack Damage should be from head only (5.0)");
@@ -113,7 +105,7 @@ class AttributeEngineTest extends ForgeroTest {
 		}
 
 		Component tool = builder.build();
-		AttributeQueryResult result = resolver.resolve(tool, attributeEngine());
+		AttributeQueryResult result = attributeEngine().resolve(tool);
 
 		// All 100 attributes should be aggregated
 		assertEquals(100.0f, result.getValue(DefaultAttributes.ATTACK_DAMAGE),
@@ -131,7 +123,7 @@ class AttributeEngineTest extends ForgeroTest {
 				.withAttribute(DefaultAttributes.ATTACK_DAMAGE, Float.MAX_VALUE)
 				.build();
 
-		AttributeQueryResult result = resolver.resolve(tool, attributeEngine());
+		AttributeQueryResult result = attributeEngine().resolve(tool);
 
 		assertEquals(Float.MAX_VALUE, result.getValue(DefaultAttributes.ATTACK_DAMAGE),
 				"Should handle Float.MAX_VALUE correctly");
@@ -148,7 +140,7 @@ class AttributeEngineTest extends ForgeroTest {
 				.withAttribute(DefaultAttributes.ATTACK_DAMAGE, Float.MIN_VALUE)
 				.build();
 
-		AttributeQueryResult result = resolver.resolve(tool, attributeEngine());
+		AttributeQueryResult result = attributeEngine().resolve(tool);
 
 		assertEquals(Float.MIN_VALUE, result.getValue(DefaultAttributes.ATTACK_DAMAGE),
 				"Should handle Float.MIN_VALUE correctly");
@@ -165,7 +157,7 @@ class AttributeEngineTest extends ForgeroTest {
 				.withAttribute(DefaultAttributes.ATTACK_DAMAGE, 0.0f)
 				.build();
 
-		AttributeQueryResult result = resolver.resolve(tool, attributeEngine());
+		AttributeQueryResult result = attributeEngine().resolve(tool);
 
 		assertEquals(0.0f, result.getValue(DefaultAttributes.ATTACK_DAMAGE),
 				"Zero attribute value should be preserved");
@@ -182,7 +174,7 @@ class AttributeEngineTest extends ForgeroTest {
 				.withAttribute(DefaultAttributes.ATTACK_DAMAGE, -5.0f)
 				.build();
 
-		AttributeQueryResult result = resolver.resolve(tool, attributeEngine());
+		AttributeQueryResult result = attributeEngine().resolve(tool);
 
 		assertEquals(-5.0f, result.getValue(DefaultAttributes.ATTACK_DAMAGE),
 				"Negative attribute value should be preserved");
@@ -210,7 +202,7 @@ class AttributeEngineTest extends ForgeroTest {
 				.withPart(part2, "slot2", TestIdentifiers.id("part"))
 				.build();
 
-		AttributeQueryResult result = resolver.resolve(tool, attributeEngine());
+		AttributeQueryResult result = attributeEngine().resolve(tool);
 
 		// Float.MAX_VALUE + Float.MAX_VALUE = Infinity in Java
 		float aggregated = result.getValue(DefaultAttributes.ATTACK_DAMAGE);
@@ -240,7 +232,7 @@ class AttributeEngineTest extends ForgeroTest {
 				.withPart(negativePart, "slot2", TestIdentifiers.id("part"))
 				.build();
 
-		AttributeQueryResult result = resolver.resolve(tool, attributeEngine());
+		AttributeQueryResult result = attributeEngine().resolve(tool);
 
 		// MAX_VALUE + (-MAX_VALUE) should be 0, but floating point may have precision issues
 		float aggregated = result.getValue(DefaultAttributes.ATTACK_DAMAGE);
@@ -280,7 +272,7 @@ class AttributeEngineTest extends ForgeroTest {
 				.withPart(current, "root_slot", TestIdentifiers.id("part"))
 				.build();
 
-		AttributeQueryResult result = resolver.resolve(tool, attributeEngine());
+		AttributeQueryResult result = attributeEngine().resolve(tool);
 
 		// Should aggregate all 21 attributes (20 parts + 1 tool)
 		assertEquals(21.0f, result.getValue(DefaultAttributes.ATTACK_DAMAGE),
@@ -307,7 +299,7 @@ class AttributeEngineTest extends ForgeroTest {
 		}
 
 		Component tool = builder.build();
-		AttributeQueryResult result = resolver.resolve(tool, attributeEngine());
+		AttributeQueryResult result = attributeEngine().resolve(tool);
 
 		// Should aggregate 51 attributes (50 parts + 1 tool)
 		assertEquals(51.0f, result.getValue(DefaultAttributes.ATTACK_DAMAGE),
@@ -333,7 +325,7 @@ class AttributeEngineTest extends ForgeroTest {
 		}
 
 		Component tool = builder.build();
-		AttributeQueryResult result = resolver.resolve(tool, attributeEngine());
+		AttributeQueryResult result = attributeEngine().resolve(tool);
 
 		// Should aggregate to approximately 1.0 (1000 * 0.001)
 		// Use delta for floating point comparison
@@ -351,7 +343,7 @@ class AttributeEngineTest extends ForgeroTest {
 				.withTag("tool")
 				.build();
 
-		AttributeQueryResult result = resolver.resolve(tool, attributeEngine());
+		AttributeQueryResult result = attributeEngine().resolve(tool);
 
 		// Querying non-existent attribute should return 0 or default value
 		float damage = result.getValue(DefaultAttributes.ATTACK_DAMAGE);
@@ -371,7 +363,7 @@ class AttributeEngineTest extends ForgeroTest {
 				.withAttribute(DefaultAttributes.ATTACK_DAMAGE, 2.0f)
 				.build();
 
-		AttributeQueryResult result = resolver.resolve(tool, attributeEngine());
+		AttributeQueryResult result = attributeEngine().resolve(tool);
 
 		// All three attributes should be aggregated
 		assertEquals(10.0f, result.getValue(DefaultAttributes.ATTACK_DAMAGE),

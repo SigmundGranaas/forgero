@@ -1,0 +1,6 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:diamond",
+  "context": "binding_gem",
+  "texture": "forgero:item/upgrade/diamond-binding_gem"
+}

@@ -7,7 +7,6 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.useinteraction.UseContext;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.loader.api.ForgeroInitializedCallback;
 import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.ContextualUseHandler;
 import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.entity.ThrownItemEntity;
@@ -74,12 +73,10 @@ public record ThrowHandler(
 
 	// Services received from ForgeroInitializedCallback
 	private static ComponentConverter converter;
-	private static Resolver resolver;
 
 	static {
 		ForgeroInitializedCallback.EVENT.register(services -> {
 			converter = services.converter();
-			resolver = services.resolver();
 		});
 	}
 
@@ -191,8 +188,7 @@ public record ThrowHandler(
 	private static float resolveAttribute(ItemStack stack, OpenIdentifier attr, float fallback) {
 		return converter.toComponent(stack)
 				.map(component -> {
-					AttributeQueryResult result = resolver
-							.resolve(component, new AttributeEngine());
+					AttributeQueryResult result = new AttributeEngine().resolve(component);
 					return result.getValue(attr);
 				})
 				.filter(value -> value > 0)

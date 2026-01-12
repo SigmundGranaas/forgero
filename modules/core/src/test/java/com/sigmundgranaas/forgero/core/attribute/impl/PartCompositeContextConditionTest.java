@@ -18,7 +18,6 @@ import com.sigmundgranaas.forgero.core.component.impl.StructuredPart;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 import com.sigmundgranaas.forgero.core.condition.predicate.InSlotTypeCondition;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -47,13 +46,6 @@ class PartCompositeContextConditionTest extends ForgeroTest {
 	private static final OpenIdentifier TOOL_MATERIAL_SLOT = idFactory.of("forgero:materials/roles/tool_material");
 	private static final OpenIdentifier ARMOR_MATERIAL_SLOT = idFactory.of("forgero:materials/roles/armor_material");
 	private static final OpenIdentifier PICKAXE_HEAD_TAG = idFactory.of("forgero:parts/types/pickaxe_head");
-
-	private Resolver resolver;
-
-	@BeforeEach
-	void setUp() {
-		resolver = resolver();
-	}
 
 	private SimpleAttribute partCompositeBase(OpenIdentifier type, float value) {
 		return new SimpleAttribute(
@@ -113,7 +105,7 @@ class PartCompositeContextConditionTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = resolver.resolve(pickaxeHead, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(pickaxeHead);
 
 			assertEquals(240f, result.getValue(DefaultAttributes.DURABILITY), 0.001f,
 					"Durability passes condition and composes");
@@ -150,7 +142,7 @@ class PartCompositeContextConditionTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = resolver.resolve(armorPlate, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(armorPlate);
 
 			assertEquals(2f, result.getValue(DefaultAttributes.ARMOR), 0.001f,
 					"Armor passes condition in armor_material slot");
@@ -190,7 +182,7 @@ class PartCompositeContextConditionTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = resolver.resolve(part, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(part);
 
 			assertEquals(7.2f, result.getValue(DefaultAttributes.MINING_SPEED), 0.001f,
 					"Mining speed composed: 6 × 1.2 = 7.2");
@@ -231,7 +223,7 @@ class PartCompositeContextConditionTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = resolver.resolve(part, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(part);
 
 			assertEquals(240f, result.getValue(DefaultAttributes.DURABILITY), 0.001f,
 					"Durability has matching multiplier");
@@ -259,7 +251,7 @@ class PartCompositeContextConditionTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = resolver.resolve(part, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(part);
 
 			assertEquals(0f, result.getValue(DefaultAttributes.DURABILITY), 0.001f,
 					"Context attribute from single source is discarded");
@@ -290,7 +282,7 @@ class PartCompositeContextConditionTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = resolver.resolve(part, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(part);
 
 			assertEquals(100f, result.getValue(DefaultAttributes.DURABILITY), 0.001f,
 					"Default attribute passes through unchanged");
@@ -359,7 +351,7 @@ class PartCompositeContextConditionTest extends ForgeroTest {
 					)
 			);
 
-			StructuredEquipment ironPickaxe = new StructuredEquipment(
+			StructuredEquipment ironPickaxe = StructuredEquipment.create(
 					idFactory.of("forgero:iron-pickaxe"),
 					Set.of(idFactory.of("forgero:tools/pickaxe")),
 					new HashMap<>(),
@@ -369,7 +361,7 @@ class PartCompositeContextConditionTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = resolver.resolve(ironPickaxe, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(ironPickaxe);
 
 			assertEquals(0f, result.getValue(DefaultAttributes.ARMOR), 0.001f,
 					"Armor excluded - no multiplier at part level");

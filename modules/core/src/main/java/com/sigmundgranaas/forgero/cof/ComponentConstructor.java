@@ -61,7 +61,7 @@ public final class ComponentConstructor {
 			if (struct == null || upgs == null) {
 				return DataResult.error(() -> "Missing structure or upgrades for structured_extensible_equipment with id: " + id);
 			}
-			return DataResult.success(new StructuredExtensibleEquipment(id, tags, props, struct, upgs));
+			return DataResult.success(StructuredExtensibleEquipment.create(id, tags, props, struct, upgs));
 		});
 
 		register.accept(STRUCTURED_EXTENSIBLE_PART, StructuredExtensiblePart.class, (id, tags, props, struct, upgs) -> {
@@ -75,7 +75,7 @@ public final class ComponentConstructor {
 			if (struct == null) {
 				return DataResult.error(() -> "Missing structure for structured_equipment with id: " + id);
 			}
-			return DataResult.success(new StructuredEquipment(id, tags, props, struct));
+			return DataResult.success(StructuredEquipment.create(id, tags, props, struct));
 		});
 
 		register.accept(STRUCTURED_PART, StructuredPart.class, (id, tags, props, struct, upgs) -> {
@@ -89,7 +89,7 @@ public final class ComponentConstructor {
 			if (upgs == null) {
 				return DataResult.error(() -> "Missing upgrades for extensible_equipment with id: " + id);
 			}
-			return DataResult.success(new ExtensibleEquipment(id, tags, props, upgs));
+			return DataResult.success(ExtensibleEquipment.create(id, tags, props, upgs));
 		});
 
 		register.accept(EXTENSIBLE_PART, ExtensiblePart.class, (id, tags, props, struct, upgs) -> {
@@ -100,7 +100,7 @@ public final class ComponentConstructor {
 		});
 
 		register.accept(STATIC_EQUIPMENT, StaticEquipment.class, (id, tags, props, struct, upgs) ->
-				DataResult.success(new StaticEquipment(id, tags, props))
+				DataResult.success(StaticEquipment.create(id, tags, props))
 		);
 
 		register.accept(STATIC_COMPONENT, StaticComponent.class, (id, tags, props, struct, upgs) ->

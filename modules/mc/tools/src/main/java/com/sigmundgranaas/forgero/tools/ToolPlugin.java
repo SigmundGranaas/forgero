@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.tools;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.CreateData;
 import com.sigmundgranaas.forgero.loader.api.DataPlugin;
 import com.sigmundgranaas.forgero.loader.api.PluginRegistrationContext;
@@ -41,32 +40,32 @@ public class ToolPlugin implements DataPlugin {
 		context.registerItemCreator(PART_ITEM_CLASS, this::createPartItem);
 	}
 
-	private Item createPickaxeItem(Component component, CreateData data, Resolver resolver) {
-		ForgeroToolMaterial material = new ForgeroToolMaterial(component, resolver);
-		return new ForgeroPickaxeItem(material, new Item.Settings(), component, resolver);
+	private Item createPickaxeItem(Component component, CreateData data) {
+		ForgeroToolMaterial material = new ForgeroToolMaterial(component);
+		return new ForgeroPickaxeItem(material, new Item.Settings(), component);
 	}
 
-	private Item createSwordItem(Component component, CreateData data, Resolver resolver) {
-		ForgeroToolMaterial material = new ForgeroToolMaterial(component, resolver);
-		return new ForgeroSwordItem(material, new Item.Settings(), component, resolver);
+	private Item createSwordItem(Component component, CreateData data) {
+		ForgeroToolMaterial material = new ForgeroToolMaterial(component);
+		return new ForgeroSwordItem(material, new Item.Settings(), component);
 	}
 
-	private Item createAxeItem(Component component, CreateData data, Resolver resolver) {
-		ForgeroToolMaterial material = new ForgeroToolMaterial(component, resolver);
-		return new ForgeroAxeItem(material, new Item.Settings(), component, resolver);
+	private Item createAxeItem(Component component, CreateData data) {
+		ForgeroToolMaterial material = new ForgeroToolMaterial(component);
+		return new ForgeroAxeItem(material, new Item.Settings(), component);
 	}
 
-	private Item createShovelItem(Component component, CreateData data, Resolver resolver) {
-		ForgeroToolMaterial material = new ForgeroToolMaterial(component, resolver);
-		return new ForgeroShovelItem(material, new Item.Settings(), component, resolver);
+	private Item createShovelItem(Component component, CreateData data) {
+		ForgeroToolMaterial material = new ForgeroToolMaterial(component);
+		return new ForgeroShovelItem(material, new Item.Settings(), component);
 	}
 
-	private Item createHoeItem(Component component, CreateData data, Resolver resolver) {
-		ForgeroToolMaterial material = new ForgeroToolMaterial(component, resolver);
-		return new ForgeroHoeItem(material, new Item.Settings(), component, resolver);
+	private Item createHoeItem(Component component, CreateData data) {
+		ForgeroToolMaterial material = new ForgeroToolMaterial(component);
+		return new ForgeroHoeItem(material, new Item.Settings(), component);
 	}
 
-	private Item createPartItem(Component component, CreateData data, Resolver resolver) {
-		return new ForgeroPartItem(new Item.Settings(), component, resolver);
+	private Item createPartItem(Component component, CreateData data) {
+		return new ForgeroPartItem(new Item.Settings(), component);
 	}
 }

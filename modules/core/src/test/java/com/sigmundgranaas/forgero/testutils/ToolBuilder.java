@@ -42,14 +42,14 @@ public class ToolBuilder extends BaseComponentBuilder<ToolBuilder> {
 		var upgrades = ComponentUpgrades.of(upgradeSlots);
 
 		if (hasStructure && hasUpgrades) {
-			return new StructuredExtensibleEquipment(id, tags, properties, structure, upgrades);
+			return StructuredExtensibleEquipment.create(id, tags, properties, structure, upgrades);
 		}
 		if (hasStructure) {
-			return new StructuredEquipment(id, tags, properties, structure);
+			return StructuredEquipment.create(id, tags, properties, structure);
 		}
 		if (hasUpgrades) {
-			return new ExtensibleEquipment(id, tags, properties, upgrades);
+			return ExtensibleEquipment.create(id, tags, properties, upgrades);
 		}
-		return new StaticEquipment(id, tags, properties);
+		return StaticEquipment.create(id, tags, properties);
 	}
 }

@@ -11,6 +11,8 @@ import java.util.Optional;
  * to allow for context-dependent calculations.
  */
 public class DynamicContext {
+	private static final DynamicContext EMPTY = new DynamicContext(Collections.emptyMap());
+
 	private final Map<Key<?>, Object> data;
 
 	private DynamicContext(Map<Key<?>, Object> data) {
@@ -46,6 +48,6 @@ public class DynamicContext {
 	}
 
 	public static DynamicContext empty() {
-		return new DynamicContext(Collections.emptyMap());
+		return EMPTY;
 	}
 }

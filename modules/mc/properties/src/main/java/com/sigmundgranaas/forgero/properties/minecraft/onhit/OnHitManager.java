@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgero.properties.minecraft.onhit;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.context.ContextKeys;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
@@ -22,7 +21,6 @@ import java.util.stream.Collectors;
 public class OnHitManager {
 
 	private static ComponentConverter converter;
-	private static Resolver resolver;
 
 	private OnHitManager() {
 		// Static class
@@ -36,7 +34,6 @@ public class OnHitManager {
 	 */
 	public static void initialize(ForgeroServices services) {
 		converter = services.converter();
-		resolver = services.resolver();
 	}
 
 	public static void handleOnHit(ItemStack stack, Entity source, Entity target) {
@@ -78,6 +75,6 @@ public class OnHitManager {
 
 		contextBuilder.put(ContextKeys.TARGET_TAGS, targetTags);
 
-		return resolver.resolve(component, engine, contextBuilder.build());
+		return engine.resolve(component, contextBuilder.build());
 	}
 }

@@ -12,7 +12,16 @@
       "layers": [
         {
           "order": 15,
-          "template": "forgero:texture_template/parts/handle",
+          "textures": {
+            "default": "forgero:item/upgrade/{target.name}-arrow_shaft",
+            "variants": [
+              {
+                "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:ranged/bow" }],
+                "texture": "forgero:item/upgrade/{target.name}-arrow_shaft_in_bow"
+              }
+            ]
+          },
+          "template": "forgero:texture_template/parts/arrow_shaft",
           "palette": "forgero:palette/{target.name}",
           "output": "forgero:item/upgrade/{target.name}-arrow_shaft"
         }
@@ -20,6 +29,13 @@
       "mount_points": [
         { "name": "center", "position": [8, 8] }
       ]
+    }
+  ],
+  "texture_variants": [
+    {
+      "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:ranged/bow" }],
+      "template": "forgero:texture_template/parts/arrow_shaft_in_bow",
+      "output_suffix": "-arrow_shaft_in_bow"
     }
   ]
 }

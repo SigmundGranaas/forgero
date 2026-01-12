@@ -1,0 +1,28 @@
+{
+  "type": "forgero:upgrade_model_template",
+  "context": "dagger_blade_reinforcement",
+  "target": {
+    "tag": "forgero:tool_material"
+  },
+  "models": [
+    {
+      "type": "forgero:texture_model",
+      "target": "forgero:{target.name}",
+      "context": "dagger_blade_reinforcement",
+      "layers": [
+        {
+          "order": 5,
+          "template": "forgero:texture_template/parts/sword_blade_tip_reinforcement",
+          "palette": "forgero:palette/{target.name}",
+          "output": "forgero:item/upgrade/{target.name}-dagger_blade_reinforcement"
+        }
+      ],
+      "mount_points": [
+        {
+          "name": "attachment_point",
+          "position": [12, 12]
+        }
+      ]
+    }
+  ]
+}

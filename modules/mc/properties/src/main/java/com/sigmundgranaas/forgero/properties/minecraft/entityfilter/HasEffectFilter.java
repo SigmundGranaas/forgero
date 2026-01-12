@@ -5,8 +5,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 
 /**
@@ -30,12 +30,16 @@ public record HasEffectFilter(String effect) implements EntityFilter {
 			return false;
 		}
 
-		StatusEffect statusEffect = Registries.STATUS_EFFECT.get(effectId);
-		if (statusEffect == null) {
-			return false;
+		// Check if any active effect matches the requested identifier
+		for (StatusEffectInstance instance : living.getStatusEffects()) {
+			StatusEffect activeEffect = instance.getEffectType();
+			Identifier activeEffectId = Registries.STATUS_EFFECT.getId(activeEffect);
+			if (activeEffectId != null && activeEffectId.equals(effectId)) {
+				return true;
+			}
 		}
 
-		return living.hasStatusEffect(statusEffect);
+		return false;
 	}
 
 	@Override

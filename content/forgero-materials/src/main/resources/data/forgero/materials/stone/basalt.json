@@ -3,7 +3,8 @@
   "name": "Basalt",
   "tags": [
     "forgero:materials/types/stone",
-    "forgero:materials/roles/tool_material"
+    "forgero:materials/roles/tool_material",
+    "forgero:materials/roles/upgrade_material"
   ],
   "host": {
     "identifiers": [

@@ -15,8 +15,6 @@ import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 import com.sigmundgranaas.forgero.core.condition.predicate.HasOtherContributorCondition;
 import com.sigmundgranaas.forgero.core.condition.predicate.InSlotTypeCondition;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -24,7 +22,6 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 
 import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.attributeEngine;
-import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.resolver;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -52,13 +49,6 @@ class HandleAttributeFilteringTest extends ForgeroTest {
 	private static final OpenIdentifier TOOL_MATERIAL_ID = OpenIdentifier.parse("forgero:tool_material");
 	private static final OpenIdentifier HANDLE_TAG = OpenIdentifier.parse("forgero:handle");
 	private static final OpenIdentifier SWORD_BLADE_TAG = OpenIdentifier.parse("forgero:sword_blade");
-
-	private Resolver resolver;
-
-	@BeforeEach
-	void setUp() {
-		resolver = resolver();
-	}
 
 	// ==================== HELPER METHODS ====================
 
@@ -121,7 +111,7 @@ class HandleAttributeFilteringTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = resolver.resolve(ironHandle, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(ironHandle);
 
 			assertEquals(0f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f,
 					"CRITICAL: Standalone iron handle should NOT have attack_damage because " +
@@ -148,7 +138,7 @@ class HandleAttributeFilteringTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = resolver.resolve(ironHandle, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(ironHandle);
 
 			// With has_other_contributor condition, even durability requires another source
 			assertEquals(0f, result.getValue(DefaultAttributes.DURABILITY), 0.001f,
@@ -179,7 +169,7 @@ class HandleAttributeFilteringTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = resolver.resolve(oakHandle, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(oakHandle);
 
 			assertEquals(50f, result.getValue(DefaultAttributes.DURABILITY), 0.001f,
 					"Unconditional attributes should apply to handles");
@@ -219,7 +209,7 @@ class HandleAttributeFilteringTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = resolver.resolve(swordBlade, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(swordBlade);
 
 			// Total attack_damage should be: schematic base (1) + iron (4) = 5
 			assertEquals(5f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f,
@@ -277,7 +267,7 @@ class HandleAttributeFilteringTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = resolver.resolve(pickaxe, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(pickaxe);
 
 			// Both materials contribute durability because they are "other contributors" to each other
 			// Total: iron (250) + oak (50) = 300
@@ -314,7 +304,7 @@ class HandleAttributeFilteringTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = resolver.resolve(handle, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(handle);
 
 			// in_slot_type PASSES (iron is in tool_material slot)
 			// has_other_contributor FAILS (no other component has attack_damage)
@@ -349,7 +339,7 @@ class HandleAttributeFilteringTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = resolver.resolve(part, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(part);
 
 			// Durability should apply: base(10) + iron(250) = 260
 			// (Part provides base durability, satisfying has_other_contributor for iron's durability)

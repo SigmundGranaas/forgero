@@ -12,7 +12,6 @@ import com.sigmundgranaas.forgero.common.tooltip.api.TooltipRenderConfig;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.Text;
@@ -35,7 +34,6 @@ public final class TooltipBuilder {
 	 * Builds a complete tooltip for the given component.
 	 *
 	 * @param component           The component to build tooltip for
-	 * @param resolver            The property resolver
 	 * @param comparisonContext   The comparison context
 	 * @param dynamicContext      The dynamic context
 	 * @param renderConfig        The render configuration
@@ -45,7 +43,6 @@ public final class TooltipBuilder {
 	 */
 	public static List<Text> build(
 			Component component,
-			Resolver resolver,
 			ComparisonContext comparisonContext,
 			DynamicContext dynamicContext,
 			TooltipRenderConfig renderConfig,
@@ -56,21 +53,20 @@ public final class TooltipBuilder {
 
 		// Resolve all needed data
 		AttributeEngine attributeEngine = new AttributeEngine();
-		AttributeQueryResult attributes = resolver.resolve(component, attributeEngine, dynamicContext);
+		AttributeQueryResult attributes = attributeEngine.resolve(component, dynamicContext);
 
 		TooltipDescriptor.Engine descriptorEngine = new TooltipDescriptor.Engine();
-		List<TooltipDescriptor> descriptors = resolver.resolve(component, descriptorEngine, dynamicContext);
+		List<TooltipDescriptor> descriptors = descriptorEngine.resolve(component, dynamicContext);
 
 		// Create shared utilities
 		TooltipValueResolver valueResolver = new TooltipValueResolver(component, attributes, dynamicContext);
-		DifferenceCalculator diffCalc = new DifferenceCalculator(resolver);
+		DifferenceCalculator diffCalc = new DifferenceCalculator();
 
 		// Create and run section writers
 		for (var registered : SectionRegistry.getAllSorted()) {
 			SectionWriterContext writerContext = new SectionWriterContext(
 					registered.section(),
 					component,
-					resolver,
 					attributes,
 					descriptors,
 					comparisonContext,

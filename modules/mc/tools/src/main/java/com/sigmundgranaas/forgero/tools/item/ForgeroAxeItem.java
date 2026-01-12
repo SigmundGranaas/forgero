@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgero.tools.item;
 import com.sigmundgranaas.forgero.common.item.ForgeroHostItem;
 import com.sigmundgranaas.forgero.common.name.NameResolver;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
 
 import net.minecraft.item.AxeItem;
@@ -18,7 +17,7 @@ import net.minecraft.text.Text;
 public class ForgeroAxeItem extends AxeItem implements ForgeroHostItem {
 	private final Component component;
 
-	public ForgeroAxeItem(ToolMaterial material, Settings settings, Component component, Resolver resolver) {
+	public ForgeroAxeItem(ToolMaterial material, Settings settings, Component component) {
 		super(material, 0, 0, settings);
 		this.component = component;
 	}

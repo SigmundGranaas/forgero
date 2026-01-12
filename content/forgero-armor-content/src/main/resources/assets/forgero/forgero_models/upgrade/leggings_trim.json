@@ -1,0 +1,22 @@
+{
+  "type": "forgero:upgrade_model_template",
+  "context": "leggings_trim",
+  "target": {
+    "tag": "forgero:materials/roles/armor_material"
+  },
+  "models": [
+    {
+      "type": "forgero:texture_model",
+      "target": "forgero:{target.name}",
+      "context": "leggings_trim",
+      "layers": [
+        {
+          "order": 5,
+          "template": "forgero:texture_template/armor_trim_layer_2",
+          "palette": "forgero:palette/{target.name}",
+          "output": "forgero:armor/trim/{target.name}_leggings_trim"
+        }
+      ]
+    }
+  ]
+}

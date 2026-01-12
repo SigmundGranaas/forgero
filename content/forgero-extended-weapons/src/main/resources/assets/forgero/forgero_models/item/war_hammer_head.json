@@ -21,7 +21,7 @@
         "order": 30,
         "renderer": {
           "type": "forgero:component",
-          "context": "head_reinforcement"
+          "context": "war_hammer_head_reinforcement"
         }
       }
     ]

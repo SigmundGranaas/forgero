@@ -21,7 +21,7 @@
         "order": 30,
         "renderer": {
           "type": "forgero:component",
-          "context": "head_reinforcement"
+          "context": "battle_axe_head_reinforcement"
         }
       }
     ]

@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgero.properties.minecraft.onsneak;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.context.ContextKeys;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.effects.entity.ContextualEffectHandler;
@@ -35,7 +34,6 @@ public class OnSneakToggleManager {
 	private static final ConcurrentHashMap<UUID, Boolean> sneakStates = new ConcurrentHashMap<>();
 
 	private static ComponentConverter converter;
-	private static Resolver resolver;
 
 	static {
 		// Register player disconnect cleanup hook (server-side only)
@@ -58,7 +56,6 @@ public class OnSneakToggleManager {
 	 */
 	public static void initialize(ForgeroServices services) {
 		converter = services.converter();
-		resolver = services.resolver();
 	}
 
 	/**
@@ -133,7 +130,7 @@ public class OnSneakToggleManager {
 
 		contextBuilder.put(ContextKeys.TARGET_TAGS, entityTags);
 
-		return resolver.resolve(component, engine, contextBuilder.build());
+		return engine.resolve(component, contextBuilder.build());
 	}
 
 	/**

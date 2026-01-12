@@ -11,8 +11,6 @@ import com.sigmundgranaas.forgero.core.component.mutation.api.ComponentMutater;
 import com.sigmundgranaas.forgero.core.component.mutation.impl.ComponentMutaterImpl;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
-import com.sigmundgranaas.forgero.core.property.engine.ResolverEngine;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -94,14 +92,6 @@ public class ForgeroTestFactory {
 	// =============================================================================================
 	// Engine and Service Factories (abstracts implementation details)
 	// =============================================================================================
-
-	/**
-	 * Creates a Resolver instance for testing.
-	 * Abstracts away the concrete implementation.
-	 */
-	public static Resolver resolver() {
-		return new ResolverEngine();
-	}
 
 	/**
 	 * Creates an AttributeEngine instance for testing.

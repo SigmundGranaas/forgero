@@ -12,7 +12,6 @@ import com.sigmundgranaas.forgero.bows.handlers.PlaySoundHandler;
 import com.sigmundgranaas.forgero.bows.item.ForgeroArrowItem;
 import com.sigmundgranaas.forgero.bows.item.ForgeroBowItem;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.CreateData;
 import com.sigmundgranaas.forgero.loader.api.DataPlugin;
 import com.sigmundgranaas.forgero.loader.api.PluginRegistrationContext;
@@ -70,11 +69,11 @@ public class BowPlugin implements DataPlugin {
 		return "forgero:bow-plugin";
 	}
 
-	private Item createBowItem(Component component, CreateData data, Resolver resolver) {
+	private Item createBowItem(Component component, CreateData data) {
 		return new ForgeroBowItem(new Item.Settings(), component);
 	}
 
-	private Item createArrowItem(Component component, CreateData data, Resolver resolver) {
+	private Item createArrowItem(Component component, CreateData data) {
 		return new ForgeroArrowItem(new Item.Settings(), component);
 	}
 }

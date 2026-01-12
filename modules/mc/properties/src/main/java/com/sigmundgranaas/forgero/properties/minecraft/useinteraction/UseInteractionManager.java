@@ -8,7 +8,6 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
 import com.sigmundgranaas.forgero.common.useinteraction.UseContext;
@@ -38,7 +37,6 @@ import net.minecraft.world.World;
 public final class UseInteractionManager {
 
 	private static ComponentConverter converter;
-	private static Resolver resolver;
 
 	// 20 ticks = 1 second in Minecraft; this is vanilla bow charge time
 	private static final int BASE_CHARGE_TIME_TICKS = 20;
@@ -59,7 +57,6 @@ public final class UseInteractionManager {
 	 */
 	public static void initialize(ForgeroServices services) {
 		converter = services.converter();
-		resolver = services.resolver();
 	}
 
 	/**
@@ -238,7 +235,7 @@ public final class UseInteractionManager {
 	private static float resolveDrawSpeed(ItemStack stack) {
 		return converter.toComponent(stack)
 				.map(component -> {
-					AttributeQueryResult result = resolver.resolve(component, new AttributeEngine());
+					AttributeQueryResult result = new AttributeEngine().resolve(component);
 					float baseDrawSpeed = result.getValue(DRAW_SPEED_ATTR);
 					float weight = result.getValue(WEIGHT_ATTR);
 					
@@ -274,7 +271,7 @@ public final class UseInteractionManager {
 		var engine = new UseInteractionProperty.Engine();
 		DynamicContext context = new DynamicContext.Builder().build();
 
-		List<UseInteractionProperty> properties = resolver.resolve(component, engine, context);
+		List<UseInteractionProperty> properties = engine.resolve(component, context);
 
 		return properties.isEmpty() ? Optional.empty() : Optional.of(properties);
 	}

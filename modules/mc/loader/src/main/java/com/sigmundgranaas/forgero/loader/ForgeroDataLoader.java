@@ -112,7 +112,6 @@ public class ForgeroDataLoader implements ModInitializer {
 			// Phase 7: Setup item registration callbacks
 			ItemRegistrar itemRegistrar = new ItemRegistrar(
 					context.componentRegistry(),
-					context.resolver(),
 					LOGGER
 			);
 			plugins.setupItemCallbacks(itemRegistrar);
@@ -129,7 +128,7 @@ public class ForgeroDataLoader implements ModInitializer {
 			initializeRecipes(dataConfig);
 
 			initialized = true;
-			ForgeroTooltipRenderer.initialize(context.converter(), context.resolver());
+			ForgeroTooltipRenderer.initialize(context.converter());
 
 			// Phase 11: Fire initialization event (external subscribers via ForgeroInitializedCallback)
 			apiInitializer.fireInitializationEvent(context);
@@ -178,7 +177,6 @@ public class ForgeroDataLoader implements ModInitializer {
 		context.initialize(
 				services.componentRegistry(),
 				bundle.componentRegistry(),
-				services.resolver(),
 				services.converter(),
 				services.nbtConverter(),
 				slotManager,
@@ -191,7 +189,7 @@ public class ForgeroDataLoader implements ModInitializer {
 
 	private void initializeLegacyServices(ComponentRegistrationService.ServiceBundle services) {
 		// Initialize AttributeManager for mixin access
-		AttributeManager.initialize(services.converter(), services.resolver());
+		AttributeManager.initialize(services.converter());
 		LOGGER.debug("Forgero Attribute Manager initialized.");
 	}
 

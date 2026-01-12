@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.properties.minecraft.ontick;
 
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.context.ContextKeys;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
@@ -23,7 +22,6 @@ import java.util.stream.Collectors;
 public class OnTickManager {
 
 	private static ComponentConverter converter;
-	private static Resolver resolver;
 
 	private OnTickManager() {
 		// Static class
@@ -37,7 +35,6 @@ public class OnTickManager {
 	 */
 	public static void initialize(ForgeroServices services) {
 		converter = services.converter();
-		resolver = services.resolver();
 	}
 
 	public static void handle(LivingEntity entity) {
@@ -66,7 +63,7 @@ public class OnTickManager {
 			}
 			converter.toComponent(stack).ifPresent(component -> {
 				var engine = new OnTickProperty.Engine();
-				List<OnTickProperty> properties = resolver.resolve(component, engine, context);
+				List<OnTickProperty> properties = engine.resolve(component, context);
 
 				for (OnTickProperty property : properties) {
 					if (entity.age % property.interval() == 0) {

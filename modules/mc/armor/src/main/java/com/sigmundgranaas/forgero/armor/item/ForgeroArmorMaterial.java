@@ -7,7 +7,6 @@ import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.recipe.Ingredient;
@@ -28,9 +27,9 @@ public class ForgeroArmorMaterial implements ArmorMaterial {
 	private final Component component;
 	private final AttributeQueryResult attributes;
 
-	public ForgeroArmorMaterial(Component component, Resolver resolver) {
+	public ForgeroArmorMaterial(Component component) {
 		this.component = component;
-		this.attributes = resolver.resolve(component, new AttributeEngine());
+		this.attributes = new AttributeEngine().resolve(component);
 		LOGGER.debug("Created armor material for component: {} with durability={}, armor={}, toughness={}, knockbackResistance={}",
 				component.id(),
 				(int) attributes.getValue(DefaultAttributes.DURABILITY),

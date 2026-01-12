@@ -6,8 +6,8 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
+import com.sigmundgranaas.forgero.core.component.api.EquipmentComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.SlotManager;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import net.minecraft.item.ItemStack;
 
@@ -25,7 +25,6 @@ import java.util.Set;
 public class ItemQueryApiImpl implements ItemQueryApi {
 
 	private final ComponentConverter converter;
-	private final Resolver resolver;
 	private final SlotManager slotManager;
 	private final AttributeEngine attributeEngine;
 
@@ -33,12 +32,10 @@ public class ItemQueryApiImpl implements ItemQueryApi {
 	 * Creates a new ItemQueryApiImpl instance.
 	 *
 	 * @param converter   The component converter
-	 * @param resolver    The property resolver
 	 * @param slotManager The slot manager
 	 */
-	public ItemQueryApiImpl(ComponentConverter converter, Resolver resolver, SlotManager slotManager) {
+	public ItemQueryApiImpl(ComponentConverter converter, SlotManager slotManager) {
 		this.converter = converter;
-		this.resolver = resolver;
 		this.slotManager = slotManager;
 		this.attributeEngine = new AttributeEngine();
 	}
@@ -156,7 +153,7 @@ public class ItemQueryApiImpl implements ItemQueryApi {
 		return converter.toComponent(stack)
 			.map(component -> {
 				// Resolve attributes using AttributeEngine
-				AttributeQueryResult result = resolver.resolve(component, attributeEngine, DynamicContext.empty());
+				AttributeQueryResult result = attributeEngine.resolve(component, DynamicContext.empty());
 				return result.getValue(attributeType);
 			})
 			.orElse(0.0f);
@@ -259,6 +256,33 @@ public class ItemQueryApiImpl implements ItemQueryApi {
 		return converter.toComponent(stack)
 			.map(slotManager::countEmptySlots)
 			.orElse(0);
+	}
+
+	@Override
+	public boolean appliesAttributes(ItemStack stack) {
+		if (stack == null || stack.isEmpty()) {
+			return false;
+		}
+		return converter.toComponent(stack)
+			.map(component -> component instanceof EquipmentComponent)
+			.orElse(false);
+	}
+
+	@Override
+	public float getContributedAttackDamage(ItemStack stack) {
+		// This method returns the attack damage regardless of component type
+		// It's the same as getAttribute, which works for both equipment and parts
+		return getAttribute(stack, DefaultAttributes.ATTACK_DAMAGE);
+	}
+
+	@Override
+	public float getContributedMiningSpeed(ItemStack stack) {
+		return getAttribute(stack, DefaultAttributes.MINING_SPEED);
+	}
+
+	@Override
+	public int getContributedDurability(ItemStack stack) {
+		return (int) getAttribute(stack, DefaultAttributes.DURABILITY);
 	}
 
 	@Override

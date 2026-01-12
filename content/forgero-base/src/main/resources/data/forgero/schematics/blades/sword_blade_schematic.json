@@ -17,7 +17,7 @@
   "upgrades": [
     {
       "id": "forgero:reinforcement-slot",
-      "type": "forgero:material",
+      "type": "forgero:materials/roles/upgrade_material",
       "tags": [
         "forgero:upgrades/types/reinforcement"
       ],

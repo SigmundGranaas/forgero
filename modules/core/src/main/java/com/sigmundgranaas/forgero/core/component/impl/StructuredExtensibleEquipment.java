@@ -1,8 +1,10 @@
 package com.sigmundgranaas.forgero.core.component.impl;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.core.attribute.api.BakedAttributes;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
+import com.sigmundgranaas.forgero.core.component.api.EquipmentComponent;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgrades;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
@@ -23,24 +25,49 @@ public record StructuredExtensibleEquipment(
 		Set<OpenIdentifier> tags,
 		Map<String, List<?>> properties,
 		ComponentStructure structure,
-		ComponentUpgrades upgrades
-) implements StructuredComponent, CustomizableComponent {
+		ComponentUpgrades upgrades,
+		BakedAttributes bakedAttributes
+) implements StructuredComponent, CustomizableComponent, EquipmentComponent {
 
 	private static final OpenIdentifier TYPE_IDENTIFIER = OpenIdentifier.of("structured_extensible_equipment");
+
+	/**
+	 * Creates equipment with auto-baked attributes.
+	 */
+	public static StructuredExtensibleEquipment create(
+			OpenIdentifier id,
+			Set<OpenIdentifier> tags,
+			Map<String, List<?>> properties,
+			ComponentStructure structure,
+			ComponentUpgrades upgrades
+	) {
+		validateSlotIds(structure, upgrades);
+		StructuredExtensibleEquipment temp = new StructuredExtensibleEquipment(
+				id, tags, properties, structure, upgrades, BakedAttributes.EMPTY
+		);
+		return new StructuredExtensibleEquipment(
+				id, tags, properties, structure, upgrades, AttributeBaker.bake(temp)
+		);
+	}
+
+	public StructuredExtensibleEquipment {
+		validateSlotIds(structure, upgrades);
+	}
+
+	private static void validateSlotIds(ComponentStructure structure, ComponentUpgrades upgrades) {
+		var ids = new HashSet<>(structure.parts().keySet());
+		for (var upgradeSlot : upgrades.slots().all()) {
+			if (!ids.add(upgradeSlot.id())) {
+				throw new IllegalArgumentException(
+						"Duplicate slot ID found between structure and upgrades: " + upgradeSlot.id()
+				);
+			}
+		}
+	}
 
 	@Override
 	public OpenIdentifier getTypeIdentifier() {
 		return TYPE_IDENTIFIER;
-	}
-
-	public StructuredExtensibleEquipment {
-		// Validate that slot IDs are unique across both structure and upgrades.
-		var ids = new HashSet<>(structure.parts().keySet());
-		for (var upgradeSlot : upgrades.slots().all()) {
-			if (!ids.add(upgradeSlot.id())) {
-				throw new IllegalArgumentException("Duplicate slot ID found between structure and upgrades: " + upgradeSlot.id());
-			}
-		}
 	}
 
 	@Override
@@ -63,16 +90,32 @@ public record StructuredExtensibleEquipment(
 
 	@Override
 	public Component withStructure(ComponentStructure newStructure) {
-		return new StructuredExtensibleEquipment(this.id, this.tags, this.properties, newStructure, this.upgrades);
+		StructuredExtensibleEquipment temp = new StructuredExtensibleEquipment(
+				this.id, this.tags, this.properties, newStructure, this.upgrades, BakedAttributes.EMPTY
+		);
+		return new StructuredExtensibleEquipment(
+				this.id, this.tags, this.properties, newStructure, this.upgrades, AttributeBaker.bake(temp)
+		);
 	}
 
 	@Override
 	public Component withUpgrades(ComponentUpgrades newUpgrades) {
-		return new StructuredExtensibleEquipment(this.id, this.tags, this.properties, this.structure, newUpgrades);
+		StructuredExtensibleEquipment temp = new StructuredExtensibleEquipment(
+				this.id, this.tags, this.properties, this.structure, newUpgrades, BakedAttributes.EMPTY
+		);
+		return new StructuredExtensibleEquipment(
+				this.id, this.tags, this.properties, this.structure, newUpgrades, AttributeBaker.bake(temp)
+		);
 	}
 
 	@Override
 	public Component withProperties(Map<String, List<?>> newProperties) {
-		return new StructuredExtensibleEquipment(this.id, this.tags, PropertyMergeHelper.merge(this.properties, newProperties), this.structure, this.upgrades);
+		Map<String, List<?>> merged = PropertyMergeHelper.merge(this.properties, newProperties);
+		StructuredExtensibleEquipment temp = new StructuredExtensibleEquipment(
+				this.id, this.tags, merged, this.structure, this.upgrades, BakedAttributes.EMPTY
+		);
+		return new StructuredExtensibleEquipment(
+				this.id, this.tags, merged, this.structure, this.upgrades, AttributeBaker.bake(temp)
+		);
 	}
 }

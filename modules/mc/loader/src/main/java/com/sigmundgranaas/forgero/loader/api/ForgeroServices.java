@@ -9,7 +9,6 @@ import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.common.tags.engine.TaggedRegistry;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.slot.SlotManager;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
 import net.minecraft.item.ItemStack;
 
@@ -27,18 +26,18 @@ import java.util.Optional;
  * <pre>{@code
  * public class MyManager {
  *     private static ComponentConverter converter;
- *     private static Resolver resolver;
  *
  *     static {
  *         ForgeroInitializedCallback.EVENT.register(services -> {
  *             converter = services.converter();
- *             resolver = services.resolver();
  *         });
  *     }
  *
  *     public void doSomething(ItemStack stack) {
  *         converter.toComponent(stack).ifPresent(component -> {
- *             // use component...
+ *             // For attributes, use engine.resolve(component) directly
+ *             var engine = new AttributeEngine();
+ *             AttributeQueryResult result = engine.resolve(component);
  *         });
  *     }
  * }
@@ -82,13 +81,6 @@ public interface ForgeroServices {
 	 * @return The component converter instance
 	 */
 	ComponentConverter converter();
-
-	/**
-	 * Returns the property resolver for computing attributes and features.
-	 *
-	 * @return The property resolver instance
-	 */
-	Resolver resolver();
 
 	/**
 	 * Returns the component registry containing all loaded default-state components.

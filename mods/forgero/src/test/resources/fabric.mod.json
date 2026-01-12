@@ -22,7 +22,10 @@
       "com.sigmundgranaas.forgero.tests.BowContentGameTest",
       "com.sigmundgranaas.forgero.tests.NameResolutionGameTest",
       "com.sigmundgranaas.forgero.tests.ExtendedToolsRecipeTest",
-      "com.sigmundgranaas.forgero.tests.BowVariantPartsBehaviorTest"
+      "com.sigmundgranaas.forgero.tests.BowVariantPartsBehaviorTest",
+      "com.sigmundgranaas.forgero.tests.CustomArrowDetectionTest",
+      "com.sigmundgranaas.forgero.tests.BasicBowRecipeTest",
+      "com.sigmundgranaas.forgero.tests.ReinforcementSlotUpgradeTest"
     ]
   },
   "depends": {

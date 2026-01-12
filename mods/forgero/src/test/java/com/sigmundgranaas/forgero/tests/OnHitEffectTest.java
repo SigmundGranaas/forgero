@@ -3,8 +3,6 @@ package com.sigmundgranaas.forgero.tests;
 import com.sigmundgranaas.forgero.common.api.item.ItemMutationApi;
 import com.sigmundgranaas.forgero.common.api.item.ItemQueryApi;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.effects.entity.FireHandler;
 import com.sigmundgranaas.forgero.effects.entity.StatusEffectHandler;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroGameTest;
@@ -46,7 +44,6 @@ public class OnHitEffectTest implements ForgeroGameTest {
 		var api = ctx.api();
 		ItemMutationApi mutate = api.itemMutation();
 		ItemQueryApi query = api.itemQuery();
-		Resolver resolver = api.resolver();
 
 		// Get iron sword - a tool with upgrade slots
 		var ironSwordOpt = ctx.component("forgero:iron_sword");
@@ -91,7 +88,7 @@ public class OnHitEffectTest implements ForgeroGameTest {
 
 		// Resolve on-hit properties through the property system
 		var onHitEngine = new OnHitProperty.Engine();
-		List<OnHitProperty> onHitProperties = resolver.resolve(upgradedComponent, onHitEngine, DynamicContext.empty());
+		List<OnHitProperty> onHitProperties = onHitEngine.resolve(upgradedComponent);
 
 		LOGGER.debug("Resolved on-hit properties after blaze_rod upgrade: count={}", onHitProperties.size());
 
@@ -120,7 +117,6 @@ public class OnHitEffectTest implements ForgeroGameTest {
 		var ctx = ForgeroTestUtils.forgero(context);
 		var api = ctx.api();
 		ItemMutationApi mutate = api.itemMutation();
-		Resolver resolver = api.resolver();
 
 		// Get iron sword
 		var ironSwordOpt = ctx.component("forgero:iron_sword");
@@ -147,11 +143,7 @@ public class OnHitEffectTest implements ForgeroGameTest {
 		var upgradedComponentOpt = ctx.toComponent(upgradedSword);
 		assertTrue(upgradedComponentOpt.isPresent(), "Upgraded sword must convert back to Component");
 
-		List<OnHitProperty> onHitProperties = resolver.resolve(
-				upgradedComponentOpt.get(),
-				new OnHitProperty.Engine(),
-				DynamicContext.empty()
-		);
+		List<OnHitProperty> onHitProperties = new OnHitProperty.Engine().resolve(upgradedComponentOpt.get());
 
 		LOGGER.debug("Resolved on-hit properties after slime_ball upgrade: count={}", onHitProperties.size());
 
@@ -184,7 +176,6 @@ public class OnHitEffectTest implements ForgeroGameTest {
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
 	public void base_tool_has_no_onhit_effects(TestContext context) {
 		var ctx = ForgeroTestUtils.forgero(context);
-		Resolver resolver = ctx.api().resolver();
 
 		var ironSwordOpt = ctx.component("forgero:iron_sword");
 		assertTrue(ironSwordOpt.isPresent(), "iron_sword component must exist");
@@ -192,11 +183,7 @@ public class OnHitEffectTest implements ForgeroGameTest {
 		Component baseSword = ironSwordOpt.get();
 
 		// Resolve on-hit properties on base sword (no upgrades)
-		List<OnHitProperty> onHitProperties = resolver.resolve(
-				baseSword,
-				new OnHitProperty.Engine(),
-				DynamicContext.empty()
-		);
+		List<OnHitProperty> onHitProperties = new OnHitProperty.Engine().resolve(baseSword);
 
 		LOGGER.debug("Base iron_sword on-hit properties: count={}", onHitProperties.size());
 
@@ -216,7 +203,6 @@ public class OnHitEffectTest implements ForgeroGameTest {
 		var api = ctx.api();
 		ItemMutationApi mutate = api.itemMutation();
 		ItemQueryApi query = api.itemQuery();
-		Resolver resolver = api.resolver();
 
 		// Get diamond sword - should have multiple upgrade slots
 		var diamondSwordOpt = ctx.component("forgero:diamond_sword");
@@ -268,11 +254,7 @@ public class OnHitEffectTest implements ForgeroGameTest {
 		var upgradedComponentOpt = ctx.toComponent(currentSword);
 		assertTrue(upgradedComponentOpt.isPresent(), "Upgraded sword must convert to Component");
 
-		List<OnHitProperty> onHitProperties = resolver.resolve(
-				upgradedComponentOpt.get(),
-				new OnHitProperty.Engine(),
-				DynamicContext.empty()
-		);
+		List<OnHitProperty> onHitProperties = new OnHitProperty.Engine().resolve(upgradedComponentOpt.get());
 
 		LOGGER.debug("On-hit properties after 2 upgrades: count={}", onHitProperties.size());
 
@@ -304,7 +286,6 @@ public class OnHitEffectTest implements ForgeroGameTest {
 		var ctx = ForgeroTestUtils.forgero(context);
 		var api = ctx.api();
 		ItemMutationApi mutate = api.itemMutation();
-		Resolver resolver = api.resolver();
 
 		// Get sword and blaze rod
 		var ironSwordOpt = ctx.component("forgero:iron_sword");
@@ -331,11 +312,7 @@ public class OnHitEffectTest implements ForgeroGameTest {
 		assertTrue(upgradedCompOpt.isPresent(), "Upgraded sword must convert to Component");
 
 		// Verify it has fire effect
-		List<OnHitProperty> propsWithUpgrade = resolver.resolve(
-				upgradedCompOpt.get(),
-				new OnHitProperty.Engine(),
-				DynamicContext.empty()
-		);
+		List<OnHitProperty> propsWithUpgrade = new OnHitProperty.Engine().resolve(upgradedCompOpt.get());
 
 		boolean hasFireBefore = propsWithUpgrade.stream()
 				.flatMap(p -> p.effects().stream())
@@ -350,11 +327,7 @@ public class OnHitEffectTest implements ForgeroGameTest {
 		assertTrue(strippedCompOpt.isPresent(), "Stripped sword must convert to Component");
 
 		// Verify fire effect is gone
-		List<OnHitProperty> propsAfterRemoval = resolver.resolve(
-				strippedCompOpt.get(),
-				new OnHitProperty.Engine(),
-				DynamicContext.empty()
-		);
+		List<OnHitProperty> propsAfterRemoval = new OnHitProperty.Engine().resolve(strippedCompOpt.get());
 
 		boolean hasFireAfter = propsAfterRemoval.stream()
 				.flatMap(p -> p.effects().stream())
@@ -375,7 +348,6 @@ public class OnHitEffectTest implements ForgeroGameTest {
 		var ctx = ForgeroTestUtils.forgero(context);
 		var api = ctx.api();
 		ItemMutationApi mutate = api.itemMutation();
-		Resolver resolver = api.resolver();
 
 		var ironSwordOpt = ctx.component("forgero:iron_sword");
 		var fireChargeOpt = ctx.component("forgero:fire_charge");
@@ -399,11 +371,7 @@ public class OnHitEffectTest implements ForgeroGameTest {
 		var upgradedCompOpt = ctx.toComponent(upgradedSword);
 		assertTrue(upgradedCompOpt.isPresent(), "Upgraded sword must convert to Component");
 
-		List<OnHitProperty> onHitProperties = resolver.resolve(
-				upgradedCompOpt.get(),
-				new OnHitProperty.Engine(),
-				DynamicContext.empty()
-		);
+		List<OnHitProperty> onHitProperties = new OnHitProperty.Engine().resolve(upgradedCompOpt.get());
 
 		LOGGER.debug("On-hit properties after fire_charge upgrade: count={}", onHitProperties.size());
 
@@ -426,7 +394,6 @@ public class OnHitEffectTest implements ForgeroGameTest {
 		var api = ctx.api();
 		ItemMutationApi mutate = api.itemMutation();
 		ItemQueryApi query = api.itemQuery();
-		Resolver resolver = api.resolver();
 
 		LOGGER.debug("=== Upgrade Installation Debug ===");
 
@@ -465,11 +432,7 @@ public class OnHitEffectTest implements ForgeroGameTest {
 				ItemStack upgraded = mutate.installUpgrade(sword, upgradeStackOpt.get());
 				var compOpt = ctx.toComponent(upgraded);
 				if (compOpt.isPresent()) {
-					List<OnHitProperty> props = resolver.resolve(
-							compOpt.get(),
-							new OnHitProperty.Engine(),
-							DynamicContext.empty()
-					);
+					List<OnHitProperty> props = new OnHitProperty.Engine().resolve(compOpt.get());
 					LOGGER.debug("  On-hit properties after {}: count={}", upgradeId, props.size());
 					for (OnHitProperty prop : props) {
 						for (var effect : prop.effects()) {

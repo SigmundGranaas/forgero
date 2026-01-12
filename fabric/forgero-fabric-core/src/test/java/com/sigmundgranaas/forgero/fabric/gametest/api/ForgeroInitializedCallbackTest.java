@@ -50,7 +50,6 @@ public class ForgeroInitializedCallbackTest {
 		// Verify all service methods return non-null
 		assertNotNull(services.tagResolver(), "tagResolver() should not be null");
 		assertNotNull(services.converter(), "converter() should not be null");
-		assertNotNull(services.resolver(), "resolver() should not be null");
 		assertNotNull(services.componentRegistry(), "componentRegistry() should not be null");
 		assertNotNull(services.taggedComponents(), "taggedComponents() should not be null");
 		assertNotNull(services.nbtConverter(), "nbtConverter() should not be null");

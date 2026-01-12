@@ -9,7 +9,6 @@ import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.common.tags.engine.TaggedRegistry;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.slot.SlotManager;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
 
 /**
@@ -102,17 +101,6 @@ public final class ForgeroApi {
 	 */
 	public static ComponentConverter converter() {
 		return services().converter();
-	}
-
-	/**
-	 * Returns the property resolver for computing attributes.
-	 * Convenience method equivalent to {@code services().resolver()}.
-	 *
-	 * @return The property resolver instance
-	 * @throws IllegalStateException if Forgero has not yet been initialized
-	 */
-	public static Resolver resolver() {
-		return services().resolver();
 	}
 
 	/**

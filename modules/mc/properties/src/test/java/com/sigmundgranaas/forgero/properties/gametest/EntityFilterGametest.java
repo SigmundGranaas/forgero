@@ -163,17 +163,17 @@ public class EntityFilterGametest {
 
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
 	public void testHasTagFilter(TestContext context) {
-		// Test for undead tag (zombies and skeletons are undead)
-		HasTagFilter undeadFilter = new HasTagFilter("minecraft:undead");
+		// Test for skeletons tag (actual vanilla tag that exists in MC 1.20.1)
+		HasTagFilter skeletonsFilter = new HasTagFilter("minecraft:skeletons");
 
 		LivingEntity source = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(0, 1, 0));
-		LivingEntity zombie = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(1, 1, 0));
-		LivingEntity skeleton = context.spawnEntity(EntityType.SKELETON, new BlockPos(2, 1, 0));
-		LivingEntity villager = context.spawnEntity(EntityType.VILLAGER, new BlockPos(3, 1, 0));
+		LivingEntity skeleton = context.spawnEntity(EntityType.SKELETON, new BlockPos(1, 1, 0));
+		LivingEntity witherSkeleton = context.spawnEntity(EntityType.WITHER_SKELETON, new BlockPos(2, 1, 0));
+		LivingEntity zombie = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(3, 1, 0));
 
-		context.assertTrue(undeadFilter.test(source, zombie), "Zombie should have undead tag");
-		context.assertTrue(undeadFilter.test(source, skeleton), "Skeleton should have undead tag");
-		context.assertFalse(undeadFilter.test(source, villager), "Villager should not have undead tag");
+		context.assertTrue(skeletonsFilter.test(source, skeleton), "Skeleton should have skeletons tag");
+		context.assertTrue(skeletonsFilter.test(source, witherSkeleton), "Wither skeleton should have skeletons tag");
+		context.assertFalse(skeletonsFilter.test(source, zombie), "Zombie should not have skeletons tag");
 		context.complete();
 	}
 
@@ -236,26 +236,33 @@ public class EntityFilterGametest {
 		LivingEntity notInWater = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
 		LivingEntity inWater = context.spawnEntity(EntityType.ZOMBIE, waterPos);
 
-		context.assertFalse(filter.test(source, notInWater), "Should fail for entity not in water");
-		context.assertTrue(filter.test(source, inWater), "Should pass for entity in water");
-		context.complete();
+		// Wait for entities to tick and update their water touching state
+		context.waitAndRun(3, () -> {
+			context.assertFalse(filter.test(source, notInWater), "Should fail for entity not in water");
+			context.assertTrue(filter.test(source, inWater), "Should pass for entity in water");
+			context.complete();
+		});
 	}
 
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
 	public void testHasEffectFilter(TestContext context) {
-		HasEffectFilter poisonFilter = new HasEffectFilter("minecraft:poison");
+		// Use slowness instead of poison - zombies are undead and immune to poison
+		HasEffectFilter slownessFilter = new HasEffectFilter("minecraft:slowness");
 
 		LivingEntity source = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(0, 1, 0));
 		LivingEntity withoutEffect = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(1, 1, 0));
 		LivingEntity withEffect = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(2, 1, 0));
 
-		// Apply poison effect
+		// Apply slowness effect (works on all mobs including undead)
 		withEffect.addStatusEffect(new net.minecraft.entity.effect.StatusEffectInstance(
-				net.minecraft.entity.effect.StatusEffects.POISON, 100, 0));
+				net.minecraft.entity.effect.StatusEffects.SLOWNESS, 100, 0));
 
-		context.assertFalse(poisonFilter.test(source, withoutEffect), "Should fail for entity without poison effect");
-		context.assertTrue(poisonFilter.test(source, withEffect), "Should pass for entity with poison effect");
-		context.complete();
+		// Wait for effect to be processed
+		context.waitAndRun(3, () -> {
+			context.assertFalse(slownessFilter.test(source, withoutEffect), "Should fail for entity without slowness effect");
+			context.assertTrue(slownessFilter.test(source, withEffect), "Should pass for entity with slowness effect");
+			context.complete();
+		});
 	}
 
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)

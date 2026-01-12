@@ -8,11 +8,19 @@
   ],
   "slots": [
     {
+      "id": "cosmetic_slot",
+      "order": 32,
+      "renderer": {
+        "type": "forgero:component",
+        "context": "binding_dye"
+      }
+    },
+    {
       "id": "gem_slot",
       "order": 35,
       "renderer": {
         "type": "forgero:component",
-        "context": "gem"
+        "context": "binding_gem"
       }
     }
   ]

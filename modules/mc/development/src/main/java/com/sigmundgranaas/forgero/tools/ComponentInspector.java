@@ -14,7 +14,6 @@ import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -35,24 +34,24 @@ public class ComponentInspector {
 			new AttributeDisplayData(DefaultAttributes.ARMOR_TOUGHNESS, "attribute.forgero.armor_toughness", AttributeDisplayData.Style.ADDITIVE, 0.0f)
 	);
 
-	public String generateReport(Component component, Resolver resolver) {
+	public String generateReport(Component component) {
 		StringBuilder builder = new StringBuilder();
 		String header = "COMPONENT REPORT: " + component.id();
 		String separator = "=".repeat(header.length() + 4);
 
 		builder.append(separator).append("\n  ").append(header).append("\n").append(separator).append("\n\n");
-		appendFinalAttributes(builder, component, resolver);
+		appendFinalAttributes(builder, component);
 		builder.append("\n");
 		appendCompositionTree(builder, component);
 		builder.append("\n");
-		appendAttributeBreakdown(builder, component, resolver);
+		appendAttributeBreakdown(builder, component);
 
 		return builder.toString();
 	}
 
-	private void appendFinalAttributes(StringBuilder builder, Component component, Resolver resolver) {
+	private void appendFinalAttributes(StringBuilder builder, Component component) {
 		builder.append("-- FINAL CALCULATED STATS --\n");
-		AttributeQueryResult attributes = resolver.resolve(component, new AttributeEngine());
+		AttributeQueryResult attributes = new AttributeEngine().resolve(component);
 
 		for (AttributeDisplayData displayData : ATTRIBUTES_TO_DISPLAY) {
 			float rawValue = attributes.getValue(displayData.id());
@@ -108,9 +107,9 @@ public class ComponentInspector {
 		}
 	}
 
-	private void appendAttributeBreakdown(StringBuilder builder, Component component, Resolver resolver) {
+	private void appendAttributeBreakdown(StringBuilder builder, Component component) {
 		builder.append("-- ATTRIBUTE BREAKDOWN --\n");
-		AttributeQueryResult finalAttributes = resolver.resolve(component, new AttributeEngine());
+		AttributeQueryResult finalAttributes = new AttributeEngine().resolve(component);
 		List<Component> allComponents = traverse(component);
 
 		for (AttributeDisplayData displayData : ATTRIBUTES_TO_DISPLAY) {

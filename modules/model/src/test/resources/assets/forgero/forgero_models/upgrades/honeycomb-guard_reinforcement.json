@@ -1,0 +1,6 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:honeycomb",
+  "context": "guard_reinforcement",
+  "texture": "forgero:item/upgrade/honeycomb-guard_reinforcement"
+}

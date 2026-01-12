@@ -66,15 +66,16 @@ public record UseInteractionProperty(
 		@Nullable Condition condition
 ) implements ConditionalProperty {
 
-	public static final OpenIdentifier KEY_ID = new OpenIdentifier("minecraft", "use_interaction");
+	public static final OpenIdentifier KEY_ID = new OpenIdentifier("forgero", "use_interaction");
 	public static final ResolutionKey<List<UseInteractionProperty>> KEY = new ResolutionKey<>(KEY_ID);
 	public static final PropertyKey<UseInteractionProperty> PROPERTY_KEY = new PropertyKey<>(UseInteractionProperty.class, KEY_ID.toString());
 
 	/**
 	 * Codec for UseAction enum.
+	 * Uses case-insensitive parsing to accept both "bow" and "BOW" in JSON.
 	 */
 	public static final Codec<UseAction> USE_ACTION_CODEC = Codec.STRING.xmap(
-			UseAction::valueOf,
+			str -> UseAction.valueOf(str.toUpperCase()),
 			UseAction::name
 	);
 

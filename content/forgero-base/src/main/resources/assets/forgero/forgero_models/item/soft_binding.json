@@ -10,6 +10,27 @@
     "layers": [
       {
         "order": 40,
+        "textures": {
+          "default": "forgero:item/{target.name}-soft_binding",
+          "variants": [
+            {
+              "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/pickaxe" }],
+              "texture": "forgero:item/{target.name}-soft_pickaxe_binding"
+            },
+            {
+              "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/axe" }],
+              "texture": "forgero:item/{target.name}-soft_axe_binding"
+            },
+            {
+              "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/hoe" }],
+              "texture": "forgero:item/{target.name}-soft_hoe_binding"
+            },
+            {
+              "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/shovel" }],
+              "texture": "forgero:item/{target.name}-soft_shovel_binding"
+            }
+          ]
+        },
         "template": "forgero:texture_template/parts/soft_binding",
         "palette": "forgero:palette/{target.name}",
         "output": "forgero:item/{target.name}-soft_binding"
@@ -25,5 +46,27 @@
         }
       }
     ]
-  }
+  },
+  "texture_variants": [
+    {
+      "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/pickaxe" }],
+      "template": "forgero:texture_template/parts/soft_pickaxe_binding",
+      "output_suffix": "-soft_pickaxe_binding"
+    },
+    {
+      "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/axe" }],
+      "template": "forgero:texture_template/parts/soft_axe_binding",
+      "output_suffix": "-soft_axe_binding"
+    },
+    {
+      "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/hoe" }],
+      "template": "forgero:texture_template/parts/soft_hoe_binding",
+      "output_suffix": "-soft_hoe_binding"
+    },
+    {
+      "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/shovel" }],
+      "template": "forgero:texture_template/parts/soft_shovel_binding",
+      "output_suffix": "-soft_shovel_binding"
+    }
+  ]
 }

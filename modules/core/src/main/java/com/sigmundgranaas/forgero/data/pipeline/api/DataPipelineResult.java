@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.data.pipeline.api;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.loading.api.RawDefinition;
+import com.sigmundgranaas.forgero.data.validation.ValidationResult;
 
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,13 @@ public record DataPipelineResult(
 		 * Parsing errors collected during loading.
 		 * These are errors that prevented a resource from being loaded.
 		 */
-		List<ParsingError> parsingErrors
+		List<ParsingError> parsingErrors,
+
+		/**
+		 * Phase 4: Component validation results.
+		 * Contains errors and warnings from structural, reference, and attribute validation.
+		 */
+		ValidationResult validationResult
 ) {
 	/**
 	 * @return true if any parsing errors occurred
@@ -57,6 +64,20 @@ public record DataPipelineResult(
 	}
 
 	/**
+	 * @return true if any validation errors occurred
+	 */
+	public boolean hasValidationErrors() {
+		return validationResult != null && validationResult.hasErrors();
+	}
+
+	/**
+	 * @return true if any validation warnings occurred
+	 */
+	public boolean hasValidationWarnings() {
+		return validationResult != null && validationResult.hasWarnings();
+	}
+
+	/**
 	 * Creates a result for cases where the pipeline failed early.
 	 */
 	public static DataPipelineResult failed(List<ParsingError> errors) {
@@ -64,7 +85,8 @@ public record DataPipelineResult(
 				Map.of(),
 				TemplateExpansionResult.empty(),
 				null,
-				errors
+				errors,
+				ValidationResult.empty()
 		);
 	}
 }

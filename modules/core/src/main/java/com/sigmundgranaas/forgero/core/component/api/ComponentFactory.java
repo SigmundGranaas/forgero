@@ -62,13 +62,13 @@ public final class ComponentFactory {
 			boolean hasUpgrades
 	) {
 		if (hasStructure && hasUpgrades) {
-			return new StructuredExtensibleEquipment(id, tags, properties, structure, upgrades);
+			return StructuredExtensibleEquipment.create(id, tags, properties, structure, upgrades);
 		} else if (hasStructure) {
-			return new StructuredEquipment(id, tags, properties, structure);
+			return StructuredEquipment.create(id, tags, properties, structure);
 		} else if (hasUpgrades) {
-			return new ExtensibleEquipment(id, tags, properties, upgrades);
+			return ExtensibleEquipment.create(id, tags, properties, upgrades);
 		} else {
-			return new StaticEquipment(id, tags, properties);
+			return StaticEquipment.create(id, tags, properties);
 		}
 	}
 
@@ -111,7 +111,7 @@ public final class ComponentFactory {
 			Set<OpenIdentifier> tags,
 			Map<String, List<?>> properties
 	) {
-		return new StaticEquipment(id, tags, properties);
+		return StaticEquipment.create(id, tags, properties);
 	}
 
 	/**

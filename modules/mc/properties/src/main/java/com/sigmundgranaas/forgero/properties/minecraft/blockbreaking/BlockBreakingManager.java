@@ -4,7 +4,6 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -29,7 +28,6 @@ public class BlockBreakingManager {
 			.build();
 
 	private static ComponentConverter converter;
-	private static Resolver resolver;
 
 	private BlockBreakingManager() {
 		// Static class
@@ -43,7 +41,6 @@ public class BlockBreakingManager {
 	 */
 	public static void initialize(ForgeroServices services) {
 		converter = services.converter();
-		resolver = services.resolver();
 	}
 
 	/**
@@ -77,7 +74,7 @@ public class BlockBreakingManager {
 
 	private static Optional<BlockBreakingProperty> findActiveProperty(Component component, PlayerEntity player, BlockPos pos) {
 		var engine = new BlockBreakingProperty.Engine();
-		List<BlockBreakingProperty> bakedResult = resolver.resolve(component, engine);
+		List<BlockBreakingProperty> bakedResult = engine.resolve(component);
 		return bakedResult.stream().findFirst();
 	}
 

@@ -7,7 +7,6 @@ import com.sigmundgranaas.forgero.armor.item.ForgeroArmorItem;
 import com.sigmundgranaas.forgero.armor.item.ForgeroArmorMaterial;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.CreateData;
 import com.sigmundgranaas.forgero.loader.api.DataPlugin;
 import com.sigmundgranaas.forgero.loader.api.PluginRegistrationContext;
@@ -34,14 +33,14 @@ public class ArmorPlugin implements DataPlugin {
 		return "forgero:armor-plugin";
 	}
 
-	private Item createArmorItem(Component component, CreateData data, Resolver resolver) {
+	private Item createArmorItem(Component component, CreateData data) {
 		var armorType = determineArmorType(component);
 		if (armorType == null) {
 			LOGGER.error("Cannot create armor item for '{}': no armor type tag (helmet/chestplate/leggings/boots) found in tags {}",
 					component.id(), component.getTags().stream().map(OpenIdentifier::name).collect(Collectors.toList()));
 			throw new IllegalArgumentException("Failed to create armor item for component '" + component.id() + "'. Could not determine armor type from tags.");
 		}
-		ForgeroArmorMaterial material = new ForgeroArmorMaterial(component, resolver);
+		ForgeroArmorMaterial material = new ForgeroArmorMaterial(component);
 		return new ForgeroArmorItem(material, armorType, new Item.Settings(), component);
 	}
 

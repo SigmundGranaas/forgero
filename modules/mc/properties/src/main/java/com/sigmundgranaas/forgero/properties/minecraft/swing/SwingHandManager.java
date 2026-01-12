@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.properties.minecraft.swing;
 
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
 import com.sigmundgranaas.forgero.effects.entity.SwingEffect;
@@ -19,7 +18,6 @@ import java.util.List;
 public class SwingHandManager {
 
 	private static ComponentConverter converter;
-	private static Resolver resolver;
 
 	private SwingHandManager() {
 		// Static class
@@ -33,7 +31,6 @@ public class SwingHandManager {
 	 */
 	public static void initialize(ForgeroServices services) {
 		converter = services.converter();
-		resolver = services.resolver();
 	}
 
 	/**
@@ -66,6 +63,6 @@ public class SwingHandManager {
 		// Build context for dynamic condition evaluation
 		// You can add more context keys here as needed (entity state, etc.)
 
-		return resolver.resolve(component, engine, contextBuilder.build());
+		return engine.resolve(component, contextBuilder.build());
 	}
 }

@@ -9,8 +9,6 @@ import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.attribute.api.operator.AdditionOperator;
 import com.sigmundgranaas.forgero.core.attribute.api.operator.MultiplicationOperator;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,12 +29,6 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class CompositeAttributeResolutionTest extends ForgeroTest {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompositeAttributeResolutionTest.class);
-	private Resolver resolver;
-
-	@BeforeEach
-	void setUp() {
-		resolver = resolver();
-	}
 
 	/**
 	 * Test 1: Simple material with attributes
@@ -53,7 +45,7 @@ class CompositeAttributeResolutionTest extends ForgeroTest {
 				.withAttribute(DefaultAttributes.MINING_LEVEL, 2f)
 				.build();
 
-		AttributeQueryResult result = resolver.resolve(ironMaterial, attributeEngine());
+		AttributeQueryResult result = attributeEngine().resolve(ironMaterial);
 
 		assertEquals(240f, result.getValue(DefaultAttributes.DURABILITY),
 				"Iron material should have 240 durability");
@@ -84,7 +76,7 @@ class CompositeAttributeResolutionTest extends ForgeroTest {
 				.withStructureSlot(structureSlot("material", id("material_slot"), ironMaterial))
 				.build();
 
-		AttributeQueryResult result = resolver.resolve(ironPickaxeHead, attributeEngine());
+		AttributeQueryResult result = attributeEngine().resolve(ironPickaxeHead);
 
 		// The head should inherit material attributes
 		float durability = result.getValue(DefaultAttributes.DURABILITY);
@@ -142,7 +134,7 @@ class CompositeAttributeResolutionTest extends ForgeroTest {
 				.withAttribute(DefaultAttributes.ATTACK_SPEED, -2.8f) // Tool-level attribute
 				.build();
 
-		AttributeQueryResult result = resolver.resolve(ironPickaxe, attributeEngine());
+		AttributeQueryResult result = attributeEngine().resolve(ironPickaxe);
 
 		// Should get attributes from both head (iron) and handle (oak)
 		float durability = result.getValue(DefaultAttributes.DURABILITY);
@@ -199,7 +191,7 @@ class CompositeAttributeResolutionTest extends ForgeroTest {
 				.withStructureSlot(structureSlot("shape", id("shape_slot"), pickaxeHeadShape))
 				.build();
 
-		AttributeQueryResult result = resolver.resolve(ironPickaxeHead, attributeEngine());
+		AttributeQueryResult result = attributeEngine().resolve(ironPickaxeHead);
 
 		float durability = result.getValue(DefaultAttributes.DURABILITY);
 		float miningSpeed = result.getValue(DefaultAttributes.MINING_SPEED);
@@ -272,8 +264,8 @@ class CompositeAttributeResolutionTest extends ForgeroTest {
 				.build();
 
 		// Resolve attributes
-		AttributeQueryResult ironResult = resolver.resolve(ironPickaxe, attributeEngine());
-		AttributeQueryResult diamondResult = resolver.resolve(diamondPickaxe, attributeEngine());
+		AttributeQueryResult ironResult = attributeEngine().resolve(ironPickaxe);
+		AttributeQueryResult diamondResult = attributeEngine().resolve(diamondPickaxe);
 
 		float ironDurability = ironResult.getValue(DefaultAttributes.DURABILITY);
 		float diamondDurability = diamondResult.getValue(DefaultAttributes.DURABILITY);

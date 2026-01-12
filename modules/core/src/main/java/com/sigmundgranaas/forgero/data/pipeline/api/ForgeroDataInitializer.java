@@ -25,6 +25,8 @@ import com.sigmundgranaas.forgero.data.loading.impl.codec.DefinitionCodecRegistr
 import com.sigmundgranaas.forgero.data.loading.impl.codec.PartTemplateCodecs;
 import com.sigmundgranaas.forgero.data.pipeline.impl.*;
 import com.sigmundgranaas.forgero.data.pipeline.util.IdTemplateResolver;
+import com.sigmundgranaas.forgero.data.validation.*;
+import com.sigmundgranaas.forgero.data.validation.validators.*;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceConverter;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceProvider;
 import com.sigmundgranaas.forgero.utility.resource.loader.implementation.ResourceLoader;
@@ -156,7 +158,36 @@ public class ForgeroDataInitializer {
 		List<Component> components = componentBuilder.buildAll();
 		LOGGER.info("Built {} final runtime components.", components.size());
 
-		// 8. CREATE FINAL BUNDLE
+		// 8. RUN COMPONENT VALIDATION
+		Map<OpenIdentifier, Component> componentMap = components.stream()
+				.collect(Collectors.toMap(Component::id, c -> c, (a, b) -> a));
+
+		ValidationContext validationContext = new ValidationContext.Builder()
+				.tagResolver(tagResolver)
+				.allCofComponents(allCofComponents)
+				.builtComponents(componentMap)
+				.build();
+
+		ComponentValidationEngine validationEngine = new ComponentValidationEngine.Builder()
+				.addValidator(new StructureValidator())
+				.addValidator(new ReferenceValidator())
+				.addValidator(new AttributeSchemaValidator())
+				.addValidator(new EagerBakingValidator())
+				.context(validationContext)
+				.build();
+
+		ValidationResult validationResult = validationEngine.validateAll(components);
+
+		if (validationResult.hasErrors()) {
+			LOGGER.warn("Component validation found {} error(s):\n{}",
+					validationResult.errorCount(), validationResult.formatErrors());
+		}
+		if (validationResult.hasWarnings()) {
+			LOGGER.debug("Component validation found {} warning(s):\n{}",
+					validationResult.warningCount(), validationResult.formatWarnings());
+		}
+
+		// 9. CREATE FINAL BUNDLE
 		TaggedRegistry.Builder<Component> registryBuilder = new TaggedRegistry.Builder<>(tagResolver);
 		components.forEach(registryBuilder::add);
 		this.dataBundle = new ForgeroDataBundle(
@@ -165,12 +196,13 @@ public class ForgeroDataInitializer {
 				Collections.unmodifiableMap(hostItemMap)
 		);
 
-		// 9. STORE PIPELINE RESULT FOR VALIDATION
+		// 10. STORE PIPELINE RESULT FOR VALIDATION
 		this.pipelineResult = new DataPipelineResult(
 				Collections.unmodifiableMap(rawDefinitions),
 				templateResult.expansionResult(),
 				this.dataBundle,
-				List.of()
+				List.of(),
+				validationResult
 		);
 
 		long endTime = System.currentTimeMillis();

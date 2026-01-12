@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgero.properties.minecraft.ondamage;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.context.ContextKeys;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.effects.entity.ContextualEffectHandler;
@@ -29,7 +28,6 @@ import java.util.stream.Collectors;
 public class OnDamageReceivedManager {
 
 	private static ComponentConverter converter;
-	private static Resolver resolver;
 
 	private OnDamageReceivedManager() {
 		// Static class
@@ -43,7 +41,6 @@ public class OnDamageReceivedManager {
 	 */
 	public static void initialize(ForgeroServices services) {
 		converter = services.converter();
-		resolver = services.resolver();
 	}
 
 	/**
@@ -113,6 +110,6 @@ public class OnDamageReceivedManager {
 		// Future enhancement: Could add damage amount to context for conditional properties
 		// contextBuilder.put(ContextKeys.DAMAGE_AMOUNT, amount);
 
-		return resolver.resolve(component, engine, contextBuilder.build());
+		return engine.resolve(component, contextBuilder.build());
 	}
 }

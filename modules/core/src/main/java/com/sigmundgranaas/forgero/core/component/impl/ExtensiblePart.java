@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.component.impl;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.component.api.ContributingComponent;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgrades;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
@@ -18,7 +19,7 @@ public record ExtensiblePart(
 		Set<OpenIdentifier> tags,
 		Map<String, List<?>> properties,
 		ComponentUpgrades upgrades
-) implements CustomizableComponent {
+) implements CustomizableComponent, ContributingComponent {
 
 	private static final OpenIdentifier TYPE_IDENTIFIER = OpenIdentifier.of("extensible_part");
 

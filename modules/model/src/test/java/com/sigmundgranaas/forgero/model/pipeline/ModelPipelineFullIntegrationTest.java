@@ -102,7 +102,7 @@ public class ModelPipelineFullIntegrationTest {
 
 		var bladeSlotId = OpenIdentifier.parse("forgero:blade");
 		var handleSlotId = OpenIdentifier.parse("forgero:handle");
-		Component ironSword = new StructuredEquipment(
+		Component ironSword = StructuredEquipment.create(
 				ironSwordId,
 				Set.of(toolTag, swordTag),
 				new HashMap<>(),

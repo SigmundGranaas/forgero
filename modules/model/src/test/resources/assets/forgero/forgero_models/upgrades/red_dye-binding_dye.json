@@ -1,0 +1,6 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:red_dye",
+  "context": "binding_dye",
+  "texture": "forgero:item/upgrade/red_dye-binding"
+}

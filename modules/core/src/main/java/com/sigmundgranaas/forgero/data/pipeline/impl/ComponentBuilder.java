@@ -95,10 +95,14 @@ public class ComponentBuilder {
 			}
 
 			SlotValidator validator;
-			if (slotDto.validTags() == null || slotDto.validTags().isEmpty()) {
-				validator = SlotValidator.ACCEPT_ALL;
-			} else {
+			if (slotDto.validTags() != null && !slotDto.validTags().isEmpty()) {
+				// Use explicitly specified valid tags
 				validator = SlotValidator.requireAllTags(slotDto.validTags());
+			} else if (slotDto.type() != null) {
+				// Use the slot type as the required tag (standard behavior)
+				validator = SlotValidator.requireTag(slotDto.type());
+			} else {
+				validator = SlotValidator.ACCEPT_ALL;
 			}
 
 			slots.add(new ComponentUpgradeSlot(slotDto.id(), slotDto.type(), slotDto.description(), slotDto.contextOpt(), validator, Optional.ofNullable(childComponent)));

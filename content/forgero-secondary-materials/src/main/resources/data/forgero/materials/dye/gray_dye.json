@@ -2,7 +2,8 @@
   "type": "forgero:material",
   "name": "Gray Dye",
   "tags": [
-    "forgero:upgrades/types/cosmetic"
+    "forgero:upgrades/types/cosmetic",
+    "forgero:materials/types/dye"
   ],
   "host": {
     "identifiers": [

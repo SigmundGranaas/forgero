@@ -1,0 +1,24 @@
+{
+  "type": "forgero:composite_model",
+  "layers": [
+    { "order": 10, "textures": { "default": "forgero:item/oak-handle" } }
+  ],
+  "slots": [
+    {
+      "id": "pommel_slot",
+      "order": 5,
+      "renderer": {
+        "type": "forgero:component",
+        "context": "pommel"
+      }
+    },
+    {
+      "id": "grip_slot",
+      "order": 15,
+      "renderer": {
+        "type": "forgero:component",
+        "context": "grip"
+      }
+    }
+  ]
+}

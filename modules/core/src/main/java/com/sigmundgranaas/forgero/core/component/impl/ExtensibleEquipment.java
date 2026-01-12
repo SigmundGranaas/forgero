@@ -1,7 +1,9 @@
 package com.sigmundgranaas.forgero.core.component.impl;
 
+import com.sigmundgranaas.forgero.core.attribute.api.BakedAttributes;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
+import com.sigmundgranaas.forgero.core.component.api.EquipmentComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgrades;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 
@@ -17,10 +19,24 @@ public record ExtensibleEquipment(
 		OpenIdentifier id,
 		Set<OpenIdentifier> tags,
 		Map<String, List<?>> properties,
-		ComponentUpgrades upgrades
-) implements CustomizableComponent {
+		ComponentUpgrades upgrades,
+		BakedAttributes bakedAttributes
+) implements CustomizableComponent, EquipmentComponent {
 
 	private static final OpenIdentifier TYPE_IDENTIFIER = OpenIdentifier.of("extensible_equipment");
+
+	/**
+	 * Creates equipment with auto-baked attributes.
+	 */
+	public static ExtensibleEquipment create(
+			OpenIdentifier id,
+			Set<OpenIdentifier> tags,
+			Map<String, List<?>> properties,
+			ComponentUpgrades upgrades
+	) {
+		ExtensibleEquipment temp = new ExtensibleEquipment(id, tags, properties, upgrades, BakedAttributes.EMPTY);
+		return new ExtensibleEquipment(id, tags, properties, upgrades, AttributeBaker.bake(temp));
+	}
 
 	@Override
 	public OpenIdentifier getTypeIdentifier() {
@@ -44,11 +60,14 @@ public record ExtensibleEquipment(
 
 	@Override
 	public Component withUpgrades(ComponentUpgrades newUpgrades) {
-		return new ExtensibleEquipment(this.id, this.tags, this.properties, newUpgrades);
+		ExtensibleEquipment temp = new ExtensibleEquipment(this.id, this.tags, this.properties, newUpgrades, BakedAttributes.EMPTY);
+		return new ExtensibleEquipment(this.id, this.tags, this.properties, newUpgrades, AttributeBaker.bake(temp));
 	}
 
 	@Override
 	public Component withProperties(Map<String, List<?>> newProperties) {
-		return new ExtensibleEquipment(this.id, this.tags, PropertyMergeHelper.merge(this.properties, newProperties), this.upgrades);
+		Map<String, List<?>> merged = PropertyMergeHelper.merge(this.properties, newProperties);
+		ExtensibleEquipment temp = new ExtensibleEquipment(this.id, this.tags, merged, this.upgrades, BakedAttributes.EMPTY);
+		return new ExtensibleEquipment(this.id, this.tags, merged, this.upgrades, AttributeBaker.bake(temp));
 	}
 }

@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.core.component.impl;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.component.api.ContributingComponent;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgrades;
@@ -24,7 +25,7 @@ public record StructuredExtensiblePart(
 		Map<String, List<?>> properties,
 		ComponentStructure structure,
 		ComponentUpgrades upgrades
-) implements StructuredComponent, CustomizableComponent {
+) implements StructuredComponent, CustomizableComponent, ContributingComponent {
 
 	private static final OpenIdentifier TYPE_IDENTIFIER = OpenIdentifier.of("structured_extensible_part");
 

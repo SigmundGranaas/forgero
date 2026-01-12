@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.core.component.impl;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.component.api.ContributingComponent;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public record StaticComponent(
 		OpenIdentifier id,
 		Set<OpenIdentifier> tags,
 		Map<String, List<?>> properties
-) implements Component {
+) implements ContributingComponent {
 
 	private static final OpenIdentifier TYPE_IDENTIFIER = OpenIdentifier.of("static_component");
 

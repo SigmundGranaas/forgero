@@ -14,8 +14,6 @@ import com.sigmundgranaas.forgero.core.component.impl.StructuredPart;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 import com.sigmundgranaas.forgero.core.condition.predicate.InSlotTypeCondition;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -23,7 +21,6 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 
 import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.attributeEngine;
-import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.resolver;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -47,13 +44,6 @@ class MaterialSlotConditionValidationTest extends ForgeroTest {
 	private static final OpenIdentifier CHESTPLATE_ID = OpenIdentifier.parse("forgero:iron-chestplate");
 	private static final OpenIdentifier ARMOR_PLATE_TAG = OpenIdentifier.parse("forgero:armor_plate");
 	private static final OpenIdentifier HANDLE_MATERIAL_ID = OpenIdentifier.parse("forgero:handle_material");
-
-	private Resolver resolver;
-
-	@BeforeEach
-	void setUp() {
-		resolver = resolver();
-	}
 
 	// ==================== HELPER METHODS ====================
 
@@ -109,7 +99,7 @@ class MaterialSlotConditionValidationTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = resolver.resolve(pickaxeHead, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(pickaxeHead);
 
 			assertEquals(0f, result.getValue(DefaultAttributes.ARMOR), 0.001f,
 					"CRITICAL: Armor attribute should NOT apply when material is in tool_material slot. " +
@@ -140,7 +130,7 @@ class MaterialSlotConditionValidationTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = resolver.resolve(armorPlate, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(armorPlate);
 
 			assertEquals(5f, result.getValue(DefaultAttributes.ARMOR), 0.001f,
 					"Armor attribute should apply when material is in armor_material slot");
@@ -170,7 +160,7 @@ class MaterialSlotConditionValidationTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = resolver.resolve(armorPlate, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(armorPlate);
 
 			assertEquals(0f, result.getValue(DefaultAttributes.MINING_SPEED), 0.001f,
 					"Mining speed should NOT apply when material is in armor_material slot");
@@ -206,7 +196,7 @@ class MaterialSlotConditionValidationTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = resolver.resolve(pickaxeHead, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(pickaxeHead);
 
 			assertEquals(250f, result.getValue(DefaultAttributes.DURABILITY), 0.001f,
 					"Durability should apply when material is in tool_material slot");
@@ -239,7 +229,7 @@ class MaterialSlotConditionValidationTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = resolver.resolve(swordBlade, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(swordBlade);
 
 			assertEquals(3f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f,
 					"Attack damage should apply when material is in tool_material slot");
@@ -296,7 +286,7 @@ class MaterialSlotConditionValidationTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = resolver.resolve(pickaxe, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(pickaxe);
 
 			// Total durability should be: iron head (250) + oak handle (50) = 300
 			assertEquals(300f, result.getValue(DefaultAttributes.DURABILITY), 0.001f,
@@ -364,7 +354,7 @@ class MaterialSlotConditionValidationTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult toolResult = resolver.resolve(pickaxeHead, attributeEngine());
+			AttributeQueryResult toolResult = attributeEngine().resolve(pickaxeHead);
 
 			assertEquals(250f, toolResult.getValue(DefaultAttributes.DURABILITY), 0.001f,
 					"Durability should apply in tool slot");
@@ -381,7 +371,7 @@ class MaterialSlotConditionValidationTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult armorResult = resolver.resolve(armorPlate, attributeEngine());
+			AttributeQueryResult armorResult = attributeEngine().resolve(armorPlate);
 
 			assertEquals(0f, armorResult.getValue(DefaultAttributes.DURABILITY), 0.001f,
 					"Durability should NOT apply in armor slot (unless it has armor_material condition too)");
@@ -449,7 +439,7 @@ class MaterialSlotConditionValidationTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = resolver.resolve(pickaxeHead, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(pickaxeHead);
 
 			assertEquals(0f, result.getValue(DefaultAttributes.ARMOR), 0.001f,
 					"INVARIANT: Tools should NEVER have non-zero armor values. " +

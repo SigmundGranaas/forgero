@@ -41,7 +41,7 @@
       "on_release": [
         {"type": "forgero:launch_projectile", "base_power": 3.0, "base_divergence": 1.0},
         {"type": "forgero:consume_projectile"},
-        {"type": "forgero:play_sound", "sound": "entity.arrow.shoot"}
+        {"type": "forgero:play_sound", "sound_id": "minecraft:entity.arrow.shoot"}
       ]
     }
   }

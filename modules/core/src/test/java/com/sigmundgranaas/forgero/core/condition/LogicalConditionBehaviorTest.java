@@ -13,8 +13,6 @@ import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 import com.sigmundgranaas.forgero.core.condition.predicate.InSlotTypeCondition;
 import com.sigmundgranaas.forgero.core.condition.predicate.TagMatchCondition;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -24,18 +22,10 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.attributeEngine;
-import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.resolver;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Logical Condition Behavior")
 class LogicalConditionBehaviorTest extends ForgeroTest {
-
-	private Resolver resolver;
-
-	@BeforeEach
-	void setUp() {
-		resolver = resolver();
-	}
 
 	private SimpleAttribute attributeWithCondition(OpenIdentifier type, float value, Condition condition) {
 		return new SimpleAttribute(
@@ -81,7 +71,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					)
 					.build();
 
-			AttributeQueryResult result = resolver.resolve(tool, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(tool);
 
 			assertEquals(5f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f);
 		}
@@ -106,7 +96,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					)
 					.build();
 
-			AttributeQueryResult result = resolver.resolve(tool, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(tool);
 
 			assertEquals(0f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f);
 		}
@@ -145,7 +135,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					.structureSlot(OpenIdentifier.of("shape"), OpenIdentifier.of("shape"), "Shape", shape)
 					.build();
 
-			AttributeQueryResult result = resolver.resolve(part, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(part);
 
 			assertEquals(5f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f);
 		}
@@ -168,7 +158,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					.structureSlot(OpenIdentifier.of("material"), OpenIdentifier.of("tool_material"), "Material", iron)
 					.build();
 
-			AttributeQueryResult result = resolver.resolve(tool, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(tool);
 
 			assertEquals(0f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f);
 		}
@@ -191,7 +181,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					.structureSlot(OpenIdentifier.of("material"), OpenIdentifier.of("tool_material"), "Material", iron)
 					.build();
 
-			AttributeQueryResult result = resolver.resolve(tool, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(tool);
 
 			assertEquals(7f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f);
 		}
@@ -211,7 +201,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					.property(Attribute.KEY.key(), damage)
 					.build();
 
-			AttributeQueryResult result = resolver.resolve(iron, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(iron);
 
 			assertEquals(3f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f);
 		}
@@ -225,7 +215,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					.property(Attribute.KEY.key(), damage)
 					.build();
 
-			AttributeQueryResult result = resolver.resolve(iron, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(iron);
 
 			assertEquals(4f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f);
 		}
@@ -261,7 +251,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					.asEquipment()
 					.build();
 
-			AttributeQueryResult result = resolver.resolve(pickaxe, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(pickaxe);
 
 			assertEquals(6f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f);
 		}
@@ -289,7 +279,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					.structureSlot(OpenIdentifier.of("handle_material"), OpenIdentifier.of("tool_material"), "Handle", oak)
 					.build();
 
-			AttributeQueryResult result = resolver.resolve(tool, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(tool);
 
 			assertEquals(6f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f);
 		}
@@ -314,7 +304,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					.structureSlot(OpenIdentifier.of("material"), OpenIdentifier.of("tool_material"), "Material", iron)
 					.build();
 
-			AttributeQueryResult result = resolver.resolve(tool, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(tool);
 
 			assertEquals(0f, result.getValue(DefaultAttributes.ARMOR), 0.001f);
 		}
@@ -334,7 +324,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					.structureSlot(OpenIdentifier.of("material"), OpenIdentifier.of("armor_material"), "Material", iron)
 					.build();
 
-			AttributeQueryResult result = resolver.resolve(armor, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(armor);
 
 			assertEquals(0f, result.getValue(DefaultAttributes.MINING_SPEED), 0.001f);
 		}
@@ -355,7 +345,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					.property(Attribute.KEY.key(), bonus)
 					.build();
 
-			AttributeQueryResult result = resolver.resolve(iron, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(iron);
 
 			assertEquals(150f, result.getValue(DefaultAttributes.DURABILITY), 0.001f);
 		}
@@ -387,7 +377,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					.property(Attribute.KEY.key(), multiplier)
 					.build();
 
-			AttributeQueryResult result = resolver.resolve(iron, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(iron);
 
 			assertEquals(150f, result.getValue(DefaultAttributes.DURABILITY), 0.001f);
 		}

@@ -55,7 +55,7 @@ public class AttributeDebugTest implements ForgeroGameTest {
 	}
 
 	private void printComponentAttributes(String id, Component component) {
-		AttributeQueryResult attributes = ForgeroTestUtils.services().resolver().resolve(component, new AttributeEngine());
+		AttributeQueryResult attributes = new AttributeEngine().resolve(component);
 
 		LOGGER.debug("--- Component: {} ---", id);
 

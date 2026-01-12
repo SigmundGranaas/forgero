@@ -1,0 +1,6 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:bamboo",
+  "context": "pommel",
+  "texture": "forgero:item/upgrade/bamboo-pommel"
+}

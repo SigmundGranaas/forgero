@@ -4,7 +4,6 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 
 import java.util.Optional;
@@ -36,16 +35,12 @@ import java.util.Optional;
  */
 public class DifferenceCalculator {
 
-	private final Resolver resolver;
 	private final AttributeEngine attributeEngine;
 
 	/**
-	 * Creates a calculator with the given resolver.
-	 *
-	 * @param resolver The resolver for computing attribute values
+	 * Creates a calculator that uses AttributeEngine directly for resolution.
 	 */
-	public DifferenceCalculator(Resolver resolver) {
-		this.resolver = resolver;
+	public DifferenceCalculator() {
 		this.attributeEngine = new AttributeEngine();
 	}
 
@@ -64,7 +59,7 @@ public class DifferenceCalculator {
 			ComparisonContext comparisonContext,
 			DynamicContext dynamicContext
 	) {
-		float currentValue = resolver.resolve(current, attributeEngine, dynamicContext).getValue(attributeId);
+		float currentValue = attributeEngine.resolve(current, dynamicContext).getValue(attributeId);
 
 		Optional<Float> baselineValue = getBaselineValue(attributeId, comparisonContext, dynamicContext);
 
@@ -113,22 +108,22 @@ public class DifferenceCalculator {
 		}
 
 		if (context instanceof ComparisonContext.StrippedItem stripped) {
-			AttributeQueryResult result = resolver.resolve(
-					stripped.strippedComponent(), attributeEngine, dynamicContext
+			AttributeQueryResult result = attributeEngine.resolve(
+					stripped.strippedComponent(), dynamicContext
 			);
 			return Optional.of(result.getValue(attributeId));
 		}
 
 		if (context instanceof ComparisonContext.VsComponent vs) {
-			AttributeQueryResult result = resolver.resolve(
-					vs.baselineComponent(), attributeEngine, dynamicContext
+			AttributeQueryResult result = attributeEngine.resolve(
+					vs.baselineComponent(), dynamicContext
 			);
 			return Optional.of(result.getValue(attributeId));
 		}
 
 		if (context instanceof ComparisonContext.WithoutUpgrade without) {
-			AttributeQueryResult result = resolver.resolve(
-					without.baseWithoutUpgrade(), attributeEngine, dynamicContext
+			AttributeQueryResult result = attributeEngine.resolve(
+					without.baseWithoutUpgrade(), dynamicContext
 			);
 			return Optional.of(result.getValue(attributeId));
 		}

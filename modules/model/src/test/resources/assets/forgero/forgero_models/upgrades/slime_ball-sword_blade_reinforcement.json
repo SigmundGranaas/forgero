@@ -1,0 +1,6 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:slime_ball",
+  "context": "sword_blade_reinforcement",
+  "texture": "forgero:item/upgrade/slime_ball-sword_blade_reinforcement"
+}

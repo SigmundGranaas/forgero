@@ -1,0 +1,6 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:fire_charge",
+  "context": "pickaxe_head_reinforcement",
+  "texture": "forgero:item/upgrade/fire_charge-pickaxe_head_reinforcement"
+}

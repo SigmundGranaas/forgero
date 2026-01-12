@@ -17,7 +17,6 @@ import com.sigmundgranaas.forgero.core.condition.api.ConditionCodec;
 import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 import com.sigmundgranaas.forgero.core.condition.predicate.TagMatchCondition;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.core.property.context.Key;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +30,6 @@ import java.util.Set;
 
 import static com.sigmundgranaas.forgero.data.Utils.id;
 import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.attributeEngine;
-import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.resolver;
 import static com.sigmundgranaas.forgero.testutils.TestIdentifiers.ATTACK_DAMAGE_IDENTIFIER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -73,7 +71,7 @@ public class PredicateSystemTest extends ForgeroTest {
 	// Test Setup and Execution
 	// =============================================================================================
 
-	private Resolver resolver;
+	private AttributeEngine engine;
 	private Component componentWithPlatformPredicate;
 
 	@BeforeEach
@@ -87,7 +85,7 @@ public class PredicateSystemTest extends ForgeroTest {
 		// Step 3: Create the master ConditionCodec with all registered predicates
 		ConditionCodec conditionCodec = new ConditionCodec(staticCodecs, dynamicCodecs);
 
-		this.resolver = resolver();
+		this.engine = attributeEngine();
 
 		// Step 4: Create a condition object that uses the custom predicate by parsing JSON
 		String conditionJson = """
@@ -122,7 +120,7 @@ public class PredicateSystemTest extends ForgeroTest {
 				.put(MinecraftContextKeys.ENTITY_FLAGS, Set.of(id("minecraft:is_sneaking")))
 				.build();
 
-		AttributeQueryResult resultWhenSneaking = resolver.resolve(componentWithPlatformPredicate, attributeEngine(), contextWhenSneaking);
+		AttributeQueryResult resultWhenSneaking = engine.resolve(componentWithPlatformPredicate, contextWhenSneaking);
 
 		float damageWhenSneaking = resultWhenSneaking.getValue(ATTACK_DAMAGE_IDENTIFIER);
 		assertEquals(10.0f, damageWhenSneaking, "Attribute should be applied when the custom predicate is met.");
@@ -132,7 +130,7 @@ public class PredicateSystemTest extends ForgeroTest {
 				.put(MinecraftContextKeys.ENTITY_FLAGS, Collections.emptySet())
 				.build();
 
-		AttributeQueryResult resultWhenNotSneaking = resolver.resolve(componentWithPlatformPredicate, attributeEngine(), contextWhenNotSneaking);
+		AttributeQueryResult resultWhenNotSneaking = engine.resolve(componentWithPlatformPredicate, contextWhenNotSneaking);
 
 		float damageWhenNotSneaking = resultWhenNotSneaking.getValue(ATTACK_DAMAGE_IDENTIFIER);
 		assertEquals(0.0f, damageWhenNotSneaking, "Attribute should NOT be applied when the custom predicate is not met.");
@@ -140,7 +138,7 @@ public class PredicateSystemTest extends ForgeroTest {
 		// Test Case 3: Context is missing the required data
 		DynamicContext emptyContext = DynamicContext.empty();
 
-		AttributeQueryResult resultWithEmptyContext = resolver.resolve(componentWithPlatformPredicate, attributeEngine(), emptyContext);
+		AttributeQueryResult resultWithEmptyContext = engine.resolve(componentWithPlatformPredicate, emptyContext);
 
 		float damageWithEmptyContext = resultWithEmptyContext.getValue(ATTACK_DAMAGE_IDENTIFIER);
 		assertEquals(0.0f, damageWithEmptyContext, "Attribute should NOT be applied when context is missing required keys.");

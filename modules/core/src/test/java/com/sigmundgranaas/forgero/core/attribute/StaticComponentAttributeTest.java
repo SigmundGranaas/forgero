@@ -5,8 +5,6 @@ import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -22,12 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
  * This isolates whether the attribute system works in core, separate from JSON loading.
  */
 class StaticComponentAttributeTest extends ForgeroTest {
-	private Resolver resolver;
-
-	@BeforeEach
-	void setUp() {
-		resolver = resolver();
-	}
 
 	/**
 	 * Test 1: Can a static component have attributes directly?
@@ -82,7 +74,7 @@ class StaticComponentAttributeTest extends ForgeroTest {
 				.withAttribute(DefaultAttributes.MINING_LEVEL, 2f)
 				.build();
 
-		AttributeQueryResult result = resolver.resolve(ironPickaxe, attributeEngine());
+		AttributeQueryResult result = attributeEngine().resolve(ironPickaxe);
 
 		assertEquals(4f, result.getValue(DefaultAttributes.ATTACK_DAMAGE),
 				"Attack damage should resolve to 4");
@@ -146,19 +138,19 @@ class StaticComponentAttributeTest extends ForgeroTest {
 		assertFalse(goldPickaxe.properties(Attribute.KEY).isEmpty(), "Gold pickaxe should have attributes");
 
 		// Verify attributes resolve correctly
-		AttributeQueryResult ironPickaxeResult = resolver.resolve(ironPickaxe, attributeEngine());
+		AttributeQueryResult ironPickaxeResult = attributeEngine().resolve(ironPickaxe);
 		assertEquals(250f, ironPickaxeResult.getValue(DefaultAttributes.DURABILITY));
 		assertEquals(4f, ironPickaxeResult.getValue(DefaultAttributes.ATTACK_DAMAGE));
 
-		AttributeQueryResult ironSwordResult = resolver.resolve(ironSword, attributeEngine());
+		AttributeQueryResult ironSwordResult = attributeEngine().resolve(ironSword);
 		assertEquals(250f, ironSwordResult.getValue(DefaultAttributes.DURABILITY));
 		assertEquals(6f, ironSwordResult.getValue(DefaultAttributes.ATTACK_DAMAGE));
 
-		AttributeQueryResult diamondResult = resolver.resolve(diamondPickaxe, attributeEngine());
+		AttributeQueryResult diamondResult = attributeEngine().resolve(diamondPickaxe);
 		assertEquals(1561f, diamondResult.getValue(DefaultAttributes.DURABILITY));
 		assertEquals(8f, diamondResult.getValue(DefaultAttributes.MINING_SPEED));
 
-		AttributeQueryResult goldResult = resolver.resolve(goldPickaxe, attributeEngine());
+		AttributeQueryResult goldResult = attributeEngine().resolve(goldPickaxe);
 		assertEquals(32f, goldResult.getValue(DefaultAttributes.DURABILITY));
 		assertEquals(12f, goldResult.getValue(DefaultAttributes.MINING_SPEED));
 	}
@@ -196,7 +188,7 @@ class StaticComponentAttributeTest extends ForgeroTest {
 		assertFalse(attributes.isEmpty(), "Component with one attribute should not be empty");
 		assertEquals(1, attributes.size(), "Should have exactly 1 attribute");
 
-		AttributeQueryResult result = resolver.resolve(partialTool, attributeEngine());
+		AttributeQueryResult result = attributeEngine().resolve(partialTool);
 		assertEquals(5f, result.getValue(DefaultAttributes.ATTACK_DAMAGE));
 	}
 }

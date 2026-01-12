@@ -3,7 +3,8 @@ package com.sigmundgranaas.forgero.properties.minecraft.entityfilter;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.entity.Entity;
-import net.minecraft.registry.Registries;
+import net.minecraft.entity.EntityType;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 
@@ -23,10 +24,8 @@ public record HasTagFilter(String tag) implements EntityFilter {
 			return false;
 		}
 
-		TagKey<?> tagKey = TagKey.of(Registries.ENTITY_TYPE.getKey(), tagId);
-		return Registries.ENTITY_TYPE.getEntry(candidate.getType())
-				.streamTags()
-				.anyMatch(tag -> tag.equals(tagKey));
+		TagKey<EntityType<?>> tagKey = TagKey.of(RegistryKeys.ENTITY_TYPE, tagId);
+		return candidate.getType().isIn(tagKey);
 	}
 
 	@Override

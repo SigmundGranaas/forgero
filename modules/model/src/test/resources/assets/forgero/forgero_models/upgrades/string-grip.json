@@ -1,0 +1,6 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:string",
+  "context": "grip",
+  "texture": "forgero:item/upgrade/string-handle_grip"
+}

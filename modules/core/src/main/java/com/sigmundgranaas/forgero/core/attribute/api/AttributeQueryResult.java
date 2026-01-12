@@ -1,11 +1,10 @@
 package com.sigmundgranaas.forgero.core.attribute.api;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 
 /**
  * Represents the final, resolved result for an attribute query.
- * This object is the product of the {@link Resolver} when using the {@code AttributeEngine.KEY}.
+ * This object is the product of the {@code AttributeEngine.resolve()} method.
  * It is context-aware and can be queried for the value of any specific attribute.
  * This design handles the "asymmetric" nature of attribute resolution, where you resolve
  * all attributes at once but then query for them one by one.

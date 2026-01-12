@@ -21,7 +21,7 @@
         "order": 30,
         "renderer": {
           "type": "forgero:component",
-          "context": "blade_reinforcement"
+          "context": "dagger_blade_reinforcement"
         }
       }
     ]

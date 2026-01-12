@@ -8,7 +8,6 @@ import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.loader.api.ForgeroInitializedCallback;
 import com.sigmundgranaas.forgero.properties.minecraft.onhit.OnHitManager;
 import com.sigmundgranaas.forgero.properties.minecraft.onhitblock.OnHitBlockManager;
@@ -52,7 +51,6 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 
 	// Services initialized via callback
 	private static ComponentConverter converter;
-	private static Resolver resolver;
 
 	// Track initialization to prevent premature discarding
 	private boolean initialized = false;
@@ -65,7 +63,6 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 		// Initialize services when Forgero is ready
 		ForgeroInitializedCallback.EVENT.register(services -> {
 			converter = services.converter();
-			resolver = services.resolver();
 		});
 	}
 
@@ -94,22 +91,19 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 		// Resolve attack damage from component
 		// If converter is null (callback hasn't fired yet), try to get it directly
 		ComponentConverter activeConverter = converter;
-		Resolver activeResolver = resolver;
 
-		if (activeConverter == null || activeResolver == null) {
+		if (activeConverter == null) {
 			var services = ForgeroInitializedCallback.getServices().orElse(null);
 			if (services != null) {
 				activeConverter = services.converter();
-				activeResolver = services.resolver();
 			}
 		}
 
-		if (activeConverter != null && activeResolver != null) {
+		if (activeConverter != null) {
 			final ComponentConverter finalConverter = activeConverter;
-			final Resolver finalResolver = activeResolver;
 
 			finalConverter.toComponent(stack).ifPresent(component -> {
-				AttributeQueryResult result = finalResolver.resolve(component, new AttributeEngine());
+				AttributeQueryResult result = new AttributeEngine().resolve(component);
 				float damage = result.getValue(ATTACK_DAMAGE_ATTR);
 				if (damage > 0) {
 					setDamage(damage);
@@ -169,28 +163,25 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 			return 0f;
 		}
 
-		// Get converter/resolver, using fallback if static fields are null
+		// Get converter, using fallback if static field is null
 		ComponentConverter activeConverter = converter;
-		Resolver activeResolver = resolver;
 
-		if (activeConverter == null || activeResolver == null) {
+		if (activeConverter == null) {
 			var services = ForgeroInitializedCallback.getServices().orElse(null);
 			if (services != null) {
 				activeConverter = services.converter();
-				activeResolver = services.resolver();
 			}
 		}
 
-		if (activeConverter == null || activeResolver == null) {
+		if (activeConverter == null) {
 			return 0f; // No services available, use default vanilla gravity
 		}
 
 		final ComponentConverter finalConverter = activeConverter;
-		final Resolver finalResolver = activeResolver;
 
 		float weight = finalConverter.toComponent(getStack())
 				.map(component -> {
-					AttributeQueryResult result = finalResolver.resolve(component, new AttributeEngine());
+					AttributeQueryResult result = new AttributeEngine().resolve(component);
 					return result.getValue(WEIGHT_ATTR);
 				})
 				.orElse(2f); // Default weight

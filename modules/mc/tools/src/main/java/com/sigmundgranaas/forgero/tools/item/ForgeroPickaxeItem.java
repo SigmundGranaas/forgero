@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgero.tools.item;
 import com.sigmundgranaas.forgero.common.item.ForgeroHostItem;
 import com.sigmundgranaas.forgero.common.name.NameResolver;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
 
 import net.minecraft.item.ItemStack;
@@ -18,7 +17,7 @@ import net.minecraft.text.Text;
 public class ForgeroPickaxeItem extends PickaxeItem implements ForgeroHostItem {
 	private final Component component;
 
-	public ForgeroPickaxeItem(ToolMaterial material, Settings settings, Component component, Resolver resolver) {
+	public ForgeroPickaxeItem(ToolMaterial material, Settings settings, Component component) {
 		super(material, 0, 0, settings); // Base damage and speed are set to 0, will be provided by attributes
 		this.component = component;
 	}

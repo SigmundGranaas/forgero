@@ -4,6 +4,7 @@
   "tags": [
     "forgero:materials/types/metal",
     "forgero:materials/roles/tool_material",
+    "forgero:materials/roles/upgrade_material",
     "forgero:materials/roles/armor_material",
     "forgero:materials/properties/hard",
     "forgero:upgrades/types/tip_reinforcement"

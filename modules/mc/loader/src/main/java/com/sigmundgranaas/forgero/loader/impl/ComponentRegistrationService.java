@@ -12,9 +12,7 @@ import com.sigmundgranaas.forgero.common.convert.StatefulConverter;
 import com.sigmundgranaas.forgero.common.convert.TypeConverter;
 import com.sigmundgranaas.forgero.common.nbt.ComponentNbtConverter;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.api.codec.KeyMapDispatchCodec;
-import com.sigmundgranaas.forgero.core.property.engine.ResolverEngine;
 import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
 import com.sigmundgranaas.forgero.core.registry.impl.MapBackedComponentRegistry;
 import com.sigmundgranaas.forgero.data.pipeline.api.ForgeroDataBundle;
@@ -47,7 +45,6 @@ public class ComponentRegistrationService {
 			ComponentRegistry componentRegistry,
 			ComponentConverter converter,
 			ComponentNbtConverter nbtConverter,
-			Resolver resolver,
 			IdMapper idMapper
 	) {}
 
@@ -97,16 +94,12 @@ public class ComponentRegistrationService {
 				componentRegistry
 		);
 
-		// Create resolver
-		Resolver resolver = new ResolverEngine();
-
 		LOGGER.debug("Core services initialized");
 
 		return new ServiceBundle(
 				componentRegistry,
 				componentConverter,
 				nbtConverter,
-				resolver,
 				idMapper
 		);
 	}

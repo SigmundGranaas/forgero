@@ -14,9 +14,7 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.useinteraction.UseContext;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.loader.api.ForgeroInitializedCallback;
-import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
 import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.ContextualUseHandler;
 
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -61,12 +59,10 @@ public record LaunchProjectileHandler(
 
 	// Services received from ForgeroInitializedCallback
 	private static ComponentConverter converter;
-	private static Resolver resolver;
 
 	static {
 		ForgeroInitializedCallback.EVENT.register(services -> {
 			converter = services.converter();
-			resolver = services.resolver();
 			LOGGER.debug("LaunchProjectileHandler services initialized");
 		});
 	}
@@ -263,8 +259,7 @@ public record LaunchProjectileHandler(
 	private static float resolveAttribute(ItemStack stack, OpenIdentifier attr, float fallback) {
 		Optional<Float> result = converter.toComponent(stack)
 				.map(component -> {
-					AttributeQueryResult attrResult = resolver
-							.resolve(component, new AttributeEngine());
+					AttributeQueryResult attrResult = new AttributeEngine().resolve(component);
 					return attrResult.getValue(attr);
 				})
 				.filter(value -> value > 0);

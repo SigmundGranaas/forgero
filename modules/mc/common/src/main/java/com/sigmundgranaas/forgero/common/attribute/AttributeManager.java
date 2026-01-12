@@ -8,7 +8,7 @@ import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
+import com.sigmundgranaas.forgero.core.component.api.EquipmentComponent;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
@@ -30,7 +30,6 @@ import java.util.function.Function;
 public class AttributeManager {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AttributeManager.class);
 	private static ComponentConverter converter;
-	private static Resolver resolver;
 	private static boolean initialized = false;
 
 	// Vanilla attribute modifier UUIDs, essential for replacing vanilla modifiers.
@@ -44,14 +43,13 @@ public class AttributeManager {
 	/**
 	 * Initializes the manager with necessary services from the loader.
 	 */
-	public static void initialize(ComponentConverter converter, Resolver resolver) {
+	public static void initialize(ComponentConverter converter) {
 		if (initialized) {
 			LOGGER.warn("ForgeroAttributeManager is being initialized more than once. " +
 					"This may indicate a mod lifecycle issue - the attribute manager should only be initialized once during mod setup.");
 			return;
 		}
 		AttributeManager.converter = converter;
-		AttributeManager.resolver = resolver;
 		AttributeManager.initialized = true;
 	}
 
@@ -67,7 +65,7 @@ public class AttributeManager {
 			return Optional.empty();
 		}
 		return converter.toComponent(stack)
-				.map(component -> resolver.resolve(component, new AttributeEngine()));
+				.map(component -> new AttributeEngine().resolve(component));
 	}
 
 	/**
@@ -87,15 +85,35 @@ public class AttributeManager {
 	/**
 	 * The main method for retrieving EntityAttributes for an ItemStack.
 	 * It uses the shared helper to resolve attributes and then builds the Multimap.
+	 * <p>
+	 * <b>Important:</b> Only {@link EquipmentComponent}s apply their attributes to players.
+	 * Parts and materials ({@link com.sigmundgranaas.forgero.core.component.api.ContributingComponent})
+	 * expose attributes for inspection and composition but do not apply them when held.
 	 */
 	public static Multimap<EntityAttribute, EntityAttributeModifier> getAttributes(ItemStack stack, Multimap<EntityAttribute, EntityAttributeModifier> vanillaMap, EquipmentSlot slot) {
-		Optional<AttributeQueryResult> result = getResolvedAttributes(stack);
-
-		if (result.isEmpty()) {
+		if (!initialized || stack.isEmpty()) {
 			return vanillaMap;
 		}
 
-		Multimap<EntityAttribute, EntityAttributeModifier> forgeroAttributes = createAttributeMap(result.get(), slot);
+		// Get the component and check if it's equipment (terminal component)
+		Optional<Component> componentOpt = getComponent(stack);
+		if (componentOpt.isEmpty()) {
+			return vanillaMap;
+		}
+
+		Component component = componentOpt.get();
+
+		// CRITICAL: Only equipment components apply their attributes to the player.
+		// Parts and materials (ContributingComponent) provide attributes for composition
+		// and inspection only - they don't modify player stats when held.
+		if (!(component instanceof EquipmentComponent)) {
+			return vanillaMap;
+		}
+
+		// Resolve attributes for this equipment
+		AttributeQueryResult result = new AttributeEngine().resolve(component);
+
+		Multimap<EntityAttribute, EntityAttributeModifier> forgeroAttributes = createAttributeMap(result, slot);
 
 		Multimap<EntityAttribute, EntityAttributeModifier> finalMap = LinkedListMultimap.create();
 		finalMap.putAll(forgeroAttributes);

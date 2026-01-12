@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.context.ContextKeys;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.effects.entity.ContextualEffectHandler;
@@ -33,13 +32,11 @@ import net.minecraft.registry.tag.TagKey;
  */
 public class OnTickProjectileManager {
 	private static ComponentConverter converter;
-	private static Resolver resolver;
 
 	static {
 		// Initialize services when Forgero is ready
 		ForgeroInitializedCallback.EVENT.register(services -> {
 			converter = services.converter();
-			resolver = services.resolver();
 		});
 	}
 
@@ -66,22 +63,19 @@ public class OnTickProjectileManager {
 
 		// Ensure services are available
 		ComponentConverter activeConverter = converter;
-		Resolver activeResolver = resolver;
 
-		if (activeConverter == null || activeResolver == null) {
+		if (activeConverter == null) {
 			var services = ForgeroInitializedCallback.getServices().orElse(null);
 			if (services != null) {
 				activeConverter = services.converter();
-				activeResolver = services.resolver();
 			}
 		}
 
-		if (activeConverter == null || activeResolver == null) {
+		if (activeConverter == null) {
 			return;
 		}
 
 		final ComponentConverter finalConverter = activeConverter;
-		final Resolver finalResolver = activeResolver;
 
 		finalConverter.toComponent(stack).ifPresent(component -> {
 			// Build context with projectile's entity type tags
@@ -96,7 +90,7 @@ public class OnTickProjectileManager {
 
 			// Resolve on-tick properties
 			var engine = new OnTickProperty.Engine();
-			List<OnTickProperty> properties = finalResolver.resolve(component, engine, context);
+			List<OnTickProperty> properties = engine.resolve(component, context);
 
 			// Determine the source entity (owner if available, otherwise projectile itself)
 			Entity source = projectile.getOwner() != null ? projectile.getOwner() : projectile;

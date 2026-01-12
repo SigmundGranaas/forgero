@@ -429,12 +429,13 @@ public class IntegrationTests {
 		// Test all 7 new handlers in one scenario
 		PlayerEntity player = context.createMockCreativeServerPlayerInWorld();
 
-		// Use RELATIVE coordinates - place platform first
-		BlockPos platformPosRelative = new BlockPos(3, 1, 3);
-		context.setBlockState(platformPosRelative, Blocks.DIRT);
+		// Use RELATIVE coordinates - place dirt at y=0 (ground level)
+		BlockPos dirtPosRelative = new BlockPos(3, 0, 3);
+		context.setBlockState(dirtPosRelative, Blocks.DIRT);
 
-		// Spawn target ON the dirt block (not above it) so target.getBlockPos() returns the dirt position
-		LivingEntity target = context.spawnEntity(EntityType.ZOMBIE, platformPosRelative);
+		// Spawn target ABOVE the dirt block at y=1, so its feet are in air above dirt
+		BlockPos spawnPosRelative = new BlockPos(3, 1, 3);
+		LivingEntity target = context.spawnEntity(EntityType.ZOMBIE, spawnPosRelative);
 
 		// 1. Freeze
 		new FreezeHandler(80, false).apply(target);
@@ -451,10 +452,10 @@ public class IntegrationTests {
 				20, 0.1, 1.0, ParticleHandler.ParticleTarget.TARGET
 		).apply(player, target);
 
-		// 4. Velocity
+		// 4. Velocity - small amount so target stays nearby
 		new VelocityHandler(
 				VelocityHandler.VelocityTarget.TARGET,
-				1.0, VelocityHandler.VelocityMode.ADD, 0.5
+				0.2, VelocityHandler.VelocityMode.ADD, 0.1
 		).apply(player, target);
 
 		context.waitAndRun(2, () -> {
@@ -470,9 +471,15 @@ public class IntegrationTests {
 					1, Vec3d.ZERO, true, false, true
 			).apply(player, target);
 
-			// 7. Modify Block - original target moved due to VelocityHandler
-			//    Spawn a fresh zombie at the dirt block position for block modification
-			LivingEntity blockModTarget = context.spawnEntity(EntityType.ZOMBIE, platformPosRelative);
+			// 7. Modify Block - spawn a zombie on top of the dirt, it will have getBlockPos() at y=1
+			//    But we want to modify the dirt at y=0, so we need to target differently
+			//    ModifyBlockHandler modifies the block at target.getBlockPos(), not below it
+			//    Let's place a new dirt block where the new zombie will stand
+			BlockPos modifyBlockPos = new BlockPos(5, 1, 3);
+			context.setBlockState(modifyBlockPos, Blocks.DIRT);
+			// Spawn zombie INSIDE the dirt block so getBlockPos returns the dirt position
+			LivingEntity blockModTarget = context.spawnEntity(EntityType.ZOMBIE, modifyBlockPos);
+
 			new ModifyBlockHandler(
 					ModifyBlockHandler.BlockAction.REPLACE,
 					Optional.empty(), // No filter - replace any block
@@ -484,8 +491,8 @@ public class IntegrationTests {
 			context.waitAndRun(2, () -> {
 				// All effects applied successfully
 				context.assertTrue(target.getFrozenTicks() > 0, "Freeze worked");
-				// Use RELATIVE position for expectBlock
-				context.expectBlock(Blocks.GRASS_BLOCK, platformPosRelative);
+				// ModifyBlockHandler should have replaced the dirt at (5,1,3) with grass
+				context.expectBlock(Blocks.GRASS_BLOCK, modifyBlockPos);
 				context.expectEntity(EntityType.CHICKEN);
 				context.complete();
 			});

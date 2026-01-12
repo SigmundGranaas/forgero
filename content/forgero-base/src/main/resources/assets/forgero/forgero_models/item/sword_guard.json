@@ -17,6 +17,14 @@
     ],
     "slots": [
       {
+        "id": "guard-cosmetic",
+        "order": 65,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "guard_dye"
+        }
+      },
+      {
         "id": "reinforcement_slot",
         "order": 70,
         "renderer": {

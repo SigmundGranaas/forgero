@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.loader.impl;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.CreateData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.HostData;
@@ -29,7 +28,6 @@ public class ItemRegistrar {
 	private static final Map<String, RegistryKey<ItemGroup>> ITEM_GROUP_KEY_MAP = new HashMap<>();
 
 	private final ComponentRegistry componentRegistry;
-	private final Resolver resolver;
 	private final Logger logger;
 	private final List<ItemRegistrationCallback> registrationCallbacks = new ArrayList<>();
 
@@ -49,9 +47,8 @@ public class ItemRegistrar {
 	public record PendingItemGroupRegistration(Item item, @Nullable String groupId) {}
 	public record RegisteredItem(Identifier id, Item item, Component component, CreateData createData) {}
 
-	public ItemRegistrar(ComponentRegistry componentRegistry, Resolver resolver, Logger logger) {
+	public ItemRegistrar(ComponentRegistry componentRegistry, Logger logger) {
 		this.componentRegistry = componentRegistry;
-		this.resolver = resolver;
 		this.logger = logger;
 	}
 
@@ -99,7 +96,7 @@ public class ItemRegistrar {
 
 			try {
 				// Create the item
-				Item item = creator.create(component, createData, resolver);
+				Item item = creator.create(component, createData);
 				Identifier minecraftId = new Identifier(createData.id().namespace(), createData.id().path());
 
 				// Allow callbacks to modify the item before registration

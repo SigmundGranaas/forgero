@@ -6,10 +6,8 @@ import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.context.ResolutionContext;
 import com.sigmundgranaas.forgero.testutils.TestIdentifiers;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -35,15 +33,9 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @DisplayName("Attribute Resolution Behavior")
 class AttributeResolutionBehaviorTest extends ForgeroTest {
-	private Resolver resolver;
 
 	private static final String HEAD_TAG = "head";
 	private static final String HANDLE_TAG = "handle";
-
-	@BeforeEach
-	void setUp() {
-		resolver = resolver();
-	}
 
 	@Nested
 	@DisplayName("Condition Filtering")
@@ -83,7 +75,7 @@ class AttributeResolutionBehaviorTest extends ForgeroTest {
 					.withPart(part, "slot", TestIdentifiers.id(HEAD_TAG))
 					.build();
 
-			AttributeQueryResult result = resolver.resolve(tool, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(tool);
 
 			// Unconditioned attribute should apply
 			assertEquals(100f, result.getValue(DefaultAttributes.DURABILITY), 0.1f,
@@ -125,7 +117,7 @@ class AttributeResolutionBehaviorTest extends ForgeroTest {
 					.withPart(part, "slot", TestIdentifiers.id(HEAD_TAG))
 					.build();
 
-			AttributeQueryResult result = resolver.resolve(tool, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(tool);
 
 			// Conditioned attribute with true condition SHOULD apply
 			assertEquals(5f, result.getValue(DefaultAttributes.ARMOR), 0.1f,
@@ -148,7 +140,7 @@ class AttributeResolutionBehaviorTest extends ForgeroTest {
 					.withPart(part, "slot", TestIdentifiers.id(HEAD_TAG))
 					.build();
 
-			AttributeQueryResult result = resolver.resolve(tool, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(tool);
 
 			assertEquals(100f, result.getValue(DefaultAttributes.DURABILITY), 0.1f,
 					"Attribute with ALWAYS_TRUE condition should be included");
@@ -183,7 +175,7 @@ class AttributeResolutionBehaviorTest extends ForgeroTest {
 					.withPart(handle, "handle_slot", TestIdentifiers.id(HANDLE_TAG))
 					.build();
 
-			AttributeQueryResult result = resolver.resolve(tool, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(tool);
 
 			assertEquals(125f, result.getValue(DefaultAttributes.DURABILITY), 0.1f,
 					"Durability should sum: 100 + 25 = 125");
@@ -215,7 +207,7 @@ class AttributeResolutionBehaviorTest extends ForgeroTest {
 					.withPart(handle, "handle_slot", TestIdentifiers.id(HANDLE_TAG))
 					.build();
 
-			AttributeQueryResult result = resolver.resolve(tool, attributeEngine());
+			AttributeQueryResult result = attributeEngine().resolve(tool);
 
 			assertEquals(125f, result.getValue(DefaultAttributes.DURABILITY), 0.1f,
 					"Durability should sum normally");
@@ -261,8 +253,8 @@ class AttributeResolutionBehaviorTest extends ForgeroTest {
 					.withPart(handle, "handle_slot", TestIdentifiers.id(HANDLE_TAG))
 					.build();
 
-			AttributeQueryResult weakResult = resolver.resolve(weakTool, attributeEngine());
-			AttributeQueryResult strongResult = resolver.resolve(strongTool, attributeEngine());
+			AttributeQueryResult weakResult = attributeEngine().resolve(weakTool);
+			AttributeQueryResult strongResult = attributeEngine().resolve(strongTool);
 
 			assertEquals(75f, weakResult.getValue(DefaultAttributes.DURABILITY), 0.1f,
 					"Weak tool should have 50 + 25 = 75 durability");
@@ -297,8 +289,8 @@ class AttributeResolutionBehaviorTest extends ForgeroTest {
 					.withPart(head, "head_slot", TestIdentifiers.id(HEAD_TAG))
 					.build();
 
-			AttributeQueryResult result1 = resolver.resolve(tool1, attributeEngine());
-			AttributeQueryResult result2 = resolver.resolve(tool2, attributeEngine());
+			AttributeQueryResult result1 = attributeEngine().resolve(tool1);
+			AttributeQueryResult result2 = attributeEngine().resolve(tool2);
 
 			// Both should have same value since they share the same head
 			assertEquals(result1.getValue(DefaultAttributes.DURABILITY),

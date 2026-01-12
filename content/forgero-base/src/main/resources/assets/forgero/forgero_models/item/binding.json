@@ -10,12 +10,41 @@
     "layers": [
       {
         "order": 40,
+        "textures": {
+          "default": "forgero:item/{target.name}-binding",
+          "variants": [
+            {
+              "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/pickaxe" }],
+              "texture": "forgero:item/{target.name}-pickaxe_binding"
+            },
+            {
+              "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/axe" }],
+              "texture": "forgero:item/{target.name}-axe_binding"
+            },
+            {
+              "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/hoe" }],
+              "texture": "forgero:item/{target.name}-hoe_binding"
+            },
+            {
+              "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/shovel" }],
+              "texture": "forgero:item/{target.name}-shovel_binding"
+            }
+          ]
+        },
         "template": "forgero:texture_template/parts/binding",
         "palette": "forgero:palette/{target.name}",
         "output": "forgero:item/{target.name}-binding"
       }
     ],
     "slots": [
+      {
+        "id": "binding-cosmetic",
+        "order": 45,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "binding_dye"
+        }
+      },
       {
         "id": "binding-gem",
         "order": 90,
@@ -25,5 +54,27 @@
         }
       }
     ]
-  }
+  },
+  "texture_variants": [
+    {
+      "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/pickaxe" }],
+      "template": "forgero:texture_template/parts/pickaxe_binding",
+      "output_suffix": "-pickaxe_binding"
+    },
+    {
+      "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/axe" }],
+      "template": "forgero:texture_template/parts/axe_binding",
+      "output_suffix": "-axe_binding"
+    },
+    {
+      "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/hoe" }],
+      "template": "forgero:texture_template/parts/hoe_binding",
+      "output_suffix": "-hoe_binding"
+    },
+    {
+      "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/shovel" }],
+      "template": "forgero:texture_template/parts/shovel_binding",
+      "output_suffix": "-shovel_binding"
+    }
+  ]
 }

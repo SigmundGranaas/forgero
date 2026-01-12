@@ -11,6 +11,71 @@ import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+/**
+ * A static condition that passes when a component (self or root) has a specific tag.
+ *
+ * <p>Tags are hierarchical identifiers that classify components. This condition uses
+ * the {@link TagResolver} to check tag membership, which supports tag inheritance
+ * (if a component has tag "forgero:metal", it also has "forgero:material").
+ *
+ * <h2>Condition Types</h2>
+ * <table>
+ *   <tr><th>Type</th><th>Checks</th><th>Use Case</th></tr>
+ *   <tr><td>{@code forgero:self_has_tag}</td><td>Current component</td><td>Material-specific properties</td></tr>
+ *   <tr><td>{@code forgero:root_has_tag}</td><td>Root equipment</td><td>Equipment-type bonuses</td></tr>
+ * </table>
+ *
+ * <h2>Use Cases</h2>
+ * <ul>
+ *   <li><strong>Material-specific bonuses:</strong> Extra durability for metal materials</li>
+ *   <li><strong>Category filtering:</strong> Apply effect only to weapons, not tools</li>
+ *   <li><strong>Synergy effects:</strong> Bonus when root is a specific equipment type</li>
+ * </ul>
+ *
+ * <h2>Example: Metal Material Bonus</h2>
+ * <pre>{@code
+ * // Extra durability for metal materials:
+ * {
+ *   "attributes": [{
+ *     "type": "forgero:durability",
+ *     "value": 1.1,
+ *     "operator": "multiplication",
+ *     "condition": {
+ *       "static": [{ "type": "forgero:self_has_tag", "tag": "forgero:metal" }]
+ *     }
+ *   }]
+ * }
+ * }</pre>
+ *
+ * <h2>Example: Weapon-Only Effect</h2>
+ * <pre>{@code
+ * // Fire damage only on weapons:
+ * {
+ *   "on_hit": [{
+ *     "selector": { "type": "forgero:single_target" },
+ *     "effects": [{ "type": "forgero:fire", "duration": 100 }],
+ *     "condition": {
+ *       "static": [{ "type": "forgero:root_has_tag", "tag": "forgero:weapon" }]
+ *     }
+ *   }]
+ * }
+ * }</pre>
+ *
+ * <h2>Common Tags</h2>
+ * <ul>
+ *   <li>{@code forgero:metal} - Metal materials (iron, gold, netherite)</li>
+ *   <li>{@code forgero:wood} - Wood materials (oak, birch, etc.)</li>
+ *   <li>{@code forgero:stone} - Stone materials</li>
+ *   <li>{@code forgero:gem} - Gem materials (diamond, emerald)</li>
+ *   <li>{@code forgero:weapon} - Weapon equipment types</li>
+ *   <li>{@code forgero:tool} - Tool equipment types</li>
+ *   <li>{@code forgero:pickaxe}, {@code forgero:sword}, etc. - Specific equipment types</li>
+ * </ul>
+ *
+ * @see AllTagsMatchCondition for AND logic across multiple tags
+ * @see AnyTagMatchCondition for OR logic across multiple tags
+ * @see TagResolver for tag inheritance and resolution
+ */
 public final class TagMatchCondition implements StaticCondition {
 
 	private final OpenIdentifier type;

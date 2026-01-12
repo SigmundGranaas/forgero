@@ -10,7 +10,6 @@ import com.sigmundgranaas.forgero.common.tooltip.value.TooltipValueResolver;
 import com.sigmundgranaas.forgero.common.tooltip.api.TooltipRenderConfig;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 
 import java.util.List;
@@ -46,7 +45,6 @@ import java.util.List;
  *
  * @param section              The section this writer is creating content for
  * @param component            The component being rendered
- * @param resolver             The property resolver for computing values
  * @param attributes           The resolved attributes for the component
  * @param descriptors          All tooltip descriptors for the component
  * @param comparisonContext    The comparison mode for showing differences
@@ -59,7 +57,6 @@ import java.util.List;
 public record SectionWriterContext(
 		TooltipSection section,
 		Component component,
-		Resolver resolver,
 		AttributeQueryResult attributes,
 		List<TooltipDescriptor> descriptors,
 		ComparisonContext comparisonContext,

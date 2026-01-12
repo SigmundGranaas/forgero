@@ -4,13 +4,11 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 import com.sigmundgranaas.forgero.core.property.context.ContextKeys;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
-import com.sigmundgranaas.forgero.core.property.engine.ResolverEngine;
 import com.sigmundgranaas.forgero.core.condition.predicate.SlotContainsCondition;
 import com.sigmundgranaas.forgero.core.condition.predicate.TagMatchCondition;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,16 +29,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Validates the core functionality of the {@link AttributeEngine} and its interaction
- * with the new {@link Resolver} and {@link AttributeQueryResult}.
+ * with the new {@link AttributeQueryResult}.
  */
 class AttributeResolverTest {
-	private Resolver resolver;
-
-	@BeforeEach
-	void setUp() {
-		// Reset and initialize the PropertyRegistry to ensure all core codecs are available
-		resolver = resolver();
-	}
 
 	/**
 	 * Tests if the resolver can correctly resolve attributes and that the query result
@@ -55,7 +46,7 @@ class AttributeResolverTest {
 				.withPart(handle, "handle_slot", HANDLE_SLOT_TYPE)
 				.build();
 
-		AttributeQueryResult result = resolver.resolve(pickaxe, attributeEngine());
+		AttributeQueryResult result = attributeEngine().resolve(pickaxe);
 
 		float attackDamage = result.getValue(ATTACK_DAMAGE);
 		assertEquals(11f, attackDamage, "Should be 10 from head + 1 from pickaxe base.");
@@ -118,17 +109,17 @@ class AttributeResolverTest {
 		DynamicContext woodTarget = new DynamicContext.Builder().put(ContextKeys.TARGET_TAGS, Set.of(id("wood"))).build();
 
 		// Test pickaxe against different contexts
-		AttributeQueryResult pickaxeStoneResult = resolver.resolve(pickaxe, attributeEngine(), stoneTarget);
+		AttributeQueryResult pickaxeStoneResult = attributeEngine().resolve(pickaxe, stoneTarget);
 		assertEquals(16f, pickaxeStoneResult.getValue(MINING_SPEED), "Base (1) + Iron (5) + Diamond (10) = 16");
 
-		AttributeQueryResult pickaxeWoodResult = resolver.resolve(pickaxe, attributeEngine(), woodTarget);
+		AttributeQueryResult pickaxeWoodResult = attributeEngine().resolve(pickaxe, woodTarget);
 		assertEquals(6f, pickaxeWoodResult.getValue(MINING_SPEED), "Base (1) + Iron (5) = 6");
 
 		// Test sword against different contexts
-		AttributeQueryResult swordStoneResult = resolver.resolve(sword, attributeEngine(), stoneTarget);
+		AttributeQueryResult swordStoneResult = attributeEngine().resolve(sword, stoneTarget);
 		assertEquals(11f, swordStoneResult.getValue(MINING_SPEED), "Base (1) + Diamond (10) = 11. Iron bonus inactive.");
 
-		AttributeQueryResult swordWoodResult = resolver.resolve(sword, attributeEngine(), woodTarget);
+		AttributeQueryResult swordWoodResult = attributeEngine().resolve(sword, woodTarget);
 		assertEquals(1f, swordWoodResult.getValue(MINING_SPEED), "Base (1) only.");
 	}
 
@@ -156,10 +147,10 @@ class AttributeResolverTest {
 				.withPart(ironHandle, "handle_slot", HANDLE_SLOT_TYPE)
 				.build();
 
-		float woodDamage = resolver.resolve(woodPickaxe, attributeEngine()).getValue(ATTACK_DAMAGE);
+		float woodDamage = attributeEngine().resolve(woodPickaxe).getValue(ATTACK_DAMAGE);
 		assertEquals(6f, woodDamage, "Base damage (1) + head bonus (5, because handle is wood) = 6");
 
-		float ironDamage = resolver.resolve(ironPickaxe, attributeEngine()).getValue(ATTACK_DAMAGE);
+		float ironDamage = attributeEngine().resolve(ironPickaxe).getValue(ATTACK_DAMAGE);
 		assertEquals(1f, ironDamage, "Base damage (1) only, because handle is not wood.");
 	}
 }

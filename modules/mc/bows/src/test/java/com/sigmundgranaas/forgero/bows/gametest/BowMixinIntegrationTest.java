@@ -444,7 +444,7 @@ public class BowMixinIntegrationTest {
 	}
 
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "bow_mixin_edge_cases")
-	public void veryShortChargeTimeDoesNotSpawnArrow(TestContext context) {
+	public void zeroChargeTimeDoesNotSpawnArrow(TestContext context) {
 		ServerPlayerEntity player = context.createMockCreativeServerPlayerInWorld();
 
 		ItemStack forgeroBow = getRegisteredItem("oak-bow");
@@ -460,13 +460,15 @@ public class BowMixinIntegrationTest {
 
 		player.setCurrentHand(Hand.MAIN_HAND);
 		int maxUseTime = forgeroBow.getMaxUseTime();
-		// Simulate only 1 tick of charging (very short)
-		int remainingTicks = maxUseTime - 1;
+		// Simulate 0 ticks of charging (immediately released)
+		// With remainingTicks = maxUseTime, chargeTime = maxUseTime - remainingTicks = 0
+		// This results in pullProgress = 0, which is < 0.1 threshold
+		int remainingTicks = maxUseTime;
 
 		forgeroBow.getItem().onStoppedUsing(forgeroBow, context.getWorld(), player, remainingTicks);
 
 		context.waitAndRun(5, () -> {
-			// Very short charge should not spawn arrow (pullProgress < 0.1)
+			// Zero charge should not spawn arrow (pullProgress = 0 < 0.1)
 			List<DynamicArrowEntity> dynamicArrows = context.getWorld().getEntitiesByClass(
 					DynamicArrowEntity.class,
 					player.getBoundingBox().expand(500),
@@ -474,7 +476,7 @@ public class BowMixinIntegrationTest {
 			);
 
 			context.assertTrue(dynamicArrows.isEmpty(),
-					"Very short charge should not spawn arrow");
+					"Zero charge time should not spawn arrow");
 
 			context.complete();
 		});

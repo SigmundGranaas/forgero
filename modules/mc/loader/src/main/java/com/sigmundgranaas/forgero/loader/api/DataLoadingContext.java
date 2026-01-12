@@ -6,7 +6,6 @@ import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.common.tags.engine.TaggedRegistry;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.slot.SlotManager;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
 import com.sigmundgranaas.forgero.data.pipeline.api.ForgeroDataBundle;
 import net.minecraft.item.ItemStack;
@@ -32,9 +31,6 @@ public interface DataLoadingContext extends ForgeroServices {
 
 	@Override
 	ComponentConverter converter();
-
-	@Override
-	Resolver resolver();
 
 	@Override
 	ComponentRegistry componentRegistry();
@@ -69,14 +65,6 @@ public interface DataLoadingContext extends ForgeroServices {
 	@Deprecated(forRemoval = true)
 	default TaggedRegistry<Component> getTaggedComponentRegistry() {
 		return taggedComponents();
-	}
-
-	/**
-	 * @deprecated Use {@link #resolver()} instead
-	 */
-	@Deprecated(forRemoval = true)
-	default Resolver getResolver() {
-		return resolver();
 	}
 
 	/**

@@ -1,0 +1,6 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:oak",
+  "context": "arrow_shaft",
+  "texture": "forgero:item/upgrade/oak-arrow_shaft"
+}

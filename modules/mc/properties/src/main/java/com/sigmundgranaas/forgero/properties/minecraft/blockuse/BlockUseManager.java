@@ -4,7 +4,6 @@ import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.useinteraction.BlockUseContext;
 import com.sigmundgranaas.forgero.common.useinteraction.BlockUseEffect;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,7 +21,6 @@ import java.util.List;
 public class BlockUseManager {
 
 	private static ComponentConverter converter;
-	private static Resolver resolver;
 
 	private BlockUseManager() {
 		// Static class
@@ -36,7 +34,6 @@ public class BlockUseManager {
 	 */
 	public static void initialize(ForgeroServices services) {
 		converter = services.converter();
-		resolver = services.resolver();
 	}
 
 	/**
@@ -92,6 +89,6 @@ public class BlockUseManager {
 		DynamicContext.Builder contextBuilder = new DynamicContext.Builder();
 
 		// Build context for dynamic condition evaluation
-		return resolver.resolve(component, engine, contextBuilder.build());
+		return engine.resolve(component, contextBuilder.build());
 	}
 }

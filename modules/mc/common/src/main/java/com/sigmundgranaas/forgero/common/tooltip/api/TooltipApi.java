@@ -8,7 +8,6 @@ import com.sigmundgranaas.forgero.common.tooltip.section.SectionRegistry;
 import com.sigmundgranaas.forgero.common.tooltip.value.PlaceholderRegistry;
 import com.sigmundgranaas.forgero.common.tooltip.api.TooltipRenderConfig;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.Text;
@@ -22,7 +21,7 @@ import java.util.function.BiFunction;
  * <p>
  * This API provides:
  * <ul>
- *   <li>Tooltip building via {@link #builder(Component, Resolver)}</li>
+ *   <li>Tooltip building via {@link #builder(Component)}</li>
  *   <li>Section registration via {@link #registerSection(TooltipSection, SectionWriterFactory)}</li>
  *   <li>Placeholder registration via {@link #registerPlaceholder(String, PlaceholderResolver)}</li>
  *   <li>Inverse attribute registration via {@link #registerInverseAttribute(com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier)}</li>
@@ -30,7 +29,7 @@ import java.util.function.BiFunction;
  *
  * <h2>Building Tooltips</h2>
  * <pre>{@code
- * List<Text> tooltip = TooltipApi.builder(component, resolver)
+ * List<Text> tooltip = TooltipApi.builder(component)
  *     .withComparison(ComparisonContext.strippedItem(stripped))
  *     .withDynamicContext(context)
  *     .build(tooltipContext);
@@ -63,11 +62,10 @@ public final class TooltipApi {
 	 * Creates a new tooltip builder for the given component.
 	 *
 	 * @param component The component to build tooltips for
-	 * @param resolver  The resolver for computing property values
 	 * @return A new builder instance
 	 */
-	public static Builder builder(Component component, Resolver resolver) {
-		return new Builder(component, resolver);
+	public static Builder builder(Component component) {
+		return new Builder(component);
 	}
 
 	// ==================== SECTION REGISTRATION ====================
@@ -157,15 +155,13 @@ public final class TooltipApi {
 	 */
 	public static final class Builder {
 		private final Component component;
-		private final Resolver resolver;
 		private ComparisonContext comparisonContext = ComparisonContext.none();
 		private DynamicContext dynamicContext = DynamicContext.empty();
 		private TooltipRenderConfig renderConfig = TooltipRenderConfig.defaults();
 		private DifferenceFormatter differenceFormatter = new DifferenceFormatter();
 
-		private Builder(Component component, Resolver resolver) {
+		private Builder(Component component) {
 			this.component = component;
-			this.resolver = resolver;
 		}
 
 		/**
@@ -221,7 +217,6 @@ public final class TooltipApi {
 		public List<Text> build(TooltipContext tooltipContext) {
 			return com.sigmundgranaas.forgero.common.tooltip.impl.TooltipBuilder.build(
 					component,
-					resolver,
 					comparisonContext,
 					dynamicContext,
 					renderConfig,

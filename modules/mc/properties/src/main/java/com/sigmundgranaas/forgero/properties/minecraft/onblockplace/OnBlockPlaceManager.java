@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.properties.minecraft.onblockplace;
 
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.effects.block.BlockEffect;
 import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
@@ -20,7 +19,6 @@ import java.util.List;
 public class OnBlockPlaceManager {
 
 	private static ComponentConverter converter;
-	private static Resolver resolver;
 
 	private OnBlockPlaceManager() {
 		// Static class
@@ -34,7 +32,6 @@ public class OnBlockPlaceManager {
 	 */
 	public static void initialize(ForgeroServices services) {
 		converter = services.converter();
-		resolver = services.resolver();
 	}
 
 	/**
@@ -90,6 +87,6 @@ public class OnBlockPlaceManager {
 		// Additional context could be added here (biome, time of day, etc.)
 		// For now, use empty context
 
-		return resolver.resolve(component, engine, contextBuilder.build());
+		return engine.resolve(component, contextBuilder.build());
 	}
 }

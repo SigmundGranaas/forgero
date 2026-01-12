@@ -4,7 +4,6 @@ import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.tooltip.api.TooltipApi;
 import com.sigmundgranaas.forgero.common.tooltip.section.DefaultSections;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.Resolver;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -25,7 +24,6 @@ import java.util.Optional;
 public final class ForgeroTooltipRenderer {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ForgeroTooltipRenderer.class);
 	private static ComponentConverter converter;
-	private static Resolver resolver;
 	private static boolean initialized = false;
 
 	private ForgeroTooltipRenderer() {
@@ -35,14 +33,13 @@ public final class ForgeroTooltipRenderer {
 	 * Initializes the renderer with necessary services.
 	 * Must be called once during mod setup.
 	 */
-	public static void initialize(ComponentConverter converter, Resolver resolver) {
+	public static void initialize(ComponentConverter converter) {
 		if (initialized) {
 			LOGGER.warn("ForgeroTooltipRenderer is being initialized more than once. " +
 					"This may indicate a lifecycle issue - tooltip renderer should only be initialized once during mod setup.");
 			return;
 		}
 		ForgeroTooltipRenderer.converter = converter;
-		ForgeroTooltipRenderer.resolver = resolver;
 		ForgeroTooltipRenderer.initialized = true;
 
 		// Register default sections
@@ -69,7 +66,7 @@ public final class ForgeroTooltipRenderer {
 		Component component = componentOpt.get();
 
 		// Use the new TooltipApi
-		TooltipApi.builder(component, resolver)
+		TooltipApi.builder(component)
 				.appendTo(tooltip, context);
 	}
 
