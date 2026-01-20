@@ -1,0 +1,41 @@
+{
+  "type": "POMMEL",
+  "models": [
+    {
+      "name": "handle_pommel",
+      "variants": [
+        {
+          "target": [
+            "type:ARROW"
+          ],
+          "template": "empty_model"
+        },
+        {
+          "target": [
+            "type:ARROW",
+            "type:BOW"
+          ],
+          "template": "empty_model"
+        }
+      ]
+    },
+    {
+      "name": "pommel_dye",
+      "variants": [
+        {
+          "target": [
+            "type:ARROW"
+          ],
+          "template": "empty_model"
+        },
+        {
+          "target": [
+            "type:ARROW",
+            "type:BOW"
+          ],
+          "template": "empty_model"
+        }
+      ]
+    }
+  ]
+}

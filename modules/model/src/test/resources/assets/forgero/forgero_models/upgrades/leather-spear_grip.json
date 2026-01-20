@@ -1,0 +1,6 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:leather",
+  "context": "spear_grip",
+  "texture": "forgero:item/upgrade/leather-spear_grip"
+}

@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-conditions",
+  "version": "${version}",
+  "name": "Forgero Conditions",
+  "description": "Random item modifier conditions for Forgero (sharp, durable, swift, etc.)",
+  "environment": "*",
+  "depends": {
+    "java": ">=17"
+  },
+  "custom": {
+    "forgeroResource": true
+  }
+}

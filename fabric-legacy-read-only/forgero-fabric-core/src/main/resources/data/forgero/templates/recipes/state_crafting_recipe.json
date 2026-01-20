@@ -1,0 +1,16 @@
+{
+  "type": "forgero:state_crafting_recipe",
+  "pattern": [
+    " H",
+    "I "
+  ],
+  "key": {
+    "I": {
+    },
+    "H": {
+    }
+  },
+  "result": {
+    "item": "TOOL"
+  }
+}

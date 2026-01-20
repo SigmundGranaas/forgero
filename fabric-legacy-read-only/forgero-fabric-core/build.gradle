@@ -1,0 +1,89 @@
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection DependencyNotationArgument
+
+dependencies {
+	// Fabric common module
+	api(project(path: ":fabric-legacy-read-only:minecraft-common", configuration: 'namedElements'))
+
+	// Fabric generator module
+	api(project(path: ":fabric-legacy-read-only:modules:generator", configuration: 'namedElements'))
+
+	// Forgero modules - needed for ForgeroApi, TagResolver, etc.
+	api(project(path: ":modules:mc:loader", configuration: 'namedElements'))
+	api(project(":modules:core"))
+
+	// Bow and arrows
+	// Arrows and bow tests are still in the core fabric module. This dependency is needed until they are moved to their own module.
+	// Ref: https://github.com/SigmundGranaas/forgero/issues/933
+	localRuntime(project(path: ":fabric-legacy-read-only:modules:bows", configuration: 'namedElements'))
+
+	// Trade
+	localRuntime(project(path: ":fabric-legacy-read-only:modules:trade", configuration: 'namedElements'))
+
+	// Fabric Loader
+	modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
+
+	// Fabric API
+	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
+
+	// Dynamic Resource Pack module
+	api(project(path: ":mods:drp", configuration: 'namedElements'))
+
+	modApi("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_entity_attributes_version}"){
+		exclude(group: "net.fabricmc.fabric-loader")
+	}
+
+	// Test dependencies - ForgeroServices API tests
+	testImplementation(project(path: ":modules:mc:loader", configuration: 'namedElements'))
+	testImplementation(project(":modules:core"))
+
+	// Content modules needed for tests
+	testRuntimeOnly(project(":content:forgero-materials"))
+	testRuntimeOnly(project(":content:forgero-base"))
+	testRuntimeOnly(project(":content:forgero-gems"))
+}
+
+sourceSets {
+	test {
+		compileClasspath += main.compileClasspath
+		runtimeClasspath += main.runtimeClasspath
+	}
+}
+
+loom {
+	accessWidenerPath = file("src/main/resources/${mod_id}-core.accesswidener")
+
+	runs {
+		client {
+			client()
+			ideConfigGenerated = true
+		}
+		testServer {
+			server()
+			name = "Test Server"
+			source sourceSets.test
+		}
+		gameTest {
+			inherit testServer
+			name "Game Test"
+			// Enable the gametest runner
+			vmArg "-Dfabric-api.gametest"
+			runDir "build/gameTest"
+		}
+		testClient {
+			client()
+			name = "Test Client"
+			vmArg "-Dfabric-api.gametest.structures.output-dir=${file("src/test/resources/data/${mod_id}/gametest/structures")}"
+
+			source sourceSets.test
+		}
+	}
+}
+
+test {
+	useJUnitPlatform()
+	maxParallelForks = 32
+	testLogging.events("failed")
+	testLogging.info.events = ["failed", "skipped"]
+}

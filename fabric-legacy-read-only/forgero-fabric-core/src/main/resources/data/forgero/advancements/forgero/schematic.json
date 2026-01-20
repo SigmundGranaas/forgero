@@ -1,0 +1,36 @@
+{
+  "parent": "forgero:forgero/tool",
+  "criteria": {
+    "schematic": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "forgero:schematic"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.forgero.schematic.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "forgero:pickaxe_head-schematic"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.forgero.schematic.title"
+    }
+  },
+  "requirements": [
+    [
+      "schematic"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

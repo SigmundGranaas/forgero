@@ -1,0 +1,12 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:iron-binding",
+  "context": "tool_binding",
+  "texture": "forgero:item/iron-pickaxe_binding",
+  "mount_points": [
+    {
+      "name": "center",
+      "position": [8, 8]
+    }
+  ]
+}

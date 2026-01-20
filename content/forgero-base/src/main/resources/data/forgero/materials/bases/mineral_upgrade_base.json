@@ -1,0 +1,48 @@
+{
+  "type": "forgero:material",
+  "name": "mineral_upgrade_base",
+  "attributes": [
+    {
+      "id": "forgero:mineral-upgrade-rarity",
+      "type": "forgero:rarity",
+      "computation": { "value": 40, "operation": "addition" },
+      "context": "forgero:upgrade"
+    },
+    {
+      "id": "forgero:mineral-upgrade-weight",
+      "type": "forgero:weight",
+      "computation": { "value": 2, "operation": "addition" },
+      "context": "forgero:upgrade"
+    },
+    {
+      "id": "forgero:mineral-offensive-attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": { "value": 2.5, "operation": "addition" },
+      "context": "forgero:contexts/offensive"
+    },
+    {
+      "id": "forgero:mineral-offensive-mining_speed",
+      "type": "forgero:mining_speed",
+      "computation": { "value": 4, "operation": "addition" },
+      "context": "forgero:contexts/offensive"
+    },
+    {
+      "id": "forgero:mineral-offensive-mining_level",
+      "type": "forgero:mining_level",
+      "computation": { "value": 1, "operation": "addition" },
+      "context": "forgero:contexts/offensive"
+    },
+    {
+      "id": "forgero:mineral-offensive-durability",
+      "type": "forgero:durability",
+      "computation": { "value": 775, "operation": "addition" },
+      "context": "forgero:contexts/offensive"
+    },
+    {
+      "id": "forgero:mineral-offensive-draw_power",
+      "type": "forgero:draw_power",
+      "computation": { "value": 0.65, "operation": "addition" },
+      "context": "forgero:contexts/offensive"
+    }
+  ]
+}

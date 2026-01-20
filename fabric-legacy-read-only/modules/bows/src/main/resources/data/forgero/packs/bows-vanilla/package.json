@@ -1,0 +1,10 @@
+{
+  "name": "bows-vanilla",
+  "resource_type": "PACKAGE",
+  "priority": 5,
+  "namespace": "forgero",
+  "dependencies": [
+    "minecraft",
+    "forgero-vanilla"
+  ]
+}

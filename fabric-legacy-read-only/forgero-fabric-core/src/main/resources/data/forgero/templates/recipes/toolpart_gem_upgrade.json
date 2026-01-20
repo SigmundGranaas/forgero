@@ -1,0 +1,12 @@
+{
+  "type": "forgero:tool_part_gem_upgrade",
+  "base": {
+    "item": "BASE_ITEM"
+  },
+  "addition": {
+    "item": "GEM"
+  },
+  "result": {
+    "item": "UPGRADED_BASE_TOOL_PART"
+  }
+}

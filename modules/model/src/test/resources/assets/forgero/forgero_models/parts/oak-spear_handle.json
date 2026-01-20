@@ -1,0 +1,16 @@
+{
+  "type": "forgero:composite_model",
+  "layers": [
+    { "order": 10, "textures": { "default": "forgero:item/oak-spear_handle" } }
+  ],
+  "slots": [
+    {
+      "id": "grip_slot",
+      "order": 25,
+      "renderer": {
+        "type": "forgero:component",
+        "context": "spear_grip"
+      }
+    }
+  ]
+}

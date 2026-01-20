@@ -1,0 +1,6 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:emerald",
+  "context": "scythe_binding_gem",
+  "texture": "forgero:item/upgrade/emerald-scythe_binding_gem"
+}

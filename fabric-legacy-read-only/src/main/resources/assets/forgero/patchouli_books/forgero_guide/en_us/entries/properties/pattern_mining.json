@@ -1,0 +1,17 @@
+{
+  "name": "Pattern mining",
+  "icon": "forgero:iron-path_digger_shovel_head",
+  "category": "forgero:property_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Pattern mining allows tools to break multiple blocks based on predefined patterns. Different parts have different patterns, from the 3x3 mining of the Path digger to the 2x1 pattern of the Path miner pickaxe head."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Pattern mining",
+      "item": "forgero:iron-path_digger_shovel_head",
+      "text": "The path digger has a predefined 3x3 pattern. The mining speed will be calculated based on the hardness of all of the available blocks in the pattern."
+    }
+  ]
+}

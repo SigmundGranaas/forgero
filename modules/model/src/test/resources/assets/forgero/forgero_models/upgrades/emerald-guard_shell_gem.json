@@ -1,0 +1,6 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:emerald",
+  "context": "guard_shell_gem",
+  "texture": "forgero:item/upgrade/emerald-guard_shell_gem"
+}

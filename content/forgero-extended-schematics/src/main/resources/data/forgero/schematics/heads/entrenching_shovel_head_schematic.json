@@ -1,0 +1,57 @@
+{
+  "type": "forgero:schematic",
+  "name": "Entrenching Shovel Head",
+  "tags": [
+    "forgero:schematics/heads",
+    "forgero:schematics/mining"
+  ],
+  "properties": {
+    "minecraft:block_breaking": [
+      {
+        "selector": {
+          "type": "forgero:pattern",
+          "pattern": ["x", "x"],
+          "depth": 1,
+          "direction": "multi",
+          "filter": {"type": "forgero:can_mine"}
+        },
+        "speed": "forgero:all"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:entrenching_shovel_head-schematic-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 75,
+        "operation": "addition"
+      }
+    }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:entrenching_shovel_head-reinforcement-slot",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": [
+        "forgero:upgrades/types/reinforcement"
+      ],
+      "description": "slot.forgero.reinforcement"
+    },
+    {
+      "id": "forgero:entrenching_shovel_head-cosmetic-slot",
+      "type": "forgero:dye",
+      "tags": [
+        "forgero:upgrades/types/cosmetic"
+      ],
+      "description": "slot.forgero.cosmetic"
+    }
+  ],
+  "host": {
+    "create": {
+      "id": "forgero:entrenching_shovel_head-schematic",
+      "class_name": "forgero:part_item",
+      "item_group": "forgero:ingredients"
+    }
+  }
+}

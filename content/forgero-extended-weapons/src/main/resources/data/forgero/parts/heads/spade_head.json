@@ -1,0 +1,74 @@
+{
+  "type": "forgero:part_template",
+  "name": "spade_head",
+  "tags": [
+    "forgero:parts/head",
+    "forgero:parts/spade_head",
+    "forgero:parts/types/shovel_head",
+    "forgero:parts/categories/head"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-spade_head"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-spade_head",
+    "slots": {
+      "material": {
+        "type": "forgero:materials/roles/tool_material",
+        "default_tag": "forgero:materials/roles/tool_material"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:spade_head-reinforcement",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/reinforcement"],
+      "description": "slot.forgero.reinforcement"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:spade_head-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 75,
+        "operation": "addition"
+      }
+    },
+    {
+      "id": "forgero:spade_head-mining_speed",
+      "type": "forgero:mining_speed",
+      "computation": {
+        "value": 1.35,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "type": "forgero:is_root"
+      }
+    },
+    {
+      "id": "forgero:spade_head-durability",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 1.55,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "type": "forgero:is_root"
+      }
+    },
+    {
+      "id": "forgero:spade_head-weight",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 1.15,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "type": "forgero:is_root"
+      }
+    }
+  ]
+}

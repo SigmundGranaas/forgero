@@ -1,0 +1,29 @@
+{
+  "type": "forgero:part_model_template",
+  "target": {
+    "tag": "forgero:materials/roles/tool_material"
+  },
+  "model": {
+    "id": "forgero:item/{target.name}-hammer_head",
+    "type": "forgero:composite_model",
+    "target": "forgero:{target.name}-hammer_head",
+    "layers": [
+      {
+        "order": 20,
+        "template": "forgero:texture_template/parts/hammer_head",
+        "palette": "forgero:palette/{target.name}",
+        "output": "forgero:item/{target.name}-hammer_head"
+      }
+    ],
+    "slots": [
+      {
+        "id": "hammer_head-reinforcement",
+        "order": 30,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "hammer_head_reinforcement"
+        }
+      }
+    ]
+  }
+}

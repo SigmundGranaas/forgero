@@ -1,0 +1,63 @@
+{
+  "type": "forgero:part_template",
+  "name": "felling_axe_head",
+  "tags": [
+    "forgero:parts/head",
+    "forgero:parts/felling_axe_head",
+    "forgero:parts/types/axe_head",
+    "forgero:parts/categories/head"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-felling_axe_head"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-felling_axe_head",
+    "slots": {
+      "material": {
+        "type": "forgero:materials/roles/tool_material",
+        "default_tag": "forgero:materials/roles/tool_material"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:felling_axe_head-reinforcement",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/reinforcement"],
+      "description": "slot.forgero.reinforcement"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:felling_axe_head-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 75,
+        "operation": "addition"
+      }
+    },
+    {
+      "id": "forgero:felling_axe_head-mining_speed",
+      "type": "forgero:mining_speed",
+      "computation": {
+        "value": 1.35,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "type": "forgero:is_root"
+      }
+    },
+    {
+      "id": "forgero:felling_axe_head-durability",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 1.5,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "type": "forgero:is_root"
+      }
+    }
+  ]
+}

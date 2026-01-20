@@ -1,0 +1,16 @@
+{
+  "name": "Redstone Gem",
+  "icon": "forgero:redstone-gem",
+  "category": "forgero:gems_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A redstone gem increases attack damage by one. Can be applied to tool part heads."
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Crafting a redstone gem",
+      "recipe": "forgero:redstone_gem"
+    }
+  ]
+}

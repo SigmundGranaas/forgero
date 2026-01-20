@@ -1,0 +1,36 @@
+{
+  "type": "ARROW",
+  "name": "flint-arrow",
+  "container": {
+    "type": "HOST",
+    "id": "minecraft:arrow"
+  },
+  "properties": {
+    "attributes": [
+      {
+        "type": "RARITY",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 5
+      },
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 2
+      },
+      {
+        "type": "forgero:accuracy",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 30
+      },
+      {
+        "type": "WEIGHT",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 20
+      }
+    ]
+  }
+}

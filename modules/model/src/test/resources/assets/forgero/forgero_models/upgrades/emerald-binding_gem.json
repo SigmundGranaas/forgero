@@ -1,0 +1,6 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:emerald",
+  "context": "binding_gem",
+  "texture": "forgero:item/upgrade/emerald-binding_gem"
+}

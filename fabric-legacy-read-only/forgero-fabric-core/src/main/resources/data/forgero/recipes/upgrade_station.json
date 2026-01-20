@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "yyy",
+    "yzy"
+  ],
+  "key": {
+    "y": {
+      "tag": "minecraft:planks"
+    },
+    "z": {
+      "item": "minecraft:smithing_table"
+    }
+  },
+  "result": {
+    "item": "forgero:upgrade_station"
+  }
+}

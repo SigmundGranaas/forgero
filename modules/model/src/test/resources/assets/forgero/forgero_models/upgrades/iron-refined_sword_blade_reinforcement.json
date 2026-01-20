@@ -1,0 +1,6 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:iron",
+  "context": "refined_sword_blade_reinforcement",
+  "texture": "forgero:item/upgrade/iron-refined_sword_blade_reinforcement"
+}

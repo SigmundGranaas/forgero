@@ -1,0 +1,33 @@
+{
+  "id": "forgero:pig_affinity",
+  "priority": 5,
+  "target": {
+    "types": [
+      "PART",
+      "TOOL",
+      "WEAPON"
+    ],
+    "ids": [],
+    "incompatibilities": [
+    ]
+  },
+  "chance": 0.004,
+  "properties": {
+    "attributes": [
+      {
+        "type": "ATTACK_DAMAGE",
+        "order": "BASE",
+        "operation": "ADDITION",
+        "value": 5,
+        "predicate": {
+          "type": "minecraft:entity",
+          "entity_type": {
+            "id": "minecraft:pig"
+          }
+        }
+      }
+    ],
+    "features": [
+    ]
+  }
+}

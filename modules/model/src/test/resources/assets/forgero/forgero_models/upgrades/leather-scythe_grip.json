@@ -1,0 +1,6 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:leather",
+  "context": "scythe_grip",
+  "texture": "forgero:item/upgrade/leather-scythe_grip"
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Tool Parts",
+  "description": "There are three types of tool parts: heads, handles and bindings. Creating a toolpart requires a schematic for that specific toolpart. The recipes are shapeless, but you need to fill out the correct amount of material!",
+  "icon": "forgero:acacia-handle",
+  "sortnum": 1
+}

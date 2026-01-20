@@ -1,0 +1,13 @@
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection DependencyNotationArgument
+
+dependencies {
+	implementation(project(":fabric-legacy-read-only:${rootProject.mod_id}-fabric-core"))
+
+	// Common modules
+	implementation(project(path: ":fabric-legacy-read-only:minecraft-common", configuration: 'namedElements'))
+
+	// Fabric API
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+}

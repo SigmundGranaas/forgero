@@ -1,0 +1,6 @@
+{
+  "name": "Schematics",
+  "description": "Schematics are the foundation of every tool part. It decides the shape, function and stats of a tool part. Schematics are required in order to create different parts, and can be found scattered around the world.",
+  "icon": "forgero:pickaxe_head-schematic",
+  "sortnum": 1
+}

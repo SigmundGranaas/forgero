@@ -1,0 +1,37 @@
+{
+  "category": "forgero:upgrading",
+  "name": "book.forgero.guidebook.upgrading.upgrade_station.name",
+  "description": "book.forgero.guidebook.upgrading.upgrade_station.description",
+  "background_v_index": 1,
+  "icon": "forgero:upgrade_station",
+  "x": -5,
+  "y": 0,
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "show_title_separator": true,
+      "text": "book.forgero.guidebook.upgrading.upgrade_station.text",
+      "title": "book.forgero.guidebook.upgrading.upgrade_station.title",
+      "use_markdown_title": false
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "anchor": "",
+      "recipe_id_1": "forgero:upgrade_station"
+    },
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "show_title_separator": true,
+      "text": "book.forgero.guidebook.upgrading.upgrade_station.text1",
+      "title": "book.forgero.guidebook.upgrading.upgrade_station.title1",
+      "use_markdown_in_title": false
+    },
+    {
+      "type": "modonomicon:multiblock",
+      "multiblock_name": "",
+      "multiblock_id": "forgero:upgrade_station"
+    }
+  ]
+}

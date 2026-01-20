@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:logs",
+    "#minecraft:overworld_natural_logs",
+    "minecraft:mushroom_stem",
+    "minecraft:brown_mushroom_block",
+    "minecraft:red_mushroom_block"
+  ]
+}

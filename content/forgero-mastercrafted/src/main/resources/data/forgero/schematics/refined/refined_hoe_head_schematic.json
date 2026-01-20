@@ -1,0 +1,102 @@
+{
+  "type": "forgero:schematic",
+  "name": "Refined Hoe Head",
+  "tags": [
+    "forgero:schematics/heads",
+    "forgero:schematics/refined"
+  ],
+  "properties": {
+    "minecraft:block_breaking": [
+      {
+        "selector": {
+          "type": "forgero:pattern",
+          "pattern": [" x ", "xxx", " x "],
+          "depth": 1,
+          "direction": "multi",
+          "filter": { "type": "forgero:can_mine" }
+        },
+        "speed": "forgero:single"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:refined-hoe-rarity-local",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 50,
+        "operation": "addition"
+      }
+    },
+    {
+      "id": "forgero:refined-hoe-rarity-composite",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 1.25,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:refined-hoe-attack_speed-composite",
+      "type": "forgero:attack_speed",
+      "computation": {
+        "value": 1.25,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:refined-hoe-durability-composite",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 1.25,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:refined-reinforcement-slot",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": [
+        "forgero:upgrades/types/reinforcement"
+      ],
+      "description": "slot.forgero.reinforcement"
+    },
+    {
+      "id": "forgero:refined-cosmetic-slot",
+      "type": "forgero:dye",
+      "tags": [
+        "forgero:upgrades/types/cosmetic"
+      ],
+      "description": "slot.forgero.cosmetic"
+    }
+  ],
+  "host": {
+    "create": {
+      "id": "forgero:refined_hoe_head-schematic",
+      "class_name": "forgero:part_item",
+      "item_group": "forgero:ingredients"
+    }
+  }
+}

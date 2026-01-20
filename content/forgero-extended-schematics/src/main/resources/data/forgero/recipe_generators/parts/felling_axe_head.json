@@ -1,0 +1,32 @@
+{
+  "generator_type": "forgero:mapped_recipe_generator",
+  "identifier": "forgero:${material.name}-felling_axe_head-${handle_material.name}-handle",
+  "variables": {
+    "material": {
+      "tag": "forgero:materials/roles/tool_material"
+    },
+    "handle_material": {
+      "tag": "forgero:materials/roles/tool_material"
+    }
+  },
+  "type": "forgero:shaped_recipe",
+  "pattern": [
+    "a",
+    "b"
+  ],
+  "key": {
+    "a": {
+      "item": "forgero:${material.name}-felling_axe_head"
+    },
+    "b": {
+      "item": "forgero:${handle_material.name}-handle"
+    }
+  },
+  "result": {
+    "item": "forgero:${material.name}-axe",
+    "structure": {
+      "forgero:head": "a",
+      "forgero:handle": "b"
+    }
+  }
+}

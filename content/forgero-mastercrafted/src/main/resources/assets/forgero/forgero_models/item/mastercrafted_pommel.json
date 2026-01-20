@@ -1,0 +1,35 @@
+{
+  "type": "forgero:part_model_template",
+  "target": {
+    "tag": "forgero:materials/roles/tool_material"
+  },
+  "model": {
+    "id": "forgero:item/{target.name}-mastercrafted_pommel",
+    "type": "forgero:composite_model",
+    "target": "forgero:{target.name}-mastercrafted_pommel",
+    "layers": [
+      {
+        "order": 5,
+        "textures": {
+          "default": "forgero:item/{target.name}-mastercrafted_pommel",
+          "variants": [
+            {
+              "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:weapons/sword" }],
+              "texture": "forgero:item/{target.name}-mastercrafted_sword_pommel"
+            }
+          ]
+        },
+        "template": "forgero:texture_template/parts/mastercrafted_pommel",
+        "palette": "forgero:palette/{target.name}",
+        "output": "forgero:item/{target.name}-mastercrafted_pommel"
+      }
+    ]
+  },
+  "texture_variants": [
+    {
+      "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:weapons/sword" }],
+      "template": "forgero:texture_template/parts/mastercrafted_sword_pommel",
+      "output_suffix": "-mastercrafted_sword_pommel"
+    }
+  ]
+}

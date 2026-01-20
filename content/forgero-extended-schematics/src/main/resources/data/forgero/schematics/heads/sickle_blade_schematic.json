@@ -1,0 +1,61 @@
+{
+  "type": "forgero:schematic",
+  "name": "Sickle Blade",
+  "tags": [
+    "forgero:schematics/heads",
+    "forgero:schematics/extended"
+  ],
+  "properties": {
+    "minecraft:block_breaking": [
+      {
+        "selector": {
+          "type": "forgero:radius",
+          "radius": 3,
+          "filter": {
+            "type": "forgero:filter_wrapper",
+            "filters": [
+              {"type": "forgero:can_mine"},
+              {"type": "forgero:block_tag", "tag": "forgero:plants"}
+            ]
+          }
+        },
+        "speed": "forgero:instant"
+      }
+    ]
+  },
+  "attributes": [
+    {
+      "id": "forgero:sickle_blade-schematic-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 75,
+        "operation": "addition"
+      }
+    }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:sickle_blade-reinforcement-slot",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": [
+        "forgero:upgrades/types/reinforcement"
+      ],
+      "description": "slot.forgero.reinforcement"
+    },
+    {
+      "id": "forgero:sickle_blade-cosmetic-slot",
+      "type": "forgero:dye",
+      "tags": [
+        "forgero:upgrades/types/cosmetic"
+      ],
+      "description": "slot.forgero.cosmetic"
+    }
+  ],
+  "host": {
+    "create": {
+      "id": "forgero:sickle_blade-schematic",
+      "class_name": "forgero:part_item",
+      "item_group": "forgero:ingredients"
+    }
+  }
+}

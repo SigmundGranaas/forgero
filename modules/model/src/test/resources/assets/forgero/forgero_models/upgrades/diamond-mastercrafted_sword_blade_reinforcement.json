@@ -1,0 +1,6 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:diamond",
+  "context": "mastercrafted_sword_blade_reinforcement",
+  "texture": "forgero:item/upgrade/diamond-mastercrafted_sword_blade_reinforcement"
+}

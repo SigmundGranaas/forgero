@@ -1,0 +1,31 @@
+{
+  "item.forgero.cruciform_sword_guard": "Cruciform Sword Guard",
+  "item.forgero.half_basket_sword_guard": "Half Basket Sword Guard",
+  "item.forgero.mechanized_sword_guard": "Mechanized Sword Guard",
+  "item.forgero.rounded_sword_guard": "Rounded Sword Guard",
+  "item.forgero.shell_sword_guard": "Shell Sword Guard",
+  "item.forgero.swept_sword_guard": "Swept Sword Guard",
+  "item.forgero.tsuba_sword_guard": "Tsuba Sword Guard",
+
+  "item.forgero.entrenching_shovel": "Entrenching Shovel",
+  "item.forgero.entrenching_shovel_head": "Entrenching Shovel Head",
+  "item.forgero.sickle": "Sickle",
+  "item.forgero.sickle_blade": "Sickle Blade",
+
+  "item.forgero.scrappy_binding": "Scrappy Binding",
+  "item.forgero.string_binding": "String Binding",
+
+  "item.forgero.schematic": "Schematic",
+
+  "tooltip.forgero.part_type.cruciform_sword_guard": "Cruciform Sword Guard",
+  "tooltip.forgero.part_type.half_basket_sword_guard": "Half Basket Sword Guard",
+  "tooltip.forgero.part_type.mechanized_sword_guard": "Mechanized Sword Guard",
+  "tooltip.forgero.part_type.rounded_sword_guard": "Rounded Sword Guard",
+  "tooltip.forgero.part_type.shell_sword_guard": "Shell Sword Guard",
+  "tooltip.forgero.part_type.swept_sword_guard": "Swept Sword Guard",
+  "tooltip.forgero.part_type.tsuba_sword_guard": "Tsuba Sword Guard",
+  "tooltip.forgero.part_type.entrenching_shovel_head": "Entrenching Shovel Head",
+  "tooltip.forgero.part_type.sickle_blade": "Sickle Blade",
+  "tooltip.forgero.part_type.scrappy_binding": "Scrappy Binding",
+  "tooltip.forgero.part_type.string_binding": "String Binding"
+}

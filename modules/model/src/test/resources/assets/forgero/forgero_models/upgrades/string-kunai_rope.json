@@ -1,0 +1,6 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:string",
+  "context": "kunai_rope",
+  "texture": "forgero:item/upgrade/string-kunai_rope"
+}

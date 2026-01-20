@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ii",
+    "xi"
+  ],
+  "key": {
+    "x": {
+      "tag": "forgero:pickaxe_head"
+    },
+    "i": {
+      "item": "minecraft:cobblestone"
+    }
+  },
+  "result": {
+    "item": "forgero:stone-pickaxe_head"
+  }
+}

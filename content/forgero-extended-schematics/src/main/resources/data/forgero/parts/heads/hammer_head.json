@@ -1,0 +1,86 @@
+{
+  "type": "forgero:part_template",
+  "name": "hammer_head",
+  "tags": [
+    "forgero:parts/head",
+    "forgero:parts/hammer_head",
+    "forgero:parts/types/pickaxe_head",
+    "forgero:parts/categories/head"
+  ],
+  "host_template": {
+    "class": "forgero:part_item",
+    "id": "forgero:{material.name}-hammer_head"
+  },
+  "structure": {
+    "id": "forgero:{material.name}-hammer_head",
+    "slots": {
+      "material": {
+        "type": "forgero:materials/roles/tool_material",
+        "default_tag": "forgero:materials/roles/tool_material"
+      }
+    }
+  },
+  "upgrades": [
+    {
+      "id": "forgero:hammer_head-reinforcement",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/reinforcement"],
+      "description": "slot.forgero.reinforcement"
+    }
+  ],
+  "attributes": [
+    {
+      "id": "forgero:hammer_head-rarity",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 75,
+        "operation": "addition"
+      }
+    },
+    {
+      "id": "forgero:hammer_head-mining_speed",
+      "type": "forgero:mining_speed",
+      "computation": {
+        "value": 1.25,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:hammer_head-durability",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 1.55,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:hammer_head-weight",
+      "type": "forgero:weight",
+      "computation": {
+        "value": 1.15,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    }
+  ]
+}

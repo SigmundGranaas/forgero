@@ -1,0 +1,16 @@
+{
+  "type": "forgero:composite_model",
+  "layers": [
+    { "order": 15, "textures": { "default": "forgero:item/iron-sword_guard" } }
+  ],
+  "slots": [
+    {
+      "id": "center_gem_slot",
+      "order": 90,
+      "renderer": {
+        "type": "forgero:component",
+        "context": "guard_center_gem"
+      }
+    }
+  ]
+}

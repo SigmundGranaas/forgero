@@ -1,0 +1,92 @@
+{
+  "name": "bow_limb_base",
+  "resource_type": "ABSTRACT",
+  "properties": {
+    "grouped_attributes": [
+      {
+        "context": "LOCAL",
+        "operation": "ADDITION",
+        "order": "BASE",
+        "attributes": [
+        ]
+      },
+      {
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "schematic-rarity-composite",
+            "type": "RARITY",
+            "value": 1
+          },
+          {
+            "id": "schematic-weight-composite",
+            "type": "WEIGHT",
+            "value": 1
+          },
+          {
+            "id": "schematic-durability-composite",
+            "type": "DURABILITY",
+            "value": 1
+          },
+          {
+            "id": "schematic-draw_speed-composite",
+            "type": "forgero:draw_speed",
+            "value": 1
+          },
+          {
+            "id": "schematic-accuracy-composite",
+            "type": "forgero:accuracy",
+            "value": 1
+          },
+          {
+            "id": "schematic-draw_power-composite",
+            "type": "forgero:draw_power",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "context": "COMPOSITE",
+        "operation": "FORCE",
+        "order": "BASE",
+        "attributes": [
+          {
+            "id": "schematic-attack_damage-composite",
+            "type": "ATTACK_DAMAGE",
+            "value": 1
+          }
+        ]
+      }
+    ],
+    "attributes": [
+      {
+        "id": "schematic-reach",
+        "type": "forgero:reach",
+        "value": 4.5
+      }
+    ],
+    "features": [
+      {
+        "type": "minecraft:on_use",
+        "max_use_time": 7200,
+        "use_action": "BOW",
+        "use": [
+          {
+            "type": "forgero:mount_projectile"
+          }
+        ],
+        "on_stop": [
+          {
+            "type": "forgero:launch_projectile"
+          },
+          {
+            "type": "minecraft:stack_damage",
+            "damage": 1
+          }
+        ]
+      }
+    ]
+  }
+}

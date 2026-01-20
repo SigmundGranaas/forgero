@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.sigmundgranaas.forgero.generator.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "RecipeInjectionMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

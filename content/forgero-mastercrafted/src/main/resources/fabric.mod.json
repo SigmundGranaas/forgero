@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "forgero-mastercrafted",
+  "version": "${version}",
+  "name": "Forgero Mastercrafted",
+  "description": "Refined and mastercrafted quality schematics for Forgero",
+  "environment": "*",
+  "depends": {
+    "java": ">=17"
+  },
+  "custom": {
+    "forgeroResource": true
+  }
+}

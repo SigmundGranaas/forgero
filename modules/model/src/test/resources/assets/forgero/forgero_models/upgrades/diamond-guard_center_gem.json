@@ -1,0 +1,6 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:diamond",
+  "context": "guard_center_gem",
+  "texture": "forgero:item/upgrade/diamond-guard_center_gem"
+}

@@ -1,0 +1,28 @@
+{
+  "type": "forgero:upgrade_model_template",
+  "context": "cutter_mattock_head_reinforcement",
+  "target": {
+    "tag": "forgero:materials/roles/tool_material"
+  },
+  "models": [
+    {
+      "type": "forgero:texture_model",
+      "target": "forgero:{target.name}",
+      "context": "cutter_mattock_head_reinforcement",
+      "layers": [
+        {
+          "order": 5,
+          "template": "forgero:texture_template/upgrade/cutter_mattock_head_reinforcement",
+          "palette": "forgero:palette/{target.name}",
+          "output": "forgero:item/upgrade/{target.name}-cutter_mattock_head_reinforcement"
+        }
+      ],
+      "mount_points": [
+        {
+          "name": "attachment_point",
+          "position": [12, 12]
+        }
+      ]
+    }
+  ]
+}

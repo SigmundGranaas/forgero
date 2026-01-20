@@ -1,0 +1,33 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forgero:swords",
+      "required": false
+    },
+    {
+      "id": "#c:wooden_sword",
+      "required": false
+    },
+    {
+      "id": "#c:stone_sword",
+      "required": false
+    },
+    {
+      "id": "#c:iron_sword",
+      "required": false
+    },
+    {
+      "id": "#c:golden_sword",
+      "required": false
+    },
+    {
+      "id": "#c:diamond_sword",
+      "required": false
+    },
+    {
+      "id": "#c:netherite_sword",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "type": "forgero:upgrade_model_template",
+  "context": "tool_binding",
+  "target": {
+    "tag": "forgero:parts/binding"
+  },
+  "models": [
+    {
+      "type": "forgero:texture_model",
+      "target": "forgero:{target.name}",
+      "context": "tool_binding",
+      "layers": [
+        {
+          "order": 40,
+          "textures": {
+            "default": "forgero:item/{material.name}-pickaxe_binding",
+            "variants": [
+              {
+                "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/pickaxe" }],
+                "template": "forgero:texture_template/parts/pickaxe_binding",
+                "palette": "forgero:palette/{material.name}",
+                "output": "forgero:item/{material.name}-pickaxe_binding"
+              },
+              {
+                "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/axe" }],
+                "template": "forgero:texture_template/parts/axe_binding",
+                "palette": "forgero:palette/{material.name}",
+                "output": "forgero:item/{material.name}-axe_binding"
+              },
+              {
+                "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/hoe" }],
+                "template": "forgero:texture_template/parts/hoe_binding",
+                "palette": "forgero:palette/{material.name}",
+                "output": "forgero:item/{material.name}-hoe_binding"
+              },
+              {
+                "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/shovel" }],
+                "template": "forgero:texture_template/parts/shovel_binding",
+                "palette": "forgero:palette/{material.name}",
+                "output": "forgero:item/{material.name}-shovel_binding"
+              }
+            ]
+          },
+          "template": "forgero:texture_template/parts/pickaxe_binding",
+          "palette": "forgero:palette/{material.name}",
+          "output": "forgero:item/{material.name}-pickaxe_binding"
+        }
+      ],
+      "mount_points": [
+        {
+          "name": "center",
+          "position": [8, 8]
+        }
+      ]
+    }
+  ]
+}

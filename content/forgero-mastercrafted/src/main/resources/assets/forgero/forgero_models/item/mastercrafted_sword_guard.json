@@ -1,0 +1,37 @@
+{
+  "type": "forgero:part_model_template",
+  "target": {
+    "tag": "forgero:materials/roles/tool_material"
+  },
+  "model": {
+    "id": "forgero:item/{target.name}-mastercrafted_sword_guard",
+    "type": "forgero:composite_model",
+    "target": "forgero:{target.name}-mastercrafted_sword_guard",
+    "layers": [
+      {
+        "order": 15,
+        "template": "forgero:texture_template/parts/mastercrafted_sword_guard",
+        "palette": "forgero:palette/{target.name}",
+        "output": "forgero:item/{target.name}-mastercrafted_sword_guard"
+      }
+    ],
+    "slots": [
+      {
+        "id": "mastercrafted_sword_guard-reinforcement",
+        "order": 20,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "mastercrafted_sword_guard_reinforcement"
+        }
+      },
+      {
+        "id": "mastercrafted_sword_guard-gem",
+        "order": 25,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "guard_gem"
+        }
+      }
+    ]
+  }
+}

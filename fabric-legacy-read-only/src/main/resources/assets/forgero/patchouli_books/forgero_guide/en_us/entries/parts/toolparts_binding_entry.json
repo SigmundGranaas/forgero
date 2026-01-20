@@ -1,0 +1,23 @@
+{
+  "name": "Binding",
+  "icon": "forgero:gold-binding",
+  "category": "forgero:toolparts_category",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The binding is an optional part of the tool, and will give some beneficial stats to your tools, as well as potential slots for more upgrades"
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Crafting bindings",
+      "recipe": "forgero:gold-binding",
+      "recipe2": "forgero:diamond-binding"
+    },
+    {
+      "type": "patchouli:crafting",
+      "title": "Crafting bindings",
+      "recipe": "forgero:gold-sword_guard",
+      "recipe2": "forgero:copper-sword_guard"
+    }
+  ]
+}

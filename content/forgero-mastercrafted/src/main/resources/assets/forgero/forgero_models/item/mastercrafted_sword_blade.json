@@ -1,0 +1,29 @@
+{
+  "type": "forgero:part_model_template",
+  "target": {
+    "tag": "forgero:materials/roles/tool_material"
+  },
+  "model": {
+    "id": "forgero:item/{target.name}-mastercrafted_sword_blade",
+    "type": "forgero:composite_model",
+    "target": "forgero:{target.name}-mastercrafted_sword_blade",
+    "layers": [
+      {
+        "order": 20,
+        "template": "forgero:texture_template/parts/mastercrafted_sword_blade",
+        "palette": "forgero:palette/{target.name}",
+        "output": "forgero:item/{target.name}-mastercrafted_sword_blade"
+      }
+    ],
+    "slots": [
+      {
+        "id": "mastercrafted_sword_blade-reinforcement",
+        "order": 30,
+        "renderer": {
+          "type": "forgero:component",
+          "context": "mastercrafted_sword_blade_reinforcement"
+        }
+      }
+    ]
+  }
+}

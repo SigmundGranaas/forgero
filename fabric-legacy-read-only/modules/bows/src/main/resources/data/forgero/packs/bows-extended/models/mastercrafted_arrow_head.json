@@ -1,0 +1,163 @@
+{
+  "type": "ARROW_HEAD",
+  "models": [
+    {
+      "name": "mastercrafted_arrow_head",
+      "type": "GENERATE",
+      "template": "mastercrafted_arrow_head.png",
+      "palette": "TOOL_MATERIAL",
+      "order": 10,
+      "variants": [
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "mastercrafted_arrow_head_in_bow.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "mastercrafted_arrow_head_in_bow.png"
+        },
+        {
+          "predicate": [
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "offset": [
+            -1,
+            1
+          ],
+          "template": "mastercrafted_arrow_head_in_bow.png"
+        },
+        {
+          "predicate": [
+            "type:BOW"
+          ],
+          "offset": [
+            -1,
+            1
+          ],
+          "template": "mastercrafted_arrow_head_in_bow.png"
+        }
+      ]
+    },
+    {
+      "name": "arrow_reinforcement",
+      "variants": [
+        {
+          "predicate": [
+            "model:mastercrafted_arrow_head.png"
+          ],
+          "template": "mastercrafted_arrow_reinforcement.png"
+        },
+        {
+          "predicate": [
+            "model:mastercrafted_arrow_head_in_bow.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "mastercrafted_arrow_reinforcement_in_bow.png"
+        },
+        {
+          "predicate": [
+            "model:mastercrafted_arrow_head_in_bow.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "mastercrafted_arrow_reinforcement_in_bow.png"
+        },
+        {
+          "predicate": [
+            "model:mastercrafted_arrow_head_in_bow.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "offset": [
+            -1,
+            1
+          ],
+          "template": "mastercrafted_arrow_reinforcement_in_bow.png"
+        }
+      ]
+    },
+    {
+      "name": "arrow_dye",
+      "variants": [
+        {
+          "predicate": [
+            "model:mastercrafted_arrow_head.png"
+          ],
+          "template": "mastercrafted_arrow_head.png"
+        },
+        {
+          "predicate": [
+            "model:mastercrafted_arrow_head_in_bow.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.9
+            }
+          ],
+          "template": "mastercrafted_arrow_head_in_bow.png"
+        },
+        {
+          "predicate": [
+            "model:mastercrafted_arrow_head_in_bow.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.6
+            }
+          ],
+          "template": "mastercrafted_arrow_head_in_bow.png"
+        },
+        {
+          "predicate": [
+            "model:mastercrafted_arrow_head_in_bow.png",
+            {
+              "type": "forgero:bow_pull",
+              "pull": 0.1
+            }
+          ],
+          "offset": [
+            -1,
+            1
+          ],
+          "template": "mastercrafted_arrow_head_in_bow.png"
+        },
+        {
+          "predicate": [
+            "type:BOW"
+          ],
+          "offset": [
+            -1,
+            1
+          ],
+          "template": "mastercrafted_arrow_head_in_bow.png"
+        }
+      ]
+    },
+    {
+      "target": [
+        "type:TOOL_MATERIAL",
+        "id:mastercrafted_arrow_head-schematic"
+      ],
+      "modelType": "BASED_COMPOSITE",
+      "template": "mastercrafted_arrow_head"
+    }
+  ]
+}

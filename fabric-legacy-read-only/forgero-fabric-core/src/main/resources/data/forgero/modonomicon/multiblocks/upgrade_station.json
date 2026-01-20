@@ -1,0 +1,31 @@
+{
+  "type": "modonomicon:dense",
+  "mapping": {
+    "*": {
+      "type": "modonomicon:display",
+      "display": "minecraft:basalt"
+    },
+    "+": {
+      "type": "modonomicon:display",
+      "display": "minecraft:stone"
+    },
+    "0": {
+      "type": "modonomicon:block",
+      "block": "forgero:upgrade_station"
+    }
+  },
+  "pattern": [
+    [
+      "___",
+      "___",
+      "_0_",
+      "___"
+    ],
+    [
+      "+*+",
+      "*+*",
+      "+*+",
+      "*+*"
+    ]
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "parent": "forgero:forgero/root",
+  "criteria": {
+    "pickaxe": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "minecraft:tools"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.forgero.tool.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "forgero:oak-pickaxe"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.forgero.tool.title"
+    }
+  },
+  "requirements": [
+    [
+      "pickaxe"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,116 @@
+{
+  "parent": "forgero:forgero/gem",
+  "criteria": {
+    "diamond_gem_5": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:diamond_gem_5"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "amethyst_gem_5": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:amethyst_gem_5"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "echo_gem_5": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:echo_gem_5"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "emerald_gem_5": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:emerald_gem_5"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "lapis_gem_5": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:lapis_gem_5"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "prismarine_gem_5": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:prismarine_gem_5"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "quartz_gem_5": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forgero:quartz_gem_5"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.forgero.gem_level_5.description"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "forgero:diamond_gem_5"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.forgero.gem_level_5.title"
+    }
+  },
+  "requirements": [
+    [
+      "diamond_gem_5",
+      "lapis_gem_5",
+      "prismarine_gem_5",
+      "quartz_gem_5",
+      "emerald_gem_5",
+      "amethyst_gem_5",
+      "echo_gem_5"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

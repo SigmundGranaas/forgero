@@ -1,0 +1,33 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forgero:pickaxes",
+      "required": false
+    },
+    {
+      "id": "#c:wooden_pickaxe",
+      "required": false
+    },
+    {
+      "id": "#c:stone_pickaxe",
+      "required": false
+    },
+    {
+      "id": "#c:iron_pickaxe",
+      "required": false
+    },
+    {
+      "id": "#c:golden_pickaxe",
+      "required": false
+    },
+    {
+      "id": "#c:diamond_pickaxe",
+      "required": false
+    },
+    {
+      "id": "#c:netherite_pickaxe",
+      "required": false
+    }
+  ]
+}

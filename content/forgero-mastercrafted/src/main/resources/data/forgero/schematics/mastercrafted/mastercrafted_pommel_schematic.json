@@ -1,0 +1,65 @@
+{
+  "type": "forgero:schematic",
+  "name": "Mastercrafted Pommel",
+  "tags": [
+    "forgero:upgrades/types/pommel",
+    "forgero:schematics/mastercrafted"
+  ],
+  "attributes": [
+    {
+      "id": "forgero:mastercrafted-pommel-rarity-local",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 100,
+        "operation": "addition"
+      }
+    },
+    {
+      "id": "forgero:mastercrafted-pommel-rarity-composite",
+      "type": "forgero:rarity",
+      "computation": {
+        "value": 1.5,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    },
+    {
+      "id": "forgero:mastercrafted-pommel-durability-composite",
+      "type": "forgero:durability",
+      "computation": {
+        "value": 1.5,
+        "operation": "multiplication"
+      },
+      "condition": {
+        "static": [
+          {
+            "type": "forgero:is_root"
+          }
+        ]
+      }
+    }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:mastercrafted-cosmetic-slot",
+      "type": "forgero:dye",
+      "tags": [
+        "forgero:upgrades/types/cosmetic"
+      ],
+      "description": "slot.forgero.cosmetic"
+    }
+  ],
+  "host": {
+    "create": {
+      "id": "forgero:mastercrafted_pommel-schematic",
+      "class_name": "forgero:part_item",
+      "item_group": "forgero:ingredients"
+    }
+  }
+}

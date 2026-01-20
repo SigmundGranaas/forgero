@@ -1,0 +1,11 @@
+{
+  "id": "echo_gem_from_ancient_city",
+  "tables": [
+    "minecraft:chests/ancient_city"
+  ],
+  "ids": [
+    "forgero:chipped_echo"
+  ],
+  "chance": 0.0125,
+  "rolls": 1
+}

@@ -1,0 +1,29 @@
+{
+  "type": "ARROW",
+  "name": "arrow",
+  "resource_type": "CONSTRUCT_TEMPLATE",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "ARROW",
+    "target": "CREATE",
+    "components": [
+      {
+        "type": "ARROW_HEAD"
+      },
+      {
+        "type": "HANDLE"
+      },
+      {
+        "type": "FEATHER"
+      }
+    ],
+    "slots": [
+    ]
+  },
+  "model": {
+    "type": "COMPOSITE"
+  }
+}

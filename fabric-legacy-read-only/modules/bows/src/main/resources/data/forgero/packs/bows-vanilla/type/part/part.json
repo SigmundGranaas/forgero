@@ -1,0 +1,17 @@
+{
+  "name": "PART",
+  "children": [
+    {
+      "name": "ARROW_HEAD"
+    },
+    {
+      "name": "BOW_LIMB"
+    },
+    {
+      "name": "ARROW_SHAFT"
+    },
+    {
+      "name": "ARROW_FEATHER"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.sigmundgranaas.forgero.bow.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "BowFovMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

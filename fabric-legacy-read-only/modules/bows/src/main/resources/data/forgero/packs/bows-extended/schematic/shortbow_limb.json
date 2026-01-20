@@ -1,0 +1,126 @@
+{
+  "type": "BOW_LIMB_SCHEMATIC",
+  "name": "shortbow_limb-schematic",
+  "parent": "bow_limb_base",
+  "container": {
+    "type": "CREATE",
+    "id": "this"
+  },
+  "construct": {
+    "type": "BOW_LIMB",
+    "target": "CREATE",
+    "recipes": [
+      {
+        "crafting_type": "SCHEMATIC_PART_CRAFTING",
+        "ingredients": [
+          {
+            "id": "this"
+          },
+          {
+            "type": "BOW_LIMB_MATERIAL",
+            "unique": true,
+            "amount": 3
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "id": "this"
+      },
+      {
+        "type": "BOW_LIMB_MATERIAL",
+        "unique": true
+      }
+    ],
+    "slots": [
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "grip",
+        "type": "SOFT_MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "OFFENSIVE"
+        ],
+        "description": "reinforcement",
+        "type": "UPGRADE_MATERIAL",
+        "tier": 1
+      },
+      {
+        "upgrade_type": "SMITHING",
+        "category": [
+          "UTILITY"
+        ],
+        "description": "cosmetic",
+        "type": "DYE",
+        "tier": 1
+      }
+    ]
+  },
+  "properties": {
+    "attributes": [
+      {
+        "id": "schematic-rarity-local",
+        "type": "RARITY",
+        "order": "BASE",
+        "context": "LOCAL",
+        "operation": "ADDITION",
+        "value": 50
+      },
+      {
+        "id": "schematic-rarity-composite",
+        "type": "RARITY",
+        "order": "BASE",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.25
+      },
+      {
+        "id": "schematic-durability-composite",
+        "type": "DURABILITY",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.3
+      },
+      {
+        "id": "schematic-draw_speed-composite",
+        "type": "forgero:draw_speed",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 1.3
+      },
+      {
+        "id": "schematic-accuracy-composite",
+        "type": "forgero:accuracy",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.9
+      },
+      {
+        "id": "schematic-draw_power-composite",
+        "type": "forgero:draw_power",
+        "context": "COMPOSITE",
+        "operation": "MULTIPLICATION",
+        "value": 0.7
+      }
+    ],
+    "features": [
+    ]
+  },
+  "custom_data": {
+    "ingredient_count": {
+      "value": 3,
+      "context": "LOCAL"
+    },
+    "name_replacement": {
+      "from": "bow",
+      "to": "shortbow"
+    }
+  }
+}

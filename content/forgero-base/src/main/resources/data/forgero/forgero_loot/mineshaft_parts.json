@@ -1,0 +1,15 @@
+{
+  "id": "mineshaft_parts",
+  "tables": [
+    "minecraft:chests/abandoned_mineshaft"
+  ],
+  "types": [
+    "PICKAXE_HEAD",
+    "TOOL_BINDING",
+    "HANDLE"
+  ],
+  "upper_rarity_limit": 30,
+  "lower_rarity_limit": 0,
+  "chance": 0.3,
+  "rolls": 2
+}
