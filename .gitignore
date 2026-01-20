@@ -116,6 +116,6 @@ gradle-app.setting
 .gradle/
 [Oo]utput/
 
-# Claude Code extracted sources (for local analysis only)
 # Regenerate with: ./gradlew extractMinecraftSources
 .minecraft/
+.claude/
