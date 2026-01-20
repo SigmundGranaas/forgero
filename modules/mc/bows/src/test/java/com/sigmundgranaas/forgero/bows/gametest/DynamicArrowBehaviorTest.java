@@ -19,7 +19,7 @@ import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.impl.StaticComponent;
-import com.sigmundgranaas.forgero.loader.api.ForgeroInitializedCallback;
+import com.sigmundgranaas.forgero.common.api.ForgeroInitializedCallback;
 
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.enchantment.Enchantments;

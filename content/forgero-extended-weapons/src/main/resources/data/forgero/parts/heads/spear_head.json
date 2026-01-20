@@ -39,10 +39,15 @@
       "computation": {"multiply": 0.9}
     },
     {
-      "id": "forgero:spear_head-attack_damage-mult",
+      "id": "forgero:spear_head-attack_damage-offset",
       "type": "forgero:attack_damage",
       "context": "forgero:part-composite",
-      "computation": {"multiply": 1.2}
+      "computation": {"value": 2, "operation": "addition"}
+    },
+    {
+      "id": "forgero:spear_head-attack_speed-base",
+      "type": "forgero:attack_speed",
+      "computation": {"value": -0.3}
     },
     {
       "id": "forgero:spear_head-attack_speed-mult",

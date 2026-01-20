@@ -6,7 +6,7 @@ import com.sigmundgranaas.forgero.common.tags.engine.TaggedRegistry;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
 import com.sigmundgranaas.forgero.drp.api.texture.AtlasBuilder;
-import com.sigmundgranaas.forgero.loader.api.ForgeroInitializedCallback;
+import com.sigmundgranaas.forgero.common.api.ForgeroInitializedCallback;
 import com.sigmundgranaas.forgero.model.generation.api.TextureGenerationTask;
 import com.sigmundgranaas.forgero.model.pipeline.api.ModelDataInitializer;
 import com.sigmundgranaas.forgero.model.pipeline.api.ModelInitializationResult;
@@ -59,7 +59,7 @@ public class ForgeroModelResourceListener implements IdentifiableResourceReloadL
 	@Override
 	public CompletableFuture<Void> reload(Synchronizer synchronizer, ResourceManager manager, Profiler prepareProfiler, Profiler applyProfiler, Executor prepareExecutor, Executor applyExecutor) {
 		return CompletableFuture.supplyAsync(() -> {
-					LOGGER.info("Hot reload detected. Reloading Forgero models...");
+					LOGGER.debug("Hot reload detected. Reloading Forgero models...");
 					ResourceProvider resourceProvider = new MinecraftResourceProvider(manager);
 
 					ItemModelRegistry itemModelRegistry = new MapBackedModelRegistry();
@@ -91,7 +91,7 @@ public class ForgeroModelResourceListener implements IdentifiableResourceReloadL
 							new ForgeroArmorTextureManager(result.itemModelRegistry()),
 							new ForgeroArmorModelManager(MinecraftClient.getInstance().getEntityModelLoader())
 					);
-					LOGGER.info("Forgero models reloaded successfully. {} item models available.", result.itemModelRegistry().models().size());
+					LOGGER.debug("Forgero models reloaded: {} item models", result.itemModelRegistry().models().size());
 
 					return result;
 				}, prepareExecutor)
@@ -102,7 +102,7 @@ public class ForgeroModelResourceListener implements IdentifiableResourceReloadL
 
 	private void generateTextures(List<TextureGenerationTask> tasks, ResourceManager resourceManager) {
 		if (tasks.isEmpty()) return;
-		LOGGER.info("Generating {} textures at runtime...", tasks.size());
+		LOGGER.debug("Generating {} textures at runtime", tasks.size());
 		var textureGenerator = new DefaultTextureGenerator(new MinecraftResourceProvider(resourceManager), new AwtPalettizedTextureGenerator(), new RuntimeTextureWriter(RenderInitializer.getResourcePack()));
 		textureGenerator.generate(tasks);
 	}
@@ -120,6 +120,6 @@ public class ForgeroModelResourceListener implements IdentifiableResourceReloadL
 		if (atlasBuilder.getSources().isEmpty()) return;
 
 		RenderInitializer.getResourcePack().addAtlas(new Identifier("minecraft", "blocks"), atlasBuilder);
-		LOGGER.info("Generated and added atlas configuration for {} item textures.", atlasBuilder.getSources().size());
+		LOGGER.debug("Generated atlas config for {} item textures", atlasBuilder.getSources().size());
 	}
 }

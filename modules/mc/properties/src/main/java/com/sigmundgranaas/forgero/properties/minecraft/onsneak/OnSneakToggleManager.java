@@ -1,14 +1,12 @@
 package com.sigmundgranaas.forgero.properties.minecraft.onsneak;
 
-import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.property.context.ContextKeys;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.effects.entity.ContextualEffectHandler;
 import com.sigmundgranaas.forgero.effects.entity.EntityEffectHandler;
 import com.sigmundgranaas.forgero.effects.entity.OnHitEffect;
-import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
+import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.loader.api.FabricLoader;
@@ -33,8 +31,6 @@ public class OnSneakToggleManager {
 	// Track sneak state per entity UUID
 	private static final ConcurrentHashMap<UUID, Boolean> sneakStates = new ConcurrentHashMap<>();
 
-	private static ComponentConverter converter;
-
 	static {
 		// Register player disconnect cleanup hook (server-side only)
 		if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
@@ -46,16 +42,6 @@ public class OnSneakToggleManager {
 
 	private OnSneakToggleManager() {
 		// Static class
-	}
-
-	/**
-	 * Initializes the manager with required services.
-	 * Called during Forgero initialization.
-	 *
-	 * @param services The Forgero services container
-	 */
-	public static void initialize(ForgeroServices services) {
-		converter = services.converter();
 	}
 
 	/**
@@ -90,47 +76,38 @@ public class OnSneakToggleManager {
 		entity.getHandItems().forEach(equipment::add);
 		entity.getArmorItems().forEach(equipment::add);
 
+		// Build context with entity tags
+		DynamicContext.Builder contextBuilder = new DynamicContext.Builder();
+		Set<OpenIdentifier> entityTags = Registries.ENTITY_TYPE.getEntry(entity.getType())
+				.streamTags()
+				.map(TagKey::id)
+				.map(id -> new OpenIdentifier(id.getNamespace(), id.getPath()))
+				.collect(Collectors.toSet());
+		contextBuilder.put(ContextKeys.TARGET_TAGS, entityTags);
+
 		// Process each equipped item
 		for (ItemStack stack : equipment) {
 			if (stack.isEmpty()) {
 				continue;
 			}
 
-			converter.toComponent(stack).ifPresent(component -> {
-				List<OnSneakToggleProperty> properties = getActiveProperties(component, entity);
+			List<OnSneakToggleProperty> properties = ForgeroApi.itemProperty().resolve(stack, OnSneakToggleProperty.Engine::new, contextBuilder.build());
 
-				for (OnSneakToggleProperty property : properties) {
-					// Entity sneaks targeting self or nearby entities
-					List<Entity> finalTargets = property.selector().select(entity, entity);
+			for (OnSneakToggleProperty property : properties) {
+				// Entity sneaks targeting self or nearby entities
+				List<Entity> finalTargets = property.selector().select(entity, entity);
 
-					for (Entity finalTarget : finalTargets) {
-						for (OnHitEffect effect : property.effects()) {
-							if (effect instanceof ContextualEffectHandler contextual) {
-								contextual.apply(entity, finalTarget);
-							} else if (effect instanceof EntityEffectHandler simple) {
-								simple.apply(finalTarget);
-							}
+				for (Entity finalTarget : finalTargets) {
+					for (OnHitEffect effect : property.effects()) {
+						if (effect instanceof ContextualEffectHandler contextual) {
+							contextual.apply(entity, finalTarget);
+						} else if (effect instanceof EntityEffectHandler simple) {
+							simple.apply(finalTarget);
 						}
 					}
 				}
-			});
+			}
 		}
-	}
-
-	private static List<OnSneakToggleProperty> getActiveProperties(Component component, Entity entity) {
-		var engine = new OnSneakToggleProperty.Engine();
-		DynamicContext.Builder contextBuilder = new DynamicContext.Builder();
-
-		// Populate context with entity tags
-		Set<OpenIdentifier> entityTags = Registries.ENTITY_TYPE.getEntry(entity.getType())
-				.streamTags()
-				.map(TagKey::id)
-				.map(id -> new OpenIdentifier(id.getNamespace(), id.getPath()))
-				.collect(Collectors.toSet());
-
-		contextBuilder.put(ContextKeys.TARGET_TAGS, entityTags);
-
-		return engine.resolve(component, contextBuilder.build());
 	}
 
 	/**

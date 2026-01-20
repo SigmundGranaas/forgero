@@ -25,6 +25,7 @@
       "id": "forgero:hoe_head-reinforcement",
       "type": "forgero:materials/roles/upgrade_material",
       "tags": ["forgero:upgrades/types/reinforcement"],
+      "context": "forgero:contexts/offensive",
       "description": "slot.forgero.reinforcement"
     }
   ],
@@ -45,6 +46,18 @@
       "type": "forgero:attack_damage",
       "context": "forgero:part-composite",
       "computation": {"multiply": 1.0}
+    },
+    {
+      "id": "forgero:hoe_head-attack_damage-offset",
+      "type": "forgero:attack_damage",
+      "context": "forgero:part-composite",
+      "computation": {"value": 0, "operation": "addition"}
+    },
+    {
+      "id": "forgero:hoe_head-attack_speed-base",
+      "type": "forgero:attack_speed",
+      "context": "forgero:part-composite",
+      "computation": {"value": -1.0, "operation": "addition"}
     },
     {
       "id": "forgero:hoe_head-attack_speed-mult",

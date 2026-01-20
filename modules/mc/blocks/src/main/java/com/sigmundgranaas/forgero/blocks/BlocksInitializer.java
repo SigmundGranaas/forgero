@@ -22,11 +22,8 @@ public class BlocksInitializer implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		LOGGER.info("Initializing Forgero Blocks...");
-
 		// Register disassembly recipe reload listener
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new DisassemblyRecipeReloadListener());
-
-		LOGGER.info("Forgero Blocks initialized");
+		LOGGER.debug("Forgero Blocks initialized");
 	}
 }

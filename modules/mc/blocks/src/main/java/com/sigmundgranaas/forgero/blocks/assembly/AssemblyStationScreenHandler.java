@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
+import com.sigmundgranaas.forgero.common.api.ForgeroServices;
 
 /**
  * Screen handler for the Assembly Station (disassembly station).

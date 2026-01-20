@@ -40,10 +40,15 @@
       "computation": {"multiply": 1.1}
     },
     {
-      "id": "forgero:mace_head-attack_damage-mult",
+      "id": "forgero:mace_head-attack_damage-offset",
       "type": "forgero:attack_damage",
       "context": "forgero:part-composite",
-      "computation": {"multiply": 1.5}
+      "computation": {"value": 3, "operation": "addition"}
+    },
+    {
+      "id": "forgero:mace_head-attack_speed-base",
+      "type": "forgero:attack_speed",
+      "computation": {"value": -0.4}
     },
     {
       "id": "forgero:mace_head-attack_speed-mult",

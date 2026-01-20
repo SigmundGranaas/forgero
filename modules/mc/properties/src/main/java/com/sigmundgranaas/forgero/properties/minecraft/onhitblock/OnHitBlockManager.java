@@ -1,9 +1,7 @@
 package com.sigmundgranaas.forgero.properties.minecraft.onhitblock;
 
-import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
-import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
-import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
+import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import com.sigmundgranaas.forgero.effects.block.OnHitBlockEffect;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -19,20 +17,8 @@ import java.util.Set;
  */
 public class OnHitBlockManager {
 
-	private static ComponentConverter converter;
-
 	private OnHitBlockManager() {
 		// Static class
-	}
-
-	/**
-	 * Initializes the manager with required services.
-	 * Called during Forgero initialization.
-	 *
-	 * @param services The Forgero services container
-	 */
-	public static void initialize(ForgeroServices services) {
-		converter = services.converter();
 	}
 
 	/**
@@ -48,30 +34,23 @@ public class OnHitBlockManager {
 			return;
 		}
 
-		converter.toComponent(stack).ifPresent(component -> {
-			List<OnHitBlockProperty> properties = getActiveProperties(component);
+		DynamicContext.Builder contextBuilder = new DynamicContext.Builder();
+		List<OnHitBlockProperty> properties = ForgeroApi.itemProperty().resolve(
+			stack,
+			OnHitBlockProperty.Engine::new,
+			contextBuilder.build()
+		);
 
-			for (OnHitBlockProperty property : properties) {
-				// Selector determines which blocks are affected
-				Set<BlockPos> selectedBlocks = property.selector().select(targetPos, source);
+		for (OnHitBlockProperty property : properties) {
+			// Selector determines which blocks are affected
+			Set<BlockPos> selectedBlocks = property.selector().select(targetPos, source);
 
-				// Apply effects to all selected blocks
-				for (BlockPos pos : selectedBlocks) {
-					for (OnHitBlockEffect effect : property.effects()) {
-						effect.apply(world, source, pos);
-					}
+			// Apply effects to all selected blocks
+			for (BlockPos pos : selectedBlocks) {
+				for (OnHitBlockEffect effect : property.effects()) {
+					effect.apply(world, source, pos);
 				}
 			}
-		});
-	}
-
-	private static List<OnHitBlockProperty> getActiveProperties(Component component) {
-		var engine = new OnHitBlockProperty.Engine();
-		DynamicContext.Builder contextBuilder = new DynamicContext.Builder();
-
-		// Build context for dynamic condition evaluation
-		// You can add more context keys here as needed (world state, biome, time, etc.)
-
-		return engine.resolve(component, contextBuilder.build());
+		}
 	}
 }

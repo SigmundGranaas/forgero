@@ -17,7 +17,7 @@ import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.impl.StaticComponent;
-import com.sigmundgranaas.forgero.loader.api.ForgeroInitializedCallback;
+import com.sigmundgranaas.forgero.common.api.ForgeroInitializedCallback;
 import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.UseHandler;
 import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.UseInteractionProperty;
 import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.UseInteractionPropertiesPlugin;

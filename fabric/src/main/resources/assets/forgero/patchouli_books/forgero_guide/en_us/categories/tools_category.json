@@ -1,6 +1,0 @@
-{
-  "name": "Tools",
-  "description": "Tools created by combining different part will inherit and combine all of the attributes of its parts. Most parts also have upgrade slots, which can fit a tool binding, or a sword guard.",
-  "icon": "forgero:oak-axe",
-  "sortnum": 1
-}

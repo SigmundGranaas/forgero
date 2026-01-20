@@ -80,6 +80,9 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 		// Draw main background
 		context.drawTexture(TEXTURE, guiX, guiY, 0, 0, backgroundWidth, backgroundHeight);
 
+		// Always draw composite slot texture
+		drawSlotTexture(context, guiX, guiY, handler.getCompositeSlot(), false);
+
 		// Only draw slot UI if there's a component in the composite slot
 		if (handler.getCurrentComponent() != null) {
 			// Draw relationship lines first (behind slots)
@@ -138,8 +141,22 @@ public class UpgradeStationScreen extends HandledScreen<UpgradeStationScreenHand
 	 * @param readOnly    Whether this is a read-only display slot
 	 */
 	private void drawSlotTexture(DrawContext context, int guiX, int guiY, Slot slot, boolean readOnly) {
-		int slotX = guiX + slot.x - 1;
-		int slotY = guiY + slot.y - 1;
+		// Use dynamic positions for ComponentSlot and DisplaySlot
+		int slotPosX;
+		int slotPosY;
+		if (slot instanceof ComponentSlot componentSlot) {
+			slotPosX = componentSlot.getDynamicX();
+			slotPosY = componentSlot.getDynamicY();
+		} else if (slot instanceof DisplaySlot displaySlot) {
+			slotPosX = displaySlot.getDynamicX();
+			slotPosY = displaySlot.getDynamicY();
+		} else {
+			slotPosX = slot.x;
+			slotPosY = slot.y;
+		}
+
+		int slotX = guiX + slotPosX - 1;
+		int slotY = guiY + slotPosY - 1;
 
 		// Texture atlas coordinates for slot backgrounds
 		// Read-only slots: lighter/grayed appearance

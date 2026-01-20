@@ -120,7 +120,7 @@ subprojects { project ->
 			publications {
 				mavenJava(MavenPublication) {
 					groupId = group
-					if (project.name == 'fabric') {
+					if (project.name == 'fabric-legacy-read-only') {
 						artifactId = "${rootProject.mod_id}-fabric"
 						base.archivesName = "${rootProject.mod_id}-fabric"
 					} else {
@@ -324,16 +324,14 @@ tasks.register('validateContentPacks') {
 		def contentModulePaths = [
 			'content/forgero-base',
 			'content/forgero-materials',
-			'content/forgero-upgrades',
-			'content/forgero-tools',
+			'content/forgero-conditions',
 			'content/minecraft-tools',
 			'content/forgero-armor',
 			'content/forgero-armor-content',
-			'content/forgero-schematics',
+			'content/forgero-mastercrafted',
 			'content/forgero-extended-schematics',
 			'content/forgero-secondary-materials',
 			'content/forgero-extended-weapons',
-			'content/forgero-mining',
 			'content/forgero-gems',
 			'content/vanilla-upgrades-base'
 		].collect { file("${projectDir}/${it}").toPath() }
@@ -414,8 +412,7 @@ tasks.register('validateTags') {
 			'content/forgero-armor-content',
 			'content/forgero-materials',
 			'content/forgero-gems',
-			'content/forgero-mining',
-			'content/forgero-tools'
+			'content/forgero-mastercrafted'
 		]
 
 		logger.lifecycle('[TagValidation] Starting validation...')

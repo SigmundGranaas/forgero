@@ -1,6 +1,7 @@
 {
   "type": "forgero:material",
   "name": "Scute",
+  "include": ["forgero:hard_upgrade_base"],
   "tags": [
     "forgero:materials/properties/hard",
     "forgero:upgrades/types/reinforcement"

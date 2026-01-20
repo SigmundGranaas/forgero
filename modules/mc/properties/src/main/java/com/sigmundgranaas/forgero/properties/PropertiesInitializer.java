@@ -1,19 +1,9 @@
 package com.sigmundgranaas.forgero.properties;
 
-import com.sigmundgranaas.forgero.loader.api.ForgeroInitializedCallback;
-import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
+import com.sigmundgranaas.forgero.common.api.ForgeroInitializedCallback;
+import com.sigmundgranaas.forgero.common.api.ForgeroServices;
 import com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.BlockBreakingManager;
-import com.sigmundgranaas.forgero.properties.minecraft.blockuse.BlockUseManager;
-import com.sigmundgranaas.forgero.properties.minecraft.entityuse.EntityUseManager;
 import com.sigmundgranaas.forgero.properties.minecraft.loot.LootManager;
-import com.sigmundgranaas.forgero.properties.minecraft.onblockplace.OnBlockPlaceManager;
-import com.sigmundgranaas.forgero.properties.minecraft.ondamage.OnDamageReceivedManager;
-import com.sigmundgranaas.forgero.properties.minecraft.onhit.OnHitManager;
-import com.sigmundgranaas.forgero.properties.minecraft.onhitblock.OnHitBlockManager;
-import com.sigmundgranaas.forgero.properties.minecraft.onkill.OnKillManager;
-import com.sigmundgranaas.forgero.properties.minecraft.onsneak.OnSneakToggleManager;
-import com.sigmundgranaas.forgero.properties.minecraft.ontick.OnTickManager;
-import com.sigmundgranaas.forgero.properties.minecraft.swing.SwingHandManager;
 import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.UseInteractionManager;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
@@ -34,26 +24,15 @@ public class PropertiesInitializer implements ModInitializer {
 		// - If ForgeroDataLoader hasn't run yet, register for the future event
 		// - If ForgeroDataLoader has already run, immediately invoke with stored services
 		ForgeroInitializedCallback.registerAndReplay(this::initializeManagers);
-		LOGGER.info("Properties module registered for Forgero initialization callback.");
 	}
 
 	private void initializeManagers(ForgeroServices services) {
-		LOGGER.debug("Initializing property managers...");
-
-		OnHitManager.initialize(services);
-		OnHitBlockManager.initialize(services);
-		OnTickManager.initialize(services);
-		OnKillManager.initialize(services);
-		OnSneakToggleManager.initialize(services);
-		OnDamageReceivedManager.initialize(services);
-		OnBlockPlaceManager.initialize(services);
+		// Most managers refactored to use ItemPropertyApi - no initialization needed
+		// Only these three still require initialization:
 		BlockBreakingManager.initialize(services);
-		BlockUseManager.initialize(services);
-		EntityUseManager.initialize(services);
 		LootManager.initialize(services);
-		SwingHandManager.initialize(services);
 		UseInteractionManager.initialize(services);
 
-		LOGGER.info("Property managers initialized successfully.");
+		LOGGER.debug("Property managers initialized");
 	}
 }

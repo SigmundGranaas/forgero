@@ -98,7 +98,7 @@ public class FullPickaxeRenderTest {
 				"forgero:item/oak-pickaxe_handle", // Contextual handle variant for pickaxes
 				"forgero:item/leather-grip", // Grip upgrade
 				"forgero:item/leather-pickaxe_binding", // Base binding
-				"forgero:item/emerald-gem" // Gem upgrade
+				"forgero:item/upgrade/emerald-binding_gem" // Contextual gem upgrade on binding
 		);
 
 		Set<String> actualTextures = textures.stream()

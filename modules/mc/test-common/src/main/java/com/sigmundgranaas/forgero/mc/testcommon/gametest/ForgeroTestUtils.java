@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.mc.testcommon.gametest;
 
-import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
-import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
+import com.sigmundgranaas.forgero.common.api.ForgeroApi;
+import com.sigmundgranaas.forgero.common.api.ForgeroServices;
 import net.minecraft.test.TestContext;
 
 public final class ForgeroTestUtils {

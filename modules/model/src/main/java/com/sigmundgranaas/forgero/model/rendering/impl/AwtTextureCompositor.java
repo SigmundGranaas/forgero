@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.model.rendering.impl;
 
 import com.sigmundgranaas.forgero.model.api.RenderableTexture;
 import com.sigmundgranaas.forgero.model.rendering.api.TextureCompositor;
-import com.sigmundgranaas.forgero.model.rendering.api.TextureProvider;
+import com.sigmundgranaas.forgero.utility.resource.loader.api.UnifiedTextureProvider;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -12,8 +12,8 @@ import java.util.Optional;
 
 public class AwtTextureCompositor implements TextureCompositor {
 
-	private final TextureProvider textureProvider;
-	public AwtTextureCompositor(TextureProvider textureProvider) { this.textureProvider = textureProvider; }
+	private final UnifiedTextureProvider textureProvider;
+	public AwtTextureCompositor(UnifiedTextureProvider textureProvider) { this.textureProvider = textureProvider; }
 
 	@Override
 	public BufferedImage render(List<RenderableTexture> texturesToRender) {

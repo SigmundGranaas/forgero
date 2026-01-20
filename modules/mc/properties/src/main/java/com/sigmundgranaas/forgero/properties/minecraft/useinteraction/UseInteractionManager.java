@@ -3,13 +3,13 @@ package com.sigmundgranaas.forgero.properties.minecraft.useinteraction;
 import java.util.List;
 import java.util.Optional;
 
+import com.sigmundgranaas.forgero.common.api.item.ItemQueryApi;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
-import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
-import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
+import com.sigmundgranaas.forgero.common.api.ForgeroApi;
+import com.sigmundgranaas.forgero.common.api.ForgeroServices;
 import com.sigmundgranaas.forgero.common.useinteraction.UseContext;
 
 import net.minecraft.entity.LivingEntity;
@@ -233,22 +233,23 @@ public final class UseInteractionManager {
 	}
 
 	private static float resolveDrawSpeed(ItemStack stack) {
-		return converter.toComponent(stack)
-				.map(component -> {
-					AttributeQueryResult result = new AttributeEngine().resolve(component);
-					float baseDrawSpeed = result.getValue(DRAW_SPEED_ATTR);
-					float weight = result.getValue(WEIGHT_ATTR);
-					
-					if (baseDrawSpeed <= 0) {
-						baseDrawSpeed = 1.0f;
-					}
-					
-					float weightReduction = weight / WEIGHT_REDUCTION_DIVISOR;
-					float adjustedDrawSpeed = baseDrawSpeed - weightReduction;
-					
-					return Math.max(MIN_DRAW_SPEED, adjustedDrawSpeed);
-				})
-				.orElse(1.0f);
+		ItemQueryApi query = ForgeroApi.itemQuery();
+
+		if (!query.isForgeroItem(stack)) {
+			return 1.0f;
+		}
+
+		float baseDrawSpeed = query.getAttribute(stack, DRAW_SPEED_ATTR);
+		float weight = query.getAttribute(stack, WEIGHT_ATTR);
+
+		if (baseDrawSpeed <= 0) {
+			baseDrawSpeed = 1.0f;
+		}
+
+		float weightReduction = weight / WEIGHT_REDUCTION_DIVISOR;
+		float adjustedDrawSpeed = baseDrawSpeed - weightReduction;
+
+		return Math.max(MIN_DRAW_SPEED, adjustedDrawSpeed);
 	}
 
 	/**

@@ -3,8 +3,8 @@ package com.sigmundgranaas.forgero.predicate.minecraft;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sigmundgranaas.forgero.loader.api.DataPlugin;
-import com.sigmundgranaas.forgero.loader.api.PluginRegistrationContext;
+import com.sigmundgranaas.forgero.common.api.DataPlugin;
+import com.sigmundgranaas.forgero.common.api.PluginRegistrationContext;
 import com.sigmundgranaas.forgero.predicate.minecraft.block.BlockPredicate;
 import com.sigmundgranaas.forgero.predicate.minecraft.entity.EntityPredicate;
 import com.sigmundgranaas.forgero.predicate.minecraft.standalone.DamagePredicate;

@@ -1,8 +1,11 @@
 {
   "type": "forgero:material",
   "name": "Coal",
+  "include": ["forgero:mineral_upgrade_base"],
   "tags": [
-    "forgero:materials/types/mineral"
+    "forgero:materials/types/mineral",
+    "forgero:materials/roles/upgrade_material",
+    "forgero:upgrades/types/reinforcement"
   ],
   "host": {
     "identifiers": [

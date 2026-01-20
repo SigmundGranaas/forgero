@@ -20,6 +20,8 @@
       "com.sigmundgranaas.forgero.properties.PropertiesInitializer"
     ],
     "forgero:data_plugin": [
+      "com.sigmundgranaas.forgero.properties.plugin.ForgeroDefaultsPlugin",
+      "com.sigmundgranaas.forgero.properties.plugin.CoreSlotTypesPlugin",
       "com.sigmundgranaas.forgero.properties.minecraft.ontick.OnTickPropertiesPlugin",
       "com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.BlockBreakingPropertiesPlugin",
       "com.sigmundgranaas.forgero.properties.minecraft.onhit.OnHitPropertiesPlugin",

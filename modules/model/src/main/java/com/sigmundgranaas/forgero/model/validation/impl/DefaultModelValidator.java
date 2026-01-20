@@ -181,7 +181,7 @@ public class DefaultModelValidator implements ModelValidator {
 			TagResolver tagResolver,
 			List<Path> assetPaths
 	) {
-		LOGGER.info("Starting comprehensive model validation...");
+		LOGGER.debug("Starting comprehensive model validation...");
 		
 		ComprehensiveModelValidationResult.Builder builder = ComprehensiveModelValidationResult.builder();
 		
@@ -189,14 +189,14 @@ public class DefaultModelValidator implements ModelValidator {
 		LOGGER.debug("Phase 1: Validating model JSON syntax...");
 		ModelValidationResult modelResult = validateModels(provider, tagResolver);
 		builder.modelResult(modelResult);
-		LOGGER.info("Validated {} models, found {} errors", 
+		LOGGER.debug("Validated {} models, found {} errors",
 				modelResult.totalModelsValidated(), modelResult.errors().size());
 		
 		// Phase 2: Texture validation
 		LOGGER.debug("Phase 2: Validating textures...");
 		TextureValidationResult textureResult = validateTextures(assetPaths);
 		builder.textureResult(textureResult);
-		LOGGER.info("Validated {} templates, {} palettes", 
+		LOGGER.debug("Validated {} templates, {} palettes",
 				textureResult.templatesValidated(), textureResult.palettesValidated());
 		
 		// Phase 3: Palette conformity (if enabled)
@@ -204,7 +204,7 @@ public class DefaultModelValidator implements ModelValidator {
 			LOGGER.debug("Phase 3: Validating palette conformity...");
 			PaletteConformityResult paletteResult = validatePalettes(assetPaths);
 			builder.paletteResult(paletteResult);
-			LOGGER.info("Validated {} palettes for conformity, {} valid, {} errors",
+			LOGGER.debug("Validated {} palettes for conformity, {} valid, {} errors",
 					paletteResult.totalPalettesValidated(),
 					paletteResult.validPalettes(),
 					paletteResult.errorCount());
@@ -215,7 +215,7 @@ public class DefaultModelValidator implements ModelValidator {
 			LOGGER.debug("Phase 4: Validating animated textures...");
 			AnimatedTextureResult animatedResult = validateAnimatedTextures(assetPaths);
 			builder.animatedResult(animatedResult);
-			LOGGER.info("Found {} animated textures, {} valid",
+			LOGGER.debug("Found {} animated textures, {} valid",
 					animatedResult.totalAnimatedTextures(),
 					animatedResult.validAnimatedTextures());
 		}
@@ -227,7 +227,7 @@ public class DefaultModelValidator implements ModelValidator {
 		
 		ComprehensiveModelValidationResult result = builder.build();
 		
-		LOGGER.info("Comprehensive validation complete. Total errors: {}, warnings: {}",
+		LOGGER.debug("Comprehensive validation complete. Total errors: {}, warnings: {}",
 				result.totalErrorCount(), result.totalWarningCount());
 		
 		return result;

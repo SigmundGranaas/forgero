@@ -60,7 +60,7 @@ public class ExtensionMerger {
 			return rawDefinitions;
 		}
 
-		LOGGER.info("Processing {} extension resources", extensions.size());
+		LOGGER.debug("Processing {} extension resources", extensions.size());
 
 		// Group extensions by target
 		Map<OpenIdentifier, List<ExtensionData>> extensionsByTarget = extensions.stream()

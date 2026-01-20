@@ -68,7 +68,7 @@ public class ModelFileLoader {
 	public void load() {
 		resourceProvider.getNamespaces().forEach(this::loadModelsFromNamespace);
 		resolvePaletteMapRefs();
-		LOGGER.info("Loaded {} item templates, {} upgrade templates, {} armor templates, {} manual item models, {} manual armor models, and {} model extensions from all namespaces.",
+		LOGGER.debug("Loaded {} item, {} upgrade, {} armor templates, {} item models, {} armor models, {} extensions",
 				itemTemplates.size(), upgradeTemplates.size(), armorTemplates.size(), manualItemModels.size(), manualArmorModels.size(), modelExtensions.size());
 	}
 
@@ -91,19 +91,10 @@ public class ModelFileLoader {
 		// Scan both forgero_models and model_templates directories
 		OpenIdentifier modelsRoot = new OpenIdentifier(namespace, "forgero_models");
 		var modelsList = resourceProvider.list(modelsRoot, true).toList();
-		if (!modelsList.isEmpty()) {
-			LOGGER.info("Found {} model files in namespace '{}' under forgero_models", modelsList.size(), namespace);
-			if (LOGGER.isDebugEnabled()) {
-				modelsList.forEach(id -> LOGGER.debug("  - {}", id));
-			}
-		}
 		modelsList.forEach(this::parseResource);
 
 		OpenIdentifier templatesRoot = new OpenIdentifier(namespace, "model_templates");
 		var templatesList = resourceProvider.list(templatesRoot, true).toList();
-		if (!templatesList.isEmpty()) {
-			LOGGER.info("Found {} model files in namespace '{}' under model_templates", templatesList.size(), namespace);
-		}
 		templatesList.forEach(this::parseResource);
 	}
 

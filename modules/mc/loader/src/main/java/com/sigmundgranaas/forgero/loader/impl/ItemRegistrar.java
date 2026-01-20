@@ -5,8 +5,8 @@ import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.CreateData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.HostData;
-import com.sigmundgranaas.forgero.loader.api.ItemCreator;
-import com.sigmundgranaas.forgero.loader.api.ItemRegistrationCallback;
+import com.sigmundgranaas.forgero.common.api.ItemCreator;
+import com.sigmundgranaas.forgero.common.api.ItemRegistrationCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -66,8 +66,6 @@ public class ItemRegistrar {
 	 */
 	public List<RegisteredItem> registerItems(Map<OpenIdentifier, HostData> hostItemMap, Map<String, ItemCreator> creators) {
 		long startTime = System.currentTimeMillis();
-		logger.info("Starting item registration. Found {} host entries to process with {} item creators.",
-				hostItemMap.size(), creators.size());
 
 		List<PendingItemGroupRegistration> pendingGroupRegistrations = new ArrayList<>();
 		List<RegisteredItem> registeredItems = new ArrayList<>();
@@ -130,8 +128,13 @@ public class ItemRegistrar {
 		});
 
 		long endTime = System.currentTimeMillis();
-		logger.info("Finished item registration. Registered {} items, skipped {}, failed {} in {}ms.",
-				successCount.get(), skipCount.get(), failCount.get(), endTime - startTime);
+		if (failCount.get() > 0) {
+			logger.warn("Item registration: {} registered, {} skipped, {} failed in {}ms",
+					successCount.get(), skipCount.get(), failCount.get(), endTime - startTime);
+		} else {
+			logger.debug("Item registration: {} registered, {} skipped in {}ms",
+					successCount.get(), skipCount.get(), endTime - startTime);
+		}
 
 		// Add items to creative tabs
 		addItemsToGroups(pendingGroupRegistrations);
@@ -154,12 +157,8 @@ public class ItemRegistrar {
 
 	private void addItemsToGroups(List<PendingItemGroupRegistration> pendingRegistrations) {
 		if (pendingRegistrations.isEmpty()) {
-			logger.debug("No new items to add to creative tabs.");
 			return;
 		}
-
-		logger.info("Adding {} items to their respective creative tabs...", pendingRegistrations.size());
-		long startTime = System.currentTimeMillis();
 
 		// Group items by their target ItemGroup to reduce event registrations
 		Map<RegistryKey<ItemGroup>, List<Item>> itemsByGroup = new HashMap<>();
@@ -176,15 +175,9 @@ public class ItemRegistrar {
 			ItemGroupEvents.modifyEntriesEvent(groupKey).register(entries -> {
 				for (Item item : items) {
 					entries.add(item);
-					logger.trace("Added item {} to item group {}",
-							Registries.ITEM.getId(item), groupKey.getValue());
 				}
 			});
-			logger.debug("Queued {} items for creative tab {}", items.size(), groupKey.getValue());
 		});
-
-		long endTime = System.currentTimeMillis();
-		logger.info("Finished queuing items for creative tabs in {}ms.", endTime - startTime);
 	}
 
 	@Nullable

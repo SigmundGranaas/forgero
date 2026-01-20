@@ -170,7 +170,7 @@ public record ResourceData(
 				data.attributes(),
 				data.localAttributes(),
 				data.properties(),
-				null,
+				data.upgrades(),
 				data.target()
 		);
 	}

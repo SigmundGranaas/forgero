@@ -60,6 +60,24 @@
           "slot_type": "forgero:materials/roles/upgrade_material"
         }
       }
+    ],
+    "minecraft:on_hit_block": [
+      {
+        "selector": {
+          "type": "forgero:single"
+        },
+        "effects": [
+          {
+            "type": "forgero:block_explosion",
+            "power": 3.0,
+            "create_fire": false
+          }
+        ],
+        "condition": {
+          "type": "forgero:in_slot_type",
+          "slot_type": "forgero:materials/roles/upgrade_material"
+        }
+      }
     ]
   }
 }

@@ -1,10 +1,12 @@
 {
   "type": "forgero:material",
   "name": "Basalt",
+  "include": ["forgero:stone_upgrade_base"],
   "tags": [
     "forgero:materials/types/stone",
     "forgero:materials/roles/tool_material",
-    "forgero:materials/roles/upgrade_material"
+    "forgero:materials/roles/upgrade_material",
+    "forgero:upgrades/types/reinforcement"
   ],
   "host": {
     "identifiers": [

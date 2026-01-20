@@ -5,8 +5,8 @@ import com.sigmundgranaas.forgero.core.property.api.codec.ListCodecWrapper;
 import com.sigmundgranaas.forgero.effects.entity.SwingEffect;
 import com.sigmundgranaas.forgero.effects.entity.SwingParticleEffect;
 import com.sigmundgranaas.forgero.effects.entity.SwingSoundEffect;
-import com.sigmundgranaas.forgero.loader.api.DataPlugin;
-import com.sigmundgranaas.forgero.loader.api.PluginRegistrationContext;
+import com.sigmundgranaas.forgero.common.api.DataPlugin;
+import com.sigmundgranaas.forgero.common.api.PluginRegistrationContext;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

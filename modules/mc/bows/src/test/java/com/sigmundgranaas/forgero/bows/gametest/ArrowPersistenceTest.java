@@ -8,7 +8,7 @@ import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.useinteraction.UseContext;
 import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
-import com.sigmundgranaas.forgero.loader.api.ForgeroInitializedCallback;
+import com.sigmundgranaas.forgero.common.api.ForgeroInitializedCallback;
 
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.item.ItemStack;

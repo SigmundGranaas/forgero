@@ -278,7 +278,7 @@ class DefinitionDataTest {
 					new com.sigmundgranaas.forgero.data.loading.api.data.SchematicData(
 							id("forgero:schematic"),
 							"refined_pickaxe",
-							null, null, null, null, null, null,
+							null, null, null, null, null, null, null,
 							id("forgero:parts/pickaxe_head"),
 							null
 					);

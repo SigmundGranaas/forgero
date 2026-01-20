@@ -21,12 +21,10 @@ public class DisassemblyRecipeReloadListener implements SimpleSynchronousResourc
 
 	@Override
 	public void reload(ResourceManager manager) {
-		LOGGER.info("Reloading disassembly recipes...");
-
 		try {
 			DisassemblyRecipeLoader.reload(manager);
 			int count = DisassemblyRecipeLoader.getRecipes().size();
-			LOGGER.info("Loaded {} disassembly recipe(s)", count);
+			LOGGER.debug("Loaded {} disassembly recipe(s)", count);
 		} catch (Exception e) {
 			LOGGER.error("Failed to reload disassembly recipes - Forgero's upgrade station may not function correctly", e);
 		}

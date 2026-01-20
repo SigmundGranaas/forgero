@@ -37,6 +37,13 @@
       "computation": {
         "value": 8
       }
+    },
+    {
+      "id": "forgero:redstone-emissive",
+      "type": "forgero:emissive",
+      "computation": {
+        "value": 4
+      }
     }
   ]
 }

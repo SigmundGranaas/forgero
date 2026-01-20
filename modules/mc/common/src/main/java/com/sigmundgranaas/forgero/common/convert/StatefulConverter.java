@@ -56,6 +56,9 @@ public class StatefulConverter {
 
 	/**
 	 * Converts a Forgero Component into an ItemStack with the component's state written to NBT.
+	 * <p>
+	 * If the component is identical to the default/registry component for its item type,
+	 * no NBT is added. This preserves stacking behavior for vanilla items used as upgrades.
 	 *
 	 * @param component The component to convert.
 	 * @return An optional containing the created ItemStack, or empty if no base item could be found.
@@ -69,6 +72,13 @@ public class StatefulConverter {
 
 		Item baseItem = baseItemOpt.get();
 		ItemStack stack = new ItemStack(baseItem);
+
+		// Check if the component matches the default for this item type
+		// If so, skip NBT to preserve vanilla stacking behavior
+		Optional<Component> defaultComponent = typeConverter.toComponent(baseItem);
+		if (defaultComponent.isPresent() && component.equals(defaultComponent.get())) {
+			return Optional.of(stack);
+		}
 
 		// Serialize the component to NBT and attach it
 		NbtCompound componentNbt = nbtConverter.toNbt(component);

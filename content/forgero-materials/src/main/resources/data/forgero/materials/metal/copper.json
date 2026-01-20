@@ -1,17 +1,34 @@
 {
   "type": "forgero:material",
   "name": "Copper",
+  "include": ["forgero:metal_upgrade_base"],
   "tags": [
     "forgero:materials/types/metal",
     "forgero:materials/roles/tool_material",
     "forgero:materials/roles/upgrade_material",
-    "forgero:upgrades/types/tip_reinforcement"
+    "forgero:upgrades/types/tip_reinforcement",
+    "forgero:upgrades/types/reinforcement"
   ],
   "host": {
     "identifiers": [
       {
         "type": "item",
         "id": "minecraft:copper_ingot"
+      }
+    ]
+  },
+  "properties": {
+    "minecraft:on_tick": [
+      {
+        "interval": 5,
+        "selector": { "type": "forgero:single_target" },
+        "effects": [
+          { "type": "forgero:magnet", "radius": 3.0, "speed": 0.3 }
+        ],
+        "condition": {
+          "type": "forgero:in_slot_type",
+          "slot_type": "forgero:materials/roles/upgrade_material"
+        }
       }
     ]
   },

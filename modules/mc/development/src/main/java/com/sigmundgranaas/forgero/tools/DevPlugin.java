@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.tools;
 
 
-import com.sigmundgranaas.forgero.loader.api.DataLoadingContext;
-import com.sigmundgranaas.forgero.loader.api.PostLoadPlugin;
+import com.sigmundgranaas.forgero.common.api.DataLoadingContext;
+import com.sigmundgranaas.forgero.common.api.PostLoadPlugin;
 
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 
@@ -25,7 +25,6 @@ public class DevPlugin implements PostLoadPlugin {
 	public void onDataLoaded(DataLoadingContext context) {
 		ComponentSlottingHandler slottingHandler = new ComponentSlottingHandler(context.converter());
 		UseItemCallback.EVENT.register(slottingHandler::handle);
-		LOGGER.info("Registered component slotting handler for item use events.");
 
 		ServerPlayNetworking.registerGlobalReceiver(UpgradeComponentPacket.ID, (server, player, handler, buf, responseSender) -> {
 			Hand hand = UpgradeComponentPacket.readHand(buf);
@@ -41,6 +40,6 @@ public class DevPlugin implements PostLoadPlugin {
 				}
 			});
 		});
-		LOGGER.info("Registered component upgrade packet handler.");
+		LOGGER.debug("Development plugin initialized");
 	}
 }

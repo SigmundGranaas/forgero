@@ -40,10 +40,15 @@
       "computation": {"multiply": 0.85}
     },
     {
-      "id": "forgero:rapier_blade-attack_damage-mult",
+      "id": "forgero:rapier_blade-attack_damage-offset",
       "type": "forgero:attack_damage",
       "context": "forgero:part-composite",
-      "computation": {"multiply": 0.9}
+      "computation": {"value": 1, "operation": "addition"}
+    },
+    {
+      "id": "forgero:rapier_blade-attack_speed-base",
+      "type": "forgero:attack_speed",
+      "computation": {"value": 0.3}
     },
     {
       "id": "forgero:rapier_blade-attack_speed-mult",

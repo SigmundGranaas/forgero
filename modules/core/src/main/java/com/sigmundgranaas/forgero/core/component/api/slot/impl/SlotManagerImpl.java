@@ -8,6 +8,7 @@ import com.sigmundgranaas.forgero.core.component.api.slot.*;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 import com.sigmundgranaas.forgero.core.component.mutation.api.ComponentMutater;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -49,13 +50,29 @@ public class SlotManagerImpl implements SlotManager {
 
 	@Override
 	public List<ComponentUpgradeSlot> getAllUpgradeSlots(Component component) {
+		List<ComponentUpgradeSlot> slots = new ArrayList<>();
+		collectAllUpgradeSlotsRecursive(component, slots);
+		return slots;
+	}
+
+	/**
+	 * Recursively collects all upgrade slots from a component and its nested structure parts.
+	 */
+	private void collectAllUpgradeSlotsRecursive(Component component, List<ComponentUpgradeSlot> slots) {
+		// Collect direct slots
 		if (component instanceof CustomizableComponent customizable) {
-			return customizable.upgrades().slots().all().stream()
+			customizable.upgrades().slots().all().stream()
 					.filter(slot -> slot instanceof ComponentUpgradeSlot)
 					.map(slot -> (ComponentUpgradeSlot) slot)
-					.toList();
+					.forEach(slots::add);
 		}
-		return Collections.emptyList();
+
+		// Recurse into structure parts
+		if (component instanceof StructuredComponent structured) {
+			for (ComponentPart part : structured.structure().allParts()) {
+				collectAllUpgradeSlotsRecursive(part.content(), slots);
+			}
+		}
 	}
 
 	@Override
@@ -74,10 +91,26 @@ public class SlotManagerImpl implements SlotManager {
 
 	@Override
 	public List<Component> getInstalledUpgrades(Component component) {
+		List<Component> upgrades = new ArrayList<>();
+		collectInstalledUpgradesRecursive(component, upgrades);
+		return upgrades;
+	}
+
+	/**
+	 * Recursively collects all installed upgrades from a component and its nested structure parts.
+	 */
+	private void collectInstalledUpgradesRecursive(Component component, List<Component> upgrades) {
+		// Collect direct upgrades
 		if (component instanceof CustomizableComponent customizable) {
-			return customizable.upgrades().filledContents();
+			upgrades.addAll(customizable.upgrades().filledContents());
 		}
-		return Collections.emptyList();
+
+		// Recurse into structure parts
+		if (component instanceof StructuredComponent structured) {
+			for (ComponentPart part : structured.structure().allParts()) {
+				collectInstalledUpgradesRecursive(part.content(), upgrades);
+			}
+		}
 	}
 
 	// ========== COMPATIBILITY CHECKING ==========
@@ -193,19 +226,20 @@ public class SlotManagerImpl implements SlotManager {
 
 	@Override
 	public Component removeAllUpgrades(Component target) {
-		if (!(target instanceof CustomizableComponent customizable)) {
+		// Get all filled slots recursively (including nested structure parts)
+		List<ComponentUpgradeSlot> filledSlots = getFilledUpgradeSlots(target);
+
+		if (filledSlots.isEmpty()) {
 			return target;
 		}
 
-		// Empty all ComponentUpgradeSlot instances
-		ComponentUpgrades emptyUpgrades = ComponentUpgrades.of(
-				customizable.upgrades().slots().all().stream()
-						.filter(slot -> slot instanceof ComponentUpgradeSlot)
-						.map(slot -> ((ComponentUpgradeSlot) slot).empty())
-						.toList()
-		);
+		// Remove each upgrade using the recursive mutater
+		Component current = target;
+		for (ComponentUpgradeSlot slot : filledSlots) {
+			current = mutater.removeSlot(current, slot.id());
+		}
 
-		return customizable.withUpgrades(emptyUpgrades);
+		return current;
 	}
 
 	// ========== UTILITY OPERATIONS ==========
@@ -235,23 +269,37 @@ public class SlotManagerImpl implements SlotManager {
 
 	@Override
 	public boolean hasComponentUpgradeSlots(Component component) {
-		return component instanceof CustomizableComponent customizable
-				&& !customizable.upgrades().isEmpty();
+		return !getAllUpgradeSlots(component).isEmpty();
 	}
 
 	// ========== PRIVATE HELPER METHODS ==========
 
 	/**
-	 * Gets an upgrade slot by ID.
+	 * Gets an upgrade slot by ID, searching recursively through structure parts.
 	 *
 	 * @param component The component to search
 	 * @param slotId    The slot ID
 	 * @return The upgrade slot if found
 	 */
 	private Optional<ComponentUpgradeSlot> getComponentUpgradeSlot(Component component, OpenIdentifier slotId) {
+		// Check direct slots first
 		if (component instanceof CustomizableComponent customizable) {
-			return customizable.upgrades().get(slotId);
+			var directSlot = customizable.upgrades().get(slotId);
+			if (directSlot.isPresent()) {
+				return directSlot;
+			}
 		}
+
+		// Search in nested structure parts
+		if (component instanceof StructuredComponent structured) {
+			for (ComponentPart part : structured.structure().allParts()) {
+				var nestedSlot = getComponentUpgradeSlot(part.content(), slotId);
+				if (nestedSlot.isPresent()) {
+					return nestedSlot;
+				}
+			}
+		}
+
 		return Optional.empty();
 	}
 }

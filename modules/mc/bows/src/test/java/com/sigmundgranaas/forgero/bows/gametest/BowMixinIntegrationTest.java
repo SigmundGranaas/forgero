@@ -12,7 +12,7 @@ import com.sigmundgranaas.forgero.bows.item.ForgeroBowItem;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.loader.api.ForgeroInitializedCallback;
+import com.sigmundgranaas.forgero.common.api.ForgeroInitializedCallback;
 import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.UseInteractionManager;
 
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;

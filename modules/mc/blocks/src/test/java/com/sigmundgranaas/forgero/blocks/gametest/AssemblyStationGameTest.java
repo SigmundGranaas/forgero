@@ -4,7 +4,7 @@ import com.sigmundgranaas.forgero.blocks.api.StationContext;
 import com.sigmundgranaas.forgero.blocks.assembly.AssemblyStationScreenHandler;
 import com.sigmundgranaas.forgero.blocks.assembly.DisassemblyService;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
+import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroGameTest;
 
 import net.minecraft.entity.player.PlayerInventory;

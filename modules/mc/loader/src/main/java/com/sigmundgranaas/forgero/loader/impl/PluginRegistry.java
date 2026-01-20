@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.loader.impl;
 
-import com.sigmundgranaas.forgero.loader.api.DataPlugin;
-import com.sigmundgranaas.forgero.loader.api.ItemRegistrationPlugin;
-import com.sigmundgranaas.forgero.loader.api.PostLoadPlugin;
+import com.sigmundgranaas.forgero.common.api.DataPlugin;
+import com.sigmundgranaas.forgero.common.api.ItemRegistrationPlugin;
+import com.sigmundgranaas.forgero.common.api.PostLoadPlugin;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import org.slf4j.Logger;
@@ -31,18 +31,11 @@ public class PluginRegistry {
 	 * This should be called once during initialization.
 	 */
 	public void discoverPlugins() {
-		LOGGER.info("Discovering Forgero plugins...");
-
-		// Discover data plugins
 		discoverDataPlugins();
-
-		// Discover post-load plugins
 		discoverPostLoadPlugins();
-
-		// Discover item registration plugins
 		discoverItemRegistrationPlugins();
 
-		LOGGER.info("Plugin discovery complete. Found {} data plugins, {} post-load plugins, and {} item registration plugins",
+		LOGGER.debug("Discovered {} data, {} post-load, {} item registration plugins",
 				dataPlugins.size(), postLoadPlugins.size(), itemRegistrationPlugins.size());
 	}
 

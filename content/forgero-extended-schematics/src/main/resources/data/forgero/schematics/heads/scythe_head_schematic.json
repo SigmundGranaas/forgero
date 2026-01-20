@@ -5,6 +5,24 @@
     "forgero:schematics/heads",
     "forgero:schematics/extended"
   ],
+  "properties": {
+    "minecraft:block_breaking": [
+      {
+        "selector": {
+          "type": "forgero:radius",
+          "radius": 5,
+          "filter": {
+            "type": "forgero:filter_wrapper",
+            "filters": [
+              {"type": "forgero:can_mine"},
+              {"type": "forgero:block_tag", "tag": "forgero:plants"}
+            ]
+          }
+        },
+        "speed": "forgero:average"
+      }
+    ]
+  },
   "attributes": [
     {
       "id": "forgero:scythe-schematic-rarity",

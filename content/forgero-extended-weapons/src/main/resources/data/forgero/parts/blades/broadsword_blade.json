@@ -29,9 +29,9 @@
   ],
   "attributes": [
     {
-      "id": "forgero:broadsword_blade-attack_speed",
+      "id": "forgero:broadsword_blade-attack_speed-base",
       "type": "forgero:attack_speed",
-      "computation": {"value": -0.4}
+      "computation": {"value": -0.6}
     },
     {
       "id": "forgero:broadsword_blade-rarity",
@@ -45,10 +45,10 @@
       "computation": {"multiply": 1.15}
     },
     {
-      "id": "forgero:broadsword_blade-attack_damage-mult",
+      "id": "forgero:broadsword_blade-attack_damage-offset",
       "type": "forgero:attack_damage",
       "context": "forgero:part-composite",
-      "computation": {"multiply": 1.8}
+      "computation": {"value": 5, "operation": "addition"}
     },
     {
       "id": "forgero:broadsword_blade-attack_speed-mult",

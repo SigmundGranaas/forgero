@@ -2,8 +2,8 @@ package com.sigmundgranaas.forgero.mc.testcommon.gametest;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
-import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
+import com.sigmundgranaas.forgero.common.api.ForgeroApi;
+import com.sigmundgranaas.forgero.common.api.ForgeroServices;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.test.TestContext;
 import net.minecraft.item.ItemStack;

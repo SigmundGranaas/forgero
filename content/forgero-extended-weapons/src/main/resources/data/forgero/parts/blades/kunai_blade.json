@@ -32,10 +32,15 @@
       "computation": {"multiply": 0.4}
     },
     {
-      "id": "forgero:kunai_blade-attack_damage-mult",
+      "id": "forgero:kunai_blade-attack_damage-offset",
       "type": "forgero:attack_damage",
       "context": "forgero:part-composite",
-      "computation": {"multiply": 0.5}
+      "computation": {"value": 0, "operation": "addition"}
+    },
+    {
+      "id": "forgero:kunai_blade-attack_speed-base",
+      "type": "forgero:attack_speed",
+      "computation": {"value": 0.8}
     },
     {
       "id": "forgero:kunai_blade-attack_speed-mult",

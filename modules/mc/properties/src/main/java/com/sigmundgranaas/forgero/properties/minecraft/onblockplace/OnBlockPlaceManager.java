@@ -1,10 +1,8 @@
 package com.sigmundgranaas.forgero.properties.minecraft.onblockplace;
 
-import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
-import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.effects.block.BlockEffect;
-import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
+import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -18,20 +16,8 @@ import java.util.List;
  */
 public class OnBlockPlaceManager {
 
-	private static ComponentConverter converter;
-
 	private OnBlockPlaceManager() {
 		// Static class
-	}
-
-	/**
-	 * Initializes the manager with required services.
-	 * Called during Forgero initialization.
-	 *
-	 * @param services The Forgero services container
-	 */
-	public static void initialize(ForgeroServices services) {
-		converter = services.converter();
 	}
 
 	/**
@@ -51,42 +37,27 @@ public class OnBlockPlaceManager {
 			return;
 		}
 
-		// Convert item to component and resolve properties
-		converter.toComponent(stack).ifPresent(component -> {
-			List<OnBlockPlaceProperty> properties = getActiveProperties(component);
+		DynamicContext.Builder contextBuilder = new DynamicContext.Builder();
+		List<OnBlockPlaceProperty> properties = ForgeroApi.itemProperty().resolve(
+			stack,
+			OnBlockPlaceProperty.Engine::new,
+			contextBuilder.build()
+		);
 
-			for (OnBlockPlaceProperty property : properties) {
-				BlockState placedState = player.getWorld().getBlockState(pos);
+		for (OnBlockPlaceProperty property : properties) {
+			BlockState placedState = player.getWorld().getBlockState(pos);
 
-				// Use selector to determine which positions to affect
-				List<BlockPos> targetPositions = property.selector().select(player, pos, placedState);
+			// Use selector to determine which positions to affect
+			List<BlockPos> targetPositions = property.selector().select(player, pos, placedState);
 
-				// Apply each effect to each selected position
-				for (BlockPos targetPos : targetPositions) {
-					BlockState targetState = player.getWorld().getBlockState(targetPos);
+			// Apply each effect to each selected position
+			for (BlockPos targetPos : targetPositions) {
+				BlockState targetState = player.getWorld().getBlockState(targetPos);
 
-					for (BlockEffect effect : property.effects()) {
-						effect.apply(player, targetPos, targetState);
-					}
+				for (BlockEffect effect : property.effects()) {
+					effect.apply(player, targetPos, targetState);
 				}
 			}
-		});
-	}
-
-	/**
-	 * Resolves active OnBlockPlaceProperty instances from a component.
-	 * Applies conditions and context to determine which properties are active.
-	 *
-	 * @param component The component to resolve properties from
-	 * @return List of active properties
-	 */
-	private static List<OnBlockPlaceProperty> getActiveProperties(Component component) {
-		var engine = new OnBlockPlaceProperty.Engine();
-		DynamicContext.Builder contextBuilder = new DynamicContext.Builder();
-
-		// Additional context could be added here (biome, time of day, etc.)
-		// For now, use empty context
-
-		return engine.resolve(component, contextBuilder.build());
+		}
 	}
 }

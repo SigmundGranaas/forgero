@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.mc.testcommon.assertions;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
+import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

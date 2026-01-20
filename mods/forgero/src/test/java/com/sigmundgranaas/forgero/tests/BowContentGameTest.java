@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.tests;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
+import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.registry.Registries;
 import net.minecraft.test.GameTest;

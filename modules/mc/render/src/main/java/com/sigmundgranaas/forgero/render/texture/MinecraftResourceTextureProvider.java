@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.render.texture;
 
-import com.sigmundgranaas.forgero.model.rendering.api.TextureProvider;
+import com.sigmundgranaas.forgero.utility.resource.loader.api.UnifiedTextureProvider;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.ResourceManager;
@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 
-public class MinecraftResourceTextureProvider implements TextureProvider {
+public class MinecraftResourceTextureProvider implements UnifiedTextureProvider {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MinecraftResourceTextureProvider.class);
 
 	public MinecraftResourceTextureProvider() {

@@ -6,8 +6,8 @@ import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
-import com.sigmundgranaas.forgero.loader.api.ItemCreator;
-import com.sigmundgranaas.forgero.loader.api.PluginRegistrationContext;
+import com.sigmundgranaas.forgero.common.api.ItemCreator;
+import com.sigmundgranaas.forgero.common.api.PluginRegistrationContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

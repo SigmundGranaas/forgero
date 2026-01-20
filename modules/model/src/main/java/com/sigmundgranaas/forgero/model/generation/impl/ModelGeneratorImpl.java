@@ -15,12 +15,16 @@ import com.sigmundgranaas.forgero.model.loading.impl.dto.TexturesDTO;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.VariantDTO;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.TemplateArmorModelDTO;
 import com.sigmundgranaas.forgero.model.loading.impl.dto.templates.TemplateModelDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ModelGeneratorImpl implements ModelGenerator {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ModelGeneratorImpl.class);
+
 	private final TagResolver tagResolver;
 	private final PlaceholderResolver placeholderResolver;
 
@@ -35,19 +39,32 @@ public class ModelGeneratorImpl implements ModelGenerator {
 		Map<OpenIdentifier, ArmorModelDTO> generatedArmorModels = new HashMap<>();
 		List<TextureGenerationTask> textureTasks = new ArrayList<>();
 
-		processItemTemplates(templateProvider.getItemTemplates(), components, generatedItemModels, textureTasks, c -> true);
-		processItemTemplates(templateProvider.getUpgradeTemplates(), components, generatedItemModels, textureTasks, c -> true);
+		processItemTemplates(templateProvider.getItemTemplates(), components, generatedItemModels, textureTasks, c -> true, "item");
+		processItemTemplates(templateProvider.getUpgradeTemplates(), components, generatedItemModels, textureTasks, c -> true, "upgrade");
 		processArmorTemplates(templateProvider.getArmorTemplates(), components, generatedArmorModels, textureTasks, c -> true);
+
+		LOGGER.debug("Model generation: {} item models, {} armor models, {} texture tasks",
+				generatedItemModels.size(), generatedArmorModels.size(), textureTasks.size());
 
 		return new ModelGenerationResult(generatedItemModels, generatedArmorModels, textureTasks);
 	}
 
-	private void processItemTemplates(Collection<? extends TemplateDataProvider<TemplateModelDTO>> templates, Map<OpenIdentifier, Component> components, Map<OpenIdentifier, ModelDTO> models, List<TextureGenerationTask> tasks, Predicate<Component> componentFilter) {
+	private void processItemTemplates(Collection<? extends TemplateDataProvider<TemplateModelDTO>> templates, Map<OpenIdentifier, Component> components, Map<OpenIdentifier, ModelDTO> models, List<TextureGenerationTask> tasks, Predicate<Component> componentFilter, String templateType) {
 		for (TemplateDataProvider<TemplateModelDTO> template : templates) {
+			String targetTag = template.target().tag().toString();
 			List<Component> compatibleComponents = tagResolver.findTagged(template.target().tag(), components.values())
 					.stream()
 					.filter(componentFilter)
 					.toList();
+
+			if (compatibleComponents.isEmpty()) {
+				LOGGER.warn("No components found for {} template targeting tag '{}'. " +
+						"Check that components with this tag exist and are registered before model generation.",
+						templateType, targetTag);
+			} else {
+				LOGGER.debug("Found {} components for {} template targeting tag '{}'",
+						compatibleComponents.size(), templateType, targetTag);
+			}
 
 			Map<String, String> paletteMap = template.paletteMap();
 			for (Component component : compatibleComponents) {
@@ -55,6 +72,9 @@ public class ModelGeneratorImpl implements ModelGenerator {
 				for (TemplateModelDTO modelTemplate : template.models()) {
 					ModelDTO resolvedModel = mapTemplateToModel(modelTemplate, generationContext, tasks, paletteMap);
 					models.put(resolvedModel.getOpenIdentifierId().get(), resolvedModel);
+					LOGGER.debug("Generated {} model '{}' from component '{}' (context: {})",
+							templateType, resolvedModel.getOpenIdentifierId().get(), component.id(),
+							modelTemplate.context() != null ? modelTemplate.context() : "none");
 				}
 			}
 		}

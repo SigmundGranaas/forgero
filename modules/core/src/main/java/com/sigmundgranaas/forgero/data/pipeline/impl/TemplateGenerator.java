@@ -429,7 +429,7 @@ public class TemplateGenerator {
 					(filter.excludeAnyTags() != null && !filter.excludeAnyTags().isEmpty()) ||
 					(filter.excludeAllTags() != null && !filter.excludeAllTags().isEmpty());
 			if (hasTagFilters) {
-				LOGGER.info("Generation filter has both explicit list and tag filters. Explicit list will override tag filters. Consider removing unused tag filters.");
+				LOGGER.debug("Generation filter has both explicit list and tag filters. Explicit list will override tag filters.");
 			}
 		}
 	}

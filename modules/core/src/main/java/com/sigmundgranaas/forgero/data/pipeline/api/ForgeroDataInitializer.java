@@ -69,7 +69,6 @@ public class ForgeroDataInitializer {
 
 	public ForgeroDataInitializer(Config config) {
 		long startTime = System.currentTimeMillis();
-		LOGGER.info("Starting Forgero data initialization pipeline...");
 
 		// 1. SETUP: Factories, Codecs, and Resolvers
 		IdentifierFactory identifierFactory = new IdentifierFactory.Builder().defaultNamespace(config.defaultNamespace()).build();
@@ -139,7 +138,7 @@ public class ForgeroDataInitializer {
 				hostItemMap.put(cof.id(), autoHost);
 			}
 		}
-		LOGGER.info("Processed {} static definitions.", staticComponents.size());
+		LOGGER.debug("Processed {} static definitions", staticComponents.size());
 
 		// 6. PROCESS TEMPLATES
 		IdTemplateResolver idTemplateResolver = new IdTemplateResolver(identifierFactory, rawDefinitions);
@@ -150,13 +149,13 @@ public class ForgeroDataInitializer {
 		templateResult.components().forEach(comp -> allCofComponents.put(comp.id(), comp));
 
 		hostItemMap.putAll(templateResult.hostData());
-		LOGGER.info("Generated {} components from templates.", templateResult.components().size());
+		LOGGER.debug("Generated {} components from templates", templateResult.components().size());
 
 		// 7. BUILD FINAL RUNTIME COMPONENTS
 		ComponentConstructor componentConstructorRegistry = ComponentConstructor.defaults();
 		ComponentBuilder componentBuilder = new ComponentBuilder(componentConstructorRegistry, allCofComponents);
 		List<Component> components = componentBuilder.buildAll();
-		LOGGER.info("Built {} final runtime components.", components.size());
+		LOGGER.debug("Built {} final runtime components", components.size());
 
 		// 8. RUN COMPONENT VALIDATION
 		Map<OpenIdentifier, Component> componentMap = components.stream()
@@ -206,7 +205,7 @@ public class ForgeroDataInitializer {
 		);
 
 		long endTime = System.currentTimeMillis();
-		LOGGER.info("Forgero data initialization complete. Total time: {}ms", endTime - startTime);
+		LOGGER.debug("Forgero data pipeline complete: {} components in {}ms", components.size(), endTime - startTime);
 	}
 
 	public ForgeroDataBundle getDataBundle() {

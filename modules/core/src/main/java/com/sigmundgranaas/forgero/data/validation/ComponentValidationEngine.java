@@ -58,9 +58,6 @@ public class ComponentValidationEngine {
 	 * @return Aggregated validation result from all components and validators.
 	 */
 	public ValidationResult validateAll(List<Component> components) {
-		LOGGER.info("Running validation on {} components with {} validators...",
-				components.size(), validators.size());
-
 		long startTime = System.currentTimeMillis();
 		ValidationResult.Builder builder = new ValidationResult.Builder();
 
@@ -72,7 +69,7 @@ public class ComponentValidationEngine {
 		ValidationResult finalResult = builder.build();
 		long endTime = System.currentTimeMillis();
 
-		LOGGER.info("Validation complete in {}ms: {} errors, {} warnings",
+		LOGGER.debug("Validation complete in {}ms: {} errors, {} warnings",
 				endTime - startTime, finalResult.errorCount(), finalResult.warningCount());
 
 		return finalResult;

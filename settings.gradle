@@ -7,8 +7,8 @@ pluginManagement {
 
 rootProject.name = "${mod_id}"
 
-// Core
-include("${mod_id}-core")
+// Core (Legacy - Read Only)
+include("${mod_id}-core-legacy-read-only")
 
 // Modules
 include ("modules")
@@ -35,13 +35,12 @@ include "modules:mc:test-common"
 // Content - New Structure (clean modules for new mods)
 include("content")
 include("content:forgero-materials")
-include("content:forgero-upgrades")
+include("content:forgero-conditions")  // Random item modifier conditions (sharp, durable, etc.)
 include("content:forgero-base")
 include("content:vanilla-upgrades-base")
-include("content:forgero-extended-weapons")
-include("content:forgero-mining")
+include("content:forgero-extended-weapons")  // Extended weapon parts AND mining tools (hammer, spade, etc.)
 include("content:forgero-gems")
-include("content:forgero-schematics")  // Quality schematics (mastercrafted, refined)
+include("content:forgero-mastercrafted")  // Quality schematics (refined, mastercrafted)
 include("content:forgero-secondary-materials")  // Secondary materials (soft, hard, hybrid, dyes)
 include("content:forgero-extended-schematics")  // Extended schematics (weapon blades, tool heads, guards, bindings)
 include("content:forgero-bows")  // Bow and arrow content
@@ -55,7 +54,6 @@ include("content:${mod_id}-structures")
 include("content:${mod_id}-vanilla-legacy-read-only")
 include("content:${mod_id}-extended-legacy-read-only")
 include("content:${mod_id}-compat-legacy-read-only")
-include("content:${mod_id}-tools")
 include("content:minecraft-tools")
 include("content:${mod_id}-deprecated")
 
@@ -66,17 +64,17 @@ include 'mods:vanilla-upgrades'
 include 'mods:forgero'
 include 'mods:repair-kit'
 
-// LEGACY
-// Fabric
-include "fabric"
-include "fabric:${mod_id}-fabric-core"
-include "fabric:${mod_id}-fabric-compat"
-include "fabric:minecraft-common"
+// LEGACY - Read Only
+// Fabric (Legacy)
+include "fabric-legacy-read-only"
+include "fabric-legacy-read-only:${mod_id}-fabric-core"
+include "fabric-legacy-read-only:${mod_id}-fabric-compat"
+include "fabric-legacy-read-only:minecraft-common"
 
-// Old Modules
+// Old Modules (Legacy)
 include 'mods'
-include "fabric:modules"
-include "fabric:modules:bows"
-include "fabric:modules:trade"
-include "fabric:modules:generator"
+include "fabric-legacy-read-only:modules"
+include "fabric-legacy-read-only:modules:bows"
+include "fabric-legacy-read-only:modules:trade"
+include "fabric-legacy-read-only:modules:generator"
 

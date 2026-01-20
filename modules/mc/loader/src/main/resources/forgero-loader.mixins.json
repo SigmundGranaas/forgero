@@ -6,7 +6,8 @@
     "ItemMiningMixin",
     "ItemStackAttributeMixin",
     "ItemStackDurabilityMixin",
-    "ItemTooltipMixin"
+    "ItemTooltipMixin",
+    "PiglinBrainMixin"
   ],
   "injectors": {
     "defaultRequire": 1

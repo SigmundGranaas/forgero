@@ -2,7 +2,7 @@
   "type": "forgero:upgrade_model_template",
   "context": "tool_tip",
   "target": {
-    "tag": "forgero:tool_material"
+    "tag": "forgero:materials/roles/tool_material"
   },
   "models": [
     {
@@ -17,19 +17,27 @@
             "variants": [
               {
                 "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/axe" }],
-                "texture": "forgero:item/upgrade/{target.name}-axe_tip_reinforcement"
+                "template": "forgero:texture_template/parts/axe_head_tip_reinforcement",
+                "palette": "forgero:palette/{target.name}",
+                "output": "forgero:item/upgrade/{target.name}-axe_tip_reinforcement"
               },
               {
                 "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/shovel" }],
-                "texture": "forgero:item/upgrade/{target.name}-shovel_tip_reinforcement"
+                "template": "forgero:texture_template/parts/shovel_head_tip_reinforcement",
+                "palette": "forgero:palette/{target.name}",
+                "output": "forgero:item/upgrade/{target.name}-shovel_tip_reinforcement"
               },
               {
                 "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/hoe" }],
-                "texture": "forgero:item/upgrade/{target.name}-hoe_tip_reinforcement"
+                "template": "forgero:texture_template/parts/hoe_head_tip_reinforcement",
+                "palette": "forgero:palette/{target.name}",
+                "output": "forgero:item/upgrade/{target.name}-hoe_tip_reinforcement"
               },
               {
                 "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/sword" }],
-                "texture": "forgero:item/upgrade/{target.name}-sword_tip_reinforcement"
+                "template": "forgero:texture_template/parts/sword_blade_tip_reinforcement",
+                "palette": "forgero:palette/{target.name}",
+                "output": "forgero:item/upgrade/{target.name}-sword_tip_reinforcement"
               }
             ]
           },
@@ -41,28 +49,6 @@
       "mount_points": [
         { "name": "attachment_point", "position": [12, 12] }
       ]
-    }
-  ],
-  "texture_variants": [
-    {
-      "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/axe" }],
-      "template": "forgero:texture_template/parts/axe_head_tip_reinforcement",
-      "output_suffix": "-axe_tip_reinforcement"
-    },
-    {
-      "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/shovel" }],
-      "template": "forgero:texture_template/parts/shovel_head_tip_reinforcement",
-      "output_suffix": "-shovel_tip_reinforcement"
-    },
-    {
-      "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/hoe" }],
-      "template": "forgero:texture_template/parts/hoe_head_tip_reinforcement",
-      "output_suffix": "-hoe_tip_reinforcement"
-    },
-    {
-      "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/sword" }],
-      "template": "forgero:texture_template/parts/sword_blade_tip_reinforcement",
-      "output_suffix": "-sword_tip_reinforcement"
     }
   ]
 }

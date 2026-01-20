@@ -1,6 +1,7 @@
 {
   "type": "forgero:material",
   "name": "Leather",
+  "include": ["forgero:soft_upgrade_base"],
   "tags": [
     "forgero:materials/roles/armor_lining_material",
     "forgero:materials/types/leather",

@@ -1,6 +1,7 @@
 {
   "type": "forgero:material",
   "name": "Chipped Prismarine",
+  "include": ["forgero:gem_upgrade_base"],
   "tags": [
     "forgero:upgrades/types/gem",
     "forgero:materials/types/prismarine",
@@ -13,7 +14,12 @@
         "type": "item",
         "id": "minecraft:prismarine_shard"
       }
-    ]
+    ],
+    "create": {
+      "id": "forgero:chipped_prismarine",
+      "class_name": "forgero:gem_item",
+      "item_group": "forgero:gems"
+    }
   },
   "attributes": [
     {

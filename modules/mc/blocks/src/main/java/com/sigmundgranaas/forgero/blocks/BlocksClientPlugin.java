@@ -22,12 +22,9 @@ public class BlocksClientPlugin implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		LOGGER.info("Initializing Forgero Blocks client...");
-
 		// Register screens
 		HandledScreens.register(UpgradeStationScreenHandler.TYPE, UpgradeStationScreen::new);
 		HandledScreens.register(AssemblyStationScreenHandler.TYPE, AssemblyStationScreen::new);
-
-		LOGGER.info("Forgero Blocks client initialized successfully");
+		LOGGER.debug("Forgero Blocks client initialized");
 	}
 }

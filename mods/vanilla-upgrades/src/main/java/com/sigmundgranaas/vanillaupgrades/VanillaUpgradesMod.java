@@ -21,6 +21,6 @@ public class VanillaUpgradesMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        LOGGER.info("Vanilla Upgrades initialized - upgrade slots enabled for vanilla tools!");
+        // Configuration loaded through data packs
     }
 }

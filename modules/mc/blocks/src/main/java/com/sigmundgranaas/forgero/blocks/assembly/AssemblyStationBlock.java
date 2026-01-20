@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.blocks.assembly;
 
 import com.sigmundgranaas.forgero.blocks.api.StationContext;
 import com.sigmundgranaas.forgero.blocks.common.block.AbstractDoubleBlock;
-import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
+import com.sigmundgranaas.forgero.common.api.ForgeroServices;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;

@@ -1,6 +1,7 @@
 {
   "type": "forgero:material",
   "name": "Chipped Echo",
+  "include": ["forgero:gem_upgrade_base"],
   "tags": [
     "forgero:upgrades/types/gem",
     "forgero:materials/types/echo",
@@ -13,7 +14,12 @@
         "type": "item",
         "id": "minecraft:echo_shard"
       }
-    ]
+    ],
+    "create": {
+      "id": "forgero:chipped_echo",
+      "class_name": "forgero:gem_item",
+      "item_group": "forgero:gems"
+    }
   },
   "attributes": [
     {

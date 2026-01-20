@@ -40,10 +40,15 @@
       "computation": {"multiply": 0.7}
     },
     {
-      "id": "forgero:dagger_blade-attack_damage-mult",
+      "id": "forgero:dagger_blade-attack_damage-offset",
       "type": "forgero:attack_damage",
       "context": "forgero:part-composite",
-      "computation": {"multiply": 0.8}
+      "computation": {"value": 1, "operation": "addition"}
+    },
+    {
+      "id": "forgero:dagger_blade-attack_speed-base",
+      "type": "forgero:attack_speed",
+      "computation": {"value": 0.5}
     },
     {
       "id": "forgero:dagger_blade-attack_speed-mult",

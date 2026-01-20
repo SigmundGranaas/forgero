@@ -32,7 +32,7 @@ public class DevResourcePackProvider implements ResourcePackProvider {
 			return;
 		}
 
-		DevPlugin.LOGGER.info("Forgero Dev Mode: Registering source directories for automatic hot-reloading.");
+		DevPlugin.LOGGER.debug("Forgero Dev Mode: Registering source directories for automatic hot-reloading.");
 
 		int packCounter = 0;
 		for (String pathString : resourcePaths.split(File.pathSeparator)) {
@@ -54,7 +54,7 @@ public class DevResourcePackProvider implements ResourcePackProvider {
 
 				if (profile != null) {
 					profileAdder.accept(profile);
-					DevPlugin.LOGGER.info("Registered source resource pack: {}", resourcePath);
+					DevPlugin.LOGGER.debug("Registered source resource pack: {}", resourcePath);
 				}
 			}
 		}

@@ -1,8 +1,12 @@
 {
   "type": "forgero:material",
   "name": "Prismarine",
+  "include": ["forgero:mineral_upgrade_base"],
   "tags": [
-    "forgero:materials/types/mineral"
+    "forgero:materials/types/mineral",
+    "forgero:materials/roles/upgrade_material",
+    "forgero:upgrades/types/reinforcement",
+    "forgero:upgrades/types/tip_reinforcement"
   ],
   "host": {
     "identifiers": [

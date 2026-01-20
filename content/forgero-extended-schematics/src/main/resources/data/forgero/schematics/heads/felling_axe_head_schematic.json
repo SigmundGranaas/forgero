@@ -5,6 +5,25 @@
     "forgero:schematics/heads",
     "forgero:schematics/mining"
   ],
+  "properties": {
+    "minecraft:block_breaking": [
+      {
+        "selector": {
+          "type": "forgero:column",
+          "depth": 2,
+          "height": 10,
+          "filter": {
+            "type": "forgero:filter_wrapper",
+            "filters": [
+              {"type": "forgero:can_mine"},
+              {"type": "forgero:block_tag", "tag": "minecraft:logs"}
+            ]
+          }
+        },
+        "speed": "forgero:average"
+      }
+    ]
+  },
   "attributes": [
     {
       "id": "forgero:felling_axe_head-schematic-rarity",

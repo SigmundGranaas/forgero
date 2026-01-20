@@ -13,8 +13,8 @@ import com.sigmundgranaas.forgero.bows.item.ForgeroArrowItem;
 import com.sigmundgranaas.forgero.bows.item.ForgeroBowItem;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.CreateData;
-import com.sigmundgranaas.forgero.loader.api.DataPlugin;
-import com.sigmundgranaas.forgero.loader.api.PluginRegistrationContext;
+import com.sigmundgranaas.forgero.common.api.DataPlugin;
+import com.sigmundgranaas.forgero.common.api.PluginRegistrationContext;
 import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.UseInteractionPropertiesPlugin;
 
 import net.minecraft.item.Item;

@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.model.rendering.impl;
 
-import com.sigmundgranaas.forgero.model.rendering.api.TextureProvider;
+import com.sigmundgranaas.forgero.utility.resource.loader.api.UnifiedTextureProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.util.Optional;
 
-public class ClassPathResourceTextureProvider implements TextureProvider {
+public class ClassPathResourceTextureProvider implements UnifiedTextureProvider {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClassPathResourceTextureProvider.class);
 
 	@Override

@@ -5,8 +5,8 @@ import com.sigmundgranaas.forgero.blocks.assembly.AssemblyStationScreenHandler;
 import com.sigmundgranaas.forgero.blocks.registry.BlockRegistry;
 import com.sigmundgranaas.forgero.blocks.upgrade.UpgradeStationBlock;
 import com.sigmundgranaas.forgero.blocks.upgrade.UpgradeStationScreenHandler;
-import com.sigmundgranaas.forgero.loader.api.DataLoadingContext;
-import com.sigmundgranaas.forgero.loader.api.PostLoadPlugin;
+import com.sigmundgranaas.forgero.common.api.DataLoadingContext;
+import com.sigmundgranaas.forgero.common.api.PostLoadPlugin;
 
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.ItemGroups;
@@ -37,8 +37,6 @@ public class BlocksPlugin implements PostLoadPlugin {
 
 	@Override
 	public void onDataLoaded(DataLoadingContext context) {
-		LOGGER.info("Initializing Forgero Blocks module...");
-
 		// Set up service suppliers for blocks (DataLoadingContext extends ForgeroServices)
 		UpgradeStationBlock.setServicesSupplier(() -> context);
 		AssemblyStationBlock.setServicesSupplier(() -> context);
@@ -54,7 +52,7 @@ public class BlocksPlugin implements PostLoadPlugin {
 		// Add blocks to creative tabs
 		addBlocksToCreativeTabs();
 
-		LOGGER.info("Forgero Blocks module initialized successfully");
+		LOGGER.debug("Forgero Blocks module initialized");
 	}
 
 	/**

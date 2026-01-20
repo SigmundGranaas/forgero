@@ -8,8 +8,8 @@ import com.sigmundgranaas.forgero.armor.item.ForgeroArmorMaterial;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.CreateData;
-import com.sigmundgranaas.forgero.loader.api.DataPlugin;
-import com.sigmundgranaas.forgero.loader.api.PluginRegistrationContext;
+import com.sigmundgranaas.forgero.common.api.DataPlugin;
+import com.sigmundgranaas.forgero.common.api.PluginRegistrationContext;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 

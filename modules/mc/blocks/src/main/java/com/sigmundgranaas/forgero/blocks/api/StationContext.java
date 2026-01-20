@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.blocks.api;
 
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.core.component.api.slot.SlotManager;
-import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
+import com.sigmundgranaas.forgero.common.api.ForgeroServices;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

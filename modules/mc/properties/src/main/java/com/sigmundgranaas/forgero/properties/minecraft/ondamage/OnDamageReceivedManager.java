@@ -1,14 +1,13 @@
 package com.sigmundgranaas.forgero.properties.minecraft.ondamage;
 
-import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
+import com.sigmundgranaas.forgero.common.api.item.ItemPropertyApi;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.property.context.ContextKeys;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.effects.entity.ContextualEffectHandler;
 import com.sigmundgranaas.forgero.effects.entity.EntityEffectHandler;
 import com.sigmundgranaas.forgero.effects.entity.OnHitEffect;
-import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
+import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -27,20 +26,8 @@ import java.util.stream.Collectors;
  */
 public class OnDamageReceivedManager {
 
-	private static ComponentConverter converter;
-
 	private OnDamageReceivedManager() {
 		// Static class
-	}
-
-	/**
-	 * Initializes the manager with required services.
-	 * Called during Forgero initialization.
-	 *
-	 * @param services The Forgero services container
-	 */
-	public static void initialize(ForgeroServices services) {
-		converter = services.converter();
 	}
 
 	/**
@@ -62,6 +49,18 @@ public class OnDamageReceivedManager {
 			return;
 		}
 
+		// Build context with attacker tags
+		DynamicContext.Builder contextBuilder = new DynamicContext.Builder();
+		Set<OpenIdentifier> attackerTags = Registries.ENTITY_TYPE.getEntry(attacker.getType())
+				.streamTags()
+				.map(TagKey::id)
+				.map(id -> new OpenIdentifier(id.getNamespace(), id.getPath()))
+				.collect(Collectors.toSet());
+		contextBuilder.put(ContextKeys.TARGET_TAGS, attackerTags);
+		// Future enhancement: Could add damage amount to context for conditional properties
+		// contextBuilder.put(ContextKeys.DAMAGE_AMOUNT, amount);
+		DynamicContext context = contextBuilder.build();
+
 		// Collect all equipment (armor + held items)
 		List<ItemStack> equipment = new ArrayList<>();
 		defender.getHandItems().forEach(equipment::add);
@@ -73,43 +72,22 @@ public class OnDamageReceivedManager {
 				continue;
 			}
 
-			converter.toComponent(stack).ifPresent(component -> {
-				List<OnDamageReceivedProperty> properties = getActiveProperties(component, attacker, amount);
+			List<OnDamageReceivedProperty> properties = ForgeroApi.itemProperty().resolve(stack, OnDamageReceivedProperty.Engine::new, context);
 
-				for (OnDamageReceivedProperty property : properties) {
-					// Defender is "source", attacker is "initial target"
-					List<Entity> finalTargets = property.selector().select(defender, attacker);
+			for (OnDamageReceivedProperty property : properties) {
+				// Defender is "source", attacker is "initial target"
+				List<Entity> finalTargets = property.selector().select(defender, attacker);
 
-					for (Entity finalTarget : finalTargets) {
-						for (OnHitEffect effect : property.effects()) {
-							if (effect instanceof ContextualEffectHandler contextual) {
-								contextual.apply(defender, finalTarget);
-							} else if (effect instanceof EntityEffectHandler simple) {
-								simple.apply(finalTarget);
-							}
+				for (Entity finalTarget : finalTargets) {
+					for (OnHitEffect effect : property.effects()) {
+						if (effect instanceof ContextualEffectHandler contextual) {
+							contextual.apply(defender, finalTarget);
+						} else if (effect instanceof EntityEffectHandler simple) {
+							simple.apply(finalTarget);
 						}
 					}
 				}
-			});
+			}
 		}
-	}
-
-	private static List<OnDamageReceivedProperty> getActiveProperties(Component component, Entity attacker, float amount) {
-		var engine = new OnDamageReceivedProperty.Engine();
-		DynamicContext.Builder contextBuilder = new DynamicContext.Builder();
-
-		// Populate context with attacker tags
-		Set<OpenIdentifier> attackerTags = Registries.ENTITY_TYPE.getEntry(attacker.getType())
-				.streamTags()
-				.map(TagKey::id)
-				.map(id -> new OpenIdentifier(id.getNamespace(), id.getPath()))
-				.collect(Collectors.toSet());
-
-		contextBuilder.put(ContextKeys.TARGET_TAGS, attackerTags);
-
-		// Future enhancement: Could add damage amount to context for conditional properties
-		// contextBuilder.put(ContextKeys.DAMAGE_AMOUNT, amount);
-
-		return engine.resolve(component, contextBuilder.build());
 	}
 }

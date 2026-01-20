@@ -5,6 +5,20 @@
     "forgero:schematics/blades",
     "forgero:schematics/extended"
   ],
+  "properties": {
+    "minecraft:use_interaction": {
+      "use_action": "SPEAR",
+      "max_use_time": 55000,
+      "used_on_release": true,
+      "on_start": [
+        { "type": "forgero:start_use" }
+      ],
+      "on_release": [
+        { "type": "forgero:throw", "velocity_multiplier": 2.5, "instability": 2.0, "charge_time": 20, "spin_type": "VERTICAL" },
+        { "type": "forgero:consume_stack", "count": 1 }
+      ]
+    }
+  },
   "attributes": [
     {
       "id": "forgero:kunai-schematic-rarity-local",

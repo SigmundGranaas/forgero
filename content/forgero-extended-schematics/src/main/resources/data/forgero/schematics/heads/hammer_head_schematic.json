@@ -5,6 +5,20 @@
     "forgero:schematics/heads",
     "forgero:schematics/mining"
   ],
+  "properties": {
+    "minecraft:block_breaking": [
+      {
+        "selector": {
+          "type": "forgero:pattern",
+          "pattern": ["XXX", "XXX", "XXX"],
+          "depth": 1,
+          "direction": "multi",
+          "filter": { "type": "forgero:can_mine" }
+        },
+        "speed": "forgero:all"
+      }
+    ]
+  },
   "attributes": [
     {
       "id": "forgero:hammer_head-schematic-rarity",

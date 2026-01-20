@@ -29,12 +29,5 @@
       "tags": ["forgero:parts/binding"],
       "description": "slot.forgero.binding"
     }
-  ],
-  "attributes": [
-    {
-      "id": "forgero:shovel-attack_speed",
-      "type": "forgero:attack_speed",
-      "computation": {"value": -3.0}
-    }
   ]
 }

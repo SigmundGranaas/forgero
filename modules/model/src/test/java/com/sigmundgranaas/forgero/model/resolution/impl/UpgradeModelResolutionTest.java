@@ -326,6 +326,31 @@ class UpgradeModelResolutionTest {
 		}
 	}
 
+	@Nested
+	@DisplayName("Tool Binding Upgrade Tests")
+	class ToolBindingUpgradeTests {
+
+		@Test
+		@DisplayName("Iron binding resolves in tool binding slot")
+		void ironBindingResolvesInToolBindingSlot() {
+			// Create an iron-binding part (a binding made of iron material)
+			Component binding = mockComponent("forgero:iron-binding", "parts/binding");
+
+			// Create a pickaxe with the binding in its binding slot
+			StructuredComponent pickaxe = mockStructuredComponent(
+					"forgero:equipment/iron-pickaxe",
+					Map.of("binding", binding)
+			);
+
+			List<RenderableTexture> textures = resolver.resolve(pickaxe).orElse(Collections.emptyList());
+
+			// The binding texture should be present
+			assertTrue(textures.stream().anyMatch(t ->
+							t.texture().contains("iron") && t.texture().contains("binding")),
+					"Iron binding texture should be present");
+		}
+	}
+
 	private record MockStructuredEquipment(
 			OpenIdentifier id,
 			Set<OpenIdentifier> tags,

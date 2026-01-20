@@ -3,8 +3,8 @@ package com.sigmundgranaas.forgero.properties.minecraft.entityuse;
 import com.mojang.serialization.Codec;
 import com.sigmundgranaas.forgero.common.useinteraction.EntityUseEffect;
 import com.sigmundgranaas.forgero.core.property.api.codec.ListCodecWrapper;
-import com.sigmundgranaas.forgero.loader.api.DataPlugin;
-import com.sigmundgranaas.forgero.loader.api.PluginRegistrationContext;
+import com.sigmundgranaas.forgero.common.api.DataPlugin;
+import com.sigmundgranaas.forgero.common.api.PluginRegistrationContext;
 import com.sigmundgranaas.forgero.properties.minecraft.entityuse.effects.HealEntityEffect;
 
 import java.util.Map;

@@ -57,16 +57,52 @@ public class ComponentMutaterImpl implements ComponentMutater {
 			}
 		}
 
-		// Check mutable slots
-		Slot targetSlot = findSlot(target, slotId)
-				.orElseThrow(() -> new IllegalArgumentException("Invalid slot or part ID: " + slotId));
-
-		if (targetSlot instanceof ComponentUpgradeSlot upgradeSlot) {
-			ComponentUpgradeSlot updated = upgradeSlot.withContent(newContent);
-			return setComponentUpgradeSlot(target, updated);
+		// Check direct mutable slots on this component
+		if (target instanceof CustomizableComponent customizable) {
+			var directSlot = customizable.upgrades().get(slotId);
+			if (directSlot.isPresent()) {
+				Slot slot = directSlot.get();
+				if (slot instanceof ComponentUpgradeSlot upgradeSlot) {
+					ComponentUpgradeSlot updated = upgradeSlot.withContent(newContent);
+					return setComponentUpgradeSlot(target, updated);
+				}
+			}
 		}
 
-		throw new IllegalStateException("Unknown slot type: " + targetSlot.getClass());
+		// Check nested slots in structure parts (recursive)
+		if (target instanceof StructuredComponent structured) {
+			for (ComponentPart part : structured.structure().allParts()) {
+				if (hasSlot(part.content(), slotId)) {
+					// Recursively set the slot in the nested part
+					Component updatedContent = setSlot(part.content(), slotId, newContent);
+					ComponentPart updatedPart = part.withContent(updatedContent);
+					return setStructurePart(target, updatedPart);
+				}
+			}
+		}
+
+		throw new IllegalArgumentException("Invalid slot or part ID: " + slotId);
+	}
+
+	/**
+	 * Checks if a component (or its nested parts) contains a slot with the given ID.
+	 */
+	private boolean hasSlot(Component component, OpenIdentifier slotId) {
+		// Check direct slots
+		if (component instanceof CustomizableComponent customizable) {
+			if (customizable.upgrades().get(slotId).isPresent()) {
+				return true;
+			}
+		}
+		// Check nested parts
+		if (component instanceof StructuredComponent structured) {
+			for (ComponentPart part : structured.structure().allParts()) {
+				if (hasSlot(part.content(), slotId)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -78,15 +114,30 @@ public class ComponentMutaterImpl implements ComponentMutater {
 			}
 		}
 
-		// Only mutable slots can be removed
-		Slot targetSlot = findSlot(target, slotId)
-				.orElseThrow(() -> new IllegalArgumentException("Invalid slot ID: " + slotId));
-
-		if (targetSlot instanceof ComponentUpgradeSlot upgradeSlot) {
-			return setComponentUpgradeSlot(target, upgradeSlot.empty());
+		// Check direct mutable slots on this component
+		if (target instanceof CustomizableComponent customizable) {
+			var directSlot = customizable.upgrades().get(slotId);
+			if (directSlot.isPresent()) {
+				Slot slot = directSlot.get();
+				if (slot instanceof ComponentUpgradeSlot upgradeSlot) {
+					return setComponentUpgradeSlot(target, upgradeSlot.empty());
+				}
+			}
 		}
 
-		throw new IllegalStateException("Attempted to remove from a non-upgrade slot");
+		// Check nested slots in structure parts (recursive)
+		if (target instanceof StructuredComponent structured) {
+			for (ComponentPart part : structured.structure().allParts()) {
+				if (hasSlot(part.content(), slotId)) {
+					// Recursively remove the slot content in the nested part
+					Component updatedContent = removeSlot(part.content(), slotId);
+					ComponentPart updatedPart = part.withContent(updatedContent);
+					return setStructurePart(target, updatedPart);
+				}
+			}
+		}
+
+		throw new IllegalArgumentException("Invalid slot ID: " + slotId);
 	}
 
 	private Component setStructurePart(Component target, ComponentPart updatedPart) {
@@ -109,14 +160,25 @@ public class ComponentMutaterImpl implements ComponentMutater {
 
 	@Override
 	public List<Slot> getAllSlots(Component component) {
-		// Note: This now only returns MUTABLE slots
-		// Structure parts are NOT slots
 		List<Slot> slots = new ArrayList<>();
+		collectAllSlotsRecursive(component, slots);
+		return Collections.unmodifiableList(slots);
+	}
 
+	/**
+	 * Recursively collects all slots from a component and its nested structure parts.
+	 */
+	private void collectAllSlotsRecursive(Component component, List<Slot> slots) {
+		// Collect direct slots
 		if (component instanceof CustomizableComponent customizable) {
 			slots.addAll(customizable.upgrades().slots().all());
 		}
 
-		return Collections.unmodifiableList(slots);
+		// Recurse into structure parts
+		if (component instanceof StructuredComponent structured) {
+			for (ComponentPart part : structured.structure().allParts()) {
+				collectAllSlotsRecursive(part.content(), slots);
+			}
+		}
 	}
 }

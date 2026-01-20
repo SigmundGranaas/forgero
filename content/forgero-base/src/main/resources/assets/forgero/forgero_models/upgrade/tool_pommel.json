@@ -2,7 +2,7 @@
   "type": "forgero:upgrade_model_template",
   "context": "tool_pommel",
   "target": {
-    "tag": "forgero:tool_material"
+    "tag": "forgero:materials/roles/tool_material"
   },
   "models": [
     {
@@ -17,7 +17,9 @@
             "variants": [
               {
                 "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/sword" }],
-                "texture": "forgero:item/upgrade/{target.name}-sword_pommel"
+                "template": "forgero:texture_template/parts/sword_pommel",
+                "palette": "forgero:palette/{target.name}",
+                "output": "forgero:item/upgrade/{target.name}-sword_pommel"
               }
             ]
           },
@@ -29,13 +31,6 @@
       "mount_points": [
         { "name": "center", "position": [8, 8] }
       ]
-    }
-  ],
-  "texture_variants": [
-    {
-      "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/sword" }],
-      "template": "forgero:texture_template/parts/sword_pommel",
-      "output_suffix": "-sword_pommel"
     }
   ]
 }

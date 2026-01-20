@@ -2,8 +2,8 @@ package com.sigmundgranaas.forgero.tools;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.CreateData;
-import com.sigmundgranaas.forgero.loader.api.DataPlugin;
-import com.sigmundgranaas.forgero.loader.api.PluginRegistrationContext;
+import com.sigmundgranaas.forgero.common.api.DataPlugin;
+import com.sigmundgranaas.forgero.common.api.PluginRegistrationContext;
 import com.sigmundgranaas.forgero.tools.item.ForgeroAxeItem;
 import com.sigmundgranaas.forgero.tools.item.ForgeroHoeItem;
 import com.sigmundgranaas.forgero.tools.item.ForgeroPartItem;

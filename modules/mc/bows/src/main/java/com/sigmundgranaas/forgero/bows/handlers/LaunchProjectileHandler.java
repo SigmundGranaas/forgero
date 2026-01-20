@@ -1,7 +1,5 @@
 package com.sigmundgranaas.forgero.bows.handlers;
 
-import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,12 +7,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.bows.entity.DynamicArrowEntity;
 import com.sigmundgranaas.forgero.bows.item.ForgeroArrowItem;
-import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
+import com.sigmundgranaas.forgero.common.api.item.ItemQueryApi;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.useinteraction.UseContext;
-import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
-import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
-import com.sigmundgranaas.forgero.loader.api.ForgeroInitializedCallback;
+import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.ContextualUseHandler;
 
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -56,16 +52,6 @@ public record LaunchProjectileHandler(
 	private static final float DEFAULT_POWER = 3.0f;
 	private static final float DEFAULT_DIVERGENCE = 1.0f;
 	private static final float DEFAULT_ACCURACY = 50.0f;
-
-	// Services received from ForgeroInitializedCallback
-	private static ComponentConverter converter;
-
-	static {
-		ForgeroInitializedCallback.EVENT.register(services -> {
-			converter = services.converter();
-			LOGGER.debug("LaunchProjectileHandler services initialized");
-		});
-	}
 
 	/**
 	 * Attribute identifier for resolving draw power from Forgero components.
@@ -257,14 +243,9 @@ public record LaunchProjectileHandler(
 	 * @return The resolved attribute value, or fallback if not available
 	 */
 	private static float resolveAttribute(ItemStack stack, OpenIdentifier attr, float fallback) {
-		Optional<Float> result = converter.toComponent(stack)
-				.map(component -> {
-					AttributeQueryResult attrResult = new AttributeEngine().resolve(component);
-					return attrResult.getValue(attr);
-				})
-				.filter(value -> value > 0);
-
-		return result.orElse(fallback);
+		ItemQueryApi query = ForgeroApi.itemQuery();
+		float value = query.getAttribute(stack, attr);
+		return value > 0 ? value : fallback;
 	}
 
 	/**

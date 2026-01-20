@@ -29,12 +29,5 @@
       "tags": ["forgero:parts/guard"],
       "description": "slot.forgero.guard"
     }
-  ],
-  "attributes": [
-    {
-      "id": "forgero:sword-attack_speed",
-      "type": "forgero:attack_speed",
-      "computation": {"value": -2.4}
-    }
   ]
 }

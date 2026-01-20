@@ -72,7 +72,7 @@ import net.minecraft.item.ItemStack;
  *     <li>Durability/damage can differ</li>
  * </ul>
  *
- * @see com.sigmundgranaas.forgero.loader.api.ForgeroApi#itemComparison()
+ * @see com.sigmundgranaas.forgero.common.api.ForgeroApi#itemComparison()
  */
 public interface ItemComparisonApi {
 

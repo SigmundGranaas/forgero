@@ -5,8 +5,8 @@ import com.sigmundgranaas.forgero.common.tags.engine.TaggedRegistry;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
-import com.sigmundgranaas.forgero.loader.api.ForgeroInitializedCallback;
-import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
+import com.sigmundgranaas.forgero.common.api.ForgeroInitializedCallback;
+import com.sigmundgranaas.forgero.common.api.ForgeroServices;
 import com.sigmundgranaas.forgero.model.generation.api.TextureGenerationTask;
 import com.sigmundgranaas.forgero.model.pipeline.api.ModelDataInitializer;
 import com.sigmundgranaas.forgero.model.pipeline.api.ModelInitializationResult;
@@ -76,7 +76,6 @@ public class RenderInitializer implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		LOGGER.info("Forgero client rendering setup starting...");
 		DRPApi.getInstance().register(getResourcePack(), ResourcePackPhase.BEFORE_VANILLA);
 
 		// STEP 1: Synchronous Pre-load Phase
@@ -84,16 +83,11 @@ public class RenderInitializer implements ClientModInitializer {
 		// Try to use Minecraft's ResourceManager if available, as it can find resources across all mod JARs.
 		// Fall back to FabricResourceProvider which uses Fabric's ModContainer API to scan all mod JARs.
 		try {
-			LOGGER.info("Starting synchronous model pre-load...");
 			ResourceProvider preloadProvider;
 			ResourceManager mcResourceManager = MinecraftClient.getInstance().getResourceManager();
 			if (mcResourceManager != null && !mcResourceManager.getAllNamespaces().isEmpty()) {
-				LOGGER.info("Using MinecraftResourceProvider for synchronous pre-load (namespaces: {})", mcResourceManager.getAllNamespaces().size());
 				preloadProvider = new MinecraftResourceProvider(mcResourceManager);
 			} else {
-				// Use FabricResourceProvider which properly scans all mod JARs using Fabric's ModContainer API
-				// This works before Minecraft's ResourceManager is ready and finds assets in nested JARs
-				LOGGER.info("ResourceManager not ready, using FabricResourceProvider for asset loading");
 				preloadProvider = new FabricResourceProvider("assets");
 			}
 
@@ -112,7 +106,6 @@ public class RenderInitializer implements ClientModInitializer {
 				// Generate initial textures and atlas config BEFORE the first resource reload
 				var tasks = initialResult.generationResult().textureGenerationTasks();
 				if (!tasks.isEmpty()) {
-					LOGGER.info("Performing initial texture generation for {} tasks...", tasks.size());
 					var textureGenerator = new DefaultTextureGenerator(preloadProvider, new AwtPalettizedTextureGenerator(), new RuntimeTextureWriter(getResourcePack()));
 					textureGenerator.generate(tasks);
 					generateAtlasConfig(tasks);
@@ -127,7 +120,7 @@ public class RenderInitializer implements ClientModInitializer {
 						new ForgeroArmorTextureManager(initialResult.itemModelRegistry()),
 						new ForgeroArmorModelManager(MinecraftClient.getInstance().getEntityModelLoader())
 				);
-				LOGGER.info("Synchronous model pre-load complete. {} item models loaded.", initialResult.itemModelRegistry().models().size());
+				LOGGER.debug("Model pre-load complete: {} models", initialResult.itemModelRegistry().models().size());
 			} else {
 				LOGGER.warn("Forgero data not yet initialized during client startup. Models will be loaded on first resource reload.");
 				// Initialize with empty services - hot reload will populate them later
@@ -154,7 +147,6 @@ public class RenderInitializer implements ClientModInitializer {
 		// This is now 100% safe because the synchronous pre-load has already populated ForgeroClient.services.
 		ModelLoadingPlugin.register(pluginContext -> {
 			pluginContext.resolveModel().register(new ForgeroModelProvider());
-			LOGGER.info("Forgero ModelLoadingPlugin registered.");
 		});
 	}
 
@@ -171,6 +163,5 @@ public class RenderInitializer implements ClientModInitializer {
 		if (atlasBuilder.getSources().isEmpty()) return;
 
 		getResourcePack().addAtlas(new Identifier("minecraft", "blocks"), atlasBuilder);
-		LOGGER.info("Generated and added initial atlas configuration for {} item textures.", atlasBuilder.getSources().size());
 	}
 }

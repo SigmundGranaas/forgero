@@ -4,6 +4,7 @@
   "target": {
     "tag": "forgero:materials/roles/upgrade_material"
   },
+  "palette_map_ref": "forgero:gem",
   "models": [
     {
       "type": "forgero:texture_model",
@@ -13,7 +14,7 @@
         {
           "order": 30,
           "template": "forgero:texture_template/parts/shovel_head_tip_reinforcement",
-          "palette": "forgero:palette/{target.name}",
+          "palette": "forgero:palette/{target.palette}",
           "output": "forgero:item/upgrade/{target.name}-shovel_head_reinforcement"
         }
       ],

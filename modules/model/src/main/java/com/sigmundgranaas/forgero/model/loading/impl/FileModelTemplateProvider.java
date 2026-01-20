@@ -43,7 +43,7 @@ public class FileModelTemplateProvider implements ModelTemplateProvider {
 
 		this.armorTemplates = loadAllFromNamespaces(resourceProvider, "armor", ModelTemplateCodecs.ARMOR_MODEL_TEMPLATE_CODEC);
 
-		LOGGER.info("Loaded {} item, {} upgrade, and {} armor model templates from all namespaces.",
+		LOGGER.debug("Loaded {} item, {} upgrade, and {} armor model templates from all namespaces.",
 				itemTemplates.size(), upgradeTemplates.size(), armorTemplates.size());
 	}
 

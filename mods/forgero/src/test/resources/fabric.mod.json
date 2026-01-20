@@ -25,7 +25,13 @@
       "com.sigmundgranaas.forgero.tests.BowVariantPartsBehaviorTest",
       "com.sigmundgranaas.forgero.tests.CustomArrowDetectionTest",
       "com.sigmundgranaas.forgero.tests.BasicBowRecipeTest",
-      "com.sigmundgranaas.forgero.tests.ReinforcementSlotUpgradeTest"
+      "com.sigmundgranaas.forgero.tests.ReinforcementSlotUpgradeTest",
+      "com.sigmundgranaas.forgero.tests.IronReinforcementInstallationTest",
+      "com.sigmundgranaas.forgero.tests.GoldenFeatureTest",
+      "com.sigmundgranaas.forgero.tests.BlockExplosionEffectTest",
+      "com.sigmundgranaas.forgero.tests.UpgradeSerializationRoundTripTest",
+      "com.sigmundgranaas.forgero.tests.UpgradeStationSerializationTest",
+      "com.sigmundgranaas.forgero.tests.UpgradeSlotSystemTest"
     ]
   },
   "depends": {

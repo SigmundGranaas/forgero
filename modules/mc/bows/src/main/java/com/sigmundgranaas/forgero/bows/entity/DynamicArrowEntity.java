@@ -8,7 +8,7 @@ import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
-import com.sigmundgranaas.forgero.loader.api.ForgeroInitializedCallback;
+import com.sigmundgranaas.forgero.common.api.ForgeroInitializedCallback;
 import com.sigmundgranaas.forgero.properties.minecraft.onhit.OnHitManager;
 import com.sigmundgranaas.forgero.properties.minecraft.onhitblock.OnHitBlockManager;
 

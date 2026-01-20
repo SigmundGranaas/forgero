@@ -28,7 +28,6 @@ public class DRPResourcePackProvider implements ResourcePackProvider {
 	@Override
 	public void register(Consumer<ResourcePackProfile> profileAdder) {
 		DRPApiImpl api = DRPApiImpl.getInstance();
-		LOGGER.info("DRP ResourcePackProvider.register() called, {} packs registered", api.getRegisteredPacks().size());
 
 		for (DynamicResourcePack pack : api.getRegisteredPacks()) {
 			if (!(pack instanceof DynamicResourcePackImpl packImpl)) {
@@ -75,7 +74,7 @@ public class DRPResourcePackProvider implements ResourcePackProvider {
 
 		int packCount = api.getRegisteredPacks().size();
 		if (packCount > 0) {
-			LOGGER.info("Registered {} DRP pack(s)", packCount);
+			LOGGER.debug("Registered {} DRP pack(s)", packCount);
 		}
 	}
 }

@@ -1,6 +1,7 @@
 {
   "type": "forgero:material",
   "name": "Bamboo",
+  "include": ["forgero:hard_upgrade_base"],
   "tags": [
     "forgero:materials/properties/hard",
     "forgero:materials/types/binding",

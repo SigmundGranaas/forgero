@@ -96,28 +96,44 @@ public final class AttributeContext {
 	 * <ul>
 	 *   <li>Attribute with no context → matches any slot (default behavior)</li>
 	 *   <li>Attribute with {@link #UPGRADE} context → matches any upgrade slot</li>
-	 *   <li>Attribute with specific context → matches only if contexts are equal</li>
+	 *   <li>Slot with no context → only no-context and UPGRADE attributes pass</li>
+	 *   <li>Slot with specific context → matches attributes with exact context match</li>
 	 * </ul>
+	 *
+	 * <p>IMPORTANT: Attributes with {@link #PART_COMPOSITE} or {@link #EQUIPMENT_COMPOSITE}
+	 * contexts will NOT match upgrade slots. These contexts are for part/equipment composition
+	 * only, not for upgrade bonus application.</p>
 	 *
 	 * @param attributeContext The attribute's context (may be empty for default attributes)
 	 * @param slotContext The slot's context (may be empty for unfiltered slots)
 	 * @return true if the attribute should be included for this slot
 	 */
 	public static boolean matchesSlotContext(java.util.Optional<OpenIdentifier> attributeContext, java.util.Optional<OpenIdentifier> slotContext) {
+		// No context = default attribute, always included
 		if (attributeContext.isEmpty()) {
 			return true;
 		}
 
 		OpenIdentifier attrCtx = attributeContext.get();
 
+		// Composite contexts (PART_COMPOSITE, EQUIPMENT_COMPOSITE) are NEVER valid for upgrade slots.
+		// These contexts are for part/equipment composition only, not for upgrade bonuses.
+		if (isCompositeContext(attrCtx)) {
+			return false;
+		}
+
+		// UPGRADE context = always included in any upgrade slot
 		if (UPGRADE.equals(attrCtx)) {
 			return true;
 		}
 
+		// If slot has no specific context filter, only no-context and UPGRADE pass through.
+		// All other contexts (offensive, defensive, etc.) require an explicit slot context match.
 		if (slotContext.isEmpty()) {
-			return true;
+			return false;
 		}
 
+		// Slot has a specific context - check for exact match
 		return attrCtx.equals(slotContext.get());
 	}
 
@@ -144,26 +160,38 @@ public final class AttributeContext {
 			java.util.Optional<OpenIdentifier> slotContext,
 			com.sigmundgranaas.forgero.common.tags.api.TagResolver tagResolver
 	) {
+		// No context = default attribute, always included
 		if (attributeContext.isEmpty()) {
 			return true;
 		}
 
 		OpenIdentifier attrCtx = attributeContext.get();
 
+		// Composite contexts (PART_COMPOSITE, EQUIPMENT_COMPOSITE) are NEVER valid for upgrade slots.
+		// These contexts are for part/equipment composition only, not for upgrade bonuses.
+		if (isCompositeContext(attrCtx)) {
+			return false;
+		}
+
+		// UPGRADE context = always included in any upgrade slot
 		if (UPGRADE.equals(attrCtx)) {
 			return true;
 		}
 
+		// If slot has no specific context filter, only no-context and UPGRADE pass through.
+		// All other contexts (offensive, defensive, etc.) require an explicit slot context match.
 		if (slotContext.isEmpty()) {
-			return true;
+			return false;
 		}
 
 		OpenIdentifier slotCtx = slotContext.get();
 
+		// Check for exact match
 		if (attrCtx.equals(slotCtx)) {
 			return true;
 		}
 
+		// Check tag hierarchy - attribute context is a descendant of slot context
 		return tagResolver.getDescendants(slotCtx).contains(attrCtx);
 	}
 }

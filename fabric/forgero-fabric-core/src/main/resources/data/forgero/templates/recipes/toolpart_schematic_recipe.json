@@ -1,8 +1,0 @@
-{
-  "type": "forgero:schematic_part_crafting",
-  "ingredients": [
-  ],
-  "result": {
-    "item": "minecraft:stick"
-  }
-}

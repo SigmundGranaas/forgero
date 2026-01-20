@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.properties.minecraft.ontick;
 
 import com.sigmundgranaas.forgero.core.property.api.codec.ListCodecWrapper;
-import com.sigmundgranaas.forgero.loader.api.DataPlugin;
-import com.sigmundgranaas.forgero.loader.api.PluginRegistrationContext;
+import com.sigmundgranaas.forgero.common.api.DataPlugin;
+import com.sigmundgranaas.forgero.common.api.PluginRegistrationContext;
 
 public class OnTickPropertiesPlugin implements DataPlugin {
 	@Override

@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.render.plugin;
 
-import com.sigmundgranaas.forgero.loader.api.DataLoadingContext;
-import com.sigmundgranaas.forgero.loader.api.PostLoadPlugin;
+import com.sigmundgranaas.forgero.common.api.DataLoadingContext;
+import com.sigmundgranaas.forgero.common.api.PostLoadPlugin;
 import com.sigmundgranaas.forgero.render.ForgeroClient;
 
 public class ForgeroRenderPlugin implements PostLoadPlugin {

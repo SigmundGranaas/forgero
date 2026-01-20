@@ -14,11 +14,16 @@ configurations.matching { !it.name.startsWith('mod') }.all {
 }
 
 dependencies {
-    // Core modules (included in JAR)
+    // === SHARED FOUNDATION ===
+    // forgero-loader provides the initialization system and core APIs
+    // Included in JAR - Fabric's jar-in-jar will deduplicate if vanilla-upgrades is also loaded
+    include(project(path: ":modules:mc:loader", configuration: 'namedElements'))
+
+    // === FORGERO-SPECIFIC MODULES (bundled in JAR) ===
+    // Core modules still needed for transitive dependencies
     include(project(":modules:core"))
     include(project(":modules:model"))
     include(project(path: ":modules:mc:common", configuration: 'namedElements'))
-    include(project(path: ":modules:mc:loader", configuration: 'namedElements'))
     include(project(path: ":modules:mc:properties", configuration: 'namedElements'))
     include(project(path: ":modules:mc:render", configuration: 'namedElements'))
     include(project(path: ":modules:mc:predicate", configuration: 'namedElements'))
@@ -50,23 +55,36 @@ dependencies {
     implementation(project(path: ":modules:mc:armor", configuration: 'namedElements'))
     implementation(project(path: ":modules:mc:bows", configuration: 'namedElements'))
 
-    // Content modules - core content
-    runtimeOnly(project(":content:forgero-materials"))
-    runtimeOnly(project(":content:minecraft-tools"))
-    runtimeOnly(project(":content:forgero-base"))
-    runtimeOnly(project(":content:forgero-upgrades"))
-    runtimeOnly(project(":content:forgero-armor"))  // Armor texture templates
-    runtimeOnly(project(":content:forgero-armor-content"))
-    runtimeOnly(project(":content:forgero-tools"))  // Adds armor_material tag to metals
+    // === FORGERO-SPECIFIC CONTENT (bundled in JAR) ===
+    // Note: Material upgrade bases are in forgero-base, conditions in separate optional pack
+    include(project(":content:forgero-base"))
+    include(project(":content:forgero-materials"))
+    include(project(":content:minecraft-tools"))
+    include(project(":content:forgero-conditions"))  // Random item modifiers (sharp, durable, etc.)
+    include(project(":content:forgero-armor"))  // Armor texture templates
+    include(project(":content:forgero-armor-content"))
+    include(project(":content:forgero-mastercrafted"))         // Quality schematics (refined, mastercrafted)
+    include(project(":content:forgero-extended-schematics"))  // Extended schematics (weapon blades, tool heads, guards, bindings)
+    include(project(":content:forgero-secondary-materials"))  // Secondary materials (soft, hard, hybrid, dyes)
+    include(project(":content:forgero-extended-weapons"))     // Extended weapon parts and equipment (includes mining tools)
+    include(project(":content:forgero-gems"))                 // Gem upgrades (diamond_gem, etc.)
+    include(project(":content:forgero-bows"))                 // Bow and arrow parts and equipment
 
-    // Content modules - schematics and extended content (modern format only)
-    runtimeOnly(project(":content:forgero-schematics"))           // Quality schematics (refined, mastercrafted)
-    runtimeOnly(project(":content:forgero-extended-schematics"))  // Extended schematics (weapon blades, tool heads, guards, bindings)
-    runtimeOnly(project(":content:forgero-secondary-materials"))  // Secondary materials (soft, hard, hybrid, dyes)
-    runtimeOnly(project(":content:forgero-extended-weapons"))     // Extended weapon parts and equipment (katana, rapier, etc.)
-    runtimeOnly(project(":content:forgero-mining"))               // Mining tool parts and equipment (hammer, spade, etc.)
-    runtimeOnly(project(":content:forgero-gems"))                 // Gem upgrades (diamond_gem, etc.)
-    runtimeOnly(project(":content:forgero-bows"))                 // Bow and arrow parts and equipment
+    // Core content runtimeOnly for development
+    runtimeOnly(project(":content:forgero-base"))
+    runtimeOnly(project(":content:forgero-materials"))
+    runtimeOnly(project(":content:forgero-conditions"))
+
+    // Content runtimeOnly for development
+    runtimeOnly(project(":content:minecraft-tools"))
+    runtimeOnly(project(":content:forgero-armor"))
+    runtimeOnly(project(":content:forgero-armor-content"))
+    runtimeOnly(project(":content:forgero-mastercrafted"))
+    runtimeOnly(project(":content:forgero-extended-schematics"))
+    runtimeOnly(project(":content:forgero-secondary-materials"))
+    runtimeOnly(project(":content:forgero-extended-weapons"))
+    runtimeOnly(project(":content:forgero-gems"))
+    runtimeOnly(project(":content:forgero-bows"))
 
     // Fabric
     modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")

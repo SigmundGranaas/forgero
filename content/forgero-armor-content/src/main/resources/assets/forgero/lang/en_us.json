@@ -2,5 +2,10 @@
   "item.forgero.helmet": "Helmet",
   "item.forgero.chestplate": "Chestplate",
   "item.forgero.leggings": "Leggings",
-  "item.forgero.boots": "Boots"
+  "item.forgero.boots": "Boots",
+
+  "tooltip.forgero.part_type.helmet": "Helmet",
+  "tooltip.forgero.part_type.chestplate": "Chestplate",
+  "tooltip.forgero.part_type.leggings": "Leggings",
+  "tooltip.forgero.part_type.boots": "Boots"
 }

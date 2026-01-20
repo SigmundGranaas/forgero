@@ -140,12 +140,22 @@ public class RecursiveModelResolver implements ItemModelResolver {
 
 		if (modelOpt.isEmpty()) {
 			// Fallback: If no model is found for the child, resolve it independently. Mount points won't apply.
-			LOGGER.debug("No model found for slot '{}' child '{}', falling back to independent resolution",
-					slot.id(), child.id());
+			if (slot.context().isPresent()) {
+				LOGGER.warn("No model found for component '{}' in context '{}' - falling back to context-free lookup. " +
+						"This may indicate a missing upgrade model template for this context.",
+						child.id(), slot.context().get());
+			}
 			List<RenderableTexture> fallbackTextures = resolveComponent(child, childContext).stream()
 					.map(tex -> tex.withOrder(baseOrder + slot.order() + tex.order()))
 					.toList();
-			LOGGER.debug("Fallback resolution for '{}' returned {} textures", child.id(), fallbackTextures.size());
+			if (fallbackTextures.isEmpty()) {
+				LOGGER.error("MODEL RESOLUTION FAILED: No textures found for component '{}' in slot '{}' (context: {}). " +
+						"The item will display with missing texture! Check that: " +
+						"1) An upgrade model template exists for context '{}' targeting components with this ID or tag, " +
+						"2) The component has the correct tags for the template's target selector, " +
+						"3) The model was successfully generated during startup.",
+						child.id(), slot.id(), slot.context().orElse("none"), slot.context().orElse("none"));
+			}
 			return fallbackTextures;
 		}
 

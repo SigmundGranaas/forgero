@@ -17,6 +17,6 @@ public class ForgeroMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		LOGGER.info("Forgero initialized - Equipment crafting expansion ready!");
+		// Main initialization done through ForgeroDataLoader
 	}
 }

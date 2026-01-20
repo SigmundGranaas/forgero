@@ -17,11 +17,15 @@
             "variants": [
               {
                 "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/sword" }],
-                "texture": "forgero:item/upgrade/{target.name}-short_handle_grip"
+                "template": "forgero:texture_template/parts/short_handle_grip",
+                "palette": "forgero:palette/{target.name}",
+                "output": "forgero:item/upgrade/{target.name}-short_handle_grip"
               },
               {
                 "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/shovel" }],
-                "texture": "forgero:item/upgrade/{target.name}-medium_handle_grip"
+                "template": "forgero:texture_template/parts/medium_handle_grip",
+                "palette": "forgero:palette/{target.name}",
+                "output": "forgero:item/upgrade/{target.name}-medium_handle_grip"
               }
             ]
           },
@@ -33,18 +37,6 @@
       "mount_points": [
         { "name": "center", "position": [8, 8] }
       ]
-    }
-  ],
-  "texture_variants": [
-    {
-      "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/sword" }],
-      "template": "forgero:texture_template/parts/short_handle_grip",
-      "output_suffix": "-short_handle_grip"
-    },
-    {
-      "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:tools/shovel" }],
-      "template": "forgero:texture_template/parts/medium_handle_grip",
-      "output_suffix": "-medium_handle_grip"
     }
   ]
 }

@@ -6,6 +6,7 @@ dependencies {
 	implementation(project(":modules:core"))
 	implementation(project(path: ":modules:mc:common", configuration: 'namedElements'))
 	implementation(project(path: ":modules:mc:loader", configuration: 'namedElements'))
+	implementation(project(path: ":modules:mc:properties", configuration: 'namedElements'))
 
 	// Fabric
 	modCompileOnly("net.fabricmc:fabric-loader:${project.loader_version}")

@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.model.rendering.impl;
 import com.sigmundgranaas.forgero.model.api.Offset;
 import com.sigmundgranaas.forgero.model.api.RenderableTexture;
 import com.sigmundgranaas.forgero.model.rendering.api.TextureCompositor;
-import com.sigmundgranaas.forgero.model.rendering.api.TextureProvider;
+import com.sigmundgranaas.forgero.utility.resource.loader.api.UnifiedTextureProvider;
 import org.junit.jupiter.api.Test;
 
 import java.awt.image.BufferedImage;
@@ -18,7 +18,7 @@ public class AwtTextureCompositorTest {
 
 	@Test
 	void testRenderCompositesImagesInCorrectOrder() throws IOException {
-		TextureProvider provider = new ClassPathResourceTextureProvider();
+		UnifiedTextureProvider provider = new ClassPathResourceTextureProvider();
 		TextureCompositor compositor = new AwtTextureCompositor(provider);
 
 		// Define a list of RenderableTexture instances with order and offset
@@ -45,7 +45,7 @@ public class AwtTextureCompositorTest {
 
 	@Test
 	void testRenderCompositesImagesWithOffsets() throws IOException {
-		TextureProvider provider = new ClassPathResourceTextureProvider();
+		UnifiedTextureProvider provider = new ClassPathResourceTextureProvider();
 		TextureCompositor compositor = new AwtTextureCompositor(provider);
 
 		// Define a list of RenderableTexture instances with order and custom offsets

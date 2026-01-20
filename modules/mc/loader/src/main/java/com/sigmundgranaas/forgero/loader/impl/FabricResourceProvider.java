@@ -6,6 +6,7 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceFilter;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourcePath;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceProvider;
+import com.sigmundgranaas.forgero.utility.resource.loader.api.SourceTrackingProvider;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import org.slf4j.Logger;
@@ -15,9 +16,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,12 +31,15 @@ import java.util.stream.Stream;
  * Supports the unified resource loading architecture with configurable filtering
  * and priority-based composition.
  */
-public class FabricResourceProvider implements ResourceProvider {
+public class FabricResourceProvider implements SourceTrackingProvider {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FabricResourceProvider.class);
 
 	private final String topLevelDirectory;
 	private final List<ModContainer> forgeroResourceMods;
 	private final int providerPriority;
+
+	// Source tracking: maps resource path (as string) to mod ID
+	private final Map<String, String> sourceMappings = new ConcurrentHashMap<>();
 
 	/**
 	 * Creates a new FabricResourceProvider with specified priority.
@@ -48,11 +51,7 @@ public class FabricResourceProvider implements ResourceProvider {
 		this.topLevelDirectory = topLevelDirectory.replaceAll("^/|/$", "");
 		this.providerPriority = priority;
 		this.forgeroResourceMods = discoverForgeroResourceMods();
-		LOGGER.info("FabricResourceProvider initialized with {} Forgero resource mods: {}",
-				forgeroResourceMods.size(),
-				forgeroResourceMods.stream()
-						.map(m -> m.getMetadata().getId())
-						.collect(Collectors.joining(", ")));
+		LOGGER.debug("FabricResourceProvider: {} resource mods", forgeroResourceMods.size());
 	}
 
 	/**
@@ -112,6 +111,7 @@ public class FabricResourceProvider implements ResourceProvider {
 	private Stream<ResourcePath> listFromMod(ModContainer mod, ResourcePath path, boolean recursive, ResourceFilter filter) {
 		// Build the full path: topLevelDirectory/namespace/directory
 		String fullPath = buildFullPath(path);
+		String modId = mod.getMetadata().getId();
 
 		Optional<Path> rootPath = mod.findPath(fullPath);
 		if (rootPath.isEmpty()) {
@@ -142,14 +142,19 @@ public class FabricResourceProvider implements ResourceProvider {
 							// Get path relative to namespace root
 							Path relativePath = namespaceBase.relativize(filePath);
 							String relativePathString = relativePath.toString().replace('\\', '/');
-							return ResourcePath.fromIdentifier(new OpenIdentifier(path.namespace(), relativePathString));
+							ResourcePath resourcePath = ResourcePath.fromIdentifier(new OpenIdentifier(path.namespace(), relativePathString));
+
+							// Track the source mod for this resource
+							sourceMappings.put(resourcePath.toString(), modId);
+
+							return resourcePath;
 						})
 						.filter(filter)
 						.toList().stream(); // Collect to list to avoid stream closed issues
 			}
 		} catch (IOException e) {
 			LOGGER.error("Error listing resources from mod {} at path {}",
-					mod.getMetadata().getId(), fullPath, e);
+					modId, fullPath, e);
 			return Stream.empty();
 		}
 	}
@@ -193,5 +198,32 @@ public class FabricResourceProvider implements ResourceProvider {
 			return topLevelDirectory + "/" + path.namespace();
 		}
 		return topLevelDirectory + "/" + path.namespace() + "/" + path.directory();
+	}
+
+	// ========== SourceTrackingProvider Implementation ==========
+
+	@Override
+	public Optional<String> getSource(ResourcePath path) {
+		return Optional.ofNullable(sourceMappings.get(path.toString()));
+	}
+
+	@Override
+	public Map<String, String> getAllSourceMappings() {
+		return Collections.unmodifiableMap(new HashMap<>(sourceMappings));
+	}
+
+	@Override
+	public void clearSourceMappings() {
+		sourceMappings.clear();
+	}
+
+	/**
+	 * Returns the list of discovered Forgero resource mods.
+	 * Useful for debugging and diagnostics.
+	 *
+	 * @return Unmodifiable list of mod containers
+	 */
+	public List<ModContainer> getForgeroResourceMods() {
+		return Collections.unmodifiableList(forgeroResourceMods);
 	}
 }

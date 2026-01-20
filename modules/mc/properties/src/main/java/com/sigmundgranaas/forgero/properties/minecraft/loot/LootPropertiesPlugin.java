@@ -2,8 +2,8 @@ package com.sigmundgranaas.forgero.properties.minecraft.loot;
 
 import com.mojang.serialization.Codec;
 import com.sigmundgranaas.forgero.core.property.api.codec.ListCodecWrapper;
-import com.sigmundgranaas.forgero.loader.api.DataPlugin;
-import com.sigmundgranaas.forgero.loader.api.PluginRegistrationContext;
+import com.sigmundgranaas.forgero.common.api.DataPlugin;
+import com.sigmundgranaas.forgero.common.api.PluginRegistrationContext;
 import com.sigmundgranaas.forgero.properties.minecraft.loot.filter.IsItemFilter;
 import com.sigmundgranaas.forgero.properties.minecraft.loot.filter.ItemFilter;
 import com.sigmundgranaas.forgero.properties.minecraft.loot.filter.TagFilter;

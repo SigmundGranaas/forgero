@@ -3,20 +3,39 @@
 //file:noinspection DependencyNotationArgument
 
 dependencies {
+	// === CORE MODULES ===
 	implementation(project(":modules:core"))
+	implementation(project(":modules:model"))
 	implementation(project(path: ":modules:mc:common", configuration: 'namedElements'))
 	implementation(project(path: ":modules:mc:loader", configuration: 'namedElements'))
 
-	runtimeOnly(project(path: ":modules:mc:armor",  configuration: 'namedElements'))
-	runtimeOnly(project(path: ":modules:mc:tools",  configuration: 'namedElements'))
-	runtimeOnly(project(path: ":modules:mc:render",  configuration: 'namedElements'))
-	runtimeOnly(project(path: ":modules:mc:properties",  configuration: 'namedElements'))
+	// === ALL MC MODULES (for testing both forgero and vanilla-upgrades) ===
+	runtimeOnly(project(path: ":modules:mc:armor", configuration: 'namedElements'))
+	runtimeOnly(project(path: ":modules:mc:tools", configuration: 'namedElements'))
+	runtimeOnly(project(path: ":modules:mc:render", configuration: 'namedElements'))
+	runtimeOnly(project(path: ":modules:mc:properties", configuration: 'namedElements'))
+	runtimeOnly(project(path: ":modules:mc:predicate", configuration: 'namedElements'))
+	runtimeOnly(project(path: ":modules:mc:bows", configuration: 'namedElements'))
+	runtimeOnly(project(path: ":modules:mc:blocks", configuration: 'namedElements'))
 
-	// Resources
-	runtimeOnly(project(path: ":content:forgero-materials"))
-	runtimeOnly(project(path: ":content:forgero-tools"))
-	runtimeOnly(project(path: ":content:forgero-armor"))
-	runtimeOnly(project(path: ":content:minecraft-tools"))
+	// === SHARED CORE CONTENT (required for both mods) ===
+	runtimeOnly(project(":content:forgero-base"))
+	runtimeOnly(project(":content:forgero-materials"))
+	runtimeOnly(project(":content:forgero-conditions"))
+
+	// === FORGERO-SPECIFIC CONTENT ===
+	runtimeOnly(project(":content:forgero-armor"))
+	runtimeOnly(project(":content:forgero-armor-content"))
+	runtimeOnly(project(":content:minecraft-tools"))
+	runtimeOnly(project(":content:forgero-mastercrafted"))
+	runtimeOnly(project(":content:forgero-extended-schematics"))
+	runtimeOnly(project(":content:forgero-secondary-materials"))
+	runtimeOnly(project(":content:forgero-extended-weapons"))
+	runtimeOnly(project(":content:forgero-gems"))
+	runtimeOnly(project(":content:forgero-bows"))
+
+	// === VANILLA-UPGRADES CONTENT ===
+	runtimeOnly(project(":content:vanilla-upgrades-base"))
 
 	// Fabric
 	modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
@@ -24,6 +43,9 @@ dependencies {
 
 	// Dynamic Resource Pack module
 	runtimeOnly(project(path: ":mods:drp", configuration: 'namedElements'))
+
+	// Recipe Generator module
+	runtimeOnly(project(path: ":mods:recipe-generator", configuration: 'namedElements'))
 
 	// Testing
 	testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")

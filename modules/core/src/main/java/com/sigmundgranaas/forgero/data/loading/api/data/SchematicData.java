@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.loading.api.data.attribute.AttributeData;
 import com.sigmundgranaas.forgero.data.loading.api.data.host.HostData;
+import com.sigmundgranaas.forgero.data.loading.api.data.template.UpgradeSlotData;
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ import java.util.Map;
  * @param host            Optional data for mapping to a platform-specific item.
  * @param attributes      Optional list of attributes provided by this schematic (inherited via include).
  * @param localAttributes Optional list of attributes LOCAL to this schematic (NOT inherited via include).
+ * @param upgrades        Optional list of upgrade slots this schematic adds to parts (e.g., reinforcement slots).
  * @param target          (DEPRECATED) The ID of the `part_template` this schematic crafts. Kept for backward compatibility.
  * @param properties      Optional map for custom, extensible properties.
  */
@@ -42,6 +44,8 @@ public record SchematicData(
 		List<AttributeData> attributes,
 		@Nullable
 		List<AttributeData> localAttributes,
+		@Nullable
+		List<UpgradeSlotData> upgrades,
 		@Nullable
 		OpenIdentifier target,
 		@Nullable

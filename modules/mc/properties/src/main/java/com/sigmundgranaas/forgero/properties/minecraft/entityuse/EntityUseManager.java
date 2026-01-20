@@ -1,11 +1,9 @@
 package com.sigmundgranaas.forgero.properties.minecraft.entityuse;
 
-import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.useinteraction.EntityUseEffect;
 import com.sigmundgranaas.forgero.common.useinteraction.UseContext;
-import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
-import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
+import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -20,20 +18,8 @@ import java.util.List;
  */
 public class EntityUseManager {
 
-	private static ComponentConverter converter;
-
 	private EntityUseManager() {
 		// Static class
-	}
-
-	/**
-	 * Initializes the manager with required services.
-	 * Called during Forgero initialization.
-	 *
-	 * @param services The Forgero services container
-	 */
-	public static void initialize(ForgeroServices services) {
-		converter = services.converter();
 	}
 
 	/**
@@ -50,45 +36,34 @@ public class EntityUseManager {
 			return ActionResult.PASS;
 		}
 
-		return converter.toComponent(stack)
-				.map(component -> {
-					List<EntityUseProperty> properties = getActiveProperties(component);
-
-					if (properties.isEmpty()) {
-						return ActionResult.PASS;
-					}
-
-					UseContext context = UseContext.startWithTarget(
-							player.getWorld(),
-							player,
-							hand,
-							stack,
-							target
-					);
-
-					ActionResult finalResult = ActionResult.PASS;
-					for (EntityUseProperty property : properties) {
-						for (EntityUseEffect effect : property.effects()) {
-							ActionResult result = effect.apply(context);
-							if (result == ActionResult.FAIL) {
-								return ActionResult.FAIL;
-							}
-							if (result != ActionResult.PASS) {
-								finalResult = result;
-							}
-						}
-					}
-
-					return finalResult;
-				})
-				.orElse(ActionResult.PASS);
-	}
-
-	private static List<EntityUseProperty> getActiveProperties(Component component) {
-		var engine = new EntityUseProperty.Engine();
 		DynamicContext.Builder contextBuilder = new DynamicContext.Builder();
+		List<EntityUseProperty> properties = ForgeroApi.itemProperty().resolve(stack, EntityUseProperty.Engine::new, contextBuilder.build());
 
-		// Build context for dynamic condition evaluation
-		return engine.resolve(component, contextBuilder.build());
+		if (properties.isEmpty()) {
+			return ActionResult.PASS;
+		}
+
+		UseContext context = UseContext.startWithTarget(
+				player.getWorld(),
+				player,
+				hand,
+				stack,
+				target
+		);
+
+		ActionResult finalResult = ActionResult.PASS;
+		for (EntityUseProperty property : properties) {
+			for (EntityUseEffect effect : property.effects()) {
+				ActionResult result = effect.apply(context);
+				if (result == ActionResult.FAIL) {
+					return ActionResult.FAIL;
+				}
+				if (result != ActionResult.PASS) {
+					finalResult = result;
+				}
+			}
+		}
+
+		return finalResult;
 	}
 }

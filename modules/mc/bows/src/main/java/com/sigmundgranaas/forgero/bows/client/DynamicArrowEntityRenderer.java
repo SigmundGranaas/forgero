@@ -8,7 +8,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.render.model.json.ModelTransformationMode;
+import static net.minecraft.client.render.model.json.ModelTransformationMode.GROUND;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
@@ -53,7 +53,7 @@ public class DynamicArrowEntityRenderer extends EntityRenderer<DynamicArrowEntit
 		matrixStack.multiply(POSITIVE_Z.rotationDegrees(pitch));
 		matrixStack.multiply(POSITIVE_Z.rotationDegrees(-45.0F));
 
-		this.renderer.renderItem(arrow.getStack(), ModelTransformationMode.FIXED, light, OverlayTexture.DEFAULT_UV,
+		this.renderer.renderItem(arrow.getStack(), GROUND, light, OverlayTexture.DEFAULT_UV,
 				matrixStack, vertexConsumerProvider, arrow.getWorld(), arrow.getId());
 
 		matrixStack.pop();

@@ -10,7 +10,7 @@ import com.sigmundgranaas.forgero.bows.handlers.LaunchProjectileHandler;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.useinteraction.UseContext;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
+import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroGameTest;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroTestContext;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroTestUtils;

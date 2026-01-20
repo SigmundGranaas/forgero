@@ -1,11 +1,9 @@
 package com.sigmundgranaas.forgero.properties.minecraft.blockuse;
 
-import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.useinteraction.BlockUseContext;
 import com.sigmundgranaas.forgero.common.useinteraction.BlockUseEffect;
-import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
-import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
+import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -20,20 +18,8 @@ import java.util.List;
  */
 public class BlockUseManager {
 
-	private static ComponentConverter converter;
-
 	private BlockUseManager() {
 		// Static class
-	}
-
-	/**
-	 * Initializes the manager with required services.
-	 * Called during Forgero initialization.
-	 *
-	 * @param services The Forgero services container
-	 */
-	public static void initialize(ForgeroServices services) {
-		converter = services.converter();
 	}
 
 	/**
@@ -50,45 +36,34 @@ public class BlockUseManager {
 			return ActionResult.PASS;
 		}
 
-		return converter.toComponent(stack)
-				.map(component -> {
-					List<BlockUseProperty> properties = getActiveProperties(component);
-
-					if (properties.isEmpty()) {
-						return ActionResult.PASS;
-					}
-
-					BlockUseContext context = BlockUseContext.create(
-							player.getWorld(),
-							player,
-							hand,
-							stack,
-							hitResult
-					);
-
-					ActionResult finalResult = ActionResult.PASS;
-					for (BlockUseProperty property : properties) {
-						for (BlockUseEffect effect : property.effects()) {
-							ActionResult result = effect.apply(context);
-							if (result == ActionResult.FAIL) {
-								return ActionResult.FAIL;
-							}
-							if (result != ActionResult.PASS) {
-								finalResult = result;
-							}
-						}
-					}
-
-					return finalResult;
-				})
-				.orElse(ActionResult.PASS);
-	}
-
-	private static List<BlockUseProperty> getActiveProperties(Component component) {
-		var engine = new BlockUseProperty.Engine();
 		DynamicContext.Builder contextBuilder = new DynamicContext.Builder();
+		List<BlockUseProperty> properties = ForgeroApi.itemProperty().resolve(stack, BlockUseProperty.Engine::new, contextBuilder.build());
 
-		// Build context for dynamic condition evaluation
-		return engine.resolve(component, contextBuilder.build());
+		if (properties.isEmpty()) {
+			return ActionResult.PASS;
+		}
+
+		BlockUseContext context = BlockUseContext.create(
+				player.getWorld(),
+				player,
+				hand,
+				stack,
+				hitResult
+		);
+
+		ActionResult finalResult = ActionResult.PASS;
+		for (BlockUseProperty property : properties) {
+			for (BlockUseEffect effect : property.effects()) {
+				ActionResult result = effect.apply(context);
+				if (result == ActionResult.FAIL) {
+					return ActionResult.FAIL;
+				}
+				if (result != ActionResult.PASS) {
+					finalResult = result;
+				}
+			}
+		}
+
+		return finalResult;
 	}
 }

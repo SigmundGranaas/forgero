@@ -30,9 +30,9 @@
   ],
   "attributes": [
     {
-      "id": "forgero:war_hammer_head-attack_speed",
+      "id": "forgero:war_hammer_head-attack_speed-base",
       "type": "forgero:attack_speed",
-      "computation": {"value": -0.2}
+      "computation": {"value": -0.6}
     },
     {
       "id": "forgero:war_hammer_head-rarity",
@@ -46,10 +46,10 @@
       "computation": {"multiply": 1.3}
     },
     {
-      "id": "forgero:war_hammer_head-attack_damage-mult",
+      "id": "forgero:war_hammer_head-attack_damage-offset",
       "type": "forgero:attack_damage",
       "context": "forgero:part-composite",
-      "computation": {"multiply": 2.0}
+      "computation": {"value": 5, "operation": "addition"}
     },
     {
       "id": "forgero:war_hammer_head-attack_speed-mult",

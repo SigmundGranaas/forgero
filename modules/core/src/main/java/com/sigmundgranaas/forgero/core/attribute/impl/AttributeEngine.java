@@ -6,6 +6,7 @@ import com.sigmundgranaas.forgero.core.attribute.api.BakedAttributes;
 import com.sigmundgranaas.forgero.core.attribute.api.PrecomputedAttribute;
 import com.sigmundgranaas.forgero.core.attribute.impl.computation.ComputationChain;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.property.api.DataTypeEngine;
@@ -120,9 +121,14 @@ public class AttributeEngine implements DataTypeEngine<BakedAttributes, Attribut
 		}
 
 		// Determine which baking strategy to use based on the type of the root component.
-		AttributeBakingStrategy strategyToUse = (componentList.get(0) instanceof StructuredComponent)
-				? compositeBakingStrategy
-				: defaultBakingStrategy;
+		// Use CompositeAttributeBakingStrategy for:
+		// - StructuredComponent: needs part-composite context handling for composition
+		// - CustomizableComponent: needs upgrade attribute filtering by context
+		Component root = componentList.get(0);
+		AttributeBakingStrategy strategyToUse =
+				(root instanceof StructuredComponent || root instanceof CustomizableComponent)
+						? compositeBakingStrategy
+						: defaultBakingStrategy;
 
 		// Delegate to the chosen strategy to get raw attributes (with static conditions applied).
 		List<Attribute> rawAttributes = strategyToUse.bake(componentList.stream());

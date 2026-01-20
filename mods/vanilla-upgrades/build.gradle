@@ -3,29 +3,37 @@ group = 'com.sigmundgranaas'
 version = project.version
 
 dependencies {
-    // Core modules (included in JAR)
+    // === SHARED FOUNDATION ===
+    // forgero-loader provides the initialization system and core APIs
+    // Included in JAR - Fabric's jar-in-jar will deduplicate if forgero is also loaded
+    include(project(path: ":modules:mc:loader", configuration: 'namedElements'))
+
+    // Core content packs
+    include(project(":content:forgero-base"))
+    include(project(":content:forgero-materials"))
+
+    // === VANILLA-UPGRADES SPECIFIC MODULES (bundled in JAR) ===
     include(project(":modules:core"))
     include(project(path: ":modules:mc:common", configuration: 'namedElements'))
-    include(project(path: ":modules:mc:loader", configuration: 'namedElements'))
     include(project(path: ":modules:mc:properties", configuration: 'namedElements'))
     include(project(path: ":modules:mc:render", configuration: 'namedElements'))
     include(project(path: ":modules:mc:predicate", configuration: 'namedElements'))
     include(project(path: ":modules:mc:tools", configuration: 'namedElements'))
 
-    // Implementation dependencies (for compilation)
+    // Implementation dependencies (for compilation and development runtime)
     implementation(project(":modules:core"))
     implementation(project(path: ":modules:mc:common", configuration: 'namedElements'))
     implementation(project(path: ":modules:mc:loader", configuration: 'namedElements'))
+    implementation(project(path: ":modules:mc:properties", configuration: 'namedElements'))
     implementation(project(path: ":modules:mc:tools", configuration: 'namedElements'))
 
-    // Content packs (included in JAR and on runtime classpath for development)
-    include(project(":content:forgero-base"))
-    include(project(":content:forgero-materials"))
-    include(project(":content:forgero-upgrades"))
+    // === VANILLA-UPGRADES SPECIFIC CONTENT (bundled in JAR) ===
+    // Note: Material upgrade bases are in forgero-base
     include(project(":content:vanilla-upgrades-base"))
+
+    // Core content runtimeOnly for development
     runtimeOnly(project(":content:forgero-base"))
     runtimeOnly(project(":content:forgero-materials"))
-    runtimeOnly(project(":content:forgero-upgrades"))
     runtimeOnly(project(":content:vanilla-upgrades-base"))
 
     // Fabric

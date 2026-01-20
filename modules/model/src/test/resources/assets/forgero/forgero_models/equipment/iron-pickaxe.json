@@ -14,7 +14,10 @@
     {
       "id": "binding",
       "order": 30,
-      "renderer": { "type": "forgero:component" }
+      "renderer": {
+        "type": "forgero:component",
+        "context": "tool_binding"
+      }
     }
   ]
 }

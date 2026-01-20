@@ -1,8 +1,7 @@
 package com.sigmundgranaas.forgero.loader.impl;
 
 import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
-import com.sigmundgranaas.forgero.loader.api.*;
-import com.sigmundgranaas.forgero.loader.plugin.ForgeroDefaultsPlugin;
+import com.sigmundgranaas.forgero.common.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,18 +22,19 @@ public class PluginOrchestrator {
 	}
 
 	/**
-	 * Phase 1: Discover all plugins from Fabric entrypoints and register defaults.
+	 * Phase 1: Discover all plugins from Fabric entrypoints.
+	 * <p>
+	 * All plugins (including ForgeroDefaultsPlugin and CoreSlotTypesPlugin) are now
+	 * discovered via Fabric entrypoints defined in fabric.mod.json files.
 	 */
 	public void discoverPlugins() {
 		registry.discoverPlugins();
-		registry.registerPlugin(new ForgeroDefaultsPlugin());
-		registry.registerPlugin(new com.sigmundgranaas.forgero.loader.plugin.CoreSlotTypesPlugin());
 
 		int dataPlugins = registry.getDataPlugins().size();
 		int itemRegPlugins = registry.getItemRegistrationPlugins().size();
 		int postLoadPlugins = registry.getPostLoadPlugins().size();
 
-		LOGGER.info("Discovered and registered {} plugins: {} data, {} item registration, {} post-load",
+		LOGGER.debug("Discovered {} plugins: {} data, {} item registration, {} post-load",
 				dataPlugins + itemRegPlugins + postLoadPlugins, dataPlugins, itemRegPlugins, postLoadPlugins);
 	}
 

@@ -1,8 +1,7 @@
 package com.sigmundgranaas.forgero.loader.impl;
 
-import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
-import com.sigmundgranaas.forgero.loader.api.ForgeroInitializedCallback;
-import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
+import com.sigmundgranaas.forgero.common.api.ForgeroServices;
+import com.sigmundgranaas.forgero.loader.internal.ForgeroApiAccess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,14 +14,12 @@ public class ApiInitializer {
 
 	/**
 	 * Phase 11: Fire the initialization event for DI-based subscribers.
+	 * <p>
+	 * This sets the services on ForgeroApi and fires the callback event.
 	 *
 	 * @param services The services to provide to subscribers
 	 */
 	public void fireInitializationEvent(ForgeroServices services) {
-		LOGGER.debug("Firing ForgeroInitializedCallback event...");
-		// Set services in static accessor for convenience access
-		ForgeroApi.setServices(services);
-		ForgeroInitializedCallback.EVENT.invoker().onForgeroInitialized(services);
-		LOGGER.info("ForgeroServices are now available via event subscribers.");
+		ForgeroApiAccess.initialize(services);
 	}
 }

@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.bows.item;
 
 import com.sigmundgranaas.forgero.common.item.ForgeroHostItem;
-import com.sigmundgranaas.forgero.common.name.NameResolver;
+import com.sigmundgranaas.forgero.properties.name.NameResolver;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
+import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 
 import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;

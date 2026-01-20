@@ -224,7 +224,7 @@ public class ComponentSmokeTest implements ForgeroGameTest {
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void tool_attributes_are_reasonable(TestContext context) {
         var ctx = ForgeroTestUtils.forgero(context);
-        var query = com.sigmundgranaas.forgero.loader.api.ForgeroApi.itemQuery();
+        var query = com.sigmundgranaas.forgero.common.api.ForgeroApi.itemQuery();
 
         // Test iron pickaxe attributes
         var ironPickaxe = ctx.component("forgero:iron-pickaxe");
@@ -285,7 +285,7 @@ public class ComponentSmokeTest implements ForgeroGameTest {
     @GameTest(templateName = EMPTY_STRUCTURE, required = true)
     public void oak_pickaxe_has_wood_tier_attributes(TestContext context) {
         var ctx = ForgeroTestUtils.forgero(context);
-        var query = com.sigmundgranaas.forgero.loader.api.ForgeroApi.itemQuery();
+        var query = com.sigmundgranaas.forgero.common.api.ForgeroApi.itemQuery();
 
         var oakPickaxe = ctx.component("forgero:oak-pickaxe");
         assertTrue(oakPickaxe.isPresent(), "Oak pickaxe must exist");

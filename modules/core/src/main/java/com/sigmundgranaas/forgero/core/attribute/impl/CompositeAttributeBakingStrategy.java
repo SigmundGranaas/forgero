@@ -6,7 +6,9 @@ import com.sigmundgranaas.forgero.core.attribute.api.AttributeContext;
 import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.attribute.composition.PartCompositeContextHandler;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
+import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.property.context.ResolutionContext;
@@ -60,6 +62,9 @@ public class CompositeAttributeBakingStrategy implements AttributeBakingStrategy
 		}
 
 		collectDefaultAttributes(componentList, root, result);
+
+		// Collect attributes from upgrades (installed in upgrade slots)
+		collectUpgradeAttributes(componentList, root, result);
 
 		return result;
 	}
@@ -179,21 +184,117 @@ public class CompositeAttributeBakingStrategy implements AttributeBakingStrategy
 	}
 
 	/**
-	 * Step 5: Pass through default (no context) attributes unchanged.
+	 * Step 5: Pass through default (no context) attributes from the component tree.
+	 *
+	 * <p>Recursively collects default (no-context) attributes from the root and all
+	 * structure children. Upgrade slot contents are NOT processed here - they are handled
+	 * separately by {@link #collectUpgradeAttributes} which applies proper context filtering.</p>
 	 */
 	private void collectDefaultAttributes(List<Component> components, Component root, List<Attribute> result) {
-		for (Component component : components) {
-			ResolutionContext ctx = new ResolutionContext(component, root);
+		if (components.isEmpty()) {
+			return;
+		}
 
-			List<Attribute> defaults = component.properties(KEY).stream()
-					.filter(attr -> attr.context().isEmpty())
+		// Recursively collect from root and all structure children (not upgrades)
+		collectDefaultAttributesRecursively(root, root, result);
+	}
+
+	/**
+	 * Recursively collects default (no-context) attributes from structure children only.
+	 *
+	 * <p>This method traverses structure parts (ComponentPart) but NOT upgrade slots
+	 * (ComponentUpgradeSlot). Upgrade attributes are handled separately with context filtering.</p>
+	 */
+	private void collectDefaultAttributesRecursively(Component component, Component root, List<Attribute> result) {
+		ResolutionContext ctx = new ResolutionContext(component, root);
+
+		// Collect default (no-context) attributes from this component
+		List<Attribute> defaults = component.properties(KEY).stream()
+				.filter(attr -> attr.context().isEmpty())
+				.filter(attr -> attr.condition()
+						.map(Condition::staticConditions)
+						.map(ctx::test)
+						.orElse(true))
+				.toList();
+
+		result.addAll(defaults);
+
+		// Recursively process structure parts only (NOT upgrade slots)
+		if (component instanceof StructuredComponent structured) {
+			for (ComponentPart part : structured.structure().allParts()) {
+				collectDefaultAttributesRecursively(part.getContent(), root, result);
+			}
+		}
+	}
+
+	/**
+	 * Collects attributes from upgrades installed in upgrade slots.
+	 *
+	 * <p>Recursively traverses the component tree to find all CustomizableComponents
+	 * and collects attributes from their installed upgrades.</p>
+	 *
+	 * <p>Attribute filtering rules:</p>
+	 * <ul>
+	 *   <li>Attributes with no context → always included</li>
+	 *   <li>Attributes with "upgrade" context → always included</li>
+	 *   <li>Attributes with specific context → only if slot context matches</li>
+	 * </ul>
+	 *
+	 * @param components All components in the tree (typically just the root)
+	 * @param root The root component for context resolution
+	 * @param result The result list to add attributes to
+	 */
+	private void collectUpgradeAttributes(List<Component> components, Component root, List<Attribute> result) {
+		for (Component component : components) {
+			collectUpgradeAttributesRecursively(component, root, result);
+		}
+	}
+
+	private void collectUpgradeAttributesRecursively(Component component, Component root, List<Attribute> result) {
+		// Collect upgrades from this component if it's customizable
+		if (component instanceof CustomizableComponent customizable) {
+			collectUpgradesFromComponent(customizable, root, result);
+		}
+
+		// Recursively check structure parts
+		if (component instanceof StructuredComponent structured) {
+			for (ComponentPart part : structured.structure().allParts()) {
+				collectUpgradeAttributesRecursively(part.getContent(), root, result);
+			}
+		}
+	}
+
+	private void collectUpgradesFromComponent(CustomizableComponent customizable, Component root, List<Attribute> result) {
+		for (ComponentUpgradeSlot slot : customizable.upgrades().allUpgradeSlots()) {
+			if (!slot.isFilled()) {
+				continue;
+			}
+
+			Component upgrade = slot.content().orElse(null);
+			if (upgrade == null) {
+				continue;
+			}
+
+			Optional<OpenIdentifier> slotContext = slot.context();
+			ResolutionContext ctx = new ResolutionContext(upgrade, root);
+
+			// Collect attributes from the upgrade, filtered by slot context
+			List<Attribute> upgradeAttrs = upgrade.properties(KEY).stream()
+					.filter(attr -> AttributeContext.matchesSlotContext(attr.context(), slotContext))
 					.filter(attr -> attr.condition()
 							.map(Condition::staticConditions)
 							.map(ctx::test)
 							.orElse(true))
+					// Resolve the attribute (remove context since it's now been processed)
+					.<Attribute>map(attr -> SimpleAttribute.resolved(attr.type(), attr.value()))
 					.toList();
 
-			result.addAll(defaults);
+			result.addAll(upgradeAttrs);
+
+			// Recursively collect from nested customizable components in the upgrade
+			if (upgrade instanceof CustomizableComponent nestedCustomizable) {
+				collectUpgradesFromComponent(nestedCustomizable, root, result);
+			}
 		}
 	}
 }

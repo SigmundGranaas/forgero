@@ -1,6 +1,7 @@
 {
   "type": "forgero:material",
   "name": "Flawed Lapis",
+  "include": ["forgero:gem_upgrade_base"],
   "tags": [
     "forgero:upgrades/types/gem",
     "forgero:materials/types/lapis",

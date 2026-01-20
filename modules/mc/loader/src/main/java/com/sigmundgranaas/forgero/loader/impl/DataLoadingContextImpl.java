@@ -2,9 +2,11 @@ package com.sigmundgranaas.forgero.loader.impl;
 
 import com.sigmundgranaas.forgero.common.api.item.ItemComparisonApi;
 import com.sigmundgranaas.forgero.common.api.item.ItemMutationApi;
+import com.sigmundgranaas.forgero.common.api.item.ItemPropertyApi;
 import com.sigmundgranaas.forgero.common.api.item.ItemQueryApi;
 import com.sigmundgranaas.forgero.common.api.item.impl.ItemComparisonApiImpl;
 import com.sigmundgranaas.forgero.common.api.item.impl.ItemMutationApiImpl;
+import com.sigmundgranaas.forgero.common.api.item.impl.ItemPropertyApiImpl;
 import com.sigmundgranaas.forgero.common.api.item.impl.ItemQueryApiImpl;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.nbt.ComponentNbtConverter;
@@ -14,9 +16,10 @@ import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.slot.SlotManager;
 import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
 import com.sigmundgranaas.forgero.data.pipeline.api.ForgeroDataBundle;
-import com.sigmundgranaas.forgero.loader.api.DataLoadingContext;
+import com.sigmundgranaas.forgero.common.api.DataLoadingContext;
 import net.minecraft.item.ItemStack;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -37,7 +40,19 @@ public class DataLoadingContextImpl implements DataLoadingContext {
 	private ItemQueryApi itemQueryApi;
 	private ItemMutationApi itemMutationApi;
 	private ItemComparisonApi itemComparisonApi;
+	private ItemPropertyApi itemPropertyApi;
 
+	/**
+	 * Initializes this context with all required services.
+	 *
+	 * @param componentRegistry       The component registry (must not be null)
+	 * @param taggedComponentRegistry The tagged component registry (must not be null)
+	 * @param componentConverter      The component converter (must not be null)
+	 * @param nbtConverter            The NBT converter (must not be null)
+	 * @param slotManager             The slot manager (must not be null)
+	 * @param dataBundle              The data bundle (must not be null)
+	 * @throws NullPointerException if any parameter is null
+	 */
 	public void initialize(
 			ComponentRegistry componentRegistry,
 			TaggedRegistry<Component> taggedComponentRegistry,
@@ -45,12 +60,12 @@ public class DataLoadingContextImpl implements DataLoadingContext {
 			ComponentNbtConverter nbtConverter,
 			SlotManager slotManager,
 			ForgeroDataBundle dataBundle) {
-		this.componentRegistry = componentRegistry;
-		this.taggedComponentRegistry = taggedComponentRegistry;
-		this.componentConverter = componentConverter;
-		this.nbtConverter = nbtConverter;
-		this.slotManager = slotManager;
-		this.dataBundle = dataBundle;
+		this.componentRegistry = Objects.requireNonNull(componentRegistry, "componentRegistry must not be null");
+		this.taggedComponentRegistry = Objects.requireNonNull(taggedComponentRegistry, "taggedComponentRegistry must not be null");
+		this.componentConverter = Objects.requireNonNull(componentConverter, "componentConverter must not be null");
+		this.nbtConverter = Objects.requireNonNull(nbtConverter, "nbtConverter must not be null");
+		this.slotManager = Objects.requireNonNull(slotManager, "slotManager must not be null");
+		this.dataBundle = Objects.requireNonNull(dataBundle, "dataBundle must not be null");
 	}
 
 	// ============================================================
@@ -114,6 +129,14 @@ public class DataLoadingContextImpl implements DataLoadingContext {
 			itemComparisonApi = new ItemComparisonApiImpl(componentConverter);
 		}
 		return itemComparisonApi;
+	}
+
+	@Override
+	public ItemPropertyApi itemProperty() {
+		if (itemPropertyApi == null) {
+			itemPropertyApi = new ItemPropertyApiImpl(componentConverter);
+		}
+		return itemPropertyApi;
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.tests;
 
-import com.sigmundgranaas.forgero.common.name.NameResolver;
+import com.sigmundgranaas.forgero.properties.name.NameResolver;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroGameTest;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroTestUtils;

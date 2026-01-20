@@ -7,7 +7,7 @@ import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.impl.StaticComponent;
 import com.sigmundgranaas.forgero.core.property.api.Property;
-import com.sigmundgranaas.forgero.loader.api.ForgeroInitializedCallback;
+import com.sigmundgranaas.forgero.common.api.ForgeroInitializedCallback;
 import com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.BlockBreakingProperty;
 import com.sigmundgranaas.forgero.properties.minecraft.blockuse.BlockUseProperty;
 import com.sigmundgranaas.forgero.properties.minecraft.entityuse.EntityUseProperty;

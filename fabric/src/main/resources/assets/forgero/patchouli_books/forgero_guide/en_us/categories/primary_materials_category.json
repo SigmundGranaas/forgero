@@ -1,7 +1,0 @@
-{
-  "parent": "forgero:materials_category",
-  "name": "Tool materials",
-  "description": "Tool materials are a range of materials suited for crafting parts from schematics. All materials have unique attributes, and some materials might also have properties which affect how you interact with the world",
-  "icon": "minecraft:copper_ingot",
-  "sortnum": 1
-}

@@ -2,7 +2,7 @@ package com.sigmundgranaas.vanillaupgrades.tests;
 
 import com.sigmundgranaas.forgero.common.api.item.ItemMutationApi;
 import com.sigmundgranaas.forgero.common.api.item.ItemQueryApi;
-import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
+import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.item.ItemStack;

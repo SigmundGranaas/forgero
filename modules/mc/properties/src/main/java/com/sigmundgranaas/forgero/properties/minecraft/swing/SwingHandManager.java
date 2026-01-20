@@ -1,9 +1,7 @@
 package com.sigmundgranaas.forgero.properties.minecraft.swing;
 
-import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
-import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
-import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
+import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import com.sigmundgranaas.forgero.effects.entity.SwingEffect;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -17,20 +15,8 @@ import java.util.List;
  */
 public class SwingHandManager {
 
-	private static ComponentConverter converter;
-
 	private SwingHandManager() {
 		// Static class
-	}
-
-	/**
-	 * Initializes the manager with required services.
-	 * Called during Forgero initialization.
-	 *
-	 * @param services The Forgero services container
-	 */
-	public static void initialize(ForgeroServices services) {
-		converter = services.converter();
 	}
 
 	/**
@@ -45,24 +31,17 @@ public class SwingHandManager {
 			return;
 		}
 
-		converter.toComponent(stack).ifPresent(component -> {
-			List<SwingHandProperty> properties = getActiveProperties(component);
-
-			for (SwingHandProperty property : properties) {
-				for (SwingEffect effect : property.effects()) {
-					effect.apply(source, hand);
-				}
-			}
-		});
-	}
-
-	private static List<SwingHandProperty> getActiveProperties(Component component) {
-		var engine = new SwingHandProperty.Engine();
 		DynamicContext.Builder contextBuilder = new DynamicContext.Builder();
+		List<SwingHandProperty> properties = ForgeroApi.itemProperty().resolve(
+			stack,
+			SwingHandProperty.Engine::new,
+			contextBuilder.build()
+		);
 
-		// Build context for dynamic condition evaluation
-		// You can add more context keys here as needed (entity state, etc.)
-
-		return engine.resolve(component, contextBuilder.build());
+		for (SwingHandProperty property : properties) {
+			for (SwingEffect effect : property.effects()) {
+				effect.apply(source, hand);
+			}
+		}
 	}
 }

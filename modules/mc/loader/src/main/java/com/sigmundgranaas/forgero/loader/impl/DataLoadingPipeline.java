@@ -18,6 +18,7 @@ import com.sigmundgranaas.forgero.data.pipeline.api.ForgeroDataInitializer;
 import com.sigmundgranaas.forgero.loader.impl.phase.PhaseExecutor;
 import com.sigmundgranaas.forgero.loader.impl.phase.PhaseResult;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceProvider;
+import com.sigmundgranaas.forgero.utility.resource.loader.implementation.CachingResourceProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +39,22 @@ public class DataLoadingPipeline {
 	private final PhaseExecutor executor = new PhaseExecutor("DataLoadingPipeline");
 	private static final String MOD_NAMESPACE = "forgero";
 
+	// Shared cached provider - created once, reused across all phases
+	private final CachingResourceProvider sharedProvider;
+
+	/**
+	 * Creates a new DataLoadingPipeline with a shared cached resource provider.
+	 * <p>
+	 * The provider is created once and reused across all loading phases (tags, data, etc.)
+	 * to avoid redundant mod discovery and filesystem traversal.
+	 */
+	public DataLoadingPipeline() {
+		boolean devMode = Boolean.getBoolean("forgero.dev.hotReload");
+		FabricResourceProvider fabricProvider = new FabricResourceProvider("data");
+		this.sharedProvider = new CachingResourceProvider(fabricProvider, devMode);
+		LOGGER.debug("DataLoadingPipeline initialized (devMode={})", devMode);
+	}
+
 	/**
 	 * Phase 2: Load the TagResolver from all namespaces.
 	 *
@@ -54,16 +71,13 @@ public class DataLoadingPipeline {
 	 */
 	public PhaseResult<TagResolver> loadTagsSafe() {
 		return executor.execute("loadTags", () -> {
-			LOGGER.info("Loading TagResolver from all namespaces...");
-
 			List<String> namespaces = List.of(MOD_NAMESPACE, "minecraft");
 			IdentifierFactory idFactory = new IdentifierFactory.Builder()
 					.defaultNamespace(MOD_NAMESPACE)
 					.build();
 
-			// Use FabricResourceProvider to properly find tags from Fabric mods
-			ResourceProvider resourceProvider = new FabricResourceProvider("data");
-			TagLoadingService tagLoader = new TagLoadingService(idFactory, resourceProvider);
+			// Use shared cached provider instead of creating a new one
+			TagLoadingService tagLoader = new TagLoadingService(idFactory, sharedProvider);
 
 			return namespaces.stream()
 					.map(ns -> tagLoader.loadTags(new OpenIdentifier(ns, "tags")))
@@ -105,12 +119,10 @@ public class DataLoadingPipeline {
 			propertyCodecs.put(entry.getKey(), entry.getValue().apply(conditionCodecSupplier));
 		}
 
-		// Use FabricResourceProvider to properly find resources from Fabric mods
-		ResourceProvider resourceProvider = new FabricResourceProvider("data");
-
+		// Use shared cached provider instead of creating a new one
 		return new ForgeroDataInitializer.Config(
 				MOD_NAMESPACE,
-				resourceProvider,
+				sharedProvider,
 				tagResolver,
 				propertyCodecs,
 				staticConditionCodecs,
@@ -125,12 +137,9 @@ public class DataLoadingPipeline {
 	 * @return The loaded data bundle
 	 */
 	public ForgeroDataBundle loadData(ForgeroDataInitializer.Config config) {
-		LOGGER.info("Loading Forgero data bundle...");
-
 		ForgeroDataInitializer dataInitializer = new ForgeroDataInitializer(config);
 		ForgeroDataBundle bundle = dataInitializer.getDataBundle();
-
-		LOGGER.info("Data bundle loaded with {} components", bundle.componentRegistry().all().size());
+		LOGGER.debug("Data bundle loaded: {} components", bundle.componentRegistry().all().size());
 		return bundle;
 	}
 
@@ -139,5 +148,35 @@ public class DataLoadingPipeline {
 	 */
 	public String getModNamespace() {
 		return MOD_NAMESPACE;
+	}
+
+	/**
+	 * Gets the shared cached resource provider.
+	 * Useful for debugging and cache inspection.
+	 *
+	 * @return The shared CachingResourceProvider
+	 */
+	public CachingResourceProvider getSharedProvider() {
+		return sharedProvider;
+	}
+
+	/**
+	 * Invalidates all cached resources.
+	 * Call this when resources may have changed (e.g., F3+T reload).
+	 */
+	public void invalidateCache() {
+		sharedProvider.invalidateAll();
+		LOGGER.debug("Resource cache invalidated");
+	}
+
+	/**
+	 * Logs cache statistics for debugging.
+	 */
+	public void logCacheStatistics() {
+		var stats = sharedProvider.getStatistics();
+		LOGGER.debug("Cache statistics: listCacheSize={}, resourceCacheSize={}, trackedSources={}",
+				stats.get("listCacheSize"),
+				stats.get("resourceCacheSize"),
+				stats.get("trackedSources"));
 	}
 }

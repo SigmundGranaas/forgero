@@ -19,8 +19,6 @@ public class BowClientPlugin implements ClientModInitializer {
 				DynamicArrowEntityRegistry.DYNAMIC_ARROW_ENTITY,
 				DynamicArrowEntityRenderer::new
 		);
-		
-		LOGGER.info("Registered DynamicArrowEntityRenderer for entity type: {}", 
-				DynamicArrowEntityRegistry.IDENTIFIER);
+		LOGGER.debug("Registered DynamicArrowEntityRenderer");
 	}
 }

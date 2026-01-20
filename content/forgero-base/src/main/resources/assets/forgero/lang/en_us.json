@@ -1,3 +1,37 @@
 {
-  "util.forgero.name_separator": " "
+  "util.forgero.name_separator": " ",
+
+  "item.forgero.handle": "Handle",
+  "item.forgero.wooden_handle": "Wooden Handle",
+  "item.forgero.binding": "Binding",
+  "item.forgero.soft_binding": "Soft Binding",
+  "item.forgero.sword_blade": "Sword Blade",
+  "item.forgero.sword_guard": "Sword Guard",
+  "item.forgero.pickaxe_head": "Pickaxe Head",
+  "item.forgero.axe_head": "Axe Head",
+  "item.forgero.shovel_head": "Shovel Head",
+  "item.forgero.hoe_head": "Hoe Head",
+  "item.forgero.pommel": "Pommel",
+
+  "item.forgero.pickaxe": "Pickaxe",
+  "item.forgero.axe": "Axe",
+  "item.forgero.shovel": "Shovel",
+  "item.forgero.hoe": "Hoe",
+  "item.forgero.sword": "Sword",
+
+  "item.forgero.refined": "Refined",
+  "item.forgero.mastercrafted": "Mastercrafted",
+
+  "tooltip.forgero.part_type.handle": "Handle",
+  "tooltip.forgero.part_type.binding": "Binding",
+  "tooltip.forgero.part_type.soft_binding": "Soft Binding",
+  "tooltip.forgero.part_type.sword_blade": "Sword Blade",
+  "tooltip.forgero.part_type.sword_guard": "Sword Guard",
+  "tooltip.forgero.part_type.pickaxe_head": "Pickaxe Head",
+  "tooltip.forgero.part_type.axe_head": "Axe Head",
+  "tooltip.forgero.part_type.shovel_head": "Shovel Head",
+  "tooltip.forgero.part_type.hoe_head": "Hoe Head",
+  "tooltip.forgero.part_type.pommel": "Pommel",
+  "tooltip.forgero.part_type.head": "Head",
+  "tooltip.forgero.part_type.blade": "Blade"
 }

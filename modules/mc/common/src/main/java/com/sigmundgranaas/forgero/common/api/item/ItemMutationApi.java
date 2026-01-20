@@ -67,7 +67,7 @@ import net.minecraft.item.ItemStack;
  *     <li><b>Invalid upgrade ID:</b> Returns original stack</li>
  * </ul>
  *
- * @see com.sigmundgranaas.forgero.loader.api.ForgeroApi#itemMutation()
+ * @see com.sigmundgranaas.forgero.common.api.ForgeroApi#itemMutation()
  */
 public interface ItemMutationApi {
 

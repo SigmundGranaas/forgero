@@ -51,7 +51,7 @@ import java.util.Set;
  *     <li><b>Optional queries:</b> Return Optional.empty() when value is truly optional</li>
  * </ul>
  *
- * @see com.sigmundgranaas.forgero.loader.api.ForgeroApi#itemQuery()
+ * @see com.sigmundgranaas.forgero.common.api.ForgeroApi#itemQuery()
  */
 public interface ItemQueryApi {
 

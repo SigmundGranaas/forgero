@@ -2,7 +2,7 @@
   "type": "forgero:upgrade_model_template",
   "context": "guard_reinforcement",
   "target": {
-    "tag": "forgero:tool_material"
+    "tag": "forgero:materials/roles/tool_material"
   },
   "models": [
     {

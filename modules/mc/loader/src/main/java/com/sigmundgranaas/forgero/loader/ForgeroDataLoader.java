@@ -14,8 +14,8 @@ import com.sigmundgranaas.forgero.core.component.mutation.api.ComponentMutater;
 import com.sigmundgranaas.forgero.core.component.mutation.impl.ComponentMutaterImpl;
 import com.sigmundgranaas.forgero.data.pipeline.api.ForgeroDataBundle;
 import com.sigmundgranaas.forgero.data.pipeline.api.ForgeroDataInitializer;
-import com.sigmundgranaas.forgero.loader.api.DataLoadingContext;
-import com.sigmundgranaas.forgero.loader.api.ForgeroInitializedCallback;
+import com.sigmundgranaas.forgero.common.api.DataLoadingContext;
+import com.sigmundgranaas.forgero.common.api.ForgeroInitializedCallback;
 import com.sigmundgranaas.forgero.loader.impl.*;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.item.Item;
@@ -70,7 +70,6 @@ public class ForgeroDataLoader implements ModInitializer {
 		}
 
 		long startTime = System.currentTimeMillis();
-		LOGGER.info("Starting Forgero data loading process...");
 
 		try {
 			// Phase 0: Register dynamic items
@@ -132,11 +131,9 @@ public class ForgeroDataLoader implements ModInitializer {
 
 			// Phase 11: Fire initialization event (external subscribers via ForgeroInitializedCallback)
 			apiInitializer.fireInitializationEvent(context);
-			LOGGER.info("Forgero initialization complete. Services available via ForgeroInitializedCallback.");
 
 			long endTime = System.currentTimeMillis();
-			LOGGER.info("Forgero data loading complete. Registered {} items in {}ms",
-					registeredItems.size(), endTime - startTime);
+			LOGGER.info("Forgero initialized: {} items in {}ms", registeredItems.size(), endTime - startTime);
 
 		} catch (Exception e) {
 			LOGGER.error("Critical error during Forgero data loading", e);
@@ -162,7 +159,6 @@ public class ForgeroDataLoader implements ModInitializer {
 				new DynamicSwordItem(settings)
 		);
 
-		LOGGER.info("Registered dynamic items for NBT-driven component wrapping.");
 		return new ComponentRegistrationService.DynamicItems(dynamicItem, dynamicToolItem, dynamicSwordItem);
 	}
 
@@ -207,15 +203,12 @@ public class ForgeroDataLoader implements ModInitializer {
 				ForgeroShapedRecipeSerializer.ID,
 				ForgeroShapedRecipeSerializer.INSTANCE
 		);
-		LOGGER.info("Registered Forgero shaped recipe serializer.");
 
-		// Register schematic part crafting recipe serializer
 		Registry.register(
 				Registries.RECIPE_SERIALIZER,
 				com.sigmundgranaas.forgero.common.recipe.SchematicPartRecipe.ID,
 				com.sigmundgranaas.forgero.common.recipe.SchematicPartRecipe.SERIALIZER
 		);
-		LOGGER.info("Registered schematic part crafting recipe serializer.");
 	}
 
 	public Map<Identifier, Item> getRegisteredItems() {

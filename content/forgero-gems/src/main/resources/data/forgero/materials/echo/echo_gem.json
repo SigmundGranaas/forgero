@@ -1,6 +1,7 @@
 {
   "type": "forgero:material",
   "name": "Echo Shard",
+  "include": ["forgero:gem_upgrade_base"],
   "tags": [
     "forgero:upgrades/types/gem",
     "forgero:materials/types/echo",

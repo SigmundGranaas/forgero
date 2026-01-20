@@ -1,14 +1,12 @@
 package com.sigmundgranaas.forgero.properties.minecraft.onkill;
 
-import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.property.context.ContextKeys;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.effects.entity.ContextualEffectHandler;
 import com.sigmundgranaas.forgero.effects.entity.EntityEffectHandler;
 import com.sigmundgranaas.forgero.effects.entity.OnHitEffect;
-import com.sigmundgranaas.forgero.loader.api.ForgeroServices;
+import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -26,20 +24,8 @@ import java.util.stream.Collectors;
  */
 public class OnKillManager {
 
-	private static ComponentConverter converter;
-
 	private OnKillManager() {
 		// Static class
-	}
-
-	/**
-	 * Initializes the manager with required services.
-	 * Called during Forgero initialization.
-	 *
-	 * @param services The Forgero services container
-	 */
-	public static void initialize(ForgeroServices services) {
-		converter = services.converter();
 	}
 
 	/**
@@ -59,46 +45,37 @@ public class OnKillManager {
 		killer.getHandItems().forEach(equipment::add);
 		killer.getArmorItems().forEach(equipment::add);
 
+		// Build context with victim tags
+		DynamicContext.Builder contextBuilder = new DynamicContext.Builder();
+		Set<OpenIdentifier> victimTags = Registries.ENTITY_TYPE.getEntry(victim.getType())
+				.streamTags()
+				.map(TagKey::id)
+				.map(id -> new OpenIdentifier(id.getNamespace(), id.getPath()))
+				.collect(Collectors.toSet());
+		contextBuilder.put(ContextKeys.TARGET_TAGS, victimTags);
+
 		// Process each equipped item
 		for (ItemStack stack : equipment) {
 			if (stack.isEmpty()) {
 				continue;
 			}
 
-			converter.toComponent(stack).ifPresent(component -> {
-				List<OnKillProperty> properties = getActiveProperties(component, victim);
+			List<OnKillProperty> properties = ForgeroApi.itemProperty().resolve(stack, OnKillProperty.Engine::new, contextBuilder.build());
 
-				for (OnKillProperty property : properties) {
-					// Killer is "source", victim is "initial target"
-					List<Entity> finalTargets = property.selector().select(killer, victim);
+			for (OnKillProperty property : properties) {
+				// Killer is "source", victim is "initial target"
+				List<Entity> finalTargets = property.selector().select(killer, victim);
 
-					for (Entity finalTarget : finalTargets) {
-						for (OnHitEffect effect : property.effects()) {
-							if (effect instanceof ContextualEffectHandler contextual) {
-								contextual.apply(killer, finalTarget);
-							} else if (effect instanceof EntityEffectHandler simple) {
-								simple.apply(finalTarget);
-							}
+				for (Entity finalTarget : finalTargets) {
+					for (OnHitEffect effect : property.effects()) {
+						if (effect instanceof ContextualEffectHandler contextual) {
+							contextual.apply(killer, finalTarget);
+						} else if (effect instanceof EntityEffectHandler simple) {
+							simple.apply(finalTarget);
 						}
 					}
 				}
-			});
+			}
 		}
-	}
-
-	private static List<OnKillProperty> getActiveProperties(Component component, Entity victim) {
-		var engine = new OnKillProperty.Engine();
-		DynamicContext.Builder contextBuilder = new DynamicContext.Builder();
-
-		// Populate context with victim tags
-		Set<OpenIdentifier> victimTags = Registries.ENTITY_TYPE.getEntry(victim.getType())
-				.streamTags()
-				.map(TagKey::id)
-				.map(id -> new OpenIdentifier(id.getNamespace(), id.getPath()))
-				.collect(Collectors.toSet());
-
-		contextBuilder.put(ContextKeys.TARGET_TAGS, victimTags);
-
-		return engine.resolve(component, contextBuilder.build());
 	}
 }

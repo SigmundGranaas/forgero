@@ -6,8 +6,8 @@ import com.sigmundgranaas.forgero.effects.block.BlockEffect;
 import com.sigmundgranaas.forgero.effects.block.BlockSelector;
 import com.sigmundgranaas.forgero.effects.block.PlacedBlockSelector;
 import com.sigmundgranaas.forgero.effects.block.RadiusBlockSelector;
-import com.sigmundgranaas.forgero.loader.api.DataPlugin;
-import com.sigmundgranaas.forgero.loader.api.PluginRegistrationContext;
+import com.sigmundgranaas.forgero.common.api.DataPlugin;
+import com.sigmundgranaas.forgero.common.api.PluginRegistrationContext;
 
 import java.util.HashMap;
 import java.util.Map;

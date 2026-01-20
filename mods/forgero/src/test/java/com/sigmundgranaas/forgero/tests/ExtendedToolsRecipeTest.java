@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.tests;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.loader.api.ForgeroApi;
+import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroGameTest;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroTestUtils;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroTestContext;
