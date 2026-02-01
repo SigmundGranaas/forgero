@@ -1,0 +1,10 @@
+{
+  "type": "forgero:texture_model",
+  "textures": {
+    "default": "forgero:item/parts/test-pickaxe_head"
+  },
+  "mount_points": [
+    { "name": "center", "position": [8, 4] },
+    { "name": "top", "position": [8, 0] }
+  ]
+}

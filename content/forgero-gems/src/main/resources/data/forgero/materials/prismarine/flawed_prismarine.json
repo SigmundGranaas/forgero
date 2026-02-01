@@ -24,7 +24,7 @@
         "value": 45,
         "operation": "addition"
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:flawed_prismarine-attack_damage",
@@ -33,7 +33,7 @@
         "value": 2,
         "operation": "addition"
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     }
   ]
 }

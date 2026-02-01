@@ -75,12 +75,31 @@ public class RecursiveModelResolver implements ItemModelResolver {
 			}
 		}
 
+		// Process dynamic slots first - these reference components from dynamicState
+		for (ModelSlot modelSlot : composite.slots()) {
+			if (modelSlot.isDynamic()) {
+				String dynamicKey = modelSlot.dynamicKey().get();
+				Object dynamicValue = context.dynamicState().get(dynamicKey);
+				if (dynamicValue instanceof Component dynamicComponent) {
+					LOGGER.debug("Resolving dynamic slot '{}' with component '{}' from dynamicState key '{}'",
+							modelSlot.id(), dynamicComponent.id(), dynamicKey);
+					textures.addAll(resolveSlot(modelSlot, dynamicComponent, context, baseOrder, composite));
+				} else {
+					LOGGER.debug("Dynamic slot '{}' has no component in dynamicState for key '{}'",
+							modelSlot.id(), dynamicKey);
+				}
+			}
+		}
+
 		if (component instanceof StructuredComponent structured) {
 			// Create a map of the component's actual children, keyed by their part's path.
 			Map<String, Component> filledSlots = structured.structure().allParts().stream()
 					.collect(Collectors.toMap(part -> part.id().path(), ComponentPart::content));
 
 			for (ModelSlot modelSlot : composite.slots()) {
+				// Skip dynamic slots - already processed above
+				if (modelSlot.isDynamic()) continue;
+
 				Component childComponent = filledSlots.get(modelSlot.id());
 				if (childComponent != null) {
 					textures.addAll(resolveSlot(modelSlot, childComponent, context, baseOrder, composite));
@@ -93,12 +112,16 @@ public class RecursiveModelResolver implements ItemModelResolver {
 			Map<String, Optional<Component>> slots = customizable.getUpgradeSlots().stream()
 					.collect(Collectors.toMap(slot -> slot.id().path(), ComponentUpgradeSlot::getContent));
 
-			// Collect model slot IDs for reverse lookup
+			// Collect model slot IDs for reverse lookup (excluding dynamic slots)
 			Set<String> modelSlotIds = composite.slots().stream()
+					.filter(slot -> !slot.isDynamic())
 					.map(ModelSlot::id)
 					.collect(Collectors.toSet());
 
 			for (ModelSlot modelSlot : composite.slots().stream().toList()) {
+				// Skip dynamic slots - already processed above
+				if (modelSlot.isDynamic()) continue;
+
 				if(slots.containsKey(modelSlot.id())) {
 					slots.get(modelSlot.id()).ifPresent(childComponent -> textures.addAll(resolveSlot(modelSlot, childComponent, context, baseOrder, composite)));
 				} else {

@@ -11,7 +11,7 @@
       "computation": {
         "value": 1.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:string-draw_power",
@@ -19,7 +19,7 @@
       "computation": {
         "value": 1.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:string-accuracy",
@@ -27,7 +27,7 @@
       "computation": {
         "value": 50
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     }
   ]
 }

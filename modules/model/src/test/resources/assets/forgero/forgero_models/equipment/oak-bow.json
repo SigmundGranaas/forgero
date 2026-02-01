@@ -1,5 +1,6 @@
 {
   "type": "forgero:composite_model",
+  "parent": "minecraft:item/bow",
   "slots": [
     {
       "id": "limb",
@@ -7,16 +8,14 @@
       "renderer": { "type": "forgero:component" }
     },
     {
-      "id": "handle",
-      "order": 20,
-      "renderer": {
-        "type": "forgero:component",
-        "context": "bow_handle"
-      }
+      "id": "equipped-arrow",
+      "order": 12,
+      "renderer": { "type": "forgero:component" },
+      "dynamic_key": "equippedArrow"
     },
     {
       "id": "string",
-      "order": 30,
+      "order": 20,
       "renderer": { "type": "forgero:component" }
     }
   ]

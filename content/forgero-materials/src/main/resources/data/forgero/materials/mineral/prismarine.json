@@ -23,7 +23,7 @@
       "computation": {
         "value": 2.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:prismarine_shard-attack_damage",
@@ -31,7 +31,7 @@
       "computation": {
         "value": 6.5
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:prismarine_shard-mining_speed",
@@ -39,7 +39,7 @@
       "computation": {
         "value": 8.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:prismarine_shard-mining_level",
@@ -47,7 +47,7 @@
       "computation": {
         "value": 3
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:prismarine_shard-durability",
@@ -55,7 +55,7 @@
       "computation": {
         "value": 1150
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:prismarine_shard-rarity",
@@ -63,7 +63,7 @@
       "computation": {
         "value": 70
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:prismarine_shard-weight",
@@ -71,7 +71,7 @@
       "computation": {
         "value": 2.5
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:prismarine_shard-armor",
@@ -79,7 +79,7 @@
       "computation": {
         "value": 5
       },
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "condition": {
         "type": "forgero:in_slot_type",
         "slot_type": "forgero:materials/roles/armor_material"

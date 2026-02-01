@@ -29,7 +29,7 @@
         "value": 30,
         "operation": "addition"
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:chipped_prismarine-attack_damage",
@@ -38,7 +38,7 @@
         "value": 1,
         "operation": "addition"
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     }
   ]
 }

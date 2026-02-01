@@ -6,37 +6,37 @@
       "id": "forgero:stone-upgrade-rarity",
       "type": "forgero:rarity",
       "computation": { "value": 10, "operation": "addition" },
-      "context": "forgero:upgrade"
+      "scope": "forgero:scope/upgrade"
     },
     {
       "id": "forgero:stone-upgrade-weight",
       "type": "forgero:weight",
       "computation": { "value": 1.5, "operation": "addition" },
-      "context": "forgero:upgrade"
+      "scope": "forgero:scope/upgrade"
     },
     {
       "id": "forgero:stone-offensive-attack_damage",
       "type": "forgero:attack_damage",
       "computation": { "value": 1.5, "operation": "addition" },
-      "context": "forgero:contexts/offensive"
+      "scope": "forgero:contexts/offensive"
     },
     {
       "id": "forgero:stone-offensive-mining_speed",
       "type": "forgero:mining_speed",
       "computation": { "value": 2, "operation": "addition" },
-      "context": "forgero:contexts/offensive"
+      "scope": "forgero:contexts/offensive"
     },
     {
       "id": "forgero:stone-offensive-durability",
       "type": "forgero:durability",
       "computation": { "value": 60, "operation": "addition" },
-      "context": "forgero:contexts/offensive"
+      "scope": "forgero:contexts/offensive"
     },
     {
       "id": "forgero:stone-offensive-draw_power",
       "type": "forgero:draw_power",
       "computation": { "value": 0.5, "operation": "addition" },
-      "context": "forgero:contexts/offensive"
+      "scope": "forgero:contexts/offensive"
     }
   ]
 }

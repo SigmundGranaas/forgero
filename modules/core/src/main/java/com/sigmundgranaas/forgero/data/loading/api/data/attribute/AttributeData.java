@@ -8,7 +8,7 @@ import java.util.Optional;
 /**
  * Data transfer object for attribute definitions in JSON.
  *
- * <p>Attributes can specify a {@link #context()} to indicate how they participate
+ * <p>Attributes can specify a {@link #scope()} to indicate how they participate
  * in composition (e.g., part-composite for shape+material composition).</p>
  */
 public interface AttributeData {
@@ -17,13 +17,13 @@ public interface AttributeData {
 	ComputationData computation();
 
 	/**
-	 * The composition context for this attribute.
+	 * The composition scope for this attribute.
 	 *
 	 * <p>Empty means default behavior (no special composition handling).</p>
 	 *
-	 * @return The context identifier, or empty for default
+	 * @return The scope identifier, or empty for default
 	 */
-	Optional<OpenIdentifier> context();
+	Optional<OpenIdentifier> scope();
 
 	Optional<Condition> condition();
 }

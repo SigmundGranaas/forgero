@@ -2,5 +2,16 @@
   "type": "forgero:texture_model",
   "target": "forgero:oak",
   "context": "arrow_shaft",
-  "texture": "forgero:item/upgrade/oak-arrow_shaft"
+  "textures": {
+    "default": "forgero:item/upgrade/oak-arrow_shaft",
+    "variants": [
+      {
+        "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:ranged/bow" }],
+        "texture": "forgero:item/upgrade/oak-arrow_shaft_in_bow"
+      }
+    ]
+  },
+  "mount_points": [
+    { "name": "center", "position": [8, 8] }
+  ]
 }

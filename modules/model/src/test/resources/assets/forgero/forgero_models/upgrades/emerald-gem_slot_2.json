@@ -1,0 +1,8 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:emerald",
+  "context": "gem_slot_2",
+  "textures": {
+    "default": "forgero:item/contextual/emerald_gem_2"
+  }
+}

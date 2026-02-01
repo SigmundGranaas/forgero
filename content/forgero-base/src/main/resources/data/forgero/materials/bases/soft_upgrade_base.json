@@ -6,37 +6,37 @@
       "id": "forgero:soft-upgrade-rarity",
       "type": "forgero:rarity",
       "computation": { "value": 10, "operation": "addition" },
-      "context": "forgero:upgrade"
+      "scope": "forgero:scope/upgrade"
     },
     {
       "id": "forgero:soft-upgrade-weight",
       "type": "forgero:weight",
       "computation": { "value": 0.75, "operation": "addition" },
-      "context": "forgero:upgrade"
+      "scope": "forgero:scope/upgrade"
     },
     {
       "id": "forgero:soft-utility-attack_speed",
       "type": "forgero:attack_speed",
       "computation": { "value": 0.1, "operation": "addition" },
-      "context": "forgero:contexts/utility"
+      "scope": "forgero:contexts/utility"
     },
     {
       "id": "forgero:soft-utility-accuracy",
       "type": "forgero:accuracy",
       "computation": { "value": 3, "operation": "addition" },
-      "context": "forgero:contexts/utility"
+      "scope": "forgero:contexts/utility"
     },
     {
       "id": "forgero:soft-utility-durability",
       "type": "forgero:durability",
       "computation": { "value": 70, "operation": "addition" },
-      "context": "forgero:contexts/utility"
+      "scope": "forgero:contexts/utility"
     },
     {
       "id": "forgero:soft-utility-draw_speed",
       "type": "forgero:draw_speed",
       "computation": { "value": 0.1, "operation": "addition" },
-      "context": "forgero:contexts/utility"
+      "scope": "forgero:contexts/utility"
     }
   ]
 }

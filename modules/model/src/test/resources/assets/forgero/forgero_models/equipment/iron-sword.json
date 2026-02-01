@@ -1,0 +1,23 @@
+{
+  "type": "forgero:composite_model",
+  "slots": [
+    {
+      "id": "blade",
+      "order": 20,
+      "renderer": { "type": "forgero:component" }
+    },
+    {
+      "id": "handle",
+      "order": 10,
+      "renderer": {
+        "type": "forgero:component",
+        "context": "handle_sword"
+      }
+    },
+    {
+      "id": "guard",
+      "order": 15,
+      "renderer": { "type": "forgero:component" }
+    }
+  ]
+}

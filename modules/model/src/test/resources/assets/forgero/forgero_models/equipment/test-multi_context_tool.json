@@ -1,0 +1,13 @@
+{
+  "type": "forgero:composite_model",
+  "slots": [
+    {
+      "id": "handle",
+      "order": 5,
+      "renderer": {
+        "type": "forgero:component",
+        "context": "handle"
+      }
+    }
+  ]
+}

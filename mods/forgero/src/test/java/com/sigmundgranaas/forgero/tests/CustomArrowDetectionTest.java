@@ -14,11 +14,13 @@ import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroGameTest;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroTestContext;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroTestUtils;
+import com.sigmundgranaas.forgero.mc.testcommon.helpers.PlayerFactory;
 import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.UseInteractionManager;
 import com.sigmundgranaas.forgero.common.useinteraction.UseContext;
 import com.sigmundgranaas.forgero.bows.handlers.LaunchProjectileHandler;
 
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.item.ArrowItem;
@@ -28,6 +30,8 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 
 /**
  * Tests that custom Forgero arrows are properly detected and used when shooting bows.
@@ -460,6 +464,231 @@ public class CustomArrowDetectionTest implements ForgeroGameTest {
 
 			context.assertTrue(!dynamicArrows.isEmpty(),
 					"Direct handler call should spawn DynamicArrowEntity - handler is broken if this fails");
+
+			context.complete();
+		});
+	}
+
+	// ========== Survival Mode Tests ==========
+
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "survival_arrow_tests")
+	public void survival_player_shoots_correct_custom_arrow_and_decrements_stack(TestContext context) {
+		var ctx = ForgeroTestUtils.forgero(context);
+
+		// Get Forgero bow and custom arrow
+		var bowOpt = ctx.component("forgero:oak-bow").flatMap(ctx::toStack);
+		var arrowOpt = ctx.component("forgero:iron-arrow").flatMap(ctx::toStack);
+
+		context.assertTrue(bowOpt.isPresent(), "Bow must exist");
+		context.assertTrue(arrowOpt.isPresent(), "Arrow must exist");
+
+		ItemStack bow = bowOpt.get();
+		ItemStack arrow = arrowOpt.get();
+		arrow.setCount(5);
+
+		// Build a thick target wall in front of the player (3 wide, 3 tall, 2 deep)
+		// This ensures the arrow will hit it regardless of aim precision
+		BlockPos wallCenter = context.getAbsolutePos(new BlockPos(0, 1, 5));
+		for (int x = -1; x <= 1; x++) {
+			for (int y = -1; y <= 1; y++) {
+				for (int z = 0; z <= 1; z++) {
+					context.getWorld().setBlockState(wallCenter.add(x, y, z), Blocks.STONE.getDefaultState());
+				}
+			}
+		}
+
+		// Create survival player facing the wall with slight downward pitch to aim at wall center
+		ServerPlayerEntity player = PlayerFactory.create(context)
+				.survival()
+				.at(0, 1, 0)
+				.facing(Direction.SOUTH)
+				.withPitch(10.0f) // Slight downward angle to hit the wall
+				.holding(bow)
+				.build();
+
+		player.getInventory().setStack(9, arrow.copy());
+		int initialCount = player.getInventory().getStack(9).getCount();
+
+		LOGGER.info("Survival test: {} iron arrows, shooting at wall at {}", initialCount, wallCenter);
+
+		// Shoot at the wall
+		player.setCurrentHand(Hand.MAIN_HAND);
+		bow.getItem().onStoppedUsing(bow, context.getWorld(), player, bow.getMaxUseTime() - 20);
+
+		// Wait for arrow to hit the wall
+		context.waitAndRun(15, () -> {
+			// Find arrow entities owned by this player
+			List<DynamicArrowEntity> arrows = context.getWorld().getEntitiesByClass(
+					DynamicArrowEntity.class,
+					player.getBoundingBox().expand(30),
+					a -> a.getOwner() != null && a.getOwner().getUuid().equals(player.getUuid())
+			);
+
+			context.assertTrue(!arrows.isEmpty(), "Arrow should be shot by player");
+
+			DynamicArrowEntity shotArrow = arrows.get(0);
+			ItemStack arrowStack = shotArrow.getStack();
+
+			// Verify the arrow entity contains the correct arrow type
+			context.assertTrue(!arrowStack.isEmpty(), "Arrow entity should have an ItemStack");
+			context.assertTrue(arrowStack.getItem() instanceof ForgeroArrowItem,
+					"Shot arrow should be ForgeroArrowItem");
+
+			// Verify it's specifically an iron arrow by checking the item
+			String arrowName = arrowStack.getItem().getTranslationKey();
+			LOGGER.info("Shot arrow type: {}", arrowName);
+			context.assertTrue(arrowName.contains("iron"),
+					"Shot arrow should be iron arrow, got: " + arrowName);
+
+			// Verify stack was decremented
+			int remainingCount = player.getInventory().getStack(9).isEmpty() ? 0 :
+					player.getInventory().getStack(9).getCount();
+			context.assertTrue(remainingCount == initialCount - 1,
+					"Arrow count should decrease: " + initialCount + " -> " + remainingCount);
+
+			context.complete();
+		});
+	}
+
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "survival_arrow_tests")
+	public void survival_player_prefers_offhand_arrow_and_shoots_correct_type(TestContext context) {
+		var ctx = ForgeroTestUtils.forgero(context);
+
+		var bowOpt = ctx.component("forgero:oak-bow").flatMap(ctx::toStack);
+		var ironArrowOpt = ctx.component("forgero:iron-arrow").flatMap(ctx::toStack);
+		var diamondArrowOpt = ctx.component("forgero:diamond-arrow").flatMap(ctx::toStack);
+
+		context.assertTrue(bowOpt.isPresent(), "Bow must exist");
+		context.assertTrue(ironArrowOpt.isPresent(), "Iron arrow must exist");
+		context.assertTrue(diamondArrowOpt.isPresent(), "Diamond arrow must exist");
+
+		ItemStack bow = bowOpt.get();
+		ItemStack ironArrow = ironArrowOpt.get();
+		ItemStack diamondArrow = diamondArrowOpt.get();
+		ironArrow.setCount(10);
+		diamondArrow.setCount(10);
+
+		// Build thick target wall
+		BlockPos wallCenter = context.getAbsolutePos(new BlockPos(0, 1, 5));
+		for (int x = -1; x <= 1; x++) {
+			for (int y = -1; y <= 1; y++) {
+				for (int z = 0; z <= 1; z++) {
+					context.getWorld().setBlockState(wallCenter.add(x, y, z), Blocks.STONE.getDefaultState());
+				}
+			}
+		}
+
+		// Player with bow in main hand, DIAMOND arrow in offhand, IRON arrows in inventory
+		ServerPlayerEntity player = PlayerFactory.create(context)
+				.survival()
+				.at(0, 1, 0)
+				.facing(Direction.SOUTH)
+				.withPitch(10.0f)
+				.withStacks(bow, diamondArrow.copy())
+				.build();
+
+		player.getInventory().setStack(9, ironArrow.copy());
+
+		int offhandInitial = player.getOffHandStack().getCount();
+		int inventoryInitial = player.getInventory().getStack(9).getCount();
+
+		LOGGER.info("Offhand priority: diamond(offhand)={}, iron(inventory)={}", offhandInitial, inventoryInitial);
+
+		// Shoot
+		player.setCurrentHand(Hand.MAIN_HAND);
+		bow.getItem().onStoppedUsing(bow, context.getWorld(), player, bow.getMaxUseTime() - 20);
+
+		context.waitAndRun(15, () -> {
+			// Find arrow shot by this player
+			List<DynamicArrowEntity> arrows = context.getWorld().getEntitiesByClass(
+					DynamicArrowEntity.class,
+					player.getBoundingBox().expand(30),
+					a -> a.getOwner() != null && a.getOwner().getUuid().equals(player.getUuid())
+			);
+
+			context.assertTrue(!arrows.isEmpty(), "Arrow should be shot by player");
+
+			DynamicArrowEntity shotArrow = arrows.get(0);
+			String arrowName = shotArrow.getStack().getItem().getTranslationKey();
+
+			// Should be DIAMOND (from offhand), not iron (from inventory)
+			LOGGER.info("Shot arrow type: {}", arrowName);
+			context.assertTrue(arrowName.contains("diamond"),
+					"Should shoot DIAMOND arrow from offhand, got: " + arrowName);
+
+			// Offhand diamond should be decremented
+			int offhandAfter = player.getOffHandStack().isEmpty() ? 0 : player.getOffHandStack().getCount();
+			context.assertTrue(offhandAfter == offhandInitial - 1,
+					"Offhand should decrement: " + offhandInitial + " -> " + offhandAfter);
+
+			// Inventory iron should be unchanged
+			int inventoryAfter = player.getInventory().getStack(9).isEmpty() ? 0 :
+					player.getInventory().getStack(9).getCount();
+			context.assertTrue(inventoryAfter == inventoryInitial,
+					"Inventory should be unchanged: " + inventoryInitial + " -> " + inventoryAfter);
+
+			context.complete();
+		});
+	}
+
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, batchId = "survival_arrow_tests")
+	public void survival_player_last_arrow_is_consumed_completely(TestContext context) {
+		var ctx = ForgeroTestUtils.forgero(context);
+
+		var bowOpt = ctx.component("forgero:oak-bow").flatMap(ctx::toStack);
+		var arrowOpt = ctx.component("forgero:iron-arrow").flatMap(ctx::toStack);
+
+		context.assertTrue(bowOpt.isPresent(), "Bow must exist");
+		context.assertTrue(arrowOpt.isPresent(), "Arrow must exist");
+
+		ItemStack bow = bowOpt.get();
+		ItemStack arrow = arrowOpt.get();
+		arrow.setCount(1); // Only one arrow
+
+		// Build thick target wall
+		BlockPos wallCenter = context.getAbsolutePos(new BlockPos(0, 1, 5));
+		for (int x = -1; x <= 1; x++) {
+			for (int y = -1; y <= 1; y++) {
+				for (int z = 0; z <= 1; z++) {
+					context.getWorld().setBlockState(wallCenter.add(x, y, z), Blocks.STONE.getDefaultState());
+				}
+			}
+		}
+
+		ServerPlayerEntity player = PlayerFactory.create(context)
+				.survival()
+				.at(0, 1, 0)
+				.facing(Direction.SOUTH)
+				.withPitch(10.0f)
+				.holding(bow)
+				.build();
+
+		player.getInventory().setStack(9, arrow.copy());
+
+		LOGGER.info("Last arrow test: 1 iron arrow");
+
+		// Shoot
+		player.setCurrentHand(Hand.MAIN_HAND);
+		bow.getItem().onStoppedUsing(bow, context.getWorld(), player, bow.getMaxUseTime() - 20);
+
+		context.waitAndRun(15, () -> {
+			// Find arrow shot by this player (filter by owner)
+			List<DynamicArrowEntity> arrows = context.getWorld().getEntitiesByClass(
+					DynamicArrowEntity.class,
+					player.getBoundingBox().expand(30),
+					a -> a.getOwner() != null && a.getOwner().getUuid().equals(player.getUuid())
+			);
+
+			context.assertTrue(!arrows.isEmpty(), "Arrow should be shot by player");
+
+			// Verify it's an iron arrow
+			String arrowName = arrows.get(0).getStack().getItem().getTranslationKey();
+			LOGGER.info("Last arrow test: Shot arrow type: {}", arrowName);
+			context.assertTrue(arrowName.contains("iron"), "Should be iron arrow: " + arrowName);
+
+			// Stack should be completely empty
+			ItemStack remaining = player.getInventory().getStack(9);
+			context.assertTrue(remaining.isEmpty(), "Last arrow should be fully consumed");
 
 			context.complete();
 		});

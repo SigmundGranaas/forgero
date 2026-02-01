@@ -122,7 +122,7 @@ public class ComponentCofCodec implements Codec<Component> {
 						upgradeSlot.id(),
 						upgradeSlot.slotType(),
 						upgradeSlot.description(),
-						upgradeSlot.context().orElse(null),
+						upgradeSlot.scope().orElse(null),
 						upgradeSlot.getContent().map(this::buildDtoFromComponent).orElse(null),
 						null
 				))
@@ -248,7 +248,7 @@ public class ComponentCofCodec implements Codec<Component> {
 			}
 
 			newSlots.add(new ComponentUpgradeSlot(slotDto.id(), slotDto.type(), slotDto.description(),
-					slotDto.contextOpt(), pristineSlot.validator(), contentResult.result().get()));
+					slotDto.scopeOpt(), pristineSlot.validator(), contentResult.result().get()));
 		}
 
 		LOGGER.debug("Successfully built {} upgrade slots for component {}", newSlots.size(), parentDto.id());
@@ -283,7 +283,7 @@ public class ComponentCofCodec implements Codec<Component> {
 					slotDto.id(),
 					slotDto.type(),
 					slotDto.description(),
-					slotDto.contextOpt(),
+					slotDto.scopeOpt(),
 					SlotValidator.requireTag(slotDto.type()),
 					contentResult.result().get()
 			));

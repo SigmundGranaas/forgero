@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.core.attribute;
 
 import com.sigmundgranaas.forgero.core.ForgeroTest;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
-import com.sigmundgranaas.forgero.core.attribute.api.AttributeContext;
+import com.sigmundgranaas.forgero.core.attribute.api.AttributeScope;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
 import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
@@ -157,12 +157,12 @@ class CompositeAttributeResolutionTest extends ForgeroTest {
 	@Test
 	void contextAwareAttributeComposition() {
 		// Create iron material with part-composite context (like JSON)
-		Attribute ironDurabilityBase = SimpleAttribute.withContext(
+		Attribute ironDurabilityBase = SimpleAttribute.withScope(
 				DefaultAttributes.DURABILITY, 240f, AdditionOperator.getInstance(),
-				AttributeContext.PART_COMPOSITE);
-		Attribute ironMiningSpeedBase = SimpleAttribute.withContext(
+				AttributeScope.PART_COMPOSITE);
+		Attribute ironMiningSpeedBase = SimpleAttribute.withScope(
 				DefaultAttributes.MINING_SPEED, 6f, AdditionOperator.getInstance(),
-				AttributeContext.PART_COMPOSITE);
+				AttributeScope.PART_COMPOSITE);
 
 		Component ironMaterial = part("iron")
 				.withTag("materials/types/metal")
@@ -171,12 +171,12 @@ class CompositeAttributeResolutionTest extends ForgeroTest {
 				.build();
 
 		// Create pickaxe_head shape with part-composite context multipliers (like JSON)
-		Attribute durabilityMult = SimpleAttribute.withContext(
+		Attribute durabilityMult = SimpleAttribute.withScope(
 				DefaultAttributes.DURABILITY, 1.0f, MultiplicationOperator.getInstance(),
-				AttributeContext.PART_COMPOSITE);
-		Attribute miningSpeedMult = SimpleAttribute.withContext(
+				AttributeScope.PART_COMPOSITE);
+		Attribute miningSpeedMult = SimpleAttribute.withScope(
 				DefaultAttributes.MINING_SPEED, 1.2f, MultiplicationOperator.getInstance(),
-				AttributeContext.PART_COMPOSITE);
+				AttributeScope.PART_COMPOSITE);
 
 		Component pickaxeHeadShape = part("pickaxe_head_shape")
 				.withTag("shapes/pickaxe_head")

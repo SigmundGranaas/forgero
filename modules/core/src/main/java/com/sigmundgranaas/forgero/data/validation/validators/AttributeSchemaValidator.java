@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.data.validation.validators;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
-import com.sigmundgranaas.forgero.core.attribute.api.AttributeContext;
+import com.sigmundgranaas.forgero.core.attribute.api.AttributeScope;
 import com.sigmundgranaas.forgero.core.attribute.api.operator.Operator;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.data.validation.*;
@@ -14,18 +14,18 @@ import java.util.Set;
  * Validates the schema/structure of attributes on components.
  * <ul>
  *   <li>Checks that attributes have valid types</li>
- *   <li>Validates operator compatibility with context</li>
+ *   <li>Validates operator compatibility with scope</li>
  *   <li>Warns about potentially problematic attribute configurations</li>
  * </ul>
  */
 public class AttributeSchemaValidator implements ComponentValidator {
 
-	// Known valid contexts
-	private static final Set<OpenIdentifier> KNOWN_CONTEXTS = Set.of(
-			AttributeContext.LOCAL,
-			AttributeContext.PART_COMPOSITE,
-			AttributeContext.EQUIPMENT_COMPOSITE,
-			AttributeContext.UPGRADE
+	// Known valid scopes
+	private static final Set<OpenIdentifier> KNOWN_SCOPES = Set.of(
+			AttributeScope.LOCAL,
+			AttributeScope.PART_COMPOSITE,
+			AttributeScope.EQUIPMENT_COMPOSITE,
+			AttributeScope.UPGRADE
 	);
 
 	@Override
@@ -39,7 +39,7 @@ public class AttributeSchemaValidator implements ComponentValidator {
 
 			validateAttributeType(component, attr, location, builder);
 			validateOperator(component, attr, location, builder);
-			validateContextCompatibility(component, attr, location, builder);
+			validateScopeCompatibility(component, attr, location, builder);
 			validateValue(component, attr, location, builder);
 		}
 
@@ -77,19 +77,19 @@ public class AttributeSchemaValidator implements ComponentValidator {
 		}
 	}
 
-	private void validateContextCompatibility(Component component, Attribute attr, String location, ValidationResult.Builder builder) {
-		attr.context().ifPresent(ctx -> {
-			// Warn if using unknown context
-			if (!KNOWN_CONTEXTS.contains(ctx)) {
+	private void validateScopeCompatibility(Component component, Attribute attr, String location, ValidationResult.Builder builder) {
+		attr.scope().ifPresent(scope -> {
+			// Warn if using unknown scope
+			if (!KNOWN_SCOPES.contains(scope)) {
 				builder.add(ValidationIssue.info(
 						component.id(),
-						"Attribute '" + attr.type() + "' uses unknown context: " + ctx,
-						location + ".context"
+						"Attribute '" + attr.type() + "' uses unknown scope: " + scope,
+						location + ".scope"
 				));
 			}
 
-			// For part-composite context, validate composition rules
-			if (ctx.equals(AttributeContext.PART_COMPOSITE)) {
+			// For part-composite scope, validate composition rules
+			if (scope.equals(AttributeScope.PART_COMPOSITE)) {
 				validatePartCompositeRules(component, attr, location, builder);
 			}
 		});

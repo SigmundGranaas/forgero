@@ -21,7 +21,7 @@
       "tags": [
         "forgero:upgrades/types/reinforcement"
       ],
-      "context": "forgero:contexts/offensive",
+      "scope": "forgero:contexts/offensive",
       "description": "slot.forgero.reinforcement"
     }
   ],

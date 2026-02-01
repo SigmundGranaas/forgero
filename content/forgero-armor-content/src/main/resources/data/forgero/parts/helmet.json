@@ -37,13 +37,13 @@
     {
       "id": "forgero:helmet-armor-mult",
       "type": "forgero:armor",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.0}
     },
     {
       "id": "forgero:helmet-durability-mult",
       "type": "forgero:durability",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.0}
     }
   ]

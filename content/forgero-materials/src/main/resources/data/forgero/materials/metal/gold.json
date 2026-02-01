@@ -33,7 +33,7 @@
       "computation": {
         "value": 2.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:gold-attack_damage",
@@ -41,7 +41,7 @@
       "computation": {
         "value": 2.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:gold-mining_speed",
@@ -49,7 +49,7 @@
       "computation": {
         "value": 12.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:gold-mining_level",
@@ -57,7 +57,7 @@
       "computation": {
         "value": 0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:gold-durability",
@@ -65,7 +65,7 @@
       "computation": {
         "value": 32
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:gold-rarity",
@@ -73,7 +73,7 @@
       "computation": {
         "value": 60
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:gold-weight",
@@ -81,7 +81,7 @@
       "computation": {
         "value": 8.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:gold-draw_speed",
@@ -89,7 +89,7 @@
       "computation": {
         "value": 1.25
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:gold-draw_power",
@@ -97,7 +97,7 @@
       "computation": {
         "value": 4.25
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:gold-armor",
@@ -106,7 +106,7 @@
         "value": 2,
         "operation": "addition"
       },
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "condition": {
         "type": "forgero:in_slot_type",
         "slot_type": "forgero:materials/roles/armor_material"
@@ -116,7 +116,7 @@
       "id": "forgero:gold-axe-attack_damage-offset",
       "type": "forgero:attack_damage",
       "computation": {"value": 1, "operation": "addition"},
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "condition": {
         "type": "forgero:root_has_tag",
         "tag": "forgero:tools/types/axe"
@@ -126,7 +126,7 @@
       "id": "forgero:gold-hoe-attack_damage-offset",
       "type": "forgero:attack_damage",
       "computation": {"value": -1, "operation": "addition"},
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "condition": {
         "type": "forgero:root_has_tag",
         "tag": "forgero:tools/types/hoe"
@@ -136,7 +136,7 @@
       "id": "forgero:gold-axe-attack_speed-offset",
       "type": "forgero:attack_speed",
       "computation": {"value": 0.1, "operation": "addition"},
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "condition": {
         "type": "forgero:root_has_tag",
         "tag": "forgero:tools/types/axe"

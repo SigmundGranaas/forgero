@@ -28,13 +28,13 @@
     {
       "id": "forgero:club_head-durability-mult",
       "type": "forgero:durability",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 0.9}
     },
     {
       "id": "forgero:club_head-attack_damage-offset",
       "type": "forgero:attack_damage",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"value": 2, "operation": "addition"}
     },
     {
@@ -45,25 +45,25 @@
     {
       "id": "forgero:club_head-attack_speed-mult",
       "type": "forgero:attack_speed",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.0}
     },
     {
       "id": "forgero:club_head-mining_speed-mult",
       "type": "forgero:mining_speed",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.0}
     },
     {
       "id": "forgero:club_head-mining_level-mult",
       "type": "forgero:mining_level",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.0}
     },
     {
       "id": "forgero:club_head-weight-mult",
       "type": "forgero:weight",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.4}
     }
   ],

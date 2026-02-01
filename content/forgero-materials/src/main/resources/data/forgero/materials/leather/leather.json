@@ -25,7 +25,7 @@
       "computation": {
         "value": 75
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:leather-armor",
@@ -33,7 +33,7 @@
       "computation": {
         "value": 1
       },
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "condition": {
         "type": "forgero:in_slot_type",
         "slot_type": "forgero:materials/roles/armor_material"
@@ -45,7 +45,7 @@
       "computation": {
         "value": 0
       },
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "condition": {
         "type": "forgero:in_slot_type",
         "slot_type": "forgero:materials/roles/armor_material"

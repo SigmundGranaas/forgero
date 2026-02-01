@@ -24,7 +24,7 @@
         "value": 100,
         "operation": "addition"
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:perfect_lapis-reach",
@@ -33,7 +33,7 @@
         "value": 2.5,
         "operation": "addition"
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     }
   ]
 }

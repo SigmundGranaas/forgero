@@ -49,25 +49,25 @@
     {
       "id": "forgero:bow_limb-durability-mult",
       "type": "forgero:durability",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.0}
     },
     {
       "id": "forgero:bow_limb-draw_speed-mult",
       "type": "forgero:draw_speed",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.0}
     },
     {
       "id": "forgero:bow_limb-draw_power-mult",
       "type": "forgero:draw_power",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.0}
     },
     {
       "id": "forgero:bow_limb-accuracy-mult",
       "type": "forgero:accuracy",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.0}
     }
   ]

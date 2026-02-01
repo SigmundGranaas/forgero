@@ -1,0 +1,26 @@
+{
+  "type": "forgero:composite_model",
+  "slots": [
+    {
+      "id": "head",
+      "order": 20,
+      "renderer": { "type": "forgero:component" }
+    },
+    {
+      "id": "handle",
+      "order": 10,
+      "renderer": {
+        "type": "forgero:component",
+        "context": "handle_pickaxe"
+      }
+    },
+    {
+      "id": "binding",
+      "order": 30,
+      "renderer": {
+        "type": "forgero:component",
+        "context": "binding_pickaxe"
+      }
+    }
+  ]
+}

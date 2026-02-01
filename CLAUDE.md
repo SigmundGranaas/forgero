@@ -16,12 +16,9 @@ Forgero is a Minecraft Fabric mod for deep tool/weapon/armor customization. The 
 # Run Minecraft client with the mod
 ./gradlew :mods:runClient
 
-# Run Minecraft server
-./gradlew :mods:runServer
 
 # Run vanilla-upgrades mod specifically
 ./gradlew :mods:vanilla-upgrades:runClient
-./gradlew :mods:vanilla-upgrades:runServer
 ```
 
 ### Building
@@ -51,12 +48,6 @@ Forgero is a Minecraft Fabric mod for deep tool/weapon/armor customization. The 
 
 # Run tests with detailed output
 ./gradlew test --info
-```
-
-### Publishing (Requires credentials)
-```bash
-# Publish to Maven repository
-./gradlew publish
 ```
 
 ## Extracting Sources for Claude Analysis
@@ -582,18 +573,8 @@ Documentation is organized in `docs/` by purpose. See **[docs/README.md](docs/RE
 - **`docs/architecture/tag-system.md`** - Graph-based tag system (DAG)
 - **`docs/architecture/data-pipeline.md`** - How content packs are loaded
 
-### Contributing
-- **`docs/contributing/testing.md`** - GameTest patterns and test utilities
-- **`docs/contributing/documentation-standards.md`** - Documentation standards
-
-### Status (Temporary)
-- **`docs/status/content-migration.md`** - ~80% complete (loot tables, block tags remaining)
-- **`docs/status/vanilla-upgrades.md`** - ~67% complete (ranged weapons pending)
-- **`docs/status/model-validation.md`** - ~60% complete (template chain pending)
-
 ### Root-Level
 - **`README.md`** - Project overview
-- **`CONTRIBUTING.md`** - Contribution guidelines
 
 ## Version Information
 

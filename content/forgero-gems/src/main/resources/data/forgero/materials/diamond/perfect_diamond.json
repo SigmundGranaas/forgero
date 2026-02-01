@@ -16,7 +16,7 @@
         "value": 100,
         "operation": "addition"
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:perfect_diamond-durability",
@@ -25,7 +25,7 @@
         "value": 2250,
         "operation": "addition"
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     }
   ]
 }

@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.data.validation.validators;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
-import com.sigmundgranaas.forgero.core.attribute.api.AttributeContext;
+import com.sigmundgranaas.forgero.core.attribute.api.AttributeScope;
 import com.sigmundgranaas.forgero.core.attribute.api.BakedAttributes;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
@@ -128,7 +128,7 @@ public class EagerBakingValidator implements ComponentValidator {
 						attr.type(),
 						attr.value(),
 						attr.operator().order(),
-						attr.context().orElse(null)
+						attr.scope().orElse(null)
 				);
 				result.computeIfAbsent(attr.type(), k -> new ArrayList<>()).add(info);
 			}
@@ -152,7 +152,7 @@ public class EagerBakingValidator implements ComponentValidator {
 
 			// Check if any part-composite attributes were discarded
 			List<AttributeInfo> partCompositeAttrs = infos.stream()
-					.filter(info -> AttributeContext.PART_COMPOSITE.equals(info.context))
+					.filter(info -> AttributeScope.PART_COMPOSITE.equals(info.scope))
 					.toList();
 
 			if (!partCompositeAttrs.isEmpty() && !bakedTypes.contains(attrType)) {
@@ -240,7 +240,7 @@ public class EagerBakingValidator implements ComponentValidator {
 			OpenIdentifier type,
 			float value,
 			int operatorOrder,
-			OpenIdentifier context
+			OpenIdentifier scope
 	) {
 	}
 }

@@ -23,7 +23,7 @@
       "computation": {
         "value": 2.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:basalt-attack_damage",
@@ -31,7 +31,7 @@
       "computation": {
         "value": 3.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:basalt-mining_speed",
@@ -39,7 +39,7 @@
       "computation": {
         "value": 4.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:basalt-mining_level",
@@ -47,7 +47,7 @@
       "computation": {
         "value": 1
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:basalt-durability",
@@ -55,7 +55,7 @@
       "computation": {
         "value": 190
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:basalt-rarity",
@@ -63,7 +63,7 @@
       "computation": {
         "value": 30
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:basalt-weight",
@@ -71,7 +71,7 @@
       "computation": {
         "value": 4.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:basalt-armor",
@@ -79,7 +79,7 @@
       "computation": {
         "value": 3
       },
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "condition": {
         "type": "forgero:in_slot_type",
         "slot_type": "forgero:materials/roles/armor_material"

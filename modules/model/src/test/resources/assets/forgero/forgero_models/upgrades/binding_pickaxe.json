@@ -1,0 +1,8 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:parts/leather-binding",
+  "context": "binding_pickaxe",
+  "textures": {
+    "default": "forgero:item/contextual/binding_pickaxe"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:ruby",
+  "context": "gem_slot_3",
+  "textures": {
+    "default": "forgero:item/contextual/ruby_gem_3"
+  }
+}

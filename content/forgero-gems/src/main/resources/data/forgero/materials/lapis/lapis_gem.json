@@ -24,7 +24,7 @@
         "value": 60,
         "operation": "addition"
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:lapis_gem-reach",
@@ -33,7 +33,7 @@
         "value": 1.5,
         "operation": "addition"
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     }
   ]
 }

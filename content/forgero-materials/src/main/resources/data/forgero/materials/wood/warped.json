@@ -23,7 +23,7 @@
       "computation": {
         "value": 2.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:warped-attack_damage",
@@ -31,7 +31,7 @@
       "computation": {
         "value": 2.2
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:warped-mining_speed",
@@ -39,7 +39,7 @@
       "computation": {
         "value": 2.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:warped-mining_level",
@@ -47,7 +47,7 @@
       "computation": {
         "value": 0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:warped-durability",
@@ -55,7 +55,7 @@
       "computation": {
         "value": 40
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:warped-rarity",
@@ -63,7 +63,7 @@
       "computation": {
         "value": 35
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:warped-weight",
@@ -71,7 +71,7 @@
       "computation": {
         "value": 2.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:warped-draw_speed",
@@ -79,7 +79,7 @@
       "computation": {
         "value": 1.2
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:warped-draw_power",
@@ -87,7 +87,7 @@
       "computation": {
         "value": 3.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:warped-armor",
@@ -95,7 +95,7 @@
       "computation": {
         "value": 0
       },
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "condition": {
         "type": "forgero:in_slot_type",
         "slot_type": "forgero:materials/roles/armor_material"

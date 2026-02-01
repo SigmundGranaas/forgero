@@ -34,6 +34,17 @@ import java.util.stream.Collectors;
 
 import static com.sigmundgranaas.forgero.render.RenderInitializer.LOGGER;
 
+/**
+ * Resource reload listener that generates Forgero models synchronously during the prepare phase.
+ * 
+ * This ensures models are available in the registry BEFORE Minecraft starts loading models,
+ * preventing the "Unable to load model" warnings that occur when models are generated asynchronously.
+ * 
+ * The flow is:
+ * 1. PREPARE (synchronous): Generate all Forgero models and populate ForgeroClient.services
+ * 2. MODEL LOADING (synchronous): Minecraft loads models, ForgeroModelProvider finds them in registry
+ * 3. APPLY (asynchronous): Generate textures (can be done async as it doesn't affect model loading)
+ */
 public class ForgeroModelResourceListener implements IdentifiableResourceReloadListener {
 	public static final Identifier ID = new Identifier("forgero", "model_reload_listener");
 
@@ -56,53 +67,87 @@ public class ForgeroModelResourceListener implements IdentifiableResourceReloadL
 		return ID;
 	}
 
+	/**
+	 * Performs synchronous model generation during resource reload.
+	 * 
+	 * This method is called during the prepare phase, which happens BEFORE model loading.
+	 * We generate all models here so they're available when Minecraft asks for them.
+	 */
 	@Override
 	public CompletableFuture<Void> reload(Synchronizer synchronizer, ResourceManager manager, Profiler prepareProfiler, Profiler applyProfiler, Executor prepareExecutor, Executor applyExecutor) {
-		return CompletableFuture.supplyAsync(() -> {
-					LOGGER.debug("Hot reload detected. Reloading Forgero models...");
-					ResourceProvider resourceProvider = new MinecraftResourceProvider(manager);
+		// STEP 1: Synchronous model generation (prepare phase)
+		// This MUST complete before model loading starts
+		CompletableFuture<ModelInitializationResult> modelsFuture = CompletableFuture.supplyAsync(() -> {
+			prepareProfiler.startTick();
+			prepareProfiler.push("forgero:generate_models");
+			
+			LOGGER.debug("Generating Forgero models...");
+			ResourceProvider resourceProvider = new MinecraftResourceProvider(manager);
 
-					ItemModelRegistry itemModelRegistry = new MapBackedModelRegistry();
-					ArmorModelRegistry armorModelRegistry = new MapBackedArmorModelRegistry();
-					ModelDataInitializer modelInitializer = new ModelDataInitializer(resourceProvider);
+			ItemModelRegistry itemModelRegistry = new MapBackedModelRegistry();
+			ArmorModelRegistry armorModelRegistry = new MapBackedArmorModelRegistry();
+			ModelDataInitializer modelInitializer = new ModelDataInitializer(resourceProvider);
 
-					if (taggedComponents == null || tagResolver == null) {
-						LOGGER.warn("Forgero data not initialized during resource reload - skipping model reload. " +
-								"Forgero items may appear without custom textures until data is loaded.");
-						return null;
-					}
+			if (taggedComponents == null || tagResolver == null) {
+				LOGGER.warn("Forgero data not initialized during resource reload - skipping model generation.");
+				prepareProfiler.pop();
+				prepareProfiler.endTick();
+				return null;
+			}
 
-					ModelInitializationResult result = modelInitializer.initialize(
-							taggedComponents.all().stream().collect(Collectors.toMap(Component::id, Function.identity())),
-							tagResolver,
-							itemModelRegistry,
-							armorModelRegistry
-					);
+			ModelInitializationResult result = modelInitializer.initialize(
+					taggedComponents.all().stream().collect(Collectors.toMap(Component::id, Function.identity())),
+					tagResolver,
+					itemModelRegistry,
+					armorModelRegistry
+			);
 
-					// Generate textures on the worker thread.
-					generateTextures(result.generationResult().textureGenerationTasks(), manager);
-					generateAtlasConfig(result.generationResult().textureGenerationTasks());
+			// CRITICAL: Populate services BEFORE model loading starts
+			ForgeroClient.services = new ForgeroClient.ClientServices(
+					result.itemModelRegistry(),
+					result.armorModelRegistry(),
+					converter != null ? converter::toComponent : s -> java.util.Optional.empty(),
+					componentRegistry,
+					new ForgeroArmorTextureManager(result.itemModelRegistry()),
+					new ForgeroArmorModelManager(MinecraftClient.getInstance().getEntityModelLoader())
+			);
+			
+			LOGGER.debug("Forgero models generated: {} item models", result.itemModelRegistry().models().size());
+			
+			prepareProfiler.pop();
+			prepareProfiler.endTick();
+			return result;
+		}, prepareExecutor);
 
-					ForgeroClient.services = new ForgeroClient.ClientServices(
-							result.itemModelRegistry(),
-							result.armorModelRegistry(),
-							converter != null ? converter::toComponent : s -> java.util.Optional.empty(),
-							componentRegistry,
-							new ForgeroArmorTextureManager(result.itemModelRegistry()),
-							new ForgeroArmorModelManager(MinecraftClient.getInstance().getEntityModelLoader())
-					);
-					LOGGER.debug("Forgero models reloaded: {} item models", result.itemModelRegistry().models().size());
-
-					return result;
-				}, prepareExecutor)
+		// STEP 2: Wait for prepare to complete before allowing model loading
+		// The synchronizer ensures model loading doesn't start until we're done
+		return modelsFuture
 				.thenCompose(synchronizer::whenPrepared)
 				.thenAcceptAsync(result -> {
+					// STEP 3: Asynchronous texture generation (apply phase)
+					// This can happen after model loading since textures are loaded separately
+					if (result != null) {
+						applyProfiler.startTick();
+						applyProfiler.push("forgero:generate_textures");
+						
+						generateTextures(result.generationResult().textureGenerationTasks(), manager);
+						generateAtlasConfig(result.generationResult().textureGenerationTasks());
+						
+						applyProfiler.pop();
+						applyProfiler.endTick();
+					}
 				}, applyExecutor);
 	}
 
 	private void generateTextures(List<TextureGenerationTask> tasks, ResourceManager resourceManager) {
 		if (tasks.isEmpty()) return;
 		LOGGER.debug("Generating {} textures at runtime", tasks.size());
+
+		// Clear the resource pack before regenerating textures to prevent double-loading
+		// This is necessary because the resource pack persists across reloads (F3+T)
+		// and we don't want to accumulate duplicate textures
+		RenderInitializer.getResourcePack().clear();
+
 		var textureGenerator = new DefaultTextureGenerator(new MinecraftResourceProvider(resourceManager), new AwtPalettizedTextureGenerator(), new RuntimeTextureWriter(RenderInitializer.getResourcePack()));
 		textureGenerator.generate(tasks);
 	}

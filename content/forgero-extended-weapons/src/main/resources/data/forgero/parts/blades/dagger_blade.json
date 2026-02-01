@@ -36,13 +36,13 @@
     {
       "id": "forgero:dagger_blade-durability-mult",
       "type": "forgero:durability",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 0.7}
     },
     {
       "id": "forgero:dagger_blade-attack_damage-offset",
       "type": "forgero:attack_damage",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"value": 1, "operation": "addition"}
     },
     {
@@ -53,25 +53,25 @@
     {
       "id": "forgero:dagger_blade-attack_speed-mult",
       "type": "forgero:attack_speed",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.0}
     },
     {
       "id": "forgero:dagger_blade-mining_speed-mult",
       "type": "forgero:mining_speed",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.0}
     },
     {
       "id": "forgero:dagger_blade-mining_level-mult",
       "type": "forgero:mining_level",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.0}
     },
     {
       "id": "forgero:dagger_blade-weight-mult",
       "type": "forgero:weight",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 0.6}
     }
   ],

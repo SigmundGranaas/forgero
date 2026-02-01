@@ -11,7 +11,8 @@ public record SlotDTO(
 		int order,
 		RendererDTO renderer,
 		@Nullable String targetMount,
-		@Nullable String childMount
+		@Nullable String childMount,
+		@Nullable String dynamicKey
 ) {
 	public Optional<String> getTargetMount() {
 		return Optional.ofNullable(targetMount);
@@ -21,12 +22,16 @@ public record SlotDTO(
 		return Optional.ofNullable(childMount);
 	}
 
+	public Optional<String> getDynamicKey() {
+		return Optional.ofNullable(dynamicKey);
+	}
 
 	public static final Codec<SlotDTO> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.STRING.fieldOf("id").forGetter(SlotDTO::id),
 			Codec.INT.fieldOf("order").forGetter(SlotDTO::order),
 			RendererDTO.CODEC.fieldOf("renderer").forGetter(SlotDTO::renderer),
 			Codec.STRING.optionalFieldOf("mount").forGetter(SlotDTO::getTargetMount),
-			Codec.STRING.optionalFieldOf("child_mount").forGetter(SlotDTO::getChildMount)
-	).apply(instance, (id, order, renderer, target, child) -> new SlotDTO(id, order, renderer, target.orElse(null), child.orElse(null))));
+			Codec.STRING.optionalFieldOf("child_mount").forGetter(SlotDTO::getChildMount),
+			Codec.STRING.optionalFieldOf("dynamic_key").forGetter(SlotDTO::getDynamicKey)
+	).apply(instance, (id, order, renderer, target, child, dynamic) -> new SlotDTO(id, order, renderer, target.orElse(null), child.orElse(null), dynamic.orElse(null))));
 }

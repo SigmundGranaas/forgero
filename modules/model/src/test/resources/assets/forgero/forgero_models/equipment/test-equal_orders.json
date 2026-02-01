@@ -1,0 +1,15 @@
+{
+  "type": "forgero:composite_model",
+  "slots": [
+    {
+      "id": "slot_a",
+      "order": 5,
+      "renderer": { "type": "forgero:component" }
+    },
+    {
+      "id": "slot_b",
+      "order": 5,
+      "renderer": { "type": "forgero:component" }
+    }
+  ]
+}

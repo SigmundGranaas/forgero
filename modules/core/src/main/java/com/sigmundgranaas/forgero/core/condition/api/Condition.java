@@ -157,4 +157,179 @@ public record Condition(
 	public boolean isAlwaysTrue() {
 		return staticConditions.isEmpty() && dynamicConditions.isEmpty();
 	}
+
+	// ========================================================================
+	// FACTORY METHODS
+	// ========================================================================
+
+	/**
+	 * Creates a condition with only static conditions.
+	 *
+	 * <p>All provided conditions must pass for the condition to be satisfied.</p>
+	 *
+	 * @param conditions The static conditions (all must pass)
+	 * @return A new Condition with only static conditions
+	 */
+	public static Condition ofStatic(StaticCondition... conditions) {
+		return new Condition(List.of(conditions), List.of());
+	}
+
+	/**
+	 * Creates a condition with only dynamic conditions.
+	 *
+	 * <p>All provided conditions must pass for the condition to be satisfied.</p>
+	 *
+	 * @param conditions The dynamic conditions (all must pass)
+	 * @return A new Condition with only dynamic conditions
+	 */
+	public static Condition ofDynamic(DynamicCondition... conditions) {
+		return new Condition(List.of(), List.of(conditions));
+	}
+
+	/**
+	 * Creates a condition that combines multiple conditions (all must pass).
+	 *
+	 * <p>This merges all static and dynamic conditions from the provided conditions.</p>
+	 *
+	 * @param conditions The conditions to combine (AND semantics)
+	 * @return A new Condition combining all input conditions
+	 */
+	public static Condition all(Condition... conditions) {
+		if (conditions.length == 0) {
+			return ALWAYS_TRUE;
+		}
+		if (conditions.length == 1) {
+			return conditions[0];
+		}
+
+		java.util.List<StaticCondition> staticList = new java.util.ArrayList<>();
+		java.util.List<DynamicCondition> dynamicList = new java.util.ArrayList<>();
+
+		for (Condition c : conditions) {
+			staticList.addAll(c.staticConditions());
+			dynamicList.addAll(c.dynamicConditions());
+		}
+
+		return new Condition(staticList, dynamicList);
+	}
+
+	/**
+	 * Creates a condition with the provided static conditions (all must pass).
+	 *
+	 * @param conditions The static conditions (all must pass)
+	 * @return A new Condition with static conditions only
+	 */
+	public static Condition all(StaticCondition... conditions) {
+		return ofStatic(conditions);
+	}
+
+	/**
+	 * Creates a condition with the provided dynamic conditions (all must pass).
+	 *
+	 * @param conditions The dynamic conditions (all must pass)
+	 * @return A new Condition with dynamic conditions only
+	 */
+	public static Condition all(DynamicCondition... conditions) {
+		return ofDynamic(conditions);
+	}
+
+	/**
+	 * Creates a condition that passes if ANY of the provided conditions pass.
+	 *
+	 * <p><strong>Important:</strong> This method is designed for combining conditions
+	 * that have dynamic components. The OR evaluation happens at runtime.</p>
+	 *
+	 * <p><strong>How it works:</strong></p>
+	 * <ul>
+	 *   <li>All static conditions from inner Conditions are extracted and merged into
+	 *       the outer Condition's static list (evaluated with AND semantics during baking)</li>
+	 *   <li>Dynamic conditions are wrapped in an OrDynamicCondition (evaluated with OR
+	 *       semantics at runtime)</li>
+	 *   <li>If an inner Condition has no dynamic conditions, it's considered to "always
+	 *       pass at runtime" since its static conditions passed during baking</li>
+	 * </ul>
+	 *
+	 * <p><strong>Example:</strong></p>
+	 * <pre>{@code
+	 * // OR between two dynamic conditions
+	 * Condition.any(
+	 *     Condition.ofDynamic(isSneaking),
+	 *     Condition.ofDynamic(isRaining)
+	 * )
+	 * // Passes if player is sneaking OR it's raining
+	 * }</pre>
+	 *
+	 * @param conditions The conditions where at least one must pass
+	 * @return A new Condition with OR semantics for dynamic evaluation
+	 */
+	public static Condition any(Condition... conditions) {
+		if (conditions.length == 0) {
+			return ALWAYS_TRUE;
+		}
+		if (conditions.length == 1) {
+			return conditions[0];
+		}
+
+		// Extract all static conditions from inner Conditions - these are AND'd together
+		// during baking. This ensures that if any inner condition has static requirements,
+		// they must pass before the dynamic OR evaluation.
+		java.util.List<StaticCondition> mergedStatic = new java.util.ArrayList<>();
+		for (Condition c : conditions) {
+			mergedStatic.addAll(c.staticConditions());
+		}
+
+		// Check if any inner condition has ONLY static conditions (no dynamic)
+		// If so, we need to track this for the OR evaluation
+		boolean hasStaticOnlyCondition = false;
+		for (Condition c : conditions) {
+			if (c.dynamicConditions().isEmpty() && !c.staticConditions().isEmpty()) {
+				hasStaticOnlyCondition = true;
+				break;
+			}
+		}
+
+		// Wrap in an OrDynamicCondition for runtime OR evaluation
+		return new Condition(
+				mergedStatic,
+				List.of(new OrDynamicCondition(List.of(conditions), hasStaticOnlyCondition))
+		);
+	}
+
+	/**
+	 * Internal dynamic condition that implements OR semantics.
+	 *
+	 * <p>At runtime, this checks if ANY of the inner conditions' dynamic conditions pass.
+	 * If an inner condition has no dynamic conditions (only static), and those static
+	 * conditions passed during baking, it counts as a pass for the OR evaluation.</p>
+	 */
+	private record OrDynamicCondition(
+			List<Condition> conditions,
+			boolean hasStaticOnlyCondition
+	) implements DynamicCondition {
+		@Override
+		public boolean test(com.sigmundgranaas.forgero.core.property.context.DynamicContext context) {
+			for (Condition c : conditions) {
+				// If this inner condition has no dynamic conditions, it means:
+				// 1. It only had static conditions, which passed during baking (otherwise we wouldn't be here)
+				// 2. OR it's an always-true condition
+				// Either way, it counts as a "pass" for the OR evaluation
+				if (c.dynamicConditions().isEmpty()) {
+					return true;
+				}
+
+				// Check if all dynamic conditions of this inner condition pass
+				boolean allDynamicPass = c.dynamicConditions().stream()
+						.allMatch(dc -> dc.test(context));
+				if (allDynamicPass) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		@Override
+		public com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier type() {
+			return new com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier("forgero", "condition/or");
+		}
+	}
 }

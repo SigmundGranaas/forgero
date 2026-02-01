@@ -1,0 +1,10 @@
+{
+  "type": "forgero:composite_model",
+  "slots": [
+    {
+      "id": "head",
+      "order": 10,
+      "renderer": { "type": "forgero:component" }
+    }
+  ]
+}

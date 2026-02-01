@@ -27,7 +27,7 @@
       "computation": {
         "value": 2.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:cherry-attack_damage",
@@ -35,7 +35,7 @@
       "computation": {
         "value": 2.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:cherry-mining_speed",
@@ -43,7 +43,7 @@
       "computation": {
         "value": 2.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:cherry-mining_level",
@@ -51,7 +51,7 @@
       "computation": {
         "value": 0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:cherry-durability",
@@ -59,7 +59,7 @@
       "computation": {
         "value": 45
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:cherry-rarity",
@@ -67,7 +67,7 @@
       "computation": {
         "value": 25
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:cherry-weight",
@@ -75,7 +75,7 @@
       "computation": {
         "value": 1.5
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:cherry-draw_speed",
@@ -83,7 +83,7 @@
       "computation": {
         "value": 1.2
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:cherry-draw_power",
@@ -91,7 +91,7 @@
       "computation": {
         "value": 3.5
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:cherry-armor",
@@ -99,7 +99,7 @@
       "computation": {
         "value": 0
       },
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "condition": {
         "type": "forgero:in_slot_type",
         "slot_type": "forgero:materials/roles/armor_material"

@@ -27,7 +27,8 @@
     "minecraft": "1.20.1",
     "java": ">=17",
     "forgero-loader": "*",
-    "forgero-core": "*"
+    "forgero-core": "*",
+    "forgero-renderer": "*"
   },
   "breaks": {
     "forgero": "*"

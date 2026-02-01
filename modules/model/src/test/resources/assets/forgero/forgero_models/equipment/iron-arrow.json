@@ -1,0 +1,29 @@
+{
+  "type": "forgero:composite_model",
+  "slots": [
+    {
+      "id": "head",
+      "order": 20,
+      "renderer": {
+        "type": "forgero:component",
+        "context": "arrow_head"
+      }
+    },
+    {
+      "id": "shaft",
+      "order": 10,
+      "renderer": {
+        "type": "forgero:component",
+        "context": "arrow_shaft"
+      }
+    },
+    {
+      "id": "fletching",
+      "order": 15,
+      "renderer": {
+        "type": "forgero:component",
+        "context": "arrow_fletching"
+      }
+    }
+  ]
+}

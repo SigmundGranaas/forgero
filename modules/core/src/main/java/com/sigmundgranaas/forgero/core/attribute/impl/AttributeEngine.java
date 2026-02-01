@@ -122,8 +122,8 @@ public class AttributeEngine implements DataTypeEngine<BakedAttributes, Attribut
 
 		// Determine which baking strategy to use based on the type of the root component.
 		// Use CompositeAttributeBakingStrategy for:
-		// - StructuredComponent: needs part-composite context handling for composition
-		// - CustomizableComponent: needs upgrade attribute filtering by context
+		// - StructuredComponent: needs part-composite scope handling for composition
+		// - CustomizableComponent: needs upgrade attribute filtering by scope
 		Component root = componentList.get(0);
 		AttributeBakingStrategy strategyToUse =
 				(root instanceof StructuredComponent || root instanceof CustomizableComponent)

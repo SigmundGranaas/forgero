@@ -26,6 +26,7 @@ dependencies {
     implementation(project(path: ":modules:mc:loader", configuration: 'namedElements'))
     implementation(project(path: ":modules:mc:properties", configuration: 'namedElements'))
     implementation(project(path: ":modules:mc:tools", configuration: 'namedElements'))
+    modImplementation(project(path: ":modules:mc:render", configuration: 'namedElements'))
 
     // === VANILLA-UPGRADES SPECIFIC CONTENT (bundled in JAR) ===
     // Note: Material upgrade bases are in forgero-base
@@ -42,10 +43,11 @@ dependencies {
 
     // Dynamic Resource Pack module (included in JAR)
     include(project(path: ":mods:drp", configuration: 'namedElements'))
+    modImplementation(project(path: ":mods:drp", configuration: 'namedElements'))
 
     // Recipe Generator module (included in JAR)
     include(project(path: ":mods:recipe-generator", configuration: 'namedElements'))
-    implementation(project(path: ":mods:recipe-generator", configuration: 'namedElements'))
+    modImplementation(project(path: ":mods:recipe-generator", configuration: 'namedElements'))
 
     // Testing dependencies
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")

@@ -1,0 +1,17 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:feather",
+  "context": "arrow_fletching",
+  "textures": {
+    "default": "forgero:item/upgrade/feather-arrow_fletching",
+    "variants": [
+      {
+        "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:ranged/bow" }],
+        "texture": "forgero:item/upgrade/feather-arrow_fletching_in_bow"
+      }
+    ]
+  },
+  "mount_points": [
+    { "name": "center", "position": [8, 8] }
+  ]
+}

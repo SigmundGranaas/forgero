@@ -1,0 +1,7 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:oak",
+  "textures": {
+    "default": "forgero:item/material/oak"
+  }
+}

@@ -23,7 +23,7 @@
       "computation": {
         "value": 2.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:cobblestone-attack_damage",
@@ -31,7 +31,7 @@
       "computation": {
         "value": 3.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:cobblestone-mining_speed",
@@ -39,7 +39,7 @@
       "computation": {
         "value": 4.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:cobblestone-mining_level",
@@ -47,7 +47,7 @@
       "computation": {
         "value": 1
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:cobblestone-durability",
@@ -55,7 +55,7 @@
       "computation": {
         "value": 131
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:cobblestone-rarity",
@@ -63,7 +63,7 @@
       "computation": {
         "value": 20
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:cobblestone-weight",
@@ -71,7 +71,7 @@
       "computation": {
         "value": 3.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:cobblestone-armor",
@@ -79,7 +79,7 @@
       "computation": {
         "value": 3
       },
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "condition": {
         "type": "forgero:in_slot_type",
         "slot_type": "forgero:materials/roles/armor_material"
@@ -89,7 +89,7 @@
       "id": "forgero:cobblestone-axe-attack_damage-offset",
       "type": "forgero:attack_damage",
       "computation": {"value": 2, "operation": "addition"},
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "condition": {
         "type": "forgero:root_has_tag",
         "tag": "forgero:tools/types/axe"
@@ -99,7 +99,7 @@
       "id": "forgero:cobblestone-hoe-attack_damage-offset",
       "type": "forgero:attack_damage",
       "computation": {"value": -2, "operation": "addition"},
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "condition": {
         "type": "forgero:root_has_tag",
         "tag": "forgero:tools/types/hoe"
@@ -109,7 +109,7 @@
       "id": "forgero:cobblestone-axe-attack_speed-offset",
       "type": "forgero:attack_speed",
       "computation": {"value": -0.1, "operation": "addition"},
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "condition": {
         "type": "forgero:root_has_tag",
         "tag": "forgero:tools/types/axe"
@@ -119,7 +119,7 @@
       "id": "forgero:cobblestone-hoe-attack_speed-offset",
       "type": "forgero:attack_speed",
       "computation": {"value": 1.0, "operation": "addition"},
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "condition": {
         "type": "forgero:root_has_tag",
         "tag": "forgero:tools/types/hoe"

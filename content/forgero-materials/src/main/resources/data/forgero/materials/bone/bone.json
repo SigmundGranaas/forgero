@@ -20,7 +20,7 @@
       "computation": {
         "value": 2.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:bone-attack_damage",
@@ -28,7 +28,7 @@
       "computation": {
         "value": 2.5
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:bone-mining_speed",
@@ -36,7 +36,7 @@
       "computation": {
         "value": 3.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:bone-mining_level",
@@ -44,7 +44,7 @@
       "computation": {
         "value": 1
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:bone-durability",
@@ -52,7 +52,7 @@
       "computation": {
         "value": 80
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:bone-rarity",
@@ -60,7 +60,7 @@
       "computation": {
         "value": 30
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:bone-weight",
@@ -68,7 +68,7 @@
       "computation": {
         "value": 2.5
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:bone-armor",
@@ -76,7 +76,7 @@
       "computation": {
         "value": 3
       },
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "condition": {
         "type": "forgero:in_slot_type",
         "slot_type": "forgero:materials/roles/armor_material"

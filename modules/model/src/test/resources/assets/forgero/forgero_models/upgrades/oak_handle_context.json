@@ -1,0 +1,8 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:oak",
+  "context": "handle",
+  "textures": {
+    "default": "forgero:item/contextual/oak_handle"
+  }
+}

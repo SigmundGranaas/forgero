@@ -21,7 +21,7 @@
       "tags": [
         "forgero:upgrades/types/gem"
       ],
-      "context": "forgero:contexts/defensive",
+      "scope": "forgero:contexts/defensive",
       "description": "slot.forgero.gem"
     },
     {
@@ -30,7 +30,7 @@
       "tags": [
         "forgero:upgrades/types/reinforcement"
       ],
-      "context": "forgero:contexts/defensive",
+      "scope": "forgero:contexts/defensive",
       "description": "slot.forgero.reinforcement"
     },
     {
@@ -39,7 +39,7 @@
       "tags": [
         "forgero:upgrades/types/cosmetic"
       ],
-      "context": "forgero:contexts/utility",
+      "scope": "forgero:contexts/utility",
       "description": "slot.forgero.cosmetic"
     }
   ],

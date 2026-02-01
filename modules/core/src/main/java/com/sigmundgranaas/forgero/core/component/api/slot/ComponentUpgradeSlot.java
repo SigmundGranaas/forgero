@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
-import com.sigmundgranaas.forgero.core.attribute.api.AttributeContext;
+import com.sigmundgranaas.forgero.core.attribute.api.AttributeScope;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.Slot;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
@@ -22,7 +22,7 @@ import java.util.Optional;
  * @param id          The unique identifier for this slot.
  * @param slotType    The category of the slot, e.g., "forgero:binding", "forgero:gem".
  * @param description A human-readable description.
- * @param context     Optional context identifier for attribute filtering (e.g., "forgero:offensive", "forgero:defensive", "forgero:utility").
+ * @param scope       Optional scope identifier for attribute filtering (e.g., "forgero:offensive", "forgero:defensive", "forgero:utility").
  * @param validator   Validation rules for content placed in this slot.
  * @param content     The component currently in the slot, or empty if not filled.
  */
@@ -30,7 +30,7 @@ public record ComponentUpgradeSlot(
 		OpenIdentifier id,
 		OpenIdentifier slotType,
 		String description,
-		Optional<OpenIdentifier> context,
+		Optional<OpenIdentifier> scope,
 		SlotValidator validator,
 		Optional<Component> content
 ) implements Slot {
@@ -84,7 +84,7 @@ public record ComponentUpgradeSlot(
 		}
 
 		return content.get().properties(Attribute.KEY).stream()
-				.filter(attr -> AttributeContext.matchesSlotContext(attr.context(), context))
+				.filter(attr -> AttributeScope.matchesSlotScope(attr.scope(), scope))
 				.toList();
 	}
 
@@ -94,7 +94,7 @@ public record ComponentUpgradeSlot(
 		}
 
 		return content.get().properties(Attribute.KEY).stream()
-				.filter(attr -> AttributeContext.matchesSlotContext(attr.context(), context, tagResolver))
+				.filter(attr -> AttributeScope.matchesSlotScope(attr.scope(), scope, tagResolver))
 				.toList();
 	}
 
@@ -102,7 +102,7 @@ public record ComponentUpgradeSlot(
 	 * Returns this slot emptied, preserving its configuration.
 	 */
 	public ComponentUpgradeSlot empty() {
-		return new ComponentUpgradeSlot(id, slotType, description, context, validator, Optional.empty());
+		return new ComponentUpgradeSlot(id, slotType, description, scope, validator, Optional.empty());
 	}
 
 	/**
@@ -113,7 +113,7 @@ public record ComponentUpgradeSlot(
 	 * @throws IllegalArgumentException if the new content fails validation
 	 */
 	public ComponentUpgradeSlot withContent(Component newContent) {
-		return new ComponentUpgradeSlot(id, slotType, description, context, validator, Optional.of(newContent));
+		return new ComponentUpgradeSlot(id, slotType, description, scope, validator, Optional.of(newContent));
 	}
 
 	// Static factory methods
@@ -126,10 +126,10 @@ public record ComponentUpgradeSlot(
 	}
 
 	/**
-	 * Creates an empty upgrade slot with context for attribute filtering.
+	 * Creates an empty upgrade slot with scope for attribute filtering.
 	 */
-	public static ComponentUpgradeSlot emptyWithContext(OpenIdentifier id, OpenIdentifier slotType, String description, OpenIdentifier context) {
-		return new ComponentUpgradeSlot(id, slotType, description, Optional.ofNullable(context), SlotValidator.requireTag(slotType), Optional.empty());
+	public static ComponentUpgradeSlot emptyWithScope(OpenIdentifier id, OpenIdentifier slotType, String description, OpenIdentifier scope) {
+		return new ComponentUpgradeSlot(id, slotType, description, Optional.ofNullable(scope), SlotValidator.requireTag(slotType), Optional.empty());
 	}
 
 	/**
@@ -141,11 +141,11 @@ public record ComponentUpgradeSlot(
 	}
 
 	/**
-	 * Creates an empty upgrade slot with context and custom validator.
+	 * Creates an empty upgrade slot with scope and custom validator.
 	 */
-	public static ComponentUpgradeSlot emptyWithContextAndValidator(OpenIdentifier id, OpenIdentifier slotType, String description,
-	                                                                  OpenIdentifier context, SlotValidator validator) {
-		return new ComponentUpgradeSlot(id, slotType, description, Optional.ofNullable(context), validator, Optional.empty());
+	public static ComponentUpgradeSlot emptyWithScopeAndValidator(OpenIdentifier id, OpenIdentifier slotType, String description,
+	                                                                  OpenIdentifier scope, SlotValidator validator) {
+		return new ComponentUpgradeSlot(id, slotType, description, Optional.ofNullable(scope), validator, Optional.empty());
 	}
 
 	/**
@@ -157,11 +157,11 @@ public record ComponentUpgradeSlot(
 	}
 
 	/**
-	 * Creates a filled upgrade slot with context for attribute filtering.
+	 * Creates a filled upgrade slot with scope for attribute filtering.
 	 */
-	public static ComponentUpgradeSlot filledWithContext(OpenIdentifier id, OpenIdentifier slotType, String description,
-	                                                      OpenIdentifier context, Component content) {
-		return new ComponentUpgradeSlot(id, slotType, description, Optional.ofNullable(context), SlotValidator.requireTag(slotType), Optional.of(content));
+	public static ComponentUpgradeSlot filledWithScope(OpenIdentifier id, OpenIdentifier slotType, String description,
+	                                                      OpenIdentifier scope, Component content) {
+		return new ComponentUpgradeSlot(id, slotType, description, Optional.ofNullable(scope), SlotValidator.requireTag(slotType), Optional.of(content));
 	}
 
 	/**
@@ -173,11 +173,11 @@ public record ComponentUpgradeSlot(
 	}
 
 	/**
-	 * Creates a filled upgrade slot with context and custom validator.
+	 * Creates a filled upgrade slot with scope and custom validator.
 	 */
-	public static ComponentUpgradeSlot filledWithContextAndValidator(OpenIdentifier id, OpenIdentifier slotType, String description,
-	                                                                   OpenIdentifier context, SlotValidator validator, Component content) {
-		return new ComponentUpgradeSlot(id, slotType, description, Optional.ofNullable(context), validator, Optional.of(content));
+	public static ComponentUpgradeSlot filledWithScopeAndValidator(OpenIdentifier id, OpenIdentifier slotType, String description,
+	                                                                   OpenIdentifier scope, SlotValidator validator, Component content) {
+		return new ComponentUpgradeSlot(id, slotType, description, Optional.ofNullable(scope), validator, Optional.of(content));
 	}
 
 	// Codec for (de)serialization
@@ -193,9 +193,9 @@ public record ComponentUpgradeSlot(
 			CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("id").forGetter(ComponentUpgradeSlot::id),
 			CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("slot_type").forGetter(ComponentUpgradeSlot::slotType),
 			Codec.STRING.optionalFieldOf("description", "").forGetter(ComponentUpgradeSlot::description),
-			CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("context").forGetter(ComponentUpgradeSlot::context)
-		).apply(instance, (id, slotType, description, context) ->
-			context.map(c -> ComponentUpgradeSlot.emptyWithContext(id, slotType, description, c))
+			CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("scope").forGetter(ComponentUpgradeSlot::scope)
+		).apply(instance, (id, slotType, description, scope) ->
+			scope.map(s -> ComponentUpgradeSlot.emptyWithScope(id, slotType, description, s))
 				   .orElseGet(() -> ComponentUpgradeSlot.emptyOfType(id, slotType, description))
 		));
 }

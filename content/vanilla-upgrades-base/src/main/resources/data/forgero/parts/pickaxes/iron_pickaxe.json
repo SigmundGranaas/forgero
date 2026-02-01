@@ -13,6 +13,7 @@
   "attributes": [
     { "id": "forgero:iron-pickaxe-durability", "type": "forgero:durability", "computation": 250 },
     { "id": "forgero:iron-pickaxe-attack_damage", "type": "forgero:attack_damage", "computation": 4 },
+    { "id": "forgero:iron-pickaxe-attack_speed", "type": "forgero:attack_speed", "computation": 1.2 },
     { "id": "forgero:iron-pickaxe-mining_speed", "type": "forgero:mining_speed", "computation": 6 },
     { "id": "forgero:iron-pickaxe-mining_level", "type": "forgero:mining_level", "computation": 2 }
   ],

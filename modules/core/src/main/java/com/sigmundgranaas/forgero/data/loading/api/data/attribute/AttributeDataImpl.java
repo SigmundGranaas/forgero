@@ -9,14 +9,14 @@ public record AttributeDataImpl(
 		Optional<OpenIdentifier> id,
 		OpenIdentifier type,
 		ComputationData computation,
-		Optional<OpenIdentifier> context,
+		Optional<OpenIdentifier> scope,
 		Optional<Condition> condition
 ) implements AttributeData {
 
 	/**
-	 * Creates an AttributeDataImpl with no context (default behavior).
+	 * Creates an AttributeDataImpl with no scope (default behavior).
 	 */
-	public static AttributeDataImpl withoutContext(
+	public static AttributeDataImpl withoutScope(
 			Optional<OpenIdentifier> id,
 			OpenIdentifier type,
 			ComputationData computation,

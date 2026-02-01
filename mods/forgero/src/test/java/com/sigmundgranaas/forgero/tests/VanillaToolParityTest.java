@@ -761,4 +761,174 @@ public class VanillaToolParityTest implements ForgeroGameTest {
 
         context.complete();
     }
+
+    // ==================== Mixin Path Verification Tests ====================
+
+    /**
+     * Comprehensive test that dumps ALL attribute modifiers from ItemStack.getAttributeModifiers()
+     * for multiple tool types to verify actual in-game values.
+     */
+    @GameTest(templateName = EMPTY_STRUCTURE, required = true)
+    public void dump_all_attribute_modifiers(TestContext context) {
+        var ctx = ForgeroTestUtils.forgero(context);
+
+        String[] tools = {
+            "forgero:golden_sword", "forgero:iron_sword", "forgero:diamond_sword",
+            "forgero:golden_axe", "forgero:iron_axe", "forgero:diamond_axe",
+            "forgero:golden_pickaxe", "forgero:iron_pickaxe",
+            "forgero:golden_hoe", "forgero:iron_hoe", "forgero:diamond_hoe"
+        };
+
+        System.out.println("\n========== ATTRIBUTE MODIFIER DUMP ==========");
+
+        for (String toolId : tools) {
+            var component = ctx.component(toolId);
+            if (component.isEmpty()) {
+                System.out.println("[WARN] Component not found: " + toolId);
+                continue;
+            }
+
+            ItemStack stack = ForgeroApi.converter().toStack(component.get()).orElse(null);
+            if (stack == null || stack.isEmpty()) {
+                System.out.println("[WARN] Failed to convert to ItemStack: " + toolId);
+                continue;
+            }
+
+            System.out.println("\n--- " + toolId + " ---");
+            System.out.println("  Item: " + stack.getItem().getClass().getSimpleName());
+
+            var modifiers = stack.getAttributeModifiers(net.minecraft.entity.EquipmentSlot.MAINHAND);
+
+            // Attack Damage
+            var damageModifiers = modifiers.get(net.minecraft.entity.attribute.EntityAttributes.GENERIC_ATTACK_DAMAGE);
+            float totalDamageMod = 0f;
+            for (var mod : damageModifiers) {
+                System.out.println("  ATTACK_DAMAGE modifier: " + mod.getName() + " = " + mod.getValue() + " (" + mod.getOperation() + ")");
+                if (mod.getOperation() == net.minecraft.entity.attribute.EntityAttributeModifier.Operation.ADDITION) {
+                    totalDamageMod += mod.getValue();
+                }
+            }
+            System.out.println("  -> Final Attack Damage: " + (1.0 + totalDamageMod) + " (base 1.0 + " + totalDamageMod + ")");
+
+            // Attack Speed
+            var speedModifiers = modifiers.get(net.minecraft.entity.attribute.EntityAttributes.GENERIC_ATTACK_SPEED);
+            float totalSpeedMod = 0f;
+            for (var mod : speedModifiers) {
+                System.out.println("  ATTACK_SPEED modifier: " + mod.getName() + " = " + mod.getValue() + " (" + mod.getOperation() + ")");
+                if (mod.getOperation() == net.minecraft.entity.attribute.EntityAttributeModifier.Operation.ADDITION) {
+                    totalSpeedMod += mod.getValue();
+                }
+            }
+            System.out.println("  -> Final Attack Speed: " + (4.0 + totalSpeedMod) + " (base 4.0 + " + totalSpeedMod + ")");
+
+            // Compare with ItemQueryApi
+            float queryDamage = ForgeroApi.itemQuery().getAttackDamage(stack);
+            float querySpeed = ForgeroApi.itemQuery().getAttackSpeed(stack);
+            System.out.println("  ItemQueryApi - damage: " + queryDamage + ", speed: " + querySpeed);
+        }
+
+        System.out.println("\n========== END DUMP ==========\n");
+
+        // Now run actual assertions for gold sword
+        var goldSword = ctx.component("forgero:golden_sword").orElseThrow();
+        ItemStack goldStack = ForgeroApi.converter().toStack(goldSword).orElseThrow();
+
+        var goldModifiers = goldStack.getAttributeModifiers(net.minecraft.entity.EquipmentSlot.MAINHAND);
+        var goldSpeedMods = goldModifiers.get(net.minecraft.entity.attribute.EntityAttributes.GENERIC_ATTACK_SPEED);
+
+        float goldSpeedModValue = 0f;
+        for (var mod : goldSpeedMods) {
+            goldSpeedModValue += (float) mod.getValue();
+        }
+        float goldFinalSpeed = 4.0f + goldSpeedModValue;
+
+        // Gold sword should have modifier -2.4, final speed 1.6
+        assertEquals(-2.4f, goldSpeedModValue, 0.01f,
+                "Gold sword attack speed MODIFIER must be -2.4 (vanilla: 4.0 base + -2.4 = 1.6 speed)");
+        assertEquals(1.6f, goldFinalSpeed, 0.01f,
+                "Gold sword final attack speed must be 1.6");
+
+        context.complete();
+    }
+
+    /**
+     * Diagnostic test to trace exactly what's happening during attribute composition
+     * for iron vs gold pickaxes to find why iron returns 0 for attack_speed.
+     */
+    @GameTest(templateName = EMPTY_STRUCTURE, required = true)
+    public void trace_pickaxe_composition(TestContext context) {
+        var ctx = ForgeroTestUtils.forgero(context);
+
+        System.out.println("\n========== PICKAXE COMPOSITION TRACE ==========");
+
+        for (String material : new String[]{"golden", "iron"}) {
+            String pickaxeId = "forgero:" + material + "_pickaxe";
+            var pickaxeOpt = ctx.component(pickaxeId);
+
+            if (pickaxeOpt.isEmpty()) {
+                System.out.println("[ERROR] " + pickaxeId + " not found!");
+                continue;
+            }
+
+            System.out.println("\n--- " + pickaxeId + " ---");
+            var pickaxe = pickaxeOpt.get();
+            System.out.println("  Component type: " + pickaxe.getClass().getSimpleName());
+            System.out.println("  Interfaces: " + java.util.Arrays.toString(pickaxe.getClass().getInterfaces()));
+
+            // Direct attributes on pickaxe
+            var pickaxeAttrs = pickaxe.properties(com.sigmundgranaas.forgero.core.attribute.api.Attribute.KEY);
+            System.out.println("  Direct attributes (" + pickaxeAttrs.size() + "):");
+            for (var attr : pickaxeAttrs) {
+                if (attr.type().path().contains("attack")) {
+                    System.out.println("    * " + attr.type() + " = " + attr.value() +
+                        " op=" + attr.operator().getClass().getSimpleName() +
+                        " ctx=" + attr.context().orElse(null));
+                }
+            }
+
+            // Print pickaxe's structure
+            if (pickaxe instanceof com.sigmundgranaas.forgero.core.component.api.StructuredComponent structured) {
+                System.out.println("  IS StructuredComponent - parts:");
+                for (var part : structured.structure().allParts()) {
+                    System.out.println("    - slot=" + part.id() + " content=" + part.getContent().id());
+                    dumpComponentAttrsRecursive(part.getContent(), "      ", "attack");
+                }
+            } else {
+                System.out.println("  NOT a StructuredComponent");
+            }
+
+            // Get resolved value via ItemQueryApi
+            ItemStack stack = ForgeroApi.converter().toStack(pickaxe).orElseThrow();
+            float querySpeed = ForgeroApi.itemQuery().getAttackSpeed(stack);
+            float queryDamage = ForgeroApi.itemQuery().getAttackDamage(stack);
+            System.out.println("  RESOLVED via ItemQueryApi: attack_speed=" + querySpeed + ", attack_damage=" + queryDamage);
+        }
+
+        System.out.println("\n========== END TRACE ==========\n");
+
+        context.complete();
+    }
+
+    private void dumpComponentAttrsRecursive(com.sigmundgranaas.forgero.core.component.api.Component comp, String indent, String filter) {
+        var attrs = comp.properties(com.sigmundgranaas.forgero.core.attribute.api.Attribute.KEY);
+        int matchCount = 0;
+        for (var attr : attrs) {
+            if (attr.type().path().contains(filter)) {
+                matchCount++;
+                System.out.println(indent + "* " + attr.type() + " = " + attr.value() +
+                    " op=" + attr.operator().getClass().getSimpleName() +
+                    " order=" + attr.operator().order() +
+                    " ctx=" + attr.context().orElse(null) +
+                    " cond=" + attr.condition().map(c -> c.staticConditions().size() + " static").orElse("none"));
+            }
+        }
+        System.out.println(indent + "(found " + matchCount + " matching attrs out of " + attrs.size() + " total)");
+
+        if (comp instanceof com.sigmundgranaas.forgero.core.component.api.StructuredComponent structured) {
+            for (var part : structured.structure().allParts()) {
+                System.out.println(indent + "-> slot=" + part.id() + " content=" + part.getContent().id());
+                dumpComponentAttrsRecursive(part.getContent(), indent + "  ", filter);
+            }
+        }
+    }
 }

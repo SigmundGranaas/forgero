@@ -13,6 +13,7 @@
   "attributes": [
     { "id": "forgero:netherite-pickaxe-durability", "type": "forgero:durability", "computation": 2031 },
     { "id": "forgero:netherite-pickaxe-attack_damage", "type": "forgero:attack_damage", "computation": 6 },
+    { "id": "forgero:netherite-pickaxe-attack_speed", "type": "forgero:attack_speed", "computation": 1.2 },
     { "id": "forgero:netherite-pickaxe-mining_speed", "type": "forgero:mining_speed", "computation": 9 },
     { "id": "forgero:netherite-pickaxe-mining_level", "type": "forgero:mining_level", "computation": 4 }
   ],

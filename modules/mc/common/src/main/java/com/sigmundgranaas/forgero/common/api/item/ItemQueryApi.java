@@ -1,6 +1,10 @@
 package com.sigmundgranaas.forgero.common.api.item;
 
+import com.google.common.collect.Multimap;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
@@ -139,6 +143,18 @@ public interface ItemQueryApi {
 	 * @return The mining speed, or 0.0f for null/empty/non-Forgero items
 	 */
 	float getMiningSpeed(ItemStack stack);
+
+	/**
+	 * Returns the mining speed value of the provided ItemStack for a specific block state.
+	 * <p>
+	 * This method takes into account whether the tool is effective on the given block state.
+	 * If the tool is not effective on the block, this returns 0.0f or the base mining speed.
+	 *
+	 * @param stack The ItemStack to query
+	 * @param state The BlockState being mined
+	 * @return The mining speed for the given block, or 0.0f for null/empty/non-Forgero items
+	 */
+	float getMiningSpeed(ItemStack stack, net.minecraft.block.BlockState state);
 
 	/**
 	 * Returns the attack speed value of the provided ItemStack.
@@ -337,4 +353,23 @@ public interface ItemQueryApi {
 	 * @return Set of tag identifiers, or empty set for null/empty/non-Forgero items
 	 */
 	Set<OpenIdentifier> getTags(ItemStack stack);
+
+	/**
+	 * Returns the attribute modifiers for the provided ItemStack.
+	 * <p>
+	 * This method calculates Forgero attribute modifiers and merges them with the vanilla
+	 * attribute modifiers. Only attributes that apply to the given equipment slot are included.
+	 * <p>
+	 * For non-Forgero items, this returns the vanilla map unchanged.
+	 *
+	 * @param stack     The ItemStack to query
+	 * @param vanillaMap The vanilla attribute modifiers map to merge with
+	 * @param slot      The equipment slot context for the modifiers
+	 * @return A Multimap containing merged attribute modifiers
+	 */
+	Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(
+			ItemStack stack,
+			Multimap<EntityAttribute, EntityAttributeModifier> vanillaMap,
+			EquipmentSlot slot
+	);
 }

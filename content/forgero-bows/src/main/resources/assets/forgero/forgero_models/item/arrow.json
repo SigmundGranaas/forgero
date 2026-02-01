@@ -11,7 +11,10 @@
       {
         "id": "head",
         "order": 20,
-        "renderer": { "type": "forgero:component" }
+        "renderer": {
+          "type": "forgero:component",
+          "context": "arrow_head"
+        }
       },
       {
         "id": "shaft",
@@ -24,7 +27,10 @@
       {
         "id": "fletching",
         "order": 15,
-        "renderer": { "type": "forgero:component" }
+        "renderer": {
+          "type": "forgero:component",
+          "context": "arrow_fletching"
+        }
       }
     ]
   }

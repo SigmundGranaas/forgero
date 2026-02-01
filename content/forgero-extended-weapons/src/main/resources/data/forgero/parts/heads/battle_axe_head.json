@@ -41,37 +41,37 @@
     {
       "id": "forgero:battle_axe_head-durability-mult",
       "type": "forgero:durability",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.2}
     },
     {
       "id": "forgero:battle_axe_head-attack_damage-offset",
       "type": "forgero:attack_damage",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"value": 6, "operation": "addition"}
     },
     {
       "id": "forgero:battle_axe_head-attack_speed-mult",
       "type": "forgero:attack_speed",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.0}
     },
     {
       "id": "forgero:battle_axe_head-mining_speed-mult",
       "type": "forgero:mining_speed",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.1}
     },
     {
       "id": "forgero:battle_axe_head-mining_level-mult",
       "type": "forgero:mining_level",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.0}
     },
     {
       "id": "forgero:battle_axe_head-weight-mult",
       "type": "forgero:weight",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.6}
     }
   ],

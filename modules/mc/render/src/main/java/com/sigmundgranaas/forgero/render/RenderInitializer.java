@@ -6,7 +6,6 @@ import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
 import com.sigmundgranaas.forgero.common.api.ForgeroInitializedCallback;
-import com.sigmundgranaas.forgero.common.api.ForgeroServices;
 import com.sigmundgranaas.forgero.model.generation.api.TextureGenerationTask;
 import com.sigmundgranaas.forgero.model.pipeline.api.ModelDataInitializer;
 import com.sigmundgranaas.forgero.model.pipeline.api.ModelInitializationResult;
@@ -21,7 +20,6 @@ import com.sigmundgranaas.forgero.render.model.armor.ForgeroArmorTextureManager;
 import com.sigmundgranaas.forgero.render.model.item.ForgeroModelProvider;
 import com.sigmundgranaas.forgero.render.texture.RuntimeTextureWriter;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceProvider;
-import com.sigmundgranaas.forgero.utility.resource.loader.implementation.ClassPathResourceProvider;
 import com.sigmundgranaas.forgero.loader.impl.FabricResourceProvider;
 import com.sigmundgranaas.forgero.drp.api.DRPApi;
 import com.sigmundgranaas.forgero.drp.api.DynamicResourcePack;
@@ -44,6 +42,14 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * Client-side render initializer for Forgero.
+ *
+ * This class handles model and texture generation during client initialization.
+ * The key insight is that generation must happen in onInitializeClient() (not in
+ * deferred callbacks) to leverage Fabric's guarantee that client entrypoints run
+ * AFTER main entrypoints, ensuring data is available via ForgeroInitializedCallback.
+ */
 @Environment(EnvType.CLIENT)
 public class RenderInitializer implements ClientModInitializer {
 	public static final String MOD_NAMESPACE = "forgero";
@@ -78,76 +84,90 @@ public class RenderInitializer implements ClientModInitializer {
 	public void onInitializeClient() {
 		DRPApi.getInstance().register(getResourcePack(), ResourcePackPhase.BEFORE_VANILLA);
 
-		// STEP 1: Synchronous Pre-load Phase
-		// This runs once at startup, before the ModelLoader is created.
-		// Try to use Minecraft's ResourceManager if available, as it can find resources across all mod JARs.
-		// Fall back to FabricResourceProvider which uses Fabric's ModContainer API to scan all mod JARs.
+		// Generate models and textures immediately in onInitializeClient()
+		// CRITICAL: This runs AFTER ForgeroDataLoader.onInitialize() (Fabric guarantee),
+		// ensuring taggedComponents and tagResolver are available via the static initializer's
+		// ForgeroInitializedCallback.registerAndReplay() mechanism.
+		LOGGER.info("Generating Forgero models and textures...");
+		generateModelsForLoading();
+
+		// Register the Model Loading Plugin to provide the model resolver
+		// The resolver is called later when Minecraft loads individual models
+		LOGGER.info("Registering ModelLoadingPlugin...");
+		ModelLoadingPlugin.register(pluginContext -> {
+			LOGGER.debug("ModelLoadingPlugin callback invoked - registering model resolver");
+			pluginContext.resolveModel().register(new ForgeroModelProvider());
+		});
+
+		// Register resource reload listener for hot reloads (F3+T)
+		// This handles texture regeneration when resources are reloaded
+		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new ForgeroModelResourceListener());
+	}
+
+	/**
+	 * Synchronously generates Forgero models and textures during client initialization.
+	 *
+	 * This method is called from onInitializeClient(), which runs AFTER the main entrypoint
+	 * (ForgeroDataLoader.onInitialize()). This timing guarantee ensures that taggedComponents
+	 * and tagResolver are available via ForgeroInitializedCallback.registerAndReplay().
+	 *
+	 * Models and textures are generated BEFORE ModelLoadingPlugin callbacks execute,
+	 * preventing "Unable to load model" warnings.
+	 */
+	private void generateModelsForLoading() {
+		LOGGER.info("Generating Forgero models and textures during client initialization...");
+
+		if (taggedComponents == null || tagResolver == null) {
+			LOGGER.warn("Forgero data not initialized (taggedComponents={}, tagResolver={}) - skipping model generation",
+				taggedComponents, tagResolver);
+			return;
+		}
+
 		try {
-			ResourceProvider preloadProvider;
+			ResourceProvider resourceProvider;
 			ResourceManager mcResourceManager = MinecraftClient.getInstance().getResourceManager();
 			if (mcResourceManager != null && !mcResourceManager.getAllNamespaces().isEmpty()) {
-				preloadProvider = new MinecraftResourceProvider(mcResourceManager);
+				resourceProvider = new MinecraftResourceProvider(mcResourceManager);
 			} else {
-				preloadProvider = new FabricResourceProvider("assets");
+				resourceProvider = new FabricResourceProvider("assets");
 			}
 
 			ItemModelRegistry itemModelRegistry = new MapBackedModelRegistry();
 			ArmorModelRegistry armorModelRegistry = new MapBackedArmorModelRegistry();
-			ModelDataInitializer modelInitializer = new ModelDataInitializer(preloadProvider);
+			ModelDataInitializer modelInitializer = new ModelDataInitializer(resourceProvider);
 
-			if (taggedComponents != null && tagResolver != null) {
-				ModelInitializationResult initialResult = modelInitializer.initialize(
-						taggedComponents.all().stream().collect(Collectors.toMap(Component::id, Function.identity())),
-						tagResolver,
-						itemModelRegistry,
-						armorModelRegistry
-				);
+			ModelInitializationResult result = modelInitializer.initialize(
+					taggedComponents.all().stream().collect(Collectors.toMap(Component::id, Function.identity())),
+					tagResolver,
+					itemModelRegistry,
+					armorModelRegistry
+			);
 
-				// Generate initial textures and atlas config BEFORE the first resource reload
-				var tasks = initialResult.generationResult().textureGenerationTasks();
-				if (!tasks.isEmpty()) {
-					var textureGenerator = new DefaultTextureGenerator(preloadProvider, new AwtPalettizedTextureGenerator(), new RuntimeTextureWriter(getResourcePack()));
-					textureGenerator.generate(tasks);
-					generateAtlasConfig(tasks);
-				}
+			// Generate textures synchronously (required for model loading)
+			var tasks = result.generationResult().textureGenerationTasks();
+			if (!tasks.isEmpty()) {
+				// Clear any existing textures to prevent accumulation across reloads
+				getResourcePack().clear();
 
-				// Create and populate the initial services object.
-				ForgeroClient.services = new ForgeroClient.ClientServices(
-						initialResult.itemModelRegistry(),
-						initialResult.armorModelRegistry(),
-						converter != null ? converter::toComponent : s -> Optional.empty(),
-						componentRegistry,
-						new ForgeroArmorTextureManager(initialResult.itemModelRegistry()),
-						new ForgeroArmorModelManager(MinecraftClient.getInstance().getEntityModelLoader())
-				);
-				LOGGER.debug("Model pre-load complete: {} models", initialResult.itemModelRegistry().models().size());
-			} else {
-				LOGGER.warn("Forgero data not yet initialized during client startup. Models will be loaded on first resource reload.");
-				// Initialize with empty services - hot reload will populate them later
-				ForgeroClient.services = new ForgeroClient.ClientServices(
-						itemModelRegistry,
-						armorModelRegistry,
-						s -> Optional.empty(),
-						null,
-						new ForgeroArmorTextureManager(itemModelRegistry),
-						new ForgeroArmorModelManager(MinecraftClient.getInstance().getEntityModelLoader())
-				);
+				var textureGenerator = new DefaultTextureGenerator(resourceProvider, new AwtPalettizedTextureGenerator(), new RuntimeTextureWriter(getResourcePack()));
+				textureGenerator.generate(tasks);
+				generateAtlasConfig(tasks);
 			}
+
+			// Populate services BEFORE model loading starts
+			ForgeroClient.services = new ForgeroClient.ClientServices(
+					result.itemModelRegistry(),
+					result.armorModelRegistry(),
+					converter != null ? converter::toComponent : s -> Optional.empty(),
+					componentRegistry,
+					new ForgeroArmorTextureManager(result.itemModelRegistry()),
+					new ForgeroArmorModelManager(MinecraftClient.getInstance().getEntityModelLoader())
+			);
+			
+			LOGGER.debug("Forgero models generated: {} item models", result.itemModelRegistry().models().size());
 		} catch (Exception e) {
-			LOGGER.error("Critical error during Forgero synchronous pre-load. Models will not render correctly.", e);
-			// To prevent crashes in a broken state, initialize with empty services.
-			ForgeroClient.services = new ForgeroClient.ClientServices(new MapBackedModelRegistry(), new MapBackedArmorModelRegistry(), s -> Optional.empty(), null, null, null);
+			LOGGER.error("Failed to generate Forgero models during model loading", e);
 		}
-
-		// STEP 2: Register Live-Reload Systems
-		// These systems will take over for hot reloads (F3+T), using Minecraft's resource manager.
-		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new ForgeroModelResourceListener());
-
-		// STEP 3: Register the Model Provider
-		// This is now 100% safe because the synchronous pre-load has already populated ForgeroClient.services.
-		ModelLoadingPlugin.register(pluginContext -> {
-			pluginContext.resolveModel().register(new ForgeroModelProvider());
-		});
 	}
 
 	private void generateAtlasConfig(List<TextureGenerationTask> tasks) {

@@ -43,13 +43,13 @@
     {
       "id": "forgero:chestplate-armor-mult",
       "type": "forgero:armor",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 3.0}
     },
     {
       "id": "forgero:chestplate-durability-mult",
       "type": "forgero:durability",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.0}
     }
   ]

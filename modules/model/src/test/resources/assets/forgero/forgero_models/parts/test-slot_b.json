@@ -1,0 +1,6 @@
+{
+  "type": "forgero:texture_model",
+  "textures": {
+    "default": "forgero:item/test/slot_b"
+  }
+}

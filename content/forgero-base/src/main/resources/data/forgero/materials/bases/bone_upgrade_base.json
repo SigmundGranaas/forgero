@@ -6,37 +6,37 @@
       "id": "forgero:bone-upgrade-rarity",
       "type": "forgero:rarity",
       "computation": { "value": 15, "operation": "addition" },
-      "context": "forgero:upgrade"
+      "scope": "forgero:scope/upgrade"
     },
     {
       "id": "forgero:bone-upgrade-weight",
       "type": "forgero:weight",
       "computation": { "value": 1.25, "operation": "addition" },
-      "context": "forgero:upgrade"
+      "scope": "forgero:scope/upgrade"
     },
     {
       "id": "forgero:bone-offensive-attack_damage",
       "type": "forgero:attack_damage",
       "computation": { "value": 1.25, "operation": "addition" },
-      "context": "forgero:contexts/offensive"
+      "scope": "forgero:contexts/offensive"
     },
     {
       "id": "forgero:bone-offensive-mining_speed",
       "type": "forgero:mining_speed",
       "computation": { "value": 1.5, "operation": "addition" },
-      "context": "forgero:contexts/offensive"
+      "scope": "forgero:contexts/offensive"
     },
     {
       "id": "forgero:bone-offensive-durability",
       "type": "forgero:durability",
       "computation": { "value": 40, "operation": "addition" },
-      "context": "forgero:contexts/offensive"
+      "scope": "forgero:contexts/offensive"
     },
     {
       "id": "forgero:bone-offensive-draw_power",
       "type": "forgero:draw_power",
       "computation": { "value": 0.3, "operation": "addition" },
-      "context": "forgero:contexts/offensive"
+      "scope": "forgero:contexts/offensive"
     }
   ]
 }

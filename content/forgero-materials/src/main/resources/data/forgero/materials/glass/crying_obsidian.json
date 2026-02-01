@@ -20,7 +20,7 @@
       "computation": {
         "value": 2.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:crying_obsidian-attack_damage",
@@ -28,7 +28,7 @@
       "computation": {
         "value": 4.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:crying_obsidian-mining_speed",
@@ -36,7 +36,7 @@
       "computation": {
         "value": 6.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:crying_obsidian-mining_level",
@@ -44,7 +44,7 @@
       "computation": {
         "value": 3
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:crying_obsidian-durability",
@@ -52,7 +52,7 @@
       "computation": {
         "value": 1880
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:crying_obsidian-rarity",
@@ -60,7 +60,7 @@
       "computation": {
         "value": 70
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:crying_obsidian-weight",
@@ -68,7 +68,7 @@
       "computation": {
         "value": 5.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:crying_obsidian-emissive",
@@ -76,7 +76,7 @@
       "computation": {
         "value": 4
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     }
   ]
 }

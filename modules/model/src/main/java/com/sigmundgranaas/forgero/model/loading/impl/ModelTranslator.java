@@ -101,7 +101,7 @@ public class ModelTranslator {
 	protected ModelSlot toModelSlot(SlotDTO dto) {
 		RendererDTO renderer = dto.renderer();
 		Optional<String> context = Optional.ofNullable(renderer.context());
-		return new ModelSlot(dto.id(), dto.order(), context, dto.getTargetMount(), dto.getChildMount());
+		return new ModelSlot(dto.id(), dto.order(), context, dto.getTargetMount(), dto.getChildMount(), dto.getDynamicKey());
 	}
 
 	private TextureModel toTextureModel(OpenIdentifier id, ModelDTO dto) {

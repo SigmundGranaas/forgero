@@ -25,7 +25,7 @@
       "id": "forgero:shovel_head-reinforcement",
       "type": "forgero:materials/roles/upgrade_material",
       "tags": ["forgero:upgrades/types/reinforcement"],
-      "context": "forgero:contexts/offensive",
+      "scope": "forgero:contexts/offensive",
       "description": "slot.forgero.reinforcement"
     }
   ],
@@ -38,43 +38,43 @@
     {
       "id": "forgero:shovel_head-durability-mult",
       "type": "forgero:durability",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.0}
     },
     {
       "id": "forgero:shovel_head-attack_damage-mult",
       "type": "forgero:attack_damage",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.0}
     },
     {
       "id": "forgero:shovel_head-attack_damage-offset",
       "type": "forgero:attack_damage",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"value": 0.5, "operation": "addition"}
     },
     {
       "id": "forgero:shovel_head-attack_speed-base",
       "type": "forgero:attack_speed",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"value": -1.0, "operation": "addition"}
     },
     {
       "id": "forgero:shovel_head-attack_speed-mult",
       "type": "forgero:attack_speed",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.0}
     },
     {
       "id": "forgero:shovel_head-mining_speed-mult",
       "type": "forgero:mining_speed",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.0}
     },
     {
       "id": "forgero:shovel_head-mining_level-mult",
       "type": "forgero:mining_level",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.0}
     }
   ]

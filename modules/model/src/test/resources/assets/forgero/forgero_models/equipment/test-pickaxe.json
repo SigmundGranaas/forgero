@@ -1,0 +1,21 @@
+{
+  "type": "forgero:composite_model",
+  "slots": [
+    {
+      "id": "head",
+      "order": 10,
+      "renderer": { "type": "forgero:component" },
+      "mount": "head_attach",
+      "child_mount": "center"
+    },
+    {
+      "id": "handle",
+      "order": 5,
+      "renderer": { "type": "forgero:component" }
+    }
+  ],
+  "mount_points": [
+    { "name": "head_attach", "position": [8, 12] },
+    { "name": "center", "position": [8, 8] }
+  ]
+}

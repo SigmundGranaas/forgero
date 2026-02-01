@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.core.attribute.impl;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.ForgeroTest;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
-import com.sigmundgranaas.forgero.core.attribute.api.AttributeContext;
+import com.sigmundgranaas.forgero.core.attribute.api.AttributeScope;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
 import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
@@ -41,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * </ol>
  */
 @DisplayName("Attribute Composition Flow Tests")
-class PartCompositeContextConditionTest extends ForgeroTest {
+class PartCompositeScopeConditionTest extends ForgeroTest {
 
 	private static final OpenIdentifier TOOL_MATERIAL_SLOT = idFactory.of("forgero:materials/roles/tool_material");
 	private static final OpenIdentifier ARMOR_MATERIAL_SLOT = idFactory.of("forgero:materials/roles/armor_material");
@@ -50,7 +50,7 @@ class PartCompositeContextConditionTest extends ForgeroTest {
 	private SimpleAttribute partCompositeBase(OpenIdentifier type, float value) {
 		return new SimpleAttribute(
 				Optional.empty(), type, value, AdditionOperator.getInstance(),
-				0, Optional.of(AttributeContext.PART_COMPOSITE), Optional.empty()
+				0, Optional.of(AttributeScope.PART_COMPOSITE), Optional.empty()
 		);
 	}
 
@@ -58,7 +58,7 @@ class PartCompositeContextConditionTest extends ForgeroTest {
 		StaticCondition condition = new InSlotTypeCondition(idFactory.of("forgero:in_slot_type"), slotType);
 		return new SimpleAttribute(
 				Optional.empty(), type, value, AdditionOperator.getInstance(),
-				0, Optional.of(AttributeContext.PART_COMPOSITE),
+				0, Optional.of(AttributeScope.PART_COMPOSITE),
 				Optional.of(new Condition(List.of(condition), Collections.emptyList()))
 		);
 	}
@@ -66,7 +66,7 @@ class PartCompositeContextConditionTest extends ForgeroTest {
 	private SimpleAttribute partCompositeMultiplier(OpenIdentifier type, float value) {
 		return new SimpleAttribute(
 				Optional.empty(), type, value, MultiplicationOperator.getInstance(),
-				0, Optional.of(AttributeContext.PART_COMPOSITE), Optional.empty()
+				0, Optional.of(AttributeScope.PART_COMPOSITE), Optional.empty()
 		);
 	}
 

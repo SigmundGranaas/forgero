@@ -24,7 +24,7 @@
         "value": 60,
         "operation": "addition"
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:diamond_gem-durability",
@@ -33,7 +33,7 @@
         "value": 1000,
         "operation": "addition"
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     }
   ]
 }

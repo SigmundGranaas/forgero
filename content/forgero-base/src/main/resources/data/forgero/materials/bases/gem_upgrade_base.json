@@ -6,7 +6,7 @@
       "id": "forgero:gem-upgrade-rarity",
       "type": "forgero:rarity",
       "computation": { "value": 30, "operation": "addition" },
-      "context": "forgero:upgrade"
+      "scope": "forgero:scope/upgrade"
     }
   ]
 }

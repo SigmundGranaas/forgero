@@ -49,7 +49,7 @@ class ModelExtensionMergerTest {
 	}
 
 	private SlotDTO createSlot(String id, int order) {
-		return new SlotDTO(id, order, new RendererDTO("forgero:component", null), null, null);
+		return new SlotDTO(id, order, new RendererDTO("forgero:component", null), null, null, null);
 	}
 
 	private MountPointDTO createMountPoint(String name, int x, int y) {

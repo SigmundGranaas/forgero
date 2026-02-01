@@ -20,7 +20,7 @@
       "computation": {
         "value": 2.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:obsidian-attack_damage",
@@ -28,7 +28,7 @@
       "computation": {
         "value": 4.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:obsidian-mining_speed",
@@ -36,7 +36,7 @@
       "computation": {
         "value": 6.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:obsidian-mining_level",
@@ -44,7 +44,7 @@
       "computation": {
         "value": 3
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:obsidian-durability",
@@ -52,7 +52,7 @@
       "computation": {
         "value": 1750
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:obsidian-rarity",
@@ -60,7 +60,7 @@
       "computation": {
         "value": 60
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:obsidian-weight",
@@ -68,7 +68,7 @@
       "computation": {
         "value": 5.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     }
   ]
 }

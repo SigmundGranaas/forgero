@@ -23,7 +23,7 @@
     {
       "id": "forgero:sword_guard-durability-mult",
       "type": "forgero:durability",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 0.1}
     },
     {

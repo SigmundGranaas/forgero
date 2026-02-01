@@ -16,7 +16,7 @@
         "value": 75,
         "operation": "addition"
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:flawless_amethyst-mining_level",
@@ -25,7 +25,7 @@
         "value": 4,
         "operation": "addition"
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     }
   ]
 }

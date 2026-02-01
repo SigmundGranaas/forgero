@@ -1,20 +1,30 @@
 package com.sigmundgranaas.forgero.common.api.item.impl;
 
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.Multimap;
 import com.sigmundgranaas.forgero.common.api.item.ItemQueryApi;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
+import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.EquipmentComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.SlotManager;
 import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
+import java.util.function.Function;
 
 /**
  * Package-private implementation of {@link ItemQueryApi}.
@@ -123,6 +133,23 @@ public class ItemQueryApiImpl implements ItemQueryApi {
 	@Override
 	public float getMiningSpeed(ItemStack stack) {
 		return getAttribute(stack, DefaultAttributes.MINING_SPEED);
+	}
+
+	@Override
+	public float getMiningSpeed(ItemStack stack, net.minecraft.block.BlockState state) {
+		if (stack == null || stack.isEmpty() || state == null) {
+			return 0.0f;
+		}
+
+		// Check if the tool is effective on this block using vanilla logic
+		boolean isEffective = stack.isSuitableFor(state);
+
+		if (!isEffective) {
+			return 1.0f; // Return base speed (1.0) when not effective
+		}
+
+		// Return Forgero's mining speed when effective
+		return getMiningSpeed(stack);
 	}
 
 	@Override
@@ -303,5 +330,86 @@ public class ItemQueryApiImpl implements ItemQueryApi {
 		return converter.toComponent(stack)
 			.map(component -> component.getTags())
 			.orElse(Collections.emptySet());
+	}
+
+	// Vanilla attribute modifier UUIDs for armor slots
+	private static final UUID[] ARMOR_MODIFIER_IDS = new UUID[]{
+			UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), // Feet
+			UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), // Legs
+			UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), // Chest
+			UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")  // Head
+	};
+
+	@Override
+	public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(
+			ItemStack stack,
+			Multimap<EntityAttribute, EntityAttributeModifier> vanillaMap,
+			EquipmentSlot slot
+	) {
+		if (stack == null || stack.isEmpty()) {
+			return vanillaMap;
+		}
+
+		Optional<Component> componentOpt = converter.toComponent(stack);
+		if (componentOpt.isEmpty()) {
+			return vanillaMap;
+		}
+
+		Component component = componentOpt.get();
+
+		// Only equipment components apply their attributes to the player
+		if (!(component instanceof EquipmentComponent)) {
+			return vanillaMap;
+		}
+
+		// Resolve attributes for this equipment
+		AttributeQueryResult result = attributeEngine.resolve(component);
+
+		Multimap<EntityAttribute, EntityAttributeModifier> forgeroAttributes = createAttributeMap(result, slot);
+
+		Multimap<EntityAttribute, EntityAttributeModifier> finalMap = LinkedListMultimap.create();
+		finalMap.putAll(forgeroAttributes);
+
+		vanillaMap.entries().stream()
+				.filter(entry -> !finalMap.containsKey(entry.getKey()))
+				.forEach(entry -> finalMap.put(entry.getKey(), entry.getValue()));
+
+		return finalMap;
+	}
+
+	private Multimap<EntityAttribute, EntityAttributeModifier> createAttributeMap(AttributeQueryResult attributes, EquipmentSlot slot) {
+		Multimap<EntityAttribute, EntityAttributeModifier> map = LinkedListMultimap.create();
+
+		// Handle tool attributes, which apply only in the main hand
+		if (slot == EquipmentSlot.MAINHAND) {
+			handleAttribute(map, DefaultAttributes.ATTACK_DAMAGE, EntityAttributes.GENERIC_ATTACK_DAMAGE, Item.ATTACK_DAMAGE_MODIFIER_ID, "Forgero Attack Damage", attributes, val -> val - 1.0f, EntityAttributeModifier.Operation.ADDITION);
+			handleAttribute(map, DefaultAttributes.ATTACK_SPEED, EntityAttributes.GENERIC_ATTACK_SPEED, Item.ATTACK_SPEED_MODIFIER_ID, "Forgero Attack Speed", attributes, val -> val - 4.0f, EntityAttributeModifier.Operation.ADDITION);
+		}
+
+		// Handle armor attributes, which apply in armor slots
+		if (slot.getType() == EquipmentSlot.Type.ARMOR) {
+			UUID uuid = ARMOR_MODIFIER_IDS[slot.getEntitySlotId()];
+			handleAttribute(map, DefaultAttributes.ARMOR, EntityAttributes.GENERIC_ARMOR, uuid, "Forgero Armor", attributes, val -> val, EntityAttributeModifier.Operation.ADDITION);
+			handleAttribute(map, DefaultAttributes.ARMOR_TOUGHNESS, EntityAttributes.GENERIC_ARMOR_TOUGHNESS, uuid, "Forgero Armor Toughness", attributes, val -> val, EntityAttributeModifier.Operation.ADDITION);
+		}
+
+		return map;
+	}
+
+	private void handleAttribute(
+			Multimap<EntityAttribute, EntityAttributeModifier> map,
+			OpenIdentifier forgeroId,
+			EntityAttribute vanillaAttribute,
+			UUID modifierUuid,
+			String modifierName,
+			AttributeQueryResult attributes,
+			Function<Float, Float> valueMapper,
+			EntityAttributeModifier.Operation operation
+	) {
+		float value = attributes.getValue(forgeroId);
+		if (Math.abs(value) > 0.001f) {
+			float modifierValue = valueMapper.apply(value);
+			map.put(vanillaAttribute, new EntityAttributeModifier(modifierUuid, modifierName, modifierValue, operation));
+		}
 	}
 }

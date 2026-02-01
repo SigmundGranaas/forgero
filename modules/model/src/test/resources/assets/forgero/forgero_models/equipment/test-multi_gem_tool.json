@@ -1,0 +1,37 @@
+{
+  "type": "forgero:composite_model",
+  "slots": [
+    {
+      "id": "base",
+      "order": 1,
+      "renderer": { "type": "forgero:component" }
+    },
+    {
+      "id": "gem_slot_1",
+      "order": 10,
+      "mount_point": {"x": 2, "y": 2},
+      "renderer": {
+        "type": "forgero:component",
+        "context": "gem_slot_1"
+      }
+    },
+    {
+      "id": "gem_slot_2",
+      "order": 20,
+      "mount_point": {"x": 8, "y": 2},
+      "renderer": {
+        "type": "forgero:component",
+        "context": "gem_slot_2"
+      }
+    },
+    {
+      "id": "gem_slot_3",
+      "order": 30,
+      "mount_point": {"x": 14, "y": 2},
+      "renderer": {
+        "type": "forgero:component",
+        "context": "gem_slot_3"
+      }
+    }
+  ]
+}

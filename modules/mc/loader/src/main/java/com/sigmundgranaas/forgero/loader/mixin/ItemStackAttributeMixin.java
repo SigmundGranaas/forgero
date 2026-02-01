@@ -1,7 +1,9 @@
+// modules/mc/loader/src/main/java/com/sigmundgranaas/forgero/loader/mixin/ItemStackAttributeMixin.java
+
 package com.sigmundgranaas.forgero.loader.mixin;
 
 import com.google.common.collect.Multimap;
-import com.sigmundgranaas.forgero.common.attribute.AttributeManager;
+import com.sigmundgranaas.forgero.common.api.MixinServiceAccessor;
 
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -14,19 +16,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * Mixin into ItemStack to intercept the getAttributeModifiers method.
- * This is the primary hook for injecting Forgero's attribute system into the game.
- * It delegates all logic to the ForgeroAttributeManager to keep the mixin clean and simple.
+ * Delegates to MixinServiceAccessor, which bridges to ForgeroServices.
  */
 @Mixin(ItemStack.class)
 public abstract class ItemStackAttributeMixin {
 
 	@Inject(method = "getAttributeModifiers", at = @At("RETURN"), cancellable = true)
-	private void forgero$injectForgeroAttributes(EquipmentSlot slot, CallbackInfoReturnable<Multimap<EntityAttribute, EntityAttributeModifier>> cir) {
+	private void forgero$injectForgeroAttributes(
+			EquipmentSlot slot,
+			CallbackInfoReturnable<Multimap<EntityAttribute, EntityAttributeModifier>> cir
+	) {
 		ItemStack stack = (ItemStack) (Object) this;
 		Multimap<EntityAttribute, EntityAttributeModifier> vanillaMap = cir.getReturnValue();
 
-		// Delegate to the ForgeroAttributeManager to get the final, potentially modified, attribute map.
-		Multimap<EntityAttribute, EntityAttributeModifier> finalMap = AttributeManager.getAttributes(stack, vanillaMap, slot);
+		// Delegate to the service accessor - no business logic in mixin
+		Multimap<EntityAttribute, EntityAttributeModifier> finalMap =
+				MixinServiceAccessor.getAttributeModifiers(stack, vanillaMap, slot);
 
 		cir.setReturnValue(finalMap);
 	}

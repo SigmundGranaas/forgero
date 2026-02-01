@@ -42,10 +42,10 @@ public final class AttributeCodec implements Codec<Attribute> {
 						Codec.FLOAT.fieldOf("value").forGetter(SimpleAttribute::value),
 						operatorCodec.fieldOf("operator").orElse(AdditionOperator.getInstance()).forGetter(SimpleAttribute::operator),
 						Codec.INT.fieldOf("group").orElse(0).forGetter(SimpleAttribute::group),
-						CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("context").forGetter(SimpleAttribute::context),
+						CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("scope").forGetter(SimpleAttribute::scope),
 						conditionCodec.optionalFieldOf("condition").forGetter(attr -> attr.condition().filter(c -> c != Condition.ALWAYS_TRUE))
-				).apply(instance, (id, type, value, operator, group, context, condition) ->
-						new SimpleAttribute(id, type, value, operator, group, context, condition))
+				).apply(instance, (id, type, value, operator, group, scope, condition) ->
+						new SimpleAttribute(id, type, value, operator, group, scope, condition))
 		);
 	}
 

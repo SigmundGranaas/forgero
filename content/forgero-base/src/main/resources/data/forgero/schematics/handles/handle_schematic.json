@@ -21,7 +21,7 @@
       "tags": [
         "forgero:upgrades/types/pommel"
       ],
-      "context": "forgero:contexts/utility",
+      "scope": "forgero:contexts/utility",
       "description": "slot.forgero.pommel"
     },
     {
@@ -30,7 +30,7 @@
       "tags": [
         "forgero:upgrades/types/grip"
       ],
-      "context": "forgero:contexts/utility",
+      "scope": "forgero:contexts/utility",
       "description": "slot.forgero.grip"
     },
     {
@@ -39,7 +39,7 @@
       "tags": [
         "forgero:upgrades/types/reinforcement"
       ],
-      "context": "forgero:contexts/utility",
+      "scope": "forgero:contexts/utility",
       "description": "slot.forgero.reinforcement"
     },
     {
@@ -48,7 +48,7 @@
       "tags": [
         "forgero:upgrades/types/cosmetic"
       ],
-      "context": "forgero:contexts/utility",
+      "scope": "forgero:contexts/utility",
       "description": "slot.forgero.cosmetic"
     }
   ],

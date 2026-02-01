@@ -23,7 +23,7 @@
       "computation": {
         "value": 2.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:echo-attack_damage",
@@ -31,7 +31,7 @@
       "computation": {
         "value": 6.0
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:echo-mining_speed",
@@ -39,7 +39,7 @@
       "computation": {
         "value": 9.5
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:echo-mining_level",
@@ -47,7 +47,7 @@
       "computation": {
         "value": 4
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:echo-durability",
@@ -55,7 +55,7 @@
       "computation": {
         "value": 1950
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:echo-rarity",
@@ -63,7 +63,7 @@
       "computation": {
         "value": 90
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:echo-weight",
@@ -71,7 +71,7 @@
       "computation": {
         "value": 4.5
       },
-      "context": "forgero:part-composite"
+      "scope": "forgero:scope/part-composite"
     },
     {
       "id": "forgero:echo-armor",
@@ -79,7 +79,7 @@
       "computation": {
         "value": 5
       },
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "condition": {
         "type": "forgero:in_slot_type",
         "slot_type": "forgero:materials/roles/armor_material"

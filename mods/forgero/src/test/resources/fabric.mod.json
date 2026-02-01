@@ -31,7 +31,8 @@
       "com.sigmundgranaas.forgero.tests.BlockExplosionEffectTest",
       "com.sigmundgranaas.forgero.tests.UpgradeSerializationRoundTripTest",
       "com.sigmundgranaas.forgero.tests.UpgradeStationSerializationTest",
-      "com.sigmundgranaas.forgero.tests.UpgradeSlotSystemTest"
+      "com.sigmundgranaas.forgero.tests.UpgradeSlotSystemTest",
+      "com.sigmundgranaas.forgero.tests.UpgradeAttributeApplicationTest"
     ]
   },
   "depends": {

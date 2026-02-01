@@ -70,13 +70,12 @@ public class SlotsSectionWriter extends AbstractSectionWriter {
 			// Show empty indicator
 			line.append(Text.translatable("tooltip.forgero.slot.empty").formatted(Formatting.DARK_GRAY));
 
-			// Optionally show context hint (e.g., "Offensive", "Defensive")
-			slot.context().ifPresent(ctx -> {
-				String contextKey = toContextTranslationKey(ctx);
-				line.append(Text.literal(" (").formatted(Formatting.DARK_GRAY));
-				line.append(Text.translatable(contextKey).formatted(Formatting.DARK_GRAY));
-				line.append(Text.literal(")").formatted(Formatting.DARK_GRAY));
-			});
+		slot.scope().ifPresent(scope -> {
+			String scopeKey = toScopeTranslationKey(scope);
+			line.append(Text.literal(" (").formatted(Formatting.DARK_GRAY));
+			line.append(Text.translatable(scopeKey).formatted(Formatting.DARK_GRAY));
+			line.append(Text.literal(")").formatted(Formatting.DARK_GRAY));
+		});
 		}
 
 		return line;
@@ -92,12 +91,12 @@ public class SlotsSectionWriter extends AbstractSectionWriter {
 	}
 
 	/**
-	 * Converts a context identifier to a translation key.
+	 * Converts a scope identifier to a translation key.
 	 * <p>
-	 * Example: "forgero:offensive" -> "tooltip.forgero.context.offensive"
+	 * Example: "forgero:offensive" -> "tooltip.forgero.scope.offensive"
 	 */
-	private String toContextTranslationKey(OpenIdentifier contextId) {
-		return String.format("tooltip.forgero.context.%s", contextId.path());
+	private String toScopeTranslationKey(OpenIdentifier scopeId) {
+		return String.format("tooltip.forgero.scope.%s", scopeId.path());
 	}
 
 	/**

@@ -1,0 +1,20 @@
+{
+  "type": "forgero:composite_model",
+  "slots": [
+    {
+      "id": "base",
+      "order": 1,
+      "renderer": { "type": "forgero:component" }
+    },
+    {
+      "id": "overlay",
+      "order": 10,
+      "renderer": { "type": "forgero:component" }
+    },
+    {
+      "id": "gem",
+      "order": 100,
+      "renderer": { "type": "forgero:component" }
+    }
+  ]
+}

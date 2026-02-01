@@ -140,7 +140,7 @@ public class PropertyMerger {
 				computation.value(),
 				operator,
 				order,
-				data.context(),
+				data.scope(),
 				data.condition()
 		);
 	}

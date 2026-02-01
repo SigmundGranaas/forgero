@@ -42,15 +42,15 @@ public class ReferenceValidator implements ComponentValidator {
 			Attribute attr = attributes.get(i);
 			String location = "properties.attributes[" + i + "]";
 
-			// Validate context references
-			attr.context().ifPresent(ctx -> {
-				// Context identifiers don't need to exist in tag graph,
+			// Validate scope references
+			attr.scope().ifPresent(scope -> {
+				// Scope identifiers don't need to exist in tag graph,
 				// but we can warn if they look malformed
-				if (ctx.path().isEmpty()) {
+				if (scope.path().isEmpty()) {
 					builder.add(ValidationIssue.warning(
 							component.id(),
-							"Attribute '" + attr.type() + "' has empty context identifier",
-							location + ".context"
+							"Attribute '" + attr.type() + "' has empty scope identifier",
+							location + ".scope"
 					));
 				}
 			});

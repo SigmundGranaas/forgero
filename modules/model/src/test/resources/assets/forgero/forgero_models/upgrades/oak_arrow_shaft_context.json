@@ -1,0 +1,8 @@
+{
+  "type": "forgero:texture_model",
+  "target": "forgero:oak",
+  "context": "arrow_shaft",
+  "textures": {
+    "default": "forgero:item/contextual/oak_arrow_shaft"
+  }
+}

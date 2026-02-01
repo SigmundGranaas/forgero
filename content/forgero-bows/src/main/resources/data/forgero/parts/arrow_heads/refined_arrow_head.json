@@ -28,13 +28,13 @@
     {
       "id": "forgero:refined_arrow_head-attack_damage-mult",
       "type": "forgero:attack_damage",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.25}
     },
     {
       "id": "forgero:refined_arrow_head-weight-mult",
       "type": "forgero:weight",
-      "context": "forgero:part-composite",
+      "scope": "forgero:scope/part-composite",
       "computation": {"multiply": 1.0}
     }
   ]

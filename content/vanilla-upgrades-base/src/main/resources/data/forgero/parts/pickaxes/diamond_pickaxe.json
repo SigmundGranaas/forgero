@@ -13,6 +13,7 @@
   "attributes": [
     { "id": "forgero:diamond-pickaxe-durability", "type": "forgero:durability", "computation": 1561 },
     { "id": "forgero:diamond-pickaxe-attack_damage", "type": "forgero:attack_damage", "computation": 5 },
+    { "id": "forgero:diamond-pickaxe-attack_speed", "type": "forgero:attack_speed", "computation": 1.2 },
     { "id": "forgero:diamond-pickaxe-mining_speed", "type": "forgero:mining_speed", "computation": 8 },
     { "id": "forgero:diamond-pickaxe-mining_level", "type": "forgero:mining_level", "computation": 3 }
   ],
