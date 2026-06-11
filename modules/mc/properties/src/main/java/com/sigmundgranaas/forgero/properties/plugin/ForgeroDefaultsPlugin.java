@@ -5,6 +5,8 @@ import com.sigmundgranaas.forgero.core.condition.predicate.HasOtherContributorCo
 import com.sigmundgranaas.forgero.core.property.api.codec.ListCodecWrapper;
 import com.sigmundgranaas.forgero.common.api.DataPlugin;
 import com.sigmundgranaas.forgero.common.api.PluginRegistrationContext;
+import com.sigmundgranaas.forgero.common.tooltip.TooltipDescriptor;
+import com.sigmundgranaas.forgero.core.property.compiled.CompilerPasses;
 import com.sigmundgranaas.forgero.properties.property.bettercombat.BetterCombatIdentifierProperty;
 import com.sigmundgranaas.forgero.properties.property.namereplacement.NameReplacementProperty;
 import com.sigmundgranaas.forgero.properties.property.tooltip.TooltipProperty;
@@ -21,6 +23,10 @@ public class ForgeroDefaultsPlugin implements DataPlugin {
 	}
 
 	private void registerPropertyCodecs(PluginRegistrationContext context) {
+		// Register the tooltip descriptor compile pass so terminals pre-compile their
+		// descriptors at construction, read O(1) by TooltipBuilder.
+		CompilerPasses.register(TooltipDescriptor.KEY, TooltipDescriptor.Engine::new);
+
 		context.registerPropertyCodec(
 				TooltipProperty.PROPERTY_KEY,
 				conditionCodecSupplier -> ListCodecWrapper.of(TooltipProperty.codec(conditionCodecSupplier.get()))

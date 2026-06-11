@@ -12,6 +12,7 @@ import com.sigmundgranaas.forgero.common.tooltip.api.TooltipRenderConfig;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.component.api.EquipmentComponent;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.Text;
 
@@ -48,11 +49,13 @@ public final class TooltipBuilder {
 	) {
 		List<Text> tooltip = new ArrayList<>();
 
-		// Resolve all needed data - uses O(1) lookup for EquipmentComponent
+		// Read compiled data from the terminal's artifact (O(1)); fall back to on-demand
+		// compilation only for non-terminal components.
 		AttributeQueryResult attributes = AttributeEngine.resolveAttributes(component);
 
-		TooltipDescriptor.Engine descriptorEngine = new TooltipDescriptor.Engine();
-		List<TooltipDescriptor> descriptors = descriptorEngine.resolve(component);
+		List<TooltipDescriptor> descriptors = component instanceof EquipmentComponent equipment
+				? equipment.properties(TooltipDescriptor.KEY)
+				: new TooltipDescriptor.Engine().resolve(component);
 
 		// Create shared utilities
 		TooltipValueResolver valueResolver = new TooltipValueResolver(component, attributes);
