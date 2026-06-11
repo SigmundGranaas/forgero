@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.gametest;
 
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
 import com.sigmundgranaas.forgero.predicate.minecraft.MinecraftContextKeys;
 import com.sigmundgranaas.forgero.predicate.minecraft.entity.EntityFlagPredicate;
 import com.sigmundgranaas.forgero.predicate.minecraft.entity.EntityPredicate;

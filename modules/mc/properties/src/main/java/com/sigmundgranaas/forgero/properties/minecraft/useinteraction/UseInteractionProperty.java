@@ -9,7 +9,6 @@ import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import com.sigmundgranaas.forgero.core.property.api.custom.AbstractConditionalPropertyEngine;
 import com.sigmundgranaas.forgero.core.property.api.custom.ConditionalProperty;
 import com.sigmundgranaas.forgero.core.property.api.custom.OptimizedBakedResult;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 
 import net.minecraft.util.UseAction;
 
@@ -145,8 +144,8 @@ public record UseInteractionProperty(
 		}
 
 		@Override
-		public List<UseInteractionProperty> apply(OptimizedBakedResult<UseInteractionProperty> baked, DynamicContext context) {
-			return baked.stream(context).collect(Collectors.toList());
+		public List<UseInteractionProperty> apply(OptimizedBakedResult<UseInteractionProperty> baked) {
+			return baked.all().collect(Collectors.toList());
 		}
 	}
 }

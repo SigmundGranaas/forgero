@@ -2,8 +2,9 @@ package com.sigmundgranaas.forgero.properties.minecraft.ondamage;
 
 import com.sigmundgranaas.forgero.common.api.item.ItemPropertyApi;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.property.context.ContextKeys;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.ContextKeys;
+import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.RuntimeConditions;
 import com.sigmundgranaas.forgero.effects.entity.ContextualEffectHandler;
 import com.sigmundgranaas.forgero.effects.entity.EntityEffectHandler;
 import com.sigmundgranaas.forgero.effects.entity.OnHitEffect;
@@ -72,7 +73,7 @@ public class OnDamageReceivedManager {
 				continue;
 			}
 
-			List<OnDamageReceivedProperty> properties = ForgeroApi.itemProperty().resolve(stack, OnDamageReceivedProperty.Engine::new, context);
+			List<OnDamageReceivedProperty> properties = RuntimeConditions.filter(ForgeroApi.itemProperty().resolve(stack, OnDamageReceivedProperty.Engine::new), context);
 
 			for (OnDamageReceivedProperty property : properties) {
 				// Defender is "source", attacker is "initial target"

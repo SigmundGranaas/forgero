@@ -4,7 +4,6 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 
 import java.util.Optional;
 
@@ -22,8 +21,7 @@ import java.util.Optional;
  * Optional<AttributeDifference> diff = calculator.calculate(
  *     currentComponent,
  *     DefaultAttributes.ATTACK_DAMAGE,
- *     ComparisonContext.strippedItem(stripped),
- *     DynamicContext.empty()
+ *     ComparisonContext.strippedItem(stripped)
  * );
  *
  * diff.ifPresent(d -> {
@@ -47,18 +45,16 @@ public class DifferenceCalculator {
 	 * @param current           The current component
 	 * @param attributeId       The attribute to calculate difference for
 	 * @param comparisonContext The context defining the baseline
-	 * @param dynamicContext    The dynamic context for resolution
 	 * @return The difference if a comparison is applicable, empty otherwise
 	 */
 	public Optional<AttributeDifference> calculate(
 			Component current,
 			OpenIdentifier attributeId,
-			ComparisonContext comparisonContext,
-			DynamicContext dynamicContext
+			ComparisonContext comparisonContext
 	) {
-		float currentValue = AttributeEngine.getAttribute(current, attributeId, dynamicContext);
+		float currentValue = AttributeEngine.getAttribute(current, attributeId);
 
-		Optional<Float> baselineValue = getBaselineValue(attributeId, comparisonContext, dynamicContext);
+		Optional<Float> baselineValue = getBaselineValue(attributeId, comparisonContext);
 
 		return baselineValue.map(baseline -> {
 			float diff = currentValue - baseline;
@@ -69,22 +65,19 @@ public class DifferenceCalculator {
 	/**
 	 * Calculates differences for all attributes in a result.
 	 *
-	 * @param current           The current component
 	 * @param currentResult     The already-resolved attributes for the current component
 	 * @param attributeId       The attribute to calculate difference for
 	 * @param comparisonContext The context defining the baseline
-	 * @param dynamicContext    The dynamic context for resolution
 	 * @return The difference if a comparison is applicable, empty otherwise
 	 */
 	public Optional<AttributeDifference> calculateFromResult(
 			AttributeQueryResult currentResult,
 			OpenIdentifier attributeId,
-			ComparisonContext comparisonContext,
-			DynamicContext dynamicContext
+			ComparisonContext comparisonContext
 	) {
 		float currentValue = currentResult.getValue(attributeId);
 
-		Optional<Float> baselineValue = getBaselineValue(attributeId, comparisonContext, dynamicContext);
+		Optional<Float> baselineValue = getBaselineValue(attributeId, comparisonContext);
 
 		return baselineValue.map(baseline -> {
 			float diff = currentValue - baseline;
@@ -97,25 +90,24 @@ public class DifferenceCalculator {
 	 */
 	private Optional<Float> getBaselineValue(
 			OpenIdentifier attributeId,
-			ComparisonContext context,
-			DynamicContext dynamicContext
+			ComparisonContext context
 	) {
 		if (context instanceof ComparisonContext.None) {
 			return Optional.empty();
 		}
 
 		if (context instanceof ComparisonContext.StrippedItem stripped) {
-			float value = AttributeEngine.getAttribute(stripped.strippedComponent(), attributeId, dynamicContext);
+			float value = AttributeEngine.getAttribute(stripped.strippedComponent(), attributeId);
 			return Optional.of(value);
 		}
 
 		if (context instanceof ComparisonContext.VsComponent vs) {
-			float value = AttributeEngine.getAttribute(vs.baselineComponent(), attributeId, dynamicContext);
+			float value = AttributeEngine.getAttribute(vs.baselineComponent(), attributeId);
 			return Optional.of(value);
 		}
 
 		if (context instanceof ComparisonContext.WithoutUpgrade without) {
-			float value = AttributeEngine.getAttribute(without.baseWithoutUpgrade(), attributeId, dynamicContext);
+			float value = AttributeEngine.getAttribute(without.baseWithoutUpgrade(), attributeId);
 			return Optional.of(value);
 		}
 

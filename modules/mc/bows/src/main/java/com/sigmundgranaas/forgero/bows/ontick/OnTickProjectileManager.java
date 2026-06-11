@@ -6,8 +6,9 @@ import java.util.stream.Collectors;
 
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.property.context.ContextKeys;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.ContextKeys;
+import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.RuntimeConditions;
 import com.sigmundgranaas.forgero.effects.entity.ContextualEffectHandler;
 import com.sigmundgranaas.forgero.effects.entity.EntityEffectHandler;
 import com.sigmundgranaas.forgero.effects.entity.OnHitEffect;
@@ -90,7 +91,7 @@ public class OnTickProjectileManager {
 
 			// Resolve on-tick properties
 			var engine = new OnTickProperty.Engine();
-			List<OnTickProperty> properties = engine.resolve(component, context);
+			List<OnTickProperty> properties = RuntimeConditions.filter(engine.resolve(component), context);
 
 			// Determine the source entity (owner if available, otherwise projectile itself)
 			Entity source = projectile.getOwner() != null ? projectile.getOwner() : projectile;

@@ -12,7 +12,6 @@ import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.SlotManager;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroGameTest;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroTestUtils;
@@ -146,7 +145,7 @@ public class TooltipSystemTest implements ForgeroGameTest {
 		Component sword = ctx.component("forgero:iron-sword").orElseThrow();
 
 		AttributeEngine engine = new AttributeEngine();
-		var result = engine.resolve(sword, DynamicContext.empty());
+		var result = engine.resolve(sword);
 		float damage = result.getValue(OpenIdentifier.parse("forgero:attack_damage"));
 
 		assertTrue(damage > 0, "Sword should have attack damage > 0");
@@ -170,7 +169,7 @@ public class TooltipSystemTest implements ForgeroGameTest {
 		Component pickaxe = ctx.component("forgero:iron-pickaxe").orElseThrow();
 
 		AttributeEngine engine = new AttributeEngine();
-		var result = engine.resolve(pickaxe, DynamicContext.empty());
+		var result = engine.resolve(pickaxe);
 		float miningSpeed = result.getValue(OpenIdentifier.parse("forgero:mining_speed"));
 
 		assertTrue(miningSpeed > 0, "Pickaxe should have mining speed > 0");
@@ -240,8 +239,7 @@ public class TooltipSystemTest implements ForgeroGameTest {
 		var diffOpt = calculator.calculate(
 				upgraded,
 				OpenIdentifier.parse("forgero:durability"),
-				ComparisonContext.strippedItem(stripped),
-				DynamicContext.empty()
+				ComparisonContext.strippedItem(stripped)
 		);
 
 		if (diffOpt.isPresent()) {
@@ -267,8 +265,7 @@ public class TooltipSystemTest implements ForgeroGameTest {
 		var diffOpt = calculator.calculate(
 				diamondPickaxe,
 				OpenIdentifier.parse("forgero:durability"),
-				ComparisonContext.vsComponent(ironPickaxe),
-				DynamicContext.empty()
+				ComparisonContext.vsComponent(ironPickaxe)
 		);
 
 		assertTrue(diffOpt.isPresent(), "Should calculate difference between iron and diamond pickaxe");
@@ -292,8 +289,7 @@ public class TooltipSystemTest implements ForgeroGameTest {
 		var diffOpt = calculator.calculate(
 				pickaxe,
 				OpenIdentifier.parse("forgero:durability"),
-				ComparisonContext.none(),
-				DynamicContext.empty()
+				ComparisonContext.none()
 		);
 
 		assertTrue(diffOpt.isEmpty(),

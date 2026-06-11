@@ -6,8 +6,8 @@ import org.slf4j.LoggerFactory;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.EvaluableCondition;
+import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
 import com.sigmundgranaas.forgero.predicate.minecraft.MinecraftContextKeys;
 
 import net.minecraft.world.World;
@@ -47,7 +47,7 @@ import java.util.Optional;
 public record WeatherPredicate(
 		@Nullable Boolean raining,
 		@Nullable Boolean thundering
-) implements DynamicCondition {
+) implements EvaluableCondition {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(WeatherPredicate.class);
 	public static final OpenIdentifier TYPE = new OpenIdentifier("minecraft", "weather");

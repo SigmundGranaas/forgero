@@ -179,7 +179,7 @@ public interface ForgeroServices {
 	 * ItemPropertyApi props = services.itemProperty();
 	 *
 	 * // Resolve OnHit properties
-	 * List<OnHitProperty> onHitProps = props.resolve(stack, OnHitProperty.Engine::new, context);
+	 * List<OnHitProperty> onHitProps = props.resolve(stack, OnHitProperty.Engine::new);
 	 *
 	 * // Process resolved properties
 	 * for (OnHitProperty prop : onHitProps) {

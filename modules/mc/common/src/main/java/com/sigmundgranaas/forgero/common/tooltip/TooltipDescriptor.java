@@ -9,7 +9,6 @@ import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import com.sigmundgranaas.forgero.core.property.api.custom.AbstractConditionalPropertyEngine;
 import com.sigmundgranaas.forgero.core.property.api.custom.ConditionalProperty;
 import com.sigmundgranaas.forgero.core.property.api.custom.OptimizedBakedResult;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
 import org.jetbrains.annotations.Nullable;
 
@@ -137,8 +136,8 @@ public record TooltipDescriptor(
 		}
 
 		@Override
-		public List<TooltipDescriptor> apply(OptimizedBakedResult<TooltipDescriptor> baked, DynamicContext context) {
-			return baked.stream(context).toList();
+		public List<TooltipDescriptor> apply(OptimizedBakedResult<TooltipDescriptor> baked) {
+			return baked.all().toList();
 		}
 	}
 }

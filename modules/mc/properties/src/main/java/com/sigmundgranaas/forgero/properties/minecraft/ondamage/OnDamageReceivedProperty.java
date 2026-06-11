@@ -9,7 +9,6 @@ import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import com.sigmundgranaas.forgero.core.property.api.custom.AbstractConditionalPropertyEngine;
 import com.sigmundgranaas.forgero.core.property.api.custom.ConditionalProperty;
 import com.sigmundgranaas.forgero.core.property.api.custom.OptimizedBakedResult;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.effects.entity.OnHitEffect;
 import com.sigmundgranaas.forgero.properties.minecraft.entityselector.EntitySelector;
 
@@ -93,8 +92,8 @@ public record OnDamageReceivedProperty(
 		}
 
 		@Override
-		public List<OnDamageReceivedProperty> apply(OptimizedBakedResult<OnDamageReceivedProperty> baked, DynamicContext context) {
-			return baked.stream(context).collect(Collectors.toList());
+		public List<OnDamageReceivedProperty> apply(OptimizedBakedResult<OnDamageReceivedProperty> baked) {
+			return baked.all().collect(Collectors.toList());
 		}
 	}
 }

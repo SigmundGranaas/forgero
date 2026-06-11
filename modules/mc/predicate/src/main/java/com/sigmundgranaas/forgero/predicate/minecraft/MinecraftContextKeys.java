@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.predicate.minecraft;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.property.context.Key;
+import com.sigmundgranaas.forgero.common.runtime.Key;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;

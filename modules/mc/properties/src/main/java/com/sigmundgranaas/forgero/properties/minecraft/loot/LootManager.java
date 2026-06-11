@@ -3,8 +3,9 @@ package com.sigmundgranaas.forgero.properties.minecraft.loot;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.context.ContextKeys;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.ContextKeys;
+import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.RuntimeConditions;
 import com.sigmundgranaas.forgero.common.api.ForgeroServices;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -50,7 +51,7 @@ public class LootManager {
 		DynamicContext.Builder dynamicContextBuilder = new DynamicContext.Builder();
 
 		var engine = new LootProperty.Engine();
-		List<LootProperty> properties = engine.resolve(componentOpt.get(), dynamicContextBuilder.build());
+		List<LootProperty> properties = RuntimeConditions.filter(engine.resolve(componentOpt.get()), dynamicContextBuilder.build());
 
 		List<ItemStack> currentLoot = loot;
 		for (LootProperty property : properties) {
@@ -83,7 +84,7 @@ public class LootManager {
 		}
 
 		var engine = new LootProperty.Engine();
-		List<LootProperty> properties = engine.resolve(componentOpt.get(), dynamicContextBuilder.build());
+		List<LootProperty> properties = RuntimeConditions.filter(engine.resolve(componentOpt.get()), dynamicContextBuilder.build());
 
 		List<ItemStack> currentLoot = loot;
 		for (LootProperty property : properties) {

@@ -7,7 +7,8 @@ import com.sigmundgranaas.forgero.common.api.item.ItemQueryApi;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.RuntimeConditions;
 import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import com.sigmundgranaas.forgero.common.api.ForgeroServices;
 import com.sigmundgranaas.forgero.common.useinteraction.UseContext;
@@ -272,7 +273,7 @@ public final class UseInteractionManager {
 		var engine = new UseInteractionProperty.Engine();
 		DynamicContext context = new DynamicContext.Builder().build();
 
-		List<UseInteractionProperty> properties = engine.resolve(component, context);
+		List<UseInteractionProperty> properties = RuntimeConditions.filter(engine.resolve(component), context);
 
 		return properties.isEmpty() ? Optional.empty() : Optional.of(properties);
 	}

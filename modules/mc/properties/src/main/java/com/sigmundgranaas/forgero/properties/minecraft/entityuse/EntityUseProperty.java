@@ -10,7 +10,6 @@ import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import com.sigmundgranaas.forgero.core.property.api.custom.AbstractConditionalPropertyEngine;
 import com.sigmundgranaas.forgero.core.property.api.custom.ConditionalProperty;
 import com.sigmundgranaas.forgero.core.property.api.custom.OptimizedBakedResult;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -66,8 +65,8 @@ public record EntityUseProperty(
 		}
 
 		@Override
-		public List<EntityUseProperty> apply(OptimizedBakedResult<EntityUseProperty> baked, DynamicContext context) {
-			return baked.stream(context).collect(Collectors.toList());
+		public List<EntityUseProperty> apply(OptimizedBakedResult<EntityUseProperty> baked) {
+			return baked.all().collect(Collectors.toList());
 		}
 	}
 }

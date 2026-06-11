@@ -12,7 +12,6 @@ import com.sigmundgranaas.forgero.common.tooltip.api.TooltipRenderConfig;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.Text;
 
@@ -35,7 +34,6 @@ public final class TooltipBuilder {
 	 *
 	 * @param component           The component to build tooltip for
 	 * @param comparisonContext   The comparison context
-	 * @param dynamicContext      The dynamic context
 	 * @param renderConfig        The render configuration
 	 * @param differenceFormatter The difference formatter
 	 * @param tooltipContext      The Minecraft tooltip context
@@ -44,7 +42,6 @@ public final class TooltipBuilder {
 	public static List<Text> build(
 			Component component,
 			ComparisonContext comparisonContext,
-			DynamicContext dynamicContext,
 			TooltipRenderConfig renderConfig,
 			DifferenceFormatter differenceFormatter,
 			TooltipContext tooltipContext
@@ -52,13 +49,13 @@ public final class TooltipBuilder {
 		List<Text> tooltip = new ArrayList<>();
 
 		// Resolve all needed data - uses O(1) lookup for EquipmentComponent
-		AttributeQueryResult attributes = AttributeEngine.resolveAttributes(component, dynamicContext);
+		AttributeQueryResult attributes = AttributeEngine.resolveAttributes(component);
 
 		TooltipDescriptor.Engine descriptorEngine = new TooltipDescriptor.Engine();
-		List<TooltipDescriptor> descriptors = descriptorEngine.resolve(component, dynamicContext);
+		List<TooltipDescriptor> descriptors = descriptorEngine.resolve(component);
 
 		// Create shared utilities
-		TooltipValueResolver valueResolver = new TooltipValueResolver(component, attributes, dynamicContext);
+		TooltipValueResolver valueResolver = new TooltipValueResolver(component, attributes);
 		DifferenceCalculator diffCalc = new DifferenceCalculator();
 
 		// Create and run section writers
@@ -69,7 +66,6 @@ public final class TooltipBuilder {
 					attributes,
 					descriptors,
 					comparisonContext,
-					dynamicContext,
 					valueResolver,
 					diffCalc,
 					differenceFormatter,

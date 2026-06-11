@@ -9,7 +9,6 @@ import com.sigmundgranaas.forgero.core.property.api.custom.AbstractConditionalPr
 import com.sigmundgranaas.forgero.core.property.api.custom.ConditionalProperty;
 import com.sigmundgranaas.forgero.core.property.api.custom.OptimizedBakedResult;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.hardness.BlockBreakSpeedCalculator;
 import com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.selector.BlockSelector;
 
@@ -71,8 +70,8 @@ public record BlockBreakingProperty(
 		}
 
 		@Override
-		public List<BlockBreakingProperty> apply(OptimizedBakedResult<BlockBreakingProperty> baked, DynamicContext context) {
-			return baked.stream(context).collect(Collectors.toList());
+		public List<BlockBreakingProperty> apply(OptimizedBakedResult<BlockBreakingProperty> baked) {
+			return baked.all().collect(Collectors.toList());
 		}
 	}
 }

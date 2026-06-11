@@ -5,11 +5,9 @@ import org.slf4j.LoggerFactory;
 
 import com.sigmundgranaas.forgero.bows.ontick.OnTickProjectileManager;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
-import com.sigmundgranaas.forgero.predicate.minecraft.DynamicContextFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.common.api.ForgeroInitializedCallback;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.properties.minecraft.onhit.OnHitManager;
 import com.sigmundgranaas.forgero.properties.minecraft.onhitblock.OnHitBlockManager;
 
@@ -102,10 +100,9 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 
 		if (activeConverter != null) {
 			final ComponentConverter finalConverter = activeConverter;
-			final DynamicContext context = DynamicContextFactory.fromEntity(owner);
 
 			finalConverter.toComponent(stack).ifPresent(component -> {
-				float damage = AttributeEngine.getAttribute(component, ATTACK_DAMAGE_ATTR, context);
+				float damage = AttributeEngine.getAttribute(component, ATTACK_DAMAGE_ATTR);
 				if (damage > 0) {
 					setDamage(damage);
 				}
@@ -179,10 +176,9 @@ public class DynamicArrowEntity extends PersistentProjectileEntity {
 		}
 
 		final ComponentConverter finalConverter = activeConverter;
-		final DynamicContext context = DynamicContextFactory.fromEntity(getOwner());
 
 		float weight = finalConverter.toComponent(getStack())
-				.map(component -> AttributeEngine.getAttribute(component, WEIGHT_ATTR, context))
+				.map(component -> AttributeEngine.getAttribute(component, WEIGHT_ATTR))
 				.orElse(2f); // Default weight
 
 		if (weight >= 1f) {

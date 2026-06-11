@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.core.condition.api;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.core.property.context.ResolutionContext;
 import org.junit.jupiter.api.Test;
 
@@ -45,16 +44,13 @@ class ConditionFactoryTest {
 	}
 
 	/**
-	 * Simple test implementation of DynamicCondition.
+	 * Simple test implementation of DynamicCondition. Core treats dynamic conditions as
+	 * opaque data; the result flag is only used for identity/immutability assertions here.
+	 * Evaluation semantics are covered game-side by RuntimeConditions tests.
 	 *
-	 * @param result The boolean result this condition should return
+	 * @param result Marker payload carried by this stub condition
 	 */
 	record TestDynamicCondition(boolean result) implements DynamicCondition {
-		@Override
-		public boolean test(DynamicContext ctx) {
-			return result;
-		}
-
 		@Override
 		public OpenIdentifier type() {
 			return new OpenIdentifier("test", "dynamic");
@@ -331,9 +327,11 @@ class ConditionFactoryTest {
 
 		// Should have OrDynamicCondition wrapper
 		assertEquals(1, result.dynamicConditions().size());
-		// Verify behavior: should pass because static-only condition counts as "always true at runtime"
-		DynamicCondition orCondition = result.dynamicConditions().get(0);
-		assertTrue(orCondition.test(DynamicContext.empty()));
+		// Structural check: the wrapper records that a static-only branch exists, which the
+		// game-side evaluator treats as "always true at runtime".
+		Condition.OrDynamicCondition orCondition =
+				(Condition.OrDynamicCondition) result.dynamicConditions().get(0);
+		assertTrue(orCondition.hasStaticOnlyCondition());
 	}
 
 	@Test
@@ -351,32 +349,20 @@ class ConditionFactoryTest {
 
 		// OrDynamicCondition should be created
 		assertEquals(1, result.dynamicConditions().size());
-		// Verify behavior: should pass because static-only conditions count as "always true at runtime"
-		DynamicCondition orCondition = result.dynamicConditions().get(0);
-		assertTrue(orCondition.test(DynamicContext.empty()));
+		// Structural check: both branches are static-only, recorded on the wrapper for the
+		// game-side evaluator.
+		Condition.OrDynamicCondition orCondition =
+				(Condition.OrDynamicCondition) result.dynamicConditions().get(0);
+		assertTrue(orCondition.hasStaticOnlyCondition());
 	}
 
 	// ========================================================================
-	// OrDynamicCondition BEHAVIOR TESTS
+	// OrDynamicCondition STRUCTURE TESTS
+	// (Evaluation semantics are tested game-side against RuntimeConditions.)
 	// ========================================================================
 
 	@Test
-	void orDynamicCondition_withAllFalseDynamic_returnsFalse() {
-		DynamicCondition dc1 = new TestDynamicCondition(false);
-		DynamicCondition dc2 = new TestDynamicCondition(false);
-
-		Condition cond1 = Condition.ofDynamic(dc1);
-		Condition cond2 = Condition.ofDynamic(dc2);
-
-		Condition result = Condition.any(cond1, cond2);
-
-		// Test the OrDynamicCondition
-		DynamicCondition orCondition = result.dynamicConditions().get(0);
-		assertFalse(orCondition.test(DynamicContext.empty()));
-	}
-
-	@Test
-	void orDynamicCondition_withOneTrueDynamic_returnsTrue() {
+	void orDynamicCondition_carriesAllInnerConditionsAsData() {
 		DynamicCondition dc1 = new TestDynamicCondition(false);
 		DynamicCondition dc2 = new TestDynamicCondition(true);
 
@@ -385,14 +371,18 @@ class ConditionFactoryTest {
 
 		Condition result = Condition.any(cond1, cond2);
 
-		DynamicCondition orCondition = result.dynamicConditions().get(0);
-		assertTrue(orCondition.test(DynamicContext.empty()));
+		Condition.OrDynamicCondition orCondition =
+				(Condition.OrDynamicCondition) result.dynamicConditions().get(0);
+		assertEquals(2, orCondition.conditions().size());
+		assertTrue(orCondition.conditions().contains(cond1));
+		assertTrue(orCondition.conditions().contains(cond2));
+		assertFalse(orCondition.hasStaticOnlyCondition());
 	}
 
 	@Test
-	void orDynamicCondition_withNoDynamicConditionsInInnerCondition_returnsTrue() {
-		// If an inner condition has no dynamic conditions, it means static conditions
-		// passed during baking, so it should count as "always true at runtime"
+	void orDynamicCondition_recordsStaticOnlyInnerCondition() {
+		// If an inner condition has no dynamic conditions, its static conditions passed
+		// during baking; the wrapper records this for the game-side evaluator.
 		StaticCondition sc1 = new TestStaticCondition(true);
 		DynamicCondition dc1 = new TestDynamicCondition(false);
 
@@ -401,14 +391,14 @@ class ConditionFactoryTest {
 
 		Condition result = Condition.any(staticOnly, withDynamic);
 
-		DynamicCondition orCondition = result.dynamicConditions().get(0);
-		// Should return true because staticOnly has no dynamic conditions
-		// (meaning its static conditions passed during baking)
-		assertTrue(orCondition.test(DynamicContext.empty()));
+		Condition.OrDynamicCondition orCondition =
+				(Condition.OrDynamicCondition) result.dynamicConditions().get(0);
+		assertTrue(orCondition.hasStaticOnlyCondition());
+		assertEquals(2, orCondition.conditions().size());
 	}
 
 	@Test
-	void orDynamicCondition_withAlwaysTrueCondition_returnsTrue() {
+	void orDynamicCondition_recordsAlwaysTrueInnerCondition() {
 		Condition alwaysTrue = Condition.ALWAYS_TRUE;
 		DynamicCondition dc1 = new TestDynamicCondition(false);
 
@@ -416,9 +406,12 @@ class ConditionFactoryTest {
 
 		Condition result = Condition.any(alwaysTrue, withDynamic);
 
-		DynamicCondition orCondition = result.dynamicConditions().get(0);
-		// Should return true because ALWAYS_TRUE has no dynamic conditions
-		assertTrue(orCondition.test(DynamicContext.empty()));
+		Condition.OrDynamicCondition orCondition =
+				(Condition.OrDynamicCondition) result.dynamicConditions().get(0);
+		// ALWAYS_TRUE is carried as an inner condition with no dynamic conditions; the
+		// game-side evaluator treats such inner conditions as a pass.
+		assertTrue(orCondition.conditions().contains(alwaysTrue));
+		assertTrue(alwaysTrue.dynamicConditions().isEmpty());
 	}
 
 	@Test

@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.properties.minecraft.onblockplace;
 
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.RuntimeConditions;
 import com.sigmundgranaas.forgero.effects.block.BlockEffect;
 import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import net.minecraft.block.BlockState;
@@ -38,11 +39,7 @@ public class OnBlockPlaceManager {
 		}
 
 		DynamicContext.Builder contextBuilder = new DynamicContext.Builder();
-		List<OnBlockPlaceProperty> properties = ForgeroApi.itemProperty().resolve(
-			stack,
-			OnBlockPlaceProperty.Engine::new,
-			contextBuilder.build()
-		);
+		List<OnBlockPlaceProperty> properties = RuntimeConditions.filter(ForgeroApi.itemProperty().resolve(stack, OnBlockPlaceProperty.Engine::new), contextBuilder.build());
 
 		for (OnBlockPlaceProperty property : properties) {
 			BlockState placedState = player.getWorld().getBlockState(pos);

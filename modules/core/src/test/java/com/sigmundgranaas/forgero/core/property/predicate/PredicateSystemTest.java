@@ -8,17 +8,16 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.ForgeroTest;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
+import com.sigmundgranaas.forgero.core.attribute.api.PrecomputedAttribute;
 import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.component.api.ComponentTraversal;
 import com.sigmundgranaas.forgero.core.component.impl.StaticComponent;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.condition.api.ConditionCodec;
 import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
-import com.sigmundgranaas.forgero.core.condition.predicate.TagMatchCondition;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
-import com.sigmundgranaas.forgero.core.property.context.Key;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,22 +25,28 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static com.sigmundgranaas.forgero.data.Utils.id;
 import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.attributeEngine;
 import static com.sigmundgranaas.forgero.testutils.TestIdentifiers.ATTACK_DAMAGE_IDENTIFIER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 /**
  * Test to demonstrate the extensibility of the predicate system.
  * This test simulates a "Minecraft" module plugging in its own custom predicate.
+ *
+ * <p>Core never evaluates dynamic predicates: it parses them from JSON and carries them
+ * through compilation as data. Evaluation happens in the game layer (RuntimeConditions in
+ * the mc common module), where the platform also defines its runtime context keys.
  */
 public class PredicateSystemTest extends ForgeroTest {
 
 	// =============================================================================================
 	// Step 1: Define the custom predicate record with its own Codec
 	// Location: (Simulated) fabric/minecraft-common/src/main/java/.../IsSneakingCondition.java
+	// The game layer would additionally implement the game-side evaluation interface
+	// (EvaluableCondition); to core this is opaque data with a type and a codec.
 	// =============================================================================================
 
 	public record IsSneakingCondition(OpenIdentifier type, boolean value) implements DynamicCondition {
@@ -49,22 +54,6 @@ public class PredicateSystemTest extends ForgeroTest {
 				Codec.STRING.xmap(OpenIdentifier::parse, OpenIdentifier::toString).fieldOf("type").forGetter(IsSneakingCondition::type),
 				Codec.BOOL.fieldOf("value").forGetter(IsSneakingCondition::value)
 		).apply(instance, IsSneakingCondition::new));
-
-		@Override
-		public boolean test(DynamicContext context) {
-			boolean isSneaking = context
-					.get(MinecraftContextKeys.ENTITY_FLAGS)
-					.map(flags -> flags.contains(id("minecraft:is_sneaking")))
-					.orElse(false);
-			return isSneaking == value;
-		}
-	}
-
-	/**
-	 * Context key used by the platform to pass data into the DynamicContext.
-	 */
-	public static class MinecraftContextKeys {
-		public static final Key<Set<OpenIdentifier>> ENTITY_FLAGS = new Key<>(id("minecraft:entity_flags"));
 	}
 
 	// =============================================================================================
@@ -115,32 +104,28 @@ public class PredicateSystemTest extends ForgeroTest {
 
 	@Test
 	void testPlatformPredicatePlugin() {
-		// Test Case 1: Context matches the predicate (entity is sneaking)
-		DynamicContext contextWhenSneaking = new DynamicContext.Builder()
-				.put(MinecraftContextKeys.ENTITY_FLAGS, Set.of(id("minecraft:is_sneaking")))
-				.build();
+		// The compiled value never includes dynamic-conditional attributes - core does not
+		// evaluate the custom predicate, regardless of any runtime state.
+		AttributeQueryResult compiled = engine.resolve(componentWithPlatformPredicate);
 
-		AttributeQueryResult resultWhenSneaking = engine.resolve(componentWithPlatformPredicate, contextWhenSneaking);
+		float compiledDamage = compiled.getValue(ATTACK_DAMAGE_IDENTIFIER);
+		assertEquals(0.0f, compiledDamage, "Dynamic-conditional attribute must not contribute to the compiled value.");
 
-		float damageWhenSneaking = resultWhenSneaking.getValue(ATTACK_DAMAGE_IDENTIFIER);
-		assertEquals(10.0f, damageWhenSneaking, "Attribute should be applied when the custom predicate is met.");
+		// The parsed predicate is carried through compilation as data for the game layer.
+		PrecomputedAttribute precomputed = engine
+				.bake(ComponentTraversal.traverse(componentWithPlatformPredicate).stream())
+				.get(ATTACK_DAMAGE_IDENTIFIER);
 
-		// Test Case 2: Context does not match the predicate (entity is not sneaking)
-		DynamicContext contextWhenNotSneaking = new DynamicContext.Builder()
-				.put(MinecraftContextKeys.ENTITY_FLAGS, Collections.emptySet())
-				.build();
+		assertEquals(1, precomputed.conditionalAttributes().size(),
+				"The dynamic-conditional attribute should be carried as data.");
 
-		AttributeQueryResult resultWhenNotSneaking = engine.resolve(componentWithPlatformPredicate, contextWhenNotSneaking);
+		Attribute carried = precomputed.conditionalAttributes().get(0);
+		List<DynamicCondition> dynamicConditions = carried.condition().orElseThrow().dynamicConditions();
+		assertEquals(1, dynamicConditions.size(), "The parsed predicate should be attached to the carried attribute.");
 
-		float damageWhenNotSneaking = resultWhenNotSneaking.getValue(ATTACK_DAMAGE_IDENTIFIER);
-		assertEquals(0.0f, damageWhenNotSneaking, "Attribute should NOT be applied when the custom predicate is not met.");
-
-		// Test Case 3: Context is missing the required data
-		DynamicContext emptyContext = DynamicContext.empty();
-
-		AttributeQueryResult resultWithEmptyContext = engine.resolve(componentWithPlatformPredicate, emptyContext);
-
-		float damageWithEmptyContext = resultWithEmptyContext.getValue(ATTACK_DAMAGE_IDENTIFIER);
-		assertEquals(0.0f, damageWithEmptyContext, "Attribute should NOT be applied when context is missing required keys.");
+		IsSneakingCondition parsed = assertInstanceOf(IsSneakingCondition.class, dynamicConditions.get(0),
+				"The codec-registered predicate type should round-trip through parsing and compilation.");
+		assertEquals(true, parsed.value(), "Predicate data should be preserved.");
+		assertEquals(OpenIdentifier.parse("minecraft:is_sneaking"), parsed.type(), "Predicate type should be preserved.");
 	}
 }

@@ -5,6 +5,7 @@
 dependencies {
 	implementation(project(":modules:core"))
 	implementation(project(path: ":modules:mc:loader", configuration: 'namedElements'))
+	implementation(project(path: ":modules:mc:common", configuration: 'namedElements'))
 
 	// Testing
 	testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")

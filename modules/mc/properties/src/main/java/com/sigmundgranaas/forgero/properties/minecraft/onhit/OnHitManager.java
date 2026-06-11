@@ -2,8 +2,9 @@ package com.sigmundgranaas.forgero.properties.minecraft.onhit;
 
 import com.sigmundgranaas.forgero.common.api.item.ItemPropertyApi;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.property.context.ContextKeys;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.ContextKeys;
+import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.RuntimeConditions;
 import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import com.sigmundgranaas.forgero.effects.entity.ContextualEffectHandler;
 import com.sigmundgranaas.forgero.effects.entity.EntityEffectHandler;
@@ -37,7 +38,7 @@ public class OnHitManager {
 				.collect(Collectors.toSet());
 		contextBuilder.put(ContextKeys.TARGET_TAGS, targetTags);
 
-		List<OnHitProperty> properties = ForgeroApi.itemProperty().resolve(stack, OnHitProperty.Engine::new, contextBuilder.build());
+		List<OnHitProperty> properties = RuntimeConditions.filter(ForgeroApi.itemProperty().resolve(stack, OnHitProperty.Engine::new), contextBuilder.build());
 
 		for (OnHitProperty property : properties) {
 			// Selector handles both selection and filtering

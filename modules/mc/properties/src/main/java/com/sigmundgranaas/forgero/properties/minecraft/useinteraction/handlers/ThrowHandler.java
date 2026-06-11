@@ -3,12 +3,10 @@ package com.sigmundgranaas.forgero.properties.minecraft.useinteraction.handlers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
-import com.sigmundgranaas.forgero.predicate.minecraft.DynamicContextFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.useinteraction.UseContext;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.common.api.ForgeroInitializedCallback;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.ContextualUseHandler;
 import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.entity.ThrownItemEntity;
 
@@ -189,9 +187,8 @@ public record ThrowHandler(
 	 * @return The resolved attribute value, or fallback if not available
 	 */
 	private static float resolveAttribute(ItemStack stack, OpenIdentifier attr, float fallback, LivingEntity user) {
-		DynamicContext context = DynamicContextFactory.fromEntity(user);
 		return converter.toComponent(stack)
-				.map(component -> AttributeEngine.getAttribute(component, attr, context))
+				.map(component -> AttributeEngine.getAttribute(component, attr))
 				.filter(value -> value > 0)
 				.orElse(fallback);
 	}

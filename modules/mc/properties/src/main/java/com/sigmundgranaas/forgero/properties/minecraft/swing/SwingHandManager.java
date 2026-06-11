@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.properties.minecraft.swing;
 
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.RuntimeConditions;
 import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import com.sigmundgranaas.forgero.effects.entity.SwingEffect;
 import net.minecraft.entity.Entity;
@@ -32,11 +33,7 @@ public class SwingHandManager {
 		}
 
 		DynamicContext.Builder contextBuilder = new DynamicContext.Builder();
-		List<SwingHandProperty> properties = ForgeroApi.itemProperty().resolve(
-			stack,
-			SwingHandProperty.Engine::new,
-			contextBuilder.build()
-		);
+		List<SwingHandProperty> properties = RuntimeConditions.filter(ForgeroApi.itemProperty().resolve(stack, SwingHandProperty.Engine::new), contextBuilder.build());
 
 		for (SwingHandProperty property : properties) {
 			for (SwingEffect effect : property.effects()) {

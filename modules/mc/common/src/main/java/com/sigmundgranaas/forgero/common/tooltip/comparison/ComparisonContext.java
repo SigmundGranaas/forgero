@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.common.tooltip.comparison;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.context.Key;
 
 import java.util.Optional;
 
@@ -29,11 +28,6 @@ import java.util.Optional;
  * }</pre>
  */
 public sealed interface ComparisonContext {
-
-	/**
-	 * Key for storing comparison context in DynamicContext.
-	 */
-	Key<ComparisonContext> CONTEXT_KEY = new Key<>(new OpenIdentifier("forgero", "tooltip_comparison_context"));
 
 	/**
 	 * No comparison - show raw values only.

@@ -4,7 +4,6 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.tooltip.display.TooltipTextFormatter;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +25,7 @@ import java.util.regex.Pattern;
  *
  * <h2>Usage</h2>
  * <pre>{@code
- * TooltipValueResolver resolver = new TooltipValueResolver(component, attributes, context);
+ * TooltipValueResolver resolver = new TooltipValueResolver(component, attributes);
  *
  * // Resolve placeholders in a template
  * String resolved = resolver.resolve("Deals {attack_damage} damage");
@@ -51,19 +50,16 @@ public class TooltipValueResolver {
 
 	private final Component component;
 	private final AttributeQueryResult attributes;
-	private final DynamicContext context;
 
 	/**
-	 * Creates a resolver with the given context.
+	 * Creates a resolver for the given component.
 	 *
 	 * @param component  The component being rendered
 	 * @param attributes The resolved attributes for the component
-	 * @param context    The dynamic context
 	 */
-	public TooltipValueResolver(Component component, AttributeQueryResult attributes, DynamicContext context) {
+	public TooltipValueResolver(Component component, AttributeQueryResult attributes) {
 		this.component = component;
 		this.attributes = attributes;
-		this.context = context;
 	}
 
 	/**
@@ -135,7 +131,7 @@ public class TooltipValueResolver {
 		}
 
 		// 3. Try custom placeholder registry
-		Optional<Object> customValue = PlaceholderRegistry.resolve(name, component, context);
+		Optional<Object> customValue = PlaceholderRegistry.resolve(name, component);
 		if (customValue.isPresent()) {
 			return Optional.of(formatValue(customValue.get(), format));
 		}
@@ -165,7 +161,7 @@ public class TooltipValueResolver {
 		}
 
 		// Try custom
-		return PlaceholderRegistry.resolve(name, component, context);
+		return PlaceholderRegistry.resolve(name, component);
 	}
 
 	/**

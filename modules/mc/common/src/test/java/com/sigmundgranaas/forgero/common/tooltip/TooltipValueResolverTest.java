@@ -118,14 +118,14 @@ class TooltipValueResolverTest {
 	void placeholderRegistryRegisterWorks() {
 		assertFalse(PlaceholderRegistry.isRegistered("custom"));
 
-		PlaceholderRegistry.register("custom", (comp, ctx) -> java.util.Optional.of("value"));
+		PlaceholderRegistry.register("custom", comp -> java.util.Optional.of("value"));
 
 		assertTrue(PlaceholderRegistry.isRegistered("custom"));
 	}
 
 	@Test
 	void placeholderRegistryUnregisterWorks() {
-		PlaceholderRegistry.register("temp", (comp, ctx) -> java.util.Optional.of("value"));
+		PlaceholderRegistry.register("temp", comp -> java.util.Optional.of("value"));
 		assertTrue(PlaceholderRegistry.isRegistered("temp"));
 
 		boolean removed = PlaceholderRegistry.unregister("temp");
@@ -136,7 +136,7 @@ class TooltipValueResolverTest {
 
 	@Test
 	void placeholderRegistryCaseInsensitive() {
-		PlaceholderRegistry.register("MyPlaceholder", (comp, ctx) -> java.util.Optional.of("value"));
+		PlaceholderRegistry.register("MyPlaceholder", comp -> java.util.Optional.of("value"));
 
 		assertTrue(PlaceholderRegistry.isRegistered("myplaceholder"));
 		assertTrue(PlaceholderRegistry.isRegistered("MYPLACEHOLDER"));

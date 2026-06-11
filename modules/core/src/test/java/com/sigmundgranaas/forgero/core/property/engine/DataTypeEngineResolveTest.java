@@ -6,8 +6,6 @@ import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.ComponentTraversal;
 import com.sigmundgranaas.forgero.core.property.api.DataTypeEngine;
 import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
-import com.sigmundgranaas.forgero.core.property.context.Key;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -28,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * <ul>
  *   <li>Component trees are traversed correctly in pre-order</li>
  *   <li>The bake phase receives all components from traversal</li>
- *   <li>The apply phase receives the dynamic context</li>
+ *   <li>The apply phase finalizes the baked result without any runtime context</li>
  *   <li>The resolve() convenience method correctly chains traversal, bake, and apply</li>
  * </ul>
  */
@@ -60,7 +58,7 @@ class DataTypeEngineResolveTest extends ForgeroTest {
 		}
 
 		@Override
-		public List<String> apply(List<String> baked, DynamicContext context) {
+		public List<String> apply(List<String> baked) {
 			return baked;
 		}
 
@@ -70,12 +68,13 @@ class DataTypeEngineResolveTest extends ForgeroTest {
 	}
 
 	/**
-	 * A test engine that applies a dynamic filter based on context.
+	 * A test engine whose apply phase transforms the baked result, proving the
+	 * finalize step runs as part of resolve(). No runtime context is involved.
 	 */
-	private static class DynamicFilterEngine implements DataTypeEngine<List<String>, List<String>> {
+	private static class UppercasingEngine implements DataTypeEngine<List<String>, List<String>> {
 		private final OpenIdentifier engineId;
 
-		DynamicFilterEngine(OpenIdentifier engineId) {
+		UppercasingEngine(OpenIdentifier engineId) {
 			this.engineId = engineId;
 		}
 
@@ -91,14 +90,10 @@ class DataTypeEngineResolveTest extends ForgeroTest {
 		}
 
 		@Override
-		public List<String> apply(List<String> baked, DynamicContext context) {
-			// Apply phase: filter based on context (if present)
-			if (context == null || context == DynamicContext.empty()) {
-				return baked;
-			}
-			// For testing: filter out IDs containing "iron" in dynamic phase
+		public List<String> apply(List<String> baked) {
+			// Finalize phase: pure transformation of the compiled intermediate result
 			return baked.stream()
-					.filter(id -> !id.contains("iron"))
+					.map(String::toUpperCase)
 					.collect(Collectors.toList());
 		}
 	}
@@ -187,7 +182,7 @@ class DataTypeEngineResolveTest extends ForgeroTest {
 			ComponentIdEngine testEngine = new ComponentIdEngine(id("test:resolve"));
 
 			// Use the default resolve method
-			List<String> result = testEngine.resolve(pickaxe, DynamicContext.empty());
+			List<String> result = testEngine.resolve(pickaxe);
 
 			assertNotNull(result);
 			assertEquals(2, result.size());
@@ -197,12 +192,12 @@ class DataTypeEngineResolveTest extends ForgeroTest {
 		}
 
 		@Test
-		void resolveWithoutContextUsesEmptyContext() {
+		void resolveIsAPureCompileTimeOperation() {
 			Component pickaxe = part(PICKAXE_ID).build();
 
 			ComponentIdEngine testEngine = new ComponentIdEngine(id("test:no_context"));
 
-			// Use the convenience resolve(component) method
+			// resolve(component) takes no runtime state of any kind
 			List<String> result = testEngine.resolve(pickaxe);
 
 			assertNotNull(result);
@@ -211,28 +206,19 @@ class DataTypeEngineResolveTest extends ForgeroTest {
 		}
 
 		@Test
-		void dynamicContextPassedToApplyPhase() {
+		void applyPhaseFinalizesBakedResult() {
 			Component iron = material(IRON_ID, METAL_TAG);
 			Component pickaxe = part(PICKAXE_ID)
 					.withStructureSlot(structureSlot("material_slot", MATERIAL_SLOT_TYPE, iron))
 					.build();
 
-			DynamicFilterEngine testEngine = new DynamicFilterEngine(id("test:dynamic"));
+			UppercasingEngine testEngine = new UppercasingEngine(id("test:finalize"));
 
-			// With empty context - no filtering
-			List<String> resultEmpty = testEngine.resolve(pickaxe, DynamicContext.empty());
-			assertEquals(2, resultEmpty.size(), "Empty context should not filter");
+			List<String> result = testEngine.resolve(pickaxe);
 
-			// With non-empty context - filtering applies
-			DynamicContext filterContext = new DynamicContext.Builder()
-					.put(new Key<String>(id("test:key")), "trigger_filter")
-					.build();
-			List<String> resultFiltered = testEngine.resolve(pickaxe, filterContext);
-
-			// The filter removes IDs containing "iron"
-			assertEquals(1, resultFiltered.size(), "Should filter out iron");
-			assertFalse(resultFiltered.contains(IRON_ID.toString()), "Iron should be filtered out");
-			assertTrue(resultFiltered.contains(PICKAXE_ID.toString()), "Pickaxe should remain");
+			assertEquals(2, result.size(), "Apply should preserve all baked entries");
+			assertTrue(result.contains(IRON_ID.toString().toUpperCase()), "Apply transformation should run");
+			assertTrue(result.contains(PICKAXE_ID.toString().toUpperCase()), "Apply transformation should run");
 		}
 
 		@Test
@@ -257,7 +243,7 @@ class DataTypeEngineResolveTest extends ForgeroTest {
 
 			ComponentIdEngine testEngine = new ComponentIdEngine(id("test:complex"));
 
-			List<String> result = testEngine.resolve(pickaxe, DynamicContext.empty());
+			List<String> result = testEngine.resolve(pickaxe);
 
 			assertEquals(6, result.size(), "Should traverse all 6 components");
 			assertEquals(PICKAXE_ID.toString(), result.get(0), "Root should be first");

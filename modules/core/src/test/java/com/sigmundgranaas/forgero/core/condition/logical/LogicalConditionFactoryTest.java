@@ -5,7 +5,6 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.core.property.context.ResolutionContext;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -55,30 +54,11 @@ class LogicalConditionFactoryTest {
 		}
 	};
 
-	// Test dynamic conditions
-	private static final DynamicCondition ALWAYS_TRUE_DYNAMIC = new DynamicCondition() {
-		@Override
-		public boolean test(DynamicContext context) {
-			return true;
-		}
+	// Test dynamic conditions. Core treats them as opaque data; evaluation semantics are
+	// tested game-side against RuntimeConditions.
+	private static final DynamicCondition ALWAYS_TRUE_DYNAMIC = () -> ID_FACTORY.of("always_true_dynamic");
 
-		@Override
-		public OpenIdentifier type() {
-			return ID_FACTORY.of("always_true_dynamic");
-		}
-	};
-
-	private static final DynamicCondition ALWAYS_FALSE_DYNAMIC = new DynamicCondition() {
-		@Override
-		public boolean test(DynamicContext context) {
-			return false;
-		}
-
-		@Override
-		public OpenIdentifier type() {
-			return ID_FACTORY.of("always_false_dynamic");
-		}
-	};
+	private static final DynamicCondition ALWAYS_FALSE_DYNAMIC = () -> ID_FACTORY.of("always_false_dynamic");
 
 	@Nested
 	@DisplayName("AndCondition Factory")
@@ -137,29 +117,20 @@ class LogicalConditionFactoryTest {
 		}
 
 		@Test
-		@DisplayName("AndDynamic passes when all dynamic conditions pass")
-		void andDynamicPassesWhenAllDynamicConditionsPass() {
+		@DisplayName("AndDynamic carries all child conditions as data")
+		void andDynamicCarriesAllChildConditionsAsData() {
 			Condition children = new Condition(
-					Collections.emptyList(),
-					List.of(ALWAYS_TRUE_DYNAMIC, ALWAYS_TRUE_DYNAMIC)
-			);
-
-			AndCondition.AndDynamic result = (AndCondition.AndDynamic) AndCondition.from(children);
-
-			assertTrue(result.test(DynamicContext.empty()));
-		}
-
-		@Test
-		@DisplayName("AndDynamic fails when any dynamic condition fails")
-		void andDynamicFailsWhenAnyDynamicConditionFails() {
-			Condition children = new Condition(
-					Collections.emptyList(),
+					List.of(ALWAYS_TRUE_STATIC),
 					List.of(ALWAYS_TRUE_DYNAMIC, ALWAYS_FALSE_DYNAMIC)
 			);
 
 			AndCondition.AndDynamic result = (AndCondition.AndDynamic) AndCondition.from(children);
 
-			assertFalse(result.test(DynamicContext.empty()));
+			// Evaluation happens game-side; core only carries the structure.
+			assertEquals(2, result.dynamicConds().size());
+			assertTrue(result.dynamicConds().contains(ALWAYS_TRUE_DYNAMIC));
+			assertTrue(result.dynamicConds().contains(ALWAYS_FALSE_DYNAMIC));
+			assertEquals(1, result.staticConds().size());
 		}
 
 		@Test
@@ -259,8 +230,8 @@ class LogicalConditionFactoryTest {
 		}
 
 		@Test
-		@DisplayName("OrDynamic passes when any dynamic condition passes")
-		void orDynamicPassesWhenAnyDynamicConditionPasses() {
+		@DisplayName("OrDynamic carries all child conditions as data")
+		void orDynamicCarriesAllChildConditionsAsData() {
 			Condition children = new Condition(
 					Collections.emptyList(),
 					List.of(ALWAYS_FALSE_DYNAMIC, ALWAYS_TRUE_DYNAMIC)
@@ -268,20 +239,10 @@ class LogicalConditionFactoryTest {
 
 			OrCondition.OrDynamic result = (OrCondition.OrDynamic) OrCondition.from(children);
 
-			assertTrue(result.test(DynamicContext.empty()));
-		}
-
-		@Test
-		@DisplayName("OrDynamic fails when all dynamic conditions fail")
-		void orDynamicFailsWhenAllDynamicConditionsFail() {
-			Condition children = new Condition(
-					Collections.emptyList(),
-					List.of(ALWAYS_FALSE_DYNAMIC, ALWAYS_FALSE_DYNAMIC)
-			);
-
-			OrCondition.OrDynamic result = (OrCondition.OrDynamic) OrCondition.from(children);
-
-			assertFalse(result.test(DynamicContext.empty()));
+			// Evaluation happens game-side; core only carries the structure.
+			assertEquals(2, result.dynamicConds().size());
+			assertTrue(result.dynamicConds().contains(ALWAYS_FALSE_DYNAMIC));
+			assertTrue(result.dynamicConds().contains(ALWAYS_TRUE_DYNAMIC));
 		}
 
 		@Test
@@ -362,23 +323,14 @@ class LogicalConditionFactoryTest {
 		}
 
 		@Test
-		@DisplayName("NotDynamic inverts true to false")
-		void notDynamicInvertsTrueToFalse() {
+		@DisplayName("NotDynamic carries its child condition as data")
+		void notDynamicCarriesChildConditionAsData() {
 			Condition child = new Condition(Collections.emptyList(), List.of(ALWAYS_TRUE_DYNAMIC));
 
 			NotCondition.NotDynamic result = (NotCondition.NotDynamic) NotCondition.from(child);
 
-			assertFalse(result.test(DynamicContext.empty()));
-		}
-
-		@Test
-		@DisplayName("NotDynamic inverts false to true")
-		void notDynamicInvertsFalseToTrue() {
-			Condition child = new Condition(Collections.emptyList(), List.of(ALWAYS_FALSE_DYNAMIC));
-
-			NotCondition.NotDynamic result = (NotCondition.NotDynamic) NotCondition.from(child);
-
-			assertTrue(result.test(DynamicContext.empty()));
+			// Evaluation (inversion) happens game-side; core only carries the structure.
+			assertEquals(ALWAYS_TRUE_DYNAMIC, result.dynamicCond());
 		}
 
 		@Test
@@ -405,16 +357,15 @@ class LogicalConditionFactoryTest {
 		}
 
 		@Test
-		@DisplayName("NotDynamic handles null dynamic condition gracefully")
-		void notDynamicHandlesNullDynamicConditionGracefully() {
-			// When there's only a static condition but fromDynamic is called
-			// The NotDynamic should handle null gracefully
+		@DisplayName("NotDynamic carries mixed static and dynamic children as data")
+		void notDynamicCarriesMixedChildrenAsData() {
+			// When the child has both static and dynamic conditions, the dynamic part is
+			// carried for game-side evaluation.
 			Condition child = new Condition(List.of(ALWAYS_TRUE_STATIC), List.of(ALWAYS_TRUE_DYNAMIC));
 
 			NotCondition.NotDynamic result = (NotCondition.NotDynamic) NotCondition.from(child);
 
-			// Should not throw, dynamic result should be inverted
-			assertFalse(result.test(DynamicContext.empty()));
+			assertEquals(ALWAYS_TRUE_DYNAMIC, result.dynamicCond());
 		}
 	}
 

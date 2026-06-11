@@ -4,7 +4,6 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.property.api.Property;
 import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
-import com.sigmundgranaas.forgero.core.property.context.Key;
 
 import java.util.ArrayList;
 import java.util.HashMap;

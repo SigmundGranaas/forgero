@@ -9,7 +9,6 @@ import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import com.sigmundgranaas.forgero.core.property.api.custom.AbstractConditionalPropertyEngine;
 import com.sigmundgranaas.forgero.core.property.api.custom.ConditionalProperty;
 import com.sigmundgranaas.forgero.core.property.api.custom.OptimizedBakedResult;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.effects.block.OnHitBlockEffect;
 import com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.selector.BlockSelector;
 
@@ -69,8 +68,8 @@ public record OnHitBlockProperty(
 		}
 
 		@Override
-		public List<OnHitBlockProperty> apply(OptimizedBakedResult<OnHitBlockProperty> baked, DynamicContext context) {
-			return baked.stream(context).collect(Collectors.toList());
+		public List<OnHitBlockProperty> apply(OptimizedBakedResult<OnHitBlockProperty> baked) {
+			return baked.all().collect(Collectors.toList());
 		}
 	}
 }

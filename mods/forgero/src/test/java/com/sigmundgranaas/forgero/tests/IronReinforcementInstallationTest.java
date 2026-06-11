@@ -5,7 +5,6 @@ import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
@@ -50,7 +49,7 @@ public class IronReinforcementInstallationTest implements ForgeroGameTest {
 	 * This INCLUDES attributes from installed upgrades.
 	 */
 	private float getResolvedAttributeValue(Component component, OpenIdentifier attributeType) {
-		AttributeQueryResult result = attributeEngine.resolve(component, DynamicContext.empty());
+		AttributeQueryResult result = attributeEngine.resolve(component);
 		return result.getValue(attributeType);
 	}
 

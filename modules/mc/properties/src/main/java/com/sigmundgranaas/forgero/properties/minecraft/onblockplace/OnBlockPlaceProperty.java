@@ -9,7 +9,6 @@ import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import com.sigmundgranaas.forgero.core.property.api.custom.AbstractConditionalPropertyEngine;
 import com.sigmundgranaas.forgero.core.property.api.custom.ConditionalProperty;
 import com.sigmundgranaas.forgero.core.property.api.custom.OptimizedBakedResult;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.effects.block.BlockEffect;
 import com.sigmundgranaas.forgero.effects.block.BlockSelector;
 
@@ -104,8 +103,8 @@ public record OnBlockPlaceProperty(
 		}
 
 		@Override
-		public List<OnBlockPlaceProperty> apply(OptimizedBakedResult<OnBlockPlaceProperty> baked, DynamicContext context) {
-			return baked.stream(context).collect(Collectors.toList());
+		public List<OnBlockPlaceProperty> apply(OptimizedBakedResult<OnBlockPlaceProperty> baked) {
+			return baked.all().collect(Collectors.toList());
 		}
 	}
 }

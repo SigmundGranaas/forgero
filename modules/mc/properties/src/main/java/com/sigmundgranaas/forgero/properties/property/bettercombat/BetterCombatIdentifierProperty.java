@@ -9,7 +9,6 @@ import com.sigmundgranaas.forgero.core.property.api.custom.AbstractConditionalPr
 import com.sigmundgranaas.forgero.core.property.api.custom.ConditionalProperty;
 import com.sigmundgranaas.forgero.core.property.api.custom.OptimizedBakedResult;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
 
 import javax.annotation.Nullable;
@@ -36,8 +35,8 @@ public record BetterCombatIdentifierProperty(
 		}
 
 		@Override
-		public Optional<OpenIdentifier> apply(OptimizedBakedResult<BetterCombatIdentifierProperty> baked, DynamicContext context) {
-			return baked.stream(context)
+		public Optional<OpenIdentifier> apply(OptimizedBakedResult<BetterCombatIdentifierProperty> baked) {
+			return baked.all()
 					.map(BetterCombatIdentifierProperty::identifier)
 					.findFirst();
 		}

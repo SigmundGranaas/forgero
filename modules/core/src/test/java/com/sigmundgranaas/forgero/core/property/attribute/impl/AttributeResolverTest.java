@@ -7,8 +7,8 @@ import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
-import com.sigmundgranaas.forgero.core.property.context.ContextKeys;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
+import com.sigmundgranaas.forgero.core.attribute.api.PrecomputedAttribute;
+import com.sigmundgranaas.forgero.core.component.api.ComponentTraversal;
 import com.sigmundgranaas.forgero.core.condition.predicate.SlotContainsCondition;
 import com.sigmundgranaas.forgero.core.condition.predicate.TagMatchCondition;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,25 +57,14 @@ class AttributeResolverTest {
 
 
 	/**
-	 * Tests a complex scenario involving both static (structural) and dynamic (contextual) conditions.
+	 * Tests a complex scenario involving both static (structural) and dynamic conditions.
+	 * Static conditions are resolved during compilation; dynamic conditions never affect
+	 * the compiled value and are carried through as data for the game layer.
 	 */
 	@Test
 	void appliesStaticAndDynamicConditions() {
-		// DYNAMIC CONDITION: Active only if the target has the 'stone' tag.
-		DynamicCondition onStone = new DynamicCondition() {
-
-			@Override
-			public boolean test(DynamicContext context) {
-				return context.get(ContextKeys.TARGET_TAGS)
-						.map(tags -> tags.contains(id("stone")))
-						.orElse(false);
-			}
-
-			@Override
-			public OpenIdentifier type() {
-				return OpenIdentifier.parse("forgero:none");
-			}
-		};
+		// DYNAMIC CONDITION: opaque data for the game layer; core never evaluates it.
+		DynamicCondition onStone = () -> OpenIdentifier.parse("forgero:none");
 
 		var diamondCondition = new Condition(Collections.emptyList(), List.of(onStone));
 		var diamondProperty = attribute(MINING_SPEED).withValue(10f).withCondition(diamondCondition).build();
@@ -105,22 +94,22 @@ class AttributeResolverTest {
 				.withPart(head, "blade_slot", id("blade"))
 				.build();
 
-		DynamicContext stoneTarget = new DynamicContext.Builder().put(ContextKeys.TARGET_TAGS, Set.of(id("stone"))).build();
-		DynamicContext woodTarget = new DynamicContext.Builder().put(ContextKeys.TARGET_TAGS, Set.of(id("wood"))).build();
+		// Compiled values: dynamic-conditional attributes never contribute.
+		AttributeQueryResult pickaxeResult = attributeEngine().resolve(pickaxe);
+		assertEquals(6f, pickaxeResult.getValue(MINING_SPEED), "Base (1) + Iron (5) = 6. Diamond bonus is dynamic and carried as data.");
 
-		// Test pickaxe against different contexts
-		AttributeQueryResult pickaxeStoneResult = attributeEngine().resolve(pickaxe, stoneTarget);
-		assertEquals(16f, pickaxeStoneResult.getValue(MINING_SPEED), "Base (1) + Iron (5) + Diamond (10) = 16");
+		AttributeQueryResult swordResult = attributeEngine().resolve(sword);
+		assertEquals(1f, swordResult.getValue(MINING_SPEED), "Base (1) only. Iron bonus statically inactive, diamond bonus dynamic.");
 
-		AttributeQueryResult pickaxeWoodResult = attributeEngine().resolve(pickaxe, woodTarget);
-		assertEquals(6f, pickaxeWoodResult.getValue(MINING_SPEED), "Base (1) + Iron (5) = 6");
+		// The dynamic-conditional diamond bonus is carried as data on the baked result.
+		PrecomputedAttribute pickaxeSpeed = attributeEngine().bake(ComponentTraversal.traverse(pickaxe).stream()).get(MINING_SPEED);
+		assertEquals(6f, pickaxeSpeed.value(), "Compiled value excludes the dynamic diamond bonus.");
+		assertEquals(1, pickaxeSpeed.conditionalAttributes().size(), "Dynamic diamond bonus is carried as data.");
+		assertEquals(10f, pickaxeSpeed.conditionalAttributes().get(0).value(), "Carried attribute keeps its value.");
 
-		// Test sword against different contexts
-		AttributeQueryResult swordStoneResult = attributeEngine().resolve(sword, stoneTarget);
-		assertEquals(11f, swordStoneResult.getValue(MINING_SPEED), "Base (1) + Diamond (10) = 11. Iron bonus inactive.");
-
-		AttributeQueryResult swordWoodResult = attributeEngine().resolve(sword, woodTarget);
-		assertEquals(1f, swordWoodResult.getValue(MINING_SPEED), "Base (1) only.");
+		PrecomputedAttribute swordSpeed = attributeEngine().bake(ComponentTraversal.traverse(sword).stream()).get(MINING_SPEED);
+		assertEquals(1f, swordSpeed.value(), "Compiled value excludes statically-failed iron and dynamic diamond bonuses.");
+		assertEquals(1, swordSpeed.conditionalAttributes().size(), "Dynamic diamond bonus is carried as data.");
 	}
 
 	/**

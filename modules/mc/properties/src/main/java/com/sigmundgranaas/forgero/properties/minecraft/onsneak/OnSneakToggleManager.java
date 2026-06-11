@@ -1,8 +1,9 @@
 package com.sigmundgranaas.forgero.properties.minecraft.onsneak;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.property.context.ContextKeys;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.ContextKeys;
+import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.RuntimeConditions;
 import com.sigmundgranaas.forgero.effects.entity.ContextualEffectHandler;
 import com.sigmundgranaas.forgero.effects.entity.EntityEffectHandler;
 import com.sigmundgranaas.forgero.effects.entity.OnHitEffect;
@@ -91,7 +92,7 @@ public class OnSneakToggleManager {
 				continue;
 			}
 
-			List<OnSneakToggleProperty> properties = ForgeroApi.itemProperty().resolve(stack, OnSneakToggleProperty.Engine::new, contextBuilder.build());
+			List<OnSneakToggleProperty> properties = RuntimeConditions.filter(ForgeroApi.itemProperty().resolve(stack, OnSneakToggleProperty.Engine::new), contextBuilder.build());
 
 			for (OnSneakToggleProperty property : properties) {
 				// Entity sneaks targeting self or nearby entities

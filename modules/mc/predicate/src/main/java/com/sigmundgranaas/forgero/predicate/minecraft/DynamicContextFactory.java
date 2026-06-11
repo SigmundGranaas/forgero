@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.predicate.minecraft;
 
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;

@@ -1,11 +1,9 @@
 package com.sigmundgranaas.forgero.properties.minecraft.useinteraction.entity;
 
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
-import com.sigmundgranaas.forgero.predicate.minecraft.DynamicContextFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.common.api.ForgeroInitializedCallback;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.properties.minecraft.onhit.OnHitManager;
 
 import net.minecraft.entity.Entity;
@@ -170,9 +168,8 @@ public class ThrownItemEntity extends PersistentProjectileEntity {
 	 * @return The resolved attribute value, or fallback if not available
 	 */
 	private float resolveAttribute(ItemStack stack, OpenIdentifier attr, float fallback) {
-		DynamicContext context = DynamicContextFactory.fromEntity(getOwner());
 		return converter.toComponent(stack)
-				.map(component -> AttributeEngine.getAttribute(component, attr, context))
+				.map(component -> AttributeEngine.getAttribute(component, attr))
 				.filter(value -> value > 0)
 				.orElse(fallback);
 	}

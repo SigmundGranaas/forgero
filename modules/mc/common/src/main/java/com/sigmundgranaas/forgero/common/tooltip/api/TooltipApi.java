@@ -8,13 +8,12 @@ import com.sigmundgranaas.forgero.common.tooltip.section.SectionRegistry;
 import com.sigmundgranaas.forgero.common.tooltip.value.PlaceholderRegistry;
 import com.sigmundgranaas.forgero.common.tooltip.api.TooltipRenderConfig;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.text.Text;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * Main entry point for the Forgero tooltip system.
@@ -31,7 +30,6 @@ import java.util.function.BiFunction;
  * <pre>{@code
  * List<Text> tooltip = TooltipApi.builder(component)
  *     .withComparison(ComparisonContext.strippedItem(stripped))
- *     .withDynamicContext(context)
  *     .build(tooltipContext);
  * }</pre>
  *
@@ -43,7 +41,7 @@ import java.util.function.BiFunction;
  *
  * <h2>Registering Custom Placeholders</h2>
  * <pre>{@code
- * TooltipApi.registerPlaceholder("rarity", (comp, ctx) ->
+ * TooltipApi.registerPlaceholder("rarity", comp ->
  *     Optional.of(RarityHelper.getRarity(comp).name()));
  * }</pre>
  *
@@ -110,7 +108,7 @@ public final class TooltipApi {
 	 * Functional interface for resolving custom placeholders.
 	 */
 	@FunctionalInterface
-	public interface PlaceholderResolver extends BiFunction<Component, DynamicContext, Optional<Object>> {
+	public interface PlaceholderResolver extends Function<Component, Optional<Object>> {
 	}
 
 	/**
@@ -156,7 +154,6 @@ public final class TooltipApi {
 	public static final class Builder {
 		private final Component component;
 		private ComparisonContext comparisonContext = ComparisonContext.none();
-		private DynamicContext dynamicContext = DynamicContext.empty();
 		private TooltipRenderConfig renderConfig = TooltipRenderConfig.defaults();
 		private DifferenceFormatter differenceFormatter = new DifferenceFormatter();
 
@@ -172,17 +169,6 @@ public final class TooltipApi {
 		 */
 		public Builder withComparison(ComparisonContext context) {
 			this.comparisonContext = context;
-			return this;
-		}
-
-		/**
-		 * Sets the dynamic context for conditional property resolution.
-		 *
-		 * @param context The dynamic context
-		 * @return This builder
-		 */
-		public Builder withDynamicContext(DynamicContext context) {
-			this.dynamicContext = context;
 			return this;
 		}
 
@@ -218,7 +204,6 @@ public final class TooltipApi {
 			return com.sigmundgranaas.forgero.common.tooltip.impl.TooltipBuilder.build(
 					component,
 					comparisonContext,
-					dynamicContext,
 					renderConfig,
 					differenceFormatter,
 					tooltipContext

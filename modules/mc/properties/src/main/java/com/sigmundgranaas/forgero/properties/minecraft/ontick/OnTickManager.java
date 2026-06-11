@@ -2,8 +2,9 @@ package com.sigmundgranaas.forgero.properties.minecraft.ontick;
 
 import com.sigmundgranaas.forgero.common.api.item.ItemPropertyApi;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.property.context.ContextKeys;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.ContextKeys;
+import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.RuntimeConditions;
 import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import com.sigmundgranaas.forgero.effects.entity.ContextualEffectHandler;
 import com.sigmundgranaas.forgero.effects.entity.EntityEffectHandler;
@@ -50,7 +51,7 @@ public class OnTickManager {
 				continue;
 			}
 
-			List<OnTickProperty> properties = ForgeroApi.itemProperty().resolve(stack, OnTickProperty.Engine::new, context);
+			List<OnTickProperty> properties = RuntimeConditions.filter(ForgeroApi.itemProperty().resolve(stack, OnTickProperty.Engine::new), context);
 
 			for (OnTickProperty property : properties) {
 				if (entity.age % property.interval() == 0) {

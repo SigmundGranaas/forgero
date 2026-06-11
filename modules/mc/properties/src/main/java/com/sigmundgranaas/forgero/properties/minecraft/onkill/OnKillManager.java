@@ -1,8 +1,9 @@
 package com.sigmundgranaas.forgero.properties.minecraft.onkill;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.property.context.ContextKeys;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.ContextKeys;
+import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.RuntimeConditions;
 import com.sigmundgranaas.forgero.effects.entity.ContextualEffectHandler;
 import com.sigmundgranaas.forgero.effects.entity.EntityEffectHandler;
 import com.sigmundgranaas.forgero.effects.entity.OnHitEffect;
@@ -60,7 +61,7 @@ public class OnKillManager {
 				continue;
 			}
 
-			List<OnKillProperty> properties = ForgeroApi.itemProperty().resolve(stack, OnKillProperty.Engine::new, contextBuilder.build());
+			List<OnKillProperty> properties = RuntimeConditions.filter(ForgeroApi.itemProperty().resolve(stack, OnKillProperty.Engine::new), contextBuilder.build());
 
 			for (OnKillProperty property : properties) {
 				// Killer is "source", victim is "initial target"

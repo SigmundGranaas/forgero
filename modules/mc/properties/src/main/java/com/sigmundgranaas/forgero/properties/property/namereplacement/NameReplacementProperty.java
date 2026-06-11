@@ -9,7 +9,6 @@ import com.sigmundgranaas.forgero.core.property.api.custom.AbstractConditionalPr
 import com.sigmundgranaas.forgero.core.property.api.custom.ConditionalProperty;
 import com.sigmundgranaas.forgero.core.property.api.custom.OptimizedBakedResult;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -47,8 +46,8 @@ public record NameReplacementProperty(
 		}
 
 		@Override
-		public Optional<String> apply(OptimizedBakedResult<NameReplacementProperty> baked, DynamicContext context) {
-			return baked.stream(context)
+		public Optional<String> apply(OptimizedBakedResult<NameReplacementProperty> baked) {
+			return baked.all()
 					.map(NameReplacementProperty::to)
 					.findFirst(); // Only the first valid replacement wins
 		}

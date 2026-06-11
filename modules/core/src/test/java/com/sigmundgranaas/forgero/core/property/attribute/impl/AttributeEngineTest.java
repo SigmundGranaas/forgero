@@ -8,7 +8,6 @@ import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.EquipmentComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.SlotValidator;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.testutils.TestIdentifiers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -423,21 +422,20 @@ class AttributeEngineTest extends ForgeroTest {
 		}
 
 		@Test
-		@DisplayName("getAttribute with context works for EquipmentComponent")
-		void getAttributeWithContextWorksForEquipment() {
+		@DisplayName("getAttribute returns the compiled value for EquipmentComponent")
+		void getAttributeReturnsCompiledValueForEquipment() {
 			Component equipment = tool("context_test_tool")
 					.withTag("tool")
 					.withAttribute(DefaultAttributes.ATTACK_DAMAGE, 15f)
 					.build();
 
-			// Use empty context (conditional attributes would need real context)
+			// Compiled lookup: no runtime context exists in this path
 			float damage = AttributeEngine.getAttribute(
 					equipment,
-					DefaultAttributes.ATTACK_DAMAGE,
-					DynamicContext.empty()
+					DefaultAttributes.ATTACK_DAMAGE
 			);
 
-			assertEquals(15f, damage, "Should return correct value with context");
+			assertEquals(15f, damage, "Should return the compiled value");
 		}
 
 		@Test
@@ -500,17 +498,14 @@ class AttributeEngineTest extends ForgeroTest {
 		}
 
 		@Test
-		@DisplayName("resolveAttributes with context works correctly")
-		void resolveAttributesWithContextWorks() {
+		@DisplayName("resolveAttributes returns compiled values")
+		void resolveAttributesReturnsCompiledValues() {
 			Component equipment = tool("context_resolve_tool")
 					.withTag("tool")
 					.withAttribute(DefaultAttributes.ATTACK_DAMAGE, 20f)
 					.build();
 
-			AttributeQueryResult result = AttributeEngine.resolveAttributes(
-					equipment,
-					DynamicContext.empty()
-			);
+			AttributeQueryResult result = AttributeEngine.resolveAttributes(equipment);
 
 			assertEquals(20f, result.getValue(DefaultAttributes.ATTACK_DAMAGE));
 		}

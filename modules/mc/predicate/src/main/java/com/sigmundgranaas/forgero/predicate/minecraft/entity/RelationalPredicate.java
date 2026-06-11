@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.predicate.minecraft.entity;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
 import com.sigmundgranaas.forgero.predicate.minecraft.MinecraftContextKeys;
 import com.sigmundgranaas.forgero.predicate.minecraft.util.NumericPredicate;
 

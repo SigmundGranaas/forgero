@@ -1,12 +1,11 @@
 package com.sigmundgranaas.forgero.common.tooltip.value;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * Registry for custom placeholder resolvers.
@@ -23,11 +22,8 @@ import java.util.function.BiFunction;
  *
  * <h2>Registering Custom Placeholders</h2>
  * <pre>{@code
- * PlaceholderRegistry.register("rarity", (component, context) ->
+ * PlaceholderRegistry.register("rarity", component ->
  *     Optional.of(RarityHelper.getRarity(component).name()));
- *
- * PlaceholderRegistry.register("enchantment_level", (component, context) ->
- *     context.get(EnchantmentKeys.LEVEL).map(l -> (Object) l));
  * }</pre>
  */
 public final class PlaceholderRegistry {
@@ -41,7 +37,7 @@ public final class PlaceholderRegistry {
 	 * Functional interface for placeholder resolution.
 	 */
 	@FunctionalInterface
-	public interface PlaceholderResolver extends BiFunction<Component, DynamicContext, Optional<Object>> {
+	public interface PlaceholderResolver extends Function<Component, Optional<Object>> {
 	}
 
 	/**
@@ -81,13 +77,12 @@ public final class PlaceholderRegistry {
 	 *
 	 * @param name      The placeholder name
 	 * @param component The component being rendered
-	 * @param context   The dynamic context
 	 * @return The resolved value, or empty if not registered or resolver returns empty
 	 */
-	public static Optional<Object> resolve(String name, Component component, DynamicContext context) {
+	public static Optional<Object> resolve(String name, Component component) {
 		PlaceholderResolver resolver = RESOLVERS.get(name.toLowerCase());
 		if (resolver != null) {
-			return resolver.apply(component, context);
+			return resolver.apply(component);
 		}
 		return Optional.empty();
 	}
@@ -105,17 +100,17 @@ public final class PlaceholderRegistry {
 	 */
 	public static void registerDefaults() {
 		// Component identifier parts
-		register("material_name", (comp, ctx) ->
+		register("material_name", comp ->
 				Optional.of(comp.id().path()));
 
-		register("namespace", (comp, ctx) ->
+		register("namespace", comp ->
 				Optional.of(comp.id().namespace()));
 
-		register("full_id", (comp, ctx) ->
+		register("full_id", comp ->
 				Optional.of(comp.id().toString()));
 
 		// Component name (path without underscores, title case)
-		register("display_name", (comp, ctx) -> {
+		register("display_name", comp -> {
 			String path = comp.id().path();
 			String[] parts = path.split("_");
 			StringBuilder sb = new StringBuilder();

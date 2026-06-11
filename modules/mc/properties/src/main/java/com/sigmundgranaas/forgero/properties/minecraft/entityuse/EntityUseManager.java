@@ -2,7 +2,8 @@ package com.sigmundgranaas.forgero.properties.minecraft.entityuse;
 
 import com.sigmundgranaas.forgero.common.useinteraction.EntityUseEffect;
 import com.sigmundgranaas.forgero.common.useinteraction.UseContext;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.RuntimeConditions;
 import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -37,7 +38,7 @@ public class EntityUseManager {
 		}
 
 		DynamicContext.Builder contextBuilder = new DynamicContext.Builder();
-		List<EntityUseProperty> properties = ForgeroApi.itemProperty().resolve(stack, EntityUseProperty.Engine::new, contextBuilder.build());
+		List<EntityUseProperty> properties = RuntimeConditions.filter(ForgeroApi.itemProperty().resolve(stack, EntityUseProperty.Engine::new), contextBuilder.build());
 
 		if (properties.isEmpty()) {
 			return ActionResult.PASS;

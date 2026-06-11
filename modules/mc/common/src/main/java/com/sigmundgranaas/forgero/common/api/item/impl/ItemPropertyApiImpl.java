@@ -3,7 +3,6 @@ package com.sigmundgranaas.forgero.common.api.item.impl;
 import com.sigmundgranaas.forgero.common.api.item.ItemPropertyApi;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.core.property.api.DataTypeEngine;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import net.minecraft.item.ItemStack;
 
 import java.util.Collections;
@@ -30,7 +29,7 @@ public class ItemPropertyApiImpl implements ItemPropertyApi {
 	}
 
 	@Override
-	public <P> List<P> resolve(ItemStack stack, Supplier<? extends DataTypeEngine<?, List<P>>> engineSupplier, DynamicContext context) {
+	public <P> List<P> resolve(ItemStack stack, Supplier<? extends DataTypeEngine<?, List<P>>> engineSupplier) {
 		if (stack == null || stack.isEmpty()) {
 			return Collections.emptyList();
 		}
@@ -38,19 +37,19 @@ public class ItemPropertyApiImpl implements ItemPropertyApi {
 		return converter.toComponent(stack)
 				.map(component -> {
 					DataTypeEngine<?, List<P>> engine = engineSupplier.get();
-					return engine.resolve(component, context);
+					return engine.resolve(component);
 				})
 				.orElse(Collections.emptyList());
 	}
 
 	@Override
-	public <P> List<P> resolve(ItemStack stack, DataTypeEngine<?, List<P>> engine, DynamicContext context) {
+	public <P> List<P> resolve(ItemStack stack, DataTypeEngine<?, List<P>> engine) {
 		if (stack == null || stack.isEmpty() || engine == null) {
 			return Collections.emptyList();
 		}
 
 		return converter.toComponent(stack)
-				.map(component -> engine.resolve(component, context))
+				.map(component -> engine.resolve(component))
 				.orElse(Collections.emptyList());
 	}
 }

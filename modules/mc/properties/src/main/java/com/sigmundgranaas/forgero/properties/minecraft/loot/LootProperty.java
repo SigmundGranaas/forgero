@@ -9,7 +9,6 @@ import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import com.sigmundgranaas.forgero.core.property.api.custom.AbstractConditionalPropertyEngine;
 import com.sigmundgranaas.forgero.core.property.api.custom.ConditionalProperty;
 import com.sigmundgranaas.forgero.core.property.api.custom.OptimizedBakedResult;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.properties.minecraft.loot.handler.LootHandler;
 
 import javax.annotation.Nullable;
@@ -74,8 +73,8 @@ public record LootProperty(LootHandler handler, @Nullable Condition condition) i
 		}
 
 		@Override
-		public List<LootProperty> apply(OptimizedBakedResult<LootProperty> baked, DynamicContext context) {
-			return baked.stream(context).collect(Collectors.toList());
+		public List<LootProperty> apply(OptimizedBakedResult<LootProperty> baked) {
+			return baked.all().collect(Collectors.toList());
 		}
 	}
 }

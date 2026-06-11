@@ -6,8 +6,8 @@ import org.slf4j.LoggerFactory;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.EvaluableCondition;
+import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
 import com.sigmundgranaas.forgero.predicate.minecraft.MinecraftContextKeys;
 
 import net.minecraft.entity.Entity;
@@ -46,7 +46,7 @@ public record RandomPredicate(
 		float chance,
 		int worldTimeQuantization,
 		List<SeedSource> seedSources
-) implements DynamicCondition {
+) implements EvaluableCondition {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RandomPredicate.class);
 	public static final OpenIdentifier TYPE = new OpenIdentifier("forgero", "random");

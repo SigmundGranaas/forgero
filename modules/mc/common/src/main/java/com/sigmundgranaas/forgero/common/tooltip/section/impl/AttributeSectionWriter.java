@@ -131,8 +131,7 @@ public class AttributeSectionWriter extends AbstractSectionWriter {
 				context.differenceCalculator().calculateFromResult(
 						context.attributes(),
 						attributeId,
-						context.comparisonContext(),
-						context.dynamicContext()
+						context.comparisonContext()
 				);
 
 		diffOpt.ifPresent(diff -> {
