@@ -12,7 +12,6 @@ import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.property.api.DataTypeEngine;
 import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,7 +51,7 @@ import java.util.stream.Stream;
  * │                                                                             │
  * │  1. O(1) map lookup: baked.get(ATTACK_DAMAGE) → PrecomputedAttribute       │
  * │  2. IF no conditionals: return baseValue immediately (FAST PATH)           │
- * │  3. ELSE: filter conditionals by DynamicContext, apply via ComputationChain│
+ * │  3. Conditional attributes are carried as data for the game layer only     │
  * └─────────────────────────────────────────────────────────────────────────────┘
  * </pre>
  *
@@ -86,13 +85,10 @@ import java.util.stream.Stream;
  * AttributeQueryResult result = engine.resolve(pickaxe);
  * float damage = result.getValue(DefaultAttributes.ATTACK_DAMAGE);
  *
- * // With dynamic context (for conditional attributes)
- * DynamicContext ctx = new DynamicContext.Builder()
- *     .put(IS_SNEAKING, true)
- *     .build();
- * AttributeQueryResult contextual = engine.resolve(pickaxe, ctx);
- * float sneakDamage = contextual.getValue(DefaultAttributes.ATTACK_DAMAGE);
  * }</pre>
+ *
+ * <p>Runtime state never enters this engine. Game-state-dependent behaviour is modelled
+ * as effects evaluated by the game layer; see docs/ADR-002-compiler-in-the-factory.md.
  *
  * @see BakedAttributes for the optimized baked structure
  * @see PrecomputedAttribute for per-type pre-computation
@@ -112,53 +108,37 @@ public class AttributeEngine implements DataTypeEngine<BakedAttributes, Attribut
 	// These provide O(1) lookup for EquipmentComponent, falling back to resolve() for others.
 
 	/**
-	 * Gets the value of a specific attribute from a component.
+	 * Gets the compiled value of a specific attribute from a component.
 	 * <p>
 	 * For EquipmentComponent, uses pre-baked O(1) lookup.
-	 * For other components, computes on-demand via resolve().
+	 * For other components, compiles on-demand via resolve().
 	 *
 	 * @param component The component to query
 	 * @param type      The attribute type
-	 * @param context   Dynamic context for conditional evaluation
-	 * @return The computed attribute value, or 0 if not found
-	 */
-	public static float getAttribute(Component component, OpenIdentifier type, DynamicContext context) {
-		if (component instanceof EquipmentComponent equipment) {
-			return equipment.getAttribute(type, context);
-		}
-		return new AttributeEngine().resolve(component, context).getValue(type);
-	}
-
-	/**
-	 * Gets attribute value with empty context.
+	 * @return The compiled attribute value, or 0 if not found
 	 */
 	public static float getAttribute(Component component, OpenIdentifier type) {
-		return getAttribute(component, type, DynamicContext.empty());
+		if (component instanceof EquipmentComponent equipment) {
+			return equipment.getAttribute(type);
+		}
+		return new AttributeEngine().resolve(component).getValue(type);
 	}
 
 	/**
-	 * Resolves all attributes for a component.
+	 * Compiles all attributes for a component.
 	 * <p>
 	 * For EquipmentComponent, wraps pre-baked attributes in QueryResult.
-	 * For other components, computes via resolve().
+	 * For other components, compiles via resolve().
 	 *
-	 * @param component The component to resolve
-	 * @param context   Dynamic context for conditional evaluation
-	 * @return Query result for accessing attribute values
-	 */
-	public static AttributeQueryResult resolveAttributes(Component component, DynamicContext context) {
-		if (component instanceof EquipmentComponent equipment) {
-			var baked = equipment.bakedAttributes();
-			return type -> baked.get(type).compute(context);
-		}
-		return new AttributeEngine().resolve(component, context);
-	}
-
-	/**
-	 * Resolves attributes with empty context.
+	 * @param component The component to compile
+	 * @return Query result for accessing compiled attribute values
 	 */
 	public static AttributeQueryResult resolveAttributes(Component component) {
-		return resolveAttributes(component, DynamicContext.empty());
+		if (component instanceof EquipmentComponent equipment) {
+			var baked = equipment.bakedAttributes();
+			return type -> baked.get(type).value();
+		}
+		return new AttributeEngine().resolve(component);
 	}
 
 	@Override
@@ -251,8 +231,10 @@ public class AttributeEngine implements DataTypeEngine<BakedAttributes, Attribut
 	}
 
 	@Override
-	public AttributeQueryResult apply(BakedAttributes baked, DynamicContext context) {
-		// Return a lightweight query object with O(1) type lookup + conditional evaluation.
-		return (attributeType) -> baked.get(attributeType).compute(context);
+	public AttributeQueryResult apply(BakedAttributes baked) {
+		// Return a lightweight query object with O(1) type lookup over compiled values.
+		// Dynamic-conditional attributes are carried in the baked result as data; their
+		// evaluation belongs to the game layer, never to this compile-time path.
+		return (attributeType) -> baked.get(attributeType).value();
 	}
 }

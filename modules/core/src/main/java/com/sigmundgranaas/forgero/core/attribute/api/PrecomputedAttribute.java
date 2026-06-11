@@ -1,8 +1,5 @@
 package com.sigmundgranaas.forgero.core.attribute.api;
 
-import com.sigmundgranaas.forgero.core.attribute.impl.computation.ComputationChain;
-import com.sigmundgranaas.forgero.core.condition.api.Condition;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 
 import java.util.List;
 
@@ -50,47 +47,17 @@ public record PrecomputedAttribute(
 	}
 
 	/**
-	 * Computes the final value by applying conditional attributes to the base.
-	 *
-	 * <p>Fast path: If there are no conditional attributes, returns baseValue immediately.
-	 * Otherwise, evaluates dynamic conditions and applies active conditionals via ComputationChain.
-	 *
-	 * @param context The dynamic context for evaluating conditions
-	 * @return The final computed attribute value
+	 * @return The compiled attribute value. Attributes carrying dynamic conditions do not
+	 * contribute here: they are exposed via {@link #conditionalAttributes()} as data, and
+	 * any game-state-dependent behaviour belongs to the game layer (as effects), never to
+	 * the compiled stat value.
 	 */
-	public float compute(DynamicContext context) {
-		if (conditionalAttributes.isEmpty()) {
-			return baseValue;  // Fast path: no conditions to evaluate
-		}
-
-		List<Attribute> active = conditionalAttributes.stream()
-				.filter(attr -> testDynamicConditions(attr, context))
-				.toList();
-
-		if (active.isEmpty()) {
-			return baseValue;
-		}
-
-		return new ComputationChain(active).compute(baseValue);
-	}
-
-	/**
-	 * Tests whether an attribute's dynamic conditions pass in the given context.
-	 *
-	 * @param attr    The attribute to test
-	 * @param context The dynamic context
-	 * @return true if all dynamic conditions pass (or if there are none)
-	 */
-	private boolean testDynamicConditions(Attribute attr, DynamicContext context) {
-		return attr.condition()
-				.map(Condition::dynamicConditions)
-				.map(conditions -> conditions.stream().allMatch(cond -> cond.test(context)))
-				.orElse(true);
+	public float value() {
+		return baseValue;
 	}
 
 	/**
 	 * Returns true if this precomputed attribute has no conditional attributes.
-	 * In this case, {@link #compute(DynamicContext)} will always return {@link #baseValue}.
 	 */
 	public boolean isFullyPrecomputed() {
 		return conditionalAttributes.isEmpty();

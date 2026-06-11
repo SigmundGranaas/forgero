@@ -5,7 +5,6 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.core.property.context.ResolutionContext;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
 
@@ -47,11 +46,6 @@ public class OrCondition {
 	}
 
 	public record OrDynamic(List<StaticCondition> staticConds, List<DynamicCondition> dynamicConds) implements DynamicCondition, LogicalConditionResult {
-		@Override
-		public boolean test(DynamicContext context) {
-			return dynamicConds.stream().anyMatch(c -> c.test(context));
-		}
-
 		@Override
 		public OpenIdentifier type() {
 			return TYPE;

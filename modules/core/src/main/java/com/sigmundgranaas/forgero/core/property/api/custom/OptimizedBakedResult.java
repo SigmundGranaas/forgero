@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.core.property.api.custom;
 
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -17,14 +16,14 @@ import java.util.stream.Stream;
  */
 public record OptimizedBakedResult<P extends ConditionalProperty>(List<P> staticProperties, List<P> dynamicProperties) {
 	/**
-	 * Produces a stream of all active properties for a given dynamic context.
-	 * It efficiently filters only the dynamic properties and combines them with the static ones.
+	 * Produces a stream of all statically-valid properties: the unconditional ones plus
+	 * those carrying dynamic conditions. Dynamic conditions are NOT evaluated here — they
+	 * are data for the game layer, which filters via its runtime evaluator at the call
+	 * sites that hold actual game state.
 	 *
-	 * @param context The dynamic context for the calculation.
-	 * @return A stream containing all active properties.
+	 * @return A stream containing all compiled properties.
 	 */
-	public Stream<P> stream(DynamicContext context) {
-		Stream<P> activeDynamicStream = dynamicProperties.stream().filter(prop -> prop.test(context));
-		return Stream.concat(staticProperties.stream(), activeDynamicStream);
+	public Stream<P> all() {
+		return Stream.concat(staticProperties.stream(), dynamicProperties.stream());
 	}
 }

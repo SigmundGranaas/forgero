@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.property.context;
+package com.sigmundgranaas.forgero.common.runtime;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import java.util.Set;

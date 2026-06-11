@@ -2,7 +2,6 @@ package com.sigmundgranaas.forgero.core.component.api;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.BakedAttributes;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 
 /**
  * Interface for components that are "terminal" - they apply their attributes
@@ -13,7 +12,7 @@ import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
  * its attributes (attack damage, attack speed, armor, etc.) are applied to the player.
  * <p>
  * <b>Attribute resolution:</b> Equipment components bake their attributes at creation
- * time for O(1) lookup. Use {@link #getAttribute(OpenIdentifier, DynamicContext)} to
+ * time for O(1) lookup. Use {@link #getAttribute(OpenIdentifier)} to
  * query attribute values.
  * <p>
  * <b>Semantic distinction:</b>
@@ -40,23 +39,10 @@ public interface EquipmentComponent extends Component {
 	 * Gets the value of a specific attribute type.
 	 *
 	 * @param type    The attribute type (e.g., attack_damage, durability)
-	 * @param context The dynamic context for evaluating conditional attributes
 	 * @return The computed attribute value
 	 */
-	default float getAttribute(OpenIdentifier type, DynamicContext context) {
-		return bakedAttributes().get(type).compute(context);
-	}
-
-	/**
-	 * Gets the value of a specific attribute type with empty context.
-	 * <p>
-	 * Use this when no dynamic conditions are relevant.
-	 *
-	 * @param type The attribute type
-	 * @return The base attribute value (conditionals not applied)
-	 */
 	default float getAttribute(OpenIdentifier type) {
-		return getAttribute(type, DynamicContext.empty());
+		return bakedAttributes().get(type).value();
 	}
 
 	/**

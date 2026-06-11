@@ -5,7 +5,6 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.core.property.context.ResolutionContext;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
 
@@ -46,12 +45,6 @@ public class NotCondition {
 	}
 
 	public record NotDynamic(StaticCondition staticCond, DynamicCondition dynamicCond) implements DynamicCondition, LogicalConditionResult {
-		@Override
-		public boolean test(DynamicContext context) {
-			boolean dynamicResult = dynamicCond == null || dynamicCond.test(context);
-			return !(dynamicResult);
-		}
-
 		@Override
 		public OpenIdentifier type() {
 			return TYPE;

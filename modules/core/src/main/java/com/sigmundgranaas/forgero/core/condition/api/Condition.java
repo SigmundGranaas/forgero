@@ -302,31 +302,14 @@ public record Condition(
 	 * If an inner condition has no dynamic conditions (only static), and those static
 	 * conditions passed during baking, it counts as a pass for the OR evaluation.</p>
 	 */
-	private record OrDynamicCondition(
+	public record OrDynamicCondition(
 			List<Condition> conditions,
 			boolean hasStaticOnlyCondition
 	) implements DynamicCondition {
-		@Override
-		public boolean test(com.sigmundgranaas.forgero.core.property.context.DynamicContext context) {
-			for (Condition c : conditions) {
-				// If this inner condition has no dynamic conditions, it means:
-				// 1. It only had static conditions, which passed during baking (otherwise we wouldn't be here)
-				// 2. OR it's an always-true condition
-				// Either way, it counts as a "pass" for the OR evaluation
-				if (c.dynamicConditions().isEmpty()) {
-					return true;
-				}
-
-				// Check if all dynamic conditions of this inner condition pass
-				boolean allDynamicPass = c.dynamicConditions().stream()
-						.allMatch(dc -> dc.test(context));
-				if (allDynamicPass) {
-					return true;
-				}
-			}
-			return false;
-		}
-
+		// Evaluation semantics (implemented by the game-side runtime evaluator):
+		// passes if ANY inner Condition passes, where an inner Condition with no dynamic
+		// conditions counts as a pass (its static conditions already passed during
+		// compilation), and one with dynamic conditions passes if ALL of them pass.
 		@Override
 		public com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier type() {
 			return new com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier("forgero", "condition/or");
