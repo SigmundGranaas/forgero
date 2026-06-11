@@ -360,14 +360,34 @@ public class ItemQueryApiImpl implements ItemQueryApi {
 
 		Multimap<EntityAttribute, EntityAttributeModifier> forgeroAttributes = createAttributeMap(result, slot);
 
+		// Forgero owns only the modifiers it writes (by UUID). Replace exactly those — which
+		// supersedes the vanilla base tool/armor modifiers that share those canonical UUIDs —
+		// while preserving every other modifier under the same attribute key (enchantments,
+		// /attribute commands, other mods, map-maker NBT). Merging key-wise would discard them.
+		Set<UUID> forgeroOwned = ownedModifierIds(slot);
+
 		Multimap<EntityAttribute, EntityAttributeModifier> finalMap = LinkedListMultimap.create();
 		finalMap.putAll(forgeroAttributes);
 
 		vanillaMap.entries().stream()
-				.filter(entry -> !finalMap.containsKey(entry.getKey()))
+				.filter(entry -> !forgeroOwned.contains(entry.getValue().getId()))
 				.forEach(entry -> finalMap.put(entry.getKey(), entry.getValue()));
 
 		return finalMap;
+	}
+
+	/**
+	 * The modifier UUIDs Forgero itself writes for a slot — the canonical vanilla tool/armor
+	 * modifier ids. Only these are replaced on merge; all other modifiers are preserved.
+	 */
+	private static Set<UUID> ownedModifierIds(EquipmentSlot slot) {
+		if (slot == EquipmentSlot.MAINHAND) {
+			return Set.of(Item.ATTACK_DAMAGE_MODIFIER_ID, Item.ATTACK_SPEED_MODIFIER_ID);
+		}
+		if (slot.getType() == EquipmentSlot.Type.ARMOR) {
+			return Set.of(ARMOR_MODIFIER_IDS[slot.getEntitySlotId()]);
+		}
+		return Set.of();
 	}
 
 	private Multimap<EntityAttribute, EntityAttributeModifier> createAttributeMap(AttributeQueryResult attributes, EquipmentSlot slot) {

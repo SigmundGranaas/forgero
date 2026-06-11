@@ -100,11 +100,12 @@ conditional (→ `PrecomputedAttribute.conditionalAttributes`, **never read**). 
 - **Change (later):** survey content JSON for dynamic-conditional attributes; migrate any to the
   event layer. Gate with a check.
 
-### 2.2 The vanilla attribute-modifier merge still discards other mods' modifiers
+### 2.2 The vanilla attribute-modifier merge — FIXED (UUID-owned merge)
 `ItemQueryApiImpl.getAttributeModifiers` (lines ~363-368) still drops vanilla/other-mod modifiers
 key-wise. This is the long-standing interop break, and the compiled artifact is the enabler for
-the real fix (write our own UUID-keyed entries, merge the rest by UUID). Decoupled from the
-rejected persistence step — can be done as a standalone fix when prioritized, without freezing values.
+the real fix. **Done:** `getAttributeModifiers` now replaces only Forgero's own modifier UUIDs
+(the canonical tool/armor ids) and preserves every other modifier under the same attribute key —
+enchantments, `/attribute`, other mods, map NBT. No values frozen; live-derived as before.
 
 ---
 
