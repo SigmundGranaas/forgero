@@ -6,7 +6,7 @@ import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.ComponentTreeVisitor;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
-import com.sigmundgranaas.forgero.core.property.context.ResolutionContext;
+import com.sigmundgranaas.forgero.core.property.compilation.ResolutionContext;
 
 import java.util.ArrayList;
 import java.util.List;

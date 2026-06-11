@@ -5,7 +5,7 @@ import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
 import com.sigmundgranaas.forgero.common.tags.engine.TagGraph;
 import com.sigmundgranaas.forgero.core.ForgeroTest;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.context.ResolutionContext;
+import com.sigmundgranaas.forgero.core.property.compilation.ResolutionContext;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;

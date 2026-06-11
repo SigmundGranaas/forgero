@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.core.attribute.impl;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
-import com.sigmundgranaas.forgero.core.property.context.ResolutionContext;
+import com.sigmundgranaas.forgero.core.property.compilation.ResolutionContext;
 
 import java.util.List;
 import java.util.stream.Stream;

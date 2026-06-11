@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.core.component.api;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.attribute.api.BakedAttributes;
 import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import com.sigmundgranaas.forgero.core.property.compiled.CompiledProperties;
 
@@ -38,14 +37,6 @@ public interface EquipmentComponent extends Component {
 	 */
 	CompiledProperties compiled();
 
-	/**
-	 * Returns the pre-baked attributes for this equipment (a view of {@link #compiled()}).
-	 *
-	 * @return The baked attributes
-	 */
-	default BakedAttributes bakedAttributes() {
-		return compiled().attributes();
-	}
 
 	/**
 	 * Reads the compiled property list of the given type from this terminal's artifact.

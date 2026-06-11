@@ -36,7 +36,7 @@ class AttributeBuilderTest extends ForgeroTest {
 	private static StaticCondition testStaticCondition() {
 		return new StaticCondition() {
 			@Override
-			public boolean test(com.sigmundgranaas.forgero.core.property.context.ResolutionContext context) {
+			public boolean test(com.sigmundgranaas.forgero.core.property.compilation.ResolutionContext context) {
 				return true;
 			}
 

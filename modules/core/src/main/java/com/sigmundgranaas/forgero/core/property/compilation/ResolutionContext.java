@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.property.context;
+package com.sigmundgranaas.forgero.core.property.compilation;
 
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;

@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.core.property.context;
+package com.sigmundgranaas.forgero.core.property.compilation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

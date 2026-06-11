@@ -6,7 +6,7 @@ import com.sigmundgranaas.forgero.core.property.api.CompilerPass;
 import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
-import com.sigmundgranaas.forgero.core.property.context.ResolutionContext;
+import com.sigmundgranaas.forgero.core.property.compilation.ResolutionContext;
 
 import java.util.List;
 import java.util.Optional;

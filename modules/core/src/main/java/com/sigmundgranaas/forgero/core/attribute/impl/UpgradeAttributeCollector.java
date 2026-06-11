@@ -12,7 +12,7 @@ import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
-import com.sigmundgranaas.forgero.core.property.context.ResolutionContext;
+import com.sigmundgranaas.forgero.core.property.compilation.ResolutionContext;
 
 import java.util.*;
 import java.util.stream.Collectors;

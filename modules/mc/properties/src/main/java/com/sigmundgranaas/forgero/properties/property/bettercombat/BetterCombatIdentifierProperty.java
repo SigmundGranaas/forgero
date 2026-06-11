@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
-import com.sigmundgranaas.forgero.core.property.api.custom.AbstractConditionalPropertyEngine;
 import com.sigmundgranaas.forgero.core.property.api.custom.ConditionalProperty;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
@@ -19,7 +18,6 @@ public record BetterCombatIdentifierProperty(
 		@Nullable Condition condition
 ) implements ConditionalProperty {
 	public static final OpenIdentifier KEY_ID = new OpenIdentifier("better_combat", "attribute_container");
-	public static final ResolutionKey<List<BetterCombatIdentifierProperty>> KEY = new ResolutionKey<>(KEY_ID);
 	public static final PropertyKey<BetterCombatIdentifierProperty> PROPERTY_KEY = new PropertyKey<>(BetterCombatIdentifierProperty.class, KEY_ID.toString());
 
 	public static Codec<BetterCombatIdentifierProperty> codec(Codec<Condition> conditionCodec) {
@@ -29,9 +27,4 @@ public record BetterCombatIdentifierProperty(
 		).apply(instance, (id, cond) -> new BetterCombatIdentifierProperty(id, cond.orElse(null))));
 	}
 
-	public static class Engine extends AbstractConditionalPropertyEngine<BetterCombatIdentifierProperty> {
-		public Engine() {
-			super(KEY, PROPERTY_KEY);
-		}
-	}
 }

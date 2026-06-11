@@ -50,7 +50,6 @@ class CompiledPropertiesTest {
 
 		// Attributes live in the same compiled artifact.
 		assertEquals(7f, tool.getAttribute(DefaultAttributes.ATTACK_DAMAGE));
-		assertEquals(tool.compiled().attributes(), tool.bakedAttributes());
 	}
 
 	@Test

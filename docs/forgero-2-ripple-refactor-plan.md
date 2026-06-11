@@ -61,7 +61,7 @@ no tree walk).
   the dispatcher, migrate **one** manager (OnHit) end-to-end, confirm compile + any covering
   gametest, then fan out. **Do it, staged.**
 
-### 1.3 Delete the `instanceof EquipmentComponent … else resolve()` fallbacks where non-terminals never reach
+### 1.3 Audit the `instanceof EquipmentComponent … else resolve()` fallbacks — AUDITED: KEEP
 This pattern now appears in 4+ places (`AttributeEngine.getAttribute`/`resolveAttributes`,
 `ItemPropertyApiImpl.read`, `TooltipBuilder`). Per the role model, **only terminals are ever
 queried** — a bare part is never handed to a read path. If that invariant holds (needs
@@ -71,9 +71,15 @@ dead, and deleting them removes the last places core "resolves at query time."
 - **Change:** confirm the invariant by auditing callers; if it holds, the read paths take/assume a
   terminal and the fallback (and `resolve(Component)` convenience) can go. If a legitimate
   non-terminal caller exists, keep a single explicit path, not four copies.
-- **Why over the survey's "keep as safety net":** an unexercised "safety net" that lets a tree be
-  resolved at runtime is exactly the regrowth vector ADR-002 warns about. Verify, then delete or
-  centralize. **Do it after the audit.**
+- **Audit result (keep):** the premise was wrong — non-terminals DO legitimately reach these
+  paths. Part items (`StaticComponent`/`StructuredPart` implement `ContributingComponent`, **not**
+  `EquipmentComponent`) show tooltips/stats, and tooltip comparison builds derived components
+  (`strippedComponent()`, `baseWithoutUpgrade()`, `baselineComponent()`) that aren't pre-compiled.
+  These resolve on demand once for a tooltip — not per-frame on a held tool — so the fallback is
+  **not** a runtime-resolution-of-a-held-item regrowth vector; it's the correct read path for
+  things that genuinely aren't terminals. It stays. (The duplication is already minimal: the
+  pattern lives in `AttributeEngine`'s two static helpers and one tooltip site, each with a
+  different return type — not four copies of one thing.)
 
 ---
 

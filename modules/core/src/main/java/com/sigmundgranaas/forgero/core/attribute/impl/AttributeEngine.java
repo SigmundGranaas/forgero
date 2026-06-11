@@ -135,7 +135,7 @@ public class AttributeEngine implements CompilerPass<BakedAttributes> {
 	 */
 	public static AttributeQueryResult resolveAttributes(Component component) {
 		BakedAttributes baked = component instanceof EquipmentComponent equipment
-				? equipment.bakedAttributes()
+				? equipment.compiled().attributes()
 				: new AttributeEngine().resolve(component);
 		return type -> baked.get(type).value();
 	}

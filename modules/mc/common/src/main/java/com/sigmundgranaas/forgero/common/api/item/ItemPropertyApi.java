@@ -1,11 +1,9 @@
 package com.sigmundgranaas.forgero.common.api.item;
 
-import com.sigmundgranaas.forgero.core.property.api.CompilerPass;
 import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 /**
  * API for resolving Forgero properties from ItemStacks.
@@ -22,11 +20,8 @@ import java.util.function.Supplier;
  * ItemPropertyApi props = ForgeroApi.itemProperty();
  *
  * // Resolve OnHit properties
- * List<OnHitProperty> onHitProps = props.resolve(stack, OnHitProperty.Engine::new);
+ * List<OnHitProperty> onHitProps = props.get(stack, OnHitProperty.KEY);
  *
- * // With pre-created engine
- * OnHitProperty.Engine engine = new OnHitProperty.Engine();
- * List<OnHitProperty> props = props.resolve(stack, engine);
  * }</pre>
  *
  * <h2>Design Notes</h2>
@@ -42,19 +37,6 @@ import java.util.function.Supplier;
 public interface ItemPropertyApi {
 
 	/**
-	 * Resolves properties from an ItemStack using the given engine supplier.
-	 * <p>
-	 * This is the most convenient form - pass a method reference to the engine constructor:
-	 * <pre>{@code
-	 * List<OnHitProperty> props = api.resolve(stack, OnHitProperty.Engine::new);
-	 * }</pre>
-	 *
-	 * @param stack           The ItemStack to resolve properties from
-	 * @param engineSupplier  Supplier that creates the property engine (e.g., {@code OnHitProperty.Engine::new})
-	 * @param <P>             The property type
-	 * @return List of resolved properties, or empty list for null/empty/non-Forgero items
-	 */
-	/**
 	 * Reads the compiled property list of a type directly from a terminal item's artifact.
 	 * <p>
 	 * This is the preferred runtime accessor: it needs only the property's {@link ResolutionKey},
@@ -69,29 +51,4 @@ public interface ItemPropertyApi {
 	 */
 	<P> List<P> get(ItemStack stack, ResolutionKey<List<P>> key);
 
-	<P> List<P> resolve(ItemStack stack, Supplier<? extends CompilerPass<List<P>>> engineSupplier);
-
-	/**
-	 * Resolves properties from an ItemStack using a pre-created engine.
-	 * <p>
-	 * Use this when you need to reuse the same engine instance across multiple resolutions.
-	 *
-	 * @param stack   The ItemStack to resolve properties from
-	 * @param engine  The property engine to use for resolution
-	 * @param <P>     The property type
-	 * @return List of resolved properties, or empty list for null/empty/non-Forgero items
-	 */
-	<P> List<P> resolve(ItemStack stack, CompilerPass<List<P>> engine);
-
-	/**
-	 * Checks if the ItemStack has any properties of the given type.
-	 *
-	 * @param stack          The ItemStack to check
-	 * @param engineSupplier Supplier that creates the property engine
-	 * @param <P>            The property type
-	 * @return true if the item has at least one property of the given type
-	 */
-	default <P> boolean hasProperties(ItemStack stack, Supplier<? extends CompilerPass<List<P>>> engineSupplier) {
-		return !resolve(stack, engineSupplier).isEmpty();
-	}
 }

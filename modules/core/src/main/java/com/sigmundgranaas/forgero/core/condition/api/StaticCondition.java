@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.core.condition.api;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.property.context.ResolutionContext;
+import com.sigmundgranaas.forgero.core.property.compilation.ResolutionContext;
 
 /**
  * A condition evaluated during the static "bake" phase of property resolution.

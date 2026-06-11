@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
-import com.sigmundgranaas.forgero.core.property.api.custom.AbstractConditionalPropertyEngine;
 import com.sigmundgranaas.forgero.core.property.api.custom.ConditionalProperty;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
 
@@ -23,7 +22,6 @@ public record NameReplacementProperty(
 		@Nullable Condition condition
 ) implements ConditionalProperty {
 	public static final OpenIdentifier KEY_ID = new OpenIdentifier("forgero", "name_replacement");
-	public static final ResolutionKey<List<NameReplacementProperty>> KEY = new ResolutionKey<>(KEY_ID);
 	public static final PropertyKey<NameReplacementProperty> PROPERTY_KEY = new PropertyKey<>(NameReplacementProperty.class, KEY_ID.toString());
 
 	public static Codec<NameReplacementProperty> codec(Codec<Condition> conditionCodec) {
@@ -39,9 +37,4 @@ public record NameReplacementProperty(
 	 * <p>
 	 * Final Result Type {@code <R>}: {@code List<NameReplacementProperty>}
 	 */
-	public static class Engine extends AbstractConditionalPropertyEngine<NameReplacementProperty> {
-		public Engine() {
-			super(KEY, PROPERTY_KEY);
-		}
-	}
 }

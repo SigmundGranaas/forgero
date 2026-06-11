@@ -6,7 +6,7 @@ import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
-import com.sigmundgranaas.forgero.core.property.context.ResolutionContext;
+import com.sigmundgranaas.forgero.core.property.compilation.ResolutionContext;
 import com.sigmundgranaas.forgero.testutils.TestIdentifiers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

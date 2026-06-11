@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.core.status;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.context.ResolutionContext;
+import com.sigmundgranaas.forgero.core.property.compilation.ResolutionContext;
 import com.sigmundgranaas.forgero.core.status.api.StatusModifiableComponent;
 import com.sigmundgranaas.forgero.core.status.api.StatusModifier;
 import com.sigmundgranaas.forgero.core.status.api.StatusModifierSlot;

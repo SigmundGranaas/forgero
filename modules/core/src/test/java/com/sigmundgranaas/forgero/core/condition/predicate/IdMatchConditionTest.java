@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.core.condition.predicate;
 
 import com.sigmundgranaas.forgero.core.ForgeroTest;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.context.ResolutionContext;
+import com.sigmundgranaas.forgero.core.property.compilation.ResolutionContext;
 import org.junit.jupiter.api.Test;
 
 import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.*;

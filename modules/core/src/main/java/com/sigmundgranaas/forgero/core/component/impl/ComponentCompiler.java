@@ -4,13 +4,12 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.BakedAttributes;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.component.api.ComponentTraversal;
 import com.sigmundgranaas.forgero.core.property.api.CompilerPass;
 import com.sigmundgranaas.forgero.core.property.compiled.CompiledProperties;
 import com.sigmundgranaas.forgero.core.property.compiled.CompilerPasses;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +32,7 @@ final class ComponentCompiler {
 	 * Compiles the full property artifact for a component tree.
 	 */
 	static CompiledProperties compile(Component root) {
-		List<Component> components = traverse(root);
+		List<Component> components = ComponentTraversal.traverse(root);
 		BakedAttributes attributes = ATTRIBUTES.compile(components.stream());
 
 		Map<OpenIdentifier, List<?>> properties = new HashMap<>();
@@ -51,18 +50,4 @@ final class ComponentCompiler {
 		return pass.compile(components.stream());
 	}
 
-	private static List<Component> traverse(Component component) {
-		List<Component> allComponents = new ArrayList<>();
-		Deque<Component> stack = new ArrayDeque<>();
-		stack.push(component);
-		while (!stack.isEmpty()) {
-			Component current = stack.pop();
-			allComponents.add(current);
-			List<Component> children = current.getChildren();
-			for (int i = children.size() - 1; i >= 0; i--) {
-				stack.push(children.get(i));
-			}
-		}
-		return allComponents;
-	}
 }
