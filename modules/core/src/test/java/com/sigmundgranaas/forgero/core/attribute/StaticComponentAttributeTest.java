@@ -74,7 +74,7 @@ class StaticComponentAttributeTest extends ForgeroTest {
 				.withAttribute(DefaultAttributes.MINING_LEVEL, 2f)
 				.build();
 
-		AttributeQueryResult result = attributeEngine().resolve(ironPickaxe);
+		AttributeQueryResult result = resolveAttributes(ironPickaxe);
 
 		assertEquals(4f, result.getValue(DefaultAttributes.ATTACK_DAMAGE),
 				"Attack damage should resolve to 4");
@@ -138,19 +138,19 @@ class StaticComponentAttributeTest extends ForgeroTest {
 		assertFalse(goldPickaxe.properties(Attribute.KEY).isEmpty(), "Gold pickaxe should have attributes");
 
 		// Verify attributes resolve correctly
-		AttributeQueryResult ironPickaxeResult = attributeEngine().resolve(ironPickaxe);
+		AttributeQueryResult ironPickaxeResult = resolveAttributes(ironPickaxe);
 		assertEquals(250f, ironPickaxeResult.getValue(DefaultAttributes.DURABILITY));
 		assertEquals(4f, ironPickaxeResult.getValue(DefaultAttributes.ATTACK_DAMAGE));
 
-		AttributeQueryResult ironSwordResult = attributeEngine().resolve(ironSword);
+		AttributeQueryResult ironSwordResult = resolveAttributes(ironSword);
 		assertEquals(250f, ironSwordResult.getValue(DefaultAttributes.DURABILITY));
 		assertEquals(6f, ironSwordResult.getValue(DefaultAttributes.ATTACK_DAMAGE));
 
-		AttributeQueryResult diamondResult = attributeEngine().resolve(diamondPickaxe);
+		AttributeQueryResult diamondResult = resolveAttributes(diamondPickaxe);
 		assertEquals(1561f, diamondResult.getValue(DefaultAttributes.DURABILITY));
 		assertEquals(8f, diamondResult.getValue(DefaultAttributes.MINING_SPEED));
 
-		AttributeQueryResult goldResult = attributeEngine().resolve(goldPickaxe);
+		AttributeQueryResult goldResult = resolveAttributes(goldPickaxe);
 		assertEquals(32f, goldResult.getValue(DefaultAttributes.DURABILITY));
 		assertEquals(12f, goldResult.getValue(DefaultAttributes.MINING_SPEED));
 	}
@@ -188,7 +188,7 @@ class StaticComponentAttributeTest extends ForgeroTest {
 		assertFalse(attributes.isEmpty(), "Component with one attribute should not be empty");
 		assertEquals(1, attributes.size(), "Should have exactly 1 attribute");
 
-		AttributeQueryResult result = attributeEngine().resolve(partialTool);
+		AttributeQueryResult result = resolveAttributes(partialTool);
 		assertEquals(5f, result.getValue(DefaultAttributes.ATTACK_DAMAGE));
 	}
 }

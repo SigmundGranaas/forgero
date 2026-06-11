@@ -99,7 +99,7 @@ class UpgradeAttributeFilteringIntegrationTest extends ForgeroTest {
 							.withContent(ironUpgrade))
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(pickaxeHead);
+			AttributeQueryResult result = resolveAttributes(pickaxeHead);
 			float attackDamage = result.getValue(DefaultAttributes.ATTACK_DAMAGE);
 
 			// Should get ONLY the 2.0 from offensive context, NOT the 4.0 from part-composite
@@ -125,7 +125,7 @@ class UpgradeAttributeFilteringIntegrationTest extends ForgeroTest {
 							.withContent(upgrade))
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(head);
+			AttributeQueryResult result = resolveAttributes(head);
 			float attackDamage = result.getValue(DefaultAttributes.ATTACK_DAMAGE);
 
 			// Part-composite should NOT pass through, even with no slot context
@@ -156,7 +156,7 @@ class UpgradeAttributeFilteringIntegrationTest extends ForgeroTest {
 							.withContent(gem))
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(head);
+			AttributeQueryResult result = resolveAttributes(head);
 
 			assertEquals(5.0f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f,
 					"UPGRADE context attributes should always apply in upgrade slots");
@@ -179,7 +179,7 @@ class UpgradeAttributeFilteringIntegrationTest extends ForgeroTest {
 							.withContent(upgrade))
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(head);
+			AttributeQueryResult result = resolveAttributes(head);
 
 			assertEquals(100.0f, result.getValue(DefaultAttributes.DURABILITY), 0.001f,
 					"UPGRADE context should apply even when slot has different context");
@@ -205,7 +205,7 @@ class UpgradeAttributeFilteringIntegrationTest extends ForgeroTest {
 							.withContent(upgrade))
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(head);
+			AttributeQueryResult result = resolveAttributes(head);
 
 			assertEquals(2.0f, result.getValue(DefaultAttributes.MINING_SPEED), 0.001f,
 					"No-context attributes should always apply");
@@ -232,7 +232,7 @@ class UpgradeAttributeFilteringIntegrationTest extends ForgeroTest {
 							.withContent(upgrade))
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(head);
+			AttributeQueryResult result = resolveAttributes(head);
 
 			assertEquals(3.0f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f,
 					"Offensive context should match slot with offensive context");
@@ -255,7 +255,7 @@ class UpgradeAttributeFilteringIntegrationTest extends ForgeroTest {
 							.withContent(upgrade))
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(head);
+			AttributeQueryResult result = resolveAttributes(head);
 
 			assertEquals(0.0f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f,
 					"Offensive context should NOT apply when slot has no context filter");
@@ -306,7 +306,7 @@ class UpgradeAttributeFilteringIntegrationTest extends ForgeroTest {
 							.withContent(ironGuard))
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(sword);
+			AttributeQueryResult result = resolveAttributes(sword);
 			float durability = result.getValue(DefaultAttributes.DURABILITY);
 
 			// Expected: 91 (sword base) + 17 (guard: 170 × 0.1 = 17 from composition)
@@ -348,7 +348,7 @@ class UpgradeAttributeFilteringIntegrationTest extends ForgeroTest {
 							.withContent(structuredPart))
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(tool);
+			AttributeQueryResult result = resolveAttributes(tool);
 			float miningSpeed = result.getValue(DefaultAttributes.MINING_SPEED);
 
 			// Composed: 6.0 × 1.2 = 7.2
@@ -400,7 +400,7 @@ class UpgradeAttributeFilteringIntegrationTest extends ForgeroTest {
 					.withUpgradeSlot(upgradeSlotWithoutContext("guard_slot_2").withContent(guard2))
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(sword);
+			AttributeQueryResult result = resolveAttributes(sword);
 			float durability = result.getValue(DefaultAttributes.DURABILITY);
 
 			// Expected: 100 (base) + 17 (iron guard) + 155 (diamond guard) = 272
@@ -459,7 +459,7 @@ class UpgradeAttributeFilteringIntegrationTest extends ForgeroTest {
 							.withContent(ironReinforcement))
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(pickaxeHead);
+			AttributeQueryResult result = resolveAttributes(pickaxeHead);
 			float attackDamage = result.getValue(DefaultAttributes.ATTACK_DAMAGE);
 
 			// Expected: 4.0 (from iron material via part-composite) + 2.0 (from reinforcement via offensive) = 6.0

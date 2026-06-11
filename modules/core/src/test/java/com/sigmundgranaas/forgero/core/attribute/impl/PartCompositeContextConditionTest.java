@@ -105,7 +105,7 @@ class PartCompositeScopeConditionTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = attributeEngine().resolve(pickaxeHead);
+			AttributeQueryResult result = resolveAttributes(pickaxeHead);
 
 			assertEquals(240f, result.getValue(DefaultAttributes.DURABILITY), 0.001f,
 					"Durability passes condition and composes");
@@ -142,7 +142,7 @@ class PartCompositeScopeConditionTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = attributeEngine().resolve(armorPlate);
+			AttributeQueryResult result = resolveAttributes(armorPlate);
 
 			assertEquals(2f, result.getValue(DefaultAttributes.ARMOR), 0.001f,
 					"Armor passes condition in armor_material slot");
@@ -182,7 +182,7 @@ class PartCompositeScopeConditionTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = attributeEngine().resolve(part);
+			AttributeQueryResult result = resolveAttributes(part);
 
 			assertEquals(7.2f, result.getValue(DefaultAttributes.MINING_SPEED), 0.001f,
 					"Mining speed composed: 6 × 1.2 = 7.2");
@@ -223,7 +223,7 @@ class PartCompositeScopeConditionTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = attributeEngine().resolve(part);
+			AttributeQueryResult result = resolveAttributes(part);
 
 			assertEquals(240f, result.getValue(DefaultAttributes.DURABILITY), 0.001f,
 					"Durability has matching multiplier");
@@ -251,7 +251,7 @@ class PartCompositeScopeConditionTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = attributeEngine().resolve(part);
+			AttributeQueryResult result = resolveAttributes(part);
 
 			assertEquals(0f, result.getValue(DefaultAttributes.DURABILITY), 0.001f,
 					"Context attribute from single source is discarded");
@@ -282,7 +282,7 @@ class PartCompositeScopeConditionTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = attributeEngine().resolve(part);
+			AttributeQueryResult result = resolveAttributes(part);
 
 			assertEquals(100f, result.getValue(DefaultAttributes.DURABILITY), 0.001f,
 					"Default attribute passes through unchanged");
@@ -361,7 +361,7 @@ class PartCompositeScopeConditionTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = attributeEngine().resolve(ironPickaxe);
+			AttributeQueryResult result = resolveAttributes(ironPickaxe);
 
 			assertEquals(0f, result.getValue(DefaultAttributes.ARMOR), 0.001f,
 					"Armor excluded - no multiplier at part level");

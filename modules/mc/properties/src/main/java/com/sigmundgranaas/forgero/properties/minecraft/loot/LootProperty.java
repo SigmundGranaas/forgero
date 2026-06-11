@@ -8,13 +8,11 @@ import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import com.sigmundgranaas.forgero.core.property.api.custom.AbstractConditionalPropertyEngine;
 import com.sigmundgranaas.forgero.core.property.api.custom.ConditionalProperty;
-import com.sigmundgranaas.forgero.core.property.api.custom.OptimizedBakedResult;
 import com.sigmundgranaas.forgero.properties.minecraft.loot.handler.LootHandler;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * A property that defines custom behavior for loot drops from blocks or entities.
@@ -67,14 +65,9 @@ public record LootProperty(LootHandler handler, @Nullable Condition condition) i
 		return condition;
 	}
 
-	public static class Engine extends AbstractConditionalPropertyEngine<LootProperty, List<LootProperty>> {
+	public static class Engine extends AbstractConditionalPropertyEngine<LootProperty> {
 		public Engine() {
 			super(KEY, PROPERTY_KEY);
-		}
-
-		@Override
-		public List<LootProperty> apply(OptimizedBakedResult<LootProperty> baked) {
-			return baked.all().collect(Collectors.toList());
 		}
 	}
 }

@@ -8,14 +8,12 @@ import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import com.sigmundgranaas.forgero.core.property.api.custom.AbstractConditionalPropertyEngine;
 import com.sigmundgranaas.forgero.core.property.api.custom.ConditionalProperty;
-import com.sigmundgranaas.forgero.core.property.api.custom.OptimizedBakedResult;
 import com.sigmundgranaas.forgero.effects.block.BlockEffect;
 import com.sigmundgranaas.forgero.effects.block.BlockSelector;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * The Orchestrator property for On-Block-Place events. This triggers when a player
@@ -97,14 +95,9 @@ public record OnBlockPlaceProperty(
 		return condition;
 	}
 
-	public static class Engine extends AbstractConditionalPropertyEngine<OnBlockPlaceProperty, List<OnBlockPlaceProperty>> {
+	public static class Engine extends AbstractConditionalPropertyEngine<OnBlockPlaceProperty> {
 		public Engine() {
 			super(KEY, PROPERTY_KEY);
-		}
-
-		@Override
-		public List<OnBlockPlaceProperty> apply(OptimizedBakedResult<OnBlockPlaceProperty> baked) {
-			return baked.all().collect(Collectors.toList());
 		}
 	}
 }

@@ -10,7 +10,7 @@ import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.EquipmentComponent;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.property.api.DataTypeEngine;
+import com.sigmundgranaas.forgero.core.property.api.CompilerPass;
 import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 
 import java.util.ArrayList;
@@ -92,10 +92,10 @@ import java.util.stream.Stream;
  *
  * @see BakedAttributes for the optimized baked structure
  * @see PrecomputedAttribute for per-type pre-computation
- * @see DataTypeEngine for the two-phase resolution interface
+ * @see CompilerPass for the single-phase compile interface
  */
-public class AttributeEngine implements DataTypeEngine<BakedAttributes, AttributeQueryResult> {
-	public static final ResolutionKey<AttributeQueryResult> KEY = new ResolutionKey<>(new OpenIdentifier("forgero", "attributes"));
+public class AttributeEngine implements CompilerPass<BakedAttributes> {
+	public static final ResolutionKey<BakedAttributes> KEY = new ResolutionKey<>(new OpenIdentifier("forgero", "attributes"));
 
 	// Initialize the concrete strategies
 	private final AttributeBakingStrategy defaultBakingStrategy = new DefaultBakingStrategyImpl();
@@ -121,7 +121,7 @@ public class AttributeEngine implements DataTypeEngine<BakedAttributes, Attribut
 		if (component instanceof EquipmentComponent equipment) {
 			return equipment.getAttribute(type);
 		}
-		return new AttributeEngine().resolve(component).getValue(type);
+		return new AttributeEngine().resolve(component).get(type).value();
 	}
 
 	/**
@@ -134,20 +134,19 @@ public class AttributeEngine implements DataTypeEngine<BakedAttributes, Attribut
 	 * @return Query result for accessing compiled attribute values
 	 */
 	public static AttributeQueryResult resolveAttributes(Component component) {
-		if (component instanceof EquipmentComponent equipment) {
-			var baked = equipment.bakedAttributes();
-			return type -> baked.get(type).value();
-		}
-		return new AttributeEngine().resolve(component);
+		BakedAttributes baked = component instanceof EquipmentComponent equipment
+				? equipment.bakedAttributes()
+				: new AttributeEngine().resolve(component);
+		return type -> baked.get(type).value();
 	}
 
 	@Override
-	public ResolutionKey<AttributeQueryResult> key() {
+	public ResolutionKey<BakedAttributes> key() {
 		return KEY;
 	}
 
 	@Override
-	public BakedAttributes bake(Stream<Component> components) {
+	public BakedAttributes compile(Stream<Component> components) {
 		// Convert the stream to a list to be able to inspect the first element (root component).
 		List<Component> componentList = components.toList();
 		if (componentList.isEmpty()) {
@@ -230,11 +229,4 @@ public class AttributeEngine implements DataTypeEngine<BakedAttributes, Attribut
 				.orElse(false);
 	}
 
-	@Override
-	public AttributeQueryResult apply(BakedAttributes baked) {
-		// Return a lightweight query object with O(1) type lookup over compiled values.
-		// Dynamic-conditional attributes are carried in the baked result as data; their
-		// evaluation belongs to the game layer, never to this compile-time path.
-		return (attributeType) -> baked.get(attributeType).value();
-	}
 }

@@ -8,7 +8,6 @@ import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import com.sigmundgranaas.forgero.core.property.api.custom.AbstractConditionalPropertyEngine;
 import com.sigmundgranaas.forgero.core.property.api.custom.ConditionalProperty;
-import com.sigmundgranaas.forgero.core.property.api.custom.OptimizedBakedResult;
 
 import net.minecraft.util.UseAction;
 
@@ -16,7 +15,6 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Property that defines how an item behaves during use interactions.
@@ -138,14 +136,9 @@ public record UseInteractionProperty(
 	/**
 	 * Engine for resolving UseInteractionProperty from components.
 	 */
-	public static class Engine extends AbstractConditionalPropertyEngine<UseInteractionProperty, List<UseInteractionProperty>> {
+	public static class Engine extends AbstractConditionalPropertyEngine<UseInteractionProperty> {
 		public Engine() {
 			super(KEY, PROPERTY_KEY);
-		}
-
-		@Override
-		public List<UseInteractionProperty> apply(OptimizedBakedResult<UseInteractionProperty> baked) {
-			return baked.all().collect(Collectors.toList());
 		}
 	}
 }

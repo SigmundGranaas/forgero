@@ -29,7 +29,7 @@ public class ForgeroArmorMaterial implements ArmorMaterial {
 
 	public ForgeroArmorMaterial(Component component) {
 		this.component = component;
-		this.attributes = new AttributeEngine().resolve(component);
+		this.attributes = AttributeEngine.resolveAttributes(component);
 		LOGGER.debug("Created armor material for component: {} with durability={}, armor={}, toughness={}, knockbackResistance={}",
 				component.id(),
 				(int) attributes.getValue(DefaultAttributes.DURABILITY),

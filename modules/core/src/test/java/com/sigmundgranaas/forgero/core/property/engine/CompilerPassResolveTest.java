@@ -4,7 +4,7 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.ForgeroTest;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.ComponentTraversal;
-import com.sigmundgranaas.forgero.core.property.api.DataTypeEngine;
+import com.sigmundgranaas.forgero.core.property.api.CompilerPass;
 import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -20,27 +20,27 @@ import static com.sigmundgranaas.forgero.testutils.TestIdentifiers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Tests for the DataTypeEngine.resolve() default method and ComponentTraversal utility.
+ * Tests for the CompilerPass.resolve() default method and ComponentTraversal utility.
  *
  * <p>This validates that:
  * <ul>
  *   <li>Component trees are traversed correctly in pre-order</li>
- *   <li>The bake phase receives all components from traversal</li>
- *   <li>The apply phase finalizes the baked result without any runtime context</li>
- *   <li>The resolve() convenience method correctly chains traversal, bake, and apply</li>
+ *   <li>The compile phase receives all components from traversal</li>
+ *   <li>compile finalizes the result in a single phase without any runtime context</li>
+ *   <li>The resolve() convenience method correctly chains traversal and compile</li>
  * </ul>
  */
-@DisplayName("DataTypeEngine Resolution Tests")
-class DataTypeEngineResolveTest extends ForgeroTest {
+@DisplayName("CompilerPass Resolution Tests")
+class CompilerPassResolveTest extends ForgeroTest {
 
 	// Test helper classes
 
 	/**
-	 * A simple test engine that collects component IDs in traversal order.
+	 * A simple test pass that collects component IDs in traversal order.
 	 */
-	private static class ComponentIdEngine implements DataTypeEngine<List<String>, List<String>> {
+	private static class ComponentIdEngine implements CompilerPass<List<String>> {
 		private final OpenIdentifier engineId;
-		private final AtomicInteger bakeCallCount = new AtomicInteger(0);
+		private final AtomicInteger compileCallCount = new AtomicInteger(0);
 
 		ComponentIdEngine(OpenIdentifier engineId) {
 			this.engineId = engineId;
@@ -52,26 +52,21 @@ class DataTypeEngineResolveTest extends ForgeroTest {
 		}
 
 		@Override
-		public List<String> bake(Stream<Component> components) {
-			bakeCallCount.incrementAndGet();
+		public List<String> compile(Stream<Component> components) {
+			compileCallCount.incrementAndGet();
 			return components.map(c -> c.id().toString()).collect(Collectors.toList());
 		}
 
-		@Override
-		public List<String> apply(List<String> baked) {
-			return baked;
-		}
-
-		int getBakeCallCount() {
-			return bakeCallCount.get();
+		int getCompileCallCount() {
+			return compileCallCount.get();
 		}
 	}
 
 	/**
-	 * A test engine whose apply phase transforms the baked result, proving the
+	 * A test pass that transforms the compiled result, proving the
 	 * finalize step runs as part of resolve(). No runtime context is involved.
 	 */
-	private static class UppercasingEngine implements DataTypeEngine<List<String>, List<String>> {
+	private static class UppercasingEngine implements CompilerPass<List<String>> {
 		private final OpenIdentifier engineId;
 
 		UppercasingEngine(OpenIdentifier engineId) {
@@ -84,15 +79,10 @@ class DataTypeEngineResolveTest extends ForgeroTest {
 		}
 
 		@Override
-		public List<String> bake(Stream<Component> components) {
-			// Bake phase: collect all component IDs
-			return components.map(c -> c.id().toString()).collect(Collectors.toList());
-		}
-
-		@Override
-		public List<String> apply(List<String> baked) {
-			// Finalize phase: pure transformation of the compiled intermediate result
-			return baked.stream()
+		public List<String> compile(Stream<Component> components) {
+			// Single-phase compile: collect all component IDs and finalize via transformation
+			return components
+					.map(c -> c.id().toString())
 					.map(String::toUpperCase)
 					.collect(Collectors.toList());
 		}
@@ -169,11 +159,11 @@ class DataTypeEngineResolveTest extends ForgeroTest {
 	}
 
 	@Nested
-	@DisplayName("Engine Resolve Tests")
+	@DisplayName("Pass Resolve Tests")
 	class EngineResolveTests {
 
 		@Test
-		void resolveMethodChainsBakeAndApply() {
+		void resolveMethodChainsTraversalAndCompile() {
 			Component iron = material(IRON_ID, METAL_TAG);
 			Component pickaxe = part(PICKAXE_ID)
 					.withStructureSlot(structureSlot("material_slot", MATERIAL_SLOT_TYPE, iron))
@@ -188,7 +178,7 @@ class DataTypeEngineResolveTest extends ForgeroTest {
 			assertEquals(2, result.size());
 			assertTrue(result.contains(PICKAXE_ID.toString()));
 			assertTrue(result.contains(IRON_ID.toString()));
-			assertEquals(1, testEngine.getBakeCallCount(), "Bake should be called once");
+			assertEquals(1, testEngine.getCompileCallCount(), "Compile should be called once");
 		}
 
 		@Test
@@ -206,7 +196,7 @@ class DataTypeEngineResolveTest extends ForgeroTest {
 		}
 
 		@Test
-		void applyPhaseFinalizesBakedResult() {
+		void compileFinalizesResult() {
 			Component iron = material(IRON_ID, METAL_TAG);
 			Component pickaxe = part(PICKAXE_ID)
 					.withStructureSlot(structureSlot("material_slot", MATERIAL_SLOT_TYPE, iron))
@@ -216,9 +206,9 @@ class DataTypeEngineResolveTest extends ForgeroTest {
 
 			List<String> result = testEngine.resolve(pickaxe);
 
-			assertEquals(2, result.size(), "Apply should preserve all baked entries");
-			assertTrue(result.contains(IRON_ID.toString().toUpperCase()), "Apply transformation should run");
-			assertTrue(result.contains(PICKAXE_ID.toString().toUpperCase()), "Apply transformation should run");
+			assertEquals(2, result.size(), "Compile should preserve all entries");
+			assertTrue(result.contains(IRON_ID.toString().toUpperCase()), "Compile transformation should run");
+			assertTrue(result.contains(PICKAXE_ID.toString().toUpperCase()), "Compile transformation should run");
 		}
 
 		@Test

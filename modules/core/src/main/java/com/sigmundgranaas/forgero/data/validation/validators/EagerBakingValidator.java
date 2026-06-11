@@ -90,7 +90,7 @@ public class EagerBakingValidator implements ComponentValidator {
 		Map<OpenIdentifier, List<AttributeInfo>> attributesBefore = collectAllAttributes(componentList);
 
 		// Run baking
-		BakedAttributes bakedAttributes = attributeEngine.bake(componentList.stream());
+		BakedAttributes bakedAttributes = attributeEngine.compile(componentList.stream());
 
 		// Collect attribute types that made it through baking
 		Set<OpenIdentifier> bakedTypes = bakedAttributes.byType().keySet();

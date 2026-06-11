@@ -8,14 +8,12 @@ import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import com.sigmundgranaas.forgero.core.property.api.custom.AbstractConditionalPropertyEngine;
 import com.sigmundgranaas.forgero.core.property.api.custom.ConditionalProperty;
-import com.sigmundgranaas.forgero.core.property.api.custom.OptimizedBakedResult;
 import com.sigmundgranaas.forgero.effects.entity.OnHitEffect;
 import com.sigmundgranaas.forgero.properties.minecraft.entityselector.EntitySelector;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * The Orchestrator property for On-Kill events. This triggers when the wielder
@@ -90,14 +88,9 @@ public record OnKillProperty(
 		return condition;
 	}
 
-	public static class Engine extends AbstractConditionalPropertyEngine<OnKillProperty, List<OnKillProperty>> {
+	public static class Engine extends AbstractConditionalPropertyEngine<OnKillProperty> {
 		public Engine() {
 			super(KEY, PROPERTY_KEY);
-		}
-
-		@Override
-		public List<OnKillProperty> apply(OptimizedBakedResult<OnKillProperty> baked) {
-			return baked.all().collect(Collectors.toList());
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.testutils;
 
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
+import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
@@ -99,6 +100,14 @@ public class ForgeroTestFactory {
 	 */
 	public static AttributeEngine attributeEngine() {
 		return new AttributeEngine();
+	}
+
+	/**
+	 * Resolves a component's attributes into an {@link AttributeQueryResult} for testing.
+	 * Mirrors {@link AttributeEngine#resolveAttributes(Component)}.
+	 */
+	public static AttributeQueryResult resolveAttributes(Component component) {
+		return AttributeEngine.resolveAttributes(component);
 	}
 
 	/**

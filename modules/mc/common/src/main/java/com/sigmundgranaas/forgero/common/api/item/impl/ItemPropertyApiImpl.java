@@ -4,7 +4,7 @@ import com.sigmundgranaas.forgero.common.api.item.ItemPropertyApi;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.EquipmentComponent;
-import com.sigmundgranaas.forgero.core.property.api.DataTypeEngine;
+import com.sigmundgranaas.forgero.core.property.api.CompilerPass;
 import net.minecraft.item.ItemStack;
 
 import java.util.Collections;
@@ -35,7 +35,7 @@ public class ItemPropertyApiImpl implements ItemPropertyApi {
 	}
 
 	@Override
-	public <P> List<P> resolve(ItemStack stack, Supplier<? extends DataTypeEngine<?, List<P>>> engineSupplier) {
+	public <P> List<P> resolve(ItemStack stack, Supplier<? extends CompilerPass<List<P>>> engineSupplier) {
 		if (stack == null || stack.isEmpty()) {
 			return Collections.emptyList();
 		}
@@ -45,7 +45,7 @@ public class ItemPropertyApiImpl implements ItemPropertyApi {
 	}
 
 	@Override
-	public <P> List<P> resolve(ItemStack stack, DataTypeEngine<?, List<P>> engine) {
+	public <P> List<P> resolve(ItemStack stack, CompilerPass<List<P>> engine) {
 		if (stack == null || stack.isEmpty() || engine == null) {
 			return Collections.emptyList();
 		}
@@ -54,7 +54,7 @@ public class ItemPropertyApiImpl implements ItemPropertyApi {
 				.orElse(Collections.emptyList());
 	}
 
-	private <P> List<P> read(Component component, DataTypeEngine<?, List<P>> engine) {
+	private <P> List<P> read(Component component, CompilerPass<List<P>> engine) {
 		// Terminal items carry the compiled property list; read it directly.
 		if (component instanceof EquipmentComponent equipment) {
 			return equipment.properties(engine.key());

@@ -49,7 +49,7 @@ public class IronReinforcementInstallationTest implements ForgeroGameTest {
 	 * This INCLUDES attributes from installed upgrades.
 	 */
 	private float getResolvedAttributeValue(Component component, OpenIdentifier attributeType) {
-		AttributeQueryResult result = attributeEngine.resolve(component);
+		AttributeQueryResult result = AttributeEngine.resolveAttributes(component);
 		return result.getValue(attributeType);
 	}
 

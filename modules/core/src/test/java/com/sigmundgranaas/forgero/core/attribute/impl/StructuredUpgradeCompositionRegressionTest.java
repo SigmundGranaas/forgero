@@ -138,7 +138,7 @@ class StructuredUpgradeCompositionRegressionTest extends ForgeroTest {
 					.withUpgradeSlot(upgradeSlot("guard_slot").withContent(ironGuard))
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(upgradedSword);
+			AttributeQueryResult result = resolveAttributes(upgradedSword);
 			float durability = result.getValue(DefaultAttributes.DURABILITY);
 
 			// THE CRITICAL ASSERTION - this failed before the fix
@@ -160,7 +160,7 @@ class StructuredUpgradeCompositionRegressionTest extends ForgeroTest {
 					.withUpgradeSlot(upgradeSlot("guard_slot")) // Empty slot
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(goldenSword);
+			AttributeQueryResult result = resolveAttributes(goldenSword);
 			float durability = result.getValue(DefaultAttributes.DURABILITY);
 
 			assertEquals(91.0f, durability, 0.01f,
@@ -175,7 +175,7 @@ class StructuredUpgradeCompositionRegressionTest extends ForgeroTest {
 		void ironGuardAloneHas17Durability() {
 			Component ironGuard = createGuard("iron-sword_guard", 170.0f, 0.1f);
 
-			AttributeQueryResult result = attributeEngine().resolve(ironGuard);
+			AttributeQueryResult result = resolveAttributes(ironGuard);
 			float durability = result.getValue(DefaultAttributes.DURABILITY);
 
 			assertEquals(17.0f, durability, 0.01f,
@@ -205,7 +205,7 @@ class StructuredUpgradeCompositionRegressionTest extends ForgeroTest {
 					.withUpgradeSlot(upgradeSlot("guard_slot_2").withContent(diamondGuard))
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(sword);
+			AttributeQueryResult result = resolveAttributes(sword);
 			float durability = result.getValue(DefaultAttributes.DURABILITY);
 
 			assertEquals(272.0f, durability, 0.01f,
@@ -230,7 +230,7 @@ class StructuredUpgradeCompositionRegressionTest extends ForgeroTest {
 					.withUpgradeSlot(upgradeSlot("slot_3").withContent(guard3))
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(sword);
+			AttributeQueryResult result = resolveAttributes(sword);
 			float durability = result.getValue(DefaultAttributes.DURABILITY);
 
 			assertEquals(110.0f, durability, 0.01f,
@@ -248,8 +248,8 @@ class StructuredUpgradeCompositionRegressionTest extends ForgeroTest {
 			Component ironGuard = createGuard("iron-guard", 170.0f, 0.1f);    // = 17
 			Component diamondGuard = createGuard("diamond-guard", 1550.0f, 0.1f); // = 155
 
-			AttributeQueryResult ironResult = attributeEngine().resolve(ironGuard);
-			AttributeQueryResult diamondResult = attributeEngine().resolve(diamondGuard);
+			AttributeQueryResult ironResult = resolveAttributes(ironGuard);
+			AttributeQueryResult diamondResult = resolveAttributes(diamondGuard);
 
 			float ironDur = ironResult.getValue(DefaultAttributes.DURABILITY);
 			float diamondDur = diamondResult.getValue(DefaultAttributes.DURABILITY);
@@ -269,9 +269,9 @@ class StructuredUpgradeCompositionRegressionTest extends ForgeroTest {
 			Component stoneGuard = createGuard("stone-guard", 131.0f, 0.5f);  // = 65.5
 			Component ironGuard = createGuard("iron-guard", 170.0f, 0.5f);    // = 85
 
-			float woodDur = attributeEngine().resolve(woodGuard).getValue(DefaultAttributes.DURABILITY);
-			float stoneDur = attributeEngine().resolve(stoneGuard).getValue(DefaultAttributes.DURABILITY);
-			float ironDur = attributeEngine().resolve(ironGuard).getValue(DefaultAttributes.DURABILITY);
+			float woodDur = resolveAttributes(woodGuard).getValue(DefaultAttributes.DURABILITY);
+			float stoneDur = resolveAttributes(stoneGuard).getValue(DefaultAttributes.DURABILITY);
+			float ironDur = resolveAttributes(ironGuard).getValue(DefaultAttributes.DURABILITY);
 
 			assertTrue(ironDur > stoneDur && stoneDur > woodDur,
 					String.format("Expected iron (%f) > stone (%f) > wood (%f)",
@@ -334,7 +334,7 @@ class StructuredUpgradeCompositionRegressionTest extends ForgeroTest {
 					.withUpgradeSlot(upgradeSlot("guard_slot").withContent(guard))
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(sword);
+			AttributeQueryResult result = resolveAttributes(sword);
 
 			assertEquals(120.0f, result.getValue(DefaultAttributes.DURABILITY), 0.01f,
 					"Durability: 100 + 20 = 120");
@@ -369,7 +369,7 @@ class StructuredUpgradeCompositionRegressionTest extends ForgeroTest {
 					.withUpgradeSlot(upgradeSlot("slot").withContent(guard))
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(sword);
+			AttributeQueryResult result = resolveAttributes(sword);
 
 			// Guard contributes nothing (composition requires base + multiplier from different sources)
 			assertEquals(100.0f, result.getValue(DefaultAttributes.DURABILITY), 0.01f,
@@ -398,7 +398,7 @@ class StructuredUpgradeCompositionRegressionTest extends ForgeroTest {
 					.withUpgradeSlot(upgradeSlot("slot").withContent(guard))
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(sword);
+			AttributeQueryResult result = resolveAttributes(sword);
 
 			// Guard contributes nothing (composition requires base + multiplier from different sources)
 			assertEquals(100.0f, result.getValue(DefaultAttributes.DURABILITY), 0.01f,
@@ -418,7 +418,7 @@ class StructuredUpgradeCompositionRegressionTest extends ForgeroTest {
 					.withUpgradeSlot(upgradeSlot("slot").withContent(simpleUpgrade))
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(sword);
+			AttributeQueryResult result = resolveAttributes(sword);
 
 			assertEquals(205.0f, result.getValue(DefaultAttributes.DURABILITY), 0.01f,
 					"Simple upgrade should add its durability directly");
@@ -441,7 +441,7 @@ class StructuredUpgradeCompositionRegressionTest extends ForgeroTest {
 					.withUpgradeSlot(upgradeSlot("gem_slot").withContent(simpleUpgrade))
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(sword);
+			AttributeQueryResult result = resolveAttributes(sword);
 
 			assertEquals(170.0f, result.getValue(DefaultAttributes.DURABILITY), 0.01f,
 					"Base (100) + guard (20) + gem (50) = 170");
@@ -463,7 +463,7 @@ class StructuredUpgradeCompositionRegressionTest extends ForgeroTest {
 					.build();
 
 			// First verify the head alone has correct durability
-			AttributeQueryResult headResult = attributeEngine().resolve(head);
+			AttributeQueryResult headResult = resolveAttributes(head);
 			assertEquals(170.0f, headResult.getValue(DefaultAttributes.DURABILITY), 0.01f,
 					"Head alone should be 150 (base) + 20 (guard)");
 
@@ -472,7 +472,7 @@ class StructuredUpgradeCompositionRegressionTest extends ForgeroTest {
 					.withStructureSlot(structureSlot("head", id("head_slot"), head))
 					.build();
 
-			AttributeQueryResult swordResult = attributeEngine().resolve(sword);
+			AttributeQueryResult swordResult = resolveAttributes(sword);
 			float swordDurability = swordResult.getValue(DefaultAttributes.DURABILITY);
 
 			// The sword should get the head's resolved durability

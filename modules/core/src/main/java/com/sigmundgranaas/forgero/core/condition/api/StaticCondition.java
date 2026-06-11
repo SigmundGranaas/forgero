@@ -17,11 +17,11 @@ import com.sigmundgranaas.forgero.core.property.context.ResolutionContext;
  *       ↓
  * ComponentTraversal.traverse()
  *       ↓
- * DataTypeEngine.bake() ◄── Static conditions evaluated HERE
+ * CompilerPass.bake() ◄── Static conditions evaluated HERE
  *       ↓
  * Cached intermediate result (e.g., BakedAttributes)
  *       ↓
- * DataTypeEngine.apply() ◄── Dynamic conditions evaluated here
+ * CompilerPass.apply() ◄── Dynamic conditions evaluated here
  *       ↓
  * Final result
  * </pre>

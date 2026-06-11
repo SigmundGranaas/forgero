@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.common.api.item;
 
-import com.sigmundgranaas.forgero.core.property.api.DataTypeEngine;
+import com.sigmundgranaas.forgero.core.property.api.CompilerPass;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
@@ -53,7 +53,7 @@ public interface ItemPropertyApi {
 	 * @param <P>             The property type
 	 * @return List of resolved properties, or empty list for null/empty/non-Forgero items
 	 */
-	<P> List<P> resolve(ItemStack stack, Supplier<? extends DataTypeEngine<?, List<P>>> engineSupplier);
+	<P> List<P> resolve(ItemStack stack, Supplier<? extends CompilerPass<List<P>>> engineSupplier);
 
 	/**
 	 * Resolves properties from an ItemStack using a pre-created engine.
@@ -65,7 +65,7 @@ public interface ItemPropertyApi {
 	 * @param <P>     The property type
 	 * @return List of resolved properties, or empty list for null/empty/non-Forgero items
 	 */
-	<P> List<P> resolve(ItemStack stack, DataTypeEngine<?, List<P>> engine);
+	<P> List<P> resolve(ItemStack stack, CompilerPass<List<P>> engine);
 
 	/**
 	 * Checks if the ItemStack has any properties of the given type.
@@ -75,7 +75,7 @@ public interface ItemPropertyApi {
 	 * @param <P>            The property type
 	 * @return true if the item has at least one property of the given type
 	 */
-	default <P> boolean hasProperties(ItemStack stack, Supplier<? extends DataTypeEngine<?, List<P>>> engineSupplier) {
+	default <P> boolean hasProperties(ItemStack stack, Supplier<? extends CompilerPass<List<P>>> engineSupplier) {
 		return !resolve(stack, engineSupplier).isEmpty();
 	}
 }

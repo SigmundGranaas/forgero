@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 
 import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.attributeEngine;
+import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.resolveAttributes;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
@@ -98,7 +99,7 @@ class SlotScopedCompositionTest extends ForgeroTest {
 				)
 		);
 
-		AttributeQueryResult result = attributeEngine().resolve(pickaxeHead);
+		AttributeQueryResult result = resolveAttributes(pickaxeHead);
 
 		assertEquals(9f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f,
 				"Attack damage should be material base (6) * shape modifier (1.5) = 9");
@@ -123,7 +124,7 @@ class SlotScopedCompositionTest extends ForgeroTest {
 				)
 		);
 
-		AttributeQueryResult result = attributeEngine().resolve(pickaxeHead);
+		AttributeQueryResult result = resolveAttributes(pickaxeHead);
 
 		assertEquals(10f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f,
 				"Attribute without when_in should always apply");
@@ -152,7 +153,7 @@ class SlotScopedCompositionTest extends ForgeroTest {
 				)
 		);
 
-		AttributeQueryResult result = attributeEngine().resolve(pickaxeHead);
+		AttributeQueryResult result = resolveAttributes(pickaxeHead);
 
 		assertEquals(0f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f,
 				"Attribute should not apply when component is in wrong slot type");
@@ -198,7 +199,7 @@ class SlotScopedCompositionTest extends ForgeroTest {
 				)
 		);
 
-		AttributeQueryResult result = attributeEngine().resolve(pickaxe);
+		AttributeQueryResult result = resolveAttributes(pickaxe);
 
 		// Both materials contribute: 6 + 2 = 8
 		assertEquals(8f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f,

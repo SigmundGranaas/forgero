@@ -19,7 +19,7 @@ public class ForgeroToolMaterial implements ToolMaterial {
 
 	public ForgeroToolMaterial(Component component) {
 		this.component = component;
-		this.attributes = new AttributeEngine().resolve(component);
+		this.attributes = AttributeEngine.resolveAttributes(component);
 		LOGGER.debug("Created tool material for component: {} with durability={}, miningSpeed={}, attackDamage={}, miningLevel={}",
 				component.id(),
 				(int) attributes.getValue(DefaultAttributes.DURABILITY),

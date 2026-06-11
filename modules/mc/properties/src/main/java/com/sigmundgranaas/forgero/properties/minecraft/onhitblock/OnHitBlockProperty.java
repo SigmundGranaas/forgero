@@ -8,14 +8,12 @@ import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import com.sigmundgranaas.forgero.core.property.api.custom.AbstractConditionalPropertyEngine;
 import com.sigmundgranaas.forgero.core.property.api.custom.ConditionalProperty;
-import com.sigmundgranaas.forgero.core.property.api.custom.OptimizedBakedResult;
 import com.sigmundgranaas.forgero.effects.block.OnHitBlockEffect;
 import com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.selector.BlockSelector;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * The Orchestrator property for On-Hit-Block events. It defines the "when" (when a block is hit),
@@ -62,14 +60,9 @@ public record OnHitBlockProperty(
 		return condition;
 	}
 
-	public static class Engine extends AbstractConditionalPropertyEngine<OnHitBlockProperty, List<OnHitBlockProperty>> {
+	public static class Engine extends AbstractConditionalPropertyEngine<OnHitBlockProperty> {
 		public Engine() {
 			super(KEY, PROPERTY_KEY);
-		}
-
-		@Override
-		public List<OnHitBlockProperty> apply(OptimizedBakedResult<OnHitBlockProperty> baked) {
-			return baked.all().collect(Collectors.toList());
 		}
 	}
 }

@@ -7,11 +7,11 @@ import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import com.sigmundgranaas.forgero.core.property.api.custom.AbstractConditionalPropertyEngine;
 import com.sigmundgranaas.forgero.core.property.api.custom.ConditionalProperty;
-import com.sigmundgranaas.forgero.core.property.api.custom.OptimizedBakedResult;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Optional;
 
 public record BetterCombatIdentifierProperty(
@@ -19,7 +19,7 @@ public record BetterCombatIdentifierProperty(
 		@Nullable Condition condition
 ) implements ConditionalProperty {
 	public static final OpenIdentifier KEY_ID = new OpenIdentifier("better_combat", "attribute_container");
-	public static final ResolutionKey<Optional<OpenIdentifier>> KEY = new ResolutionKey<>(KEY_ID);
+	public static final ResolutionKey<List<BetterCombatIdentifierProperty>> KEY = new ResolutionKey<>(KEY_ID);
 	public static final PropertyKey<BetterCombatIdentifierProperty> PROPERTY_KEY = new PropertyKey<>(BetterCombatIdentifierProperty.class, KEY_ID.toString());
 
 	public static Codec<BetterCombatIdentifierProperty> codec(Codec<Condition> conditionCodec) {
@@ -29,16 +29,9 @@ public record BetterCombatIdentifierProperty(
 		).apply(instance, (id, cond) -> new BetterCombatIdentifierProperty(id, cond.orElse(null))));
 	}
 
-	public static class Engine extends AbstractConditionalPropertyEngine<BetterCombatIdentifierProperty, Optional<OpenIdentifier>> {
+	public static class Engine extends AbstractConditionalPropertyEngine<BetterCombatIdentifierProperty> {
 		public Engine() {
 			super(KEY, PROPERTY_KEY);
-		}
-
-		@Override
-		public Optional<OpenIdentifier> apply(OptimizedBakedResult<BetterCombatIdentifierProperty> baked) {
-			return baked.all()
-					.map(BetterCombatIdentifierProperty::identifier)
-					.findFirst();
 		}
 	}
 }

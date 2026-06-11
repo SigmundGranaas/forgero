@@ -9,7 +9,7 @@ import java.util.List;
  * Utility class for traversing component trees.
  *
  * <p>Provides pre-order traversal of component hierarchies, collecting all components
- * from root to leaves. This is used by {@link com.sigmundgranaas.forgero.core.property.api.DataTypeEngine}
+ * from root to leaves. This is used by {@link com.sigmundgranaas.forgero.core.property.api.CompilerPass}
  * implementations to resolve properties from component trees.
  */
 public final class ComponentTraversal {

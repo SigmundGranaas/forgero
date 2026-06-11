@@ -8,14 +8,12 @@ import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import com.sigmundgranaas.forgero.core.property.api.custom.AbstractConditionalPropertyEngine;
 import com.sigmundgranaas.forgero.core.property.api.custom.ConditionalProperty;
-import com.sigmundgranaas.forgero.core.property.api.custom.OptimizedBakedResult;
 import com.sigmundgranaas.forgero.effects.entity.OnHitEffect;
 import com.sigmundgranaas.forgero.properties.minecraft.entityselector.EntitySelector;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * The Orchestrator property for On-Tick events. It defines the "when" (periodically),
@@ -71,14 +69,9 @@ public record OnTickProperty(
 		return condition;
 	}
 
-	public static class Engine extends AbstractConditionalPropertyEngine<OnTickProperty, List<OnTickProperty>> {
+	public static class Engine extends AbstractConditionalPropertyEngine<OnTickProperty> {
 		public Engine() {
 			super(KEY, PROPERTY_KEY);
-		}
-
-		@Override
-		public List<OnTickProperty> apply(OptimizedBakedResult<OnTickProperty> baked) {
-			return baked.all().collect(Collectors.toList());
 		}
 	}
 }

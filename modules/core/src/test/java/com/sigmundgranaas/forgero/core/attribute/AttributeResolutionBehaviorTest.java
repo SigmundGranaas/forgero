@@ -75,7 +75,7 @@ class AttributeResolutionBehaviorTest extends ForgeroTest {
 					.withPart(part, "slot", TestIdentifiers.id(HEAD_TAG))
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(tool);
+			AttributeQueryResult result = resolveAttributes(tool);
 
 			// Unconditioned attribute should apply
 			assertEquals(100f, result.getValue(DefaultAttributes.DURABILITY), 0.1f,
@@ -117,7 +117,7 @@ class AttributeResolutionBehaviorTest extends ForgeroTest {
 					.withPart(part, "slot", TestIdentifiers.id(HEAD_TAG))
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(tool);
+			AttributeQueryResult result = resolveAttributes(tool);
 
 			// Conditioned attribute with true condition SHOULD apply
 			assertEquals(5f, result.getValue(DefaultAttributes.ARMOR), 0.1f,
@@ -140,7 +140,7 @@ class AttributeResolutionBehaviorTest extends ForgeroTest {
 					.withPart(part, "slot", TestIdentifiers.id(HEAD_TAG))
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(tool);
+			AttributeQueryResult result = resolveAttributes(tool);
 
 			assertEquals(100f, result.getValue(DefaultAttributes.DURABILITY), 0.1f,
 					"Attribute with ALWAYS_TRUE condition should be included");
@@ -175,7 +175,7 @@ class AttributeResolutionBehaviorTest extends ForgeroTest {
 					.withPart(handle, "handle_slot", TestIdentifiers.id(HANDLE_TAG))
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(tool);
+			AttributeQueryResult result = resolveAttributes(tool);
 
 			assertEquals(125f, result.getValue(DefaultAttributes.DURABILITY), 0.1f,
 					"Durability should sum: 100 + 25 = 125");
@@ -207,7 +207,7 @@ class AttributeResolutionBehaviorTest extends ForgeroTest {
 					.withPart(handle, "handle_slot", TestIdentifiers.id(HANDLE_TAG))
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(tool);
+			AttributeQueryResult result = resolveAttributes(tool);
 
 			assertEquals(125f, result.getValue(DefaultAttributes.DURABILITY), 0.1f,
 					"Durability should sum normally");
@@ -253,8 +253,8 @@ class AttributeResolutionBehaviorTest extends ForgeroTest {
 					.withPart(handle, "handle_slot", TestIdentifiers.id(HANDLE_TAG))
 					.build();
 
-			AttributeQueryResult weakResult = attributeEngine().resolve(weakTool);
-			AttributeQueryResult strongResult = attributeEngine().resolve(strongTool);
+			AttributeQueryResult weakResult = resolveAttributes(weakTool);
+			AttributeQueryResult strongResult = resolveAttributes(strongTool);
 
 			assertEquals(75f, weakResult.getValue(DefaultAttributes.DURABILITY), 0.1f,
 					"Weak tool should have 50 + 25 = 75 durability");
@@ -289,8 +289,8 @@ class AttributeResolutionBehaviorTest extends ForgeroTest {
 					.withPart(head, "head_slot", TestIdentifiers.id(HEAD_TAG))
 					.build();
 
-			AttributeQueryResult result1 = attributeEngine().resolve(tool1);
-			AttributeQueryResult result2 = attributeEngine().resolve(tool2);
+			AttributeQueryResult result1 = resolveAttributes(tool1);
+			AttributeQueryResult result2 = resolveAttributes(tool2);
 
 			// Both should have same value since they share the same head
 			assertEquals(result1.getValue(DefaultAttributes.DURABILITY),

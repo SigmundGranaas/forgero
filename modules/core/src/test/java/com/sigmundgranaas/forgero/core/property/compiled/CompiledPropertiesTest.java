@@ -6,7 +6,7 @@ import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.component.api.EquipmentComponent;
 import com.sigmundgranaas.forgero.core.component.impl.StaticEquipment;
-import com.sigmundgranaas.forgero.core.property.api.DataTypeEngine;
+import com.sigmundgranaas.forgero.core.property.api.CompilerPass;
 import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import org.junit.jupiter.api.Test;
 
@@ -28,12 +28,11 @@ class CompiledPropertiesTest {
 			new ResolutionKey<>(new OpenIdentifier("forgero", "test/compiled_marker"));
 
 	/** A trivial pass that compiles to a fixed marker list, proving registered passes run at construction. */
-	static final class MarkerEngine implements DataTypeEngine<List<String>, List<String>> {
+	static final class MarkerEngine implements CompilerPass<List<String>> {
 		public ResolutionKey<List<String>> key() { return TEST_KEY; }
-		public List<String> bake(Stream<com.sigmundgranaas.forgero.core.component.api.Component> components) {
+		public List<String> compile(Stream<com.sigmundgranaas.forgero.core.component.api.Component> components) {
 			return List.of("compiled-at-construction");
 		}
-		public List<String> apply(List<String> baked) { return baked; }
 	}
 
 	@Test

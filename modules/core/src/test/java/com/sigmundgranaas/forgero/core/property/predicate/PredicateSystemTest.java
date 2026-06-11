@@ -7,12 +7,11 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.ForgeroTest;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
-import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
+import com.sigmundgranaas.forgero.core.attribute.api.BakedAttributes;
 import com.sigmundgranaas.forgero.core.attribute.api.PrecomputedAttribute;
 import com.sigmundgranaas.forgero.core.attribute.api.SimpleAttribute;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.component.api.ComponentTraversal;
 import com.sigmundgranaas.forgero.core.component.impl.StaticComponent;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.condition.api.ConditionCodec;
@@ -106,15 +105,13 @@ public class PredicateSystemTest extends ForgeroTest {
 	void testPlatformPredicatePlugin() {
 		// The compiled value never includes dynamic-conditional attributes - core does not
 		// evaluate the custom predicate, regardless of any runtime state.
-		AttributeQueryResult compiled = engine.resolve(componentWithPlatformPredicate);
+		BakedAttributes compiled = engine.resolve(componentWithPlatformPredicate);
 
-		float compiledDamage = compiled.getValue(ATTACK_DAMAGE_IDENTIFIER);
+		float compiledDamage = compiled.get(ATTACK_DAMAGE_IDENTIFIER).value();
 		assertEquals(0.0f, compiledDamage, "Dynamic-conditional attribute must not contribute to the compiled value.");
 
 		// The parsed predicate is carried through compilation as data for the game layer.
-		PrecomputedAttribute precomputed = engine
-				.bake(ComponentTraversal.traverse(componentWithPlatformPredicate).stream())
-				.get(ATTACK_DAMAGE_IDENTIFIER);
+		PrecomputedAttribute precomputed = compiled.get(ATTACK_DAMAGE_IDENTIFIER);
 
 		assertEquals(1, precomputed.conditionalAttributes().size(),
 				"The dynamic-conditional attribute should be carried as data.");

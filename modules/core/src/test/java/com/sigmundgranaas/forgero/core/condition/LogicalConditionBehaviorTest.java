@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.attributeEngine;
+import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.resolveAttributes;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Logical Condition Behavior")
@@ -71,7 +72,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					)
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(tool);
+			AttributeQueryResult result = resolveAttributes(tool);
 
 			assertEquals(5f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f);
 		}
@@ -96,7 +97,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					)
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(tool);
+			AttributeQueryResult result = resolveAttributes(tool);
 
 			assertEquals(0f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f);
 		}
@@ -135,7 +136,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					.structureSlot(OpenIdentifier.of("shape"), OpenIdentifier.of("shape"), "Shape", shape)
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(part);
+			AttributeQueryResult result = resolveAttributes(part);
 
 			assertEquals(5f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f);
 		}
@@ -158,7 +159,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					.structureSlot(OpenIdentifier.of("material"), OpenIdentifier.of("tool_material"), "Material", iron)
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(tool);
+			AttributeQueryResult result = resolveAttributes(tool);
 
 			assertEquals(0f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f);
 		}
@@ -181,7 +182,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					.structureSlot(OpenIdentifier.of("material"), OpenIdentifier.of("tool_material"), "Material", iron)
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(tool);
+			AttributeQueryResult result = resolveAttributes(tool);
 
 			assertEquals(7f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f);
 		}
@@ -201,7 +202,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					.property(Attribute.KEY.key(), damage)
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(iron);
+			AttributeQueryResult result = resolveAttributes(iron);
 
 			assertEquals(3f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f);
 		}
@@ -215,7 +216,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					.property(Attribute.KEY.key(), damage)
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(iron);
+			AttributeQueryResult result = resolveAttributes(iron);
 
 			assertEquals(4f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f);
 		}
@@ -251,7 +252,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					.asEquipment()
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(pickaxe);
+			AttributeQueryResult result = resolveAttributes(pickaxe);
 
 			assertEquals(6f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f);
 		}
@@ -279,7 +280,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					.structureSlot(OpenIdentifier.of("handle_material"), OpenIdentifier.of("tool_material"), "Handle", oak)
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(tool);
+			AttributeQueryResult result = resolveAttributes(tool);
 
 			assertEquals(6f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f);
 		}
@@ -304,7 +305,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					.structureSlot(OpenIdentifier.of("material"), OpenIdentifier.of("tool_material"), "Material", iron)
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(tool);
+			AttributeQueryResult result = resolveAttributes(tool);
 
 			assertEquals(0f, result.getValue(DefaultAttributes.ARMOR), 0.001f);
 		}
@@ -324,7 +325,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					.structureSlot(OpenIdentifier.of("material"), OpenIdentifier.of("armor_material"), "Material", iron)
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(armor);
+			AttributeQueryResult result = resolveAttributes(armor);
 
 			assertEquals(0f, result.getValue(DefaultAttributes.MINING_SPEED), 0.001f);
 		}
@@ -345,7 +346,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					.property(Attribute.KEY.key(), bonus)
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(iron);
+			AttributeQueryResult result = resolveAttributes(iron);
 
 			assertEquals(150f, result.getValue(DefaultAttributes.DURABILITY), 0.001f);
 		}
@@ -377,7 +378,7 @@ class LogicalConditionBehaviorTest extends ForgeroTest {
 					.property(Attribute.KEY.key(), multiplier)
 					.build();
 
-			AttributeQueryResult result = attributeEngine().resolve(iron);
+			AttributeQueryResult result = resolveAttributes(iron);
 
 			assertEquals(150f, result.getValue(DefaultAttributes.DURABILITY), 0.001f);
 		}

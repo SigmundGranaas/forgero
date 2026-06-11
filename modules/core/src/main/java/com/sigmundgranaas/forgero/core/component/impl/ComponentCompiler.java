@@ -4,7 +4,7 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.BakedAttributes;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
-import com.sigmundgranaas.forgero.core.property.api.DataTypeEngine;
+import com.sigmundgranaas.forgero.core.property.api.CompilerPass;
 import com.sigmundgranaas.forgero.core.property.compiled.CompiledProperties;
 import com.sigmundgranaas.forgero.core.property.compiled.CompilerPasses;
 
@@ -34,7 +34,7 @@ final class ComponentCompiler {
 	 */
 	static CompiledProperties compile(Component root) {
 		List<Component> components = traverse(root);
-		BakedAttributes attributes = ATTRIBUTES.bake(components.stream());
+		BakedAttributes attributes = ATTRIBUTES.compile(components.stream());
 
 		Map<OpenIdentifier, List<?>> properties = new HashMap<>();
 		for (var entry : CompilerPasses.registered().entrySet()) {
@@ -47,8 +47,8 @@ final class ComponentCompiler {
 		return new CompiledProperties(attributes, properties);
 	}
 
-	private static <B, R extends List<?>> R runPass(DataTypeEngine<B, R> engine, List<Component> components) {
-		return engine.apply(engine.bake(components.stream()));
+	private static <R extends List<?>> R runPass(CompilerPass<R> pass, List<Component> components) {
+		return pass.compile(components.stream());
 	}
 
 	private static List<Component> traverse(Component component) {

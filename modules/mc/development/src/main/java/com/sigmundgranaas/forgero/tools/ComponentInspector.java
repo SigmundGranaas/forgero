@@ -51,7 +51,7 @@ public class ComponentInspector {
 
 	private void appendFinalAttributes(StringBuilder builder, Component component) {
 		builder.append("-- FINAL CALCULATED STATS --\n");
-		AttributeQueryResult attributes = new AttributeEngine().resolve(component);
+		AttributeQueryResult attributes = AttributeEngine.resolveAttributes(component);
 
 		for (AttributeDisplayData displayData : ATTRIBUTES_TO_DISPLAY) {
 			float rawValue = attributes.getValue(displayData.id());
@@ -109,7 +109,7 @@ public class ComponentInspector {
 
 	private void appendAttributeBreakdown(StringBuilder builder, Component component) {
 		builder.append("-- ATTRIBUTE BREAKDOWN --\n");
-		AttributeQueryResult finalAttributes = new AttributeEngine().resolve(component);
+		AttributeQueryResult finalAttributes = AttributeEngine.resolveAttributes(component);
 		List<Component> allComponents = traverse(component);
 
 		for (AttributeDisplayData displayData : ATTRIBUTES_TO_DISPLAY) {

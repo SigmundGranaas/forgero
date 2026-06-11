@@ -7,7 +7,6 @@ import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import com.sigmundgranaas.forgero.core.property.api.custom.AbstractConditionalPropertyEngine;
 import com.sigmundgranaas.forgero.core.property.api.custom.ConditionalProperty;
-import com.sigmundgranaas.forgero.core.property.api.custom.OptimizedBakedResult;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.hardness.BlockBreakSpeedCalculator;
 import com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.selector.BlockSelector;
@@ -15,7 +14,6 @@ import com.sigmundgranaas.forgero.properties.minecraft.blockbreaking.selector.Bl
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * A property that defines custom block-breaking behavior, including how blocks are selected
@@ -64,14 +62,9 @@ public record BlockBreakingProperty(
 		).apply(instance, (selector, speed, condition) -> new BlockBreakingProperty(selector, speed, condition.orElse(null))));
 	}
 
-	public static class Engine extends AbstractConditionalPropertyEngine<BlockBreakingProperty, List<BlockBreakingProperty>> {
+	public static class Engine extends AbstractConditionalPropertyEngine<BlockBreakingProperty> {
 		public Engine() {
 			super(KEY, PROPERTY_KEY);
-		}
-
-		@Override
-		public List<BlockBreakingProperty> apply(OptimizedBakedResult<BlockBreakingProperty> baked) {
-			return baked.all().collect(Collectors.toList());
 		}
 	}
 }

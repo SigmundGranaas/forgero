@@ -8,7 +8,6 @@ import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import com.sigmundgranaas.forgero.core.property.api.custom.AbstractConditionalPropertyEngine;
 import com.sigmundgranaas.forgero.core.property.api.custom.ConditionalProperty;
-import com.sigmundgranaas.forgero.core.property.api.custom.OptimizedBakedResult;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
 import org.jetbrains.annotations.Nullable;
 
@@ -127,17 +126,11 @@ public record TooltipDescriptor(
 	/**
 	 * The engine for resolving TooltipDescriptor properties.
 	 * <p>
-	 * Intermediate Baked Type {@code <B>}: {@link OptimizedBakedResult}
 	 * Final Result Type {@code <R>}: {@code List<TooltipDescriptor>}
 	 */
-	public static class Engine extends AbstractConditionalPropertyEngine<TooltipDescriptor, List<TooltipDescriptor>> {
+	public static class Engine extends AbstractConditionalPropertyEngine<TooltipDescriptor> {
 		public Engine() {
 			super(KEY, PROPERTY_KEY);
-		}
-
-		@Override
-		public List<TooltipDescriptor> apply(OptimizedBakedResult<TooltipDescriptor> baked) {
-			return baked.all().toList();
 		}
 	}
 }

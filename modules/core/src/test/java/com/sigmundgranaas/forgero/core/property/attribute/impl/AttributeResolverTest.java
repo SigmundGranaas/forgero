@@ -8,7 +8,6 @@ import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.condition.api.DynamicCondition;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 import com.sigmundgranaas.forgero.core.attribute.api.PrecomputedAttribute;
-import com.sigmundgranaas.forgero.core.component.api.ComponentTraversal;
 import com.sigmundgranaas.forgero.core.condition.predicate.SlotContainsCondition;
 import com.sigmundgranaas.forgero.core.condition.predicate.TagMatchCondition;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +45,7 @@ class AttributeResolverTest {
 				.withPart(handle, "handle_slot", HANDLE_SLOT_TYPE)
 				.build();
 
-		AttributeQueryResult result = attributeEngine().resolve(pickaxe);
+		AttributeQueryResult result = resolveAttributes(pickaxe);
 
 		float attackDamage = result.getValue(ATTACK_DAMAGE);
 		assertEquals(11f, attackDamage, "Should be 10 from head + 1 from pickaxe base.");
@@ -95,19 +94,19 @@ class AttributeResolverTest {
 				.build();
 
 		// Compiled values: dynamic-conditional attributes never contribute.
-		AttributeQueryResult pickaxeResult = attributeEngine().resolve(pickaxe);
+		AttributeQueryResult pickaxeResult = resolveAttributes(pickaxe);
 		assertEquals(6f, pickaxeResult.getValue(MINING_SPEED), "Base (1) + Iron (5) = 6. Diamond bonus is dynamic and carried as data.");
 
-		AttributeQueryResult swordResult = attributeEngine().resolve(sword);
+		AttributeQueryResult swordResult = resolveAttributes(sword);
 		assertEquals(1f, swordResult.getValue(MINING_SPEED), "Base (1) only. Iron bonus statically inactive, diamond bonus dynamic.");
 
 		// The dynamic-conditional diamond bonus is carried as data on the baked result.
-		PrecomputedAttribute pickaxeSpeed = attributeEngine().bake(ComponentTraversal.traverse(pickaxe).stream()).get(MINING_SPEED);
+		PrecomputedAttribute pickaxeSpeed = attributeEngine().resolve(pickaxe).get(MINING_SPEED);
 		assertEquals(6f, pickaxeSpeed.value(), "Compiled value excludes the dynamic diamond bonus.");
 		assertEquals(1, pickaxeSpeed.conditionalAttributes().size(), "Dynamic diamond bonus is carried as data.");
 		assertEquals(10f, pickaxeSpeed.conditionalAttributes().get(0).value(), "Carried attribute keeps its value.");
 
-		PrecomputedAttribute swordSpeed = attributeEngine().bake(ComponentTraversal.traverse(sword).stream()).get(MINING_SPEED);
+		PrecomputedAttribute swordSpeed = attributeEngine().resolve(sword).get(MINING_SPEED);
 		assertEquals(1f, swordSpeed.value(), "Compiled value excludes statically-failed iron and dynamic diamond bonuses.");
 		assertEquals(1, swordSpeed.conditionalAttributes().size(), "Dynamic diamond bonus is carried as data.");
 	}
@@ -136,10 +135,10 @@ class AttributeResolverTest {
 				.withPart(ironHandle, "handle_slot", HANDLE_SLOT_TYPE)
 				.build();
 
-		float woodDamage = attributeEngine().resolve(woodPickaxe).getValue(ATTACK_DAMAGE);
+		float woodDamage = resolveAttributes(woodPickaxe).getValue(ATTACK_DAMAGE);
 		assertEquals(6f, woodDamage, "Base damage (1) + head bonus (5, because handle is wood) = 6");
 
-		float ironDamage = attributeEngine().resolve(ironPickaxe).getValue(ATTACK_DAMAGE);
+		float ironDamage = resolveAttributes(ironPickaxe).getValue(ATTACK_DAMAGE);
 		assertEquals(1f, ironDamage, "Base damage (1) only, because handle is not wood.");
 	}
 }

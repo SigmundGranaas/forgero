@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 
 import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.attributeEngine;
+import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.resolveAttributes;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -111,7 +112,7 @@ class HandleAttributeFilteringTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = attributeEngine().resolve(ironHandle);
+			AttributeQueryResult result = resolveAttributes(ironHandle);
 
 			assertEquals(0f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f,
 					"CRITICAL: Standalone iron handle should NOT have attack_damage because " +
@@ -138,7 +139,7 @@ class HandleAttributeFilteringTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = attributeEngine().resolve(ironHandle);
+			AttributeQueryResult result = resolveAttributes(ironHandle);
 
 			// With has_other_contributor condition, even durability requires another source
 			assertEquals(0f, result.getValue(DefaultAttributes.DURABILITY), 0.001f,
@@ -169,7 +170,7 @@ class HandleAttributeFilteringTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = attributeEngine().resolve(oakHandle);
+			AttributeQueryResult result = resolveAttributes(oakHandle);
 
 			assertEquals(50f, result.getValue(DefaultAttributes.DURABILITY), 0.001f,
 					"Unconditional attributes should apply to handles");
@@ -209,7 +210,7 @@ class HandleAttributeFilteringTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = attributeEngine().resolve(swordBlade);
+			AttributeQueryResult result = resolveAttributes(swordBlade);
 
 			// Total attack_damage should be: schematic base (1) + iron (4) = 5
 			assertEquals(5f, result.getValue(DefaultAttributes.ATTACK_DAMAGE), 0.001f,
@@ -267,7 +268,7 @@ class HandleAttributeFilteringTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = attributeEngine().resolve(pickaxe);
+			AttributeQueryResult result = resolveAttributes(pickaxe);
 
 			// Both materials contribute durability because they are "other contributors" to each other
 			// Total: iron (250) + oak (50) = 300
@@ -304,7 +305,7 @@ class HandleAttributeFilteringTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = attributeEngine().resolve(handle);
+			AttributeQueryResult result = resolveAttributes(handle);
 
 			// in_slot_type PASSES (iron is in tool_material slot)
 			// has_other_contributor FAILS (no other component has attack_damage)
@@ -339,7 +340,7 @@ class HandleAttributeFilteringTest extends ForgeroTest {
 					)
 			);
 
-			AttributeQueryResult result = attributeEngine().resolve(part);
+			AttributeQueryResult result = resolveAttributes(part);
 
 			// Durability should apply: base(10) + iron(250) = 260
 			// (Part provides base durability, satisfying has_other_contributor for iron's durability)
