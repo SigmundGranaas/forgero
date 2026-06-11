@@ -23,7 +23,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 
 public class MinigameHudOverlay implements HudRenderCallback {
 
-	private static final Identifier BAR_TEXTURE = new Identifier("forgero", "textures/gui/bar_texture_new_2.png");
+	private static final Identifier BAR_TEXTURE = new Identifier("forgero", "textures/gui/bar_texture_new.png");
 	private static final Identifier THERMOMETER_ARROW = new Identifier("forgero", "textures/gui/thermometer_arrow.png");
 
     @Override
