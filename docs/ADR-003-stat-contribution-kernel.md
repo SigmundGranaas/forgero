@@ -202,3 +202,27 @@ construction: phase 2 can land after, independently, without touching the kernel
   coordination vocabulary (scopes) goes the way of `compositeKey`, `group`, and `DynamicContext`
   before it, and for the same reason: anything authored in parallel to the tree eventually lies
   about it.
+
+---
+
+## Gate result (first full-content run) — kernel NOT yet equivalent; old kernel stays
+
+The registry-wide gametest gate reported **7,483 divergences across 11,753 compared values**.
+The unit-bundle parity was green only because that bundle is small and simple. Findings from the
+diff sample:
+
+1. **The live engine composes part-composite globally and flat** — one intersection across all
+   sources in the whole tree — not per-node sealed-then-summed. Multi-part items therefore fold
+   differently (e.g. `andesite-pickaxe` durability: engine 220 vs fold 280).
+2. The engine **drops stat types** the fold keeps (e.g. arrow-head durability: engine 0, fold
+   287.5; rarity sums differ 25 vs 35) — there are additional exclusion semantics
+   (slot/collector scoping) the fold does not yet model.
+3. Consequence: ADR-003's per-node sealing as drafted is a **semantic change**, not a pure
+   refactor. Per the gate protocol the old kernel remains authoritative; nothing is deleted.
+
+Next step: decode the authoritative global semantics from `CompositeAttributeBakingStrategy` +
+collectors and either (a) reshape the fold to global composition while keeping the contribution
+atom and shim (kernel stays generic; sealing becomes an explicit, opt-in future semantic), or
+(b) consciously re-specify the composition semantics with content rebalancing — a product
+decision, not a refactor. The parity gametest stays in the suite (non-required while iterating)
+as the standing gate with exhaustive diff reporting.
