@@ -6,7 +6,10 @@
     "default": "forgero:item/upgrade/oak-arrow_shaft",
     "variants": [
       {
-        "predicate": [{ "type": "forgero:root_tag", "tag": "forgero:ranged/bow" }],
+        "predicate": [
+          { "type": "forgero:root_tag", "tag": "forgero:ranged/bow" },
+          { "type": "forgero:bow_pull", "pull": 0.5 }
+        ],
         "texture": "forgero:item/upgrade/oak-arrow_shaft_in_bow"
       }
     ]

@@ -164,7 +164,7 @@ public class ModelTranslator {
 	private Predicate toPredicate(PredicateDTO dto) {
 		return switch (dto.type()) {
 			case "forgero:root_tag" -> new RootTagPredicate(OpenIdentifier.parse(dto.tag()), resolverSupplier);
-			case "forgero:bow_pull" -> new BowPullPredicate(dto.pull(), dto.pulling());
+			case "forgero:bow_pull" -> new BowPullPredicate(dto.getPull().orElse(0.0f), dto.getPulling().orElse(null));
 			case "forgero:child_tag" -> new ChildTagPredicate(OpenIdentifier.parse(dto.tag()), resolverSupplier);
 			default -> throw new IllegalArgumentException("Unknown predicate type: " + dto.type());
 		};
