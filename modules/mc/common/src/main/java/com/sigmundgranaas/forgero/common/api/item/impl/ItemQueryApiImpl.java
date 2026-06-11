@@ -11,7 +11,6 @@ import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.EquipmentComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.SlotManager;
-import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
@@ -36,7 +35,6 @@ public class ItemQueryApiImpl implements ItemQueryApi {
 
 	private final ComponentConverter converter;
 	private final SlotManager slotManager;
-	private final AttributeEngine attributeEngine;
 
 	/**
 	 * Creates a new ItemQueryApiImpl instance.
@@ -47,7 +45,6 @@ public class ItemQueryApiImpl implements ItemQueryApi {
 	public ItemQueryApiImpl(ComponentConverter converter, SlotManager slotManager) {
 		this.converter = converter;
 		this.slotManager = slotManager;
-		this.attributeEngine = new AttributeEngine();
 	}
 
 	@Override
@@ -178,11 +175,7 @@ public class ItemQueryApiImpl implements ItemQueryApi {
 			return 0.0f;
 		}
 		return converter.toComponent(stack)
-			.map(component -> {
-				// Resolve attributes using AttributeEngine
-				AttributeQueryResult result = attributeEngine.resolve(component, DynamicContext.empty());
-				return result.getValue(attributeType);
-			})
+			.map(component -> AttributeEngine.getAttribute(component, attributeType))
 			.orElse(0.0f);
 	}
 
@@ -363,7 +356,7 @@ public class ItemQueryApiImpl implements ItemQueryApi {
 		}
 
 		// Resolve attributes for this equipment
-		AttributeQueryResult result = attributeEngine.resolve(component);
+		AttributeQueryResult result = AttributeEngine.resolveAttributes(component);
 
 		Multimap<EntityAttribute, EntityAttributeModifier> forgeroAttributes = createAttributeMap(result, slot);
 

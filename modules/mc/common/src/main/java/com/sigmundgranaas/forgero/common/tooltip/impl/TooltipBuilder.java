@@ -51,9 +51,8 @@ public final class TooltipBuilder {
 	) {
 		List<Text> tooltip = new ArrayList<>();
 
-		// Resolve all needed data
-		AttributeEngine attributeEngine = new AttributeEngine();
-		AttributeQueryResult attributes = attributeEngine.resolve(component, dynamicContext);
+		// Resolve all needed data - uses O(1) lookup for EquipmentComponent
+		AttributeQueryResult attributes = AttributeEngine.resolveAttributes(component, dynamicContext);
 
 		TooltipDescriptor.Engine descriptorEngine = new TooltipDescriptor.Engine();
 		List<TooltipDescriptor> descriptors = descriptorEngine.resolve(component, dynamicContext);

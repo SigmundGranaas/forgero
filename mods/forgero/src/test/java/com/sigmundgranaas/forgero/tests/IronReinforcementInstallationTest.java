@@ -77,31 +77,31 @@ public class IronReinforcementInstallationTest implements ForgeroGameTest {
 		assertFalse(durabilityAttrs.isEmpty(),
 				"Iron must have durability attributes");
 
-		// Check if any have offensive context (from metal_upgrade_base)
-		boolean hasOffensiveContext = durabilityAttrs.stream()
-				.anyMatch(attr -> attr.context().isPresent() &&
-						attr.context().get().equals(OFFENSIVE_CONTEXT));
+		// Check if any have offensive scope (from metal_upgrade_base)
+		boolean hasOffensiveScope = durabilityAttrs.stream()
+				.anyMatch(attr -> attr.scope().isPresent() &&
+						attr.scope().get().equals(OFFENSIVE_CONTEXT));
 
-		// Check if any have upgrade context (from metal_upgrade_base)
-		boolean hasUpgradeContext = iron.properties(Attribute.KEY).stream()
-				.anyMatch(attr -> attr.context().isPresent() &&
-						attr.context().get().equals(UPGRADE_CONTEXT));
+		// Check if any have upgrade scope (from metal_upgrade_base)
+		boolean hasUpgradeScope = iron.properties(Attribute.KEY).stream()
+				.anyMatch(attr -> attr.scope().isPresent() &&
+						attr.scope().get().equals(UPGRADE_CONTEXT));
 
 		// Log what we found for debugging
 		System.out.println("Iron durability attributes:");
 		for (Attribute attr : durabilityAttrs) {
-			System.out.println("  - value=" + attr.value() + ", context=" + attr.context().orElse(null));
+			System.out.println("  - value=" + attr.value() + ", scope=" + attr.scope().orElse(null));
 		}
 
 		System.out.println("All iron attributes:");
 		for (Attribute attr : iron.properties(Attribute.KEY)) {
 			System.out.println("  - type=" + attr.type() + ", value=" + attr.value() +
-					", context=" + attr.context().orElse(null));
+					", scope=" + attr.scope().orElse(null));
 		}
 
-		// Iron should have offensive context attributes from metal_upgrade_base
-		assertTrue(hasOffensiveContext || hasUpgradeContext,
-				"Iron must have attributes with offensive or upgrade context from metal_upgrade_base. " +
+		// Iron should have offensive scope attributes from metal_upgrade_base
+		assertTrue(hasOffensiveScope || hasUpgradeScope,
+				"Iron must have attributes with offensive or upgrade scope from metal_upgrade_base. " +
 						"Check that the include directive is working correctly.");
 
 		context.complete();
@@ -139,11 +139,11 @@ public class IronReinforcementInstallationTest implements ForgeroGameTest {
 
 		assertTrue(reinforcementSlot.isPresent(), "Iron pickaxe head must have a reinforcement slot");
 
-		// Verify the slot has offensive context
-		assertTrue(reinforcementSlot.get().context().isPresent(),
-				"Reinforcement slot must have a context");
-		assertEquals(OFFENSIVE_CONTEXT.toString(), reinforcementSlot.get().context().get().toString(),
-				"Reinforcement slot must have offensive context");
+		// Verify the slot has offensive scope
+		assertTrue(reinforcementSlot.get().scope().isPresent(),
+				"Reinforcement slot must have a scope");
+		assertEquals(OFFENSIVE_CONTEXT.toString(), reinforcementSlot.get().scope().get().toString(),
+				"Reinforcement slot must have offensive scope");
 
 		context.complete();
 	}

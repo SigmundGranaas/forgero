@@ -882,7 +882,7 @@ public class VanillaToolParityTest implements ForgeroGameTest {
                 if (attr.type().path().contains("attack")) {
                     System.out.println("    * " + attr.type() + " = " + attr.value() +
                         " op=" + attr.operator().getClass().getSimpleName() +
-                        " ctx=" + attr.context().orElse(null));
+                        " scope=" + attr.scope().orElse(null));
                 }
             }
 
@@ -918,7 +918,7 @@ public class VanillaToolParityTest implements ForgeroGameTest {
                 System.out.println(indent + "* " + attr.type() + " = " + attr.value() +
                     " op=" + attr.operator().getClass().getSimpleName() +
                     " order=" + attr.operator().order() +
-                    " ctx=" + attr.context().orElse(null) +
+                    " scope=" + attr.scope().orElse(null) +
                     " cond=" + attr.condition().map(c -> c.staticConditions().size() + " static").orElse("none"));
             }
         }

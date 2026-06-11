@@ -35,13 +35,10 @@ import java.util.Optional;
  */
 public class DifferenceCalculator {
 
-	private final AttributeEngine attributeEngine;
-
 	/**
-	 * Creates a calculator that uses AttributeEngine directly for resolution.
+	 * Creates a calculator that uses AttributeEngine static methods for resolution.
 	 */
 	public DifferenceCalculator() {
-		this.attributeEngine = new AttributeEngine();
 	}
 
 	/**
@@ -59,7 +56,7 @@ public class DifferenceCalculator {
 			ComparisonContext comparisonContext,
 			DynamicContext dynamicContext
 	) {
-		float currentValue = attributeEngine.resolve(current, dynamicContext).getValue(attributeId);
+		float currentValue = AttributeEngine.getAttribute(current, attributeId, dynamicContext);
 
 		Optional<Float> baselineValue = getBaselineValue(attributeId, comparisonContext, dynamicContext);
 
@@ -108,24 +105,18 @@ public class DifferenceCalculator {
 		}
 
 		if (context instanceof ComparisonContext.StrippedItem stripped) {
-			AttributeQueryResult result = attributeEngine.resolve(
-					stripped.strippedComponent(), dynamicContext
-			);
-			return Optional.of(result.getValue(attributeId));
+			float value = AttributeEngine.getAttribute(stripped.strippedComponent(), attributeId, dynamicContext);
+			return Optional.of(value);
 		}
 
 		if (context instanceof ComparisonContext.VsComponent vs) {
-			AttributeQueryResult result = attributeEngine.resolve(
-					vs.baselineComponent(), dynamicContext
-			);
-			return Optional.of(result.getValue(attributeId));
+			float value = AttributeEngine.getAttribute(vs.baselineComponent(), attributeId, dynamicContext);
+			return Optional.of(value);
 		}
 
 		if (context instanceof ComparisonContext.WithoutUpgrade without) {
-			AttributeQueryResult result = attributeEngine.resolve(
-					without.baseWithoutUpgrade(), dynamicContext
-			);
-			return Optional.of(result.getValue(attributeId));
+			float value = AttributeEngine.getAttribute(without.baseWithoutUpgrade(), attributeId, dynamicContext);
+			return Optional.of(value);
 		}
 
 		if (context instanceof ComparisonContext.Custom custom) {

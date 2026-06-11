@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.loader;
 
-import com.sigmundgranaas.forgero.common.attribute.AttributeManager;
 import com.sigmundgranaas.forgero.common.item.DynamicItem;
 import com.sigmundgranaas.forgero.common.item.DynamicSwordItem;
 import com.sigmundgranaas.forgero.common.item.DynamicToolItem;
@@ -105,9 +104,6 @@ public class ForgeroDataLoader implements ModInitializer {
 			// Initialize context with services
 			initializeContext(bundle, services);
 
-			// Initialize legacy services (AttributeManager for mixin access)
-			initializeLegacyServices(services);
-
 			// Phase 7: Setup item registration callbacks
 			ItemRegistrar itemRegistrar = new ItemRegistrar(
 					context.componentRegistry(),
@@ -181,12 +177,6 @@ public class ForgeroDataLoader implements ModInitializer {
 
 		// Store mutater for legacy services initialization
 		this.componentMutater = mutater;
-	}
-
-	private void initializeLegacyServices(ComponentRegistrationService.ServiceBundle services) {
-		// Initialize AttributeManager for mixin access
-		AttributeManager.initialize(services.converter());
-		LOGGER.debug("Forgero Attribute Manager initialized.");
 	}
 
 	private void initializeRecipes(ForgeroDataInitializer.Config dataConfig) {

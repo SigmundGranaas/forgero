@@ -3,14 +3,19 @@ package com.sigmundgranaas.forgero.core.property.attribute.impl;
 import com.sigmundgranaas.forgero.core.ForgeroTest;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
+import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.component.api.EquipmentComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.SlotValidator;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
+import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.testutils.TestIdentifiers;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static com.sigmundgranaas.forgero.testutils.ForgeroTestFactory.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class AttributeEngineTest extends ForgeroTest {
 
@@ -368,5 +373,171 @@ class AttributeEngineTest extends ForgeroTest {
 		// All three attributes should be aggregated
 		assertEquals(10.0f, result.getValue(DefaultAttributes.ATTACK_DAMAGE),
 				"Duplicate attribute keys should be aggregated");
+	}
+
+	// ==================== Static Method Tests ====================
+
+	@Nested
+	@DisplayName("Static getAttribute() Method Tests")
+	class StaticGetAttributeTests {
+
+		@Test
+		@DisplayName("getAttribute uses O(1) path for EquipmentComponent")
+		void getAttributeUsesO1PathForEquipment() {
+			// tool() creates an EquipmentComponent
+			Component equipment = tool("static_test_tool")
+					.withTag("tool")
+					.withAttribute(DefaultAttributes.ATTACK_DAMAGE, 10f)
+					.withAttribute(DefaultAttributes.MINING_SPEED, 5f)
+					.build();
+
+			// Verify it's an EquipmentComponent (O(1) path)
+			assertTrue(equipment instanceof EquipmentComponent,
+					"Tool should be an EquipmentComponent");
+
+			// Test static method
+			float damage = AttributeEngine.getAttribute(equipment, DefaultAttributes.ATTACK_DAMAGE);
+			float speed = AttributeEngine.getAttribute(equipment, DefaultAttributes.MINING_SPEED);
+
+			assertEquals(10f, damage, "Should return correct attack damage");
+			assertEquals(5f, speed, "Should return correct mining speed");
+		}
+
+		@Test
+		@DisplayName("getAttribute falls back to resolve() for non-EquipmentComponent")
+		void getAttributeFallsBackForNonEquipment() {
+			// part() creates a ContributingComponent (not EquipmentComponent)
+			Component partComponent = part("static_test_part")
+					.withTag("part")
+					.withAttribute(DefaultAttributes.ATTACK_DAMAGE, 7f)
+					.build();
+
+			// Verify it's NOT an EquipmentComponent (fallback path)
+			assertFalse(partComponent instanceof EquipmentComponent,
+					"Part should NOT be an EquipmentComponent");
+
+			// Test static method (should use fallback)
+			float damage = AttributeEngine.getAttribute(partComponent, DefaultAttributes.ATTACK_DAMAGE);
+
+			assertEquals(7f, damage, "Should return correct attack damage via fallback");
+		}
+
+		@Test
+		@DisplayName("getAttribute with context works for EquipmentComponent")
+		void getAttributeWithContextWorksForEquipment() {
+			Component equipment = tool("context_test_tool")
+					.withTag("tool")
+					.withAttribute(DefaultAttributes.ATTACK_DAMAGE, 15f)
+					.build();
+
+			// Use empty context (conditional attributes would need real context)
+			float damage = AttributeEngine.getAttribute(
+					equipment,
+					DefaultAttributes.ATTACK_DAMAGE,
+					DynamicContext.empty()
+			);
+
+			assertEquals(15f, damage, "Should return correct value with context");
+		}
+
+		@Test
+		@DisplayName("getAttribute returns 0 for missing attributes")
+		void getAttributeReturnsZeroForMissing() {
+			Component equipment = tool("missing_attr_tool")
+					.withTag("tool")
+					.withAttribute(DefaultAttributes.ATTACK_DAMAGE, 5f)
+					.build();
+
+			// Query an attribute that wasn't set
+			float armor = AttributeEngine.getAttribute(equipment, DefaultAttributes.ARMOR);
+
+			assertEquals(0f, armor, "Should return 0 for missing attribute");
+		}
+	}
+
+	@Nested
+	@DisplayName("Static resolveAttributes() Method Tests")
+	class StaticResolveAttributesTests {
+
+		@Test
+		@DisplayName("resolveAttributes uses O(1) path for EquipmentComponent")
+		void resolveAttributesUsesO1PathForEquipment() {
+			Component equipment = tool("resolve_test_tool")
+					.withTag("tool")
+					.withAttribute(DefaultAttributes.ATTACK_DAMAGE, 12f)
+					.withAttribute(DefaultAttributes.ATTACK_SPEED, 1.5f)
+					.withAttribute(DefaultAttributes.DURABILITY, 500f)
+					.build();
+
+			// Verify it's an EquipmentComponent
+			assertTrue(equipment instanceof EquipmentComponent);
+
+			// Test static method
+			AttributeQueryResult result = AttributeEngine.resolveAttributes(equipment);
+
+			assertEquals(12f, result.getValue(DefaultAttributes.ATTACK_DAMAGE));
+			assertEquals(1.5f, result.getValue(DefaultAttributes.ATTACK_SPEED));
+			assertEquals(500f, result.getValue(DefaultAttributes.DURABILITY));
+		}
+
+		@Test
+		@DisplayName("resolveAttributes falls back for non-EquipmentComponent")
+		void resolveAttributesFallsBackForNonEquipment() {
+			Component partComponent = part("resolve_test_part")
+					.withTag("part")
+					.withAttribute(DefaultAttributes.ATTACK_DAMAGE, 8f)
+					.withAttribute(DefaultAttributes.MINING_SPEED, 3f)
+					.build();
+
+			// Verify it's NOT an EquipmentComponent
+			assertFalse(partComponent instanceof EquipmentComponent);
+
+			// Test static method (should use fallback)
+			AttributeQueryResult result = AttributeEngine.resolveAttributes(partComponent);
+
+			assertEquals(8f, result.getValue(DefaultAttributes.ATTACK_DAMAGE));
+			assertEquals(3f, result.getValue(DefaultAttributes.MINING_SPEED));
+		}
+
+		@Test
+		@DisplayName("resolveAttributes with context works correctly")
+		void resolveAttributesWithContextWorks() {
+			Component equipment = tool("context_resolve_tool")
+					.withTag("tool")
+					.withAttribute(DefaultAttributes.ATTACK_DAMAGE, 20f)
+					.build();
+
+			AttributeQueryResult result = AttributeEngine.resolveAttributes(
+					equipment,
+					DynamicContext.empty()
+			);
+
+			assertEquals(20f, result.getValue(DefaultAttributes.ATTACK_DAMAGE));
+		}
+
+		@Test
+		@DisplayName("resolveAttributes returns same result as instance method for equipment")
+		void resolveAttributesMatchesInstanceMethod() {
+			Component equipment = tool("match_test_tool")
+					.withTag("tool")
+					.withAttribute(DefaultAttributes.ATTACK_DAMAGE, 25f)
+					.withAttribute(DefaultAttributes.MINING_SPEED, 8f)
+					.build();
+
+			// Compare static method vs instance method
+			AttributeQueryResult staticResult = AttributeEngine.resolveAttributes(equipment);
+			AttributeQueryResult instanceResult = attributeEngine().resolve(equipment);
+
+			assertEquals(
+					instanceResult.getValue(DefaultAttributes.ATTACK_DAMAGE),
+					staticResult.getValue(DefaultAttributes.ATTACK_DAMAGE),
+					"Static and instance methods should return same damage"
+			);
+			assertEquals(
+					instanceResult.getValue(DefaultAttributes.MINING_SPEED),
+					staticResult.getValue(DefaultAttributes.MINING_SPEED),
+					"Static and instance methods should return same mining speed"
+			);
+		}
 	}
 }

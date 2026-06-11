@@ -101,6 +101,7 @@ public final class MixinServiceAccessor {
 
 	/**
 	 * Gets resolved attributes for an ItemStack.
+	 * Uses O(1) lookup for EquipmentComponent via AttributeEngine.resolveAttributes().
 	 * Used by ItemMiningMixin and ItemStackDurabilityMixin.
 	 */
 	public static Optional<AttributeQueryResult> getResolvedAttributes(ItemStack stack) {
@@ -110,7 +111,7 @@ public final class MixinServiceAccessor {
 		}
 
 		return services.converter().toComponent(stack)
-				.map(component -> new AttributeEngine().resolve(component));
+				.map(AttributeEngine::resolveAttributes);
 	}
 
 	/**

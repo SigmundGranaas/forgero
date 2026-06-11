@@ -9,6 +9,9 @@ dependencies {
 	// MC Common module - provides shared abstractions like UseContext, UsePhaseEffect
 	implementation(project(path: ":modules:mc:common", configuration: 'namedElements'))
 
+	// MC Predicate module - provides MinecraftContextKeys and DynamicContextFactory
+	implementation(project(path: ":modules:mc:predicate", configuration: 'namedElements'))
+
 	// Testing
 	testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")

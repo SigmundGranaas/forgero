@@ -1,10 +1,11 @@
 package com.sigmundgranaas.forgero.properties.minecraft.useinteraction.entity;
 
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
+import com.sigmundgranaas.forgero.predicate.minecraft.DynamicContextFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.common.api.ForgeroInitializedCallback;
+import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.properties.minecraft.onhit.OnHitManager;
 
 import net.minecraft.entity.Entity;
@@ -168,12 +169,10 @@ public class ThrownItemEntity extends PersistentProjectileEntity {
 	 * @param fallback The fallback value if resolution fails or returns zero/negative
 	 * @return The resolved attribute value, or fallback if not available
 	 */
-	private static float resolveAttribute(ItemStack stack, OpenIdentifier attr, float fallback) {
+	private float resolveAttribute(ItemStack stack, OpenIdentifier attr, float fallback) {
+		DynamicContext context = DynamicContextFactory.fromEntity(getOwner());
 		return converter.toComponent(stack)
-				.map(component -> {
-					AttributeQueryResult result = new AttributeEngine().resolve(component);
-					return result.getValue(attr);
-				})
+				.map(component -> AttributeEngine.getAttribute(component, attr, context))
 				.filter(value -> value > 0)
 				.orElse(fallback);
 	}

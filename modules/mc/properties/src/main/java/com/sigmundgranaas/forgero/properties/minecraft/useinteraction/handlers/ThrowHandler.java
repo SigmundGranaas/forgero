@@ -3,14 +3,16 @@ package com.sigmundgranaas.forgero.properties.minecraft.useinteraction.handlers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
+import com.sigmundgranaas.forgero.predicate.minecraft.DynamicContextFactory;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.useinteraction.UseContext;
-import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
 import com.sigmundgranaas.forgero.common.api.ForgeroInitializedCallback;
+import com.sigmundgranaas.forgero.core.property.context.DynamicContext;
 import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.ContextualUseHandler;
 import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.entity.ThrownItemEntity;
 
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
@@ -117,7 +119,7 @@ public record ThrowHandler(
 		ThrownItemEntity.SpinType spin = parseSpinType(spinType);
 
 		// Resolve weight from component if available, otherwise use handler's configured weight
-		float resolvedWeight = resolveAttribute(stack, WEIGHT_ATTR, weight);
+		float resolvedWeight = resolveAttribute(stack, WEIGHT_ATTR, weight, context.user());
 
 		ThrownItemEntity thrownItem = new ThrownItemEntity(
 				ThrownItemEntityRegistry.THROWN_ITEM_ENTITY,
@@ -183,14 +185,13 @@ public record ThrowHandler(
 	 * @param stack    The item stack to resolve from
 	 * @param attr     The attribute identifier to query
 	 * @param fallback The fallback value if resolution fails or returns zero/negative
+	 * @param user     The entity using the item (for context-based attributes)
 	 * @return The resolved attribute value, or fallback if not available
 	 */
-	private static float resolveAttribute(ItemStack stack, OpenIdentifier attr, float fallback) {
+	private static float resolveAttribute(ItemStack stack, OpenIdentifier attr, float fallback, LivingEntity user) {
+		DynamicContext context = DynamicContextFactory.fromEntity(user);
 		return converter.toComponent(stack)
-				.map(component -> {
-					AttributeQueryResult result = new AttributeEngine().resolve(component);
-					return result.getValue(attr);
-				})
+				.map(component -> AttributeEngine.getAttribute(component, attr, context))
 				.filter(value -> value > 0)
 				.orElse(fallback);
 	}

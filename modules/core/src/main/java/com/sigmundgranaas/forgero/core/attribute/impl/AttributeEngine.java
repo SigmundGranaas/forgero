@@ -7,6 +7,7 @@ import com.sigmundgranaas.forgero.core.attribute.api.PrecomputedAttribute;
 import com.sigmundgranaas.forgero.core.attribute.impl.computation.ComputationChain;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
+import com.sigmundgranaas.forgero.core.component.api.EquipmentComponent;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.property.api.DataTypeEngine;
@@ -105,6 +106,59 @@ public class AttributeEngine implements DataTypeEngine<BakedAttributes, Attribut
 	private final AttributeBakingStrategy compositeBakingStrategy = new CompositeAttributeBakingStrategy();
 
 	public AttributeEngine() {
+	}
+
+	// ========== Static Convenience Methods ==========
+	// These provide O(1) lookup for EquipmentComponent, falling back to resolve() for others.
+
+	/**
+	 * Gets the value of a specific attribute from a component.
+	 * <p>
+	 * For EquipmentComponent, uses pre-baked O(1) lookup.
+	 * For other components, computes on-demand via resolve().
+	 *
+	 * @param component The component to query
+	 * @param type      The attribute type
+	 * @param context   Dynamic context for conditional evaluation
+	 * @return The computed attribute value, or 0 if not found
+	 */
+	public static float getAttribute(Component component, OpenIdentifier type, DynamicContext context) {
+		if (component instanceof EquipmentComponent equipment) {
+			return equipment.getAttribute(type, context);
+		}
+		return new AttributeEngine().resolve(component, context).getValue(type);
+	}
+
+	/**
+	 * Gets attribute value with empty context.
+	 */
+	public static float getAttribute(Component component, OpenIdentifier type) {
+		return getAttribute(component, type, DynamicContext.empty());
+	}
+
+	/**
+	 * Resolves all attributes for a component.
+	 * <p>
+	 * For EquipmentComponent, wraps pre-baked attributes in QueryResult.
+	 * For other components, computes via resolve().
+	 *
+	 * @param component The component to resolve
+	 * @param context   Dynamic context for conditional evaluation
+	 * @return Query result for accessing attribute values
+	 */
+	public static AttributeQueryResult resolveAttributes(Component component, DynamicContext context) {
+		if (component instanceof EquipmentComponent equipment) {
+			var baked = equipment.bakedAttributes();
+			return type -> baked.get(type).compute(context);
+		}
+		return new AttributeEngine().resolve(component, context);
+	}
+
+	/**
+	 * Resolves attributes with empty context.
+	 */
+	public static AttributeQueryResult resolveAttributes(Component component) {
+		return resolveAttributes(component, DynamicContext.empty());
 	}
 
 	@Override
