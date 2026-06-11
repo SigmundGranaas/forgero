@@ -6,9 +6,8 @@ import java.util.Optional;
 import com.sigmundgranaas.forgero.common.api.item.ItemQueryApi;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
-import com.sigmundgranaas.forgero.common.runtime.RuntimeConditions;
+import com.sigmundgranaas.forgero.common.runtime.PropertyDispatcher;
 import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import com.sigmundgranaas.forgero.common.api.ForgeroServices;
 import com.sigmundgranaas.forgero.common.useinteraction.UseContext;
@@ -261,20 +260,7 @@ public final class UseInteractionManager {
 			return Optional.empty();
 		}
 
-		return converter.toComponent(stack)
-				.flatMap(component -> getProperties(component))
-				.flatMap(list -> list.stream().findFirst());
-	}
-
-	/**
-	 * Resolves UseInteractionProperty list from a component.
-	 */
-	private static Optional<List<UseInteractionProperty>> getProperties(Component component) {
-		var engine = new UseInteractionProperty.Engine();
-		DynamicContext context = new DynamicContext.Builder().build();
-
-		List<UseInteractionProperty> properties = RuntimeConditions.filter(engine.resolve(component), context);
-
-		return properties.isEmpty() ? Optional.empty() : Optional.of(properties);
+		return PropertyDispatcher.active(stack, UseInteractionProperty.KEY, DynamicContext.empty())
+				.stream().findFirst();
 	}
 }

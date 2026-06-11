@@ -3,8 +3,7 @@ package com.sigmundgranaas.forgero.properties.minecraft.blockuse;
 import com.sigmundgranaas.forgero.common.useinteraction.BlockUseContext;
 import com.sigmundgranaas.forgero.common.useinteraction.BlockUseEffect;
 import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
-import com.sigmundgranaas.forgero.common.runtime.RuntimeConditions;
-import com.sigmundgranaas.forgero.common.api.ForgeroApi;
+import com.sigmundgranaas.forgero.common.runtime.PropertyDispatcher;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -37,8 +36,7 @@ public class BlockUseManager {
 			return ActionResult.PASS;
 		}
 
-		DynamicContext.Builder contextBuilder = new DynamicContext.Builder();
-		List<BlockUseProperty> properties = RuntimeConditions.filter(ForgeroApi.itemProperty().resolve(stack, BlockUseProperty.Engine::new), contextBuilder.build());
+		List<BlockUseProperty> properties = PropertyDispatcher.active(stack, BlockUseProperty.KEY, DynamicContext.empty());
 
 		if (properties.isEmpty()) {
 			return ActionResult.PASS;

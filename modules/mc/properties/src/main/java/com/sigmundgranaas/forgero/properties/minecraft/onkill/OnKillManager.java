@@ -3,12 +3,8 @@ package com.sigmundgranaas.forgero.properties.minecraft.onkill;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.runtime.ContextKeys;
 import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
-import com.sigmundgranaas.forgero.common.runtime.RuntimeConditions;
-import com.sigmundgranaas.forgero.effects.entity.ContextualEffectHandler;
-import com.sigmundgranaas.forgero.effects.entity.EntityEffectHandler;
-import com.sigmundgranaas.forgero.effects.entity.OnHitEffect;
-import com.sigmundgranaas.forgero.common.api.ForgeroApi;
-import net.minecraft.entity.Entity;
+import com.sigmundgranaas.forgero.common.runtime.PropertyDispatcher;
+import com.sigmundgranaas.forgero.properties.minecraft.EntityEffects;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -61,21 +57,11 @@ public class OnKillManager {
 				continue;
 			}
 
-			List<OnKillProperty> properties = RuntimeConditions.filter(ForgeroApi.itemProperty().resolve(stack, OnKillProperty.Engine::new), contextBuilder.build());
+			List<OnKillProperty> properties = PropertyDispatcher.active(stack, OnKillProperty.KEY, contextBuilder.build());
 
 			for (OnKillProperty property : properties) {
 				// Killer is "source", victim is "initial target"
-				List<Entity> finalTargets = property.selector().select(killer, victim);
-
-				for (Entity finalTarget : finalTargets) {
-					for (OnHitEffect effect : property.effects()) {
-						if (effect instanceof ContextualEffectHandler contextual) {
-							contextual.apply(killer, finalTarget);
-						} else if (effect instanceof EntityEffectHandler simple) {
-							simple.apply(finalTarget);
-						}
-					}
-				}
+				EntityEffects.apply(property.selector(), property.effects(), killer, victim);
 			}
 		}
 	}

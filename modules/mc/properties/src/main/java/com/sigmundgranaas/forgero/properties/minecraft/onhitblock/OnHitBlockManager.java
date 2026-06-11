@@ -1,8 +1,7 @@
 package com.sigmundgranaas.forgero.properties.minecraft.onhitblock;
 
 import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
-import com.sigmundgranaas.forgero.common.runtime.RuntimeConditions;
-import com.sigmundgranaas.forgero.common.api.ForgeroApi;
+import com.sigmundgranaas.forgero.common.runtime.PropertyDispatcher;
 import com.sigmundgranaas.forgero.effects.block.OnHitBlockEffect;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -35,8 +34,7 @@ public class OnHitBlockManager {
 			return;
 		}
 
-		DynamicContext.Builder contextBuilder = new DynamicContext.Builder();
-		List<OnHitBlockProperty> properties = RuntimeConditions.filter(ForgeroApi.itemProperty().resolve(stack, OnHitBlockProperty.Engine::new), contextBuilder.build());
+		List<OnHitBlockProperty> properties = PropertyDispatcher.active(stack, OnHitBlockProperty.KEY, DynamicContext.empty());
 
 		for (OnHitBlockProperty property : properties) {
 			// Selector determines which blocks are affected

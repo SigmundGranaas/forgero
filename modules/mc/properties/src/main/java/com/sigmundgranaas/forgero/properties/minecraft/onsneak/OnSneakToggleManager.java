@@ -3,15 +3,11 @@ package com.sigmundgranaas.forgero.properties.minecraft.onsneak;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.runtime.ContextKeys;
 import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
-import com.sigmundgranaas.forgero.common.runtime.RuntimeConditions;
-import com.sigmundgranaas.forgero.effects.entity.ContextualEffectHandler;
-import com.sigmundgranaas.forgero.effects.entity.EntityEffectHandler;
-import com.sigmundgranaas.forgero.effects.entity.OnHitEffect;
-import com.sigmundgranaas.forgero.common.api.ForgeroApi;
+import com.sigmundgranaas.forgero.common.runtime.PropertyDispatcher;
+import com.sigmundgranaas.forgero.properties.minecraft.EntityEffects;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -92,21 +88,11 @@ public class OnSneakToggleManager {
 				continue;
 			}
 
-			List<OnSneakToggleProperty> properties = RuntimeConditions.filter(ForgeroApi.itemProperty().resolve(stack, OnSneakToggleProperty.Engine::new), contextBuilder.build());
+			List<OnSneakToggleProperty> properties = PropertyDispatcher.active(stack, OnSneakToggleProperty.KEY, contextBuilder.build());
 
 			for (OnSneakToggleProperty property : properties) {
 				// Entity sneaks targeting self or nearby entities
-				List<Entity> finalTargets = property.selector().select(entity, entity);
-
-				for (Entity finalTarget : finalTargets) {
-					for (OnHitEffect effect : property.effects()) {
-						if (effect instanceof ContextualEffectHandler contextual) {
-							contextual.apply(entity, finalTarget);
-						} else if (effect instanceof EntityEffectHandler simple) {
-							simple.apply(finalTarget);
-						}
-					}
-				}
+				EntityEffects.apply(property.selector(), property.effects(), entity, entity);
 			}
 		}
 	}

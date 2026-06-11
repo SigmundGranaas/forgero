@@ -2,8 +2,8 @@ package com.sigmundgranaas.forgero.properties.minecraft.blockbreaking;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
-import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.common.api.ForgeroServices;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -67,14 +67,12 @@ public class BlockBreakingManager {
 	}
 
 	private static Optional<BlockBreakingResult> calculateBreakingResult(PlayerEntity player, BlockPos pos) {
-		return converter.toComponent(player.getMainHandStack())
-				.flatMap(component -> findActiveProperty(component, player, pos)
-						.flatMap(property -> createResult(property, player, pos)));
+		return findActiveProperty(player.getMainHandStack())
+				.flatMap(property -> createResult(property, player, pos));
 	}
 
-	private static Optional<BlockBreakingProperty> findActiveProperty(Component component, PlayerEntity player, BlockPos pos) {
-		var engine = new BlockBreakingProperty.Engine();
-		List<BlockBreakingProperty> bakedResult = engine.resolve(component);
+	private static Optional<BlockBreakingProperty> findActiveProperty(ItemStack stack) {
+		List<BlockBreakingProperty> bakedResult = ForgeroApi.itemProperty().get(stack, BlockBreakingProperty.KEY);
 		return bakedResult.stream().findFirst();
 	}
 

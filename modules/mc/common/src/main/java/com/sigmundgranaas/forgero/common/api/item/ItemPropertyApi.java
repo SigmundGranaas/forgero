@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.common.api.item;
 
 import com.sigmundgranaas.forgero.core.property.api.CompilerPass;
+import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
@@ -53,6 +54,21 @@ public interface ItemPropertyApi {
 	 * @param <P>             The property type
 	 * @return List of resolved properties, or empty list for null/empty/non-Forgero items
 	 */
+	/**
+	 * Reads the compiled property list of a type directly from a terminal item's artifact.
+	 * <p>
+	 * This is the preferred runtime accessor: it needs only the property's {@link ResolutionKey},
+	 * not its engine, and is an O(1) read of the pre-compiled artifact (no tree traversal). The
+	 * returned list includes properties carrying dynamic conditions as data; filter them with
+	 * {@link com.sigmundgranaas.forgero.common.runtime.RuntimeConditions} at the call site.
+	 *
+	 * @param stack The ItemStack to read from
+	 * @param key   The property type's resolution key (e.g. {@code OnHitProperty.KEY})
+	 * @param <P>   The property type
+	 * @return The compiled properties, or empty for null/empty/non-Forgero/non-terminal items
+	 */
+	<P> List<P> get(ItemStack stack, ResolutionKey<List<P>> key);
+
 	<P> List<P> resolve(ItemStack stack, Supplier<? extends CompilerPass<List<P>>> engineSupplier);
 
 	/**

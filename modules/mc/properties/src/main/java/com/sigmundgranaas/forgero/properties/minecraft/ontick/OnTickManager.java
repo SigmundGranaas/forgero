@@ -1,15 +1,10 @@
 package com.sigmundgranaas.forgero.properties.minecraft.ontick;
 
-import com.sigmundgranaas.forgero.common.api.item.ItemPropertyApi;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.runtime.ContextKeys;
 import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
-import com.sigmundgranaas.forgero.common.runtime.RuntimeConditions;
-import com.sigmundgranaas.forgero.common.api.ForgeroApi;
-import com.sigmundgranaas.forgero.effects.entity.ContextualEffectHandler;
-import com.sigmundgranaas.forgero.effects.entity.EntityEffectHandler;
-import com.sigmundgranaas.forgero.effects.entity.OnHitEffect;
-import net.minecraft.entity.Entity;
+import com.sigmundgranaas.forgero.common.runtime.PropertyDispatcher;
+import com.sigmundgranaas.forgero.properties.minecraft.EntityEffects;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -51,22 +46,11 @@ public class OnTickManager {
 				continue;
 			}
 
-			List<OnTickProperty> properties = RuntimeConditions.filter(ForgeroApi.itemProperty().resolve(stack, OnTickProperty.Engine::new), context);
+			List<OnTickProperty> properties = PropertyDispatcher.active(stack, OnTickProperty.KEY, context);
 
 			for (OnTickProperty property : properties) {
 				if (entity.age % property.interval() == 0) {
-					// Selector handles both selection and filtering
-					List<Entity> finalTargets = property.selector().select(entity, entity);
-
-					for (Entity target : finalTargets) {
-						for (OnHitEffect effect : property.effects()) {
-							if (effect instanceof ContextualEffectHandler contextual) {
-								contextual.apply(entity, target);
-							} else if (effect instanceof EntityEffectHandler simple) {
-								simple.apply(target);
-							}
-						}
-					}
+					EntityEffects.apply(property.selector(), property.effects(), entity, entity);
 				}
 			}
 		}

@@ -2,10 +2,9 @@ package com.sigmundgranaas.forgero.properties.minecraft.loot;
 
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.common.runtime.ContextKeys;
 import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
-import com.sigmundgranaas.forgero.common.runtime.RuntimeConditions;
+import com.sigmundgranaas.forgero.common.runtime.PropertyDispatcher;
 import com.sigmundgranaas.forgero.common.api.ForgeroServices;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -43,15 +42,7 @@ public class LootManager {
 			return loot;
 		}
 
-		Optional<Component> componentOpt = converter.toComponent(tool);
-		if (componentOpt.isEmpty()) {
-			return loot;
-		}
-
-		DynamicContext.Builder dynamicContextBuilder = new DynamicContext.Builder();
-
-		var engine = new LootProperty.Engine();
-		List<LootProperty> properties = RuntimeConditions.filter(engine.resolve(componentOpt.get()), dynamicContextBuilder.build());
+		List<LootProperty> properties = PropertyDispatcher.active(tool, LootProperty.KEY, DynamicContext.empty());
 
 		List<ItemStack> currentLoot = loot;
 		for (LootProperty property : properties) {
@@ -72,19 +63,13 @@ public class LootManager {
 			return loot;
 		}
 
-		Optional<Component> componentOpt = converter.toComponent(tool.get());
-		if (componentOpt.isEmpty()) {
-			return loot;
-		}
-
 		DynamicContext.Builder dynamicContextBuilder = new DynamicContext.Builder();
 		Entity killedEntity = context.get(LootContextParameters.THIS_ENTITY);
 		if (killedEntity != null) {
 			dynamicContextBuilder.put(ContextKeys.TARGET_TAGS, getEntityTags(killedEntity));
 		}
 
-		var engine = new LootProperty.Engine();
-		List<LootProperty> properties = RuntimeConditions.filter(engine.resolve(componentOpt.get()), dynamicContextBuilder.build());
+		List<LootProperty> properties = PropertyDispatcher.active(tool.get(), LootProperty.KEY, dynamicContextBuilder.build());
 
 		List<ItemStack> currentLoot = loot;
 		for (LootProperty property : properties) {

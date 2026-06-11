@@ -47,7 +47,7 @@ architecture" smell.
   thing the architecture now forbids by design. The generality is not low-cost — it is the
   central concept the maintainer wants gone. **Do it.**
 
-### 1.2 Collapse 14 property Managers → 1 dispatcher
+### 1.2 Collapse 14 property Managers → 1 dispatcher  — DONE
 Verified ~900 LOC of near-identical structure: build context → `RuntimeConditions.filter(resolve(
 stack, KEY), ctx)` → iterate effects with the same `ContextualEffectHandler`/`EntityEffectHandler`
 instanceof dispatch. The compiled artifact made the bodies identical (no per-manager engine run,
@@ -97,12 +97,12 @@ conditional (→ `PrecomputedAttribute.conditionalAttributes`, **never read**). 
 ### 2.2 The vanilla attribute-modifier merge still discards other mods' modifiers
 `ItemQueryApiImpl.getAttributeModifiers` (lines ~363-368) still drops vanilla/other-mod modifiers
 key-wise. This is the long-standing interop break, and the compiled artifact is the enabler for
-the real fix (write vanilla `AttributeModifiers` NBT at compile time, merge by UUID). **Belongs to
-the persistence step (Tier 3), not a standalone patch** — do it there so it's done once, correctly.
+the real fix (write our own UUID-keyed entries, merge the rest by UUID). Decoupled from the
+rejected persistence step — can be done as a standalone fix when prioritized, without freezing values.
 
 ---
 
-## Tier 3 — The persistence step (separate, larger; unblocks the rest)
+## Tier 3 — The persistence step — REJECTED (see decision at end of document)
 
 ### 3.1 Serialize `CompiledProperties` to the stack; stop parsing the tree per query
 The surviving hot-path cost is `converter.toComponent(stack)` (full COF parse) on every mixin call
@@ -115,9 +115,10 @@ it did **not** remove the *re-parse*, because reads still rebuild the tree to re
   items reference their registry-compiled artifact (near-zero NBT) with a generation stamp.
   Project entity attributes into vanilla `AttributeModifiers` NBT — which fixes 2.2 by writing our
   own UUID-keyed entries and merging the rest.
-- This is the next *increment*, not part of this ripple pass — it's the ADR-002 step the inversion
-  was the prerequisite for. Flagged here so the Tier-1/2 work doesn't redundantly touch the same
-  read paths.
+- **Superseded:** persistence freezes stats and breaks data-driven propagation (edit a material →
+  existing tools must update). See the decision section at the end of this document. The surviving
+  per-query NBT parse is the accepted cost of live derivation; the correct optimization, if ever
+  needed, is a transient in-memory cache invalidated on reload — not NBT persistence.
 
 ---
 
@@ -160,3 +161,29 @@ monotonically down — which is the actual objective.
   the deleted runtime path; readiness for it is the smell.
 - Don't collapse the `ContextualEffectHandler`/`EntityEffectHandler` 2-way dispatch into a visitor
   — it's already minimal; touching it adds concepts.
+
+---
+
+## Decision: persistence (Tier 3) is REJECTED — stats derive live, never frozen
+
+The stack must store **structural identity** (which parts/upgrades, by id), and every stat value
+must be **recompiled from the current registry at construction**. Serializing the compiled
+artifact (baked stats / vanilla `AttributeModifiers` NBT) onto the stack freezes those values, so
+editing a material's stats would NOT update tools crafted earlier — breaking the core virtue of a
+data-driven mod, where content edits must propagate to existing items.
+
+The generation-stamp mitigation I had proposed is just "recompile on mismatch," which re-adds
+concepts (stamp, dual-write, lazy-recompile path) to recover the exact behaviour
+compile-at-construction already gives for free. Persistence trades the model's correctness for
+read speed; not worth it.
+
+Consequences:
+- **Keep** compile-at-construction as the only compile site. A tool deserialized from NBT
+  reconstructs its tree (part ids resolved against the *current* registry) and recompiles, so it
+  always reflects current data.
+- The surviving per-query NBT parse is the **honest cost of live derivation**. If it ever needs
+  optimizing, the correct tool is a *transient in-memory* component/compiled cache keyed by stack
+  NBT and invalidated on data reload — NOT persistence. A transient cache reflects current data
+  (rebuilt on reload); persisted NBT does not.
+- The vanilla-modifier merge fix is decoupled from persistence and can be done independently if
+  needed (write our own UUID-keyed entries, merge the rest by UUID), without freezing values.

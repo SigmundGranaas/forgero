@@ -8,11 +8,9 @@ import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.runtime.ContextKeys;
 import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
-import com.sigmundgranaas.forgero.common.runtime.RuntimeConditions;
-import com.sigmundgranaas.forgero.effects.entity.ContextualEffectHandler;
-import com.sigmundgranaas.forgero.effects.entity.EntityEffectHandler;
-import com.sigmundgranaas.forgero.effects.entity.OnHitEffect;
+import com.sigmundgranaas.forgero.common.runtime.PropertyDispatcher;
 import com.sigmundgranaas.forgero.common.api.ForgeroInitializedCallback;
+import com.sigmundgranaas.forgero.properties.minecraft.EntityEffects;
 import com.sigmundgranaas.forgero.properties.minecraft.ontick.OnTickProperty;
 
 import net.minecraft.entity.Entity;
@@ -76,44 +74,29 @@ public class OnTickProjectileManager {
 			return;
 		}
 
-		final ComponentConverter finalConverter = activeConverter;
+		// Build context with projectile's entity type tags
+		DynamicContext.Builder contextBuilder = new DynamicContext.Builder();
+		Set<OpenIdentifier> sourceTags = Registries.ENTITY_TYPE.getEntry(projectile.getType())
+				.streamTags()
+				.map(TagKey::id)
+				.map(id -> new OpenIdentifier(id.getNamespace(), id.getPath()))
+				.collect(Collectors.toSet());
+		contextBuilder.put(ContextKeys.TARGET_TAGS, sourceTags);
+		DynamicContext context = contextBuilder.build();
 
-		finalConverter.toComponent(stack).ifPresent(component -> {
-			// Build context with projectile's entity type tags
-			DynamicContext.Builder contextBuilder = new DynamicContext.Builder();
-			Set<OpenIdentifier> sourceTags = Registries.ENTITY_TYPE.getEntry(projectile.getType())
-					.streamTags()
-					.map(TagKey::id)
-					.map(id -> new OpenIdentifier(id.getNamespace(), id.getPath()))
-					.collect(Collectors.toSet());
-			contextBuilder.put(ContextKeys.TARGET_TAGS, sourceTags);
-			DynamicContext context = contextBuilder.build();
+		// Resolve on-tick properties
+		List<OnTickProperty> properties = PropertyDispatcher.active(stack, OnTickProperty.KEY, context);
 
-			// Resolve on-tick properties
-			var engine = new OnTickProperty.Engine();
-			List<OnTickProperty> properties = RuntimeConditions.filter(engine.resolve(component), context);
+		// Determine the source entity (owner if available, otherwise projectile itself)
+		Entity source = projectile.getOwner() != null ? projectile.getOwner() : projectile;
 
-			// Determine the source entity (owner if available, otherwise projectile itself)
-			Entity source = projectile.getOwner() != null ? projectile.getOwner() : projectile;
-
-			for (OnTickProperty property : properties) {
-				// Check interval (e.g., every 20 ticks)
-				if (age % property.interval() == 0) {
-					// Selector handles both selection and filtering
-					// For projectiles, the "target" for selection is typically the projectile itself
-					List<Entity> finalTargets = property.selector().select(source, projectile);
-
-					for (Entity target : finalTargets) {
-						for (OnHitEffect effect : property.effects()) {
-							if (effect instanceof ContextualEffectHandler contextual) {
-								contextual.apply(source, target);
-							} else if (effect instanceof EntityEffectHandler simple) {
-								simple.apply(target);
-							}
-						}
-					}
-				}
+		for (OnTickProperty property : properties) {
+			// Check interval (e.g., every 20 ticks)
+			if (age % property.interval() == 0) {
+				// Selector handles both selection and filtering
+				// For projectiles, the "target" for selection is typically the projectile itself
+				EntityEffects.apply(property.selector(), property.effects(), source, projectile);
 			}
-		});
+		}
 	}
 }
