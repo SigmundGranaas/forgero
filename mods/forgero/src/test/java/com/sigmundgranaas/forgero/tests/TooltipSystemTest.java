@@ -144,8 +144,7 @@ public class TooltipSystemTest implements ForgeroGameTest {
 
 		Component sword = ctx.component("forgero:iron-sword").orElseThrow();
 
-		AttributeEngine engine = new AttributeEngine();
-		var result = engine.resolve(sword);
+		var result = AttributeEngine.resolveAttributes(sword);
 		float damage = result.getValue(OpenIdentifier.parse("forgero:attack_damage"));
 
 		assertTrue(damage > 0, "Sword should have attack damage > 0");
@@ -168,8 +167,7 @@ public class TooltipSystemTest implements ForgeroGameTest {
 
 		Component pickaxe = ctx.component("forgero:iron-pickaxe").orElseThrow();
 
-		AttributeEngine engine = new AttributeEngine();
-		var result = engine.resolve(pickaxe);
+		var result = AttributeEngine.resolveAttributes(pickaxe);
 		float miningSpeed = result.getValue(OpenIdentifier.parse("forgero:mining_speed"));
 
 		assertTrue(miningSpeed > 0, "Pickaxe should have mining speed > 0");
