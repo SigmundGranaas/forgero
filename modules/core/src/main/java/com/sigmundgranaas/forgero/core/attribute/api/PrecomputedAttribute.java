@@ -47,10 +47,11 @@ public record PrecomputedAttribute(
 	}
 
 	/**
-	 * @return The compiled attribute value. Attributes carrying dynamic conditions do not
-	 * contribute here: they are exposed via {@link #conditionalAttributes()} as data, and
-	 * any game-state-dependent behaviour belongs to the game layer (as effects), never to
-	 * the compiled stat value.
+	 * @return The compiled base attribute value. Attributes carrying dynamic conditions do
+	 * not contribute here: they are exposed via {@link #conditionalAttributes()} as data and
+	 * applied by the game layer at context-bearing events (see {@code DynamicAttributes} in
+	 * the mc common module — e.g. a dagger's "+damage while sneaking"). Runtime state never
+	 * enters core; it only reads this compiled artifact.
 	 */
 	public float value() {
 		return baseValue;

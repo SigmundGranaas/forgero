@@ -23,7 +23,9 @@
     {
       "id": "forgero:dagger_blade-reinforcement",
       "type": "forgero:materials/roles/upgrade_material",
-      "tags": ["forgero:upgrades/types/reinforcement"],
+      "tags": [
+        "forgero:upgrades/types/reinforcement"
+      ],
       "description": "slot.forgero.reinforcement"
     }
   ],
@@ -31,53 +33,92 @@
     {
       "id": "forgero:dagger_blade-rarity",
       "type": "forgero:rarity",
-      "computation": {"value": 20, "operation": "addition"}
+      "computation": {
+        "value": 20,
+        "operation": "addition"
+      }
     },
     {
       "id": "forgero:dagger_blade-durability-mult",
       "type": "forgero:durability",
       "scope": "forgero:scope/part-composite",
-      "computation": {"multiply": 0.7}
+      "computation": {
+        "multiply": 0.7
+      }
     },
     {
       "id": "forgero:dagger_blade-attack_damage-offset",
       "type": "forgero:attack_damage",
       "scope": "forgero:scope/part-composite",
-      "computation": {"value": 1, "operation": "addition"}
+      "computation": {
+        "value": 1,
+        "operation": "addition"
+      }
     },
     {
       "id": "forgero:dagger_blade-attack_speed-base",
       "type": "forgero:attack_speed",
-      "computation": {"value": 0.5}
+      "computation": {
+        "value": 0.5
+      }
     },
     {
       "id": "forgero:dagger_blade-attack_speed-mult",
       "type": "forgero:attack_speed",
       "scope": "forgero:scope/part-composite",
-      "computation": {"multiply": 1.0}
+      "computation": {
+        "multiply": 1.0
+      }
     },
     {
       "id": "forgero:dagger_blade-mining_speed-mult",
       "type": "forgero:mining_speed",
       "scope": "forgero:scope/part-composite",
-      "computation": {"multiply": 1.0}
+      "computation": {
+        "multiply": 1.0
+      }
     },
     {
       "id": "forgero:dagger_blade-mining_level-mult",
       "type": "forgero:mining_level",
       "scope": "forgero:scope/part-composite",
-      "computation": {"multiply": 1.0}
+      "computation": {
+        "multiply": 1.0
+      }
     },
     {
       "id": "forgero:dagger_blade-weight-mult",
       "type": "forgero:weight",
       "scope": "forgero:scope/part-composite",
-      "computation": {"multiply": 0.6}
+      "computation": {
+        "multiply": 0.6
+      }
+    },
+    {
+      "id": "forgero:dagger_blade-sneak_attack",
+      "type": "forgero:attack_damage",
+      "computation": {
+        "value": 4,
+        "operation": "addition"
+      },
+      "condition": {
+        "dynamic": [
+          {
+            "type": "minecraft:entity",
+            "flags": {
+              "is_sneaking": true
+            }
+          }
+        ]
+      }
     }
   ],
   "properties": {
     "forgero:name_replacement": [
-      {"from": "sword", "to": "dagger"}
+      {
+        "from": "sword",
+        "to": "dagger"
+      }
     ]
   }
 }

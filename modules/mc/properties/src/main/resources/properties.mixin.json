@@ -24,6 +24,7 @@
     "ItemUseInteractionMixin",
     "LivingEntityDamageMixin",
     "LivingEntityDeathMixin",
+    "LivingEntityDynamicAttributeMixin",
     "LivingEntityLootMixin",
     "LivingEntityOnHitMixin",
     "LivingEntitySwingMixin",
