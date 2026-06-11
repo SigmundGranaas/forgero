@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.common.useinteraction.EntityUseEffect;
 import com.sigmundgranaas.forgero.core.property.api.codec.ListCodecWrapper;
 import com.sigmundgranaas.forgero.common.api.DataPlugin;
 import com.sigmundgranaas.forgero.common.api.PluginRegistrationContext;
+import com.sigmundgranaas.forgero.core.property.compiled.CompilerPasses;
 import com.sigmundgranaas.forgero.properties.minecraft.entityuse.effects.HealEntityEffect;
 
 import java.util.Map;
@@ -35,6 +36,8 @@ public class EntityUsePropertiesPlugin implements DataPlugin {
 
 	@Override
 	public void register(PluginRegistrationContext context) {
+		// Register the compile pass so terminals pre-compile this property at construction.
+		CompilerPasses.register(EntityUseProperty.KEY, EntityUseProperty.Engine::new);
 		context.registerPropertyCodec(
 				EntityUseProperty.PROPERTY_KEY,
 				conditionCodecSupplier -> ListCodecWrapper.of(EntityUseProperty.codec(conditionCodecSupplier.get()))

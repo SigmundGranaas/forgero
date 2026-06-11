@@ -2,6 +2,8 @@ package com.sigmundgranaas.forgero.common.api.item.impl;
 
 import com.sigmundgranaas.forgero.common.api.item.ItemPropertyApi;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
+import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.component.api.EquipmentComponent;
 import com.sigmundgranaas.forgero.core.property.api.DataTypeEngine;
 import net.minecraft.item.ItemStack;
 
@@ -12,8 +14,12 @@ import java.util.function.Supplier;
 /**
  * Implementation of {@link ItemPropertyApi}.
  * <p>
- * This implementation delegates to ComponentConverter for ItemStack-to-Component conversion
- * and returns empty lists for non-Forgero items, ensuring null-safe behavior.
+ * For terminal (equipment) items the property list is read directly from the component's
+ * pre-compiled artifact — an O(1) map lookup, no tree traversal or re-compilation. The
+ * artifact was produced once at construction by the factory (see
+ * {@code docs/ADR-002-compiler-in-the-factory.md}). The on-demand {@code engine.resolve}
+ * path remains only as a fallback for the rare non-terminal component. Returns empty lists
+ * for null/empty/non-Forgero items.
  */
 public class ItemPropertyApiImpl implements ItemPropertyApi {
 
@@ -33,12 +39,8 @@ public class ItemPropertyApiImpl implements ItemPropertyApi {
 		if (stack == null || stack.isEmpty()) {
 			return Collections.emptyList();
 		}
-
 		return converter.toComponent(stack)
-				.map(component -> {
-					DataTypeEngine<?, List<P>> engine = engineSupplier.get();
-					return engine.resolve(component);
-				})
+				.map(component -> read(component, engineSupplier.get()))
 				.orElse(Collections.emptyList());
 	}
 
@@ -47,9 +49,17 @@ public class ItemPropertyApiImpl implements ItemPropertyApi {
 		if (stack == null || stack.isEmpty() || engine == null) {
 			return Collections.emptyList();
 		}
-
 		return converter.toComponent(stack)
-				.map(component -> engine.resolve(component))
+				.map(component -> read(component, engine))
 				.orElse(Collections.emptyList());
+	}
+
+	private <P> List<P> read(Component component, DataTypeEngine<?, List<P>> engine) {
+		// Terminal items carry the compiled property list; read it directly.
+		if (component instanceof EquipmentComponent equipment) {
+			return equipment.properties(engine.key());
+		}
+		// Fallback: compile on demand for non-terminal components.
+		return engine.resolve(component);
 	}
 }

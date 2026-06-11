@@ -5,6 +5,7 @@ import com.sigmundgranaas.forgero.common.useinteraction.BlockUseEffect;
 import com.sigmundgranaas.forgero.core.property.api.codec.ListCodecWrapper;
 import com.sigmundgranaas.forgero.common.api.DataPlugin;
 import com.sigmundgranaas.forgero.common.api.PluginRegistrationContext;
+import com.sigmundgranaas.forgero.core.property.compiled.CompilerPasses;
 import com.sigmundgranaas.forgero.properties.minecraft.blockuse.effects.TillSoilEffect;
 
 import java.util.Map;
@@ -35,6 +36,8 @@ public class BlockUsePropertiesPlugin implements DataPlugin {
 
 	@Override
 	public void register(PluginRegistrationContext context) {
+		// Register the compile pass so terminals pre-compile this property at construction.
+		CompilerPasses.register(BlockUseProperty.KEY, BlockUseProperty.Engine::new);
 		context.registerPropertyCodec(
 				BlockUseProperty.PROPERTY_KEY,
 				conditionCodecSupplier -> ListCodecWrapper.of(BlockUseProperty.codec(conditionCodecSupplier.get()))

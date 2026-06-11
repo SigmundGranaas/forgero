@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.core.component.impl;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.attribute.api.BakedAttributes;
+import com.sigmundgranaas.forgero.core.property.compiled.CompiledProperties;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.EquipmentComponent;
@@ -26,7 +26,7 @@ public record StructuredExtensibleEquipment(
 		Map<String, List<?>> properties,
 		ComponentStructure structure,
 		ComponentUpgrades upgrades,
-		BakedAttributes bakedAttributes
+		CompiledProperties compiled
 ) implements StructuredComponent, CustomizableComponent, EquipmentComponent {
 
 	private static final OpenIdentifier TYPE_IDENTIFIER = OpenIdentifier.of("structured_extensible_equipment");
@@ -43,10 +43,10 @@ public record StructuredExtensibleEquipment(
 	) {
 		validateSlotIds(structure, upgrades);
 		StructuredExtensibleEquipment temp = new StructuredExtensibleEquipment(
-				id, tags, properties, structure, upgrades, BakedAttributes.EMPTY
+				id, tags, properties, structure, upgrades, CompiledProperties.EMPTY
 		);
 		return new StructuredExtensibleEquipment(
-				id, tags, properties, structure, upgrades, AttributeBaker.bake(temp)
+				id, tags, properties, structure, upgrades, ComponentCompiler.compile(temp)
 		);
 	}
 
@@ -91,20 +91,20 @@ public record StructuredExtensibleEquipment(
 	@Override
 	public Component withStructure(ComponentStructure newStructure) {
 		StructuredExtensibleEquipment temp = new StructuredExtensibleEquipment(
-				this.id, this.tags, this.properties, newStructure, this.upgrades, BakedAttributes.EMPTY
+				this.id, this.tags, this.properties, newStructure, this.upgrades, CompiledProperties.EMPTY
 		);
 		return new StructuredExtensibleEquipment(
-				this.id, this.tags, this.properties, newStructure, this.upgrades, AttributeBaker.bake(temp)
+				this.id, this.tags, this.properties, newStructure, this.upgrades, ComponentCompiler.compile(temp)
 		);
 	}
 
 	@Override
 	public Component withUpgrades(ComponentUpgrades newUpgrades) {
 		StructuredExtensibleEquipment temp = new StructuredExtensibleEquipment(
-				this.id, this.tags, this.properties, this.structure, newUpgrades, BakedAttributes.EMPTY
+				this.id, this.tags, this.properties, this.structure, newUpgrades, CompiledProperties.EMPTY
 		);
 		return new StructuredExtensibleEquipment(
-				this.id, this.tags, this.properties, this.structure, newUpgrades, AttributeBaker.bake(temp)
+				this.id, this.tags, this.properties, this.structure, newUpgrades, ComponentCompiler.compile(temp)
 		);
 	}
 
@@ -112,10 +112,10 @@ public record StructuredExtensibleEquipment(
 	public Component withProperties(Map<String, List<?>> newProperties) {
 		Map<String, List<?>> merged = PropertyMergeHelper.merge(this.properties, newProperties);
 		StructuredExtensibleEquipment temp = new StructuredExtensibleEquipment(
-				this.id, this.tags, merged, this.structure, this.upgrades, BakedAttributes.EMPTY
+				this.id, this.tags, merged, this.structure, this.upgrades, CompiledProperties.EMPTY
 		);
 		return new StructuredExtensibleEquipment(
-				this.id, this.tags, merged, this.structure, this.upgrades, AttributeBaker.bake(temp)
+				this.id, this.tags, merged, this.structure, this.upgrades, ComponentCompiler.compile(temp)
 		);
 	}
 }

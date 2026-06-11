@@ -1,6 +1,6 @@
 package com.sigmundgranaas.forgero.core.component.impl;
 
-import com.sigmundgranaas.forgero.core.attribute.api.BakedAttributes;
+import com.sigmundgranaas.forgero.core.property.compiled.CompiledProperties;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.EquipmentComponent;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
@@ -18,7 +18,7 @@ public record StaticEquipment(
 		OpenIdentifier id,
 		Set<OpenIdentifier> tags,
 		Map<String, List<?>> properties,
-		BakedAttributes bakedAttributes
+		CompiledProperties compiled
 ) implements EquipmentComponent {
 
 	private static final OpenIdentifier TYPE_IDENTIFIER = OpenIdentifier.of("static_equipment");
@@ -31,8 +31,8 @@ public record StaticEquipment(
 			Set<OpenIdentifier> tags,
 			Map<String, List<?>> properties
 	) {
-		StaticEquipment temp = new StaticEquipment(id, tags, properties, BakedAttributes.EMPTY);
-		return new StaticEquipment(id, tags, properties, AttributeBaker.bake(temp));
+		StaticEquipment temp = new StaticEquipment(id, tags, properties, CompiledProperties.EMPTY);
+		return new StaticEquipment(id, tags, properties, ComponentCompiler.compile(temp));
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public record StaticEquipment(
 	@Override
 	public Component withProperties(Map<String, List<?>> newProperties) {
 		Map<String, List<?>> merged = PropertyMergeHelper.merge(this.properties, newProperties);
-		StaticEquipment temp = new StaticEquipment(this.id, this.tags, merged, BakedAttributes.EMPTY);
-		return new StaticEquipment(this.id, this.tags, merged, AttributeBaker.bake(temp));
+		StaticEquipment temp = new StaticEquipment(this.id, this.tags, merged, CompiledProperties.EMPTY);
+		return new StaticEquipment(this.id, this.tags, merged, ComponentCompiler.compile(temp));
 	}
 }

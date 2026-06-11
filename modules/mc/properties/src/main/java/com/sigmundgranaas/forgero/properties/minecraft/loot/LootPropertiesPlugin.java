@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.sigmundgranaas.forgero.core.property.api.codec.ListCodecWrapper;
 import com.sigmundgranaas.forgero.common.api.DataPlugin;
 import com.sigmundgranaas.forgero.common.api.PluginRegistrationContext;
+import com.sigmundgranaas.forgero.core.property.compiled.CompilerPasses;
 import com.sigmundgranaas.forgero.properties.minecraft.loot.filter.IsItemFilter;
 import com.sigmundgranaas.forgero.properties.minecraft.loot.filter.ItemFilter;
 import com.sigmundgranaas.forgero.properties.minecraft.loot.filter.TagFilter;
@@ -58,6 +59,8 @@ public class LootPropertiesPlugin implements DataPlugin {
 
 	@Override
 	public void register(PluginRegistrationContext context) {
+		// Register the compile pass so terminals pre-compile this property at construction.
+		CompilerPasses.register(LootProperty.KEY, LootProperty.Engine::new);
 		context.registerPropertyCodec(
 				LootProperty.PROPERTY_KEY,
 				conditionCodecSupplier -> ListCodecWrapper.of(LootProperty.codec(conditionCodecSupplier.get()))

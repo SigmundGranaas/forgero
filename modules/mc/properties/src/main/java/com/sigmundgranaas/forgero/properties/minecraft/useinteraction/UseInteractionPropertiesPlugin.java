@@ -11,6 +11,7 @@ import com.sigmundgranaas.forgero.core.property.api.codec.ListCodecWrapper;
 import com.sigmundgranaas.forgero.effects.EffectCodecRegistry;
 import com.sigmundgranaas.forgero.common.api.DataPlugin;
 import com.sigmundgranaas.forgero.common.api.PluginRegistrationContext;
+import com.sigmundgranaas.forgero.core.property.compiled.CompilerPasses;
 import com.sigmundgranaas.forgero.effects.entity.ParticleHandler;
 import com.sigmundgranaas.forgero.effects.entity.SoundHandler;
 import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.handlers.ConsumeStackHandler;
@@ -94,6 +95,8 @@ public class UseInteractionPropertiesPlugin implements DataPlugin {
 
 	@Override
 	public void register(PluginRegistrationContext context) {
+		// Register the compile pass so terminals pre-compile this property at construction.
+		CompilerPasses.register(UseInteractionProperty.KEY, UseInteractionProperty.Engine::new);
 		context.registerPropertyCodec(
 				UseInteractionProperty.PROPERTY_KEY,
 				conditionCodecSupplier -> ListCodecWrapper.of(

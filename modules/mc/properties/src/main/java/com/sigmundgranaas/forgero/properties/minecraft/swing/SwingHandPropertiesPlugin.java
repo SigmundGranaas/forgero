@@ -7,6 +7,7 @@ import com.sigmundgranaas.forgero.effects.entity.SwingParticleEffect;
 import com.sigmundgranaas.forgero.effects.entity.SwingSoundEffect;
 import com.sigmundgranaas.forgero.common.api.DataPlugin;
 import com.sigmundgranaas.forgero.common.api.PluginRegistrationContext;
+import com.sigmundgranaas.forgero.core.property.compiled.CompilerPasses;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -35,6 +36,8 @@ public class SwingHandPropertiesPlugin implements DataPlugin {
 
 	@Override
 	public void register(PluginRegistrationContext context) {
+		// Register the compile pass so terminals pre-compile this property at construction.
+		CompilerPasses.register(SwingHandProperty.KEY, SwingHandProperty.Engine::new);
 		context.registerPropertyCodec(
 				SwingHandProperty.PROPERTY_KEY,
 				conditionCodecSupplier -> ListCodecWrapper.of(SwingHandProperty.codec(conditionCodecSupplier.get()))

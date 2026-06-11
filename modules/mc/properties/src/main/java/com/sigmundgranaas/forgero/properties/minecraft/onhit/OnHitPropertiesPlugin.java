@@ -23,6 +23,7 @@ import com.sigmundgranaas.forgero.effects.entity.TeleportHandler;
 import com.sigmundgranaas.forgero.effects.entity.VelocityHandler;
 import com.sigmundgranaas.forgero.common.api.DataPlugin;
 import com.sigmundgranaas.forgero.common.api.PluginRegistrationContext;
+import com.sigmundgranaas.forgero.core.property.compiled.CompilerPasses;
 import com.sigmundgranaas.forgero.properties.minecraft.entityfilter.*;
 import com.sigmundgranaas.forgero.properties.minecraft.entityfilter.EnvironmentFilter;
 import com.sigmundgranaas.forgero.properties.minecraft.entityfilter.EntityStateFilter;
@@ -129,6 +130,8 @@ public class OnHitPropertiesPlugin implements DataPlugin {
 
 	@Override
 	public void register(PluginRegistrationContext context) {
+		// Register the compile pass so terminals pre-compile this property at construction.
+		CompilerPasses.register(OnHitProperty.KEY, OnHitProperty.Engine::new);
 		context.registerPropertyCodec(
 				OnHitProperty.PROPERTY_KEY,
 				conditionCodecSupplier -> ListCodecWrapper.of(OnHitProperty.codec(conditionCodecSupplier.get()))

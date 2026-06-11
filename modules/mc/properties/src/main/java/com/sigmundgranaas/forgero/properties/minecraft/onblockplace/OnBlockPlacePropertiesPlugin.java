@@ -8,6 +8,7 @@ import com.sigmundgranaas.forgero.effects.block.PlacedBlockSelector;
 import com.sigmundgranaas.forgero.effects.block.RadiusBlockSelector;
 import com.sigmundgranaas.forgero.common.api.DataPlugin;
 import com.sigmundgranaas.forgero.common.api.PluginRegistrationContext;
+import com.sigmundgranaas.forgero.core.property.compiled.CompilerPasses;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +38,8 @@ public class OnBlockPlacePropertiesPlugin implements DataPlugin {
 
 	@Override
 	public void register(PluginRegistrationContext context) {
+		// Register the compile pass so terminals pre-compile this property at construction.
+		CompilerPasses.register(OnBlockPlaceProperty.KEY, OnBlockPlaceProperty.Engine::new);
 		context.registerPropertyCodec(
 				OnBlockPlaceProperty.PROPERTY_KEY,
 				conditionCodecSupplier -> ListCodecWrapper.of(OnBlockPlaceProperty.codec(conditionCodecSupplier.get()))
