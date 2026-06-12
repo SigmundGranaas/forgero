@@ -118,18 +118,38 @@ After the fixes: `mods/forgero` 270/270, `properties` 242/242, `predicate` 39/39
 `loader` 12/12, `test-common` 25/25, `repair-kit` 42/42, `drp` 24/24, `recipe-generator` 11/11,
 `armor` 7/7, `vanilla-upgrades` 65/65.
 
-Remaining (pre-existing, **not** session regressions — present at baseline `8da586ed5`):
-- `tools` `ToolBehaviorIntegrationGametest`: `OpenIdentifier.of("forgero:diamond-sword")` — the test
-  uses `of()` (rejects `:`) where it should use `parse()`.
-- `blocks` `assemblystationgametest.damagedforgeroitem_cannotbedisassembled`.
+### Pre-existing failures, also now fixed
+
+These predate the rework (present at baseline `8da586ed5`) and were masked — `tools` couldn't boot
+(regression #2), and only `mods/forgero` was ever validated:
+
+- **`tools` `ToolBehaviorIntegrationGametest`** (two issues, now green 23/23):
+  - `getForgeroToolByMaterial` built a `"forgero:diamond-sword"` string and passed it to
+    `OpenIdentifier.of()` (which rejects `:`); switched to `OpenIdentifier.parse()`.
+  - the vanilla/forgero diamond-sword damage tests attacked after only 10 ticks — before the
+    sword's ~12.5-tick attack cooldown recharged — so the hit dealt reduced, cooldown-scaled
+    damage (~4.6 instead of 7) and the strict `7.0 ± 0.5` assertion failed. Tick 20 so the
+    cooldown fully recharges.
+- **`blocks` `damagedForgeroItem_cannotBeDisassembled`** (now green 11/11): `DisassemblyService`
+  guarded damaged items with `ItemStack#isDamageable()`, which reads the *Item's* static max damage
+  — `0` for Forgero tools (durability is dynamic, supplied by a mixin on `ItemStack#getMaxDamage`).
+  So the guard was skipped and a damaged tool was disassemblable. Now uses the component-derived
+  durability query (`itemQuery().getMaxDurability`).
+
+### Remaining (pre-existing, not addressed)
+
 - `properties` `testOnHitMultipleEffectsIntegration` is **flaky** (a freeze-tick + multi-effect
-  timing race); passes on re-run.
+  timing race); passes on re-run. Left as-is (timing/infra, not a correctness bug).
 
-## Process gap to close
+## Process gap — closed
 
-1. The remaining suites (`bows`, `tools`, `armor`, `blocks`, `predicate`, `vanilla-upgrades`,
-   `repair-kit`, `drp`) are **also unvalidated this session** and may hide further regressions for
-   the same reason (non-terminal property serving, slot/identifier changes, condition changes).
-2. CI / the validation loop should run **every** module's `runGameTest`, not just `mods/forgero`.
-   A single aggregating task (or the loop running each `:module:runGameTest`) would have caught this
-   immediately.
+The root cause of both regressions slipping was that validation only ran `mods/forgero` (~28% of
+the corpus). Added a single aggregating Gradle task, **`runAllGameTests`** (root `build.gradle`),
+that depends on every module/mod `runGameTest`. One command now validates the whole gametest corpus:
+
+```bash
+./gradlew runAllGameTests
+```
+
+CI / the validation loop should invoke this rather than just `:mods:forgero:runGameTest`. Keep the
+`gameTestProjects` list in `build.gradle` in sync with the modules that declare a `gameTest` Loom run.
