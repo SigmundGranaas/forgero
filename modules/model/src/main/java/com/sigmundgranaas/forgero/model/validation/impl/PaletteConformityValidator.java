@@ -63,22 +63,34 @@ public class PaletteConformityValidator {
 			}
 		}
 		
-		// Check for inconsistent widths across all palettes
-		if (widthDistribution.size() > 1) {
-			int mostCommonWidth = findMostCommonWidth(widthDistribution);
-			for (Path palettePath : palettePaths) {
-				try {
-					BufferedImage img = ImageIO.read(palettePath.toFile());
-					if (img != null && img.getWidth() != mostCommonWidth) {
-						warnings.add(new PaletteWarning(
-								palettePath,
-								extractMaterialName(palettePath),
-								WarningType.INCONSISTENT_WIDTH,
-								String.format("Width %d differs from common width %d", img.getWidth(), mostCommonWidth)
-						));
-					}
-				} catch (IOException ignored) {
-					// Already reported as error
+		// Check for inconsistent SHADE COUNT across all palettes.
+		// Trailing transparent pixels are allowed padding (e.g. a 7-shade palette padded to 8px),
+		// so compare effective (opaque) widths rather than raw pixel widths — otherwise a padded
+		// 7-shade palette is falsely reported as inconsistent with an unpadded 7-shade one.
+		Map<Integer, Integer> effectiveDistribution = new HashMap<>();
+		Map<Path, Integer> effectiveByPath = new HashMap<>();
+		for (Path palettePath : palettePaths) {
+			try {
+				BufferedImage img = ImageIO.read(palettePath.toFile());
+				if (img != null && img.getHeight() == REQUIRED_HEIGHT) {
+					int eff = effectiveWidth(img);
+					effectiveDistribution.merge(eff, 1, Integer::sum);
+					effectiveByPath.put(palettePath, eff);
+				}
+			} catch (IOException ignored) {
+				// Already reported as error
+			}
+		}
+		if (effectiveDistribution.size() > 1) {
+			int mostCommonWidth = findMostCommonWidth(effectiveDistribution);
+			for (Map.Entry<Path, Integer> entry : effectiveByPath.entrySet()) {
+				if (entry.getValue() != mostCommonWidth) {
+					warnings.add(new PaletteWarning(
+							entry.getKey(),
+							extractMaterialName(entry.getKey()),
+							WarningType.INCONSISTENT_WIDTH,
+							String.format("Shade count %d differs from common %d", entry.getValue(), mostCommonWidth)
+					));
 				}
 			}
 		}
@@ -279,15 +291,34 @@ public class PaletteConformityValidator {
 	}
 	
 	/**
+	 * Effective (opaque) width: the number of leading opaque pixels, ignoring trailing transparent
+	 * padding. Padding is explicitly allowed (see {@link #hasTransparency}), so this is the real
+	 * shade count of the palette.
+	 */
+	private int effectiveWidth(BufferedImage img) {
+		for (int x = img.getWidth() - 1; x >= 0; x--) {
+			int alpha = (img.getRGB(x, 0) >> 24) & 0xFF;
+			if (alpha == 255) {
+				return x + 1;
+			}
+		}
+		return 0;
+	}
+
+	/**
 	 * Checks if colors progress from light to dark (inverted from expected).
 	 * Expected: dark on left, light on right.
+	 * <p>
+	 * Compares the first opaque pixel against the last <em>opaque</em> pixel so that trailing
+	 * transparent padding (luminance 0) does not falsely flag a correct dark→light palette.
 	 */
 	private boolean hasInvertedProgression(BufferedImage img) {
-		if (img.getWidth() < 2) return false;
-		
+		int eff = effectiveWidth(img);
+		if (eff < 2) return false;
+
 		int firstLuminance = getLuminance(img.getRGB(0, 0));
-		int lastLuminance = getLuminance(img.getRGB(img.getWidth() - 1, 0));
-		
+		int lastLuminance = getLuminance(img.getRGB(eff - 1, 0));
+
 		// Dark should be on left (low luminance), light on right (high luminance)
 		return firstLuminance > lastLuminance + PROGRESSION_TOLERANCE;
 	}
@@ -296,12 +327,14 @@ public class PaletteConformityValidator {
 	 * Checks if the palette has very low contrast.
 	 */
 	private boolean hasLowContrast(BufferedImage img) {
-		if (img.getWidth() < 2) return false;
-		
+		int eff = effectiveWidth(img);
+		if (eff < 2) return false;
+
 		int minLuminance = Integer.MAX_VALUE;
 		int maxLuminance = Integer.MIN_VALUE;
-		
-		for (int x = 0; x < img.getWidth(); x++) {
+
+		// Ignore trailing transparent padding (luminance 0 would distort the range).
+		for (int x = 0; x < eff; x++) {
 			int luminance = getLuminance(img.getRGB(x, 0));
 			minLuminance = Math.min(minLuminance, luminance);
 			maxLuminance = Math.max(maxLuminance, luminance);
