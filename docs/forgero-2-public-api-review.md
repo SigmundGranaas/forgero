@@ -120,3 +120,35 @@ The **consumption** half of the external API (read stats, install/remove upgrade
 and now guarded. The **extension** half still hands authors internal — and even `impl` — types, so
 for "add new behavior in Java," the original complaint stands. F1 + F3 are the highest-value next
 steps: seal the extension boundary, and stop the docs from pointing at an API that isn't there.
+
+---
+
+## Progress
+
+**F1 (conditions) — DONE.** A downstream mod can now author and register a custom condition with
+**zero** `core.*`/`*.impl.*` imports, proven by `ExampleDataPlugin` (public-only, compile-guarded)
+and the `PublicApiExtensionTest` gametest:
+
+- `ConditionContext` (public) — a read-only structural view (`isRoot`, `depth`, `slotType`,
+  `slotTags`, `isInSlotType`) that exposes **no** `Component`.
+- `PluginRegistrationContext.registerStaticCondition(type, Predicate<ConditionContext>)` — the
+  parameterless/logic case.
+- `PluginRegistrationContext.registerStaticCondition(type, Codec<C>, BiPredicate<C, ConditionContext>)`
+  — the JSON-parameterized case, with `ForgeroCodecs.IDENTIFIER` providing the path-preserving
+  identifier codec so the `data.loading.impl.codec.CodecConstants` leak is gone.
+
+**F3 — DONE.** Fixed the `CLAUDE.md` "Key APIs" block (removed the non-existent
+`getInstance()`/`registry()`/`resolver().resolve(...)`; replaced with the real
+`ForgeroApi.services()`/static-delegate surface).
+
+**Still leaking (next):**
+
+- **Effects** (on-hit / on-tick handlers) — registered through a different path than conditions;
+  give them the same functional/public treatment.
+- **Property codecs** (`registerPropertyCodec`) and **slot codecs** (`registerSlotCodec`) still take
+  `PropertyKey<?>` / `core.component.api.Slot` and heavy `Function<Supplier<…>, …>` generics.
+- **Registry discovery (F2)** — still returns `core.component.api.Component`; add ItemStack-level
+  `allMaterials()/allParts()`.
+- A strict, fully-sealed SPI (so an author never has even the *option* of a `core.*` import) would
+  want the condition/property SPI types in a dedicated public `forgero-api` module that both `core`
+  and `common` depend on — measured at ~90 import sites, deferred as its own refactor.

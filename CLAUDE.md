@@ -166,23 +166,25 @@ Everything in Forgero is a `Component` - materials, parts, tools, and upgrades a
 - Carry properties that define behaviors
 - Are registered in `ComponentRegistry`
 
-**Key APIs**:
+**Key APIs** (static accessor; available after Forgero is initialized — see
+`ForgeroInitializedCallback` for the injected form):
 ```java
-// Get ForgeroApi instance
-ForgeroApi api = ForgeroApi.getInstance();
-
 // Convert ItemStack ↔ Component
-Optional<Component> comp = api.converter().toComponent(stack);
-ItemStack stack = api.converter().toStack(comp);
+Optional<Component> comp = ForgeroApi.converter().toComponent(stack);
+Optional<ItemStack> back = ForgeroApi.converter().toStack(comp.get());
 
-// Access registry
-ComponentRegistry registry = api.registry();
-Optional<Component> comp = registry.find(identifier);
+// Access the component registry (by id)
+ComponentRegistry registry = ForgeroApi.componentRegistry();
+Optional<Component> found = registry.get(identifier);
 
-// Resolve properties
-PropertyResolver resolver = api.resolver();
-List<Property> props = resolver.resolve(component, engine, context);
+// Slot operations
+SlotManager slots = ForgeroApi.slotManager();
 ```
+
+> Properties are no longer "resolved" at runtime — a terminal compiles its full property
+> artifact once at construction and the game layer reads it by key. There is no
+> `api.resolver()`/`resolver.resolve(...)`. For stats off an `ItemStack`, prefer the
+> **modular ItemStack APIs** below; they hide `Component` entirely.
 
 ### Modular ItemStack APIs
 
@@ -277,13 +279,12 @@ if (compare.areSimilar(stack1, stack2)) {
 
 #### Benefits of Modular APIs
 
-**Before** (Component-based approach):
+**Before** (Component-based approach — internal types, more boilerplate):
 ```java
-// Getting attack damage required understanding Components, Resolvers, AttributeEngines
+// Getting attack damage meant dropping into the internal Component + attribute layer
 Optional<Component> comp = ForgeroApi.converter().toComponent(stack);
 if (comp.isPresent()) {
-    AttributeEngine engine = new AttributeEngine();
-    AttributeQueryResult result = ForgeroApi.resolver().resolve(comp.get(), engine, DynamicContext.empty());
+    AttributeQueryResult result = AttributeEngine.resolveAttributes(comp.get());
     float damage = result.getValue(DefaultAttributes.ATTACK_DAMAGE);
 }
 
