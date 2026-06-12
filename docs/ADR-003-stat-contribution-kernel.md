@@ -298,3 +298,36 @@ content or test depends on the finer distinction. The migration path remains: au
 
 Result: **all 263 required gametests pass** (264 minus the removed parity gametest) and the core
 unit suite is green.
+
+## Gate result #4 — slot context restored as a condition, not a positional rule
+
+Gate #3's `upgradeOnly` rule was too coarse: it made *any* unrecognized-scope attribute apply in
+*any* upgrade slot, collapsing the offensive/defensive/utility distinction the content actually
+draws (a metal reinforces offensively; a soft material grips utility; the same reinforcement slot
+is offensive on a head, defensive on a guard, utility on a handle). The distinction was wanted
+back — expressed as a **condition on the slot**, the kernel's existing, generic gating mechanism,
+rather than a special scope rule.
+
+This is now modelled with the existing `forgero:in_slot_type` static condition, which the stat
+kernel already evaluates (`StatFold` runs static conditions before the shim). The slot carries the
+context in its `scope` (e.g. `contexts/offensive`); `InSlotTypeCondition.test` matches a slot by
+its **type** *or* its **scope**, so one condition answers both "am I in an upgrade slot?"
+(`in_slot_type: materials/roles/upgrade_material`, used by effect upgrades like blaze_rod) and "am I
+in an offensive slot?" (`in_slot_type: contexts/offensive`, used by the reinforcement bonuses).
+
+Changes:
+- **Content:** the `*_upgrade_base` materials drop `scope: contexts/*` on their bonus attributes
+  and instead carry `condition: { in_slot_type: contexts/* }`. The slots keep their `type`
+  (load-bearing for validation, UI and existing effect-upgrade conditions) and their `scope`
+  (the context). Nothing is renamed — the slot type stays `materials/roles/upgrade_material`.
+- **`InSlotTypeCondition`:** matches the slot's type *or* scope (and the part type), comparing
+  **canonical** identifier forms so it works whether evaluated against a pristine component (full
+  authored path) or a serialized one (canonicalized to the last segment).
+- **`AttributeShim`:** unrecognized scopes go back to **inert** — slot-specific application is a
+  condition concern now, so a live slot-scoped attribute never reaches the shim as a bare scope;
+  anything that does is genuinely stale.
+
+This keeps the kernel generic (no named-slot-scope concept), the spear fixed (a base material is
+not in a `contexts/offensive` slot, so the condition drops the bonus), and the offensive/defensive/
+utility distinction intact and data-driven. **All 263 required gametests pass** and the core unit
+suite is green.

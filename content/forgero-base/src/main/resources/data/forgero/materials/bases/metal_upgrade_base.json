@@ -5,38 +5,68 @@
     {
       "id": "forgero:metal-upgrade-rarity",
       "type": "forgero:rarity",
-      "computation": { "value": 20, "operation": "addition" },
+      "computation": {
+        "value": 20,
+        "operation": "addition"
+      },
       "scope": "forgero:scope/upgrade"
     },
     {
       "id": "forgero:metal-upgrade-weight",
       "type": "forgero:weight",
-      "computation": { "value": 2.5, "operation": "addition" },
+      "computation": {
+        "value": 2.5,
+        "operation": "addition"
+      },
       "scope": "forgero:scope/upgrade"
     },
     {
       "id": "forgero:metal-offensive-attack_damage",
       "type": "forgero:attack_damage",
-      "computation": { "value": 2, "operation": "addition" },
-      "scope": "forgero:contexts/offensive"
+      "computation": {
+        "value": 2,
+        "operation": "addition"
+      },
+      "condition": {
+        "type": "forgero:in_slot_type",
+        "slot_type": "forgero:contexts/offensive"
+      }
     },
     {
       "id": "forgero:metal-offensive-mining_speed",
       "type": "forgero:mining_speed",
-      "computation": { "value": 3, "operation": "addition" },
-      "scope": "forgero:contexts/offensive"
+      "computation": {
+        "value": 3,
+        "operation": "addition"
+      },
+      "condition": {
+        "type": "forgero:in_slot_type",
+        "slot_type": "forgero:contexts/offensive"
+      }
     },
     {
       "id": "forgero:metal-offensive-durability",
       "type": "forgero:durability",
-      "computation": { "value": 120, "operation": "addition" },
-      "scope": "forgero:contexts/offensive"
+      "computation": {
+        "value": 120,
+        "operation": "addition"
+      },
+      "condition": {
+        "type": "forgero:in_slot_type",
+        "slot_type": "forgero:contexts/offensive"
+      }
     },
     {
       "id": "forgero:metal-offensive-draw_power",
       "type": "forgero:draw_power",
-      "computation": { "value": 0.75, "operation": "addition" },
-      "scope": "forgero:contexts/offensive"
+      "computation": {
+        "value": 0.75,
+        "operation": "addition"
+      },
+      "condition": {
+        "type": "forgero:in_slot_type",
+        "slot_type": "forgero:contexts/offensive"
+      }
     }
   ]
 }

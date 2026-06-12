@@ -31,9 +31,9 @@ import java.util.concurrent.ConcurrentHashMap;
  *   <li>{@code scope/local} → {@code local}</li>
  *   <li>{@code scope/upgrade} → {@code upgradeOnly} (applies only when the component is installed
  *       as an upgrade)</li>
- *   <li>any other scope (e.g. forgero-1 {@code contexts/*} slot scopes) → warned once and treated
- *       as {@code upgradeOnly}: the kernel has no named-slot-scope concept, so it honours position
- *       over label — dropped on base materials, applied when installed as an upgrade</li>
+ *   <li>any other scope → warned once and INERT. Slot-specific application (the former
+ *       {@code contexts/*} slot scopes) is modelled as an {@code in_slot_type} condition on the
+ *       attribute, evaluated before this shim — not as a scope here.</li>
  * </ul>
  */
 public final class AttributeShim {
@@ -61,21 +61,17 @@ public final class AttributeShim {
 			} else if (AttributeScope.isUpgrade(scope)) {
 				upgradeOnly = true;
 			} else {
-				// Unrecognized scope (e.g. forgero-1 contexts/* slot scopes): there is no kernel
-				// handler for the scope itself, but the legacy engine only ever applied such
-				// attributes through a (scope-matched) upgrade slot — never to a base material.
-				// The kernel has no notion of named slot scopes, so we honour the position, not the
-				// label: treat it as upgrade-only. It is therefore dropped on base materials (the
-				// stale-data case) and applied when the component is installed as an upgrade (the
-				// reinforcement-bonus case). Reported once so the vocabulary can be migrated to the
-				// explicit scope/upgrade form.
-				upgradeOnly = true;
+				// Unrecognized scope: no kernel handler, so it is INERT. Slot-specific application
+				// (the former contexts/* slot scopes) is now expressed as in_slot_type conditions
+				// on the attribute, evaluated before this shim — so a live slot-scoped attribute
+				// never reaches here. Anything that does is stale vocabulary; report once.
 				if (WARNED_SCOPES.add(scope.toString())) {
-					LOGGER.warn("Unrecognized attribute scope '{}' (attribute type {}): no kernel "
-							+ "handler; treating as upgrade-only (applies only when installed as an "
-							+ "upgrade). Likely a forgero-1 slot scope — migrate it to scope/upgrade.",
+					LOGGER.warn("Inert attribute scope '{}' (attribute type {}): no handler; the "
+							+ "contribution does not apply. Likely stale vocabulary — for slot-specific "
+							+ "application use an in_slot_type condition instead.",
 							scope, attribute.type());
 				}
+				return Optional.empty();
 			}
 		}
 

@@ -88,18 +88,36 @@ public record InSlotTypeCondition(OpenIdentifier type, OpenIdentifier slotType) 
 					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("slot_type").forGetter(InSlotTypeCondition::slotType)
 			).apply(instance, InSlotTypeCondition::new));
 
+	/**
+	 * Slot/part identifiers reach this condition in two forms: pristine components keep the full
+	 * authored path (e.g. {@code forgero:contexts/offensive}) while serialized (mutated) ones are
+	 * canonicalized to the last segment (e.g. {@code forgero:offensive}). Compare canonical forms
+	 * so a condition matches regardless of which representation it is evaluated against.
+	 */
+	private boolean matches(OpenIdentifier candidate) {
+		return candidate.toCanonical().equals(slotType.toCanonical());
+	}
+
 	@Override
 	public boolean test(ResolutionContext context) {
-		// Check if component is in a mutable slot (upgrade slot)
-		Optional<Boolean> slotCheck = context.getSlot()
-				.map(slot -> slot.slotType().equals(slotType));
-		if (slotCheck.isPresent()) {
-			return slotCheck.get();
+		// Mutable upgrade slot: match either the slot's type (its install identity, e.g.
+		// "materials/roles/upgrade_material" — what an upgrade asks for to mean "in any upgrade
+		// slot") or its scope (the slot's context, e.g. "contexts/offensive"). A slot answers to
+		// both dimensions, so the context can gate an attribute without the type having to encode
+		// it. See docs/ADR-003-stat-contribution-kernel.md.
+		Optional<com.sigmundgranaas.forgero.core.component.api.Slot> slotOpt = context.getSlot();
+		if (slotOpt.isPresent()) {
+			com.sigmundgranaas.forgero.core.component.api.Slot slot = slotOpt.get();
+			if (matches(slot.slotType())) {
+				return true;
+			}
+			return slot instanceof com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot upgradeSlot
+					&& upgradeSlot.scope().map(this::matches).orElse(false);
 		}
 
-		// Check if component is in an immutable structure part
+		// Immutable structure part: match the part's type.
 		return context.getPart()
-				.map(part -> part.partType().equals(slotType))
+				.map(part -> matches(part.partType()))
 				.orElse(false);
 	}
 }

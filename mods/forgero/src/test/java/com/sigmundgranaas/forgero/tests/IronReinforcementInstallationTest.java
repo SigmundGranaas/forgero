@@ -3,8 +3,10 @@ package com.sigmundgranaas.forgero.tests;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.attribute.api.AttributeQueryResult;
+import com.sigmundgranaas.forgero.core.attribute.api.AttributeScope;
 import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
 import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
+import com.sigmundgranaas.forgero.core.condition.predicate.InSlotTypeCondition;
 import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
@@ -28,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class IronReinforcementInstallationTest implements ForgeroGameTest {
 
 	private static final OpenIdentifier OFFENSIVE_CONTEXT = OpenIdentifier.parse("forgero:contexts/offensive");
-	private static final OpenIdentifier UPGRADE_CONTEXT = OpenIdentifier.parse("forgero:upgrade");
 
 	private final AttributeEngine attributeEngine = new AttributeEngine();
 
@@ -76,31 +77,25 @@ public class IronReinforcementInstallationTest implements ForgeroGameTest {
 		assertFalse(durabilityAttrs.isEmpty(),
 				"Iron must have durability attributes");
 
-		// Check if any have offensive scope (from metal_upgrade_base)
-		boolean hasOffensiveScope = durabilityAttrs.stream()
-				.anyMatch(attr -> attr.scope().isPresent() &&
-						attr.scope().get().equals(OFFENSIVE_CONTEXT));
+		// The metal_upgrade_base offensive bonuses now gate themselves with an in_slot_type
+		// condition on the offensive context (instead of a scope label).
+		boolean hasOffensiveContextCondition = iron.properties(Attribute.KEY).stream()
+				.anyMatch(attr -> attr.condition()
+						.map(c -> c.staticConditions().stream()
+								.anyMatch(sc -> sc instanceof InSlotTypeCondition slot
+										&& slot.slotType().equals(OFFENSIVE_CONTEXT)))
+						.orElse(false));
 
-		// Check if any have upgrade scope (from metal_upgrade_base)
+		// The rarity/weight bonuses keep the upgrade scope.
 		boolean hasUpgradeScope = iron.properties(Attribute.KEY).stream()
-				.anyMatch(attr -> attr.scope().isPresent() &&
-						attr.scope().get().equals(UPGRADE_CONTEXT));
+				.anyMatch(attr -> attr.scope()
+						.map(s -> s.equals(AttributeScope.UPGRADE))
+						.orElse(false));
 
-		// Log what we found for debugging
-		System.out.println("Iron durability attributes:");
-		for (Attribute attr : durabilityAttrs) {
-			System.out.println("  - value=" + attr.value() + ", scope=" + attr.scope().orElse(null));
-		}
-
-		System.out.println("All iron attributes:");
-		for (Attribute attr : iron.properties(Attribute.KEY)) {
-			System.out.println("  - type=" + attr.type() + ", value=" + attr.value() +
-					", scope=" + attr.scope().orElse(null));
-		}
-
-		// Iron should have offensive scope attributes from metal_upgrade_base
-		assertTrue(hasOffensiveScope || hasUpgradeScope,
-				"Iron must have attributes with offensive or upgrade scope from metal_upgrade_base. " +
+		// Iron should carry the upgrade-context bonuses from metal_upgrade_base
+		assertTrue(hasOffensiveContextCondition || hasUpgradeScope,
+				"Iron must carry metal_upgrade_base bonuses gated to the upgrade context " +
+						"(offensive in_slot_type condition or scope/upgrade). " +
 						"Check that the include directive is working correctly.");
 
 		context.complete();
@@ -138,7 +133,7 @@ public class IronReinforcementInstallationTest implements ForgeroGameTest {
 
 		assertTrue(reinforcementSlot.isPresent(), "Iron pickaxe head must have a reinforcement slot");
 
-		// Verify the slot has offensive scope
+		// The slot carries its offensive context as a scope, matched by in_slot_type conditions.
 		assertTrue(reinforcementSlot.get().scope().isPresent(),
 				"Reinforcement slot must have a scope");
 		assertEquals(OFFENSIVE_CONTEXT.toString(), reinforcementSlot.get().scope().get().toString(),

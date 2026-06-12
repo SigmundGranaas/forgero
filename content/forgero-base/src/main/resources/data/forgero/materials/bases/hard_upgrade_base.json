@@ -5,32 +5,56 @@
     {
       "id": "forgero:hard-upgrade-rarity",
       "type": "forgero:rarity",
-      "computation": { "value": 25, "operation": "addition" },
+      "computation": {
+        "value": 25,
+        "operation": "addition"
+      },
       "scope": "forgero:scope/upgrade"
     },
     {
       "id": "forgero:hard-upgrade-weight",
       "type": "forgero:weight",
-      "computation": { "value": 1.5, "operation": "addition" },
+      "computation": {
+        "value": 1.5,
+        "operation": "addition"
+      },
       "scope": "forgero:scope/upgrade"
     },
     {
       "id": "forgero:hard-offensive-durability",
       "type": "forgero:durability",
-      "computation": { "value": 340, "operation": "addition" },
-      "scope": "forgero:contexts/offensive"
+      "computation": {
+        "value": 340,
+        "operation": "addition"
+      },
+      "condition": {
+        "type": "forgero:in_slot_type",
+        "slot_type": "forgero:contexts/offensive"
+      }
     },
     {
       "id": "forgero:hard-offensive-draw_power",
       "type": "forgero:draw_power",
-      "computation": { "value": 0.15, "operation": "addition" },
-      "scope": "forgero:contexts/offensive"
+      "computation": {
+        "value": 0.15,
+        "operation": "addition"
+      },
+      "condition": {
+        "type": "forgero:in_slot_type",
+        "slot_type": "forgero:contexts/offensive"
+      }
     },
     {
       "id": "forgero:hard-defensive-durability",
       "type": "forgero:durability",
-      "computation": { "value": 340, "operation": "addition" },
-      "scope": "forgero:contexts/defensive"
+      "computation": {
+        "value": 340,
+        "operation": "addition"
+      },
+      "condition": {
+        "type": "forgero:in_slot_type",
+        "slot_type": "forgero:contexts/defensive"
+      }
     }
   ]
 }
