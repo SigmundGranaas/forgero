@@ -160,7 +160,8 @@ public record ComponentUpgradeSlot(
 	public static final Codec<ComponentUpgradeSlot> CODEC = RecordCodecBuilder.create(instance ->
 		instance.group(
 			CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("id").forGetter(ComponentUpgradeSlot::id),
-			CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("slot_type").forGetter(ComponentUpgradeSlot::slotType),
+			// Slot type is a tag-like classifier — preserve its full path (see CofCodecs).
+			CodecConstants.TAG_IDENTIFIER_CODEC.fieldOf("slot_type").forGetter(ComponentUpgradeSlot::slotType),
 			Codec.STRING.optionalFieldOf("description", "").forGetter(ComponentUpgradeSlot::description),
 			Codec.list(CodecConstants.TAG_IDENTIFIER_CODEC).optionalFieldOf("tags", List.of())
 					.forGetter(slot -> List.copyOf(slot.tags()))

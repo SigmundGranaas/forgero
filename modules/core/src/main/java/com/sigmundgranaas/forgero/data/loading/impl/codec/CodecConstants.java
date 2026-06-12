@@ -24,9 +24,11 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
  * <h2>The hazard</h2>
  * Encoding the same logical identifier with a canonicalizing codec in one place and a preserving
  * one in another makes the two forms unequal ({@code offensive} ≠ {@code contexts/offensive}).
- * This has bitten attribute scopes and slot types. When a value may arrive in either form (e.g. a
- * slot type that is path-preserving when loaded from a template but canonicalized when read back
- * from older serialized NBT), compare via {@link OpenIdentifier#toCanonical()} on both sides.
+ * This has bitten attribute scopes and slot types. The rule above is what keeps them consistent:
+ * attribute scopes, slot types and slot tags are now path-preserving through both data loading and
+ * COF serialization, so a slot's identity does not change form across a save/load and such values
+ * can be compared with a plain {@code equals()}. Only registry component ids (resolved from file
+ * paths) canonicalize.
  */
 public class CodecConstants {
 	public static final IdentifierFactory IDENTIFIER_FACTORY = new IdentifierFactory.Builder().defaultNamespace("forgero").build();

@@ -62,25 +62,28 @@ class InSlotTypeConditionTest extends ForgeroTest {
 	}
 
 	/**
-	 * Slot/part types reach the condition with their full authored path in a pristine component
-	 * but canonicalized (last segment) once an item has been serialized to NBT and read back.
-	 * Matching must be canonical so the same condition holds in both representations.
+	 * Slot/part types are path-preserving end-to-end, so a condition matches a multi-segment slot
+	 * type by its exact full path — and must NOT collide distinct types that share a final segment
+	 * (e.g. {@code materials/types/gem} vs {@code upgrades/types/gem}).
 	 */
 	@Test
-	void conditionMatchesAcrossCanonicalAndFullPathForms() {
-		OpenIdentifier fullPath = OpenIdentifier.parse("forgero:contexts/offensive");
-		OpenIdentifier canonical = OpenIdentifier.parse("forgero:offensive"); // serialized form
+	void conditionMatchesFullPathExactlyAndDoesNotCollideOnFinalSegment() {
+		OpenIdentifier slotPath = OpenIdentifier.parse("forgero:materials/types/gem");
+		OpenIdentifier collidingPath = OpenIdentifier.parse("forgero:upgrades/types/gem"); // same final segment
+		OpenIdentifier lastSegment = OpenIdentifier.parse("forgero:gem");
 
 		Component iron = material(IRON_ID, METAL_TAG);
 		Component head = part(PICKAXE_HEAD_ID)
-				.withStructureSlot(structureSlot("ctx_slot", fullPath, iron))
+				.withStructureSlot(structureSlot("gem_slot", slotPath, iron))
 				.build();
 		ResolutionContext context = new ResolutionContext(iron, head);
 
-		assertTrue(new InSlotTypeCondition(id("forgero:in_slot_type"), canonical).test(context),
-				"Canonical condition form should match a full-path slot type");
-		assertTrue(new InSlotTypeCondition(id("forgero:in_slot_type"), fullPath).test(context),
-				"Full-path condition form should match the same slot type");
+		assertTrue(new InSlotTypeCondition(id("forgero:in_slot_type"), slotPath).test(context),
+				"Full-path condition should match the slot type exactly");
+		assertFalse(new InSlotTypeCondition(id("forgero:in_slot_type"), collidingPath).test(context),
+				"A different type sharing the final segment must NOT match");
+		assertFalse(new InSlotTypeCondition(id("forgero:in_slot_type"), lastSegment).test(context),
+				"The bare final segment must NOT match a multi-segment slot type");
 	}
 
 	/**

@@ -58,7 +58,10 @@ public class CofCodecs {
 		Codec<CofSlot> slotCodec = RecordCodecBuilder.create(instance ->
 				instance.group(
 						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("id").forGetter(CofSlot::id),
-						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(CofSlot::type),
+						// Slot type is a tag-like classifier (e.g. materials/roles/upgrade_material),
+						// not a registry id — preserve its full path so it does not mutate across a
+						// serialize/load round-trip and stays comparable to the template-loaded form.
+						CodecConstants.TAG_IDENTIFIER_CODEC.fieldOf("type").forGetter(CofSlot::type),
 						Codec.STRING.optionalFieldOf("description").forGetter(slot -> Optional.ofNullable(slot.description())),
 						Codec.list(CodecConstants.TAG_IDENTIFIER_CODEC).optionalFieldOf("tags").forGetter(slot -> Optional.ofNullable(slot.tags())),
 						recursiveComponentCodec.optionalFieldOf("content").forGetter(CofSlot::contentOpt),

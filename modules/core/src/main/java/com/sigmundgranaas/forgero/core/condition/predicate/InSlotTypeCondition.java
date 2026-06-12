@@ -85,17 +85,21 @@ public record InSlotTypeCondition(OpenIdentifier type, OpenIdentifier slotType) 
 	public static final Codec<InSlotTypeCondition> CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(
 					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(InSlotTypeCondition::type),
-					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("slot_type").forGetter(InSlotTypeCondition::slotType)
+					// slot_type is a tag-like classifier — preserve its full path so it compares
+					// equal to the (now path-preserving) slot type and tags.
+					CodecConstants.FULL_PATH_IDENTIFIER_CODEC.fieldOf("slot_type").forGetter(InSlotTypeCondition::slotType)
 			).apply(instance, InSlotTypeCondition::new));
 
 	/**
-	 * Slot/part identifiers reach this condition in two forms: pristine components keep the full
-	 * authored path (e.g. {@code forgero:contexts/offensive}) while serialized (mutated) ones are
-	 * canonicalized to the last segment (e.g. {@code forgero:offensive}). Compare canonical forms
-	 * so a condition matches regardless of which representation it is evaluated against.
+	 * Slot/part identifiers are path-preserving end-to-end — the template loader and the COF
+	 * serialization both keep the full path, so a slot's identity does not mutate across a
+	 * save/load and the authored {@code slot_type} is likewise preserved. Matching is therefore a
+	 * plain equality, which (unlike a last-segment canonical compare) cannot collide distinct
+	 * identifiers that share a final segment, e.g. {@code materials/types/gem} vs
+	 * {@code upgrades/types/gem}.
 	 */
 	private boolean matches(OpenIdentifier candidate) {
-		return candidate.toCanonical().equals(slotType.toCanonical());
+		return candidate.equals(slotType);
 	}
 
 	@Override
