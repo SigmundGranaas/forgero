@@ -1,5 +1,13 @@
 # Forgero Attribute Resolution Architecture
 
+> **⚠️ SUPERSEDED — do not treat as current.** This document describes the original
+> runtime-resolution design. The architecture has since inverted: attributes are **compiled once
+> at component construction** (the factory), not resolved at runtime, and all stat composition is
+> done by the **`StatFold` kernel**. The runtime-traversal engine, the scope-handler/baking-strategy
+> machinery, and `ScopeMatcher`/`matchesSlotScope` described below have been **deleted**.
+> See **`docs/ADR-002-compiler-in-the-factory.md`** and **`docs/ADR-003-stat-contribution-kernel.md`**
+> for the current design. Kept for historical context only.
+
 ## Core Design Principle
 
 **Attributes in structured components are NOT pre-computed at generation time. They are lazily resolved at runtime by traversing the component structure tree.**

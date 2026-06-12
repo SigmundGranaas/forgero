@@ -1,5 +1,10 @@
 # Property and Attribute Resolution: Comprehensive Architectural Analysis
 
+> **⚠️ HISTORICAL ANALYSIS.** Written before the compile-at-construction inversion and the
+> `StatFold` kernel. The resolver/engine/scope-matching machinery it analyses has been deleted.
+> See `docs/ADR-002-compiler-in-the-factory.md` and `docs/ADR-003-stat-contribution-kernel.md`
+> for the current architecture.
+
 **Date:** 2025-01-22
 **Status:** Critical Assessment
 **Scope:** modules/core, modules/mc/properties, legacy modules

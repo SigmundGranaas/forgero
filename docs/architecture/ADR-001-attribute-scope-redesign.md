@@ -1,9 +1,15 @@
 # ADR-001: Attribute Scope Redesign
 
-**Status:** Implemented
+**Status:** Superseded by [ADR-003](../ADR-003-stat-contribution-kernel.md)
 **Date:** 2026-01-22
 **Authors:** Architecture Review
 **Supersedes:** Previous AttributeContext system (removed)
+
+> **Note:** The scope-matching machinery this ADR introduced (`ScopeMatcher`,
+> `ScopeMatchDecisionTable`, `AttributeScope.matchesSlotScope`, the scope handlers) has been
+> **removed**. Scope is now interpreted only as composition vocabulary by the `StatFold` kernel
+> (`AttributeShim`), and slot-context matching is expressed with `in_slot_type` conditions rather
+> than a scope-match table. Retained as a historical record of the decision.
 
 ---
 

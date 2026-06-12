@@ -1,5 +1,10 @@
 # The Forgero-2 Attribute System: What's Actually Going On, and How to Collapse the Dual Layer
 
+> **Process doc (historical).** This is the analysis/proposal that led to the realized design.
+> The outcome shipped as `docs/ADR-002-compiler-in-the-factory.md` (compile-at-construction) and
+> `docs/ADR-003-stat-contribution-kernel.md` (the `StatFold` kernel) — read those for the current
+> state; the machinery analysed below has been deleted.
+
 **Scope:** Deep-dive into attribute handling on the `forgero-2` branch — the full value path from
 JSON to Minecraft — followed by a redesign proposal that improves the external API surface and the
 internal design at the same time, by removing the parallel attribute layer rather than wrapping it.

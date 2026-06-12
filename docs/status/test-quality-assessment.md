@@ -1,5 +1,9 @@
 # Test Quality Assessment
 
+> **⚠️ HISTORICAL.** Dated assessment from before the `StatFold` kernel and the legacy-engine
+> deletion; references composition strategies/`matchesSlotScope` that no longer exist. Kept for
+> context. Current correctness is anchored by the gametest suite and the ADR-003 characterization.
+
 **Status:** Assessment of current test coverage quality
 **Date:** 2025-01-22
 **Related Issue:** Guard durability not applied when installed as upgrade

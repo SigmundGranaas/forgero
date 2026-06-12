@@ -120,13 +120,4 @@ public final class AttributeScope {
 		return LOCAL.equals(scope);
 	}
 
-	/**
-	 * Checks if an Optional scope is empty or contains a known scope.
-	 *
-	 * @param scope The optional scope to check
-	 * @return true if empty (no scope = default propagation)
-	 */
-	public static boolean isDefault(java.util.Optional<OpenIdentifier> scope) {
-		return scope.isEmpty();
-	}
 }
