@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.properties.minecraft.mixin;
 import com.sigmundgranaas.forgero.common.runtime.DynamicAttributes;
 import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
 import com.sigmundgranaas.forgero.core.attribute.api.DefaultAttributes;
-import com.sigmundgranaas.forgero.predicate.minecraft.DynamicContextFactory;
+import com.sigmundgranaas.forgero.common.runtime.DynamicContextFactory;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;

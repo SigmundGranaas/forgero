@@ -1,9 +1,9 @@
 package com.sigmundgranaas.forgero.predicate.minecraft.entity;
+import com.sigmundgranaas.forgero.common.runtime.MinecraftContextKeys;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
-import com.sigmundgranaas.forgero.predicate.minecraft.MinecraftContextKeys;
 import com.sigmundgranaas.forgero.predicate.minecraft.util.NumericPredicate;
 
 import net.minecraft.entity.Entity;

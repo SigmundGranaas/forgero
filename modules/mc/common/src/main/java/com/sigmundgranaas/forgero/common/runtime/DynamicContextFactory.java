@@ -1,4 +1,4 @@
-package com.sigmundgranaas.forgero.predicate.minecraft;
+package com.sigmundgranaas.forgero.common.runtime;
 
 import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
 

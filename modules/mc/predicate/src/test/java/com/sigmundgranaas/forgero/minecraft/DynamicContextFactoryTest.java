@@ -1,8 +1,8 @@
 package com.sigmundgranaas.forgero.minecraft;
+import com.sigmundgranaas.forgero.common.runtime.MinecraftContextKeys;
 
 import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
-import com.sigmundgranaas.forgero.predicate.minecraft.DynamicContextFactory;
-import com.sigmundgranaas.forgero.predicate.minecraft.MinecraftContextKeys;
+import com.sigmundgranaas.forgero.common.runtime.DynamicContextFactory;
 import com.sigmundgranaas.forgero.tools.Bootstrapped;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

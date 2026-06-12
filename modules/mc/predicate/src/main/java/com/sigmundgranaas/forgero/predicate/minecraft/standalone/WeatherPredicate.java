@@ -1,4 +1,5 @@
 package com.sigmundgranaas.forgero.predicate.minecraft.standalone;
+import com.sigmundgranaas.forgero.common.runtime.MinecraftContextKeys;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +9,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.runtime.EvaluableCondition;
 import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
-import com.sigmundgranaas.forgero.predicate.minecraft.MinecraftContextKeys;
 
 import net.minecraft.world.World;
 

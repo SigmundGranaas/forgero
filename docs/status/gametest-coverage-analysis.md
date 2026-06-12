@@ -101,6 +101,30 @@ booted. (`tools` also had pre-existing *test* failures separate from this boot b
 - `modules/mc/blocks` `assemblystationgametest.damagedforgeroitem_cannotbedisassembled` — fails at
   baseline too (pre-existing).
 
+## Resolution
+
+Both regressions fixed; full sweep re-run:
+
+- **#1 (non-terminal property serving)** — restored the on-demand fallback in `ItemPropertyApiImpl`
+  (run the registered `CompilerPass` for the key when the component isn't a terminal). `properties`
+  suite 23 → **242/242**.
+- **#2 (properties→predicate runtime coupling)** — moved `DynamicContextFactory` and
+  `MinecraftContextKeys` from `predicate.minecraft` to `common.runtime` (they only depend on
+  `common.runtime` + Minecraft; `common.runtime` already owns `DynamicContext`/`Key`/`ContextKeys`).
+  The properties mixin no longer needs predicate at runtime, so the affected suites boot again:
+  `armor` 7/7, `vanilla-upgrades` 65/65, `tools` boots.
+
+After the fixes: `mods/forgero` 270/270, `properties` 242/242, `predicate` 39/39, `bows` 93/93,
+`loader` 12/12, `test-common` 25/25, `repair-kit` 42/42, `drp` 24/24, `recipe-generator` 11/11,
+`armor` 7/7, `vanilla-upgrades` 65/65.
+
+Remaining (pre-existing, **not** session regressions — present at baseline `8da586ed5`):
+- `tools` `ToolBehaviorIntegrationGametest`: `OpenIdentifier.of("forgero:diamond-sword")` — the test
+  uses `of()` (rejects `:`) where it should use `parse()`.
+- `blocks` `assemblystationgametest.damagedforgeroitem_cannotbedisassembled`.
+- `properties` `testOnHitMultipleEffectsIntegration` is **flaky** (a freeze-tick + multi-effect
+  timing race); passes on re-run.
+
 ## Process gap to close
 
 1. The remaining suites (`bows`, `tools`, `armor`, `blocks`, `predicate`, `vanilla-upgrades`,
