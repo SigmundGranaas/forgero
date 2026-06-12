@@ -4,11 +4,14 @@ import com.sigmundgranaas.forgero.common.api.item.ItemPropertyApi;
 import com.sigmundgranaas.forgero.common.convert.ComponentConverter;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.EquipmentComponent;
+import com.sigmundgranaas.forgero.core.property.api.CompilerPass;
 import com.sigmundgranaas.forgero.core.property.api.ResolutionKey;
+import com.sigmundgranaas.forgero.core.property.compiled.CompilerPasses;
 import net.minecraft.item.ItemStack;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Implementation of {@link ItemPropertyApi}.
@@ -39,9 +42,26 @@ public class ItemPropertyApiImpl implements ItemPropertyApi {
 			return Collections.emptyList();
 		}
 		return converter.toComponent(stack)
-				.filter(component -> component instanceof EquipmentComponent)
-				.map(component -> ((EquipmentComponent) component).properties(key))
+				.map(component -> resolve(component, key))
 				.orElse(Collections.emptyList());
+	}
+
+	/**
+	 * Terminals read their pre-compiled list in O(1); non-terminal components (parts shown in
+	 * tooltips/recipes, synthetic items) compile their list on demand by running the registered
+	 * {@link CompilerPass} for the key over the tree — the fallback the compile-at-construction
+	 * inversion was supposed to keep. Mirrors how attributes fall back to {@code StatFold.fold}.
+	 */
+	@SuppressWarnings("unchecked")
+	private <P> List<P> resolve(Component component, ResolutionKey<List<P>> key) {
+		if (component instanceof EquipmentComponent equipment) {
+			return equipment.properties(key);
+		}
+		Supplier<? extends CompilerPass<? extends List<?>>> pass = CompilerPasses.registered().get(key.id());
+		if (pass == null) {
+			return Collections.emptyList();
+		}
+		return (List<P>) pass.get().resolve(component);
 	}
 
 }

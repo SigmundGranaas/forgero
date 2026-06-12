@@ -63,6 +63,44 @@ non-terminal, compile/resolve its property list for `key` on demand (run the reg
 `AttributeEngine.resolveAttributes` already does for non-terminal *attributes*
 (`StatFold.fold(component)`), so attributes survived but properties did not.
 
+## Full-suite sweep (this branch vs. pre-session baseline)
+
+| Suite | This branch | Verdict |
+|---|---|---|
+| `mods/forgero` | 270 ✅ | green |
+| `modules/mc/properties` | **23 fail** / 242 | **REGRESSION #1** (baseline 242/242) |
+| `modules/mc/predicate` | 39 ✅ | green |
+| `modules/mc/bows` | 93 ✅ | green |
+| `modules/mc/loader` | 12 ✅ | green |
+| `modules/mc/test-common` | 25 ✅ | green |
+| `mods/repair-kit` | 42 ✅ | green |
+| `mods/drp` | 24 ✅ | green |
+| `mods/recipe-generator` | 11 ✅ | green |
+| `modules/mc/tools` | **cannot boot** | **REGRESSION #2** (booted at baseline) |
+| `modules/mc/armor` | **cannot boot** | **REGRESSION #2** |
+| `mods/vanilla-upgrades` | **cannot boot** | **REGRESSION #2** |
+| `modules/mc/blocks` | 1 fail / 11 | pre-existing (fails at baseline too) |
+
+### Regression #1 — non-terminal property serving (described above)
+
+`modules/mc/properties`: 23 failures, all non-terminal components serving no properties.
+
+### Regression #2 — properties→predicate runtime coupling breaks gametest boot
+
+`tools` / `armor` / `vanilla-upgrades` fail to boot:
+`ClassNotFoundException: com.sigmundgranaas.forgero.predicate.minecraft.DynamicContextFactory`.
+The session's dynamic-attrs commit (`76c2b8be4`) added
+`properties/.../mixin/LivingEntityDynamicAttributeMixin`, whose injected method calls predicate's
+`DynamicContextFactory.fromEntities(...)`. Any gametest runtime that loads `properties` but not
+`predicate` now fails to apply that mixin and the server never starts. `mods/forgero` is fine
+(it has predicate); these three module/mod suites don't. At baseline the mixin didn't exist, so they
+booted. (`tools` also had pre-existing *test* failures separate from this boot break.)
+
+### Not regressions
+
+- `modules/mc/blocks` `assemblystationgametest.damagedforgeroitem_cannotbedisassembled` — fails at
+  baseline too (pre-existing).
+
 ## Process gap to close
 
 1. The remaining suites (`bows`, `tools`, `armor`, `blocks`, `predicate`, `vanilla-upgrades`,
