@@ -171,10 +171,20 @@ Backed by the existing `TaggedRegistry<Component>` + converter (wired into `Item
 `PublicApiExtensionTest` proves discovery returns real stacks, includes a known member (iron), and
 that the convenience tags actually resolve (an empty result would mean a wrong tag — caught).
 
+**F1 (effects, all channels) — DONE.** The functional facade now covers every effect channel,
+each public-only and gametest-proven:
+
+- `OnHitEffects` — entity effects (`single`/`source+target`), shared by `on_hit`/`on_tick`/`on_kill`.
+- `BlockEffects` — block effects, `(World, Entity source, BlockPos)` (block-breaking channel).
+- `UseEffects` — use/right-click effects, `(LivingEntity user, ItemStack, Hand)`.
+
+Each offers a no-config and a `Codec<C>` overload; the `OnHitEffect`/`OnHitBlockEffect`/
+`SimpleUseHandler` markers, the `type()` boilerplate and `EffectCodecRegistry` are all hidden.
+`PublicApiExtensionTest` registers each through the public facade, parses it through the real
+dispatch codec, and applies it (zombie on fire, gold block placed, user ignited).
+
 **Still leaking (next):**
 
-- **Other effect channels** — block effects (`OnHitBlockEffect`), use/interaction handlers and
-  on-tick share the same `EffectCodecRegistry` shape; give each the same `OnHitEffects`-style facade.
 - **Property codecs** (`registerPropertyCodec`) and **slot codecs** (`registerSlotCodec`) still take
   `PropertyKey<?>` / `core.component.api.Slot` and heavy `Function<Supplier<…>, …>` generics.
 - A strict, fully-sealed SPI (so an author never has even the *option* of a `core.*` import) would

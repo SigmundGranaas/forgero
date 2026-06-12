@@ -10,16 +10,18 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
- * Public entry point for adding custom on-hit effects. An addon supplies plain Minecraft logic
- * (a {@link Consumer}/{@link BiConsumer} over {@code Entity}) and, optionally, a {@link Codec} for
- * JSON config — and nothing else. The {@code OnHitEffect} marker, the {@code type()} boilerplate and
- * the internal {@code EffectCodecRegistry} are all hidden.
+ * Public entry point for adding custom <em>entity</em> effects. An addon supplies plain Minecraft
+ * logic (a {@link Consumer}/{@link BiConsumer} over {@code Entity}) and, optionally, a {@link Codec}
+ * for JSON config — and nothing else. The {@code OnHitEffect} marker, the {@code type()} boilerplate
+ * and the internal {@code EffectCodecRegistry} are all hidden.
  *
- * <p>Once registered the effect is usable in content JSON inside any entity event's {@code effects}
- * list (on-hit, on-tick, …):
+ * <p>Despite the name, an effect registered here is usable from <em>every</em> entity-event
+ * channel that shares the effect list — {@code on_hit}, {@code on_tick}, {@code on_kill}, … — by
+ * its type in the {@code effects} array:
  * <pre>{@code
  * { "type": "mymod:zap", "damage": 4.0 }
  * }</pre>
+ * For block and use effects see {@link BlockEffects} and {@link UseEffects}.
  *
  * <p>Call these from your mod's init (a {@code ModInitializer} or a Forgero data plugin), before
  * content loads.

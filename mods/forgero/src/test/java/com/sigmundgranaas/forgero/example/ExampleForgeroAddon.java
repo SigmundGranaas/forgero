@@ -15,7 +15,10 @@ import com.sigmundgranaas.forgero.common.api.item.ItemComparisonApi;
 import com.sigmundgranaas.forgero.common.api.item.ItemMutationApi;
 import com.sigmundgranaas.forgero.common.api.item.ItemQueryApi;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.effects.api.BlockEffects;
 import com.sigmundgranaas.forgero.effects.api.OnHitEffects;
+import com.sigmundgranaas.forgero.effects.api.UseEffects;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -93,6 +96,13 @@ public final class ExampleForgeroAddon {
 				attacker.heal(2.0f);
 			}
 		});
+
+		// Block channel — turn the struck block to magma.
+		BlockEffects.register("example:scorch",
+				(world, source, pos) -> world.setBlockState(pos, Blocks.MAGMA_BLOCK.getDefaultState()));
+
+		// Use channel — warm the user on right-click.
+		UseEffects.register("example:warm", (user, stack, hand) -> user.setOnFireFor(1));
 	}
 
 	// Scenario 6 — react to Forgero being ready and do something with its data.

@@ -18,15 +18,22 @@ import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.api.slot.InstallationResult;
 import com.sigmundgranaas.forgero.core.property.compilation.ResolutionContext;
+import com.sigmundgranaas.forgero.effects.api.BlockEffects;
 import com.sigmundgranaas.forgero.effects.api.OnHitEffects;
+import com.sigmundgranaas.forgero.effects.api.UseEffects;
+import com.sigmundgranaas.forgero.effects.block.OnHitBlockEffect;
 import com.sigmundgranaas.forgero.effects.entity.EntityEffectHandler;
 import com.sigmundgranaas.forgero.effects.entity.OnHitEffect;
+import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.SimpleUseHandler;
+import com.sigmundgranaas.forgero.properties.minecraft.useinteraction.UseHandler;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroGameTest;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroTestUtils;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -120,6 +127,41 @@ public class PublicApiExtensionTest implements ForgeroGameTest {
 	}
 
 	private record Burn(int seconds) {
+	}
+
+	/** A block effect registered through the public facade parses + applies to the world. */
+	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
+	public void public_block_effect_fires(TestContext context) {
+		BlockEffects.register("forgero:example_place",
+				(world, source, pos) -> world.setBlockState(pos, Blocks.GOLD_BLOCK.getDefaultState()));
+
+		JsonObject json = new JsonObject();
+		json.addProperty("type", "forgero:example_place");
+		OnHitBlockEffect effect = OnHitBlockEffect.CODEC.parse(JsonOps.INSTANCE, json).result().orElseThrow();
+
+		BlockPos relative = new BlockPos(1, 2, 1);
+		LivingEntity source = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(0, 1, 0));
+		effect.apply(context.getWorld(), source, context.getAbsolutePos(relative));
+
+		assertEquals(Blocks.GOLD_BLOCK, context.getBlockState(relative).getBlock(),
+				"The registered block effect must place the block");
+		context.complete();
+	}
+
+	/** A use effect registered through the public facade parses + applies to the user. */
+	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
+	public void public_use_effect_fires(TestContext context) {
+		UseEffects.register("forgero:example_ignite_self", (user, stack, hand) -> user.setOnFireFor(4));
+
+		JsonObject json = new JsonObject();
+		json.addProperty("type", "forgero:example_ignite_self");
+		UseHandler handler = UseHandler.CODEC.parse(JsonOps.INSTANCE, json).result().orElseThrow();
+
+		LivingEntity user = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
+		((SimpleUseHandler) handler).apply(user, ItemStack.EMPTY, Hand.MAIN_HAND);
+
+		assertTrue(user.isOnFire(), "The registered use effect must set the user on fire");
+		context.complete();
 	}
 
 	/** Registry-wide discovery returns real ItemStacks and the convenience tags actually resolve. */
