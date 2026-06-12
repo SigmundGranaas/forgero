@@ -3,11 +3,18 @@ package com.sigmundgranaas.forgero.core.condition.predicate;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.common.tags.api.TagResolver;
+import com.sigmundgranaas.forgero.core.component.api.Slot;
+import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
 import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 import com.sigmundgranaas.forgero.core.property.compilation.ResolutionContext;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
 
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * A static condition that passes when the component is contained within a slot of a specific type.
@@ -76,52 +83,100 @@ import java.util.Optional;
  *   └─ [gem_slot] diamond_gem           ← in_slot_type:gem_slot = true
  * </pre>
  *
- * @param type     The condition type identifier (always "forgero:in_slot_type")
- * @param slotType The slot type to match against (e.g., "forgero:head_slot")
+ * <h2>Hierarchical matching</h2>
+ * A slot answers to several identities: its type (its install identity, e.g.
+ * {@code materials/roles/upgrade_material} — what an "in any upgrade slot" condition asks for) and
+ * its identity tags (e.g. its context {@code contexts/offensive}). The condition matches if any of
+ * those identities <em>is</em> the requested {@code slot_type}, resolved through the tag graph — so
+ * {@code in_slot_type: forgero:contexts} matches a slot tagged {@code forgero:contexts/offensive}
+ * when the graph makes the latter a descendant of the former. When no resolver is available (e.g.
+ * a directly-constructed condition in a unit test) it falls back to exact equality.
+ *
  * @see ResolutionContext#getSlot() for mutable slot access
  * @see ResolutionContext#getPart() for immutable part access
  */
-public record InSlotTypeCondition(OpenIdentifier type, OpenIdentifier slotType) implements StaticCondition {
-	public static final Codec<InSlotTypeCondition> CODEC = RecordCodecBuilder.create(instance ->
-			instance.group(
-					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(InSlotTypeCondition::type),
-					// slot_type is a tag-like classifier — preserve its full path so it compares
-					// equal to the (now path-preserving) slot type and tags.
-					CodecConstants.FULL_PATH_IDENTIFIER_CODEC.fieldOf("slot_type").forGetter(InSlotTypeCondition::slotType)
-			).apply(instance, InSlotTypeCondition::new));
+public final class InSlotTypeCondition implements StaticCondition {
+
+	private final OpenIdentifier type;
+	private final OpenIdentifier slotType;
+	private final transient Supplier<TagResolver> resolverSupplier;
+
+	public InSlotTypeCondition(OpenIdentifier type, OpenIdentifier slotType, Supplier<TagResolver> resolverSupplier) {
+		this.type = type;
+		this.slotType = slotType;
+		this.resolverSupplier = resolverSupplier;
+	}
+
+	/** Constructs a condition without a tag resolver — matching falls back to exact equality. */
+	public InSlotTypeCondition(OpenIdentifier type, OpenIdentifier slotType) {
+		this(type, slotType, () -> null);
+	}
 
 	/**
-	 * Slot/part identifiers are path-preserving end-to-end — the template loader and the COF
-	 * serialization both keep the full path, so a slot's identity does not mutate across a
-	 * save/load and the authored {@code slot_type} is likewise preserved. Matching is therefore a
-	 * plain equality, which (unlike a last-segment canonical compare) cannot collide distinct
-	 * identifiers that share a final segment, e.g. {@code materials/types/gem} vs
-	 * {@code upgrades/types/gem}.
+	 * Resolver-injecting codec. {@code slot_type} is a tag-like classifier, so its full path is
+	 * preserved (matching the path-preserving slot type/tags); see CodecConstants for the contract.
 	 */
-	private boolean matches(OpenIdentifier candidate) {
-		return candidate.equals(slotType);
+	public static Codec<InSlotTypeCondition> codec(Supplier<TagResolver> resolverSupplier) {
+		return RecordCodecBuilder.create(instance ->
+				instance.group(
+						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(InSlotTypeCondition::type),
+						CodecConstants.FULL_PATH_IDENTIFIER_CODEC.fieldOf("slot_type").forGetter(InSlotTypeCondition::slotType)
+				).apply(instance, (type, slotType) -> new InSlotTypeCondition(type, slotType, resolverSupplier)));
+	}
+
+	/** Exact-match codec for callers without a resolver. */
+	public static final Codec<InSlotTypeCondition> CODEC = codec(() -> null);
+
+	@Override
+	public OpenIdentifier type() {
+		return type;
+	}
+
+	public OpenIdentifier slotType() {
+		return slotType;
+	}
+
+	/**
+	 * Does any of the slot's identities satisfy the requested {@code slot_type}? With a resolver
+	 * this is a tag-graph query ({@code hasTag} subsumes exact equality and adds descendant
+	 * matching); without one it is plain equality.
+	 */
+	private boolean matches(Set<OpenIdentifier> identities) {
+		TagResolver resolver = resolverSupplier.get();
+		if (resolver != null) {
+			return resolver.hasTag(() -> identities, slotType);
+		}
+		return identities.contains(slotType);
 	}
 
 	@Override
 	public boolean test(ResolutionContext context) {
-		// Mutable upgrade slot: match either the slot's type (its install identity, e.g.
-		// "materials/roles/upgrade_material" — what an upgrade asks for to mean "in any upgrade
-		// slot") or any of its identity tags (e.g. its context "contexts/offensive"). A slot answers
-		// to both dimensions, so the context can gate an attribute without the type having to encode
-		// it. See docs/ADR-003-stat-contribution-kernel.md.
-		Optional<com.sigmundgranaas.forgero.core.component.api.Slot> slotOpt = context.getSlot();
+		Optional<Slot> slotOpt = context.getSlot();
 		if (slotOpt.isPresent()) {
-			com.sigmundgranaas.forgero.core.component.api.Slot slot = slotOpt.get();
-			if (matches(slot.slotType())) {
-				return true;
+			Slot slot = slotOpt.get();
+			Set<OpenIdentifier> identities = new HashSet<>();
+			identities.add(slot.slotType());
+			if (slot instanceof ComponentUpgradeSlot upgradeSlot) {
+				identities.addAll(upgradeSlot.tags());
 			}
-			return slot instanceof com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot upgradeSlot
-					&& upgradeSlot.tags().stream().anyMatch(this::matches);
+			return matches(identities);
 		}
 
 		// Immutable structure part: match the part's type.
 		return context.getPart()
-				.map(part -> matches(part.partType()))
+				.map(part -> matches(Set.of(part.partType())))
 				.orElse(false);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof InSlotTypeCondition that)) return false;
+		return Objects.equals(type, that.type) && Objects.equals(slotType, that.slotType);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(type, slotType);
 	}
 }

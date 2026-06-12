@@ -49,7 +49,7 @@ public class ForgeroDefaultsPlugin implements DataPlugin {
 		context.registerStaticConditionCodec("forgero:has_sibling", HasSiblingCondition.CODEC);
 		context.registerStaticConditionCodec("forgero:has_other_contributor", HasOtherContributorCondition.CODEC);
 		context.registerStaticConditionCodec("forgero:id_match", IdMatchCondition.CODEC);
-		context.registerStaticConditionCodec("forgero:in_slot_type",  InSlotTypeCondition.CODEC);
+		context.registerStaticConditionCodec("forgero:in_slot_type", InSlotTypeCondition::codec);
 		context.registerStaticConditionCodec("forgero:is_root", IsRootCondition.CODEC);
 		context.registerStaticConditionCodec("forgero:slot_contains", SlotContainsCondition.CODEC);
 

@@ -111,4 +111,36 @@ class InSlotTypeConditionTest extends ForgeroTest {
 		assertFalse(new InSlotTypeCondition(id("forgero:in_slot_type"), OpenIdentifier.parse("forgero:contexts/defensive")).test(context0),
 				"Should not match a different context");
 	}
+
+	/**
+	 * With a tag resolver, in_slot_type matches a slot whose identity is a DESCENDANT of the
+	 * requested type — e.g. a slot tagged contexts/offensive satisfies in_slot_type: contexts when
+	 * the graph makes offensive a child of contexts.
+	 */
+	@Test
+	void conditionMatchesSlotIdentityHierarchicallyViaResolver() {
+		OpenIdentifier offensive = OpenIdentifier.parse("forgero:contexts/offensive");
+		OpenIdentifier contexts = OpenIdentifier.parse("forgero:contexts");
+		OpenIdentifier slotType = OpenIdentifier.parse("forgero:materials/roles/upgrade_material");
+
+		com.sigmundgranaas.forgero.common.tags.api.TagResolver resolver =
+				new com.sigmundgranaas.forgero.common.tags.engine.TagGraph(java.util.Map.of(offensive, java.util.Set.of(contexts)));
+
+		Component gem = material(IRON_ID, METAL_TAG);
+		ComponentUpgradeSlot slot = ComponentUpgradeSlot
+				.emptyWithTagsAndValidator(id("reinforcement"), slotType, "", java.util.Set.of(offensive),
+						com.sigmundgranaas.forgero.core.component.api.slot.SlotValidator.ACCEPT_ALL)
+				.withContent(gem);
+		Component head = part(PICKAXE_HEAD_ID).withUpgradeSlot(slot).build();
+		ResolutionContext ctx = new ResolutionContext(gem, head);
+
+		assertTrue(new InSlotTypeCondition(id("forgero:in_slot_type"), contexts, () -> resolver).test(ctx),
+				"Parent context should match a slot tagged with its descendant");
+		assertTrue(new InSlotTypeCondition(id("forgero:in_slot_type"), offensive, () -> resolver).test(ctx),
+				"Exact context tag should still match");
+		assertTrue(new InSlotTypeCondition(id("forgero:in_slot_type"), slotType, () -> resolver).test(ctx),
+				"Slot type should still match");
+		assertFalse(new InSlotTypeCondition(id("forgero:in_slot_type"), OpenIdentifier.parse("forgero:contexts/defensive"), () -> resolver).test(ctx),
+				"An unrelated sibling context should not match");
+	}
 }
