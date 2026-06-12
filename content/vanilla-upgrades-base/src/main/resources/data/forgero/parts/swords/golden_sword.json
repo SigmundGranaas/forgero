@@ -7,26 +7,62 @@
   ],
   "host": {
     "identifiers": [
-      { "type": "item", "id": "minecraft:golden_sword" }
+      {
+        "type": "item",
+        "id": "minecraft:golden_sword"
+      }
     ]
   },
   "attributes": [
-    { "id": "forgero:golden-sword-durability", "type": "forgero:durability", "computation": 32 },
-    { "id": "forgero:golden-sword-attack_damage", "type": "forgero:attack_damage", "computation": 4 },
-    { "id": "forgero:golden-sword-attack_speed", "type": "forgero:attack_speed", "computation": 1.6 }
+    {
+      "id": "forgero:golden-sword-durability",
+      "type": "forgero:durability",
+      "computation": 32
+    },
+    {
+      "id": "forgero:golden-sword-attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": 4
+    },
+    {
+      "id": "forgero:golden-sword-attack_speed",
+      "type": "forgero:attack_speed",
+      "computation": 1.6
+    }
   ],
   "upgrades": [
     {
       "id": "forgero:binding-slot",
       "type": "forgero:materials/roles/upgrade_material",
-      "tags": ["forgero:materials/types/binding"],
+      "tags": [
+        "forgero:materials/types/binding"
+      ],
       "description": "slot.forgero.binding"
     },
     {
       "id": "forgero:gem-slot",
       "type": "forgero:materials/roles/upgrade_material",
-      "tags": ["forgero:upgrades/types/gem"],
+      "tags": [
+        "forgero:upgrades/types/gem"
+      ],
       "description": "slot.forgero.gem"
+    },
+    {
+      "id": "forgero:golden_sword-reinforcement",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": [
+        "forgero:upgrades/types/reinforcement"
+      ],
+      "description": "slot.forgero.reinforcement"
+    },
+    {
+      "id": "forgero:golden_sword-guard",
+      "type": "forgero:parts/sword_guard",
+      "tags": [
+        "forgero:parts/sword_guard",
+        "forgero:parts/guard"
+      ],
+      "description": "slot.forgero.guard"
     }
   ]
 }
