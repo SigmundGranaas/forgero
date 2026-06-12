@@ -291,6 +291,38 @@ tasks.register('cleanExtractedSources') {
 }
 
 // ==============================================================================
+// Aggregate GameTest Task
+// ==============================================================================
+
+// Every module/mod that declares a `gameTest` Loom run config gets an auto-generated
+// `runGameTest` task. Historically only `:mods:forgero:runGameTest` was run during
+// validation (~28% of the corpus), which let regressions in the other suites slip
+// through. This aggregate runs *all* of them so a single command validates the whole
+// gametest corpus. Keep this list in sync with the modules declaring a `gameTest` run.
+def gameTestProjects = [
+		":modules:mc:test-common",
+		":modules:mc:loader",
+		":modules:mc:properties",
+		":modules:mc:predicate",
+		":modules:mc:blocks",
+		":modules:mc:bows",
+		":modules:mc:tools",
+		":modules:mc:armor",
+		":mods:forgero",
+		":mods:vanilla-upgrades",
+		":mods:repair-kit",
+		":mods:drp",
+		":mods:recipe-generator",
+]
+
+tasks.register('runAllGameTests') {
+	group = 'verification'
+	description = 'Run every module/mod runGameTest task (the full gametest corpus, not just mods/forgero)'
+
+	dependsOn gameTestProjects.collect { "${it}:runGameTest" }
+}
+
+// ==============================================================================
 // Tag Validation Tasks
 // ==============================================================================
 

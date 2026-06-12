@@ -127,8 +127,12 @@ public class DisassemblyService {
 			return false;
 		}
 
-		// Check if it's a damageable item that's damaged
-		if (stack.isDamageable() && stack.getDamage() > 0) {
+		// Reject damaged items: a damaged tool must be repaired before disassembly.
+		// Use Forgero's durability query (computed from the component) rather than
+		// ItemStack#isDamageable(), which reads the *Item's* static max damage — 0 for
+		// Forgero tools whose durability is dynamic — so the guard would be skipped
+		// for exactly the items we care about.
+		if (stack.getDamage() > 0 && context.services().itemQuery().getMaxDurability(stack) > 0) {
 			return false;
 		}
 

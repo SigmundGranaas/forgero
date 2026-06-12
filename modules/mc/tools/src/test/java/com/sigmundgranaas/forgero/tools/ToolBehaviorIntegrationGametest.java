@@ -148,8 +148,10 @@ public class ToolBehaviorIntegrationGametest implements ForgeroGameTest {
 		ServerPlayerEntity player = context.createMockCreativeServerPlayerInWorld();
 		player.setStackInHand(Hand.MAIN_HAND, forgeroSword);
 
-		// Tick player to update attributes
-		for (int i = 0; i < 10; i++) {
+		// Tick player to update attributes and let the attack cooldown fully recharge
+		// (a sword's cooldown period is ~12.5 ticks; attacking sooner deals reduced,
+		// cooldown-scaled damage that drops out of the expected range).
+		for (int i = 0; i < 20; i++) {
 			player.playerTick();
 		}
 
@@ -177,8 +179,10 @@ public class ToolBehaviorIntegrationGametest implements ForgeroGameTest {
 		ServerPlayerEntity player = context.createMockCreativeServerPlayerInWorld();
 		player.setStackInHand(Hand.MAIN_HAND, new ItemStack(Items.DIAMOND_SWORD));
 
-		// Tick player to update attributes
-		for (int i = 0; i < 10; i++) {
+		// Tick player to update attributes and let the attack cooldown fully recharge
+		// (a sword's cooldown period is ~12.5 ticks; attacking sooner deals reduced,
+		// cooldown-scaled damage and the strict 7.0 ± 0.5 assertion fails).
+		for (int i = 0; i < 20; i++) {
 			player.playerTick();
 		}
 
@@ -457,7 +461,7 @@ public class ToolBehaviorIntegrationGametest implements ForgeroGameTest {
 
 		// Try exact match first
 		String identifier = "forgero:" + material + "-" + toolType;
-		var exactMatch = registry.get(OpenIdentifier.of(identifier));
+		var exactMatch = registry.get(OpenIdentifier.parse(identifier));
 		if (exactMatch.isPresent()) {
 			return converter.toStack(exactMatch.get()).orElse(null);
 		}
