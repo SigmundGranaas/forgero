@@ -3,8 +3,6 @@ package com.sigmundgranaas.forgero.core.component.api.slot;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
-import com.sigmundgranaas.forgero.core.attribute.api.AttributeScope;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.Slot;
 import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
@@ -76,26 +74,6 @@ public record ComponentUpgradeSlot(
 	 */
 	public boolean isEmpty() {
 		return content.isEmpty();
-	}
-
-	public List<Attribute> getFilteredAttributes() {
-		if (content.isEmpty()) {
-			return List.of();
-		}
-
-		return content.get().properties(Attribute.KEY).stream()
-				.filter(attr -> AttributeScope.matchesSlotScope(attr.scope(), scope))
-				.toList();
-	}
-
-	public List<Attribute> getFilteredAttributes(com.sigmundgranaas.forgero.common.tags.api.TagResolver tagResolver) {
-		if (content.isEmpty()) {
-			return List.of();
-		}
-
-		return content.get().properties(Attribute.KEY).stream()
-				.filter(attr -> AttributeScope.matchesSlotScope(attr.scope(), scope, tagResolver))
-				.toList();
 	}
 
 	/**

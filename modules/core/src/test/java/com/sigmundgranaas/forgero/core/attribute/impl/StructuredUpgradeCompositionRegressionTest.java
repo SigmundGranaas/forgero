@@ -347,34 +347,10 @@ class StructuredUpgradeCompositionRegressionTest extends ForgeroTest {
 	@DisplayName("Edge Cases")
 	class EdgeCases {
 
-		@Test
-		@DisplayName("Guard with only multiplier (no base) produces 0")
-		void guardWithOnlyMultiplierProducesZero() {
-			// Shape has multiplier but material has no base = composition fails
-			Attribute shapeMult = SimpleAttribute.withScope(
-					DefaultAttributes.DURABILITY, 0.5f, MultiplicationOperator.getInstance(),
-					AttributeScope.PART_COMPOSITE);
-
-			Component shape = part("guard-shape")
-					.withAttribute(shapeMult)
-					.build();
-
-			Component guard = part("broken-guard")
-					.withStructureSlot(structureSlot("shape", id("shape_slot"), shape))
-					// No material - no base value
-					.build();
-
-			Component sword = part("sword")
-					.withAttribute(new SimpleAttribute(DefaultAttributes.DURABILITY, 100.0f))
-					.withUpgradeSlot(upgradeSlot("slot").withContent(guard))
-					.build();
-
-			AttributeQueryResult result = resolveAttributes(sword);
-
-			// Guard contributes nothing (composition requires base + multiplier from different sources)
-			assertEquals(100.0f, result.getValue(DefaultAttributes.DURABILITY), 0.01f,
-					"Guard with no base should contribute 0");
-		}
+		// Note: the old intersection kernel dropped a lone part-composite multiplier (no base)
+		// to zero. The StatFold kernel intentionally changed this — a lone multiplier rises and
+		// applies to the parent — so that "produces 0" characterization test was removed as an
+		// accepted divergence (see docs/ADR-003-stat-contribution-kernel.md).
 
 		@Test
 		@DisplayName("Guard with only base (no multiplier) produces 0")

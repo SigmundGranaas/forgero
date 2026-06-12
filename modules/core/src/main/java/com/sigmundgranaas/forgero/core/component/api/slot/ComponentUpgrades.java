@@ -1,7 +1,6 @@
 package com.sigmundgranaas.forgero.core.component.api.slot;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
-import com.sigmundgranaas.forgero.core.attribute.api.Attribute;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.Slot;
 
@@ -63,18 +62,6 @@ public record ComponentUpgrades(SlotContainer slots) {
 				.filter(slot -> slot instanceof ComponentUpgradeSlot)
 				.map(slot -> (ComponentUpgradeSlot) slot)
 				.flatMap(slot -> slot.getContent().stream())
-				.toList();
-	}
-
-	public List<Attribute> getFilteredAttributes() {
-		return upgradeSlots()
-				.flatMap(slot -> slot.getFilteredAttributes().stream())
-				.toList();
-	}
-
-	public List<Attribute> getFilteredAttributes(com.sigmundgranaas.forgero.common.tags.api.TagResolver tagResolver) {
-		return upgradeSlots()
-				.flatMap(slot -> slot.getFilteredAttributes(tagResolver).stream())
 				.toList();
 	}
 

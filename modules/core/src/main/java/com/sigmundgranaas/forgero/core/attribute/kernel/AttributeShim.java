@@ -29,9 +29,11 @@ import java.util.concurrent.ConcurrentHashMap;
  *   <li>{@code scope/part-composite}, {@code scope/equipment-composite} → {@code gated}
  *       (offer/accept: placement and validity are structural, not labelled)</li>
  *   <li>{@code scope/local} → {@code local}</li>
- *   <li>{@code scope/upgrade} → plain (position decides: such contributions only reach a fold
- *       through an upgrade slot anyway; restrictive intent belongs in an in_slot_type condition)</li>
- *   <li>any other scope → warned once, treated as plain (e.g. stale forgero-1 contexts/*)</li>
+ *   <li>{@code scope/upgrade} → {@code upgradeOnly} (applies only when the component is installed
+ *       as an upgrade)</li>
+ *   <li>any other scope (e.g. forgero-1 {@code contexts/*} slot scopes) → warned once and treated
+ *       as {@code upgradeOnly}: the kernel has no named-slot-scope concept, so it honours position
+ *       over label — dropped on base materials, applied when installed as an upgrade</li>
  * </ul>
  */
 public final class AttributeShim {
@@ -59,15 +61,21 @@ public final class AttributeShim {
 			} else if (AttributeScope.isUpgrade(scope)) {
 				upgradeOnly = true;
 			} else {
-				// Unrecognized scope (e.g. stale forgero-1 contexts/*): no handler matches it,
-				// so it is INERT — it never contributed under the legacy engine and must not be
-				// resurrected here. Reported once so the dead data can be removed.
+				// Unrecognized scope (e.g. forgero-1 contexts/* slot scopes): there is no kernel
+				// handler for the scope itself, but the legacy engine only ever applied such
+				// attributes through a (scope-matched) upgrade slot — never to a base material.
+				// The kernel has no notion of named slot scopes, so we honour the position, not the
+				// label: treat it as upgrade-only. It is therefore dropped on base materials (the
+				// stale-data case) and applied when the component is installed as an upgrade (the
+				// reinforcement-bonus case). Reported once so the vocabulary can be migrated to the
+				// explicit scope/upgrade form.
+				upgradeOnly = true;
 				if (WARNED_SCOPES.add(scope.toString())) {
-					LOGGER.warn("Inert attribute scope '{}' (attribute type {}): no handler; the "
-							+ "contribution does not apply. Likely stale vocabulary — remove or migrate it.",
+					LOGGER.warn("Unrecognized attribute scope '{}' (attribute type {}): no kernel "
+							+ "handler; treating as upgrade-only (applies only when installed as an "
+							+ "upgrade). Likely a forgero-1 slot scope — migrate it to scope/upgrade.",
 							scope, attribute.type());
 				}
-				return Optional.empty();
 			}
 		}
 

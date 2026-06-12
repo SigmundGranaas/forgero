@@ -247,7 +247,10 @@ distinctions the alignment had to make:
    **Fix:** `AttributeShim` treats any unrecognized scope as **inert** (no handler ⇒ no
    contribution), matching the engine for dead data, with a one-time warning so it can be removed.
    This is the line between "fault to fix" (a legitimately-dropped stat) and "correctly ignored"
-   (dead vocabulary) — not every divergence is a fault.
+   (dead vocabulary) — not every divergence is a fault. **(Refined in Gate result #3:** *inert* was
+   too broad — the same `contexts/offensive` vocabulary is the live mechanism for reinforcement
+   upgrade bonuses when matched to a slot, so unrecognized scopes became *upgrade-only* rather than
+   fully inert: dropped on base materials, applied when installed as an upgrade.)
 
 2. **Structured upgrades compose before the slot acts; upgrade scope is positional.** A guard
    installed in a slot must compose its own material×shape internally (iron 250 × guard-mult 0.1 =
@@ -263,3 +266,35 @@ how many values changed vs the legacy engine — the intentional fault-fixes). T
 composition kernel (`AttributeEngine` bake/strategies, the three collectors, four scope handlers,
 `ScopeMatcher`/`ScopeMatchDecisionTable`/`ScopeMatchRule`, `ComputationChain`, operator classes) is
 now unused by the compile path and is deletable as a follow-up — the win ADR-003 set out to take.
+
+## Gate result #3 — legacy composition kernel deleted; one shim refinement
+
+The follow-up deletion was performed. Removed (~1,100 LOC): the four `attribute/composition`
+scope handlers, the six `attribute/impl` baking strategies/collectors, the two
+`attribute/impl/computation` classes, and the `ScopeMatcher`/`ScopeMatchDecisionTable`/
+`ScopeMatchRule` trio. `AttributeEngine` is reduced to a thin `StatFold` adapter (its static
+`getAttribute`/`resolveAttributes` read API and the `CompilerPass` shape are kept — 8 production
+callers plus `EagerBakingValidator` and the test factories depend on them — but every call now
+folds through `StatFold`). The dead `AttributeScope.getHandler`/`isCompositionScope`/
+`isFilterScope`/`matchesSlotScope` helpers and the unused `ComponentUpgrades`/`ComponentUpgradeSlot`
+`getFilteredAttributes` chain went with them. Characterization tests of the removed machinery were
+deleted; the two scope/StatFold parity tests became vacuous and were removed.
+
+Repointing the **non-terminal** read path (`AttributeEngine.resolveAttributes` for parts/materials)
+from the old engine to `StatFold` surfaced one regression the terminal path had silently carried
+since the cutover: **reinforcement upgrade bonuses stopped applying.** `metal_upgrade_base` grants
+its damage/mining/durability bonuses under scope `contexts/offensive`, matched against the
+offensive-scoped reinforcement slot by the old `matchesSlotScope`. Gate #2's *inert* rule dropped
+those bonuses everywhere, including in the matching slot — so an installed reinforcement added
+nothing. The inert rule was correct for *base materials* (the spear case) but wrong for *upgrades*.
+
+**Fix:** `AttributeShim` now maps an unrecognized scope to **`upgradeOnly`** instead of inert. The
+kernel has no named-slot-scope concept, so it honours position over label: such a contribution is
+dropped on a base material (spear stays fixed) and applied when the component is installed as an
+upgrade (reinforcement bonus restored). This trades the legacy engine's fine-grained
+offensive/defensive/utility *slot-scope matching* for a simpler positional rule — no current
+content or test depends on the finer distinction. The migration path remains: author these as
+`scope/upgrade` directly and the warning goes away.
+
+Result: **all 263 required gametests pass** (264 minus the removed parity gametest) and the core
+unit suite is green.

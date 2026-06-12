@@ -2,7 +2,7 @@ package com.sigmundgranaas.forgero.core.component.impl;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.attribute.api.BakedAttributes;
-import com.sigmundgranaas.forgero.core.attribute.impl.AttributeEngine;
+import com.sigmundgranaas.forgero.core.attribute.kernel.StatFold;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.ComponentTraversal;
 import com.sigmundgranaas.forgero.core.property.api.CompilerPass;
@@ -24,7 +24,6 @@ import java.util.Map;
  * {@code docs/ADR-002-compiler-in-the-factory.md}.
  */
 final class ComponentCompiler {
-	private static final AttributeEngine ATTRIBUTES = new AttributeEngine();
 
 	private ComponentCompiler() {}
 
@@ -33,7 +32,7 @@ final class ComponentCompiler {
 	 */
 	static CompiledProperties compile(Component root) {
 		List<Component> components = ComponentTraversal.traverse(root);
-		BakedAttributes attributes = com.sigmundgranaas.forgero.core.attribute.kernel.StatFold.fold(root);
+		BakedAttributes attributes = StatFold.fold(root);
 
 		Map<OpenIdentifier, List<?>> properties = new HashMap<>();
 		for (var entry : CompilerPasses.registered().entrySet()) {
