@@ -15,6 +15,9 @@ import com.sigmundgranaas.forgero.common.api.item.ItemComparisonApi;
 import com.sigmundgranaas.forgero.common.api.item.ItemMutationApi;
 import com.sigmundgranaas.forgero.common.api.item.ItemQueryApi;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import com.sigmundgranaas.forgero.effects.api.OnHitEffects;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
@@ -69,8 +72,23 @@ public final class ExampleForgeroAddon {
 		return query.getAttackDamage(a) >= query.getAttackDamage(b) ? a : b;
 	}
 
-	// Scenario 5 — react to Forgero being ready and do something with its data.
+	// Scenario 5 — register custom on-hit effects usable from content JSON, with plain Minecraft
+	// logic and no internal types (public effects.api.* surface).
+	public void registerEffects() {
+		// No config — ignite the victim.
+		OnHitEffects.registerSingleTarget("example:torch", entity -> entity.setOnFireFor(3));
+
+		// Source + target — heal the attacker (lifesteal), no config.
+		OnHitEffects.registerSourceTarget("example:lifesteal", (source, target) -> {
+			if (source instanceof LivingEntity attacker) {
+				attacker.heal(2.0f);
+			}
+		});
+	}
+
+	// Scenario 6 — react to Forgero being ready and do something with its data.
 	public void onModInit() {
+		registerEffects();
 		ForgeroInitializedCallback.EVENT.register(services -> {
 			// NOTE(leak): services.componentRegistry() exposes core.component.api.Component —
 			// there is no ItemStack-level way to enumerate "all loaded materials/parts". A mod

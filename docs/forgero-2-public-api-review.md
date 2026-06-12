@@ -137,14 +137,33 @@ and the `PublicApiExtensionTest` gametest:
   — the JSON-parameterized case, with `ForgeroCodecs.IDENTIFIER` providing the path-preserving
   identifier codec so the `data.loading.impl.codec.CodecConstants` leak is gone.
 
+**F1 (on-hit effects) — DONE.** A downstream mod can add a custom on-hit effect with plain
+Minecraft logic and no internal types, proven by `ExampleForgeroAddon.registerEffects()`
+(public-only) and two `PublicApiExtensionTest` gametests (registered → parsed through the dispatch
+codec → applied to a real zombie, no-config and JSON-config paths). New public surface in
+`com.sigmundgranaas.forgero.effects.api` (this lives in the `properties` module, not `common`,
+because effects are defined above `common` in the module graph):
+
+- `OnHitEffects.registerSingleTarget(type, Consumer<Entity>)` and
+  `registerSingleTarget(type, Codec<C>, BiConsumer<C, Entity>)` — single-target effects.
+- `OnHitEffects.registerSourceTarget(type, BiConsumer<Entity, Entity>)` and
+  `registerSourceTarget(type, Codec<C>, SourceTargetAction<C>)` — attacker+victim effects.
+- `FunctionalEntityEffect`/`FunctionalContextualEffect` bridge to the internal handler types and
+  round-trip config; the `OnHitEffect` marker, the `type()` boilerplate and `EffectCodecRegistry`
+  are hidden.
+
+> The public surface is intentionally split: `common.api.*` (services, items, conditions) +
+> `effects.api.*` (effects). This is forced by the module graph (`properties` depends on `common`,
+> not the reverse) and is documented so it is not a surprise.
+
 **F3 — DONE.** Fixed the `CLAUDE.md` "Key APIs" block (removed the non-existent
 `getInstance()`/`registry()`/`resolver().resolve(...)`; replaced with the real
 `ForgeroApi.services()`/static-delegate surface).
 
 **Still leaking (next):**
 
-- **Effects** (on-hit / on-tick handlers) — registered through a different path than conditions;
-  give them the same functional/public treatment.
+- **Other effect channels** — block effects (`OnHitBlockEffect`), use/interaction handlers and
+  on-tick share the same `EffectCodecRegistry` shape; give each the same `OnHitEffects`-style facade.
 - **Property codecs** (`registerPropertyCodec`) and **slot codecs** (`registerSlotCodec`) still take
   `PropertyKey<?>` / `core.component.api.Slot` and heavy `Function<Supplier<…>, …>` generics.
 - **Registry discovery (F2)** — still returns `core.component.api.Component`; add ItemStack-level
