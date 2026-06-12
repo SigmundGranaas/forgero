@@ -38,7 +38,9 @@ public class IntegrationTests {
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
 	public void testMultipleHandlersChained(TestContext context) {
 		LivingEntity source = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(0, 1, 0));
-		LivingEntity target = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(2, 1, 2));
+		// Non-flammable target: an undead mob exposed to daylight catches fire, and fire
+		// zeroes frozen ticks, intermittently failing the freeze assertion below.
+		LivingEntity target = context.spawnEntity(EntityType.PIG, new BlockPos(2, 1, 2));
 
 		// Apply multiple handlers in sequence
 		FreezeHandler freezeHandler = new FreezeHandler(100, false);
@@ -71,10 +73,12 @@ public class IntegrationTests {
 	public void testAOEWithMultipleEffects(TestContext context) {
 		LivingEntity source = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(2, 1, 2));
 
-		// Spawn multiple entities around source
-		LivingEntity target1 = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(3, 1, 2));
-		LivingEntity target2 = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(1, 1, 2));
-		LivingEntity target3 = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(2, 1, 3));
+		// Spawn multiple entities around source. Use non-flammable pigs: a daylight-exposed
+		// undead mob can randomly ignite, and igniting zeroes frozen ticks, intermittently
+		// failing the freeze assertions below.
+		LivingEntity target1 = context.spawnEntity(EntityType.PIG, new BlockPos(3, 1, 2));
+		LivingEntity target2 = context.spawnEntity(EntityType.PIG, new BlockPos(1, 1, 2));
+		LivingEntity target3 = context.spawnEntity(EntityType.PIG, new BlockPos(2, 1, 3));
 
 		// AOE selector
 		AreaOfEffectSelector selector = new AreaOfEffectSelector(3, List.of());
@@ -102,9 +106,10 @@ public class IntegrationTests {
 	public void testFilteredEntitySelection(TestContext context) {
 		LivingEntity source = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(2, 1, 2));
 
-		// Create low-health and full-health targets
-		LivingEntity lowHealthTarget = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(3, 1, 2));
-		LivingEntity fullHealthTarget = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(4, 1, 2));
+		// Create low-health and full-health targets. Pigs (non-flammable) so a random
+		// daylight ignition can't zero the frozen ticks asserted below.
+		LivingEntity lowHealthTarget = context.spawnEntity(EntityType.PIG, new BlockPos(3, 1, 2));
+		LivingEntity fullHealthTarget = context.spawnEntity(EntityType.PIG, new BlockPos(4, 1, 2));
 
 		lowHealthTarget.setHealth(lowHealthTarget.getMaxHealth() * 0.3f);
 
@@ -335,9 +340,11 @@ public class IntegrationTests {
 
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
 	public void testFreezeHandlerDurationVariations(TestContext context) {
-		LivingEntity target1 = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
-		LivingEntity target2 = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(2, 1, 2));
-		LivingEntity target3 = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(3, 1, 3));
+		// Pigs (non-flammable): a daylight-exposed undead mob can randomly ignite, and
+		// igniting zeroes frozen ticks, which would fail the duration assertions below.
+		LivingEntity target1 = context.spawnEntity(EntityType.PIG, new BlockPos(1, 1, 1));
+		LivingEntity target2 = context.spawnEntity(EntityType.PIG, new BlockPos(2, 1, 2));
+		LivingEntity target3 = context.spawnEntity(EntityType.PIG, new BlockPos(3, 1, 3));
 
 		FreezeHandler shortFreeze = new FreezeHandler(20, false); // 1 second
 		FreezeHandler mediumFreeze = new FreezeHandler(100, false); // 5 seconds
@@ -361,7 +368,9 @@ public class IntegrationTests {
 	public void testCombatScenarioWithMultipleEffects(TestContext context) {
 		// Scenario: Player attacks enemy, triggering freeze + knockback + particles
 		PlayerEntity player = context.createMockCreativeServerPlayerInWorld();
-		LivingEntity enemy = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(3, 1, 3));
+		// Non-flammable pig: a daylight-exposed undead mob can randomly ignite, and igniting
+		// zeroes frozen ticks, intermittently failing the freeze assertion below.
+		LivingEntity enemy = context.spawnEntity(EntityType.PIG, new BlockPos(3, 1, 3));
 
 		enemy.setVelocity(Vec3d.ZERO);
 
@@ -433,9 +442,11 @@ public class IntegrationTests {
 		BlockPos dirtPosRelative = new BlockPos(3, 0, 3);
 		context.setBlockState(dirtPosRelative, Blocks.DIRT);
 
-		// Spawn target ABOVE the dirt block at y=1, so its feet are in air above dirt
+		// Spawn target ABOVE the dirt block at y=1, so its feet are in air above dirt.
+		// Non-flammable pig: a daylight-exposed undead mob can randomly ignite, and igniting
+		// zeroes frozen ticks, which would fail the "Freeze worked" assertion below.
 		BlockPos spawnPosRelative = new BlockPos(3, 1, 3);
-		LivingEntity target = context.spawnEntity(EntityType.ZOMBIE, spawnPosRelative);
+		LivingEntity target = context.spawnEntity(EntityType.PIG, spawnPosRelative);
 
 		// 1. Freeze
 		new FreezeHandler(80, false).apply(target);

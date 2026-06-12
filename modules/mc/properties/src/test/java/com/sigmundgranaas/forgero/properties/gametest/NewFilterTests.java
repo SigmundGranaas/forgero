@@ -174,8 +174,11 @@ public class NewFilterTests {
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
 	public void testEntityStateFilterBurning(TestContext context) {
 		LivingEntity source = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(0, 1, 0));
-		LivingEntity burningTarget = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(2, 1, 2));
-		LivingEntity normalTarget = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(4, 1, 4));
+		// Use non-flammable pigs so fire state is driven solely by the explicit setOnFireFor
+		// below: an undead mob exposed to daylight catches fire on its own, which made
+		// normalTarget intermittently burning and the "reject non-burning" assertion flake.
+		LivingEntity burningTarget = context.spawnEntity(EntityType.PIG, new BlockPos(2, 1, 2));
+		LivingEntity normalTarget = context.spawnEntity(EntityType.PIG, new BlockPos(4, 1, 4));
 
 		burningTarget.setOnFireFor(5);
 

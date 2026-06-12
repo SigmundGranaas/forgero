@@ -330,7 +330,9 @@ public class PropertyIntegrationGametest {
 		);
 
 		player.setStackInHand(Hand.MAIN_HAND, stack);
-		LivingEntity target = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(2, 1, 2));
+		// Non-flammable pig: a daylight-exposed undead mob can randomly ignite, and igniting
+		// zeroes frozen ticks, intermittently failing the freeze assertion below.
+		LivingEntity target = context.spawnEntity(EntityType.PIG, new BlockPos(2, 1, 2));
 		context.assertTrue(target.getFrozenTicks() == 0, "Target should not be frozen initially");
 
 		player.attack(target);
@@ -483,7 +485,10 @@ public class PropertyIntegrationGametest {
 		);
 
 		player.setStackInHand(Hand.MAIN_HAND, stack);
-		LivingEntity target = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(2, 1, 2));
+		// Use a non-flammable target: an undead mob exposed to daylight catches fire,
+		// and fire zeroes frozen ticks (Minecraft mechanic), which made the freeze
+		// assertion below intermittently fail. A pig never burns in daylight.
+		LivingEntity target = context.spawnEntity(EntityType.PIG, new BlockPos(2, 1, 2));
 
 		player.attack(target);
 
