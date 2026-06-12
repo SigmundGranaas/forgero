@@ -56,7 +56,7 @@ public final class StatFold {
 	 * current engine's, so it is parity-comparable and drop-in.
 	 */
 	public static BakedAttributes fold(Component root) {
-		Export export = seal(root, root, null);
+		Export export = seal(root, root, false);
 
 		Map<OpenIdentifier, Float> values = new LinkedHashMap<>();
 		Map<OpenIdentifier, List<StatContribution>> leftovers = new LinkedHashMap<>();
@@ -86,17 +86,13 @@ public final class StatFold {
 	 * @param slotForOwnFilter transitional shim: when this node sits in an upgrade slot, the
 	 *                         slot may filter the node's OWN contributions (legacy slot scope).
 	 */
-	private static Export seal(Component node, Component globalRoot, ComponentUpgradeSlot slotForOwnFilter) {
+	private static Export seal(Component node, Component globalRoot, boolean inUpgradeSlot) {
 		ResolutionContext ctx = new ResolutionContext(node, globalRoot);
 		List<Sourced> pool = new ArrayList<>();
 		Map<OpenIdentifier, List<Attribute>> dynamic = new HashMap<>();
 
 		// own contributions (source = the node itself)
 		for (Attribute attribute : node.properties(Attribute.KEY)) {
-			if (slotForOwnFilter != null
-					&& !AttributeScope.matchesSlotScope(attribute.scope(), slotForOwnFilter.scope())) {
-				continue;
-			}
 			if (!staticPass(attribute.condition(), ctx)) {
 				continue;
 			}
@@ -105,18 +101,22 @@ public final class StatFold {
 				continue;
 			}
 			AttributeShim.toContribution(attribute).ifPresent(c -> {
-				// local = applies only to the directly-queried component (the fold root),
-				// never when composed into something else — LocalScopeHandler's self-source rule.
-				if (!c.local() || node == globalRoot) {
-					pool.add(new Sourced(c, node));
+				// local = applies only to the directly-queried component (the fold root).
+				if (c.local() && node != globalRoot) {
+					return;
 				}
+				// upgrade-only = applies only when this node occupies an upgrade slot.
+				if (c.upgradeOnly() && !inUpgradeSlot) {
+					return;
+				}
+				pool.add(new Sourced(c, node));
 			});
 		}
 
 		// compose layer: structure children seal first; their exports enter re-sourced
 		if (node instanceof StructuredComponent structured) {
 			for (ComponentPart part : structured.structure().parts().values()) {
-				Export child = seal(part.content(), globalRoot, null);
+				Export child = seal(part.content(), globalRoot, false);
 				for (Sourced s : child.contributions()) {
 					pool.add(new Sourced(s.c(), part.id()));
 				}
@@ -137,7 +137,7 @@ public final class StatFold {
 				if (content.isEmpty()) {
 					continue;
 				}
-				Export upgrade = seal(content.get(), globalRoot, slot);
+				Export upgrade = seal(content.get(), globalRoot, true);
 				for (Sourced s : upgrade.contributions()) {
 					upgradePool.add(new Sourced(s.c(), slot.id()));
 				}

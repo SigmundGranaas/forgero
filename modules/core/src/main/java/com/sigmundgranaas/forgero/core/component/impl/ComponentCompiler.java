@@ -33,7 +33,7 @@ final class ComponentCompiler {
 	 */
 	static CompiledProperties compile(Component root) {
 		List<Component> components = ComponentTraversal.traverse(root);
-		BakedAttributes attributes = ATTRIBUTES.compile(components.stream());
+		BakedAttributes attributes = com.sigmundgranaas.forgero.core.attribute.kernel.StatFold.fold(root);
 
 		Map<OpenIdentifier, List<?>> properties = new HashMap<>();
 		for (var entry : CompilerPasses.registered().entrySet()) {

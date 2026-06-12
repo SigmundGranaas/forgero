@@ -49,6 +49,7 @@ public final class AttributeShim {
 	public static Optional<StatContribution> toContribution(Attribute attribute) {
 		boolean gated = false;
 		boolean local = false;
+		boolean upgradeOnly = false;
 		if (attribute.scope().isPresent()) {
 			OpenIdentifier scope = attribute.scope().get();
 			if (AttributeScope.isPartComposite(scope) || AttributeScope.isEquipmentComposite(scope)) {
@@ -56,30 +57,37 @@ public final class AttributeShim {
 			} else if (AttributeScope.isLocal(scope)) {
 				local = true;
 			} else if (AttributeScope.isUpgrade(scope)) {
-				// position decides; no flag needed
-			} else if (WARNED_SCOPES.add(scope.toString())) {
-				LOGGER.warn("Unknown attribute scope '{}' (attribute type {}). Treating as unscoped; "
-						+ "this is likely stale vocabulary — remove or migrate it.", scope, attribute.type());
+				upgradeOnly = true;
+			} else {
+				// Unrecognized scope (e.g. stale forgero-1 contexts/*): no handler matches it,
+				// so it is INERT — it never contributed under the legacy engine and must not be
+				// resurrected here. Reported once so the dead data can be removed.
+				if (WARNED_SCOPES.add(scope.toString())) {
+					LOGGER.warn("Inert attribute scope '{}' (attribute type {}): no handler; the "
+							+ "contribution does not apply. Likely stale vocabulary — remove or migrate it.",
+							scope, attribute.type());
+				}
+				return Optional.empty();
 			}
 		}
 
 		Operator op = attribute.operator();
 		if (op instanceof AdditionOperator) {
 			return Optional.of(new StatContribution(attribute.type(), StatContribution.Operation.ADD,
-					attribute.value(), gated, local, attribute.condition()));
+					attribute.value(), gated, local, upgradeOnly, attribute.condition()));
 		}
 		if (op instanceof SubtractionOperator) {
 			return Optional.of(new StatContribution(attribute.type(), StatContribution.Operation.ADD,
-					-attribute.value(), gated, local, attribute.condition()));
+					-attribute.value(), gated, local, upgradeOnly, attribute.condition()));
 		}
 		if (op instanceof MultiplicationOperator) {
 			return Optional.of(new StatContribution(attribute.type(), StatContribution.Operation.MULTIPLY,
-					attribute.value(), gated, local, attribute.condition()));
+					attribute.value(), gated, local, upgradeOnly, attribute.condition()));
 		}
 		if (op instanceof DivisionOperator) {
 			float v = attribute.value();
 			return Optional.of(new StatContribution(attribute.type(), StatContribution.Operation.MULTIPLY,
-					v == 0f ? 0f : 1f / v, gated, local, attribute.condition()));
+					v == 0f ? 0f : 1f / v, gated, local, upgradeOnly, attribute.condition()));
 		}
 		if (WARNED_OPERATORS.add(op.getClass().getSimpleName())) {
 			LOGGER.warn("Attribute operator {} has no kernel mapping (attribute type {}); skipping. "

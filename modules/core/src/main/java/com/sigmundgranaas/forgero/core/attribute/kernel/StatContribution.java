@@ -32,15 +32,16 @@ public record StatContribution(
 		float value,
 		boolean gated,
 		boolean local,
+		boolean upgradeOnly,
 		Optional<Condition> condition
 ) {
 	public enum Operation {ADD, MULTIPLY}
 
 	public static StatContribution add(OpenIdentifier type, float value) {
-		return new StatContribution(type, Operation.ADD, value, false, false, Optional.empty());
+		return new StatContribution(type, Operation.ADD, value, false, false, false, Optional.empty());
 	}
 
 	public static StatContribution multiply(OpenIdentifier type, float factor) {
-		return new StatContribution(type, Operation.MULTIPLY, factor, false, false, Optional.empty());
+		return new StatContribution(type, Operation.MULTIPLY, factor, false, false, false, Optional.empty());
 	}
 }

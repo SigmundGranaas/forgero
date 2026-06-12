@@ -226,3 +226,40 @@ atom and shim (kernel stays generic; sealing becomes an explicit, opt-in future 
 (b) consciously re-specify the composition semantics with content rebalancing — a product
 decision, not a refactor. The parity gametest stays in the suite (non-required while iterating)
 as the standing gate with exhaustive diff reporting.
+
+---
+
+## Gate result #2 — StatFold made authoritative; faults fixed, all functional tests green
+
+The maintainer chose to **accept stat changes where the legacy engine faulted** rather than
+reproduce it bug-for-bug. So `StatFold` was cut into the compile path (`ComponentCompiler` and the
+non-terminal `AttributeEngine` fallbacks now fold with it), and the existing functional gametests —
+which encode *designed* stat values ("iron sword attack damage ≥ 4.0") — became the correctness
+oracle instead of engine-parity.
+
+Switching to `StatFold` produced exactly **one** required-test failure, which diagnosed two real
+distinctions the alignment had to make:
+
+1. **Dead vocabulary must stay inert.** Diamond's include carries `mineral-offensive-durability
+   +775` (scope `contexts/offensive`); netherite's carries `+120`. These are stale forgero-1
+   Category strings the engine silently dropped. The first `StatFold` draft *resurrected* them as
+   plain adds, applying +775 durability to every diamond tool and inverting netherite-vs-diamond.
+   **Fix:** `AttributeShim` treats any unrecognized scope as **inert** (no handler ⇒ no
+   contribution), matching the engine for dead data, with a one-time warning so it can be removed.
+   This is the line between "fault to fix" (a legitimately-dropped stat) and "correctly ignored"
+   (dead vocabulary) — not every divergence is a fault.
+
+2. **Structured upgrades compose before the slot acts; upgrade scope is positional.** A guard
+   installed in a slot must compose its own material×shape internally (iron 250 × guard-mult 0.1 =
+   25) *before* the slot filters anything; the first draft filtered the guard's raw contributions
+   and broke its internal composition (guard added 0 durability). And `scope/upgrade` means "apply
+   only when in an upgrade slot," not "always." **Fix:** upgrade children seal fully; a new
+   `upgradeOnly` flag on `StatContribution` (from the upgrade scope) is included only when the node
+   occupies an upgrade slot — position decides, not a label.
+
+Result: **all 264 required gametests pass** with `StatFold` authoritative. The registry parity
+gametest is repurposed from a pass/fail equivalence gate to a **characterization record** (it logs
+how many values changed vs the legacy engine — the intentional fault-fixes). The legacy
+composition kernel (`AttributeEngine` bake/strategies, the three collectors, four scope handlers,
+`ScopeMatcher`/`ScopeMatchDecisionTable`/`ScopeMatchRule`, `ComputationChain`, operator classes) is
+now unused by the compile path and is deletable as a follow-up — the win ADR-003 set out to take.

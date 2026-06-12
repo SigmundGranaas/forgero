@@ -121,7 +121,7 @@ public class AttributeEngine implements CompilerPass<BakedAttributes> {
 		if (component instanceof EquipmentComponent equipment) {
 			return equipment.getAttribute(type);
 		}
-		return new AttributeEngine().resolve(component).get(type).value();
+		return com.sigmundgranaas.forgero.core.attribute.kernel.StatFold.fold(component).get(type).value();
 	}
 
 	/**
