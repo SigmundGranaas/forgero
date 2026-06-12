@@ -125,28 +125,26 @@ Forgero uses a multi-module architecture with strict dependency rules:
 
 ### Content Modules (JSON Data Packs)
 
-**Active Content Packs (Modern Format)**
+**Shipped Content Packs (Modern Format)** — bundled into the runtime mod (`mods/forgero`):
 - **`content/forgero-base/`** - Core tags, templates, and upgrade slots
 - **`content/forgero-materials/`** - 41 primary materials (metals, woods, stones, etc.)
-- **`content/forgero-upgrades/`** - Upgrade material definitions
-- **`content/minecraft-tools/`** - Vanilla tool integration
-- **`content/forgero-tools/`** - Tool definitions (adds armor_material tag to metals)
-- **`content/forgero-armor/`** - Armor texture templates
-- **`content/forgero-armor-content/`** - Armor models
-- **`content/forgero-schematics/`** - Quality schematics (refined, mastercrafted)
+- **`content/minecraft-tools/`** - Vanilla tool integration (static parts)
+- **`content/forgero-conditions/`** - Random item-modifier conditions (sharp, durable, swift, etc.; StatusModifier system)
+- **`content/forgero-armor/`** - Armor shapes/texture templates
+- **`content/forgero-armor-content/`** - Armor part templates & models
+- **`content/forgero-mastercrafted/`** - Quality schematics (refined, mastercrafted)
 - **`content/forgero-extended-schematics/`** - Extended schematics (weapon blades, tool heads, guards, bindings)
 - **`content/forgero-secondary-materials/`** - Secondary materials (soft, hard, hybrid, dyes)
-- **`content/forgero-extended-weapons/`** - Extended weapon parts & equipment (katana, rapier, etc.)
-- **`content/forgero-mining/`** - Mining tool parts & equipment (hammer, spade, etc.)
-- **`content/forgero-gems/`** - Gem upgrades
-- **`content/vanilla-upgrades-base/`** - Static parts for vanilla items
+- **`content/forgero-extended-weapons/`** - Extended weapon & mining parts/equipment (katana, rapier, hammer, spade, etc.)
+- **`content/forgero-gems/`** - Tiered gem upgrades
+- **`content/forgero-bows/`** - Bow & arrow parts and equipment
+- **`content/vanilla-upgrades-base/`** - Static parts for vanilla items (bundled via the `vanilla-upgrades` mod)
 
-**Legacy Content Packs (Old Format - Reference Only)**
-- **`content/forgero-vanilla-legacy-read-only/`** - Old pack format (recipe generators)
-- **`content/forgero-extended-legacy-read-only/`** - Old pack format (reference only)
-- **`content/forgero-compat-legacy-read-only/`** - Old mod compatibility
-- **`content/forgero-structures/`** - Structure templates (world generation)
-- **`content/forgero-deprecated/`** - Deprecated content
+**Unshipped Content Packs**
+- **`content/forgero-structures/`** - Structure templates (world generation); built but not bundled into the runtime mod
+
+> Legacy/deprecated content packs (`forgero-*-legacy-read-only`, `forgero-deprecated`) were removed from
+> the build and repository during the forgero-2 rework. The old-format packs remain available in git history.
 
 ### Dependency Rules
 ```

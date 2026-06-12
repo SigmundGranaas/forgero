@@ -1,9 +1,0 @@
-{
-  "namespace": "betterend",
-  "dependencies": [
-    "minecraft",
-    "forgero",
-    "minecraft-vanilla",
-    "betterend"
-  ]
-}

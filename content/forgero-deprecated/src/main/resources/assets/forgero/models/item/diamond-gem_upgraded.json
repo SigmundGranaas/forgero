@@ -1,7 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "forgero:item/gem_base_advanced",
-    "layer1": "forgero:item/diamond_gem_animated"
-  }
-}

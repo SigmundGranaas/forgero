@@ -50,12 +50,7 @@ include("content:forgero-armor-content")
 include("content:${mod_id}-armor")
 include("content:${mod_id}-structures")
 
-// Content - Legacy (read-only, old pack format)
-include("content:${mod_id}-vanilla-legacy-read-only")
-include("content:${mod_id}-extended-legacy-read-only")
-include("content:${mod_id}-compat-legacy-read-only")
 include("content:minecraft-tools")
-include("content:${mod_id}-deprecated")
 
 // Mods
 include 'mods:drp'
