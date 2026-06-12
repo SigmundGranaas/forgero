@@ -21,6 +21,7 @@ Creating custom materials, tools, or weapons using JSON:
 
 1. **[Guides](guides/README.md)** - Step-by-step tutorials
    - [Creating Content Packs](guides/creating-content-packs.md) - Comprehensive guide
+   - [Modding API](guides/modding-api.md) - Building on Forgero from Java (read/mutate items, discovery, conditions, effects)
    - [Best Practices](guides/best-practices.md) - Patterns and pitfalls
 
 2. **[Reference](reference/README.md)** - Complete JSON documentation

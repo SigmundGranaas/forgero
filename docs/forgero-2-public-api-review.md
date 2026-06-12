@@ -183,10 +183,16 @@ Each offers a no-config and a `Codec<C>` overload; the `OnHitEffect`/`OnHitBlock
 `PublicApiExtensionTest` registers each through the public facade, parses it through the real
 dispatch codec, and applies it (zombie on fire, gold block placed, user ignited).
 
-**Still leaking (next):**
+**Capstone — DONE.** `docs/guides/modding-api.md` documents the sealed surface (services, item
+query/mutation/comparison, discovery, conditions, effects) end-to-end, every snippet lifted from the
+leak-audited example.
 
-- **Property codecs** (`registerPropertyCodec`) and **slot codecs** (`registerSlotCodec`) still take
-  `PropertyKey<?>` / `core.component.api.Slot` and heavy `Function<Supplier<…>, …>` generics.
-- A strict, fully-sealed SPI (so an author never has even the *option* of a `core.*` import) would
-  want the condition/property SPI types in a dedicated public `forgero-api` module that both `core`
-  and `common` depend on — measured at ~90 import sites, deferred as its own refactor.
+**Intentionally not facaded — `registerPropertyCodec` / `registerSlotCodec` (framework SPI).**
+Investigation showed these are *framework-author* extension points, not common-mod-author surface:
+`registerSlotCodec` has exactly one caller (Forgero's own `CoreSlotTypesPlugin`) and zero external
+demand, and a custom **property type** needs a codec **plus** a `CompilerPasses.register`, a runtime
+manager **and** a mixin — so a functional facade over the codec alone would be a speculative,
+incomplete half-measure for an audience of nobody. They stay as power-user SPI (touching `core.*`
+types `PropertyKey` / `Condition` / `Slot`), documented as such in the guide. The proper long-term
+home, if real demand appears, is a dedicated public `forgero-api` module that both `core` and
+`common` depend on (~90 import sites) — a structural refactor, not a band-aid.

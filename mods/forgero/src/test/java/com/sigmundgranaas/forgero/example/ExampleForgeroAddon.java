@@ -1,13 +1,14 @@
 package com.sigmundgranaas.forgero.example;
 
-// THIRD-PARTY ADDON — public API validation harness.
-// Discipline: this file may import ONLY from these namespaces (what a real downstream mod
-// would have on its classpath as "the Forgero API"):
+// THIRD-PARTY ADDON — public API validation harness (and the worked example for
+// docs/guides/modding-api.md). Discipline: this file may import ONLY from these namespaces (what a
+// real downstream mod would have on its classpath as "the Forgero API"):
 //   - com.sigmundgranaas.forgero.common.api.*          (services + plugin entrypoints)
 //   - com.sigmundgranaas.forgero.common.identifier.api (OpenIdentifier)
+//   - com.sigmundgranaas.forgero.effects.api.*         (custom effects)
 //   - net.minecraft.*                                  (the game)
 //   - java.*                                           (the JDK)
-// Any import outside those namespaces is an API LEAK and is called out in the friction report.
+// Any import outside those namespaces is an API LEAK. A leak-audit asserts this stays clean.
 
 import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import com.sigmundgranaas.forgero.common.api.ForgeroInitializedCallback;
@@ -105,16 +106,12 @@ public final class ExampleForgeroAddon {
 		UseEffects.register("example:warm", (user, stack, hand) -> user.setOnFireFor(1));
 	}
 
-	// Scenario 6 — react to Forgero being ready and do something with its data.
+	// Scenario 8 — react to Forgero being ready. For content discovery prefer the ItemStack APIs
+	// (allMaterials/allParts/findByTag) over services.componentRegistry(), which exposes the
+	// internal Component type.
 	public void onModInit() {
 		registerEffects();
-		ForgeroInitializedCallback.EVENT.register(services -> {
-			// NOTE(leak): services.componentRegistry() exposes core.component.api.Component —
-			// there is no ItemStack-level way to enumerate "all loaded materials/parts". A mod
-			// that wants to, say, list every material for a JEI-style screen must drop into the
-			// internal Component type. The ItemStack APIs cover *a given stack*, not discovery.
-			int loaded = services.componentRegistry().all().size();
-			System.out.println("[example] Forgero ready with " + loaded + " components");
-		});
+		ForgeroInitializedCallback.EVENT.register(services ->
+				System.out.println("[example] Forgero ready; " + allForgeroMaterials().size() + " materials available"));
 	}
 }
