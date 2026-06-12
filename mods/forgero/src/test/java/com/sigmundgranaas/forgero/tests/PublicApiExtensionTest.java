@@ -7,7 +7,12 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.common.api.ConditionContext;
 import com.sigmundgranaas.forgero.common.api.ForgeroApi;
+import com.sigmundgranaas.forgero.common.api.item.ItemQueryApi;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
+import net.minecraft.item.ItemStack;
+
+import java.util.List;
+import java.util.Optional;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
@@ -115,5 +120,36 @@ public class PublicApiExtensionTest implements ForgeroGameTest {
 	}
 
 	private record Burn(int seconds) {
+	}
+
+	/** Registry-wide discovery returns real ItemStacks and the convenience tags actually resolve. */
+	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
+	public void public_discovery_finds_materials_and_parts(TestContext context) {
+		ItemQueryApi query = ForgeroApi.itemQuery();
+
+		List<ItemStack> materials = query.allMaterials();
+		assertFalse(materials.isEmpty(),
+				"allMaterials() must discover loaded materials — empty means the forgero:materials tag did not resolve");
+		assertTrue(materials.size() >= 10, "expected many materials, got " + materials.size());
+		assertTrue(materials.stream().allMatch(query::isForgeroItem), "every discovered material is a Forgero item");
+
+		// The right tag, proven by a known member: iron must be discoverable.
+		Optional<ItemStack> iron = ForgeroApi.converter().toStack(OpenIdentifier.parse("forgero:iron"));
+		assertTrue(iron.isPresent(), "iron must exist");
+		assertTrue(materials.stream().anyMatch(stack -> stack.isOf(iron.get().getItem())),
+				"allMaterials() must include iron");
+
+		List<ItemStack> parts = query.allParts();
+		assertFalse(parts.isEmpty(), "allParts() must discover loaded parts");
+
+		// Inheritance: metals are a strict subset of all materials.
+		List<ItemStack> metals = query.findByTag(OpenIdentifier.parse("forgero:materials/types/metal"));
+		assertFalse(metals.isEmpty(), "findByTag(materials/types/metal) must find metals");
+		assertTrue(metals.size() <= materials.size(), "metals must be a subset of materials");
+
+		assertTrue(query.findByTag(OpenIdentifier.parse("forgero:definitely_not_a_tag")).isEmpty(),
+				"an unknown tag yields an empty list");
+
+		context.complete();
 	}
 }

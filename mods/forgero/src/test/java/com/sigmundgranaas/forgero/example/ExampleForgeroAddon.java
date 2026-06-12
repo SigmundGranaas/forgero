@@ -72,7 +72,16 @@ public final class ExampleForgeroAddon {
 		return query.getAttackDamage(a) >= query.getAttackDamage(b) ? a : b;
 	}
 
-	// Scenario 5 — register custom on-hit effects usable from content JSON, with plain Minecraft
+	// Scenario 5 — registry-wide discovery for a JEI-style screen, without touching Component.
+	public List<ItemStack> allForgeroMaterials() {
+		return ForgeroApi.itemQuery().allMaterials();
+	}
+
+	public List<ItemStack> metalsOnly() {
+		return ForgeroApi.itemQuery().findByTag(OpenIdentifier.parse("forgero:materials/types/metal"));
+	}
+
+	// Scenario 7 — register custom on-hit effects usable from content JSON, with plain Minecraft
 	// logic and no internal types (public effects.api.* surface).
 	public void registerEffects() {
 		// No config — ignite the victim.

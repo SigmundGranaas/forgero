@@ -160,14 +160,23 @@ because effects are defined above `common` in the module graph):
 `getInstance()`/`registry()`/`resolver().resolve(...)`; replaced with the real
 `ForgeroApi.services()`/static-delegate surface).
 
+**F2 (registry discovery) — DONE.** `ItemQueryApi` gained ItemStack-level discovery so the registry's
+`Component` type no longer surfaces:
+
+- `findByTag(OpenIdentifier)` — every loaded component with a tag (tag-graph inheritance, so a parent
+  tag matches its descendants), as `ItemStack`s. The flexible primitive.
+- `allMaterials()` / `allParts()` — convenience defaults over `findByTag(forgero:materials|parts)`.
+
+Backed by the existing `TaggedRegistry<Component>` + converter (wired into `ItemQueryApiImpl`).
+`PublicApiExtensionTest` proves discovery returns real stacks, includes a known member (iron), and
+that the convenience tags actually resolve (an empty result would mean a wrong tag — caught).
+
 **Still leaking (next):**
 
 - **Other effect channels** — block effects (`OnHitBlockEffect`), use/interaction handlers and
   on-tick share the same `EffectCodecRegistry` shape; give each the same `OnHitEffects`-style facade.
 - **Property codecs** (`registerPropertyCodec`) and **slot codecs** (`registerSlotCodec`) still take
   `PropertyKey<?>` / `core.component.api.Slot` and heavy `Function<Supplier<…>, …>` generics.
-- **Registry discovery (F2)** — still returns `core.component.api.Component`; add ItemStack-level
-  `allMaterials()/allParts()`.
 - A strict, fully-sealed SPI (so an author never has even the *option* of a `core.*` import) would
   want the condition/property SPI types in a dedicated public `forgero-api` module that both `core`
   and `common` depend on — measured at ~90 import sites, deferred as its own refactor.

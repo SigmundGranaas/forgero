@@ -354,6 +354,38 @@ public interface ItemQueryApi {
 	 */
 	Set<OpenIdentifier> getTags(ItemStack stack);
 
+	// ===================== Discovery (registry-wide, not stack-bound) =====================
+
+	/**
+	 * Returns every loaded Forgero component carrying {@code tag} — resolved through the tag graph,
+	 * so a parent tag also matches its descendants (e.g. {@code forgero:materials} matches
+	 * {@code forgero:materials/types/metal}) — as ready-to-use {@link ItemStack}s.
+	 *
+	 * <p>This is the registry-wide discovery primitive: it lets a JEI-style screen, a recipe
+	 * generator, or a compat layer enumerate Forgero content <em>without</em> touching the internal
+	 * component model. Returns an empty list for unknown tags.
+	 *
+	 * @param tag The tag to match (with inheritance).
+	 * @return Matching components as ItemStacks; empty if none.
+	 */
+	List<ItemStack> findByTag(OpenIdentifier tag);
+
+	/**
+	 * Convenience: every loaded material as an {@link ItemStack}. Equivalent to
+	 * {@code findByTag(forgero:materials)} for Forgero's standard tag tree.
+	 */
+	default List<ItemStack> allMaterials() {
+		return findByTag(OpenIdentifier.parse("forgero:materials"));
+	}
+
+	/**
+	 * Convenience: every loaded part as an {@link ItemStack}. Equivalent to
+	 * {@code findByTag(forgero:parts)} for Forgero's standard tag tree.
+	 */
+	default List<ItemStack> allParts() {
+		return findByTag(OpenIdentifier.parse("forgero:parts"));
+	}
+
 	/**
 	 * Returns the attribute modifiers for the provided ItemStack.
 	 * <p>

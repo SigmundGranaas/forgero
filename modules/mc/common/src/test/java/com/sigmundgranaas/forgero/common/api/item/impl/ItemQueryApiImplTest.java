@@ -39,7 +39,9 @@ class ItemQueryApiImplTest {
 
 	@BeforeEach
 	void setUp() {
-		api = new ItemQueryApiImpl(new StubComponentConverter(), new StubSlotManager());
+		api = new ItemQueryApiImpl(new StubComponentConverter(), new StubSlotManager(),
+				new com.sigmundgranaas.forgero.common.tags.engine.TaggedRegistry.Builder<com.sigmundgranaas.forgero.core.component.api.Component>(
+						com.sigmundgranaas.forgero.common.tags.engine.EmptyTagResolver.INSTANCE).build());
 	}
 
 	@Nested

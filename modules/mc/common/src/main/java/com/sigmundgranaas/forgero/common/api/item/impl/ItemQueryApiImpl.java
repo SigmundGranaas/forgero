@@ -35,16 +35,32 @@ public class ItemQueryApiImpl implements ItemQueryApi {
 
 	private final ComponentConverter converter;
 	private final SlotManager slotManager;
+	private final com.sigmundgranaas.forgero.common.tags.engine.TaggedRegistry<Component> components;
 
 	/**
 	 * Creates a new ItemQueryApiImpl instance.
 	 *
 	 * @param converter   The component converter
 	 * @param slotManager The slot manager
+	 * @param components  The tagged component registry (for registry-wide discovery)
 	 */
-	public ItemQueryApiImpl(ComponentConverter converter, SlotManager slotManager) {
+	public ItemQueryApiImpl(ComponentConverter converter, SlotManager slotManager,
+	                        com.sigmundgranaas.forgero.common.tags.engine.TaggedRegistry<Component> components) {
 		this.converter = converter;
 		this.slotManager = slotManager;
+		this.components = components;
+	}
+
+	@Override
+	public List<ItemStack> findByTag(OpenIdentifier tag) {
+		if (tag == null) {
+			return List.of();
+		}
+		return components.findByTag(tag).stream()
+				.map(converter::toStack)
+				.filter(Optional::isPresent)
+				.map(Optional::get)
+				.toList();
 	}
 
 	@Override

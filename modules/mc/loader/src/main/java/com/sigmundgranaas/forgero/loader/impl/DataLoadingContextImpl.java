@@ -110,7 +110,7 @@ public class DataLoadingContextImpl implements DataLoadingContext {
 	@Override
 	public ItemQueryApi itemQuery() {
 		if (itemQueryApi == null) {
-			itemQueryApi = new ItemQueryApiImpl(componentConverter, slotManager);
+			itemQueryApi = new ItemQueryApiImpl(componentConverter, slotManager, taggedComponentRegistry);
 		}
 		return itemQueryApi;
 	}
