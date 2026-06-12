@@ -24,8 +24,10 @@
     {
       "id": "forgero:axe_head-reinforcement",
       "type": "forgero:materials/roles/upgrade_material",
-      "tags": ["forgero:upgrades/types/reinforcement"],
-      "scope": "forgero:contexts/offensive",
+      "tags": [
+        "forgero:upgrades/types/reinforcement",
+        "forgero:contexts/offensive"
+      ],
       "description": "slot.forgero.reinforcement"
     }
   ],
@@ -33,49 +35,68 @@
     {
       "id": "forgero:axe_head-rarity",
       "type": "forgero:rarity",
-      "computation": {"value": 25, "operation": "addition"}
+      "computation": {
+        "value": 25,
+        "operation": "addition"
+      }
     },
     {
       "id": "forgero:axe_head-durability-mult",
       "type": "forgero:durability",
       "scope": "forgero:scope/part-composite",
-      "computation": {"multiply": 1.0}
+      "computation": {
+        "multiply": 1.0
+      }
     },
     {
       "id": "forgero:axe_head-attack_damage-mult",
       "type": "forgero:attack_damage",
       "scope": "forgero:scope/part-composite",
-      "computation": {"multiply": 1.0}
+      "computation": {
+        "multiply": 1.0
+      }
     },
     {
       "id": "forgero:axe_head-attack_damage-offset",
       "type": "forgero:attack_damage",
       "scope": "forgero:scope/part-composite",
-      "computation": {"value": 4, "operation": "addition"}
+      "computation": {
+        "value": 4,
+        "operation": "addition"
+      }
     },
     {
       "id": "forgero:axe_head-attack_speed-base",
       "type": "forgero:attack_speed",
       "scope": "forgero:scope/part-composite",
-      "computation": {"value": -1.1, "operation": "addition"}
+      "computation": {
+        "value": -1.1,
+        "operation": "addition"
+      }
     },
     {
       "id": "forgero:axe_head-attack_speed-mult",
       "type": "forgero:attack_speed",
       "scope": "forgero:scope/part-composite",
-      "computation": {"multiply": 1.0}
+      "computation": {
+        "multiply": 1.0
+      }
     },
     {
       "id": "forgero:axe_head-mining_speed-mult",
       "type": "forgero:mining_speed",
       "scope": "forgero:scope/part-composite",
-      "computation": {"multiply": 1.0}
+      "computation": {
+        "multiply": 1.0
+      }
     },
     {
       "id": "forgero:axe_head-mining_level-mult",
       "type": "forgero:mining_level",
       "scope": "forgero:scope/part-composite",
-      "computation": {"multiply": 1.0}
+      "computation": {
+        "multiply": 1.0
+      }
     }
   ]
 }

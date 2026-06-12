@@ -10,12 +10,11 @@ import java.util.List;
  *
  * @param id          A unique identifier for this specific slot instance.
  * @param type        The type of upgrade material/component accepted (e.g., "forgero:upgrade_material", "forgero:binding").
- * @param tags        Optional list of tags that an accepted upgrade must possess.
+ * @param tags        The slot's identity tags, e.g. its context ("forgero:contexts/offensive").
+ *                    Matched by {@code in_slot_type} conditions alongside the slot type, so a
+ *                    contextual upgrade bonus can gate on the slot's context.
  * @param tier        Optional tier requirement for the upgrade.
  * @param description Optional translatable description key for the slot.
- * @param scope       Optional scope identifier for attribute filtering (e.g., "forgero:offensive", "forgero:defensive", "forgero:utility").
- *                    When an upgrade is installed in a slot with a scope, only attributes matching that scope
- *                    (via tag hierarchy resolution) will be applied.
  */
 public record UpgradeSlotData(
 		OpenIdentifier id,
@@ -25,8 +24,6 @@ public record UpgradeSlotData(
 		@Nullable
 		Integer tier,
 		@Nullable
-		String description,
-		@Nullable
-		OpenIdentifier scope
+		String description
 ) {
 }

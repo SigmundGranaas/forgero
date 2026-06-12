@@ -205,7 +205,7 @@ class TemplateGeneratorTest {
 					),
 					"forgero:{material.name}-{shape.name}",
 					null,
-					List.of(new UpgradeSlotData(id("reinforcement_slot"), id("gem"), null, null, "Reinforcement slot", null))
+					List.of(new UpgradeSlotData(id("reinforcement_slot"), id("gem"), null, null, "Reinforcement slot"))
 			);
 			addRawDefinition("forgero:part_template", template);
 
@@ -307,7 +307,7 @@ class TemplateGeneratorTest {
 									"handle", new EquipmentTemplateSlotData(id("handle"), null, null)
 							)
 					),
-					List.of(new UpgradeSlotData(id("binding_slot"), id("binding"), null, null, "Binding slot", null)),
+					List.of(new UpgradeSlotData(id("binding_slot"), id("binding"), null, null, "Binding slot")),
 					null,                      // attributes
 					null                       // properties
 			);

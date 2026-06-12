@@ -133,11 +133,9 @@ public class IronReinforcementInstallationTest implements ForgeroGameTest {
 
 		assertTrue(reinforcementSlot.isPresent(), "Iron pickaxe head must have a reinforcement slot");
 
-		// The slot carries its offensive context as a scope, matched by in_slot_type conditions.
-		assertTrue(reinforcementSlot.get().scope().isPresent(),
-				"Reinforcement slot must have a scope");
-		assertEquals(OFFENSIVE_CONTEXT.toString(), reinforcementSlot.get().scope().get().toString(),
-				"Reinforcement slot must have offensive scope");
+		// The slot carries its offensive context as an identity tag, matched by in_slot_type conditions.
+		assertTrue(reinforcementSlot.get().tags().contains(OFFENSIVE_CONTEXT),
+				"Reinforcement slot must carry the offensive context tag");
 
 		context.complete();
 	}

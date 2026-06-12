@@ -464,7 +464,7 @@ class ExtensionMergerTest {
 			UpgradeSlotData bindingSlot = new UpgradeSlotData(
 					id("binding_slot"),
 					id("forgero:binding_type"),
-					null, null, null, null
+					null, null, null
 			);
 
 			EquipmentTemplateData pickaxe = new EquipmentTemplateData(
@@ -484,8 +484,7 @@ class ExtensionMergerTest {
 					id("forgero:dye_material"),
 					List.of(id("forgero:dye")),
 					null,
-					"forgero.slot.dye",
-					null
+					"forgero.slot.dye"
 			);
 
 			ExtensionData extension = new ExtensionData(
@@ -529,8 +528,7 @@ class ExtensionMergerTest {
 					id("forgero:gem_material"),
 					List.of(id("forgero:gem")),
 					null,
-					"forgero.slot.gem",
-					null
+					"forgero.slot.gem"
 			);
 
 			ExtensionData extension = new ExtensionData(
@@ -559,7 +557,7 @@ class ExtensionMergerTest {
 			UpgradeSlotData originalSlot = new UpgradeSlotData(
 					id("binding_slot"),
 					id("forgero:binding_type"),
-					null, 1, "original", null
+					null, 1, "original"
 			);
 
 			EquipmentTemplateData pickaxe = new EquipmentTemplateData(
@@ -576,8 +574,7 @@ class ExtensionMergerTest {
 					id("forgero:special_binding"),
 					List.of(id("forgero:special")),
 					2,
-					"override",
-					null
+					"override"
 			);
 
 			ExtensionData extension = new ExtensionData(
@@ -685,7 +682,7 @@ class ExtensionMergerTest {
 			UpgradeSlotData existingSlot = new UpgradeSlotData(
 					id("gem_slot"),
 					id("forgero:gem"),
-					null, null, null, null
+					null, null, null
 			);
 
 			ResourceData staticPart = new ResourceData(
@@ -701,7 +698,7 @@ class ExtensionMergerTest {
 			UpgradeSlotData newSlot = new UpgradeSlotData(
 					id("wrap_slot"),
 					id("forgero:wrap_material"),
-					null, null, null, null
+					null, null, null
 			);
 
 			ExtensionData extension = new ExtensionData(
@@ -979,7 +976,7 @@ class ExtensionMergerTest {
 					id("forgero:extension"),
 					id("forgero:materials/iron"),
 					0,
-					null, null, null, null
+					null, null, null
 			);
 
 			Map<OpenIdentifier, RawDefinition> definitions = new HashMap<>();

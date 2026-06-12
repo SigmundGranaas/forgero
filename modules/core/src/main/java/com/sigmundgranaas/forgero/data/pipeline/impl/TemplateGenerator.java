@@ -471,10 +471,10 @@ public class TemplateGenerator {
 			return null;
 		}
 		var slots = upgradeDataList.stream()
-				// Note: upgrade.tags() are tags for the SLOT itself (e.g., "forgero:upgrades/types/reinforcement"),
-				// NOT valid tags for components. The slot type (upgrade.type()) is used for validation.
-				// Pass null for validTags so ComponentBuilder uses the slot type for validation.
-				.map(upgrade -> new CofSlot(upgrade.id(), upgrade.type(), upgrade.description(), upgrade.scope(), null, null))
+				// upgrade.tags() are the SLOT's own identity tags (e.g. "forgero:contexts/offensive"),
+				// matched by in_slot_type conditions alongside the slot type. They are NOT validation
+				// tags — validTags is left null so the slot type is used for install validation.
+				.map(upgrade -> new CofSlot(upgrade.id(), upgrade.type(), upgrade.description(), upgrade.tags(), null, null))
 				.toList();
 		return new CofUpgrades(slots);
 	}

@@ -24,8 +24,10 @@
     {
       "id": "forgero:sword_blade-reinforcement",
       "type": "forgero:materials/roles/upgrade_material",
-      "tags": ["forgero:upgrades/types/reinforcement"],
-      "scope": "forgero:contexts/offensive",
+      "tags": [
+        "forgero:upgrades/types/reinforcement",
+        "forgero:contexts/offensive"
+      ],
       "description": "slot.forgero.reinforcement"
     }
   ],
@@ -33,37 +35,52 @@
     {
       "id": "forgero:sword_blade-rarity",
       "type": "forgero:rarity",
-      "computation": {"value": 30, "operation": "addition"}
+      "computation": {
+        "value": 30,
+        "operation": "addition"
+      }
     },
     {
       "id": "forgero:sword_blade-durability-mult",
       "type": "forgero:durability",
       "scope": "forgero:scope/part-composite",
-      "computation": {"multiply": 1.0}
+      "computation": {
+        "multiply": 1.0
+      }
     },
     {
       "id": "forgero:sword_blade-attack_damage-mult",
       "type": "forgero:attack_damage",
       "scope": "forgero:scope/part-composite",
-      "computation": {"multiply": 1.0}
+      "computation": {
+        "multiply": 1.0
+      }
     },
     {
       "id": "forgero:sword_blade-attack_damage-offset",
       "type": "forgero:attack_damage",
       "scope": "forgero:scope/part-composite",
-      "computation": {"value": 2, "operation": "addition"}
+      "computation": {
+        "value": 2,
+        "operation": "addition"
+      }
     },
     {
       "id": "forgero:sword_blade-attack_speed-base",
       "type": "forgero:attack_speed",
       "scope": "forgero:scope/part-composite",
-      "computation": {"value": -0.4, "operation": "addition"}
+      "computation": {
+        "value": -0.4,
+        "operation": "addition"
+      }
     },
     {
       "id": "forgero:sword_blade-attack_speed-mult",
       "type": "forgero:attack_speed",
       "scope": "forgero:scope/part-composite",
-      "computation": {"multiply": 1.0}
+      "computation": {
+        "multiply": 1.0
+      }
     }
   ]
 }

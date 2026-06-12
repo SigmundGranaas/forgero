@@ -14,7 +14,9 @@ import java.util.Optional;
  * @param id          The unique identifier for this slot (e.g., "forgero:head", "forgero:gem_slot_1").
  * @param type        The type of component this slot accepts (e.g., "forgero:material", "forgero:gem").
  * @param description A human-readable description of the slot.
- * @param scope       Optional scope identifier for attribute filtering (e.g., "forgero:offensive", "forgero:defensive", "forgero:utility").
+ * @param tags        The slot's identity tags — additional matchable identities beyond its type,
+ *                    notably its context (e.g. "forgero:contexts/offensive"). Matched by
+ *                    in_slot_type conditions alongside the slot type.
  * @param content     The full CofComponent DTO of the item currently in the slot. Null if empty.
  * @param validTags   An optional list of tags that a component must have to be valid for this slot.
  */
@@ -22,7 +24,7 @@ public record CofSlot(
 		OpenIdentifier id,
 		OpenIdentifier type,
 		@Nullable String description,
-		@Nullable OpenIdentifier scope,
+		@Nullable List<OpenIdentifier> tags,
 		@Nullable CofComponent content,
 		@Nullable List<OpenIdentifier> validTags
 ) {
@@ -33,7 +35,7 @@ public record CofSlot(
 		return Optional.ofNullable(content);
 	}
 
-	public Optional<OpenIdentifier> scopeOpt() {
-		return Optional.ofNullable(scope);
+	public List<OpenIdentifier> tagsOrEmpty() {
+		return tags == null ? List.of() : tags;
 	}
 }

@@ -19,10 +19,9 @@ public class PartTemplateCodecs {
 					CodecConstants.TAG_IDENTIFIER_CODEC.fieldOf("type").forGetter(UpgradeSlotData::type),
 					Codec.list(CodecConstants.TAG_IDENTIFIER_CODEC).optionalFieldOf("tags").forGetter(data -> Optional.ofNullable(data.tags())),
 					Codec.INT.optionalFieldOf("tier").forGetter(data -> Optional.ofNullable(data.tier())),
-					Codec.STRING.optionalFieldOf("description").forGetter(data -> Optional.ofNullable(data.description())),
-					CodecConstants.TAG_IDENTIFIER_CODEC.optionalFieldOf("scope").forGetter(data -> Optional.ofNullable(data.scope()))
-			).apply(instance, (id, type, tags, tier, description, scope) ->
-					new UpgradeSlotData(id, type, tags.orElse(null), tier.orElse(null), description.orElse(null), scope.orElse(null))));
+					Codec.STRING.optionalFieldOf("description").forGetter(data -> Optional.ofNullable(data.description()))
+			).apply(instance, (id, type, tags, tier, description) ->
+					new UpgradeSlotData(id, type, tags.orElse(null), tier.orElse(null), description.orElse(null))));
 
 	public static final Codec<PartTemplateStructureSlotData> PART_TEMPLATE_STRUCTURE_MATERIAL_DATA_CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(

@@ -19,9 +19,9 @@
       "id": "forgero:reinforcement-slot",
       "type": "forgero:materials/roles/upgrade_material",
       "tags": [
-        "forgero:upgrades/types/reinforcement"
+        "forgero:upgrades/types/reinforcement",
+        "forgero:contexts/offensive"
       ],
-      "scope": "forgero:contexts/offensive",
       "description": "slot.forgero.reinforcement"
     }
   ],

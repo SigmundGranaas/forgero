@@ -95,7 +95,7 @@ class InSlotTypeConditionTest extends ForgeroTest {
 
 		Component gem = material(IRON_ID, METAL_TAG);
 		ComponentUpgradeSlot slot = ComponentUpgradeSlot
-				.emptyWithScopeAndValidator(id("reinforcement"), slotType, "", context,
+				.emptyWithTagsAndValidator(id("reinforcement"), slotType, "", java.util.Set.of(context),
 						com.sigmundgranaas.forgero.core.component.api.slot.SlotValidator.ACCEPT_ALL)
 				.withContent(gem);
 		Component head = part(PICKAXE_HEAD_ID).withUpgradeSlot(slot).build();

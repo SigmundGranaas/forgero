@@ -65,7 +65,7 @@ class StructuredUpgradeCompositionRegressionTest extends ForgeroTest {
 				id(id),
 				UPGRADE_TYPE,
 				"",
-				Optional.empty(),
+				java.util.Set.of(),
 				SlotValidator.ACCEPT_ALL,
 				Optional.empty()
 		);

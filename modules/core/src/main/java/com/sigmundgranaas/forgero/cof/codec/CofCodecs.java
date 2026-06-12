@@ -60,10 +60,10 @@ public class CofCodecs {
 						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("id").forGetter(CofSlot::id),
 						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(CofSlot::type),
 						Codec.STRING.optionalFieldOf("description").forGetter(slot -> Optional.ofNullable(slot.description())),
-						CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("scope").forGetter(CofSlot::scopeOpt),
+						Codec.list(CodecConstants.TAG_IDENTIFIER_CODEC).optionalFieldOf("tags").forGetter(slot -> Optional.ofNullable(slot.tags())),
 						recursiveComponentCodec.optionalFieldOf("content").forGetter(CofSlot::contentOpt),
 						Codec.list(CodecConstants.TAG_IDENTIFIER_CODEC).optionalFieldOf("valid_tags").forGetter(slot -> Optional.ofNullable(slot.validTags()))
-				).apply(instance, (id, type, desc, scope, content, tags) -> new CofSlot(id, type, desc.orElse(null), scope.orElse(null), content.orElse(null), tags.orElse(null)))
+				).apply(instance, (id, type, desc, tags, content, validTags) -> new CofSlot(id, type, desc.orElse(null), tags.orElse(null), content.orElse(null), validTags.orElse(null)))
 		);
 
 		// 3. Define the other DTO codecs using the slot codec.

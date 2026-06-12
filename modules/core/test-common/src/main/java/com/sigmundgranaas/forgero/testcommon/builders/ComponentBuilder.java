@@ -207,7 +207,7 @@ public class ComponentBuilder {
                 OpenIdentifier.of("slot_" + upgradeSlots.size()),
                 slotType,
                 "",
-                Optional.empty(),
+                java.util.Set.of(),
                 SlotValidator.ACCEPT_ALL,
                 Optional.empty()
         );
@@ -227,7 +227,7 @@ public class ComponentBuilder {
                 OpenIdentifier.of("slot_" + upgradeSlots.size()),
                 slotType,
                 "",
-                Optional.empty(),
+                java.util.Set.of(),
                 SlotValidator.custom(filter),
                 Optional.empty()
         );
@@ -247,7 +247,7 @@ public class ComponentBuilder {
                 OpenIdentifier.of("slot_" + upgradeSlots.size()),
                 slotType,
                 "",
-                Optional.empty(),
+                java.util.Set.of(),
                 SlotValidator.ACCEPT_ALL,
                 Optional.of(upgrade)
         );

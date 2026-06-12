@@ -70,12 +70,15 @@ public class SlotsSectionWriter extends AbstractSectionWriter {
 			// Show empty indicator
 			line.append(Text.translatable("tooltip.forgero.slot.empty").formatted(Formatting.DARK_GRAY));
 
-		slot.scope().ifPresent(scope -> {
-			String scopeKey = toScopeTranslationKey(scope);
-			line.append(Text.literal(" (").formatted(Formatting.DARK_GRAY));
-			line.append(Text.translatable(scopeKey).formatted(Formatting.DARK_GRAY));
-			line.append(Text.literal(")").formatted(Formatting.DARK_GRAY));
-		});
+		slot.tags().stream()
+				.filter(tag -> tag.path().startsWith("contexts/"))
+				.findFirst()
+				.ifPresent(scope -> {
+					String scopeKey = toScopeTranslationKey(scope);
+					line.append(Text.literal(" (").formatted(Formatting.DARK_GRAY));
+					line.append(Text.translatable(scopeKey).formatted(Formatting.DARK_GRAY));
+					line.append(Text.literal(")").formatted(Formatting.DARK_GRAY));
+				});
 		}
 
 		return line;
