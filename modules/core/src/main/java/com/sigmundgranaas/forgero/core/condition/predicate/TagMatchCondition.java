@@ -92,7 +92,9 @@ public final class TagMatchCondition implements StaticCondition {
 		return RecordCodecBuilder.create(instance ->
 				instance.group(
 						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(TagMatchCondition::type),
-						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("tag").forGetter(TagMatchCondition::tag)
+						// Tags are path-preserving (e.g. forgero:tools/types/hoe). Canonicalizing the
+						// operand would collapse it to its last segment and never match the graph node.
+						CodecConstants.TAG_IDENTIFIER_CODEC.fieldOf("tag").forGetter(TagMatchCondition::tag)
 				).apply(instance, (type, tag) -> new TagMatchCondition(type, tag, tagResolverSupplier))
 		);
 	}

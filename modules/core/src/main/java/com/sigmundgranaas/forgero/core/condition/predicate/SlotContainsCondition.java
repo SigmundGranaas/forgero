@@ -79,8 +79,10 @@ public record SlotContainsCondition(OpenIdentifier type, OpenIdentifier slotType
 	public static final Codec<SlotContainsCondition> CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(
 					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(SlotContainsCondition::type),
-					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("slot_type").forGetter(SlotContainsCondition::slotType),
-					CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("tag").forGetter(SlotContainsCondition::tag)
+					// slot_type and tag are path-preserving classifiers (e.g. forgero:head_slot,
+					// forgero:materials/types/metal); canonicalizing would break the exact match.
+					CodecConstants.TAG_IDENTIFIER_CODEC.fieldOf("slot_type").forGetter(SlotContainsCondition::slotType),
+					CodecConstants.TAG_IDENTIFIER_CODEC.fieldOf("tag").forGetter(SlotContainsCondition::tag)
 			).apply(instance, SlotContainsCondition::new));
 
 	@Override

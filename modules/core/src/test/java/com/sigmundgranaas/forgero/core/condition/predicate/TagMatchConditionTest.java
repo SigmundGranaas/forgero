@@ -134,4 +134,25 @@ class TagMatchConditionTest extends ForgeroTest {
 
 		assertEquals(METAL_TAG, condition.tag());
 	}
+
+	/**
+	 * Regression: the bug was in the CODEC, not the logic. A multi-segment tag must survive JSON
+	 * parsing with its full path intact — a canonicalizing codec would collapse
+	 * forgero:tools/types/hoe to forgero:hoe, which never matches the full-path graph node, so the
+	 * condition would silently never fire.
+	 */
+	@Test
+	void codecPreservesMultiSegmentTagPath() {
+		com.google.gson.JsonObject json = new com.google.gson.JsonObject();
+		json.addProperty("type", "forgero:self_has_tag");
+		json.addProperty("tag", "forgero:tools/types/hoe");
+
+		TagMatchCondition decoded = TagMatchCondition.codec(() -> new TagGraph(Map.of()))
+				.parse(com.mojang.serialization.JsonOps.INSTANCE, json)
+				.result()
+				.orElseThrow();
+
+		assertEquals(OpenIdentifier.parse("forgero:tools/types/hoe"), decoded.tag(),
+				"Codec must preserve the full tag path, not canonicalize to the last segment");
+	}
 }

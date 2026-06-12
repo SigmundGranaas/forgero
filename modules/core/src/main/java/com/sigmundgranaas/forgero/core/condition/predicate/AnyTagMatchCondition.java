@@ -44,7 +44,8 @@ public final class AnyTagMatchCondition implements StaticCondition {
 		return RecordCodecBuilder.create(instance ->
 				instance.group(
 						CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("type").forGetter(AnyTagMatchCondition::type),
-						CodecConstants.OPEN_IDENTIFIER_CODEC.listOf().fieldOf("tags").forGetter(AnyTagMatchCondition::tags)
+						// Tags are path-preserving — canonicalizing would never match the graph node.
+						CodecConstants.TAG_IDENTIFIER_CODEC.listOf().fieldOf("tags").forGetter(AnyTagMatchCondition::tags)
 				).apply(instance, (type, tags) -> new AnyTagMatchCondition(type, tags, tagResolverSupplier))
 		);
 	}
