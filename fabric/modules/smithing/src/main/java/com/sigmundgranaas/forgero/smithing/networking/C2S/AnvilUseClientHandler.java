@@ -40,17 +40,18 @@ public final class AnvilUseClientHandler {
 				return ActionResult.PASS;
 			}
 
-			ItemStack anvilItem = anvilEntity.getInventory().getStack(0);
-			boolean handEmpty = player.getStackInHand(hand).isEmpty();
+			ItemStack anvilStack = anvilEntity.getInventory().getStack(0);
+			ItemStack handStack = player.getStackInHand(hand);
+
+			boolean handEmpty = handStack.isEmpty();
+			boolean anvilHasItem = !anvilStack.isEmpty();
 			boolean sneaking = player.isSneaking();
 
-			// Empty hand + item on anvil = pickup.
-			if (handEmpty && !anvilItem.isEmpty()) {
+			if (handEmpty && anvilHasItem) {
 				sendAnvilUse(pos, hand);
 				return ActionResult.SUCCESS;
 			}
 
-			// Sneak-use = attempt place item.
 			if (sneaking) {
 				sendAnvilUse(pos, hand);
 				return ActionResult.SUCCESS;

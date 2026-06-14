@@ -75,11 +75,8 @@ public final class SmithingPacketValidator {
 			return false;
 		}
 
-		/*
-		 * Match SmithingAnvilBlockEntity.tryPlaceItem:
-		 * it currently rejects items without max temperature.
-		 */
-		return TemperatureUtils.hasMaxTemperature(stackInHand);
+		return stackInHand.getItem() instanceof MorphedItem
+				|| TemperatureUtils.hasMaxTemperature(stackInHand);
 	}
 
 	public static boolean canSelectSchematicProduct(
