@@ -1,6 +1,8 @@
 package com.sigmundgranaas.forgero.smithing.mixins;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
+import com.sigmundgranaas.forgero.smithing.item.ModItemTags;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -17,7 +19,6 @@ import net.minecraft.world.World;
 
 @Mixin(net.minecraft.block.AnvilBlock.class)
 public abstract class AnvilBlockUseMixin {
-
 	@Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
 	private void forgero$customOnUse(
 			BlockState state,
@@ -28,21 +29,30 @@ public abstract class AnvilBlockUseMixin {
 			BlockHitResult hit,
 			CallbackInfoReturnable<ActionResult> cir
 	) {
-		if (world.getBlockEntity(pos) instanceof SmithingAnvilBlockEntity smithingAnvilBlockEntity) {
-			if (smithingAnvilBlockEntity.isGuiBlocked(world)) {
-				cir.setReturnValue(ActionResult.SUCCESS);
-				return;
-			}
-			if (!smithingAnvilBlockEntity.getInventory().getStack(0).isEmpty()) {
-				cir.setReturnValue(ActionResult.SUCCESS);
-				if (!world.isClient) {
-					ItemStack stackInHand = player.getStackInHand(hand);
-					if (stackInHand.getItem().getTranslationKey().contains("smithing_hammer")) {
-						cir.setReturnValue(smithingAnvilBlockEntity.onHammerHit(player, hit));
-						return;
-					}
-				}
-			}
+		if (!(world.getBlockEntity(pos) instanceof SmithingAnvilBlockEntity smithingAnvil)) {
+			return;
+		}
+
+		if (smithingAnvil.isGuiBlocked(world)) {
+			cir.setReturnValue(ActionResult.SUCCESS);
+			return;
+		}
+
+		if (smithingAnvil.getInventory().getStack(0).isEmpty()) {
+			return;
+		}
+
+		ItemStack stackInHand = player.getStackInHand(hand);
+
+		if (!stackInHand.isIn(ModItemTags.SMITHING_HAMMERS)) {
+			cir.setReturnValue(ActionResult.SUCCESS);
+			return;
+		}
+
+		cir.setReturnValue(ActionResult.SUCCESS);
+
+		if (!world.isClient) {
+			cir.setReturnValue(smithingAnvil.onHammerHit(player, hit));
 		}
 	}
 }
