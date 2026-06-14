@@ -29,7 +29,7 @@ public class HearthBlockSyncS2CPacket {
 		buf.writeItemStack(entity.getStack(0));
 
 		for (ServerPlayerEntity player : PlayerLookup.tracking((net.minecraft.server.world.ServerWorld) entity.getWorld(), entity.getPos())) {
-			ServerPlayNetworking.send(player, com.sigmundgranaas.forgero.smithing.networking.ModMessages.HEART_BLOCK_SYNC, buf);
+			ServerPlayNetworking.send(player, com.sigmundgranaas.forgero.smithing.networking.ModMessages.HEARTH_BLOCK_SYNC, buf);
 		}
 	}
 

@@ -35,12 +35,6 @@ public final class ModMessages {
 	 * so existing saves/packet senders do not break.
 	 */
 	public static final Identifier HEARTH_BLOCK_SYNC =
-			new Identifier(Forgero.NAMESPACE, "heart_block_sync");
+			new Identifier(Forgero.NAMESPACE, "hearth_block_sync");
 
-	/**
-	 * Temporary backwards-compatible alias.
-	 * Remove this later after updating all references.
-	 */
-	@Deprecated
-	public static final Identifier HEART_BLOCK_SYNC = HEARTH_BLOCK_SYNC;
 }
