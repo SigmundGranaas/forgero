@@ -64,9 +64,10 @@ public class AnvilSyncS2CPacket {
 			if (itemStacks.length > 0
 					&& !itemStacks[0].isEmpty()
 					&& itemStacks[0].getItem() instanceof MorphedItem) {
+				int requiredHits = MinigameLogic.getRequiredHits(itemStacks[0]);
 				double progress = Math.min(
 						1.0,
-						(double) markerHitsCount / MinigameLogic.TOTAL_MARKERS
+						(double) markerHitsCount / requiredHits
 				);
 
 				MorphedItem.setMorphProgress(itemStacks[0], progress);
@@ -75,6 +76,10 @@ public class AnvilSyncS2CPacket {
 
 			for (int i = 0; i < itemStacks.length; i++) {
 				anvilEntity.getInventory().setStack(i, itemStacks[i]);
+			}
+
+			if (itemStacks.length > 0) {
+				anvilEntity.getMinigameLogic().refreshRequiredHits(itemStacks[0]);
 			}
 
 			// Update marker state through the block entity's getter methods

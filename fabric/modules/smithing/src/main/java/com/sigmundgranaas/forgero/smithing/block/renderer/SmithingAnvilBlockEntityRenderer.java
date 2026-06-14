@@ -184,6 +184,16 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 			};
 		}
 
+		if (count == 4) {
+			return switch (index) {
+				case 0 -> new Vec2f(-0.08f, -0.055f);
+				case 1 -> new Vec2f(0.08f, -0.055f);
+				case 2 -> new Vec2f(-0.08f, 0.055f);
+				case 3 -> new Vec2f(0.08f, 0.055f);
+				default -> Vec2f.ZERO;
+			};
+		}
+
 		return switch (index) {
 			case 0 -> new Vec2f(-0.08f, -0.045f);
 			case 1 -> new Vec2f(0.08f, -0.045f);

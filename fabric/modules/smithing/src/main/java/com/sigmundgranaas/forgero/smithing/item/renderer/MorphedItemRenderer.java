@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
+import com.sigmundgranaas.forgero.smithing.minigame.MinigameLogic;
 import com.sigmundgranaas.forgero.smithing.temperature.DynamicTemperatureSystem;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 import com.sigmundgranaas.forgero.smithing.util.PositionPreservingMorpher;
@@ -328,7 +329,7 @@ public class MorphedItemRenderer implements BuiltinItemRendererRegistry.DynamicI
 			return createFallbackStack(resultId, morphedStack);
 		}
 
-		int step = (int) Math.floor(progressClamped * 10);
+		int step = (int) Math.floor(progressClamped * MinigameLogic.getRequiredHits(morphedStack));
 		boolean showResult = (step % 2) == 1;
 		Identifier chosenId = (showResult && resultId != null) ? resultId : startId;
 

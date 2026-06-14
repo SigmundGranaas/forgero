@@ -100,7 +100,7 @@ public class MinigameHudOverlay implements HudRenderCallback {
 
 		fill(ctx, progressBarLeft, progressBarTop, progressBarLeft + progressBarWidth, progressBarTop + progressBarHeight, 0xFF000000);
 
-		int totalSegments = MinigameLogic.TOTAL_MARKERS;
+		int totalSegments = MinigameLogic.getRequiredHits(stack);
 		int hits = Math.min(be.getMinigameLogic().getMarkerHitsCount(), totalSegments);
 		float segWidth = progressBarWidth / (float) totalSegments;
 		var hitStageIndices = be.getMinigameLogic().getHitStageIndices();
@@ -118,7 +118,7 @@ public class MinigameHudOverlay implements HudRenderCallback {
 			fill(ctx, startX, progressBarTop, endX, progressBarTop + progressBarHeight, color);
 		}
 
-		int numSegments = 10;
+		int numSegments = totalSegments;
 		for (int i = 1; i < numSegments; i++) {
 			int tickX = progressBarLeft + (int) Math.round(i * (progressBarWidth / (float) numSegments));
 			fill(ctx, tickX, progressBarTop, tickX + 1, progressBarTop + progressBarHeight, 0xFFad9474);

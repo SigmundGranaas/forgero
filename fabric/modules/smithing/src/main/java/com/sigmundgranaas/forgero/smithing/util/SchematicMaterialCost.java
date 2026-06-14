@@ -15,13 +15,7 @@ public final class SchematicMaterialCost {
 
 	public static final int DEFAULT_MATERIAL_COST = 1;
 
-	/*
-	 * Keep this at 3 for now because your anvil currently only lets players stack
-	 * up to 3 ingots before choosing a schematic.
-	 *
-	 * If a future schematic has ingredient_count = 4, also increase the anvil cap.
-	 */
-	public static final int MAX_MATERIAL_COST = 3;
+	public static final int MAX_MATERIAL_COST = 4;
 
 	private SchematicMaterialCost() {
 	}

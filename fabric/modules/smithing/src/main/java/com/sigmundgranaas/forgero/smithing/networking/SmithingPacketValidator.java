@@ -82,7 +82,7 @@ public final class SmithingPacketValidator {
 		/*
 		 * Material ingots are allowed even when the anvil already has an ingot stack.
 		 * SmithingAnvilBlockEntity.tryPlaceItem(...) does the exact validation:
-		 * same item, not morphed, max stack 3, planned product null, etc.
+		 * same item, not morphed, max stack cap, planned product null, etc.
 		 */
 		return TemperatureUtils.hasMaxTemperature(stackInHand);
 	}

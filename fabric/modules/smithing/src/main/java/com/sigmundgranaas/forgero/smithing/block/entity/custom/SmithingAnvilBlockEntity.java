@@ -66,7 +66,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	private static final int ANVIL_INVENTORY_COOL_TICK_INTERVAL = 10;
 	private static final int GUI_COOLDOWN_TICKS = 20;
 	private static final int DEFAULT_COOLING_AMOUNT = 4;
-	private static final int MAX_MATERIAL_STACK_ON_ANVIL = 3;
+	private static final int MAX_MATERIAL_STACK_ON_ANVIL = SchematicMaterialCost.MAX_MATERIAL_COST;
 
 	private static final float ANVIL_TOP_Y = 0.9375f;
 	private static final float Y_FIGHTING_OFFSET = 0.001f;
@@ -782,7 +782,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	}
 
 	public double getMorphProgress() {
-		return minigameLogic.getMorphProgress();
+		return minigameLogic.getMorphProgress(getInventory().getStack(0));
 	}
 
 	public void setMorphProgress(double progress) {

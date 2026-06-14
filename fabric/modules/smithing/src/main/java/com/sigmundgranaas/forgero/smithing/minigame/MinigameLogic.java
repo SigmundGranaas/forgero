@@ -13,6 +13,7 @@ import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import com.sigmundgranaas.forgero.smithing.temperature.DynamicTemperatureSystem;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
+import com.sigmundgranaas.forgero.smithing.util.SchematicMaterialCost;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -36,7 +37,12 @@ public class MinigameLogic {
 	public static final int MARKER_LIFETIME_TICKS_NORMAL = 35;
 	public static final int MARKER_LIFETIME_TICKS_FAST = 20;
 	public static final int TOTAL_MARKERS = 10;
+	public static final int MAX_MARKERS = 15;
 	public static final int FAST_MARKERS = 3;
+	public static final int ONE_MATERIAL_REQUIRED_HITS = 7;
+	public static final int TWO_MATERIAL_REQUIRED_HITS = 10;
+	public static final int THREE_MATERIAL_REQUIRED_HITS = 12;
+	public static final int FOUR_MATERIAL_REQUIRED_HITS = 15;
 
 	private static final double MARKER_HIT_RADIUS_SQ = 0.0075d;
 
@@ -44,6 +50,7 @@ public class MinigameLogic {
 	private static final String ATTEMPTS_NBT_KEY = "forgero_markerAttempts";
 	private static final String FAST_MARKER_HITS_NBT_KEY = "forgero_fastMarkerHits";
 	private static final String MISS_MARKER_NBT_KEY = "forgero_missMarkerHits";
+	private static final String REQUIRED_HITS_NBT_KEY = "forgero_required_hits";
 
 	private final List<Vec2f> markerPositions = new ArrayList<>();
 	private final List<Boolean> markerHits = new ArrayList<>();
@@ -59,6 +66,8 @@ public class MinigameLogic {
 
 	@Setter
 	private int markerHitsCount = 0;
+
+	private int requiredHits = ONE_MATERIAL_REQUIRED_HITS;
 
 	private int markerTimeout = 0;
 	private int markerSpawnDelay;
@@ -98,7 +107,40 @@ public class MinigameLogic {
 		this.markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
 	}
 
+	public static int getRequiredHits(ItemStack stack) {
+		int materialCost = SchematicMaterialCost.DEFAULT_MATERIAL_COST;
+
+		if (!stack.isEmpty() && stack.hasNbt()) {
+			NbtCompound nbt = stack.getNbt();
+
+			if (nbt != null && nbt.contains(SchematicMaterialCost.MATERIAL_COST_KEY)) {
+				materialCost = nbt.getInt(SchematicMaterialCost.MATERIAL_COST_KEY);
+			}
+		}
+
+		return getRequiredHitsForMaterialCost(materialCost);
+	}
+
+	public static int getRequiredHitsForMaterialCost(int materialCost) {
+		if (materialCost <= 1) {
+			return ONE_MATERIAL_REQUIRED_HITS;
+		}
+
+		if (materialCost == 2) {
+			return TWO_MATERIAL_REQUIRED_HITS;
+		}
+
+		if (materialCost == 3) {
+			return THREE_MATERIAL_REQUIRED_HITS;
+		}
+
+		return FOUR_MATERIAL_REQUIRED_HITS;
+	}
+
 	public void resetMarkerProgress(MinigameCallback callback) {
+		ItemStack stack = callback.getCurrentStack();
+		updateRequiredHits(stack);
+
 		markerPositions.clear();
 		markerHits.clear();
 
@@ -111,16 +153,7 @@ public class MinigameLogic {
 
 		fastMarkerIndices.clear();
 
-		// Ensure first marker, index 0, is never a fast marker.
-		while (fastMarkerIndices.size() < FAST_MARKERS) {
-			int idx = 1 + random.nextInt(TOTAL_MARKERS - 1);
-
-			if (!fastMarkerIndices.contains(idx)) {
-				fastMarkerIndices.add(idx);
-			}
-		}
-
-		ItemStack stack = callback.getCurrentStack();
+		randomizeFastMarkerIndices();
 
 		if (!stack.isEmpty() && stack.getItem() instanceof MorphedItem) {
 			NbtCompound nbt = stack.getOrCreateNbt();
@@ -150,8 +183,12 @@ public class MinigameLogic {
 					int[] arr = nbt.getIntArray("fastMarkerIndices");
 
 					for (int idx : arr) {
-						fastMarkerIndices.add(idx);
+						if (idx >= 0 && idx < requiredHits) {
+							fastMarkerIndices.add(idx);
+						}
 					}
+
+					randomizeFastMarkerIndices();
 				}
 			} else {
 				this.morphProgress = 0.0;
@@ -184,6 +221,7 @@ public class MinigameLogic {
 
 		fastMarkerIndices.clear();
 		hitStageIndices.clear();
+		requiredHits = ONE_MATERIAL_REQUIRED_HITS;
 	}
 
 	public boolean processHit(Vec2f itemLocalHit, MinigameCallback callback) {
@@ -219,6 +257,8 @@ public class MinigameLogic {
 			callback.markDirty();
 			return;
 		}
+
+		updateRequiredHits(stack);
 
 		switch (outcome) {
 			case HIT -> {
@@ -334,6 +374,8 @@ public class MinigameLogic {
 
 	public void tick(MinigameCallback callback) {
 		ItemStack stackForMarker = callback.getCurrentStack();
+		updateRequiredHits(stackForMarker);
+
 		boolean activeMorph = isMorphingActive(stackForMarker);
 
 		if (!activeMorph || stackForMarker.isEmpty()) {
@@ -383,7 +425,7 @@ public class MinigameLogic {
 	}
 
 	public boolean isComplete() {
-		return markerHitsCount >= TOTAL_MARKERS;
+		return markerHitsCount >= requiredHits;
 	}
 
 	public void setMorphProgress(
@@ -544,6 +586,7 @@ public class MinigameLogic {
 		nbt.putInt(ATTEMPTS_NBT_KEY, markerAttempts);
 		nbt.putInt(FAST_MARKER_HITS_NBT_KEY, fastMarkerHits);
 		nbt.putInt(MISS_MARKER_NBT_KEY, missMarkerHits);
+		nbt.putInt(REQUIRED_HITS_NBT_KEY, requiredHits);
 		nbt.putIntArray(
 				"hitStageIndices",
 				hitStageIndices.stream().mapToInt(Integer::intValue).toArray()
@@ -552,7 +595,7 @@ public class MinigameLogic {
 				"fastMarkerIndices",
 				fastMarkerIndices.stream().mapToInt(Integer::intValue).toArray()
 		);
-		nbt.putDouble("morphProgress", morphProgress);
+		nbt.putDouble("morphProgress", getMorphProgress());
 	}
 
 	public void readNbt(NbtCompound nbt) {
@@ -562,7 +605,7 @@ public class MinigameLogic {
 		if (nbt.contains("markers", NbtCompound.COMPOUND_TYPE)) {
 			NbtCompound markersNbt = nbt.getCompound("markers");
 
-			for (int i = 0; i < TOTAL_MARKERS; i++) {
+			for (int i = 0; i < MAX_MARKERS; i++) {
 				if (markersNbt.contains("marker_" + i)) {
 					NbtCompound markerNbt = markersNbt.getCompound("marker_" + i);
 
@@ -580,6 +623,10 @@ public class MinigameLogic {
 				: markerHitsCount;
 
 		markerAttempts = markerHitsCount;
+
+		requiredHits = nbt.contains(REQUIRED_HITS_NBT_KEY)
+				? Math.max(ONE_MATERIAL_REQUIRED_HITS, Math.min(MAX_MARKERS, nbt.getInt(REQUIRED_HITS_NBT_KEY)))
+				: requiredHits;
 
 		fastMarkerHits = nbt.contains(FAST_MARKER_HITS_NBT_KEY)
 				? nbt.getInt(FAST_MARKER_HITS_NBT_KEY)
@@ -605,9 +652,13 @@ public class MinigameLogic {
 			int[] arr = nbt.getIntArray("fastMarkerIndices");
 
 			for (int idx : arr) {
-				fastMarkerIndices.add(idx);
+				if (idx >= 0 && idx < requiredHits) {
+					fastMarkerIndices.add(idx);
+				}
 			}
 		}
+
+		randomizeFastMarkerIndices();
 
 		if (nbt.contains("morphProgress")) {
 			morphProgress = nbt.getDouble("morphProgress");
@@ -615,12 +666,15 @@ public class MinigameLogic {
 	}
 
 	public void restoreFromItemNbt(ItemStack stack) {
+		updateRequiredHits(stack);
+
 		if (stack.isEmpty() || !(stack.getItem() instanceof MorphedItem)) {
 			this.markerHitsCount = 0;
 			this.markerAttempts = 0;
 			this.fastMarkerHits = 0;
 			this.missMarkerHits = 0;
 			this.morphProgress = 0.0;
+			this.requiredHits = ONE_MATERIAL_REQUIRED_HITS;
 			this.hitStageIndices.clear();
 			this.fastMarkerIndices.clear();
 			return;
@@ -632,6 +686,7 @@ public class MinigameLogic {
 			this.fastMarkerHits = 0;
 			this.missMarkerHits = 0;
 			this.morphProgress = 0.0;
+			this.requiredHits = ONE_MATERIAL_REQUIRED_HITS;
 			this.hitStageIndices.clear();
 			this.fastMarkerIndices.clear();
 			return;
@@ -670,9 +725,13 @@ public class MinigameLogic {
 			int[] arr = itemNbt.getIntArray("fastMarkerIndices");
 
 			for (int idx : arr) {
-				fastMarkerIndices.add(idx);
+				if (idx >= 0 && idx < requiredHits) {
+					fastMarkerIndices.add(idx);
+				}
 			}
 		}
+
+		randomizeFastMarkerIndices();
 
 		this.morphProgress = itemNbt.contains("morphProgress")
 				? itemNbt.getDouble("morphProgress")
@@ -680,11 +739,25 @@ public class MinigameLogic {
 	}
 
 	public double getMorphProgress() {
-		if (TOTAL_MARKERS <= 0) {
+		if (requiredHits <= 0) {
 			return 0.0;
 		}
 
-		return Math.min(1.0, (double) markerHitsCount / TOTAL_MARKERS);
+		return Math.min(1.0, (double) markerHitsCount / requiredHits);
+	}
+
+	public double getMorphProgress(ItemStack stack) {
+		int stackRequiredHits = getRequiredHits(stack);
+
+		if (stackRequiredHits <= 0) {
+			return 0.0;
+		}
+
+		return Math.min(1.0, (double) markerHitsCount / stackRequiredHits);
+	}
+
+	public void refreshRequiredHits(ItemStack stack) {
+		updateRequiredHits(stack);
 	}
 
 	private void clearActiveMarker() {
@@ -720,7 +793,25 @@ public class MinigameLogic {
 		}
 
 		if (stack.getItem() instanceof MorphedItem) {
+			updateRequiredHits(stack);
 			stack.getOrCreateNbt().putDouble(MorphedItem.PROGRESS_KEY, getMorphProgress());
+		}
+	}
+
+	private void updateRequiredHits(ItemStack stack) {
+		requiredHits = getRequiredHits(stack);
+	}
+
+	private void randomizeFastMarkerIndices() {
+		int availableFastMarkerSlots = Math.max(0, requiredHits - 1);
+		int fastMarkerCount = Math.min(FAST_MARKERS, availableFastMarkerSlots);
+
+		while (fastMarkerIndices.size() < fastMarkerCount) {
+			int idx = 1 + random.nextInt(availableFastMarkerSlots);
+
+			if (!fastMarkerIndices.contains(idx)) {
+				fastMarkerIndices.add(idx);
+			}
 		}
 	}
 
