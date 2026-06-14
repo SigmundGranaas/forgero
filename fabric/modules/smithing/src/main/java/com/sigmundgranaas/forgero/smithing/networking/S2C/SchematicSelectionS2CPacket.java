@@ -63,7 +63,11 @@ public class SchematicSelectionS2CPacket {
 			for (int i = 0; i < optionButtons.size(); i++) {
 				ButtonWidget btn = optionButtons.get(i);
 
-				if (!btn.visible || !btn.isMouseOver(mouseX, mouseY)) {
+				if (!btn.visible) {
+					continue;
+				}
+
+				if (!isMouseInsideButtonBounds(btn, mouseX, mouseY)) {
 					continue;
 				}
 
@@ -87,6 +91,13 @@ public class SchematicSelectionS2CPacket {
 				context.drawTooltip(this.textRenderer, tooltip, mouseX, mouseY);
 				return;
 			}
+		}
+
+		private boolean isMouseInsideButtonBounds(ButtonWidget button, int mouseX, int mouseY) {
+			return mouseX >= button.getX()
+					&& mouseX < button.getX() + button.getWidth()
+					&& mouseY >= button.getY()
+					&& mouseY < button.getY() + button.getHeight();
 		}
 
 		protected SimpleSchematicSelectionScreen(
