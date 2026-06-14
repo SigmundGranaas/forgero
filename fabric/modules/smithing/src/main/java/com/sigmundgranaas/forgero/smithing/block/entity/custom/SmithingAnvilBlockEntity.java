@@ -581,7 +581,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 
 		ItemStack stack = simpleInventory.getStack(0);
 
-		if (!stack.isEmpty()) {
+		if (!stack.isEmpty() && stack.getItem() instanceof MorphedItem) {
 			minigameLogic.restoreFromItemNbt(stack);
 		} else {
 			minigameLogic.setMarkerHitsCount(0);
