@@ -68,16 +68,23 @@ public final class SmithingPacketValidator {
 	}
 
 	public static boolean canPlaceOnAnvil(ItemStack stackInHand, ItemStack anvilStack) {
-		if (!anvilStack.isEmpty()) {
-			return false;
-		}
-
 		if (stackInHand.isEmpty()) {
 			return false;
 		}
 
-		return stackInHand.getItem() instanceof MorphedItem
-				|| TemperatureUtils.hasMaxTemperature(stackInHand);
+		/*
+		 * Restoring unfinished morphed items is valid only when the anvil is empty.
+		 */
+		if (stackInHand.getItem() instanceof MorphedItem) {
+			return anvilStack.isEmpty();
+		}
+
+		/*
+		 * Material ingots are allowed even when the anvil already has an ingot stack.
+		 * SmithingAnvilBlockEntity.tryPlaceItem(...) does the exact validation:
+		 * same item, not morphed, max stack 3, planned product null, etc.
+		 */
+		return TemperatureUtils.hasMaxTemperature(stackInHand);
 	}
 
 	public static boolean canSelectSchematicProduct(

@@ -44,8 +44,12 @@ public abstract class AnvilBlockUseMixin {
 
 		ItemStack stackInHand = player.getStackInHand(hand);
 
+		/*
+		 * Important:
+		 * Do NOT swallow non-hammer interactions here.
+		 * Ingot placement is handled by AnvilUseClientHandler + AnvilUseC2SPacket.
+		 */
 		if (!stackInHand.isIn(ModItemTags.SMITHING_HAMMERS)) {
-			cir.setReturnValue(ActionResult.SUCCESS);
 			return;
 		}
 

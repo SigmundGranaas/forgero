@@ -1,7 +1,9 @@
 package com.sigmundgranaas.forgero.smithing.networking.C2S;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
+import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 
 import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.entity.BlockEntity;
@@ -45,20 +47,28 @@ public final class AnvilUseClientHandler {
 
 			boolean handEmpty = handStack.isEmpty();
 			boolean anvilHasItem = !anvilStack.isEmpty();
-			boolean sneaking = player.isSneaking();
 
 			if (handEmpty && anvilHasItem) {
 				sendAnvilUse(pos, hand);
 				return ActionResult.SUCCESS;
 			}
 
-			if (sneaking) {
+			if (canSendPlaceAttempt(handStack)) {
 				sendAnvilUse(pos, hand);
 				return ActionResult.SUCCESS;
 			}
 
 			return ActionResult.PASS;
 		});
+	}
+
+	private static boolean canSendPlaceAttempt(ItemStack handStack) {
+		if (handStack.isEmpty()) {
+			return false;
+		}
+
+		return handStack.getItem() instanceof MorphedItem
+				|| TemperatureUtils.hasMaxTemperature(handStack);
 	}
 
 	private static void sendAnvilUse(BlockPos pos, Hand hand) {
