@@ -1,0 +1,70 @@
+package com.sigmundgranaas.forgero.smithing.networking.C2S;
+
+import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
+import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
+
+import net.minecraft.block.AnvilBlock;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+
+@Environment(EnvType.CLIENT)
+public final class AnvilUseClientHandler {
+	private AnvilUseClientHandler() {
+	}
+
+	public static void register() {
+		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+			if (!world.isClient) {
+				return ActionResult.PASS;
+			}
+
+			BlockPos pos = hitResult.getBlockPos();
+
+			if (!(world.getBlockState(pos).getBlock() instanceof AnvilBlock)) {
+				return ActionResult.PASS;
+			}
+
+			BlockEntity entity = world.getBlockEntity(pos);
+
+			if (!(entity instanceof SmithingAnvilBlockEntity anvilEntity)) {
+				return ActionResult.PASS;
+			}
+
+			ItemStack anvilItem = anvilEntity.getInventory().getStack(0);
+			boolean handEmpty = player.getStackInHand(hand).isEmpty();
+			boolean sneaking = player.isSneaking();
+
+			// Empty hand + item on anvil = pickup.
+			if (handEmpty && !anvilItem.isEmpty()) {
+				sendAnvilUse(pos, hand);
+				return ActionResult.SUCCESS;
+			}
+
+			// Sneak-use = attempt place item.
+			if (sneaking) {
+				sendAnvilUse(pos, hand);
+				return ActionResult.SUCCESS;
+			}
+
+			return ActionResult.PASS;
+		});
+	}
+
+	private static void sendAnvilUse(BlockPos pos, Hand hand) {
+		PacketByteBuf buf = PacketByteBufs.create();
+		buf.writeBlockPos(pos);
+		buf.writeEnumConstant(hand);
+
+		ClientPlayNetworking.send(ModMessages.ANVIL_SHIFT_USE, buf);
+	}
+}
