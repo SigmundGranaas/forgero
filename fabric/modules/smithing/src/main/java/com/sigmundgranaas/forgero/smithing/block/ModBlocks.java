@@ -14,21 +14,52 @@ import net.minecraft.util.Identifier;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 
-public class ModBlocks {
-	public static final Block HEARTH = registerBlock("hearth",
-			new HearthBlock(true, 2, FabricBlockSettings.copyOf(Blocks.CAMPFIRE)));
+public final class ModBlocks {
+	private static boolean registered = false;
 
+	public static Block HEARTH;
 
-	private static Block registerBlock(String name, Block block) {
-		registerBlockItem(name, block);
-		return Registry.register(Registries.BLOCK, new Identifier(Forgero.NAMESPACE, name), block);
-	}
-
-	private static Item registerBlockItem(String name, Block block) {
-		return Registry.register(Registries.ITEM, new Identifier(Forgero.NAMESPACE, name),
-				new BlockItem(block, new FabricItemSettings()));
+	private ModBlocks() {
 	}
 
 	public static void registerModBlocks() {
+		if (registered) {
+			return;
+		}
+
+		registered = true;
+
+		HEARTH = registerBlock(
+				"hearth",
+				new HearthBlock(
+						true,
+						2,
+						FabricBlockSettings.copyOf(Blocks.CAMPFIRE)
+				)
+		);
+	}
+
+	private static Block registerBlock(String name, Block block) {
+		Block registeredBlock = Registry.register(
+				Registries.BLOCK,
+				id(name),
+				block
+		);
+
+		registerBlockItem(name, registeredBlock);
+
+		return registeredBlock;
+	}
+
+	private static Item registerBlockItem(String name, Block block) {
+		return Registry.register(
+				Registries.ITEM,
+				id(name),
+				new BlockItem(block, new FabricItemSettings())
+		);
+	}
+
+	private static Identifier id(String name) {
+		return new Identifier(Forgero.NAMESPACE, name);
 	}
 }

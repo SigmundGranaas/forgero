@@ -9,25 +9,49 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 
-public class ModItems {
-	public static final Item SMITHING_HAMMER = registerItem("smithing_hammer", new Item(new FabricItemSettings()));
-	public static final Item SMITHING_TONGS = registerItem("smithing_tongs", new Item(new FabricItemSettings()));
-	public static final Item MORPHED_ITEM = registerItem("morphed_item", new MorphedItem(new FabricItemSettings()));
+public final class ModItems {
+	private static boolean registered = false;
 
-	private static Item registerItem(String name, Item item) {
-		return Registry.register(Registries.ITEM, new Identifier(Forgero.NAMESPACE, name), item);
-	}
+	public static Item SMITHING_HAMMER;
+	public static Item SMITHING_TONGS;
+	public static Item MORPHED_ITEM;
 
-	public static void addItemsToSmithingGroup(FabricItemGroupEntries entries) {
-		entries.add(SMITHING_HAMMER);
-		entries.add(SMITHING_TONGS);
+	private ModItems() {
 	}
 
 	public static void registerModItems() {
-		ItemGroupEvents.modifyEntriesEvent(ModItemGroups.SMITHING_GROUP_KEY)
-				.register(ModItems::addItemsToSmithingGroup);
+		if (registered) {
+			return;
+		}
+
+		registered = true;
+
+		SMITHING_HAMMER = registerItem(
+				"smithing_hammer",
+				new Item(new FabricItemSettings())
+		);
+
+		SMITHING_TONGS = registerItem(
+				"smithing_tongs",
+				new Item(new FabricItemSettings())
+		);
+
+		MORPHED_ITEM = registerItem(
+				"morphed_item",
+				new MorphedItem(new FabricItemSettings())
+		);
+	}
+
+	private static Item registerItem(String name, Item item) {
+		return Registry.register(
+				Registries.ITEM,
+				id(name),
+				item
+		);
+	}
+
+	private static Identifier id(String name) {
+		return new Identifier(Forgero.NAMESPACE, name);
 	}
 }
