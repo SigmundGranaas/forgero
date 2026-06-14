@@ -27,8 +27,8 @@ public class TemperatureUtils {
     public static final int MIN_TEMPERATURE = 0;
 
     public static int getTemperature(ItemStack stack) {
-        NbtCompound nbt = stack.getOrCreateNbt();
-        if (!nbt.contains(TEMPERATURE_KEY)) {
+        NbtCompound nbt = stack.getNbt();
+        if (nbt == null || !nbt.contains(TEMPERATURE_KEY)) {
             return DEFAULT_TEMPERATURE;
         }
         int stored = nbt.getInt(TEMPERATURE_KEY);
@@ -41,8 +41,8 @@ public class TemperatureUtils {
     }
 
     public static int getMaxTemp(ItemStack stack) {
-        NbtCompound nbt = stack.getOrCreateNbt();
-        if (nbt.contains(MAX_TEMPERATURE_KEY)) {
+        NbtCompound nbt = stack.getNbt();
+        if (nbt != null && nbt.contains(MAX_TEMPERATURE_KEY)) {
             return Math.max(0, nbt.getInt(MAX_TEMPERATURE_KEY));
         }
         Optional<State> state = StateService.INSTANCE.convert(stack);
@@ -84,8 +84,8 @@ public class TemperatureUtils {
     }
 
     public static int getWorkableTemperatureStart(ItemStack stack) {
-        NbtCompound nbt = stack.getOrCreateNbt();
-        if (nbt.contains(WORKABLE_TEMPERATURE_START_KEY)) {
+        NbtCompound nbt = stack.getNbt();
+        if (nbt != null && nbt.contains(WORKABLE_TEMPERATURE_START_KEY)) {
             return Math.max(0, nbt.getInt(WORKABLE_TEMPERATURE_START_KEY));
         }
         Optional<State> state = StateService.INSTANCE.convert(stack);
@@ -97,8 +97,8 @@ public class TemperatureUtils {
     }
 
     public static int getWorkableTemperatureEnd(ItemStack stack) {
-        NbtCompound nbt = stack.getOrCreateNbt();
-        if (nbt.contains(WORKABLE_TEMPERATURE_END_KEY)) {
+        NbtCompound nbt = stack.getNbt();
+        if (nbt != null && nbt.contains(WORKABLE_TEMPERATURE_END_KEY)) {
             return Math.max(0, nbt.getInt(WORKABLE_TEMPERATURE_END_KEY));
         }
         Optional<State> state = StateService.INSTANCE.convert(stack);

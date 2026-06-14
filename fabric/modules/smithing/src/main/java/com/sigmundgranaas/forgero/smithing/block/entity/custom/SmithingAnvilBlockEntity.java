@@ -383,6 +383,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		nbt.remove("hitStageIndices");
 		nbt.remove("morphProgress");
 		nbt.remove(MorphedItem.PROGRESS_KEY);
+		nbt.remove(TemperatureUtils.TEMPERATURE_KEY);
+		nbt.remove(TemperatureUtils.MAX_TEMPERATURE_KEY);
+		nbt.remove(TemperatureUtils.WORKABLE_TEMPERATURE_START_KEY);
+		nbt.remove(TemperatureUtils.WORKABLE_TEMPERATURE_END_KEY);
 
 		if (nbt.isEmpty()) {
 			stack.setNbt(null);
