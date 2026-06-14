@@ -336,7 +336,11 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		ItemStack anvilItem = currentStack();
 
 		if (!anvilItem.isEmpty()) {
-			minigameLogic.saveProgressToItem(anvilItem);
+			if (anvilItem.getItem() instanceof MorphedItem) {
+				minigameLogic.saveProgressToItem(anvilItem);
+			} else {
+				cleanPlainMaterialStack(anvilItem);
+			}
 
 			player.getInventory().offerOrDrop(anvilItem.copy());
 
@@ -352,6 +356,35 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		}
 
 		return ActionResult.SUCCESS;
+	}
+
+	private void cleanPlainMaterialStack(ItemStack stack) {
+		if (stack.isEmpty() || stack.getItem() instanceof MorphedItem) {
+			return;
+		}
+
+		if (!stack.hasNbt()) {
+			return;
+		}
+
+		NbtCompound nbt = stack.getNbt();
+
+		if (nbt == null) {
+			return;
+		}
+
+		nbt.remove("forgero_markerHitsCount");
+		nbt.remove("forgero_markerAttempts");
+		nbt.remove("forgero_fastMarkerHits");
+		nbt.remove("forgero_missMarkerHits");
+		nbt.remove("fastMarkerIndices");
+		nbt.remove("hitStageIndices");
+		nbt.remove("morphProgress");
+		nbt.remove(MorphedItem.PROGRESS_KEY);
+
+		if (nbt.isEmpty()) {
+			stack.setNbt(null);
+		}
 	}
 
 	public ActionResult tryPlaceItem(PlayerEntity player, Hand hand) {
@@ -523,17 +556,18 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 			return;
 		}
 
+		if (!(stack.getItem() instanceof MorphedItem)) {
+			return;
+		}
+
 		NbtCompound itemNbt = stack.getOrCreateNbt();
 
 		double progress = logic.getMorphProgress();
 
 		itemNbt.putInt("forgero_markerHitsCount", logic.getMarkerHitsCount());
 		itemNbt.putInt("forgero_markerAttempts", logic.getMarkerAttempts());
-
-		if (stack.getItem() instanceof MorphedItem) {
-			itemNbt.putDouble(MorphedItem.PROGRESS_KEY, progress);
-			itemNbt.putDouble("morphProgress", progress);
-		}
+		itemNbt.putDouble(MorphedItem.PROGRESS_KEY, progress);
+		itemNbt.putDouble("morphProgress", progress);
 	}
 
 	@Override

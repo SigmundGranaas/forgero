@@ -499,6 +499,10 @@ public class MinigameLogic {
 			return;
 		}
 
+		if (!(stack.getItem() instanceof MorphedItem)) {
+			return;
+		}
+
 		updateMorphProgressOnItem(stack);
 
 		NbtCompound itemNbt = stack.getOrCreateNbt();
@@ -520,7 +524,7 @@ public class MinigameLogic {
 
 		itemNbt.putDouble("morphProgress", getMorphProgress());
 	}
-
+	
 	public void writeNbt(NbtCompound nbt) {
 		NbtCompound markersNbt = new NbtCompound();
 
