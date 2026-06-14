@@ -187,16 +187,11 @@ public class MinigameLogic {
 	}
 
 	public boolean processHit(Vec2f itemLocalHit, MinigameCallback callback) {
-		if (markerAttempts >= TOTAL_MARKERS) {
-			return false;
-		}
-
 		if (markerPositions.size() != 1) {
 			return false;
 		}
 
 		Vec2f marker = markerPositions.get(0);
-
 		return marker.distanceSquared(itemLocalHit) < MARKER_HIT_RADIUS_SQ;
 	}
 
@@ -504,21 +499,26 @@ public class MinigameLogic {
 			return;
 		}
 
+		updateMorphProgressOnItem(stack);
+
 		NbtCompound itemNbt = stack.getOrCreateNbt();
 
 		itemNbt.putInt(HITS_NBT_KEY, markerHitsCount);
 		itemNbt.putInt(ATTEMPTS_NBT_KEY, markerAttempts);
 		itemNbt.putInt(MISS_MARKER_NBT_KEY, missMarkerHits);
 		itemNbt.putInt(FAST_MARKER_HITS_NBT_KEY, fastMarkerHits);
+
 		itemNbt.putIntArray(
 				"fastMarkerIndices",
 				fastMarkerIndices.stream().mapToInt(Integer::intValue).toArray()
 		);
+
 		itemNbt.putIntArray(
 				"hitStageIndices",
 				hitStageIndices.stream().mapToInt(Integer::intValue).toArray()
 		);
-		itemNbt.putDouble("morphProgress", morphProgress);
+
+		itemNbt.putDouble("morphProgress", getMorphProgress());
 	}
 
 	public void writeNbt(NbtCompound nbt) {

@@ -328,9 +328,21 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	}
 
 	private void writeItemNbtData(ItemStack stack, MinigameLogic logic) {
+		if (stack.isEmpty()) {
+			return;
+		}
+
 		NbtCompound itemNbt = stack.getOrCreateNbt();
+
+		double progress = logic.getMorphProgress();
+
 		itemNbt.putInt("forgero_markerHitsCount", logic.getMarkerHitsCount());
 		itemNbt.putInt("forgero_markerAttempts", logic.getMarkerAttempts());
+
+		if (stack.getItem() instanceof MorphedItem) {
+			itemNbt.putDouble(MorphedItem.PROGRESS_KEY, progress);
+			itemNbt.putDouble("morphProgress", progress);
+		}
 	}
 
 	@Override
@@ -361,12 +373,22 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	}
 
 	private void syncCustomDataToClients() {
-		if (world == null || world.isClient) return;
+		if (world == null || world.isClient) {
+			return;
+		}
+
+		ItemStack stack = simpleInventory.getStack(0);
+
+		if (!stack.isEmpty()) {
+			minigameLogic.saveProgressToItem(stack);
+			writeItemNbtData(stack, minigameLogic);
+		}
 
 		PacketByteBuf data = PacketByteBufs.create();
-		data.writeBlockPos(getPos());
 
+		data.writeBlockPos(getPos());
 		data.writeInt(simpleInventory.size());
+
 		for (int i = 0; i < simpleInventory.size(); i++) {
 			data.writeItemStack(simpleInventory.getStack(i));
 		}

@@ -1,6 +1,8 @@
 package com.sigmundgranaas.forgero.smithing.networking.S2C;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
+import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
+import com.sigmundgranaas.forgero.smithing.minigame.MinigameLogic;
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.client.MinecraftClient;
@@ -58,6 +60,19 @@ public class AnvilSyncS2CPacket {
 
 			// Update inventory
 			anvilEntity.getInventory().clear();
+
+			if (itemStacks.length > 0
+					&& !itemStacks[0].isEmpty()
+					&& itemStacks[0].getItem() instanceof MorphedItem) {
+				double progress = Math.min(
+						1.0,
+						(double) markerHitsCount / MinigameLogic.TOTAL_MARKERS
+				);
+
+				MorphedItem.setMorphProgress(itemStacks[0], progress);
+				itemStacks[0].getOrCreateNbt().putDouble("morphProgress", progress);
+			}
+
 			for (int i = 0; i < itemStacks.length; i++) {
 				anvilEntity.getInventory().setStack(i, itemStacks[i]);
 			}
