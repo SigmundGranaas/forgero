@@ -1,11 +1,9 @@
 package com.sigmundgranaas.forgero.smithing.networking.C2S;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
-import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
-import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
+import com.sigmundgranaas.forgero.smithing.networking.SmithingPacketValidator;
 
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Hand;
@@ -30,31 +28,27 @@ public final class AnvilUseC2SPacket {
 	}
 
 	private static void handle(ServerPlayerEntity player, BlockPos pos, Hand hand) {
-		BlockEntity entity = player.getWorld().getBlockEntity(pos);
+		if (!SmithingPacketValidator.isValidHand(hand)) {
+			return;
+		}
 
-		if (!(entity instanceof SmithingAnvilBlockEntity anvilEntity)) {
+		SmithingAnvilBlockEntity anvil =
+				SmithingPacketValidator.getValidSmithingAnvil(player, pos);
+
+		if (anvil == null) {
 			return;
 		}
 
 		ItemStack stackInHand = player.getStackInHand(hand);
-		ItemStack anvilItem = anvilEntity.getInventory().getStack(0);
+		ItemStack anvilStack = anvil.getInventory().getStack(0);
 
-		if (stackInHand.isEmpty() && !anvilItem.isEmpty()) {
-			anvilEntity.tryPickupItem(player);
+		if (SmithingPacketValidator.canPickupFromAnvil(stackInHand, anvilStack)) {
+			anvil.tryPickupItem(player);
 			return;
 		}
 
-		if (!anvilItem.isEmpty()) {
-			return;
+		if (SmithingPacketValidator.canPlaceOnAnvil(stackInHand, anvilStack)) {
+			anvil.tryPlaceItem(player, hand);
 		}
-
-		if (canBePlacedOnSmithingAnvil(stackInHand)) {
-			anvilEntity.tryPlaceItem(player, hand);
-		}
-	}
-
-	private static boolean canBePlacedOnSmithingAnvil(ItemStack stack) {
-		return stack.getItem() instanceof MorphedItem
-				|| TemperatureUtils.hasMaxTemperature(stack);
 	}
 }

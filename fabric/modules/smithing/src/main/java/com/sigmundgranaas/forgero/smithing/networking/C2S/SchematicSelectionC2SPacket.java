@@ -2,8 +2,9 @@ package com.sigmundgranaas.forgero.smithing.networking.C2S;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
+import com.sigmundgranaas.forgero.smithing.networking.SmithingPacketValidator;
 
-import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
@@ -14,20 +15,37 @@ public final class SchematicSelectionC2SPacket {
 	}
 
 	public static void register() {
+		register(ModMessages.SCHEMATIC_SELECTED);
+	}
+
+	public static void register(Identifier id) {
 		ServerPlayNetworking.registerGlobalReceiver(
-				ModMessages.SCHEMATIC_SELECTED,
+				id,
 				(server, player, handler, buf, responseSender) -> {
 					BlockPos pos = buf.readBlockPos();
 					Identifier selected = buf.readIdentifier();
 
-					server.execute(() -> {
-						BlockEntity be = player.getWorld().getBlockEntity(pos);
-
-						if (be instanceof SmithingAnvilBlockEntity anvil) {
-							anvil.setPlannedProduct(selected);
-						}
-					});
+					server.execute(() -> handle(player, pos, selected));
 				}
 		);
+	}
+
+	private static void handle(
+			ServerPlayerEntity player,
+			BlockPos pos,
+			Identifier selected
+	) {
+		SmithingAnvilBlockEntity anvil =
+				SmithingPacketValidator.getValidSmithingAnvil(player, pos);
+
+		if (anvil == null) {
+			return;
+		}
+
+		if (!SmithingPacketValidator.canSelectSchematicProduct(player, anvil, selected)) {
+			return;
+		}
+
+		anvil.setPlannedProduct(selected);
 	}
 }
