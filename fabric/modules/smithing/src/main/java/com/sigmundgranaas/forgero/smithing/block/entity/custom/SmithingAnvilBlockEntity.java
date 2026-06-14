@@ -189,44 +189,48 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		}
 
 		ItemStack anvilItem = currentStack();
+
 		if (anvilItem.isEmpty()) {
 			playMissEffect();
 			return ActionResult.FAIL;
 		}
 
 		if (anvilItem.getItem() instanceof MorphedItem) {
-			//if (!isHotEnoughForWork(anvilItem)) {
-			//	informPlayerHeatRequired(player);
-			//	return ActionResult.FAIL;
-			//}
+			// if (!isHotEnoughForWork(anvilItem)) {
+			//     informPlayerHeatRequired(player);
+			//     return ActionResult.FAIL;
+			// }
 		}
 
 		if (shouldOpenSchematicSelection(anvilItem)) {
-			//if (!isHotEnoughForWork(anvilItem)) {
-			//	informPlayerHeatRequired(player);
-			//	return ActionResult.FAIL;
-			//}
+			// if (!isHotEnoughForWork(anvilItem)) {
+			//     informPlayerHeatRequired(player);
+			//     return ActionResult.FAIL;
+			// }
+
 			openSchematicSelection(player);
 			return ActionResult.FAIL;
 		}
 
 		Vec2f offsetVec = resolveOffsetVec(anvilItem);
-		Vec2f itemLocalHit = MinigamePositioning.worldHitToItemLocal(hitResult, getCachedState(), offsetVec);
+		Vec2f itemLocalHit = MinigamePositioning.worldHitToItemLocal(
+				hitResult,
+				getCachedState(),
+				offsetVec
+		);
 
 		boolean hit = minigameLogic.processHit(itemLocalHit, this);
+
 		if (!hit) {
 			playMissEffect();
 		}
+
 		minigameLogic.processMarkerAttempt(hit, this);
 
 		if (minigameLogic.isComplete()) {
-			if (anvilItem.getItem() instanceof MorphedItem) {
-				minigameLogic.setMorphProgress(1.0, this, plannedProductId);
-				minigameLogic.resetMarkerProgress(this);
-			} else {
-				minigameLogic.resetMarkerProgress(this);
-			}
+			minigameLogic.resetMarkerProgress(this);
 		}
+
 		return ActionResult.SUCCESS;
 	}
 

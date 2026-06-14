@@ -13,6 +13,7 @@ import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import com.sigmundgranaas.forgero.smithing.temperature.DynamicTemperatureSystem;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,454 +31,688 @@ import net.minecraft.world.World;
 
 @Getter
 public class MinigameLogic {
-    public static final int INITIAL_MARKER_DELAY_TICKS = 25;
-    public static final int SUBSEQUENT_MARKER_DELAY_TICKS = 15;
-    public static final int MARKER_LIFETIME_TICKS_NORMAL = 35;
-    public static final int MARKER_LIFETIME_TICKS_FAST = 20;
-    public static final int TOTAL_MARKERS = 10;
-    public static final int FAST_MARKERS = 3;
+	public static final int INITIAL_MARKER_DELAY_TICKS = 25;
+	public static final int SUBSEQUENT_MARKER_DELAY_TICKS = 15;
+	public static final int MARKER_LIFETIME_TICKS_NORMAL = 35;
+	public static final int MARKER_LIFETIME_TICKS_FAST = 20;
+	public static final int TOTAL_MARKERS = 10;
+	public static final int FAST_MARKERS = 3;
 
-    private static final double MARKER_HIT_RADIUS_SQ = 0.0075d;
+	private static final double MARKER_HIT_RADIUS_SQ = 0.0075d;
 
-    private static final String HITS_NBT_KEY = "forgero_markerHitsCount";
-    private static final String ATTEMPTS_NBT_KEY = "forgero_markerAttempts";
-    private static final String FAST_MARKER_HITS_NBT_KEY = "forgero_fastMarkerHits";
-    private static final String MISS_MARKER_NBT_KEY = "forgero_missMarkerHits";
+	private static final String HITS_NBT_KEY = "forgero_markerHitsCount";
+	private static final String ATTEMPTS_NBT_KEY = "forgero_markerAttempts";
+	private static final String FAST_MARKER_HITS_NBT_KEY = "forgero_fastMarkerHits";
+	private static final String MISS_MARKER_NBT_KEY = "forgero_missMarkerHits";
 
-    private final List<Vec2f> markerPositions = new ArrayList<>();
-    private final List<Boolean> markerHits = new ArrayList<>();
-    private final List<Integer> hitStageIndices = new ArrayList<>();
-    private final List<Integer> fastMarkerIndices = new ArrayList<>();
-    private final Random random = new Random();
+	private final List<Vec2f> markerPositions = new ArrayList<>();
+	private final List<Boolean> markerHits = new ArrayList<>();
+	private final List<Integer> hitStageIndices = new ArrayList<>();
+	private final List<Integer> fastMarkerIndices = new ArrayList<>();
+	private final Random random = new Random();
 
-    private int fastMarkerHits = 0;
-    private int missMarkerHits = 0;
+	private int fastMarkerHits = 0;
+	private int missMarkerHits = 0;
 
-    @Setter
-    private int markerAttempts = 0;
-    @Setter
-    private int markerHitsCount = 0;
+	@Setter
+	private int markerAttempts = 0;
 
-    private int markerTimeout = 0;
-    private int markerSpawnDelay;
-    private double morphProgress = 0.0;
+	@Setter
+	private int markerHitsCount = 0;
 
-    private transient BufferedImage startingItemImage = null;
-    private transient BufferedImage plannedProductImage = null;
+	private int markerTimeout = 0;
+	private int markerSpawnDelay;
 
-    public interface MinigameCallback {
-        void markDirty();
-        void playHitEffect(Vec2f markerLocalPos);
-        void playMissEffect();
-        void spawnMarkerAppearanceEffect(Vec2f markerLocalPos, ItemStack itemStack);
-        World getWorld();
-        BlockPos getPos();
-        BlockState getCachedState();
-        ItemStack getCurrentStack();
-        void replaceWithResult(ItemStack resultStack);
-    }
+	private double morphProgress = 0.0;
 
-    public MinigameLogic() {
-        this.markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
-    }
+	private transient BufferedImage startingItemImage = null;
+	private transient BufferedImage plannedProductImage = null;
 
-    public void resetMarkerProgress(MinigameCallback callback) {
-        markerPositions.clear();
-        markerHits.clear();
-        markerAttempts = 0;
-        markerHitsCount = 0;
-        missMarkerHits = 0;
-        markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
-        fastMarkerIndices.clear();
+	private enum MarkerOutcome {
+		HIT,
+		MISS,
+		TIMEOUT
+	}
 
-        // Ensure first marker (index 0) is never a fast marker
-        while (fastMarkerIndices.size() < FAST_MARKERS) {
-            int idx = 1 + random.nextInt(TOTAL_MARKERS - 1);
-            if (!fastMarkerIndices.contains(idx)) {
-                fastMarkerIndices.add(idx);
-            }
-        }
+	public interface MinigameCallback {
+		void markDirty();
 
-        ItemStack stack = callback.getCurrentStack();
-        if (!stack.isEmpty() && stack.getItem() instanceof MorphedItem) {
-            NbtCompound nbt = stack.getOrCreateNbt();
-            if (nbt.contains(HITS_NBT_KEY) || nbt.contains(ATTEMPTS_NBT_KEY)) {
-                this.markerHitsCount = nbt.getInt(HITS_NBT_KEY);
-                this.markerAttempts = nbt.getInt(ATTEMPTS_NBT_KEY);
-                this.morphProgress = nbt.getDouble("morphProgress");
-                this.fastMarkerHits = nbt.getInt(FAST_MARKER_HITS_NBT_KEY);
-                this.missMarkerHits = nbt.contains(MISS_MARKER_NBT_KEY) ? nbt.getInt(MISS_MARKER_NBT_KEY) : 0;
+		void playHitEffect(Vec2f markerLocalPos);
 
-                // Restore hit stage indices
-                hitStageIndices.clear();
-                if (nbt.contains("hitStageIndices")) {
-                    int[] arr = nbt.getIntArray("hitStageIndices");
-                    for (int v : arr) hitStageIndices.add(v);
-                }
-            } else {
-                this.morphProgress = 0.0;
-                this.fastMarkerHits = 0;
-                this.missMarkerHits = 0;
-                hitStageIndices.clear();
-            }
-        } else {
-            this.morphProgress = 0.0;
-            this.fastMarkerHits = 0;
-            this.missMarkerHits = 0;
-            hitStageIndices.clear();
-        }
+		void playMissEffect();
 
-        updateMorphProgressOnItem(stack);
-        refreshMorphImages(callback);
-        callback.markDirty();
-    }
+		void spawnMarkerAppearanceEffect(Vec2f markerLocalPos, ItemStack itemStack);
 
-    public void clearMarkerProgress() {
-        markerPositions.clear();
-        markerHits.clear();
-        markerAttempts = 0;
-        markerHitsCount = 0;
-        markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
-        fastMarkerIndices.clear();
-        fastMarkerHits = 0;
-        missMarkerHits = 0;
-        // Do not clear per-hit stage indices and temperatures for a fresh run
-        hitStageIndices.clear();
-    }
+		World getWorld();
 
-    public boolean processHit(Vec2f itemLocalHit, MinigameCallback callback) {
-        if (markerPositions.size() == 1) {
-            Vec2f marker = markerPositions.get(0);
-            if (marker.distanceSquared(itemLocalHit) < MARKER_HIT_RADIUS_SQ) {
-                setMarkerHit(0, callback);
-                return true;
-            }
-        }
-        return false;
-    }
+		BlockPos getPos();
 
-    public void processMarkerAttempt(boolean hit, MinigameCallback callback) {
-        processMarkerAttempt(hit, true, callback);
-    }
+		BlockState getCachedState();
 
-    public void processMarkerAttempt(boolean hit, boolean wasPlayerAttempt, MinigameCallback callback) {
-        if (markerHitsCount >= TOTAL_MARKERS) return;
+		ItemStack getCurrentStack();
 
-        if (wasPlayerAttempt) {
-            markerAttempts++;
-        }
+		void replaceWithResult(ItemStack resultStack);
+	}
 
-        ItemStack stack = callback.getCurrentStack();
+	public MinigameLogic() {
+		this.markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
+	}
 
-        if (hit) {
-            markerHitsCount++;
+	public void resetMarkerProgress(MinigameCallback callback) {
+		markerPositions.clear();
+		markerHits.clear();
 
-            int temperature = TemperatureUtils.getTemperature(stack);
-            int maxTemp = TemperatureUtils.getMaxTemp(stack);
-            int workableStart = TemperatureUtils.getWorkableTemperatureStart(stack);
-            int workableEnd = TemperatureUtils.getWorkableTemperatureEnd(stack);
-            hitStageIndices.add(stageIndexFor(temperature, maxTemp, workableStart, workableEnd));
+		markerAttempts = 0;
+		markerHitsCount = 0;
+		fastMarkerHits = 0;
+		missMarkerHits = 0;
+		markerTimeout = 0;
+		markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
 
-            int markerIndex = markerAttempts - 1;
-            boolean fast = fastMarkerIndices.contains(markerIndex);
-            int tempChange = fast ? -10 : 40;
-            TemperatureUtils.setTemperature(stack, Math.max(0, Math.min(temperature + tempChange, maxTemp)));
+		fastMarkerIndices.clear();
 
-            if (fast) {
-                fastMarkerHits++;
-            }
-        } else {
-            if (wasPlayerAttempt) {
-                missMarkerHits++;
-            }
-        }
+		// Ensure first marker, index 0, is never a fast marker.
+		while (fastMarkerIndices.size() < FAST_MARKERS) {
+			int idx = 1 + random.nextInt(TOTAL_MARKERS - 1);
 
-        clearActiveMarker();
-        markerSpawnDelay = SUBSEQUENT_MARKER_DELAY_TICKS;
-        updateMorphProgressOnItem(stack);
-        saveProgressToItem(stack);
-        callback.markDirty();
-    }
+			if (!fastMarkerIndices.contains(idx)) {
+				fastMarkerIndices.add(idx);
+			}
+		}
 
-    private int stageIndexFor(int temperature, int maxTemp, int workableStart, int workableEnd) {
-        DynamicTemperatureSystem.TemperatureStages stages =
-            DynamicTemperatureSystem.calculateStages(maxTemp, workableStart, workableEnd);
-        DynamicTemperatureSystem.TemperatureStage stage =
-            DynamicTemperatureSystem.getStage(temperature, stages);
+		ItemStack stack = callback.getCurrentStack();
 
-        return switch (stage) {
-            case COLD -> 0;
-            case WARM -> 1;
-            case HOT -> 2;
-            case WORKABLE -> 3;
-            case OVERHEATED -> 4;
-        };
-    }
+		if (!stack.isEmpty() && stack.getItem() instanceof MorphedItem) {
+			NbtCompound nbt = stack.getOrCreateNbt();
 
-    public void setMarkerHit(int index, MinigameCallback callback) {
-        World world = callback.getWorld();
-        if (world != null && !world.isClient && index >= 0 && index < markerHits.size()) {
-            markerHits.set(index, true);
-            callback.playHitEffect(markerPositions.get(index));
-            clearActiveMarker();
-            callback.markDirty();
-        }
-    }
+			if (nbt.contains(HITS_NBT_KEY) || nbt.contains(ATTEMPTS_NBT_KEY)) {
+				this.markerHitsCount = nbt.getInt(HITS_NBT_KEY);
+				this.markerAttempts = this.markerHitsCount;
+				this.morphProgress = nbt.getDouble("morphProgress");
+				this.fastMarkerHits = nbt.getInt(FAST_MARKER_HITS_NBT_KEY);
+				this.missMarkerHits = nbt.contains(MISS_MARKER_NBT_KEY)
+						? nbt.getInt(MISS_MARKER_NBT_KEY)
+						: 0;
 
-    public void tick(MinigameCallback callback) {
-        ItemStack stackForMarker = callback.getCurrentStack();
-        boolean activeMorph = isMorphingActive(stackForMarker);
+				hitStageIndices.clear();
 
-        if (!activeMorph || stackForMarker.isEmpty()) {
-            if (!markerPositions.isEmpty() || markerSpawnDelay > 0) {
-                clearMarkerProgress();
-                callback.markDirty();
-            }
-            return;
-        }
+				if (nbt.contains("hitStageIndices")) {
+					int[] arr = nbt.getIntArray("hitStageIndices");
 
+					for (int v : arr) {
+						hitStageIndices.add(v);
+					}
+				}
 
-        // Marker lifecycle
-        if (markerPositions.isEmpty()) {
-            if (markerSpawnDelay > 0) {
-                markerSpawnDelay--;
-            }
-            if (markerSpawnDelay == 0) {
-                Vec2f marker = nextMarkerPosition(stackForMarker, callback);
-                if (marker.equals(Vec2f.ZERO)) {
-                    markerSpawnDelay = SUBSEQUENT_MARKER_DELAY_TICKS;
-                    return;
-                }
-                markerPositions.add(marker);
-                markerHits.add(false);
-                markerTimeout = fastMarkerIndices.contains(markerAttempts)
-                        ? MARKER_LIFETIME_TICKS_FAST
-                        : MARKER_LIFETIME_TICKS_NORMAL;
-                callback.markDirty();
-                callback.spawnMarkerAppearanceEffect(marker, stackForMarker);
-            }
-        } else {
-            markerTimeout--;
-            if (markerTimeout <= 0) {
-                if (fastMarkerIndices.contains(markerAttempts)) {
-                    fastMarkerIndices.remove(Integer.valueOf(markerAttempts));
-                    callback.markDirty();
-                }
-                processMarkerAttempt(false, false, callback);
-            }
-        }
-    }
+				if (nbt.contains("fastMarkerIndices")) {
+					fastMarkerIndices.clear();
 
-    public boolean isComplete() {
-        return markerHitsCount >= TOTAL_MARKERS;
-    }
+					int[] arr = nbt.getIntArray("fastMarkerIndices");
 
-    public void setMorphProgress(double progress, MinigameCallback callback, @SuppressWarnings("unused") Identifier plannedProductId) {
-        this.morphProgress = progress;
-        if (progress >= 1.0) {
-            ItemStack stack = callback.getCurrentStack();
-            if (!stack.isEmpty() && stack.getItem() instanceof MorphedItem) {
-                Item resultItem = MorphedItem.getResultItem(stack);
-                if (resultItem != null) {
-                    ItemStack resultStack = new ItemStack(resultItem, stack.getCount());
+					for (int idx : arr) {
+						fastMarkerIndices.add(idx);
+					}
+				}
+			} else {
+				this.morphProgress = 0.0;
+				this.fastMarkerHits = 0;
+				this.missMarkerHits = 0;
+				hitStageIndices.clear();
+			}
+		} else {
+			this.morphProgress = 0.0;
+			this.fastMarkerHits = 0;
+			this.missMarkerHits = 0;
+			hitStageIndices.clear();
+		}
 
-                    // Apply conditions to result item using predicates
-                    var stateOpt = StateService.INSTANCE.convert(resultStack);
-                    if (stateOpt.isPresent() && stateOpt.get() instanceof com.sigmundgranaas.forgero.core.condition.Conditional<?> conditional) {
-                        var state = stateOpt.get();
+		updateMorphProgressOnItem(stack);
+		refreshMorphImages(callback);
+		callback.markDirty();
+	}
 
-                        MatchContext context = createMatchContext(callback, stack);
+	public void clearMarkerProgress() {
+		markerPositions.clear();
+		markerHits.clear();
 
-                        // Check for direct condition assignment using predicates
-                        com.sigmundgranaas.forgero.core.condition.NamedCondition directCondition = PredicateConditionLootRegistry.getCondition(context);
-                        if (directCondition != null) {
-                            var conditioned = conditional.applyCondition(directCondition);
-                            var newStackOpt = StateService.INSTANCE.convert((com.sigmundgranaas.forgero.core.state.State) conditioned);
-                            if (newStackOpt.isPresent()) {
-                                resultStack = newStackOpt.get();
-                            }
-                        } else {
-                            var lootTable = PredicateConditionLootRegistry.getLootTable(context);
-                            if (lootTable.isEmpty()) {
-                                lootTable = PredicateConditionLootRegistry.NEUTRAL;
-                            }
-                            // Filter lootTable to only include conditions whose target matches the state
-                            List<com.sigmundgranaas.forgero.core.condition.NamedCondition> applicableConditions = lootTable.stream()
-                                    .filter(cond -> cond.matches(state))
-                                    .toList();
-                            if (!applicableConditions.isEmpty()) {
-                                com.sigmundgranaas.forgero.core.condition.NamedCondition randomCondition = applicableConditions.get(new Random().nextInt(applicableConditions.size()));
-                                var conditioned = conditional.applyCondition(randomCondition);
-                                var newStackOpt = StateService.INSTANCE.convert((com.sigmundgranaas.forgero.core.state.State) conditioned);
-                                if (newStackOpt.isPresent()) {
-                                    resultStack = newStackOpt.get();
-                                }
-                            }
-                        }
-                    }
+		markerAttempts = 0;
+		markerHitsCount = 0;
+		fastMarkerHits = 0;
+		missMarkerHits = 0;
+		markerTimeout = 0;
+		markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
 
-                    // Copy temperature from morphed item to result item
-                    double currentTemp = TemperatureUtils.getTemperature(stack);
-                    TemperatureUtils.setTemperature(resultStack, (int) Math.round(currentTemp));
-                    callback.replaceWithResult(resultStack);
+		fastMarkerIndices.clear();
+		hitStageIndices.clear();
+	}
 
-                    World world = callback.getWorld();
-                    if (world != null && !world.isClient) {
-                        world.playSound(null, callback.getPos(), SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 1.0f, 1.0f);
-                    }
-                }
-            }
-        }
-        callback.markDirty();
-    }
+	public boolean processHit(Vec2f itemLocalHit, MinigameCallback callback) {
+		if (markerAttempts >= TOTAL_MARKERS) {
+			return false;
+		}
 
-    private MatchContext createMatchContext(MinigameCallback callback, ItemStack stack) {
-        MatchContext context = MatchContext.of();
-        World world = callback.getWorld();
-        if (world != null) {
-            context = context.put(MinecraftContextKeys.WORLD, world);
-            context = context.put(MinecraftContextKeys.BLOCK_TARGET, callback.getPos());
-        }
-        context = context.put(MinecraftContextKeys.STACK, stack);
-        context = context.put(MinecraftContextKeys.TOTAL_HITS, markerHitsCount);
-        context = context.put(MinecraftContextKeys.MISS_HITS, missMarkerHits);
-        context = context.put(MinecraftContextKeys.FAST_MARKER_HITS, fastMarkerHits);
+		if (markerPositions.size() != 1) {
+			return false;
+		}
 
-        // Removed continuous stage tick data and fraction exposure to match context.
+		Vec2f marker = markerPositions.get(0);
 
-        return context;
-    }
+		return marker.distanceSquared(itemLocalHit) < MARKER_HIT_RADIUS_SQ;
+	}
 
-    public void saveProgressToItem(ItemStack stack) {
-        if (!stack.isEmpty()) {
-            NbtCompound itemNbt = stack.getOrCreateNbt();
-            itemNbt.putInt(HITS_NBT_KEY, markerHitsCount);
-            itemNbt.putInt(ATTEMPTS_NBT_KEY, markerAttempts);
-            itemNbt.putInt(MISS_MARKER_NBT_KEY, missMarkerHits);
-            itemNbt.putIntArray("fastMarkerIndices", fastMarkerIndices.stream().mapToInt(Integer::intValue).toArray());
-            itemNbt.putInt(FAST_MARKER_HITS_NBT_KEY, fastMarkerHits);
-            itemNbt.putIntArray("hitStageIndices", hitStageIndices.stream().mapToInt(Integer::intValue).toArray());
-        }
-    }
+	public void processMarkerAttempt(boolean hit, MinigameCallback callback) {
+		processMarkerAttempt(hit, true, callback);
+	}
 
-    public void writeNbt(NbtCompound nbt) {
-        // Store marker positions
-        NbtCompound markersNbt = new NbtCompound();
-        for (int i = 0; i < markerPositions.size(); i++) {
-            Vec2f pos = markerPositions.get(i);
-            NbtCompound markerNbt = new NbtCompound();
-            markerNbt.putFloat("x", pos.x);
-            markerNbt.putFloat("y", pos.y);
-            markerNbt.putBoolean("hit", markerHits.size() > i && markerHits.get(i));
-            markersNbt.put("marker_" + i, markerNbt);
-        }
-        nbt.put("markers", markersNbt);
+	public void processMarkerAttempt(boolean hit, boolean wasPlayerAttempt, MinigameCallback callback) {
+		MarkerOutcome outcome = hit
+				? MarkerOutcome.HIT
+				: wasPlayerAttempt ? MarkerOutcome.MISS : MarkerOutcome.TIMEOUT;
 
-        nbt.putIntArray("hitStageIndices", hitStageIndices.stream().mapToInt(Integer::intValue).toArray());
-        nbt.putInt("missHits", missMarkerHits);
-        nbt.putIntArray("fastMarkerIndices", fastMarkerIndices.stream().mapToInt(Integer::intValue).toArray());
-        nbt.putDouble("morphProgress", morphProgress);
-    }
+		processMarkerAttempt(outcome, callback);
+	}
 
-    public void readNbt(NbtCompound nbt) {
-        markerPositions.clear();
-        markerHits.clear();
+	private void processMarkerAttempt(MarkerOutcome outcome, MinigameCallback callback) {
+		if (isComplete()) {
+			return;
+		}
 
-        if (nbt.contains("markers", NbtCompound.COMPOUND_TYPE)) {
-            NbtCompound markersNbt = nbt.getCompound("markers");
-            for (int i = 0; i < TOTAL_MARKERS; i++) {
-                if (markersNbt.contains("marker_" + i)) {
-                    NbtCompound markerNbt = markersNbt.getCompound("marker_" + i);
-                    markerPositions.add(new Vec2f(markerNbt.getFloat("x"), markerNbt.getFloat("y")));
-                    markerHits.add(markerNbt.getBoolean("hit"));
-                }
-            }
-        }
+		ItemStack stack = callback.getCurrentStack();
 
-        hitStageIndices.clear();
-        if (nbt.contains("hitStageIndices")) {
-            int[] arr = nbt.getIntArray("hitStageIndices");
-            for (int v : arr) hitStageIndices.add(v);
-        }
-        missMarkerHits = nbt.contains("missHits") ? nbt.getInt("missHits") : 0;
+		if (stack.isEmpty()) {
+			clearActiveMarker();
+			callback.markDirty();
+			return;
+		}
 
-        fastMarkerIndices.clear();
-        if (nbt.contains("fastMarkerIndices")) {
-            int[] arr = nbt.getIntArray("fastMarkerIndices");
-            for (int idx : arr) {
-                fastMarkerIndices.add(idx);
-            }
-        }
+		switch (outcome) {
+			case HIT -> {
+				int markerIndex = markerHitsCount;
+				applySuccessfulMarkerHit(markerIndex, stack, callback);
+			}
+			case MISS, TIMEOUT -> applyFailedMarkerAttempt();
+		}
 
-        if (nbt.contains("morphProgress")) {
-            morphProgress = nbt.getDouble("morphProgress");
-        }
-    }
+		clearActiveMarker();
 
-    public void restoreFromItemNbt(ItemStack stack) {
-        if (!stack.isEmpty()) {
-            NbtCompound itemNbt = stack.getOrCreateNbt();
-            this.markerHitsCount = itemNbt.getInt(HITS_NBT_KEY);
-            this.markerAttempts = itemNbt.getInt(ATTEMPTS_NBT_KEY);
-            this.missMarkerHits = itemNbt.contains(MISS_MARKER_NBT_KEY) ? itemNbt.getInt(MISS_MARKER_NBT_KEY) : 0;
+		markerSpawnDelay = isComplete()
+				? 0
+				: SUBSEQUENT_MARKER_DELAY_TICKS;
 
-            if (itemNbt.contains("hitStageIndices")) {
-                hitStageIndices.clear();
-                int[] arr = itemNbt.getIntArray("hitStageIndices");
-                for (int v : arr) hitStageIndices.add(v);
-            }
+		updateMorphProgressOnItem(stack);
+		saveProgressToItem(stack);
 
-            if (itemNbt.contains(FAST_MARKER_HITS_NBT_KEY)) {
-                fastMarkerHits = itemNbt.getInt(FAST_MARKER_HITS_NBT_KEY);
-            }
-        } else {
-            this.markerHitsCount = 0;
-            this.markerAttempts = 0;
-            this.fastMarkerHits = 0;
-            this.missMarkerHits = 0;
-        }
-    }
+		callback.markDirty();
 
-    public double getMorphProgress() {
-        if (TOTAL_MARKERS <= 0) return 0.0;
-        return Math.min(1.0, (double) markerHitsCount / TOTAL_MARKERS);
-    }
+		finishIfComplete(callback);
+	}
 
-    private void clearActiveMarker() {
-        markerPositions.clear();
-        markerHits.clear();
-    }
+	private void applySuccessfulMarkerHit(
+			int markerIndex,
+			ItemStack stack,
+			MinigameCallback callback
+	) {
+		markerHitsCount++;
 
-    private boolean isMorphingActive(ItemStack stack) {
-        return stack.getItem() instanceof MorphedItem && MorphedItem.getMorphProgress(stack) < 1.0;
-    }
+		/*
+		 * markerAttempts now tracks successful marker progress only.
+		 * Misses and timeouts do not advance this.
+		 */
+		markerAttempts = markerHitsCount;
 
-    private Vec2f nextMarkerPosition(ItemStack stackForMarker, MinigameCallback callback) {
-        // For morphed items, we need to use the callback to access block entity methods
-        // First, check if we can cast the callback to SmithingAnvilBlockEntity for morphed positioning
-        if (stackForMarker.getItem() instanceof MorphedItem && callback instanceof com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity anvilEntity) {
-            Vec2f marker = MinigamePositioning.getRandomMarkerPositionMorphed(anvilEntity);
-            if (!marker.equals(Vec2f.ZERO)) {
-                return marker;
-            }
-        }
-        // Fallback to regular marker positioning
-        return MinigamePositioning.getRandomMarkerPosition(stackForMarker, callback.getCachedState());
-    }
+		if (!markerPositions.isEmpty()) {
+			markerHits.set(0, true);
+			callback.playHitEffect(markerPositions.get(0));
+		}
 
-    private void updateMorphProgressOnItem(ItemStack stack) {
-        if (stack.isEmpty()) return;
-        if (stack.getItem() instanceof MorphedItem) {
-            stack.getOrCreateNbt().putDouble(MorphedItem.PROGRESS_KEY, getMorphProgress());
-        }
-    }
+		int temperature = TemperatureUtils.getTemperature(stack);
+		int maxTemp = TemperatureUtils.getMaxTemp(stack);
+		int workableStart = TemperatureUtils.getWorkableTemperatureStart(stack);
+		int workableEnd = TemperatureUtils.getWorkableTemperatureEnd(stack);
 
-    private void refreshMorphImages(MinigameCallback callback) {
-        World world = callback.getWorld();
-        if (world != null && world.isClient) {
-            ItemStack stack = callback.getCurrentStack();
-            startingItemImage = RuntimeModelUtil.getFirstQuadTextureImage(stack, MinecraftClient.getInstance());
-            // plannedProductImage would need to be set based on planned product if available
-        }
-    }
+		hitStageIndices.add(stageIndexFor(
+				temperature,
+				maxTemp,
+				workableStart,
+				workableEnd
+		));
+
+		boolean fast = fastMarkerIndices.contains(markerIndex);
+		int tempChange = fast ? -10 : 40;
+
+		TemperatureUtils.setTemperature(
+				stack,
+				Math.max(0, Math.min(temperature + tempChange, maxTemp))
+		);
+
+		if (fast) {
+			fastMarkerHits++;
+		}
+	}
+
+	private void applyFailedMarkerAttempt() {
+		/*
+		 * Player misses and marker timeouts both count as failed attempts.
+		 * This makes quality punishment consistent and prevents infinite retries.
+		 */
+		missMarkerHits++;
+	}
+
+	private void finishIfComplete(MinigameCallback callback) {
+		if (!isComplete()) {
+			return;
+		}
+
+		ItemStack stack = callback.getCurrentStack();
+
+		if (!stack.isEmpty() && stack.getItem() instanceof MorphedItem) {
+			setMorphProgress(1.0, callback, null);
+		}
+	}
+
+	private int stageIndexFor(int temperature, int maxTemp, int workableStart, int workableEnd) {
+		DynamicTemperatureSystem.TemperatureStages stages =
+				DynamicTemperatureSystem.calculateStages(maxTemp, workableStart, workableEnd);
+
+		DynamicTemperatureSystem.TemperatureStage stage =
+				DynamicTemperatureSystem.getStage(temperature, stages);
+
+		return switch (stage) {
+			case COLD -> 0;
+			case WARM -> 1;
+			case HOT -> 2;
+			case WORKABLE -> 3;
+			case OVERHEATED -> 4;
+		};
+	}
+
+	public void setMarkerHit(int index, MinigameCallback callback) {
+		World world = callback.getWorld();
+
+		if (world != null && !world.isClient && index >= 0 && index < markerHits.size()) {
+			markerHits.set(index, true);
+			callback.playHitEffect(markerPositions.get(index));
+			clearActiveMarker();
+			callback.markDirty();
+		}
+	}
+
+	public void tick(MinigameCallback callback) {
+		ItemStack stackForMarker = callback.getCurrentStack();
+		boolean activeMorph = isMorphingActive(stackForMarker);
+
+		if (!activeMorph || stackForMarker.isEmpty()) {
+			if (!markerPositions.isEmpty() || markerSpawnDelay > 0) {
+				clearMarkerProgress();
+				callback.markDirty();
+			}
+
+			return;
+		}
+
+		if (isComplete()) {
+			finishIfComplete(callback);
+			return;
+		}
+
+		if (markerPositions.isEmpty()) {
+			if (markerSpawnDelay > 0) {
+				markerSpawnDelay--;
+			}
+
+			if (markerSpawnDelay == 0) {
+				Vec2f marker = nextMarkerPosition(stackForMarker, callback);
+
+				if (marker.equals(Vec2f.ZERO)) {
+					markerSpawnDelay = SUBSEQUENT_MARKER_DELAY_TICKS;
+					return;
+				}
+
+				markerPositions.add(marker);
+				markerHits.add(false);
+
+				markerTimeout = fastMarkerIndices.contains(markerHitsCount)
+						? MARKER_LIFETIME_TICKS_FAST
+						: MARKER_LIFETIME_TICKS_NORMAL;
+
+				callback.markDirty();
+				callback.spawnMarkerAppearanceEffect(marker, stackForMarker);
+			}
+		} else {
+			markerTimeout--;
+
+			if (markerTimeout <= 0) {
+				processMarkerAttempt(false, false, callback);
+			}
+		}
+	}
+
+	public boolean isComplete() {
+		return markerHitsCount >= TOTAL_MARKERS;
+	}
+
+	public void setMorphProgress(
+			double progress,
+			MinigameCallback callback,
+			@SuppressWarnings("unused") Identifier plannedProductId
+	) {
+		this.morphProgress = progress;
+
+		if (progress >= 1.0) {
+			ItemStack stack = callback.getCurrentStack();
+
+			if (!stack.isEmpty() && stack.getItem() instanceof MorphedItem) {
+				Item resultItem = MorphedItem.getResultItem(stack);
+
+				if (resultItem != null) {
+					ItemStack resultStack = new ItemStack(resultItem, stack.getCount());
+
+					var stateOpt = StateService.INSTANCE.convert(resultStack);
+
+					if (stateOpt.isPresent()
+							&& stateOpt.get() instanceof com.sigmundgranaas.forgero.core.condition.Conditional<?> conditional) {
+						var state = stateOpt.get();
+
+						MatchContext context = createMatchContext(callback, stack);
+
+						com.sigmundgranaas.forgero.core.condition.NamedCondition directCondition =
+								PredicateConditionLootRegistry.getCondition(context);
+
+						if (directCondition != null) {
+							var conditioned = conditional.applyCondition(directCondition);
+
+							var newStackOpt = StateService.INSTANCE.convert(
+									(com.sigmundgranaas.forgero.core.state.State) conditioned
+							);
+
+							if (newStackOpt.isPresent()) {
+								resultStack = newStackOpt.get();
+							}
+						} else {
+							var lootTable = PredicateConditionLootRegistry.getLootTable(context);
+
+							if (lootTable.isEmpty()) {
+								lootTable = PredicateConditionLootRegistry.NEUTRAL;
+							}
+
+							List<com.sigmundgranaas.forgero.core.condition.NamedCondition> applicableConditions =
+									lootTable.stream()
+											.filter(cond -> cond.matches(state))
+											.toList();
+
+							if (!applicableConditions.isEmpty()) {
+								com.sigmundgranaas.forgero.core.condition.NamedCondition randomCondition =
+										applicableConditions.get(new Random().nextInt(applicableConditions.size()));
+
+								var conditioned = conditional.applyCondition(randomCondition);
+
+								var newStackOpt = StateService.INSTANCE.convert(
+										(com.sigmundgranaas.forgero.core.state.State) conditioned
+								);
+
+								if (newStackOpt.isPresent()) {
+									resultStack = newStackOpt.get();
+								}
+							}
+						}
+					}
+
+					double currentTemp = TemperatureUtils.getTemperature(stack);
+					TemperatureUtils.setTemperature(resultStack, (int) Math.round(currentTemp));
+
+					callback.replaceWithResult(resultStack);
+
+					World world = callback.getWorld();
+
+					if (world != null && !world.isClient) {
+						world.playSound(
+								null,
+								callback.getPos(),
+								SoundEvents.BLOCK_ANVIL_USE,
+								SoundCategory.BLOCKS,
+								1.0f,
+								1.0f
+						);
+					}
+				}
+			}
+		}
+
+		callback.markDirty();
+	}
+
+	private MatchContext createMatchContext(MinigameCallback callback, ItemStack stack) {
+		MatchContext context = MatchContext.of();
+
+		World world = callback.getWorld();
+
+		if (world != null) {
+			context = context.put(MinecraftContextKeys.WORLD, world);
+			context = context.put(MinecraftContextKeys.BLOCK_TARGET, callback.getPos());
+		}
+
+		context = context.put(MinecraftContextKeys.STACK, stack);
+		context = context.put(MinecraftContextKeys.TOTAL_HITS, markerHitsCount);
+		context = context.put(MinecraftContextKeys.MISS_HITS, missMarkerHits);
+		context = context.put(MinecraftContextKeys.FAST_MARKER_HITS, fastMarkerHits);
+
+		return context;
+	}
+
+	public void saveProgressToItem(ItemStack stack) {
+		if (stack.isEmpty()) {
+			return;
+		}
+
+		NbtCompound itemNbt = stack.getOrCreateNbt();
+
+		itemNbt.putInt(HITS_NBT_KEY, markerHitsCount);
+		itemNbt.putInt(ATTEMPTS_NBT_KEY, markerAttempts);
+		itemNbt.putInt(MISS_MARKER_NBT_KEY, missMarkerHits);
+		itemNbt.putInt(FAST_MARKER_HITS_NBT_KEY, fastMarkerHits);
+		itemNbt.putIntArray(
+				"fastMarkerIndices",
+				fastMarkerIndices.stream().mapToInt(Integer::intValue).toArray()
+		);
+		itemNbt.putIntArray(
+				"hitStageIndices",
+				hitStageIndices.stream().mapToInt(Integer::intValue).toArray()
+		);
+		itemNbt.putDouble("morphProgress", morphProgress);
+	}
+
+	public void writeNbt(NbtCompound nbt) {
+		NbtCompound markersNbt = new NbtCompound();
+
+		for (int i = 0; i < markerPositions.size(); i++) {
+			Vec2f pos = markerPositions.get(i);
+			NbtCompound markerNbt = new NbtCompound();
+
+			markerNbt.putFloat("x", pos.x);
+			markerNbt.putFloat("y", pos.y);
+			markerNbt.putBoolean("hit", markerHits.size() > i && markerHits.get(i));
+
+			markersNbt.put("marker_" + i, markerNbt);
+		}
+
+		nbt.put("markers", markersNbt);
+		nbt.putInt(HITS_NBT_KEY, markerHitsCount);
+		nbt.putInt(ATTEMPTS_NBT_KEY, markerAttempts);
+		nbt.putInt(FAST_MARKER_HITS_NBT_KEY, fastMarkerHits);
+		nbt.putInt(MISS_MARKER_NBT_KEY, missMarkerHits);
+		nbt.putIntArray(
+				"hitStageIndices",
+				hitStageIndices.stream().mapToInt(Integer::intValue).toArray()
+		);
+		nbt.putIntArray(
+				"fastMarkerIndices",
+				fastMarkerIndices.stream().mapToInt(Integer::intValue).toArray()
+		);
+		nbt.putDouble("morphProgress", morphProgress);
+	}
+
+	public void readNbt(NbtCompound nbt) {
+		markerPositions.clear();
+		markerHits.clear();
+
+		if (nbt.contains("markers", NbtCompound.COMPOUND_TYPE)) {
+			NbtCompound markersNbt = nbt.getCompound("markers");
+
+			for (int i = 0; i < TOTAL_MARKERS; i++) {
+				if (markersNbt.contains("marker_" + i)) {
+					NbtCompound markerNbt = markersNbt.getCompound("marker_" + i);
+
+					markerPositions.add(new Vec2f(
+							markerNbt.getFloat("x"),
+							markerNbt.getFloat("y")
+					));
+					markerHits.add(markerNbt.getBoolean("hit"));
+				}
+			}
+		}
+
+		markerHitsCount = nbt.contains(HITS_NBT_KEY)
+				? nbt.getInt(HITS_NBT_KEY)
+				: markerHitsCount;
+
+		markerAttempts = markerHitsCount;
+
+		fastMarkerHits = nbt.contains(FAST_MARKER_HITS_NBT_KEY)
+				? nbt.getInt(FAST_MARKER_HITS_NBT_KEY)
+				: fastMarkerHits;
+
+		missMarkerHits = nbt.contains(MISS_MARKER_NBT_KEY)
+				? nbt.getInt(MISS_MARKER_NBT_KEY)
+				: nbt.contains("missHits") ? nbt.getInt("missHits") : 0;
+
+		hitStageIndices.clear();
+
+		if (nbt.contains("hitStageIndices")) {
+			int[] arr = nbt.getIntArray("hitStageIndices");
+
+			for (int v : arr) {
+				hitStageIndices.add(v);
+			}
+		}
+
+		fastMarkerIndices.clear();
+
+		if (nbt.contains("fastMarkerIndices")) {
+			int[] arr = nbt.getIntArray("fastMarkerIndices");
+
+			for (int idx : arr) {
+				fastMarkerIndices.add(idx);
+			}
+		}
+
+		if (nbt.contains("morphProgress")) {
+			morphProgress = nbt.getDouble("morphProgress");
+		}
+	}
+
+	public void restoreFromItemNbt(ItemStack stack) {
+		if (!stack.isEmpty()) {
+			NbtCompound itemNbt = stack.getOrCreateNbt();
+
+			this.markerHitsCount = itemNbt.getInt(HITS_NBT_KEY);
+			this.markerAttempts = this.markerHitsCount;
+			this.missMarkerHits = itemNbt.contains(MISS_MARKER_NBT_KEY)
+					? itemNbt.getInt(MISS_MARKER_NBT_KEY)
+					: 0;
+
+			if (itemNbt.contains("hitStageIndices")) {
+				hitStageIndices.clear();
+
+				int[] arr = itemNbt.getIntArray("hitStageIndices");
+
+				for (int v : arr) {
+					hitStageIndices.add(v);
+				}
+			}
+
+			if (itemNbt.contains(FAST_MARKER_HITS_NBT_KEY)) {
+				fastMarkerHits = itemNbt.getInt(FAST_MARKER_HITS_NBT_KEY);
+			}
+
+			if (itemNbt.contains("fastMarkerIndices")) {
+				fastMarkerIndices.clear();
+
+				int[] arr = itemNbt.getIntArray("fastMarkerIndices");
+
+				for (int idx : arr) {
+					fastMarkerIndices.add(idx);
+				}
+			}
+
+			if (itemNbt.contains("morphProgress")) {
+				morphProgress = itemNbt.getDouble("morphProgress");
+			}
+		} else {
+			this.markerHitsCount = 0;
+			this.markerAttempts = 0;
+			this.fastMarkerHits = 0;
+			this.missMarkerHits = 0;
+			this.morphProgress = 0.0;
+			this.hitStageIndices.clear();
+		}
+	}
+
+	public double getMorphProgress() {
+		if (TOTAL_MARKERS <= 0) {
+			return 0.0;
+		}
+
+		return Math.min(1.0, (double) markerHitsCount / TOTAL_MARKERS);
+	}
+
+	private void clearActiveMarker() {
+		markerPositions.clear();
+		markerHits.clear();
+		markerTimeout = 0;
+	}
+
+	private boolean isMorphingActive(ItemStack stack) {
+		return stack.getItem() instanceof MorphedItem
+				&& MorphedItem.getMorphProgress(stack) < 1.0;
+	}
+
+	private Vec2f nextMarkerPosition(ItemStack stackForMarker, MinigameCallback callback) {
+		if (stackForMarker.getItem() instanceof MorphedItem
+				&& callback instanceof com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity anvilEntity) {
+			Vec2f marker = MinigamePositioning.getRandomMarkerPositionMorphed(anvilEntity);
+
+			if (!marker.equals(Vec2f.ZERO)) {
+				return marker;
+			}
+		}
+
+		return MinigamePositioning.getRandomMarkerPosition(
+				stackForMarker,
+				callback.getCachedState()
+		);
+	}
+
+	private void updateMorphProgressOnItem(ItemStack stack) {
+		if (stack.isEmpty()) {
+			return;
+		}
+
+		if (stack.getItem() instanceof MorphedItem) {
+			stack.getOrCreateNbt().putDouble(MorphedItem.PROGRESS_KEY, getMorphProgress());
+		}
+	}
+
+	private void refreshMorphImages(MinigameCallback callback) {
+		World world = callback.getWorld();
+
+		if (world != null && world.isClient) {
+			ItemStack stack = callback.getCurrentStack();
+			startingItemImage = RuntimeModelUtil.getFirstQuadTextureImage(
+					stack,
+					MinecraftClient.getInstance()
+			);
+
+			// plannedProductImage would need to be set based on planned product if available.
+		}
+	}
 }
