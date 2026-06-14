@@ -615,50 +615,68 @@ public class MinigameLogic {
 	}
 
 	public void restoreFromItemNbt(ItemStack stack) {
-		if (!stack.isEmpty()) {
-			NbtCompound itemNbt = stack.getOrCreateNbt();
-
-			this.markerHitsCount = itemNbt.getInt(HITS_NBT_KEY);
-			this.markerAttempts = this.markerHitsCount;
-			this.missMarkerHits = itemNbt.contains(MISS_MARKER_NBT_KEY)
-					? itemNbt.getInt(MISS_MARKER_NBT_KEY)
-					: 0;
-
-			if (itemNbt.contains("hitStageIndices")) {
-				hitStageIndices.clear();
-
-				int[] arr = itemNbt.getIntArray("hitStageIndices");
-
-				for (int v : arr) {
-					hitStageIndices.add(v);
-				}
-			}
-
-			if (itemNbt.contains(FAST_MARKER_HITS_NBT_KEY)) {
-				fastMarkerHits = itemNbt.getInt(FAST_MARKER_HITS_NBT_KEY);
-			}
-
-			if (itemNbt.contains("fastMarkerIndices")) {
-				fastMarkerIndices.clear();
-
-				int[] arr = itemNbt.getIntArray("fastMarkerIndices");
-
-				for (int idx : arr) {
-					fastMarkerIndices.add(idx);
-				}
-			}
-
-			if (itemNbt.contains("morphProgress")) {
-				morphProgress = itemNbt.getDouble("morphProgress");
-			}
-		} else {
+		if (stack.isEmpty() || !(stack.getItem() instanceof MorphedItem)) {
 			this.markerHitsCount = 0;
 			this.markerAttempts = 0;
 			this.fastMarkerHits = 0;
 			this.missMarkerHits = 0;
 			this.morphProgress = 0.0;
 			this.hitStageIndices.clear();
+			this.fastMarkerIndices.clear();
+			return;
 		}
+
+		if (!stack.hasNbt()) {
+			this.markerHitsCount = 0;
+			this.markerAttempts = 0;
+			this.fastMarkerHits = 0;
+			this.missMarkerHits = 0;
+			this.morphProgress = 0.0;
+			this.hitStageIndices.clear();
+			this.fastMarkerIndices.clear();
+			return;
+		}
+
+		NbtCompound itemNbt = stack.getNbt();
+
+		if (itemNbt == null) {
+			return;
+		}
+
+		this.markerHitsCount = itemNbt.getInt(HITS_NBT_KEY);
+		this.markerAttempts = this.markerHitsCount;
+
+		this.missMarkerHits = itemNbt.contains(MISS_MARKER_NBT_KEY)
+				? itemNbt.getInt(MISS_MARKER_NBT_KEY)
+				: 0;
+
+		hitStageIndices.clear();
+
+		if (itemNbt.contains("hitStageIndices")) {
+			int[] arr = itemNbt.getIntArray("hitStageIndices");
+
+			for (int v : arr) {
+				hitStageIndices.add(v);
+			}
+		}
+
+		this.fastMarkerHits = itemNbt.contains(FAST_MARKER_HITS_NBT_KEY)
+				? itemNbt.getInt(FAST_MARKER_HITS_NBT_KEY)
+				: 0;
+
+		fastMarkerIndices.clear();
+
+		if (itemNbt.contains("fastMarkerIndices")) {
+			int[] arr = itemNbt.getIntArray("fastMarkerIndices");
+
+			for (int idx : arr) {
+				fastMarkerIndices.add(idx);
+			}
+		}
+
+		this.morphProgress = itemNbt.contains("morphProgress")
+				? itemNbt.getDouble("morphProgress")
+				: 0.0;
 	}
 
 	public double getMorphProgress() {

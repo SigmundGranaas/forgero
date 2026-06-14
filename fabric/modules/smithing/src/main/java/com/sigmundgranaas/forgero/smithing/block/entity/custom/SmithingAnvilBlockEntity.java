@@ -336,13 +336,15 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		ItemStack anvilItem = currentStack();
 
 		if (!anvilItem.isEmpty()) {
-			if (anvilItem.getItem() instanceof MorphedItem) {
-				minigameLogic.saveProgressToItem(anvilItem);
+			ItemStack itemToReturn = anvilItem.copy();
+
+			if (itemToReturn.getItem() instanceof MorphedItem) {
+				minigameLogic.saveProgressToItem(itemToReturn);
 			} else {
-				cleanPlainMaterialStack(anvilItem);
+				cleanPlainMaterialStack(itemToReturn);
 			}
 
-			player.getInventory().offerOrDrop(anvilItem.copy());
+			player.getInventory().offerOrDrop(itemToReturn);
 
 			getInventory().setStack(0, ItemStack.EMPTY);
 
