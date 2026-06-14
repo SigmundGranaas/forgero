@@ -2,7 +2,9 @@ package com.sigmundgranaas.forgero.smithing.block.entity.custom;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -14,11 +16,15 @@ import com.sigmundgranaas.forgero.smithing.minigame.MinigamePositioning;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
+import com.sigmundgranaas.forgero.smithing.util.SchematicMaterialCost;
 import com.sigmundgranaas.forgero.smithing.util.SchematicResultUtil;
+
 import lombok.Getter;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
@@ -56,15 +62,23 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 @Getter
 public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLogic.MinigameCallback {
 	private static final @NotNull String INVENTORY_NBT_KEY = "inventory";
+
 	private static final int ANVIL_INVENTORY_COOL_TICK_INTERVAL = 10;
+	private static final int GUI_COOLDOWN_TICKS = 20;
+	private static final int DEFAULT_COOLING_AMOUNT = 4;
+	private static final int MAX_MATERIAL_STACK_ON_ANVIL = 3;
+
 	private static final float ANVIL_TOP_Y = 0.9375f;
 	private static final float Y_FIGHTING_OFFSET = 0.001f;
 	private static final float MARKER_VISUAL_Y_OFFSET = 0.01f;
-	private static final int GUI_COOLDOWN_TICKS = 20;
-	private static final int DEFAULT_COOLING_AMOUNT = 4;
-	private static final TagKey<Item> INGOTS_TAG = TagKey.of(RegistryKeys.ITEM, new Identifier("c", "ingots"));
+
+	private static final TagKey<Item> INGOTS_TAG = TagKey.of(
+			RegistryKeys.ITEM,
+			new Identifier("c", "ingots")
+	);
 
 	private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1, ItemStack.EMPTY);
+
 	private final SimpleInventory simpleInventory = new SimpleInventory(inventory.size()) {
 		@Override
 		public ItemStack getStack(int slot) {
@@ -85,6 +99,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	private int anvilInventoryCoolTickCounter = 0;
 
 	private boolean isSmithing = false;
+
 	@Nullable
 	private Identifier plannedProductId = null;
 
@@ -102,36 +117,108 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 
 	@Override
 	public void playHitEffect(Vec2f markerLocalPos) {
-		if (!(world instanceof ServerWorld serverWorld)) return;
+		if (!(world instanceof ServerWorld serverWorld)) {
+			return;
+		}
 
 		float particleY = serverParticleY();
 		Vec2f offsetVec = resolveOffsetVec(currentStack());
+
 		net.minecraft.util.math.Vec3d worldPos = MinigamePositioning.itemLocalToWorld(
-				markerLocalPos, getPos(), getCachedState(), offsetVec, particleY
+				markerLocalPos,
+				getPos(),
+				getCachedState(),
+				offsetVec,
+				particleY
 		);
 
-		serverWorld.spawnParticles(ParticleTypes.FLAME, worldPos.x, worldPos.y, worldPos.z, 4, 0.001, 0.001, 0.001, 0.05);
-		serverWorld.spawnParticles(ParticleTypes.LAVA, worldPos.x, worldPos.y, worldPos.z, 2, 0.01, 0.01, 0.01, 0.02);
-		serverWorld.playSound(null, getPos(), SoundEvents.BLOCK_ANVIL_PLACE, SoundCategory.BLOCKS, 1f, 1f);
+		serverWorld.spawnParticles(
+				ParticleTypes.FLAME,
+				worldPos.x,
+				worldPos.y,
+				worldPos.z,
+				4,
+				0.001,
+				0.001,
+				0.001,
+				0.05
+		);
+
+		serverWorld.spawnParticles(
+				ParticleTypes.LAVA,
+				worldPos.x,
+				worldPos.y,
+				worldPos.z,
+				2,
+				0.01,
+				0.01,
+				0.01,
+				0.02
+		);
+
+		serverWorld.playSound(
+				null,
+				getPos(),
+				SoundEvents.BLOCK_ANVIL_PLACE,
+				SoundCategory.BLOCKS,
+				1f,
+				1f
+		);
 	}
 
 	@Override
 	public void playMissEffect() {
-		if (!(world instanceof ServerWorld serverWorld)) return;
+		if (!(world instanceof ServerWorld serverWorld)) {
+			return;
+		}
 
-		serverWorld.playSound(null, getPos(), SoundEvents.ITEM_AXE_SCRAPE, SoundCategory.BLOCKS, 1f, 1.0f);
-		serverWorld.spawnParticles(ParticleTypes.SMOKE, getPos().getX() + 0.5, getPos().getY() + 1.0,
-			getPos().getZ() + 0.5, 10, 0.3, 0.1, 0.3, 0.05);
+		serverWorld.playSound(
+				null,
+				getPos(),
+				SoundEvents.ITEM_AXE_SCRAPE,
+				SoundCategory.BLOCKS,
+				1f,
+				1.0f
+		);
+
+		serverWorld.spawnParticles(
+				ParticleTypes.SMOKE,
+				getPos().getX() + 0.5,
+				getPos().getY() + 1.0,
+				getPos().getZ() + 0.5,
+				10,
+				0.3,
+				0.1,
+				0.3,
+				0.05
+		);
 	}
 
 	@Override
 	public void spawnMarkerAppearanceEffect(Vec2f markerLocalPos, ItemStack itemStack) {
-		if (!(world instanceof ServerWorld serverWorld)) return;
+		if (!(world instanceof ServerWorld serverWorld)) {
+			return;
+		}
 
 		float particleY = serverParticleY();
 		Vec2f offsetVec = resolveOffsetVec(itemStack);
-		MinigamePositioning.itemLocalToWorld(markerLocalPos, getPos(), getCachedState(), offsetVec, particleY);
-		serverWorld.playSound(null, getPos(), SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.BLOCKS, 0.5f, 1.0f);
+
+		MinigamePositioning.itemLocalToWorld(
+				markerLocalPos,
+				getPos(),
+				getCachedState(),
+				offsetVec,
+				particleY
+		);
+
+		serverWorld.playSound(
+				null,
+				getPos(),
+				SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP,
+				SoundCategory.BLOCKS,
+				0.5f,
+				1.0f
+		);
 	}
 
 	@Override
@@ -158,7 +245,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	}
 
 	private Vec2f resolveOffsetVec(ItemStack stack) {
-		boolean isMorphedOrPlanned = (isSmithing && plannedProductId != null) || stack.getItem() instanceof MorphedItem;
+		boolean isMorphedOrPlanned = (isSmithing && plannedProductId != null)
+				|| stack.getItem() instanceof MorphedItem;
+
 		return isMorphedOrPlanned
 				? MinigamePositioning.getMorphedTextureOffsetVec2f(this)
 				: MinigamePositioning.getItemTextureOffsetVec2f(stack);
@@ -172,12 +261,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		isSmithing = false;
 		plannedProductId = null;
 	}
-
-	//private boolean isHotEnoughForWork(ItemStack stack) {
-	//	int temperature = TemperatureUtils.getTemperature(stack);
-	//	int maxTemp = TemperatureUtils.getMaxTemp(stack);
-	//	return TemperatureColorProvider.isHotEnoughForWork(temperature, maxTemp);
-	//}
 
 	private void informPlayerHeatRequired(PlayerEntity player) {
 		player.sendMessage(net.minecraft.text.Text.of("That needs to be heaten up first!"), true);
@@ -213,6 +296,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		}
 
 		Vec2f offsetVec = resolveOffsetVec(anvilItem);
+
 		Vec2f itemLocalHit = MinigamePositioning.worldHitToItemLocal(
 				hitResult,
 				getCachedState(),
@@ -235,7 +319,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	}
 
 	private boolean shouldOpenSchematicSelection(ItemStack stack) {
-		return isSmithing && plannedProductId == null && !(stack.getItem() instanceof MorphedItem);
+		return isSmithing
+				&& plannedProductId == null
+				&& !(stack.getItem() instanceof MorphedItem);
 	}
 
 	public boolean isGuiBlocked(World world) {
@@ -248,15 +334,23 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		}
 
 		ItemStack anvilItem = currentStack();
+
 		if (!anvilItem.isEmpty()) {
 			minigameLogic.saveProgressToItem(anvilItem);
+
 			player.getInventory().offerOrDrop(anvilItem.copy());
+
 			getInventory().setStack(0, ItemStack.EMPTY);
+
 			resetCraftingState();
+
 			markDirty();
+
 			minigameLogic.resetMarkerProgress(this);
+
 			guiBlockCooldownUntil = world.getTime() + GUI_COOLDOWN_TICKS;
 		}
+
 		return ActionResult.SUCCESS;
 	}
 
@@ -266,34 +360,128 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		}
 
 		ItemStack stackInHand = player.getStackInHand(hand);
+
+		if (stackInHand.isEmpty()) {
+			return ActionResult.SUCCESS;
+		}
+
 		ItemStack anvilItem = getInventory().getStack(0);
 
-		if (!anvilItem.isEmpty() || !TemperatureUtils.hasMaxTemperature(stackInHand)) {
+		if (stackInHand.getItem() instanceof MorphedItem) {
+			return tryPlaceMorphedItem(stackInHand);
+		}
+
+		if (!isValidSmithingMaterial(stackInHand)) {
+			return ActionResult.SUCCESS;
+		}
+
+		if (anvilItem.isEmpty()) {
+			placeFirstMaterialIngot(stackInHand);
+			return ActionResult.SUCCESS;
+		}
+
+		if (canAddMaterialIngot(anvilItem, stackInHand)) {
+			addMaterialIngot(anvilItem, stackInHand);
+			return ActionResult.SUCCESS;
+		}
+
+		return ActionResult.SUCCESS;
+	}
+
+	private ActionResult tryPlaceMorphedItem(ItemStack stackInHand) {
+		ItemStack anvilItem = getInventory().getStack(0);
+
+		if (!anvilItem.isEmpty()) {
 			return ActionResult.SUCCESS;
 		}
 
 		ItemStack toPlace = stackInHand.copy();
 		toPlace.setCount(1);
+
 		getInventory().setStack(0, toPlace);
-		isSmithing = !(stackInHand.getItem() instanceof MorphedItem);
+
+		isSmithing = false;
 		plannedProductId = null;
+
 		stackInHand.decrement(1);
 
-		if (stackInHand.getItem() instanceof MorphedItem) {
-			minigameLogic.restoreFromItemNbt(toPlace);
-			minigameLogic.getMarkerPositions().clear();
-			minigameLogic.getMarkerHits().clear();
-		} else {
-			minigameLogic.resetMarkerProgress(this);
-		}
+		minigameLogic.restoreFromItemNbt(toPlace);
+		minigameLogic.getMarkerPositions().clear();
+		minigameLogic.getMarkerHits().clear();
 
 		markDirty();
+
 		return ActionResult.SUCCESS;
+	}
+
+	private boolean isValidSmithingMaterial(ItemStack stack) {
+		return !stack.isEmpty()
+				&& stack.isIn(INGOTS_TAG)
+				&& TemperatureUtils.hasMaxTemperature(stack);
+	}
+
+	private void placeFirstMaterialIngot(ItemStack stackInHand) {
+		ItemStack toPlace = stackInHand.copy();
+		toPlace.setCount(1);
+
+		getInventory().setStack(0, toPlace);
+
+		isSmithing = true;
+		plannedProductId = null;
+
+		stackInHand.decrement(1);
+
+		minigameLogic.resetMarkerProgress(this);
+
+		markDirty();
+	}
+
+	private boolean canAddMaterialIngot(ItemStack anvilItem, ItemStack stackInHand) {
+		if (plannedProductId != null) {
+			return false;
+		}
+
+		if (!isSmithing) {
+			return false;
+		}
+
+		if (anvilItem.getItem() instanceof MorphedItem) {
+			return false;
+		}
+
+		if (!isValidSmithingMaterial(anvilItem) || !isValidSmithingMaterial(stackInHand)) {
+			return false;
+		}
+
+		if (!anvilItem.isOf(stackInHand.getItem())) {
+			return false;
+		}
+
+		return anvilItem.getCount() < MAX_MATERIAL_STACK_ON_ANVIL;
+	}
+
+	private void addMaterialIngot(ItemStack anvilItem, ItemStack stackInHand) {
+		int existingTemp = TemperatureUtils.getTemperature(anvilItem);
+		int addedTemp = TemperatureUtils.getTemperature(stackInHand);
+		int combinedTemp = Math.min(existingTemp, addedTemp);
+
+		anvilItem.increment(1);
+		TemperatureUtils.setTemperature(anvilItem, combinedTemp);
+
+		stackInHand.decrement(1);
+
+		isSmithing = true;
+		plannedProductId = null;
+
+		minigameLogic.resetMarkerProgress(this);
+
+		markDirty();
 	}
 
 	@Override
 	public void markDirty() {
 		super.markDirty();
+
 		if (isServer()) {
 			world.updateListeners(pos, getCachedState(), getCachedState(), 3);
 			syncCustomDataToClients();
@@ -313,15 +501,18 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	@Override
 	public void writeNbt(@NotNull NbtCompound nbt) {
 		super.writeNbt(nbt);
+
 		Inventories.writeNbt(nbt, this.inventory);
 		minigameLogic.writeNbt(nbt);
 
 		ItemStack stack = simpleInventory.getStack(0);
+
 		if (!stack.isEmpty()) {
 			writeItemNbtData(stack, minigameLogic);
 		}
 
 		nbt.putBoolean("ingotCrafting", isSmithing);
+
 		if (plannedProductId != null) {
 			nbt.putString("plannedProductId", plannedProductId.toString());
 		}
@@ -348,10 +539,12 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	@Override
 	public void readNbt(@NotNull NbtCompound nbt) {
 		super.readNbt(nbt);
+
 		Inventories.readNbt(nbt, this.inventory);
 		minigameLogic.readNbt(nbt);
 
 		ItemStack stack = simpleInventory.getStack(0);
+
 		if (!stack.isEmpty()) {
 			minigameLogic.restoreFromItemNbt(stack);
 		} else {
@@ -364,7 +557,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	}
 
 	private @Nullable Identifier tryParseIdentifier(String idString) {
-		if (idString == null || idString.isEmpty()) return null;
+		if (idString == null || idString.isEmpty()) {
+			return null;
+		}
+
 		try {
 			return new Identifier(idString);
 		} catch (Exception e) {
@@ -384,41 +580,48 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 			writeItemNbtData(stack, minigameLogic);
 		}
 
-		PacketByteBuf data = PacketByteBufs.create();
-
-		data.writeBlockPos(getPos());
-		data.writeInt(simpleInventory.size());
-
-		for (int i = 0; i < simpleInventory.size(); i++) {
-			data.writeItemStack(simpleInventory.getStack(i));
-		}
-
-		data.writeInt(minigameLogic.getMarkerPositions().size());
-		for (int i = 0; i < minigameLogic.getMarkerPositions().size(); i++) {
-			Vec2f pos = minigameLogic.getMarkerPositions().get(i);
-			data.writeFloat(pos.x);
-			data.writeFloat(pos.y);
-			boolean hit = i < minigameLogic.getMarkerHits().size() && minigameLogic.getMarkerHits().get(i);
-			data.writeBoolean(hit);
-		}
-
-		data.writeInt(minigameLogic.getFastMarkerIndices().size());
-		for (int idx : minigameLogic.getFastMarkerIndices()) {
-			data.writeInt(idx);
-		}
-
-		data.writeInt(minigameLogic.getMarkerAttempts());
-		data.writeInt(minigameLogic.getMarkerHitsCount());
-
-		data.writeBoolean(isSmithing);
-		data.writeBoolean(plannedProductId != null);
-		if (plannedProductId != null) {
-			data.writeIdentifier(plannedProductId);
-		}
-
-		data.writeBoolean(pendingFinalMorphNotify);
-
 		for (ServerPlayerEntity player : PlayerLookup.tracking((ServerWorld) world, getPos())) {
+			PacketByteBuf data = PacketByteBufs.create();
+
+			data.writeBlockPos(getPos());
+			data.writeInt(simpleInventory.size());
+
+			for (int i = 0; i < simpleInventory.size(); i++) {
+				data.writeItemStack(simpleInventory.getStack(i));
+			}
+
+			data.writeInt(minigameLogic.getMarkerPositions().size());
+
+			for (int i = 0; i < minigameLogic.getMarkerPositions().size(); i++) {
+				Vec2f markerPos = minigameLogic.getMarkerPositions().get(i);
+
+				data.writeFloat(markerPos.x);
+				data.writeFloat(markerPos.y);
+
+				boolean hit = i < minigameLogic.getMarkerHits().size()
+						&& minigameLogic.getMarkerHits().get(i);
+
+				data.writeBoolean(hit);
+			}
+
+			data.writeInt(minigameLogic.getFastMarkerIndices().size());
+
+			for (int idx : minigameLogic.getFastMarkerIndices()) {
+				data.writeInt(idx);
+			}
+
+			data.writeInt(minigameLogic.getMarkerAttempts());
+			data.writeInt(minigameLogic.getMarkerHitsCount());
+
+			data.writeBoolean(isSmithing);
+			data.writeBoolean(plannedProductId != null);
+
+			if (plannedProductId != null) {
+				data.writeIdentifier(plannedProductId);
+			}
+
+			data.writeBoolean(pendingFinalMorphNotify);
+
 			ServerPlayNetworking.send(player, ModMessages.ITEM_SYNC, data);
 		}
 
@@ -444,6 +647,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 
 		updateGuiCooldown();
 		updateTemperatureCooling();
+
 		minigameLogic.tick(this);
 	}
 
@@ -455,32 +659,53 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 
 	private void updateTemperatureCooling() {
 		anvilInventoryCoolTickCounter++;
+
 		if (anvilInventoryCoolTickCounter < ANVIL_INVENTORY_COOL_TICK_INTERVAL) {
 			return;
 		}
+
 		anvilInventoryCoolTickCounter = 0;
 
 		ItemStack stack = currentStack();
-		if (shouldCoolStack(stack)) {
-			coolStack(stack);
+
+		if (!shouldCoolStack(stack)) {
+			return;
 		}
-		markDirty();
+
+		boolean temperatureChanged = coolStack(stack);
+
+		if (temperatureChanged) {
+			markDirty();
+		}
 	}
 
 	private boolean shouldCoolStack(ItemStack stack) {
 		if (stack.isEmpty() || !TemperatureUtils.hasMaxTemperature(stack)) {
 			return false;
 		}
-		boolean schematicSelected = (isSmithing && plannedProductId != null) || stack.getItem() instanceof MorphedItem;
+
+		boolean schematicSelected = (isSmithing && plannedProductId != null)
+				|| stack.getItem() instanceof MorphedItem;
+
 		return schematicSelected;
 	}
 
-	private void coolStack(ItemStack stack) {
+	private boolean coolStack(ItemStack stack) {
 		int temp = TemperatureUtils.getTemperature(stack);
-		if (temp > 20) {
-			int newTemp = Math.max(20, temp - anvilInventoryCoolAmountPerTick);
-			TemperatureUtils.setTemperature(stack, newTemp);
+
+		if (temp <= 20) {
+			return false;
 		}
+
+		int newTemp = Math.max(20, temp - anvilInventoryCoolAmountPerTick);
+
+		if (newTemp == temp) {
+			return false;
+		}
+
+		TemperatureUtils.setTemperature(stack, newTemp);
+
+		return true;
 	}
 
 	public void saveProgressToItem() {
@@ -533,33 +758,84 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	}
 
 	public void openSchematicSelection(PlayerEntity player) {
-		if (world == null || world.isClient) return;
+		if (world == null || world.isClient) {
+			return;
+		}
+
+		ItemStack materialStack = currentStack();
+
+		if (materialStack.isEmpty() || materialStack.getItem() instanceof MorphedItem) {
+			return;
+		}
+
+		int materialCount = materialStack.getCount();
+
+		Map<Identifier, Integer> costs = new LinkedHashMap<>();
+
 		List<Identifier> options = SchematicResultUtil.findAvailableSchematicProductsForPlayer(player)
 				.stream()
 				.filter(id -> !createProductFromPlanned(id).isEmpty())
+				.peek(id -> costs.put(id, SchematicMaterialCost.getCost(id)))
 				.collect(Collectors.toList());
-		SchematicResultUtil.openSchematicSelection(player, getPos(), options, world);
+
+		SchematicResultUtil.openSchematicSelection(
+				player,
+				getPos(),
+				options,
+				costs,
+				materialCount,
+				world
+		);
 	}
 
 	public void setPlannedProduct(Identifier productId) {
+		setPlannedProduct(null, productId);
+	}
+
+	public void setPlannedProduct(@Nullable PlayerEntity player, Identifier productId) {
 		this.plannedProductId = productId;
-		markDirty();
-		replaceIngotWithMorphed();
+
+		boolean converted = replaceIngotWithMorphed(player);
+
+		if (!converted) {
+			this.plannedProductId = null;
+			markDirty();
+			return;
+		}
+
 		minigameLogic.resetMarkerProgress(this);
 
 		if (world != null && world.isClient) {
 			ItemStack plannedStack = createProductFromPlanned(productId);
-			plannedProductImage = RuntimeModelUtil.getFirstQuadTextureImage(plannedStack, MinecraftClient.getInstance());
+
+			plannedProductImage = RuntimeModelUtil.getFirstQuadTextureImage(
+					plannedStack,
+					MinecraftClient.getInstance()
+			);
 		}
+
+		markDirty();
 	}
 
 	public void clientRefreshMorphImages() {
-		if (world == null || !world.isClient) return;
+		if (world == null || !world.isClient) {
+			return;
+		}
+
 		ItemStack stack = getInventory().getStack(0);
-		this.startingItemImage = RuntimeModelUtil.getFirstQuadTextureImage(stack, MinecraftClient.getInstance());
+
+		this.startingItemImage = RuntimeModelUtil.getFirstQuadTextureImage(
+				stack,
+				MinecraftClient.getInstance()
+		);
+
 		if (plannedProductId != null) {
 			ItemStack plannedStack = createProductFromPlanned(plannedProductId);
-			this.plannedProductImage = RuntimeModelUtil.getFirstQuadTextureImage(plannedStack, MinecraftClient.getInstance());
+
+			this.plannedProductImage = RuntimeModelUtil.getFirstQuadTextureImage(
+					plannedStack,
+					MinecraftClient.getInstance()
+			);
 		} else {
 			this.plannedProductImage = null;
 		}
@@ -567,48 +843,71 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 
 	public ItemStack createProductFromPlanned(Identifier productId) {
 		ItemStack result = tryCreateFromStateService(productId);
-		if (!result.isEmpty()) return result;
+
+		if (!result.isEmpty()) {
+			return result;
+		}
 
 		String material = detectMaterialForStack(getInventory().getStack(0));
 		List<Identifier> candidates = buildCandidateIds(productId, material);
 
 		result = tryResolveFromCandidates(candidates);
+
 		return result.isEmpty() ? ItemStack.EMPTY : result;
 	}
 
 	private ItemStack tryCreateFromStateService(Identifier productId) {
 		try {
 			var maybeState = StateService.INSTANCE.find(productId.toString());
+
 			if (maybeState.isPresent()) {
 				var stackOpt = StateService.INSTANCE.convert(maybeState.get());
+
 				if (stackOpt.isPresent()) {
 					return stackOpt.get();
 				}
 			}
 		} catch (Throwable ignored) {
 		}
+
 		return ItemStack.EMPTY;
 	}
 
 	private List<Identifier> buildCandidateIds(Identifier productId, String material) {
 		List<Identifier> candidates = new ArrayList<>();
+
 		if (material != null && !material.isEmpty()) {
-			candidates.add(new Identifier(productId.getNamespace(), material + "_" + productId.getPath()));
-			candidates.add(new Identifier(productId.getNamespace(), material + "-" + productId.getPath()));
+			candidates.add(new Identifier(
+					productId.getNamespace(),
+					material + "_" + productId.getPath()
+			));
+
+			candidates.add(new Identifier(
+					productId.getNamespace(),
+					material + "-" + productId.getPath()
+			));
 		}
+
 		candidates.add(productId);
+
 		return candidates;
 	}
 
 	private ItemStack tryResolveFromCandidates(List<Identifier> candidates) {
 		for (Identifier id : candidates) {
 			ItemStack result = tryResolveFromStateService(id);
-			if (!result.isEmpty()) return result;
+
+			if (!result.isEmpty()) {
+				return result;
+			}
 		}
 
 		for (Identifier id : candidates) {
 			ItemStack result = tryResolveFromRegistry(id);
-			if (!result.isEmpty()) return result;
+
+			if (!result.isEmpty()) {
+				return result;
+			}
 		}
 
 		return ItemStack.EMPTY;
@@ -617,30 +916,37 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	private ItemStack tryResolveFromStateService(Identifier id) {
 		try {
 			var maybeState = StateService.INSTANCE.find(id.toString());
+
 			if (maybeState.isPresent()) {
 				var stackOpt = StateService.INSTANCE.convert(maybeState.get());
+
 				if (stackOpt.isPresent() && !stackOpt.get().isEmpty()) {
 					return stackOpt.get();
 				}
 			}
 		} catch (Throwable ignored) {
 		}
+
 		return ItemStack.EMPTY;
 	}
 
 	private ItemStack tryResolveFromRegistry(Identifier id) {
 		try {
 			var itemOpt = Registries.ITEM.getOrEmpty(id);
+
 			if (itemOpt.isPresent()) {
 				return new ItemStack(itemOpt.get());
 			}
 		} catch (Throwable ignored) {
 		}
+
 		return ItemStack.EMPTY;
 	}
 
 	private String detectMaterialForStack(ItemStack stack) {
-		if (stack.isEmpty()) return "";
+		if (stack.isEmpty()) {
+			return "";
+		}
 
 		Identifier id = Registries.ITEM.getId(stack.getItem());
 		String path = id.getPath();
@@ -649,12 +955,17 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 			if (path.endsWith("_ingot")) {
 				return path.substring(0, path.length() - "_ingot".length());
 			}
+
 			return path;
 		}
+
 		return path;
 	}
 
-	public void clientSyncIngotState(boolean ingotCrafting, @Nullable Identifier plannedProductId) {
+	public void clientSyncIngotState(
+			boolean ingotCrafting,
+			@Nullable Identifier plannedProductId
+	) {
 		this.isSmithing = ingotCrafting;
 		this.plannedProductId = plannedProductId;
 	}
@@ -663,48 +974,81 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		this.showFinalMorphOnce = true;
 	}
 
-	private void replaceIngotWithMorphed() {
-		if (world == null || world.isClient || plannedProductId == null) return;
+	private boolean replaceIngotWithMorphed(@Nullable PlayerEntity player) {
+		if (world == null || world.isClient || plannedProductId == null) {
+			return false;
+		}
 
 		ItemStack current = getInventory().getStack(0);
-		if (current.isEmpty()) return;
 
-		// Read temperature BEFORE creating new stack
+		if (current.isEmpty()) {
+			return false;
+		}
+
+		int requiredCost = SchematicMaterialCost.getCost(plannedProductId);
+
+		if (current.getCount() < requiredCost) {
+			return false;
+		}
+
 		int currentTemp = TemperatureUtils.getTemperature(current);
 		int maxTemp = TemperatureUtils.getMaxTemp(current);
 		int workableStart = TemperatureUtils.getWorkableTemperatureStart(current);
 		int workableEnd = TemperatureUtils.getWorkableTemperatureEnd(current);
 
 		Item morphedItem = findMorphedItem();
-		if (morphedItem == null) return;
 
-		ItemStack morphed = new ItemStack(morphedItem, 1);
-		ItemStack resultStack = createProductFromPlanned(plannedProductId);
-
-		if (!resultStack.isEmpty()) {
-			MorphedItem.setResultItem(morphed, resultStack.getItem());
-		} else {
-			morphed.getOrCreateNbt().putString(MorphedItem.RESULT_KEY, plannedProductId.toString());
+		if (morphedItem == null) {
+			return false;
 		}
 
+		ItemStack resultStack = createProductFromPlanned(plannedProductId);
+
+		if (resultStack.isEmpty()) {
+			return false;
+		}
+
+		ItemStack morphed = new ItemStack(morphedItem, 1);
+
+		MorphedItem.setResultItem(morphed, resultStack.getItem());
 		MorphedItem.setStartItem(morphed, current.getItem());
 		MorphedItem.setMorphProgress(morphed, 0.0);
 
-		// Copy ALL temperature-related data to morphed item
+		morphed.getOrCreateNbt().putInt(
+				SchematicMaterialCost.MATERIAL_COST_KEY,
+				requiredCost
+		);
+
 		TemperatureUtils.setTemperature(morphed, currentTemp);
 		TemperatureUtils.setMaxTemperature(morphed, maxTemp);
 		TemperatureUtils.setWorkableTemperatureStart(morphed, workableStart);
 		TemperatureUtils.setWorkableTemperatureEnd(morphed, workableEnd);
 
-		// Verify temperature was set correctly
 		int verifyTemp = TemperatureUtils.getTemperature(morphed);
+
 		if (verifyTemp != currentTemp) {
-			// Fallback: manually set NBT if setter didn't work
-			morphed.getOrCreateNbt().putInt(TemperatureUtils.TEMPERATURE_KEY, currentTemp);
+			morphed.getOrCreateNbt().putInt(
+					TemperatureUtils.TEMPERATURE_KEY,
+					currentTemp
+			);
+		}
+
+		int leftoverCount = current.getCount() - requiredCost;
+
+		if (leftoverCount > 0) {
+			ItemStack leftover = current.copy();
+			leftover.setCount(leftoverCount);
+
+			if (player != null) {
+				player.getInventory().offerOrDrop(leftover);
+			} else {
+				Block.dropStack(world, getPos().up(), leftover);
+			}
 		}
 
 		getInventory().setStack(0, morphed);
-		markDirty();
+
+		return true;
 	}
 
 	@Nullable
@@ -714,6 +1058,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 				return item;
 			}
 		}
+
 		return null;
 	}
 }

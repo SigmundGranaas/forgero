@@ -46,6 +46,6 @@ public final class SchematicSelectionC2SPacket {
 			return;
 		}
 
-		anvil.setPlannedProduct(selected);
+		anvil.setPlannedProduct(player, selected);
 	}
 }

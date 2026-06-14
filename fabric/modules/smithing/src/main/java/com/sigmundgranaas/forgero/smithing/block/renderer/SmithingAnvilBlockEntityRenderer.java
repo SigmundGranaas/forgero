@@ -1,7 +1,10 @@
 package com.sigmundgranaas.forgero.smithing.block.renderer;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
+import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import com.sigmundgranaas.forgero.smithing.minigame.MinigamePositioning;
+
+import com.sigmundgranaas.forgero.smithing.util.SchematicMaterialCost;
 
 import net.minecraft.block.AnvilBlock;
 import net.minecraft.client.MinecraftClient;
@@ -126,15 +129,92 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 			MARKER_RED, greenComponent, MARKER_NO_BLUE, MARKER_ALPHA);
 	}
 
-	private void renderItem(MatrixStack matrices, VertexConsumerProvider vertexConsumers,
-			SmithingAnvilBlockEntity entity, ItemStack itemStack, int light, int overlay) {
+	private void renderItem(
+			MatrixStack matrices,
+			VertexConsumerProvider vertexConsumers,
+			SmithingAnvilBlockEntity entity,
+			ItemStack itemStack,
+			int light,
+			int overlay
+	) {
+		if (!(itemStack.getItem() instanceof MorphedItem) && itemStack.getCount() > 1) {
+			renderMaterialStack(matrices, vertexConsumers, entity, itemStack, light, overlay);
+			return;
+		}
+
+		renderSingleItem(matrices, vertexConsumers, entity, itemStack, light, overlay);
+	}
+
+	private void renderMaterialStack(
+			MatrixStack matrices,
+			VertexConsumerProvider vertexConsumers,
+			SmithingAnvilBlockEntity entity,
+			ItemStack itemStack,
+			int light,
+			int overlay
+	) {
+		int count = Math.min(itemStack.getCount(), SchematicMaterialCost.MAX_MATERIAL_COST);
+
+		for (int i = 0; i < count; i++) {
+			matrices.push();
+
+			Vec2f offset = getMaterialStackOffset(i, count);
+
+			matrices.translate(offset.x, 0.002f * i, offset.y);
+
+			ItemStack single = itemStack.copy();
+			single.setCount(1);
+
+			renderSingleItem(matrices, vertexConsumers, entity, single, light, overlay);
+
+			matrices.pop();
+		}
+	}
+
+	private Vec2f getMaterialStackOffset(int index, int count) {
+		if (count <= 1) {
+			return Vec2f.ZERO;
+		}
+
+		if (count == 2) {
+			return switch (index) {
+				case 0 -> new Vec2f(-0.075f, 0.0f);
+				case 1 -> new Vec2f(0.075f, 0.0f);
+				default -> Vec2f.ZERO;
+			};
+		}
+
+		return switch (index) {
+			case 0 -> new Vec2f(-0.08f, -0.045f);
+			case 1 -> new Vec2f(0.08f, -0.045f);
+			case 2 -> new Vec2f(0.0f, 0.065f);
+			default -> Vec2f.ZERO;
+		};
+	}
+
+	private void renderSingleItem(
+			MatrixStack matrices,
+			VertexConsumerProvider vertexConsumers,
+			SmithingAnvilBlockEntity entity,
+			ItemStack itemStack,
+			int light,
+			int overlay
+	) {
 		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
 
 		int lightLevel = getLightLevel(entity.getWorld(), entity.getPos());
 		ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
 
-		itemRenderer.renderItem(itemStack, ModelTransformationMode.NONE, lightLevel, overlay,
-				matrices, vertexConsumers, entity.getWorld(), (int) entity.getPos().asLong());
+		itemRenderer.renderItem(
+				itemStack,
+				ModelTransformationMode.NONE,
+				lightLevel,
+				overlay,
+				matrices,
+				vertexConsumers,
+				entity.getWorld(),
+				(int) entity.getPos().asLong()
+		);
 	}
 
 	private int getLightLevel(World world, BlockPos pos) {

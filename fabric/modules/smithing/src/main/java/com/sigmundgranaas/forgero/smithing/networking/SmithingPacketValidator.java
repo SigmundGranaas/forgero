@@ -5,6 +5,7 @@ import java.util.List;
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
+import com.sigmundgranaas.forgero.smithing.util.SchematicMaterialCost;
 import com.sigmundgranaas.forgero.smithing.util.SchematicResultUtil;
 
 import net.minecraft.block.AnvilBlock;
@@ -99,6 +100,12 @@ public final class SmithingPacketValidator {
 		}
 
 		if (!TemperatureUtils.hasMaxTemperature(anvilStack)) {
+			return false;
+		}
+
+		int requiredCost = SchematicMaterialCost.getCost(selectedProduct);
+
+		if (anvilStack.getCount() < requiredCost) {
 			return false;
 		}
 

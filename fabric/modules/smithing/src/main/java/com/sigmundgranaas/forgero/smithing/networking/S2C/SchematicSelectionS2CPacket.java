@@ -1,12 +1,15 @@
 package com.sigmundgranaas.forgero.smithing.networking.S2C;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -21,14 +24,23 @@ public class SchematicSelectionS2CPacket {
 	@Environment(EnvType.CLIENT)
 	public static void receive(net.minecraft.client.MinecraftClient client, net.minecraft.client.network.ClientPlayNetworkHandler handler, net.minecraft.network.PacketByteBuf buf, PacketSender responseSender) {
 		BlockPos pos = buf.readBlockPos();
+		int materialCount = buf.readInt();
+
 		int count = buf.readInt();
+
 		List<Identifier> options = new ArrayList<>(count);
+		Map<Identifier, Integer> costs = new HashMap<>();
+
 		for (int i = 0; i < count; i++) {
-			options.add(buf.readIdentifier());
+			Identifier id = buf.readIdentifier();
+			int cost = buf.readInt();
+
+			options.add(id);
+			costs.put(id, cost);
 		}
 		client.execute(() -> {
 			if (client.player == null) return;
-			client.setScreen(new SimpleSchematicSelectionScreen(pos, options));
+			client.setScreen(new SimpleSchematicSelectionScreen(pos, options, costs, materialCount));
 		});
 	}
 
@@ -36,6 +48,8 @@ public class SchematicSelectionS2CPacket {
 	private static class SimpleSchematicSelectionScreen extends Screen {
 		private final BlockPos anvilPos;
 		private final List<Identifier> options;
+		private final Map<Identifier, Integer> costs;
+		private final int materialCount;
 
 		// Scroll state and layout
 		private final List<ButtonWidget> optionButtons = new ArrayList<>();
@@ -45,10 +59,47 @@ public class SchematicSelectionS2CPacket {
 		private float scrollOffset;
 		private ButtonWidget cancelButton; // render after clipping
 
-		protected SimpleSchematicSelectionScreen(BlockPos anvilPos, List<Identifier> options) {
+		private void renderCostTooltip(DrawContext context, int mouseX, int mouseY) {
+			for (int i = 0; i < optionButtons.size(); i++) {
+				ButtonWidget btn = optionButtons.get(i);
+
+				if (!btn.visible || !btn.isMouseOver(mouseX, mouseY)) {
+					continue;
+				}
+
+				Identifier id = options.get(i);
+				int cost = costs.getOrDefault(id, 1);
+
+				List<Text> tooltip = new ArrayList<>();
+
+				tooltip.add(Text.literal("Cost: " + cost + " ingot" + (cost == 1 ? "" : "s")));
+
+				if (materialCount >= cost) {
+					tooltip.add(Text.literal("Available: " + materialCount + "/" + cost)
+							.formatted(Formatting.GREEN));
+				} else {
+					tooltip.add(Text.literal("Available: " + materialCount + "/" + cost)
+							.formatted(Formatting.RED));
+					tooltip.add(Text.literal("Add more heated ingots to the anvil.")
+							.formatted(Formatting.GRAY));
+				}
+
+				context.drawTooltip(this.textRenderer, tooltip, mouseX, mouseY);
+				return;
+			}
+		}
+
+		protected SimpleSchematicSelectionScreen(
+				BlockPos anvilPos,
+				List<Identifier> options,
+				Map<Identifier, Integer> costs,
+				int materialCount
+		) {
 			super(Text.literal("Select mold"));
 			this.anvilPos = anvilPos;
 			this.options = options;
+			this.costs = costs;
+			this.materialCount = materialCount;
 		}
 
 		@Override
@@ -105,7 +156,10 @@ public class SchematicSelectionS2CPacket {
 				btn.setY(y);
 				boolean visible = y + this.buttonHeight > this.startY && y < this.startY + this.viewportHeight;
 				btn.visible = !this.scrollable || visible;
-				btn.active = btn.visible;
+				Identifier id = options.get(i);
+				int cost = costs.getOrDefault(id, 1);
+
+				btn.active = btn.visible && materialCount >= cost;
 			}
 		}
 
@@ -223,7 +277,8 @@ public class SchematicSelectionS2CPacket {
 			context.fill(left, top, right, top + 1, borderColor);           // Top
 			context.fill(left, bottom - 1, right, bottom, borderColor);     // Bottom
 			context.fill(left, top, left + 1, bottom, borderColor);         // Left
-			context.fill(right - 1, top, right, bottom, borderColor);       // Right
+			context.fill(right - 1, top, right, bottom, borderColor);
+			renderCostTooltip(context, mouseX, mouseY);// Right
 		}
 
 		@Override
