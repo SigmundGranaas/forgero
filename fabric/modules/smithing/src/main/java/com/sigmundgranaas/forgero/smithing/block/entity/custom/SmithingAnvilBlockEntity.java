@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
+import com.sigmundgranaas.forgero.smithing.item.custom.SmithingTongsItem;
 import com.sigmundgranaas.forgero.smithing.minigame.MinigameLogic;
 import com.sigmundgranaas.forgero.smithing.minigame.MinigamePositioning;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
@@ -360,6 +361,151 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		return ActionResult.SUCCESS;
 	}
 
+	public ActionResult tryUseTongs(PlayerEntity player, Hand hand) {
+		if (!isServer()) {
+			return ActionResult.SUCCESS;
+		}
+
+		ItemStack tongsStack = player.getStackInHand(hand);
+
+		if (!(tongsStack.getItem() instanceof SmithingTongsItem)) {
+			return ActionResult.SUCCESS;
+		}
+
+		boolean changed = SmithingTongsItem.hasStoredStack(tongsStack)
+				? tryPlaceTongsContents(tongsStack)
+				: tryPickupIntoTongs(tongsStack);
+
+		if (changed) {
+			player.getInventory().markDirty();
+			guiBlockCooldownUntil = world.getTime() + GUI_COOLDOWN_TICKS;
+		}
+
+		return ActionResult.SUCCESS;
+	}
+
+	private boolean tryPickupIntoTongs(ItemStack tongsStack) {
+		ItemStack anvilItem = currentStack();
+
+		if (anvilItem.isEmpty()) {
+			return false;
+		}
+
+		ItemStack toStore = anvilItem.copy();
+		toStore.setCount(1);
+
+		if (toStore.getItem() instanceof MorphedItem) {
+			minigameLogic.saveProgressToItem(toStore);
+		}
+
+		if (!SmithingTongsItem.canStore(toStore)) {
+			return false;
+		}
+
+		SmithingTongsItem.setStoredStack(tongsStack, toStore);
+
+		if (anvilItem.getItem() instanceof MorphedItem || anvilItem.getCount() <= 1) {
+			getInventory().setStack(0, ItemStack.EMPTY);
+			resetCraftingState();
+			minigameLogic.clearMarkerProgress();
+		} else {
+			anvilItem.decrement(1);
+			isSmithing = true;
+			plannedProductId = null;
+			minigameLogic.resetMarkerProgress(this);
+		}
+
+		markDirty();
+
+		return true;
+	}
+
+	private boolean tryPlaceTongsContents(ItemStack tongsStack) {
+		ItemStack stored = SmithingTongsItem.getStoredStack(tongsStack);
+
+		if (stored.isEmpty()) {
+			return false;
+		}
+
+		if (stored.getItem() instanceof MorphedItem) {
+			return tryPlaceMorphedFromTongs(tongsStack, stored);
+		}
+
+		if (!isValidSmithingMaterial(stored)) {
+			return false;
+		}
+
+		ItemStack anvilItem = currentStack();
+
+		if (anvilItem.isEmpty()) {
+			placeFirstMaterialFromTongs(tongsStack, stored);
+			return true;
+		}
+
+		if (canAddMaterialIngot(anvilItem, stored)) {
+			addMaterialIngotFromTongs(tongsStack, anvilItem, stored);
+			return true;
+		}
+
+		return false;
+	}
+
+	private boolean tryPlaceMorphedFromTongs(ItemStack tongsStack, ItemStack stored) {
+		if (!currentStack().isEmpty()) {
+			return false;
+		}
+
+		ItemStack toPlace = stored.copy();
+		toPlace.setCount(1);
+
+		getInventory().setStack(0, toPlace);
+		SmithingTongsItem.clearStoredStack(tongsStack);
+
+		isSmithing = false;
+		plannedProductId = null;
+
+		minigameLogic.restoreFromItemNbt(toPlace);
+		minigameLogic.getMarkerPositions().clear();
+		minigameLogic.getMarkerHits().clear();
+
+		markDirty();
+
+		return true;
+	}
+
+	private void placeFirstMaterialFromTongs(ItemStack tongsStack, ItemStack stored) {
+		ItemStack toPlace = stored.copy();
+		toPlace.setCount(1);
+
+		getInventory().setStack(0, toPlace);
+		SmithingTongsItem.clearStoredStack(tongsStack);
+
+		isSmithing = true;
+		plannedProductId = null;
+
+		minigameLogic.resetMarkerProgress(this);
+
+		markDirty();
+	}
+
+	private void addMaterialIngotFromTongs(ItemStack tongsStack, ItemStack anvilItem, ItemStack stored) {
+		int existingTemp = TemperatureUtils.getTemperature(anvilItem);
+		int addedTemp = TemperatureUtils.getTemperature(stored);
+		int combinedTemp = Math.min(existingTemp, addedTemp);
+
+		anvilItem.increment(1);
+		TemperatureUtils.setTemperature(anvilItem, combinedTemp);
+
+		SmithingTongsItem.clearStoredStack(tongsStack);
+
+		isSmithing = true;
+		plannedProductId = null;
+
+		minigameLogic.resetMarkerProgress(this);
+
+		markDirty();
+	}
+
 	private void cleanPlainMaterialStack(ItemStack stack) {
 		if (stack.isEmpty() || stack.getItem() instanceof MorphedItem) {
 			return;
@@ -377,9 +523,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 
 		nbt.remove("forgero_markerHitsCount");
 		nbt.remove("forgero_markerAttempts");
-		nbt.remove("forgero_fastMarkerHits");
+		nbt.remove("forgero_coolingMarkerHits");
 		nbt.remove("forgero_missMarkerHits");
-		nbt.remove("fastMarkerIndices");
+		nbt.remove("coolingMarkerIndices");
 		nbt.remove("hitStageIndices");
 		nbt.remove("morphProgress");
 		nbt.remove(MorphedItem.PROGRESS_KEY);
@@ -644,9 +790,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 				data.writeBoolean(hit);
 			}
 
-			data.writeInt(minigameLogic.getFastMarkerIndices().size());
+			data.writeInt(minigameLogic.getCoolingMarkerIndices().size());
 
-			for (int idx : minigameLogic.getFastMarkerIndices()) {
+			for (int idx : minigameLogic.getCoolingMarkerIndices()) {
 				data.writeInt(idx);
 			}
 
@@ -789,8 +935,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		minigameLogic.setMorphProgress(progress, this, plannedProductId);
 	}
 
-	public List<Integer> getFastMarkerIndices() {
-		return minigameLogic.getFastMarkerIndices();
+	public List<Integer> getCoolingMarkerIndices() {
+		return minigameLogic.getCoolingMarkerIndices();
 	}
 
 	public MinigameLogic getMinigameLogic() {

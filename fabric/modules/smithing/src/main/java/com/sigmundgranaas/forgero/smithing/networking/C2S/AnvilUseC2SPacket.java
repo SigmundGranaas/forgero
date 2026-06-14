@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.smithing.networking.C2S;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
+import com.sigmundgranaas.forgero.smithing.item.custom.SmithingTongsItem;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.networking.SmithingPacketValidator;
 
@@ -41,6 +42,11 @@ public final class AnvilUseC2SPacket {
 
 		ItemStack stackInHand = player.getStackInHand(hand);
 		ItemStack anvilStack = anvil.getInventory().getStack(0);
+
+		if (stackInHand.getItem() instanceof SmithingTongsItem) {
+			anvil.tryUseTongs(player, hand);
+			return;
+		}
 
 		if (SmithingPacketValidator.canPickupFromAnvil(stackInHand, anvilStack)) {
 			anvil.tryPickupItem(player);

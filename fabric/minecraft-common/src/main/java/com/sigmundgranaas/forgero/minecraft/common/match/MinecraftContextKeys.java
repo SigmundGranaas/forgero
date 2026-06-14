@@ -24,7 +24,7 @@ public class MinecraftContextKeys {
 
 	public static final ContextKey<Integer> TOTAL_HITS = ContextKey.of("total_hits", Integer.class);
 	public static final ContextKey<Integer> MISS_HITS = ContextKey.of("miss_hits", Integer.class);
-	public static final ContextKey<Integer> FAST_MARKER_HITS = ContextKey.of("fast_marker_hits", Integer.class);
+	public static final ContextKey<Integer> COOLING_MARKER_HITS = ContextKey.of("cooling_marker_hits", Integer.class);
 
 	// Continuous time (tick) tracking across the minigame lifetime
 	public static final ContextKey<Integer> TOTAL_STAGE_TICKS = ContextKey.of("total_stage_ticks", Integer.class);

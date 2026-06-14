@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.smithing.block.custom;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.HearthBlockEntity;
+import com.sigmundgranaas.forgero.smithing.item.custom.SmithingTongsItem;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 
 import net.minecraft.block.BlockState;
@@ -58,6 +59,10 @@ public class HearthBlock extends CampfireBlock implements Waterloggable {
 		ItemStack held = player.getStackInHand(hand);
 		ItemStack slot = hearth.getStack(0);
 
+		if (held.getItem() instanceof SmithingTongsItem) {
+			return useTongsOnHearth(world, player, held, hearth, slot);
+		}
+
 		boolean wantsExtract = player.isSneaking() || held.isEmpty();
 
 		if (wantsExtract && !slot.isEmpty()) {
@@ -88,5 +93,53 @@ public class HearthBlock extends CampfireBlock implements Waterloggable {
 		}
 
 		return ActionResult.PASS;
+	}
+
+	private ActionResult useTongsOnHearth(
+			World world,
+			PlayerEntity player,
+			ItemStack tongsStack,
+			HearthBlockEntity hearth,
+			ItemStack slot
+	) {
+		if (SmithingTongsItem.hasStoredStack(tongsStack)) {
+			if (!slot.isEmpty()) {
+				return ActionResult.PASS;
+			}
+
+			if (!world.isClient) {
+				ItemStack stored = SmithingTongsItem.removeStoredStack(tongsStack);
+
+				if (!stored.isEmpty()) {
+					hearth.setStack(0, stored);
+					hearth.markDirtyAndSync();
+					player.getInventory().markDirty();
+				}
+			}
+
+			return ActionResult.SUCCESS;
+		}
+
+		if (slot.isEmpty() || !SmithingTongsItem.canStore(slot)) {
+			return ActionResult.PASS;
+		}
+
+		if (!world.isClient) {
+			ItemStack stored = slot.copy();
+			stored.setCount(1);
+
+			SmithingTongsItem.setStoredStack(tongsStack, stored);
+
+			if (slot.getCount() <= 1) {
+				hearth.setStack(0, ItemStack.EMPTY);
+			} else {
+				slot.decrement(1);
+			}
+
+			hearth.markDirtyAndSync();
+			player.getInventory().markDirty();
+		}
+
+		return ActionResult.SUCCESS;
 	}
 }

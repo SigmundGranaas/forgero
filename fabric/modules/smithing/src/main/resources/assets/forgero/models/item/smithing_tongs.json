@@ -2,5 +2,13 @@
   "parent": "item/generated",
   "textures": {
     "layer0": "forgero:item/smithing_tongs"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "forgero:loaded": 1.0
+      },
+      "model": "forgero:item/smithing_tongs_loaded"
+    }
+  ]
 }

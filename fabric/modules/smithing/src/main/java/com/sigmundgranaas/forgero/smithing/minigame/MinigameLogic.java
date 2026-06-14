@@ -35,30 +35,33 @@ public class MinigameLogic {
 	public static final int INITIAL_MARKER_DELAY_TICKS = 25;
 	public static final int SUBSEQUENT_MARKER_DELAY_TICKS = 15;
 	public static final int MARKER_LIFETIME_TICKS_NORMAL = 35;
-	public static final int MARKER_LIFETIME_TICKS_FAST = 20;
+	public static final int MARKER_LIFETIME_TICKS_COOLING = 20;
 	public static final int TOTAL_MARKERS = 10;
 	public static final int MAX_MARKERS = 15;
-	public static final int FAST_MARKERS = 3;
+	public static final int COOLING_MARKERS = 3;
 	public static final int ONE_MATERIAL_REQUIRED_HITS = 7;
 	public static final int TWO_MATERIAL_REQUIRED_HITS = 10;
 	public static final int THREE_MATERIAL_REQUIRED_HITS = 12;
 	public static final int FOUR_MATERIAL_REQUIRED_HITS = 15;
+	public static final int MARKER_TIMEOUT_COOLING = 10;
+	public static final int NORMAL_MARKER_HEAT_CHANGE = 40;
+	public static final int COOLING_MARKER_HEAT_CHANGE = -25;
 
 	private static final double MARKER_HIT_RADIUS_SQ = 0.0075d;
 
 	private static final String HITS_NBT_KEY = "forgero_markerHitsCount";
 	private static final String ATTEMPTS_NBT_KEY = "forgero_markerAttempts";
-	private static final String FAST_MARKER_HITS_NBT_KEY = "forgero_fastMarkerHits";
+	private static final String COOLING_MARKER_HITS_NBT_KEY = "forgero_coolingMarkerHits";
 	private static final String MISS_MARKER_NBT_KEY = "forgero_missMarkerHits";
 	private static final String REQUIRED_HITS_NBT_KEY = "forgero_required_hits";
 
 	private final List<Vec2f> markerPositions = new ArrayList<>();
 	private final List<Boolean> markerHits = new ArrayList<>();
 	private final List<Integer> hitStageIndices = new ArrayList<>();
-	private final List<Integer> fastMarkerIndices = new ArrayList<>();
+	private final List<Integer> coolingMarkerIndices = new ArrayList<>();
 	private final Random random = new Random();
 
-	private int fastMarkerHits = 0;
+	private int coolingMarkerHits = 0;
 	private int missMarkerHits = 0;
 
 	@Setter
@@ -146,14 +149,14 @@ public class MinigameLogic {
 
 		markerAttempts = 0;
 		markerHitsCount = 0;
-		fastMarkerHits = 0;
+		coolingMarkerHits = 0;
 		missMarkerHits = 0;
 		markerTimeout = 0;
 		markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
 
-		fastMarkerIndices.clear();
+		coolingMarkerIndices.clear();
 
-		randomizeFastMarkerIndices();
+		randomizeCoolingMarkerIndices();
 
 		if (!stack.isEmpty() && stack.getItem() instanceof MorphedItem) {
 			NbtCompound nbt = stack.getOrCreateNbt();
@@ -162,7 +165,7 @@ public class MinigameLogic {
 				this.markerHitsCount = nbt.getInt(HITS_NBT_KEY);
 				this.markerAttempts = this.markerHitsCount;
 				this.morphProgress = nbt.getDouble("morphProgress");
-				this.fastMarkerHits = nbt.getInt(FAST_MARKER_HITS_NBT_KEY);
+				this.coolingMarkerHits = nbt.getInt(COOLING_MARKER_HITS_NBT_KEY);
 				this.missMarkerHits = nbt.contains(MISS_MARKER_NBT_KEY)
 						? nbt.getInt(MISS_MARKER_NBT_KEY)
 						: 0;
@@ -177,28 +180,28 @@ public class MinigameLogic {
 					}
 				}
 
-				if (nbt.contains("fastMarkerIndices")) {
-					fastMarkerIndices.clear();
+				if (nbt.contains("coolingMarkerIndices")) {
+					coolingMarkerIndices.clear();
 
-					int[] arr = nbt.getIntArray("fastMarkerIndices");
+					int[] arr = nbt.getIntArray("coolingMarkerIndices");
 
 					for (int idx : arr) {
 						if (idx >= 0 && idx < requiredHits) {
-							fastMarkerIndices.add(idx);
+							coolingMarkerIndices.add(idx);
 						}
 					}
 
-					randomizeFastMarkerIndices();
+					randomizeCoolingMarkerIndices();
 				}
 			} else {
 				this.morphProgress = 0.0;
-				this.fastMarkerHits = 0;
+				this.coolingMarkerHits = 0;
 				this.missMarkerHits = 0;
 				hitStageIndices.clear();
 			}
 		} else {
 			this.morphProgress = 0.0;
-			this.fastMarkerHits = 0;
+			this.coolingMarkerHits = 0;
 			this.missMarkerHits = 0;
 			hitStageIndices.clear();
 		}
@@ -214,12 +217,12 @@ public class MinigameLogic {
 
 		markerAttempts = 0;
 		markerHitsCount = 0;
-		fastMarkerHits = 0;
+		coolingMarkerHits = 0;
 		missMarkerHits = 0;
 		markerTimeout = 0;
 		markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
 
-		fastMarkerIndices.clear();
+		coolingMarkerIndices.clear();
 		hitStageIndices.clear();
 		requiredHits = ONE_MATERIAL_REQUIRED_HITS;
 	}
@@ -265,7 +268,8 @@ public class MinigameLogic {
 				int markerIndex = markerHitsCount;
 				applySuccessfulMarkerHit(markerIndex, stack, callback);
 			}
-			case MISS, TIMEOUT -> applyFailedMarkerAttempt();
+			case MISS -> applyFailedMarkerAttempt();
+			case TIMEOUT -> applyMarkerTimeout(stack);
 		}
 
 		clearActiveMarker();
@@ -312,25 +316,34 @@ public class MinigameLogic {
 				workableEnd
 		));
 
-		boolean fast = fastMarkerIndices.contains(markerIndex);
-		int tempChange = fast ? -10 : 40;
+		boolean coolingMarker = coolingMarkerIndices.contains(markerIndex);
+		int tempChange = coolingMarker ? COOLING_MARKER_HEAT_CHANGE : NORMAL_MARKER_HEAT_CHANGE;
 
 		TemperatureUtils.setTemperature(
 				stack,
 				Math.max(0, Math.min(temperature + tempChange, maxTemp))
 		);
 
-		if (fast) {
-			fastMarkerHits++;
+		if (coolingMarker) {
+			coolingMarkerHits++;
 		}
 	}
 
 	private void applyFailedMarkerAttempt() {
-		/*
-		 * Player misses and marker timeouts both count as failed attempts.
-		 * This makes quality punishment consistent and prevents infinite retries.
-		 */
 		missMarkerHits++;
+	}
+
+	private void applyMarkerTimeout(ItemStack stack) {
+		int temperature = TemperatureUtils.getTemperature(stack);
+
+		if (temperature <= TemperatureUtils.DEFAULT_TEMPERATURE) {
+			return;
+		}
+
+		TemperatureUtils.setTemperature(
+				stack,
+				Math.max(TemperatureUtils.DEFAULT_TEMPERATURE, temperature - MARKER_TIMEOUT_COOLING)
+		);
 	}
 
 	private void finishIfComplete(MinigameCallback callback) {
@@ -408,8 +421,8 @@ public class MinigameLogic {
 				markerPositions.add(marker);
 				markerHits.add(false);
 
-				markerTimeout = fastMarkerIndices.contains(markerHitsCount)
-						? MARKER_LIFETIME_TICKS_FAST
+				markerTimeout = coolingMarkerIndices.contains(markerHitsCount)
+						? MARKER_LIFETIME_TICKS_COOLING
 						: MARKER_LIFETIME_TICKS_NORMAL;
 
 				callback.markDirty();
@@ -531,7 +544,7 @@ public class MinigameLogic {
 		context = context.put(MinecraftContextKeys.STACK, stack);
 		context = context.put(MinecraftContextKeys.TOTAL_HITS, markerHitsCount);
 		context = context.put(MinecraftContextKeys.MISS_HITS, missMarkerHits);
-		context = context.put(MinecraftContextKeys.FAST_MARKER_HITS, fastMarkerHits);
+		context = context.put(MinecraftContextKeys.COOLING_MARKER_HITS, coolingMarkerHits);
 
 		return context;
 	}
@@ -552,11 +565,11 @@ public class MinigameLogic {
 		itemNbt.putInt(HITS_NBT_KEY, markerHitsCount);
 		itemNbt.putInt(ATTEMPTS_NBT_KEY, markerAttempts);
 		itemNbt.putInt(MISS_MARKER_NBT_KEY, missMarkerHits);
-		itemNbt.putInt(FAST_MARKER_HITS_NBT_KEY, fastMarkerHits);
+		itemNbt.putInt(COOLING_MARKER_HITS_NBT_KEY, coolingMarkerHits);
 
 		itemNbt.putIntArray(
-				"fastMarkerIndices",
-				fastMarkerIndices.stream().mapToInt(Integer::intValue).toArray()
+				"coolingMarkerIndices",
+				coolingMarkerIndices.stream().mapToInt(Integer::intValue).toArray()
 		);
 
 		itemNbt.putIntArray(
@@ -584,7 +597,7 @@ public class MinigameLogic {
 		nbt.put("markers", markersNbt);
 		nbt.putInt(HITS_NBT_KEY, markerHitsCount);
 		nbt.putInt(ATTEMPTS_NBT_KEY, markerAttempts);
-		nbt.putInt(FAST_MARKER_HITS_NBT_KEY, fastMarkerHits);
+		nbt.putInt(COOLING_MARKER_HITS_NBT_KEY, coolingMarkerHits);
 		nbt.putInt(MISS_MARKER_NBT_KEY, missMarkerHits);
 		nbt.putInt(REQUIRED_HITS_NBT_KEY, requiredHits);
 		nbt.putIntArray(
@@ -592,8 +605,8 @@ public class MinigameLogic {
 				hitStageIndices.stream().mapToInt(Integer::intValue).toArray()
 		);
 		nbt.putIntArray(
-				"fastMarkerIndices",
-				fastMarkerIndices.stream().mapToInt(Integer::intValue).toArray()
+				"coolingMarkerIndices",
+				coolingMarkerIndices.stream().mapToInt(Integer::intValue).toArray()
 		);
 		nbt.putDouble("morphProgress", getMorphProgress());
 	}
@@ -628,9 +641,9 @@ public class MinigameLogic {
 				? Math.max(ONE_MATERIAL_REQUIRED_HITS, Math.min(MAX_MARKERS, nbt.getInt(REQUIRED_HITS_NBT_KEY)))
 				: requiredHits;
 
-		fastMarkerHits = nbt.contains(FAST_MARKER_HITS_NBT_KEY)
-				? nbt.getInt(FAST_MARKER_HITS_NBT_KEY)
-				: fastMarkerHits;
+		coolingMarkerHits = nbt.contains(COOLING_MARKER_HITS_NBT_KEY)
+				? nbt.getInt(COOLING_MARKER_HITS_NBT_KEY)
+				: coolingMarkerHits;
 
 		missMarkerHits = nbt.contains(MISS_MARKER_NBT_KEY)
 				? nbt.getInt(MISS_MARKER_NBT_KEY)
@@ -646,19 +659,19 @@ public class MinigameLogic {
 			}
 		}
 
-		fastMarkerIndices.clear();
+		coolingMarkerIndices.clear();
 
-		if (nbt.contains("fastMarkerIndices")) {
-			int[] arr = nbt.getIntArray("fastMarkerIndices");
+		if (nbt.contains("coolingMarkerIndices")) {
+			int[] arr = nbt.getIntArray("coolingMarkerIndices");
 
 			for (int idx : arr) {
 				if (idx >= 0 && idx < requiredHits) {
-					fastMarkerIndices.add(idx);
+					coolingMarkerIndices.add(idx);
 				}
 			}
 		}
 
-		randomizeFastMarkerIndices();
+		randomizeCoolingMarkerIndices();
 
 		if (nbt.contains("morphProgress")) {
 			morphProgress = nbt.getDouble("morphProgress");
@@ -671,24 +684,24 @@ public class MinigameLogic {
 		if (stack.isEmpty() || !(stack.getItem() instanceof MorphedItem)) {
 			this.markerHitsCount = 0;
 			this.markerAttempts = 0;
-			this.fastMarkerHits = 0;
+			this.coolingMarkerHits = 0;
 			this.missMarkerHits = 0;
 			this.morphProgress = 0.0;
 			this.requiredHits = ONE_MATERIAL_REQUIRED_HITS;
 			this.hitStageIndices.clear();
-			this.fastMarkerIndices.clear();
+			this.coolingMarkerIndices.clear();
 			return;
 		}
 
 		if (!stack.hasNbt()) {
 			this.markerHitsCount = 0;
 			this.markerAttempts = 0;
-			this.fastMarkerHits = 0;
+			this.coolingMarkerHits = 0;
 			this.missMarkerHits = 0;
 			this.morphProgress = 0.0;
 			this.requiredHits = ONE_MATERIAL_REQUIRED_HITS;
 			this.hitStageIndices.clear();
-			this.fastMarkerIndices.clear();
+			this.coolingMarkerIndices.clear();
 			return;
 		}
 
@@ -715,23 +728,23 @@ public class MinigameLogic {
 			}
 		}
 
-		this.fastMarkerHits = itemNbt.contains(FAST_MARKER_HITS_NBT_KEY)
-				? itemNbt.getInt(FAST_MARKER_HITS_NBT_KEY)
+		this.coolingMarkerHits = itemNbt.contains(COOLING_MARKER_HITS_NBT_KEY)
+				? itemNbt.getInt(COOLING_MARKER_HITS_NBT_KEY)
 				: 0;
 
-		fastMarkerIndices.clear();
+		coolingMarkerIndices.clear();
 
-		if (itemNbt.contains("fastMarkerIndices")) {
-			int[] arr = itemNbt.getIntArray("fastMarkerIndices");
+		if (itemNbt.contains("coolingMarkerIndices")) {
+			int[] arr = itemNbt.getIntArray("coolingMarkerIndices");
 
 			for (int idx : arr) {
 				if (idx >= 0 && idx < requiredHits) {
-					fastMarkerIndices.add(idx);
+					coolingMarkerIndices.add(idx);
 				}
 			}
 		}
 
-		randomizeFastMarkerIndices();
+		randomizeCoolingMarkerIndices();
 
 		this.morphProgress = itemNbt.contains("morphProgress")
 				? itemNbt.getDouble("morphProgress")
@@ -802,15 +815,15 @@ public class MinigameLogic {
 		requiredHits = getRequiredHits(stack);
 	}
 
-	private void randomizeFastMarkerIndices() {
-		int availableFastMarkerSlots = Math.max(0, requiredHits - 1);
-		int fastMarkerCount = Math.min(FAST_MARKERS, availableFastMarkerSlots);
+	private void randomizeCoolingMarkerIndices() {
+		int availableCoolingMarkerSlots = Math.max(0, requiredHits - 1);
+		int coolingMarkerCount = Math.min(COOLING_MARKERS, availableCoolingMarkerSlots);
 
-		while (fastMarkerIndices.size() < fastMarkerCount) {
-			int idx = 1 + random.nextInt(availableFastMarkerSlots);
+		while (coolingMarkerIndices.size() < coolingMarkerCount) {
+			int idx = 1 + random.nextInt(availableCoolingMarkerSlots);
 
-			if (!fastMarkerIndices.contains(idx)) {
-				fastMarkerIndices.add(idx);
+			if (!coolingMarkerIndices.contains(idx)) {
+				coolingMarkerIndices.add(idx);
 			}
 		}
 	}

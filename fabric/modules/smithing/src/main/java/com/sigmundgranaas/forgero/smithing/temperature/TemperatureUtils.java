@@ -27,6 +27,10 @@ public class TemperatureUtils {
     public static final int MIN_TEMPERATURE = 0;
 
     public static int getTemperature(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return DEFAULT_TEMPERATURE;
+        }
+
         NbtCompound nbt = stack.getNbt();
         if (nbt == null || !nbt.contains(TEMPERATURE_KEY)) {
             return DEFAULT_TEMPERATURE;
@@ -36,11 +40,19 @@ public class TemperatureUtils {
     }
 
     public static void setTemperature(ItemStack stack, int temperature) {
+        if (stack.isEmpty()) {
+            return;
+        }
+
         NbtCompound nbt = stack.getOrCreateNbt();
         nbt.putInt(TEMPERATURE_KEY, clamp(temperature, stack));
     }
 
     public static int getMaxTemp(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return 0;
+        }
+
         NbtCompound nbt = stack.getNbt();
         if (nbt != null && nbt.contains(MAX_TEMPERATURE_KEY)) {
             return Math.max(0, nbt.getInt(MAX_TEMPERATURE_KEY));
@@ -54,11 +66,19 @@ public class TemperatureUtils {
     }
 
     public static void setMaxTemperature(ItemStack stack, int maxTemperature) {
+        if (stack.isEmpty()) {
+            return;
+        }
+
         NbtCompound nbt = stack.getOrCreateNbt();
         nbt.putInt(MAX_TEMPERATURE_KEY, Math.max(0, maxTemperature));
     }
 
     public static boolean hasMaxTemperature(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return false;
+        }
+
         if (stack.getItem() instanceof ToolStateItem && !(stack.getItem() instanceof MorphedItem)) {
             return false;
         }
@@ -84,6 +104,10 @@ public class TemperatureUtils {
     }
 
     public static int getWorkableTemperatureStart(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return 0;
+        }
+
         NbtCompound nbt = stack.getNbt();
         if (nbt != null && nbt.contains(WORKABLE_TEMPERATURE_START_KEY)) {
             return Math.max(0, nbt.getInt(WORKABLE_TEMPERATURE_START_KEY));
@@ -97,6 +121,10 @@ public class TemperatureUtils {
     }
 
     public static int getWorkableTemperatureEnd(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return 0;
+        }
+
         NbtCompound nbt = stack.getNbt();
         if (nbt != null && nbt.contains(WORKABLE_TEMPERATURE_END_KEY)) {
             return Math.max(0, nbt.getInt(WORKABLE_TEMPERATURE_END_KEY));
@@ -122,11 +150,19 @@ public class TemperatureUtils {
     }
 
     public static void setWorkableTemperatureStart(ItemStack stack, int temperature) {
+        if (stack.isEmpty()) {
+            return;
+        }
+
         NbtCompound nbt = stack.getOrCreateNbt();
         nbt.putInt(WORKABLE_TEMPERATURE_START_KEY, Math.max(0, temperature));
     }
 
     public static void setWorkableTemperatureEnd(ItemStack stack, int temperature) {
+        if (stack.isEmpty()) {
+            return;
+        }
+
         NbtCompound nbt = stack.getOrCreateNbt();
         nbt.putInt(WORKABLE_TEMPERATURE_END_KEY, Math.max(0, temperature));
     }

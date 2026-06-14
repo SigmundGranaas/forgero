@@ -34,10 +34,10 @@ public class AnvilSyncS2CPacket {
 			markerHits[i] = buf.readBoolean();
 		}
 
-		int fastMarkerCount = buf.readInt();
-		int[] fastMarkerIndices = new int[fastMarkerCount];
-		for (int i = 0; i < fastMarkerCount; i++) {
-			fastMarkerIndices[i] = buf.readInt();
+		int coolingMarkerCount = buf.readInt();
+		int[] coolingMarkerIndices = new int[coolingMarkerCount];
+		for (int i = 0; i < coolingMarkerCount; i++) {
+			coolingMarkerIndices[i] = buf.readInt();
 		}
 
 		int markerAttempts = buf.readInt();
@@ -90,10 +90,10 @@ public class AnvilSyncS2CPacket {
 				anvilEntity.getMarkerHits().add(markerHits[i]);
 			}
 
-			// Update fast marker indices through the block entity
-			anvilEntity.getFastMarkerIndices().clear();
-			for (int index : fastMarkerIndices) {
-				anvilEntity.getFastMarkerIndices().add(index);
+			// Update cooling marker indices through the block entity
+			anvilEntity.getCoolingMarkerIndices().clear();
+			for (int index : coolingMarkerIndices) {
+				anvilEntity.getCoolingMarkerIndices().add(index);
 			}
 
 			// Update progress

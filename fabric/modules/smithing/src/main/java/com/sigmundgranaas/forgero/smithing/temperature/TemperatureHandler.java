@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.smithing.temperature;
 
+import com.sigmundgranaas.forgero.smithing.item.custom.SmithingTongsItem;
 import com.sigmundgranaas.forgero.smithing.networking.S2C.TemperatureSyncS2CPacket;
 import com.sigmundgranaas.forgero.smithing.temperature.DynamicTemperatureSystem.TemperatureStage;
 import com.sigmundgranaas.forgero.smithing.temperature.DynamicTemperatureSystem.TemperatureStages;
@@ -32,6 +33,15 @@ public class TemperatureHandler {
             boolean tookHeatDamage = false;
             for (int i = 0; i < player.getInventory().size(); i++) {
                 ItemStack stack = player.getInventory().getStack(i);
+                if (stack.isEmpty()) {
+                    continue;
+                }
+
+                if (stack.getItem() instanceof SmithingTongsItem) {
+                    coolStoredTongsStack(stack);
+                    continue;
+                }
+
                 if (!TemperatureUtils.hasMaxTemperature(stack)) {
                     continue;
                 }
@@ -51,6 +61,10 @@ public class TemperatureHandler {
         for (var entity : world.iterateEntities()) {
             if (!(entity instanceof ItemEntity itemEntity)) continue;
             ItemStack stack = itemEntity.getStack();
+            if (stack.isEmpty()) {
+                continue;
+            }
+
             if (!TemperatureUtils.hasMaxTemperature(stack)) {
                 continue;
             }
@@ -81,6 +95,23 @@ public class TemperatureHandler {
                 TemperatureSyncS2CPacket.sendToClient(itemEntity, temp);
             }
         }
+    }
+
+    private static void coolStoredTongsStack(ItemStack tongsStack) {
+        ItemStack stored = SmithingTongsItem.getStoredStack(tongsStack);
+
+        if (stored.isEmpty() || !TemperatureUtils.hasMaxTemperature(stored)) {
+            return;
+        }
+
+        int temp = TemperatureUtils.getTemperature(stored);
+
+        if (temp <= 20) {
+            return;
+        }
+
+        TemperatureUtils.setTemperature(stored, Math.max(20, temp - INVENTORY_COOL_PER_TICK));
+        SmithingTongsItem.setStoredStack(tongsStack, stored);
     }
 
     private static void emitTemperatureEffects(ServerWorld world, ItemEntity itemEntity, BlockPos pos, int temp, TemperatureStages stages) {

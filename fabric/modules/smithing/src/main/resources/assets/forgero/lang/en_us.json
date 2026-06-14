@@ -1,5 +1,8 @@
 {
   "itemgroup.smithing": "Smithing",
   "item.forgero.tongs": "Tongs",
+  "item.forgero.smithing_tongs": "Smithing Tongs",
+  "item.forgero.smithing_tongs.empty": "Empty",
+  "item.forgero.smithing_tongs.stored": "Holding: %s",
   "item.forgero.smithing_hammer": "Smithing Hammer"
 }

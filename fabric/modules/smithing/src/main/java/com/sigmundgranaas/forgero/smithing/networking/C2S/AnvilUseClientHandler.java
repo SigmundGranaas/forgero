@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.smithing.networking.C2S;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
+import com.sigmundgranaas.forgero.smithing.item.custom.SmithingTongsItem;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 
@@ -48,6 +49,11 @@ public final class AnvilUseClientHandler {
 			boolean handEmpty = handStack.isEmpty();
 			boolean anvilHasItem = !anvilStack.isEmpty();
 
+			if (isTongsInteraction(handStack, anvilHasItem)) {
+				sendAnvilUse(pos, hand);
+				return ActionResult.SUCCESS;
+			}
+
 			if (handEmpty && anvilHasItem) {
 				sendAnvilUse(pos, hand);
 				return ActionResult.SUCCESS;
@@ -69,6 +75,14 @@ public final class AnvilUseClientHandler {
 
 		return handStack.getItem() instanceof MorphedItem
 				|| TemperatureUtils.hasMaxTemperature(handStack);
+	}
+
+	private static boolean isTongsInteraction(ItemStack handStack, boolean anvilHasItem) {
+		if (!(handStack.getItem() instanceof SmithingTongsItem)) {
+			return false;
+		}
+
+		return anvilHasItem || SmithingTongsItem.hasStoredStack(handStack);
 	}
 
 	private static void sendAnvilUse(BlockPos pos, Hand hand) {

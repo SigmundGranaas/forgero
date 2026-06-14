@@ -38,10 +38,12 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 	// Marker rendering constants
 	private static final float MARKER_RENDER_OFFSET_Y = 0.025f;
 	private static final float MARKER_SIZE = 0.0350f;
-	private static final float MARKER_RED = 1.0f;
-	private static final float MARKER_YELLOW_GREEN = 1.0f;
-	private static final float MARKER_NO_BLUE = 0.0f;
-	private static final float MARKER_FAST_GREEN = 0.0f;
+	private static final float MARKER_NORMAL_RED = 1.0f;
+	private static final float MARKER_NORMAL_GREEN = 1.0f;
+	private static final float MARKER_NORMAL_BLUE = 0.0f;
+	private static final float MARKER_COOLING_RED = 0.0f;
+	private static final float MARKER_COOLING_GREEN = 0.85f;
+	private static final float MARKER_COOLING_BLUE = 1.0f;
 	private static final float MARKER_ALPHA = 1.0f;
 
 	// Lighting constants
@@ -106,8 +108,8 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 		Vec2f markerPos = entity.getMarkerPositions().get(0);
 		matrices.translate(markerPos.x, MARKER_RENDER_OFFSET_Y, markerPos.y);
 
-		boolean isFastMarker = entity.getFastMarkerIndices().contains(entity.getMarkerAttempts());
-		drawMarkerBox(matrices, vertexConsumers, isFastMarker);
+		boolean isCoolingMarker = entity.getCoolingMarkerIndices().contains(entity.getMarkerAttempts());
+		drawMarkerBox(matrices, vertexConsumers, isCoolingMarker);
 
 		matrices.pop();
 	}
@@ -119,14 +121,16 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 		}
 	}
 
-	private void drawMarkerBox(MatrixStack matrices, VertexConsumerProvider vertexConsumers, boolean isFastMarker) {
-		float greenComponent = isFastMarker ? MARKER_FAST_GREEN : MARKER_YELLOW_GREEN;
+	private void drawMarkerBox(MatrixStack matrices, VertexConsumerProvider vertexConsumers, boolean isCoolingMarker) {
+		float red = isCoolingMarker ? MARKER_COOLING_RED : MARKER_NORMAL_RED;
+		float green = isCoolingMarker ? MARKER_COOLING_GREEN : MARKER_NORMAL_GREEN;
+		float blue = isCoolingMarker ? MARKER_COOLING_BLUE : MARKER_NORMAL_BLUE;
 
 		VertexConsumer lineConsumer = vertexConsumers.getBuffer(RenderLayer.getLines());
 		WorldRenderer.drawBox(matrices, lineConsumer,
 			-MARKER_SIZE, 0, -MARKER_SIZE,
 			MARKER_SIZE, 0, MARKER_SIZE,
-			MARKER_RED, greenComponent, MARKER_NO_BLUE, MARKER_ALPHA);
+			red, green, blue, MARKER_ALPHA);
 	}
 
 	private void renderItem(

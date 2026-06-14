@@ -18,11 +18,11 @@ public class TemperaturePredicates {
 	public static final int NEAR_MELT = 4;
 	public static final int MOLTEN = 5;
 
-	public static Predicate<MatchContext> perfectVeryHotFastPredicate() {
+	public static Predicate<MatchContext> perfectVeryHotCoolingPredicate() {
 		return context ->
 				context.get(MinecraftContextKeys.VERY_HOT_STAGE_FRACTION).orElse(0.0) == 1.0 &&
 						context.get(MinecraftContextKeys.MISS_HITS).orElse(0) == 0 &&
-						context.get(MinecraftContextKeys.FAST_MARKER_HITS).orElse(0) == 3;
+						context.get(MinecraftContextKeys.COOLING_MARKER_HITS).orElse(0) == 3;
 	}
 
 

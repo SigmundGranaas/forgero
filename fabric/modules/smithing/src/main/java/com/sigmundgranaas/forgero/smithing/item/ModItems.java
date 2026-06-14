@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.smithing.item;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
+import com.sigmundgranaas.forgero.smithing.item.custom.SmithingTongsItem;
 
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
@@ -34,7 +35,7 @@ public final class ModItems {
 
 		SMITHING_TONGS = registerItem(
 				"smithing_tongs",
-				new Item(new FabricItemSettings())
+				new SmithingTongsItem(new FabricItemSettings().maxCount(1))
 		);
 
 		MORPHED_ITEM = registerItem(
