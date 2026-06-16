@@ -2,6 +2,8 @@ package com.sigmundgranaas.forgero.smithing.temperature;
 
 import static com.sigmundgranaas.forgero.smithing.Attributes.*;
 
+import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.sigmundgranaas.forgero.core.property.v2.ComputedAttribute;
@@ -15,6 +17,8 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.state.property.Properties;
 import net.minecraft.world.World;
 
@@ -46,6 +50,74 @@ public class TemperatureUtils {
 
         NbtCompound nbt = stack.getOrCreateNbt();
         nbt.putInt(TEMPERATURE_KEY, clamp(temperature, stack));
+    }
+
+    public static boolean areEqualIgnoringTemperature(ItemStack left, ItemStack right) {
+        if (left == right || ItemStack.areEqual(left, right)) {
+            return true;
+        }
+
+        if (left.isEmpty() || right.isEmpty()) {
+            return false;
+        }
+
+        if (left.getItem() != right.getItem() || left.getCount() != right.getCount()) {
+            return false;
+        }
+
+        return Objects.equals(
+            nbtWithoutTemperature(left),
+            nbtWithoutTemperature(right)
+        );
+    }
+
+    private static NbtCompound nbtWithoutTemperature(ItemStack stack) {
+        NbtCompound nbt = stack.getNbt();
+
+        if (nbt == null) {
+            return null;
+        }
+
+        NbtCompound copy = nbt.copy();
+        removeTemperature(copy);
+
+        return copy.isEmpty() ? null : copy;
+    }
+
+    private static void removeTemperature(NbtElement element) {
+        if (element instanceof NbtCompound compound) {
+            removeTemperature(compound);
+        } else if (element instanceof NbtList list) {
+            for (NbtElement child : list) {
+                removeTemperature(child);
+            }
+        }
+    }
+
+    private static void removeTemperature(NbtCompound compound) {
+        compound.remove(TEMPERATURE_KEY);
+
+        for (String key : new ArrayList<>(compound.getKeys())) {
+            NbtElement child = compound.get(key);
+
+            if (child == null) {
+                continue;
+            }
+
+            removeTemperature(child);
+
+            if (isEmptySerializedStackTag(compound, key, child)) {
+                compound.remove(key);
+            }
+        }
+    }
+
+    private static boolean isEmptySerializedStackTag(NbtCompound parent, String key, NbtElement child) {
+        return "tag".equals(key)
+            && child instanceof NbtCompound childCompound
+            && childCompound.isEmpty()
+            && parent.contains("id")
+            && parent.contains("Count");
     }
 
     public static int getMaxTemp(ItemStack stack) {

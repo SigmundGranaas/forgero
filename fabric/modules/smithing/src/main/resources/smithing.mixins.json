@@ -8,8 +8,10 @@
     "AnvilBlockUseMixin",
     "CampfireBlockMixin"
   ],
+  "client": [
+    "HeldItemRendererMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }
 }
-

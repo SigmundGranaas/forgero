@@ -16,12 +16,19 @@ import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 
 @Environment(EnvType.CLIENT)
 public class SmithingTongsItemRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {
-	private static final float STORED_OFFSET_X = 0.18f;
-	private static final float STORED_OFFSET_Y = 0.18f;
-	private static final float STORED_OFFSET_Z = -0.04f;
-	private static final float STORED_SCALE = 0.24f;
-	private static final float STORED_ROTATION_Z = 45.0f;
+	private static final float STORED_OFFSET_X = 0.25f;
+	private static final float STORED_OFFSET_Y = 0.25f;
+	private static final float STORED_OFFSET_Z = 0f;
 
+	private static final float STORED_SCALE = 0.5f;
+
+	// These are DEGREES, not radians.
+	private static final float STORED_ROTATION_X = 45f;
+	private static final float STORED_ROTATION_Y = 90f;
+	private static final float STORED_ROTATION_Z = 0f;
+
+
+	// 10 45 -20
 	@Override
 	public void render(
 			ItemStack stack,
@@ -32,8 +39,11 @@ public class SmithingTongsItemRenderer implements BuiltinItemRendererRegistry.Dy
 			int overlay
 	) {
 		matrices.push();
-		renderStoredStack(stack, mode, matrices, vertexConsumers, light, overlay);
+
+		// Render base first, then render the stored item on top.
 		renderTongsBase(stack, mode, matrices, vertexConsumers, light, overlay);
+		renderStoredStack(stack, mode, matrices, vertexConsumers, light, overlay);
+
 		matrices.pop();
 	}
 
@@ -52,11 +62,21 @@ public class SmithingTongsItemRenderer implements BuiltinItemRendererRegistry.Dy
 		}
 
 		matrices.push();
-		matrices.translate(0.5f + STORED_OFFSET_X, 0.5f + STORED_OFFSET_Y, 0.5f + STORED_OFFSET_Z);
+
+		matrices.translate(
+				0.5f + STORED_OFFSET_X,
+				0.5f + STORED_OFFSET_Y,
+				0.5f + STORED_OFFSET_Z
+		);
+
+		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(STORED_ROTATION_Y));
+		matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(STORED_ROTATION_X));
 		matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(STORED_ROTATION_Z));
+
 		matrices.scale(STORED_SCALE, STORED_SCALE, STORED_SCALE);
 
 		ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
+
 		itemRenderer.renderItem(
 				stored,
 				ModelTransformationMode.NONE,
@@ -85,6 +105,7 @@ public class SmithingTongsItemRenderer implements BuiltinItemRendererRegistry.Dy
 		ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
 
 		matrices.push();
+
 		matrices.translate(0.5f, 0.5f, 0.5f);
 
 		itemRenderer.renderItem(
