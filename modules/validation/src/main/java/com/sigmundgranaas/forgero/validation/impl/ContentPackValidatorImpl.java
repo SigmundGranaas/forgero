@@ -10,6 +10,7 @@ import com.sigmundgranaas.forgero.core.condition.api.StaticCondition;
 import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 import com.sigmundgranaas.forgero.data.pipeline.api.DataPipelineResult;
 import com.sigmundgranaas.forgero.data.pipeline.api.ForgeroDataInitializer;
+import com.sigmundgranaas.forgero.data.pipeline.api.ParsingError;
 import com.sigmundgranaas.forgero.data.pipeline.api.TemplateExpansionResult;
 import com.sigmundgranaas.forgero.model.validation.api.*;
 import com.sigmundgranaas.forgero.utility.resource.loader.api.ResourceProvider;
@@ -99,6 +100,11 @@ public class ContentPackValidatorImpl implements ContentPackValidator {
 			ForgeroDataInitializer initializer = new ForgeroDataInitializer(config);
 			DataPipelineResult pipelineResult = initializer.getPipelineResult();
 
+			// Cross-check every in_slot_type condition against the slots that actually exist.
+			// A stale slot_type is otherwise a silent dead conditional (no parse error).
+			List<ParsingError> slotReferenceErrors =
+					SlotReferenceValidator.validate(contentPaths, tagResolver, defaultNamespace);
+
 			// Build asset paths for texture validation
 			List<Path> assetPaths = buildAssetPaths();
 			
@@ -141,9 +147,11 @@ public class ContentPackValidatorImpl implements ContentPackValidator {
 						animatedResult.errorCount());
 			}
 
-			// Phase 8: Build aggregated result
+			// Phase 8: Build aggregated result (definition parse errors + slot-reference errors)
+			List<ParsingError> definitionErrors = new ArrayList<>(pipelineResult.parsingErrors());
+			definitionErrors.addAll(slotReferenceErrors);
 			DefinitionValidationResult definitionResult = new DefinitionValidationResult(
-					pipelineResult.parsingErrors(),
+					definitionErrors,
 					List.of(),
 					pipelineResult.rawDefinitions().size()
 			);
