@@ -55,7 +55,7 @@ public record ExtensibleEquipment(
 
 	@Override
 	public List<Component> getChildren() {
-		return upgrades.filledContents();
+		return upgrades.traversableContents();
 	}
 
 	@Override

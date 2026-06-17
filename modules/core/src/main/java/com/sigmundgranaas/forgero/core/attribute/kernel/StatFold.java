@@ -7,8 +7,8 @@ import com.sigmundgranaas.forgero.core.attribute.api.BakedAttributes;
 import com.sigmundgranaas.forgero.core.attribute.api.PrecomputedAttribute;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
+import com.sigmundgranaas.forgero.core.component.api.Slot;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
-import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 import com.sigmundgranaas.forgero.core.condition.api.Condition;
 import com.sigmundgranaas.forgero.core.property.compilation.ResolutionContext;
@@ -126,14 +126,18 @@ public final class StatFold {
 
 		FoldResult composed = foldPool(pool);
 
-		// modify layer: filled upgrade slots' exports apply to the sealed base
+		// modify layer: filled slots' exports apply to the sealed base. Generic over any Slot
+		// kind that opts into traversal and contributes a Component (gems, runes, a potion modeled
+		// as a Component, …) — not just ComponentUpgradeSlot. Kinds that hold non-Component state
+		// (StatusModifierSlot, ArrowSlot) return empty componentContent() and are skipped here,
+		// contributing through their own machinery instead.
 		List<Sourced> upgradePool = new ArrayList<>();
 		if (node instanceof CustomizableComponent customizable) {
-			for (var rawSlot : customizable.upgrades().slots().asList()) {
-				if (!(rawSlot instanceof ComponentUpgradeSlot slot)) {
+			for (Slot slot : customizable.upgrades().slots().asList()) {
+				if (!slot.includeInTraversal()) {
 					continue;
 				}
-				Optional<Component> content = slot.getContent();
+				Optional<Component> content = slot.componentContent();
 				if (content.isEmpty()) {
 					continue;
 				}

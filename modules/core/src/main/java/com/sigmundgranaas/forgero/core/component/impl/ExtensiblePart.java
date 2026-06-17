@@ -40,7 +40,7 @@ public record ExtensiblePart(
 
 	@Override
 	public List<Component> getChildren() {
-		return upgrades.filledContents();
+		return upgrades.traversableContents();
 	}
 
 	@Override

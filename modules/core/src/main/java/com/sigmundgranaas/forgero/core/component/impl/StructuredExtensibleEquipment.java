@@ -84,7 +84,7 @@ public record StructuredExtensibleEquipment(
 	public List<Component> getChildren() {
 		return Stream.concat(
 				structure.children().stream(),
-				upgrades.filledContents().stream()
+				upgrades.traversableContents().stream()
 		).toList();
 	}
 

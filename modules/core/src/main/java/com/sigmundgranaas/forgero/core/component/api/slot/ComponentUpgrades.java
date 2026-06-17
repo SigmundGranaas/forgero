@@ -66,6 +66,23 @@ public record ComponentUpgrades(SlotContainer slots) {
 	}
 
 	/**
+	 * Component contents of <em>all</em> slot kinds (not just upgrade slots) that opt into
+	 * traversal and contribute a Component. This is the source for component-tree traversal /
+	 * property &amp; stat compilation, so any {@link Slot} kind holding a Component participates.
+	 * <p>
+	 * For the current content this is identical to {@link #filledContents()} — every
+	 * {@code ComponentUpgradeSlot} returns {@code true} from {@link Slot#includeInTraversal()} and
+	 * exposes its content via {@link Slot#componentContent()} — but a plugin slot kind that holds a
+	 * Component is now included, and one that opts out (or holds non-Component state) is excluded.
+	 */
+	public List<Component> traversableContents() {
+		return slots.all().stream()
+				.filter(Slot::includeInTraversal)
+				.flatMap(slot -> slot.componentContent().stream())
+				.toList();
+	}
+
+	/**
 	 * Returns a new upgrades with the specified ComponentUpgradeSlot updated.
 	 */
 	public ComponentUpgrades withSlot(ComponentUpgradeSlot slot) {

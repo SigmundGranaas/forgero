@@ -53,6 +53,15 @@ public record ComponentUpgradeSlot(
 		return OpenIdentifier.parse(TYPE);
 	}
 
+	/**
+	 * An upgrade slot's content <em>is</em> the Component it contributes to the parent's compiled
+	 * tree, so it participates in stat/property compilation through the generic {@link Slot} hook.
+	 */
+	@Override
+	public Optional<Component> componentContent() {
+		return content;
+	}
+
 	// Implementation-specific API
 
 	/**

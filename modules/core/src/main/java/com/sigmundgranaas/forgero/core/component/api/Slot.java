@@ -4,6 +4,7 @@ import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.property.api.Property;
 import com.sigmundgranaas.forgero.core.property.api.PropertyKey;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -66,5 +67,20 @@ public interface Slot {
 	 */
 	default boolean includeInTraversal() {
 		return true;  // Default: include in traversal
+	}
+
+	/**
+	 * The {@link Component} this slot contributes to the parent's compiled tree, if any.
+	 * <p>
+	 * This is the generic hook the stat/property compiler uses to fold a slot's content into the
+	 * parent — it lets any slot <em>kind</em> participate, not just {@code ComponentUpgradeSlot}.
+	 * A slot that holds a Component (a gem, a rune, a potion modeled as a Component) returns it; a
+	 * slot that holds non-Component state (e.g. {@code StatusModifierSlot}, an {@code ArrowSlot})
+	 * returns {@link Optional#empty()} and contributes through its own machinery instead.
+	 *
+	 * @return the Component content to fold into the parent, or empty if this slot contributes none
+	 */
+	default Optional<Component> componentContent() {
+		return Optional.empty();  // Default: a slot contributes no Component to the compiled tree
 	}
 }
