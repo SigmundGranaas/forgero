@@ -43,12 +43,12 @@
     {
       "id": "handle_grip_slot",
       "type": "forgero:handle_grip_slot",
-      "tags": ["forgero:upgrade/grip"]
+      "tags": ["forgero:upgrades/types/grip"]
     },
     {
       "id": "tip_reinforcement_slot",
       "type": "forgero:tip_reinforcement_slot",
-      "tags": ["forgero:upgrade/tip_reinforcement"]
+      "tags": ["forgero:upgrades/types/tip_reinforcement"]
     }
   ]
 }

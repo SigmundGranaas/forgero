@@ -27,7 +27,7 @@
     {
       "id": "forgero:tip-reinforcement-slot",
       "type": "forgero:materials/roles/upgrade_material",
-      "tags": ["forgero:upgrade/tip_reinforcement"],
+      "tags": ["forgero:upgrades/types/tip_reinforcement"],
       "tier": 2,
       "description": "slot.forgero.tip_reinforcement"
     },
