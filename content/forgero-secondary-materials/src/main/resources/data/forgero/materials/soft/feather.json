@@ -48,7 +48,7 @@
       },
       "condition": {
         "type": "forgero:in_slot_type",
-        "slot_type": "forgero:fletching_slot"
+        "slot_type": "forgero:binding_slot"
       }
     }
   ]
