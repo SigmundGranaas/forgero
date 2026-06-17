@@ -65,7 +65,7 @@ public class CofComponentConverter {
 				// upgrade.tags() are the SLOT's own identity tags (e.g. "forgero:contexts/offensive"),
 				// matched by in_slot_type conditions alongside the slot type. They are NOT validation
 				// tags — validTags is left null so the slot type is used for install validation.
-				.map(upgrade -> new CofSlot(upgrade.id(), upgrade.type(), upgrade.description(), upgrade.tags(), null, null))
+				.map(upgrade -> new CofSlot(upgrade.id(), upgrade.type(), upgrade.description(), upgrade.tags(), null, null, upgrade.kind()))
 				.toList();
 		return new CofUpgrades(slots);
 	}

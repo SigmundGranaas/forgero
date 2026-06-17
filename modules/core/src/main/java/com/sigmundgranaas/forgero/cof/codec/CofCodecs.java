@@ -65,8 +65,10 @@ public class CofCodecs {
 						Codec.STRING.optionalFieldOf("description").forGetter(slot -> Optional.ofNullable(slot.description())),
 						Codec.list(CodecConstants.TAG_IDENTIFIER_CODEC).optionalFieldOf("tags").forGetter(slot -> Optional.ofNullable(slot.tags())),
 						recursiveComponentCodec.optionalFieldOf("content").forGetter(CofSlot::contentOpt),
-						Codec.list(CodecConstants.TAG_IDENTIFIER_CODEC).optionalFieldOf("valid_tags").forGetter(slot -> Optional.ofNullable(slot.validTags()))
-				).apply(instance, (id, type, desc, tags, content, validTags) -> new CofSlot(id, type, desc.orElse(null), tags.orElse(null), content.orElse(null), validTags.orElse(null)))
+						Codec.list(CodecConstants.TAG_IDENTIFIER_CODEC).optionalFieldOf("valid_tags").forGetter(slot -> Optional.ofNullable(slot.validTags())),
+						// Optional slot kind (Slot.type()); absent => the standard component-upgrade slot.
+						CodecConstants.OPEN_IDENTIFIER_CODEC.optionalFieldOf("kind").forGetter(slot -> Optional.ofNullable(slot.kind()))
+				).apply(instance, (id, type, desc, tags, content, validTags, kind) -> new CofSlot(id, type, desc.orElse(null), tags.orElse(null), content.orElse(null), validTags.orElse(null), kind.orElse(null)))
 		);
 
 		// 3. Define the other DTO codecs using the slot codec.

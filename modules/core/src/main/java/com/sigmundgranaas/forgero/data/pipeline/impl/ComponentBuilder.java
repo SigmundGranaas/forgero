@@ -8,9 +8,11 @@ import com.sigmundgranaas.forgero.cof.dto.CofStructure;
 import com.sigmundgranaas.forgero.cof.dto.CofUpgrades;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.component.api.Slot;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgrades;
+import com.sigmundgranaas.forgero.core.component.api.slot.SlotFactory;
+import com.sigmundgranaas.forgero.core.component.api.slot.SlotFactoryRegistry;
 import com.sigmundgranaas.forgero.core.component.api.slot.SlotValidator;
-import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
 
@@ -87,26 +89,29 @@ public class ComponentBuilder {
 	}
 
 	private DataResult<ComponentUpgrades> buildUpgradesFromDto(CofUpgrades upgradesDto) {
-		List<ComponentUpgradeSlot> slots = new ArrayList<>();
+		List<Slot> slots = new ArrayList<>();
 		for (CofSlot slotDto : upgradesDto.slots()) {
 			Component childComponent = null;
 			if (slotDto.content() != null) {
 				childComponent = buildFromId(slotDto.content().id());
 			}
 
-			SlotValidator validator;
-			if (slotDto.validTags() != null && !slotDto.validTags().isEmpty()) {
-				// Use explicitly specified valid tags
-				validator = SlotValidator.requireAllTags(slotDto.validTags());
-			} else if (slotDto.type() != null) {
-				// Use the slot type as the required tag (standard behavior)
-				validator = SlotValidator.requireTag(slotDto.type());
-			} else {
-				validator = SlotValidator.ACCEPT_ALL;
+			// Dispatch on the slot kind so a plugin-defined slot type is built by its factory.
+			// Absent kind => the standard component-upgrade slot, so existing content is unchanged.
+			OpenIdentifier kind = slotDto.kind();
+			SlotFactory factory = SlotFactoryRegistry.get(kind);
+			if (factory == null) {
+				return DataResult.error(() -> "Unknown slot kind '" + kind + "' for slot " + slotDto.id()
+						+ " — register a SlotFactory for it.");
 			}
-
-			slots.add(new ComponentUpgradeSlot(slotDto.id(), slotDto.type(), slotDto.description(), java.util.Set.copyOf(slotDto.tagsOrEmpty()), validator, Optional.ofNullable(childComponent)));
+			SlotFactory.SlotSpec spec = new SlotFactory.SlotSpec(
+					slotDto.id(),
+					slotDto.type(),
+					slotDto.description() == null ? "" : slotDto.description(),
+					java.util.Set.copyOf(slotDto.tagsOrEmpty()),
+					slotDto.validTags());
+			slots.add(factory.create(spec, Optional.ofNullable(childComponent)));
 		}
-		return DataResult.success(ComponentUpgrades.of(slots));
+		return DataResult.success(ComponentUpgrades.ofSlots(slots));
 	}
 }

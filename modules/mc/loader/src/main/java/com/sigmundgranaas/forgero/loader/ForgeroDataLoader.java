@@ -90,6 +90,12 @@ public class ForgeroDataLoader implements ModInitializer {
 				LOGGER.debug("Registered slot codec for type: {}", type);
 			});
 
+			// Phase 3.6: Register slot factories into SlotFactoryRegistry (load-time slot dispatch)
+			registrationContext.getSlotFactories().forEach((kind, factory) -> {
+				com.sigmundgranaas.forgero.core.component.api.slot.SlotFactoryRegistry.register(kind, factory);
+				LOGGER.debug("Registered slot factory for kind: {}", kind);
+			});
+
 			// Phase 4: Create data configuration
 			ForgeroDataInitializer.Config dataConfig =
 					dataLoader.createConfig(registrationContext, this.tagResolver);

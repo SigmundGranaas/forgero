@@ -117,4 +117,16 @@ public interface PluginRegistrationContext {
 	 * @param codec The codec for parsing the slot.
 	 */
 	void registerSlotCodec(String type, Codec<? extends com.sigmundgranaas.forgero.core.component.api.Slot> codec);
+
+	/**
+	 * Registers a factory that builds a custom slot kind from data, so the kind can be authored
+	 * directly in part templates (the load-time counterpart to {@link #registerSlotCodec}). Register
+	 * both for a slot kind that is authorable <em>and</em> persists: the factory builds it at load,
+	 * the codec (de)serialises it at runtime.
+	 *
+	 * @param kind    The slot kind identifier (its {@code Slot.type()}, e.g. "forgero:potion").
+	 * @param factory Builds a Slot of this kind from a parsed slot definition.
+	 */
+	void registerSlotFactory(com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier kind,
+	                         com.sigmundgranaas.forgero.core.component.api.slot.SlotFactory factory);
 }

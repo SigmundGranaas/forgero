@@ -15,6 +15,9 @@ import java.util.List;
  *                    contextual upgrade bonus can gate on the slot's context.
  * @param tier        Optional tier requirement for the upgrade.
  * @param description Optional translatable description key for the slot.
+ * @param kind        Optional slot <em>kind</em> ({@code Slot.type()}) selecting which slot
+ *                    implementation to build (default {@code forgero:component_upgrade}). A plugin
+ *                    can author its own slot kind by registering a {@code SlotFactory} for it.
  */
 public record UpgradeSlotData(
 		OpenIdentifier id,
@@ -24,6 +27,13 @@ public record UpgradeSlotData(
 		@Nullable
 		Integer tier,
 		@Nullable
-		String description
+		String description,
+		@Nullable
+		OpenIdentifier kind
 ) {
+	/** Backward-compatible constructor defaulting {@code kind} (the standard component-upgrade slot). */
+	public UpgradeSlotData(OpenIdentifier id, OpenIdentifier type, @Nullable List<OpenIdentifier> tags,
+	                       @Nullable Integer tier, @Nullable String description) {
+		this(id, type, tags, tier, description, null);
+	}
 }

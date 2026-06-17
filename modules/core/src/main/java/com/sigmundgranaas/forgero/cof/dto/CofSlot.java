@@ -19,6 +19,8 @@ import java.util.Optional;
  *                    in_slot_type conditions alongside the slot type.
  * @param content     The full CofComponent DTO of the item currently in the slot. Null if empty.
  * @param validTags   An optional list of tags that a component must have to be valid for this slot.
+ * @param kind        Optional slot kind ({@code Slot.type()}) selecting which slot implementation to
+ *                    build. Null => the standard {@code forgero:component_upgrade} slot.
  */
 public record CofSlot(
 		OpenIdentifier id,
@@ -26,8 +28,16 @@ public record CofSlot(
 		@Nullable String description,
 		@Nullable List<OpenIdentifier> tags,
 		@Nullable CofComponent content,
-		@Nullable List<OpenIdentifier> validTags
+		@Nullable List<OpenIdentifier> validTags,
+		@Nullable OpenIdentifier kind
 ) {
+	/** Backward-compatible constructor defaulting {@code kind} (the standard component-upgrade slot). */
+	public CofSlot(OpenIdentifier id, OpenIdentifier type, @Nullable String description,
+	               @Nullable List<OpenIdentifier> tags, @Nullable CofComponent content,
+	               @Nullable List<OpenIdentifier> validTags) {
+		this(id, type, description, tags, content, validTags, null);
+	}
+
 	/**
 	 * Helper for codecs that work with Optional fields.
 	 */

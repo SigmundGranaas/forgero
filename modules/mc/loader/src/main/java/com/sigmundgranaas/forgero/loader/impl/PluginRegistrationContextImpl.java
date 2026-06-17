@@ -28,6 +28,7 @@ public class PluginRegistrationContextImpl implements PluginRegistrationContext 
 	private final Map<String, Codec<? extends DynamicCondition>> dynamicConditionCodecs = new HashMap<>();
 	private final Map<PropertyKey<?>, Function<Supplier<Codec<Condition>>, Codec<? extends List<?>>>> propertyCodecBuilders = new HashMap<>();
 	private final Map<String, Codec<? extends com.sigmundgranaas.forgero.core.component.api.Slot>> slotCodecs = new HashMap<>();
+	private final Map<com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier, com.sigmundgranaas.forgero.core.component.api.slot.SlotFactory> slotFactories = new HashMap<>();
 	private final Supplier<TagResolver> tagResolverSupplier;
 
 	public PluginRegistrationContextImpl(Supplier<TagResolver> tagResolverSupplier) {
@@ -89,6 +90,16 @@ public class PluginRegistrationContextImpl implements PluginRegistrationContext 
 		LOGGER.trace("Registered slot codec for type '{}'", type);
 	}
 
+	@Override
+	public void registerSlotFactory(com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier kind,
+	                                com.sigmundgranaas.forgero.core.component.api.slot.SlotFactory factory) {
+		if (slotFactories.containsKey(kind)) {
+			LOGGER.warn("Slot factory for kind '{}' is being overwritten", kind);
+		}
+		slotFactories.put(kind, factory);
+		LOGGER.trace("Registered slot factory for kind '{}'", kind);
+	}
+
 
 	public Map<String, ItemCreator> getItemCreators() {
 		return new HashMap<>(itemCreators);
@@ -108,5 +119,9 @@ public class PluginRegistrationContextImpl implements PluginRegistrationContext 
 
 	public Map<String, Codec<? extends com.sigmundgranaas.forgero.core.component.api.Slot>> getSlotCodecs() {
 		return new HashMap<>(slotCodecs);
+	}
+
+	public Map<com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier, com.sigmundgranaas.forgero.core.component.api.slot.SlotFactory> getSlotFactories() {
+		return new HashMap<>(slotFactories);
 	}
 }

@@ -31,6 +31,15 @@ public record ComponentUpgrades(SlotContainer slots) {
 	}
 
 	/**
+	 * Creates upgrades from a heterogeneous collection of {@link Slot} kinds. Used by the loader
+	 * once slot kinds are dispatched by their {@code kind} — the container holds any Slot, and the
+	 * upgrade-typed views ({@link #allUpgradeSlots()} etc.) still expose only ComponentUpgradeSlots.
+	 */
+	public static ComponentUpgrades ofSlots(Collection<? extends Slot> slots) {
+		return new ComponentUpgrades(SlotContainer.of(slots));
+	}
+
+	/**
 	 * Creates empty upgrades (component has upgrade capability but no slots defined).
 	 */
 	public static ComponentUpgrades empty() {
