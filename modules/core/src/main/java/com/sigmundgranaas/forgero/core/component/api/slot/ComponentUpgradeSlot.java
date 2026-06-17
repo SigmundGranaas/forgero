@@ -62,6 +62,16 @@ public record ComponentUpgradeSlot(
 		return content;
 	}
 
+	/**
+	 * Overlay seam (see {@link Slot#withComponentContent}): installs the given content (or empties),
+	 * preserving this slot's id, type, tags, and validator. The NBT round-trip restores installed
+	 * upgrades onto the pristine slot through this.
+	 */
+	@Override
+	public Slot withComponentContent(Optional<Component> newContent) {
+		return newContent.<Slot>map(this::withContent).orElseGet(this::empty);
+	}
+
 	// Implementation-specific API
 
 	/**

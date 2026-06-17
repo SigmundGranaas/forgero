@@ -16,10 +16,12 @@ import com.sigmundgranaas.forgero.cof.dto.CofUpgrades;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
+import com.sigmundgranaas.forgero.core.component.api.Slot;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgrades;
-import com.sigmundgranaas.forgero.core.component.api.slot.SlotValidator;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
+import com.sigmundgranaas.forgero.core.component.api.slot.SlotFactory;
+import com.sigmundgranaas.forgero.core.component.api.slot.SlotFactoryRegistry;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
 import com.sigmundgranaas.forgero.core.registry.ComponentRegistry;
@@ -116,16 +118,20 @@ public class ComponentCofCodec implements Codec<Component> {
 		CofUpgrades upgradesDto = null;
 		if (component instanceof CustomizableComponent customizable) {
 			List<CofSlot> upgradeDtos = customizable.upgrades().slots().all().stream()
-					.filter(slot -> slot instanceof ComponentUpgradeSlot)
-					.map(slot -> (ComponentUpgradeSlot) slot)
-				.map(upgradeSlot -> new CofSlot(
-						upgradeSlot.id(),
-						upgradeSlot.slotType(),
-						upgradeSlot.description(),
-						List.copyOf(upgradeSlot.tags()),
-						upgradeSlot.getContent().map(this::buildDtoFromComponent).orElse(null),
-						null
-				))
+					// Serialize standard upgrade slots (filled and empty, preserving the existing
+					// format) plus any other slot KIND that currently holds a Component, so a plugin
+					// slot's installed content persists. The slot's kind is recorded so it round-trips;
+					// the default kind is left null to keep existing items' NBT byte-identical.
+					.filter(slot -> slot instanceof ComponentUpgradeSlot || slot.componentContent().isPresent())
+					.map(slot -> new CofSlot(
+							slot.id(),
+							slot.slotType(),
+							slot.description(),
+							List.copyOf(slot.tags()),
+							slot.componentContent().map(this::buildDtoFromComponent).orElse(null),
+							null,
+							slot.type().equals(SlotFactoryRegistry.DEFAULT_KIND) ? null : slot.type()
+					))
 					.toList();
 			upgradesDto = new CofUpgrades(upgradeDtos);
 		}
@@ -223,36 +229,34 @@ public class ComponentCofCodec implements Codec<Component> {
 		LOGGER.debug("Building upgrades for component {} with {} upgrade slots from DTO",
 				parentDto.id(), upgrades.slots().size());
 
-		Map<OpenIdentifier, ComponentUpgradeSlot> pristineSlotsById = pristineCustomizable.upgrades().slots().all().stream()
-				.filter(slot -> slot instanceof ComponentUpgradeSlot)
-				.map(slot -> (ComponentUpgradeSlot) slot)
-				.collect(Collectors.toMap(ComponentUpgradeSlot::id, Function.identity()));
+		// The pristine component (built from data) is the source of truth for the slot structure and
+		// kind. The DTO carries only the mutable installed content, so we iterate the pristine slots
+		// and overlay each slot's content from the DTO. This preserves every slot's kind, identity,
+		// and validator (so a plugin slot keeps its behaviour), and restores installed upgrades.
+		Map<OpenIdentifier, CofSlot> dtoSlotsById = upgrades.slots().stream()
+				.collect(Collectors.toMap(CofSlot::id, Function.identity(), (a, b) -> b));
 
-		List<ComponentUpgradeSlot> newSlots = new ArrayList<>();
-		for (CofSlot slotDto : upgrades.slots()) {
-			ComponentUpgradeSlot pristineSlot = pristineSlotsById.get(slotDto.id());
-			if (pristineSlot == null) {
-				LOGGER.debug("Skipping upgrade slot {} - not found in pristine component {}", slotDto.id(), parentDto.id());
+		List<Slot> newSlots = new ArrayList<>();
+		for (Slot pristineSlot : pristineCustomizable.upgrades().slots().all()) {
+			CofSlot slotDto = dtoSlotsById.get(pristineSlot.id());
+			if (slotDto == null || slotDto.content() == null) {
+				// Not installed (or carries no Component content): keep the pristine slot as-is.
+				newSlots.add(pristineSlot);
 				continue;
 			}
 
-			var contentResult = Optional.ofNullable(slotDto.content())
-					.map(this::buildComponentFromDto)
-					.map(dr -> dr.map(Optional::of))
-					.orElse(DataResult.success(Optional.empty()));
-
+			DataResult<Optional<Component>> contentResult = buildComponentFromDto(slotDto.content()).map(Optional::of);
 			if (contentResult.error().isPresent()) {
 				LOGGER.error("Failed to build upgrade content for slot {} in component {}: {}",
-						slotDto.id(), parentDto.id(), contentResult.error().get());
+						pristineSlot.id(), parentDto.id(), contentResult.error().get());
 				return Optional.empty();
 			}
 
-			newSlots.add(new ComponentUpgradeSlot(slotDto.id(), slotDto.type(), slotDto.description(),
-					Set.copyOf(slotDto.tagsOrEmpty()), pristineSlot.validator(), contentResult.result().get()));
+			newSlots.add(pristineSlot.withComponentContent(contentResult.result().get()));
 		}
 
 		LOGGER.debug("Successfully built {} upgrade slots for component {}", newSlots.size(), parentDto.id());
-		return Optional.of(ComponentUpgrades.of(newSlots));
+		return Optional.of(ComponentUpgrades.ofSlots(newSlots));
 	}
 
 
@@ -266,7 +270,7 @@ public class ComponentCofCodec implements Codec<Component> {
 		LOGGER.debug("Building {} upgrade slots from DTO without pristine definition for component {}",
 				upgrades.slots().size(), parentDto.id());
 
-		List<ComponentUpgradeSlot> newSlots = new ArrayList<>();
+		List<Slot> newSlots = new ArrayList<>();
 		for (CofSlot slotDto : upgrades.slots()) {
 			var contentResult = Optional.ofNullable(slotDto.content())
 					.map(this::buildComponentFromDto)
@@ -279,18 +283,24 @@ public class ComponentCofCodec implements Codec<Component> {
 				return Optional.empty();
 			}
 
-			newSlots.add(new ComponentUpgradeSlot(
+			// No pristine to overlay onto: build the slot of its kind from the DTO.
+			SlotFactory factory = SlotFactoryRegistry.get(slotDto.kind());
+			if (factory == null) {
+				LOGGER.error("Unknown slot kind '{}' for slot {} in component {} (no pristine)",
+						slotDto.kind(), slotDto.id(), parentDto.id());
+				return Optional.empty();
+			}
+			SlotFactory.SlotSpec spec = new SlotFactory.SlotSpec(
 					slotDto.id(),
 					slotDto.type(),
-					slotDto.description(),
+					slotDto.description() == null ? "" : slotDto.description(),
 					Set.copyOf(slotDto.tagsOrEmpty()),
-					SlotValidator.requireTag(slotDto.type()),
-					contentResult.result().get()
-			));
+					slotDto.validTags());
+			newSlots.add(factory.create(spec, contentResult.result().get()));
 		}
 
 		LOGGER.debug("Successfully built {} upgrade slots from DTO without pristine for component {}",
 				newSlots.size(), parentDto.id());
-		return Optional.of(ComponentUpgrades.of(newSlots));
+		return Optional.of(ComponentUpgrades.ofSlots(newSlots));
 	}
 }

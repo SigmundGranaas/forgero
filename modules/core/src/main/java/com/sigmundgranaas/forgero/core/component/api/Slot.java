@@ -83,4 +83,27 @@ public interface Slot {
 	default Optional<Component> componentContent() {
 		return Optional.empty();  // Default: a slot contributes no Component to the compiled tree
 	}
+
+	/**
+	 * The slot's identity tags (its context, etc.), matched by {@code in_slot_type} alongside the
+	 * slot type. Generic accessor so serialization can read tags off any kind; kinds without tags
+	 * return empty.
+	 */
+	default java.util.Set<com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier> tags() {
+		return java.util.Set.of();
+	}
+
+	/**
+	 * Returns this slot with the given Component installed (or emptied when absent), preserving the
+	 * slot's kind, identity, and validation. This is the overlay seam the NBT round-trip uses: the
+	 * pristine slot (built from data) is the source of truth for the slot's configuration, and only
+	 * the mutable Component content is restored onto it. A slot whose content is not a Component
+	 * ignores this and returns itself.
+	 *
+	 * @param content the Component to install, or empty to clear the slot
+	 * @return a slot of the same kind carrying the given content
+	 */
+	default Slot withComponentContent(Optional<Component> content) {
+		return this;  // Default: non-Component slots carry no overlayable content
+	}
 }

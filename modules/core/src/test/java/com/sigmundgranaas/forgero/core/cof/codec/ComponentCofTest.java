@@ -125,6 +125,69 @@ class ComponentCofTest {
 		assertEquals(serialized, reserialized, "Re-serialized component should be identical to the original serialized JSON");
 	}
 
+	/**
+	 * A content installed in a <em>custom</em> slot kind (what a plugin would register) survives the
+	 * NBT/COF round-trip with its kind preserved: encode records the kind, decode overlays the
+	 * installed Component onto the pristine slot of that kind. Proves the 1b overlay path is
+	 * kind-agnostic.
+	 */
+	@Test
+	void testPluginSlotKindRoundTrip() {
+		OpenIdentifier charmId = id("test-charm");
+		PluginSlot emptySlot = new PluginSlot(id("vial"), id("test_slot_type"), Set.of(), Optional.empty());
+
+		Component pristine = ExtensibleEquipment.create(charmId, Set.of(AMULET_TAG), Collections.emptyMap(),
+				ComponentUpgrades.ofSlots(List.of(emptySlot)));
+		Component mutated = ExtensibleEquipment.create(charmId, Set.of(AMULET_TAG), Collections.emptyMap(),
+				ComponentUpgrades.ofSlots(List.of((PluginSlot) emptySlot.withComponentContent(Optional.of(GEM_COMPONENT)))));
+
+		// Pristine must be discoverable so the decode overlays installed content onto it.
+		componentRegistry = ComponentRegistry.builder()
+				.add(IRON_COMPONENT).add(GEM_COMPONENT).add(pristine).build();
+		Map<PropertyKey<?>, Codec<? extends List<?>>> propertyCodecs = new HashMap<>();
+		propertyCodecs.put(Attribute.KEY, ListCodecWrapper.of(new AttributeCodec(new ConditionCodec(new HashMap<>(), new HashMap<>()))));
+		codec = new ComponentCofCodec(componentRegistry, constructorRegistry,
+				CofCodecs.create(new KeyMapDispatchCodec(propertyCodecs).codec()));
+
+		testMutatedCycle(pristine, mutated);
+
+		// And concretely: the installed Component comes back, in a slot of the same kind.
+		JsonElement serialized = codec.encodeStart(JsonOps.INSTANCE, mutated).getOrThrow(false, System.err::println);
+		Component restored = codec.parse(JsonOps.INSTANCE, serialized).getOrThrow(false, System.err::println);
+		var slot = ((com.sigmundgranaas.forgero.core.component.api.CustomizableComponent) restored)
+				.upgrades().slots().all().iterator().next();
+		assertEquals(PluginSlot.KIND, slot.type(), "restored slot keeps its plugin kind");
+		assertTrue(slot.componentContent().isPresent(), "installed content is restored");
+		assertEquals(GEM_COMPONENT.id(), slot.componentContent().get().id());
+	}
+
+	/** A minimal Component-holding slot kind standing in for a plugin-registered slot. */
+	private record PluginSlot(OpenIdentifier id, OpenIdentifier slotType,
+	                          Set<OpenIdentifier> tags, Optional<Component> content)
+			implements com.sigmundgranaas.forgero.core.component.api.Slot {
+		static final OpenIdentifier KIND = OpenIdentifier.parse("forgero:test_plugin_slot");
+
+		@Override
+		public OpenIdentifier type() {
+			return KIND;
+		}
+
+		@Override
+		public String description() {
+			return "";
+		}
+
+		@Override
+		public Optional<Component> componentContent() {
+			return content;
+		}
+
+		@Override
+		public com.sigmundgranaas.forgero.core.component.api.Slot withComponentContent(Optional<Component> newContent) {
+			return new PluginSlot(id, slotType, tags, newContent);
+		}
+	}
+
 	@Test
 	void testStaticComponentCycle() {
 		testPristineSerialization(IRON_COMPONENT);
