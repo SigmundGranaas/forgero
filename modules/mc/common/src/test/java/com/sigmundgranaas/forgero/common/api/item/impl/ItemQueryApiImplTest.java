@@ -146,6 +146,7 @@ class ItemQueryApiImplTest {
 		@Override public SlotQuery<ComponentUpgradeSlot> queryUpgradeSlots(Component c) { throw new UnsupportedOperationException(); }
 		@Override public List<ComponentPart> getStructureParts(Component c) { return List.of(); }
 		@Override public List<ComponentUpgradeSlot> getAllUpgradeSlots(Component c) { return List.of(); }
+		@Override public List<com.sigmundgranaas.forgero.core.component.api.Slot> getAllSlots(Component c) { return List.of(); }
 		@Override public List<ComponentUpgradeSlot> getEmptyUpgradeSlots(Component c) { return List.of(); }
 		@Override public List<Component> getInstalledUpgrades(Component c) { return List.of(); }
 		@Override public boolean canInstall(Component t, Component u) { return false; }

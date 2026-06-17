@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.core.component.api.slot.impl;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
+import com.sigmundgranaas.forgero.core.component.api.Slot;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.*;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
@@ -53,6 +54,11 @@ public class SlotManagerImpl implements SlotManager {
 		List<ComponentUpgradeSlot> slots = new ArrayList<>();
 		collectAllUpgradeSlotsRecursive(component, slots);
 		return slots;
+	}
+
+	@Override
+	public List<Slot> getAllSlots(Component component) {
+		return mutater.getAllSlots(component);
 	}
 
 	/**
@@ -173,17 +179,17 @@ public class SlotManagerImpl implements SlotManager {
 
 	@Override
 	public Component installInSlot(Component target, OpenIdentifier slotId, Component upgrade) {
-		// Validate slot exists and is empty
-		ComponentUpgradeSlot slot = getComponentUpgradeSlot(target, slotId)
+		// Validate slot exists (any kind) and is empty
+		Slot slot = getSlotById(target, slotId)
 				.orElseThrow(() -> new IllegalArgumentException("Slot not found: " + slotId));
 
-		if (slot.isFilled()) {
+		if (slot.componentContent().isPresent()) {
 			throw new IllegalArgumentException("Slot already filled: " + slotId +
-					" (contains: " + slot.content().map(Component::id).orElse(null) + ")");
+					" (contains: " + slot.componentContent().map(Component::id).orElse(null) + ")");
 		}
 
-		// Validate upgrade
-		slot.validator().validate(upgrade, slotId).ifPresent(error -> {
+		// Validate upgrade against the slot (kind-generic compatibility seam)
+		slot.validate(upgrade).ifPresent(error -> {
 			throw new IllegalArgumentException(error);
 		});
 
@@ -192,12 +198,11 @@ public class SlotManagerImpl implements SlotManager {
 
 	@Override
 	public Component installOrReplace(Component target, OpenIdentifier slotId, Component upgrade) {
-		// Just validate slot exists and upgrade is compatible
-		ComponentUpgradeSlot slot = getComponentUpgradeSlot(target, slotId)
+		// Validate slot exists (any kind) and upgrade is compatible
+		Slot slot = getSlotById(target, slotId)
 				.orElseThrow(() -> new IllegalArgumentException("Slot not found: " + slotId));
 
-		// Validate upgrade
-		slot.validator().validate(upgrade, slotId).ifPresent(error -> {
+		slot.validate(upgrade).ifPresent(error -> {
 			throw new IllegalArgumentException(error);
 		});
 
@@ -281,19 +286,21 @@ public class SlotManagerImpl implements SlotManager {
 	 * @param slotId    The slot ID
 	 * @return The upgrade slot if found
 	 */
-	private Optional<ComponentUpgradeSlot> getComponentUpgradeSlot(Component component, OpenIdentifier slotId) {
-		// Check direct slots first
+	/**
+	 * Gets a slot of <em>any</em> kind by id, searching recursively through structure parts, so a
+	 * plugin slot kind can be managed by id (install/replace/remove).
+	 */
+	private Optional<Slot> getSlotById(Component component, OpenIdentifier slotId) {
 		if (component instanceof CustomizableComponent customizable) {
-			var directSlot = customizable.upgrades().get(slotId);
+			Optional<Slot> directSlot = customizable.upgrades().getSlot(slotId);
 			if (directSlot.isPresent()) {
 				return directSlot;
 			}
 		}
 
-		// Search in nested structure parts
 		if (component instanceof StructuredComponent structured) {
 			for (ComponentPart part : structured.structure().allParts()) {
-				var nestedSlot = getComponentUpgradeSlot(part.content(), slotId);
+				Optional<Slot> nestedSlot = getSlotById(part.content(), slotId);
 				if (nestedSlot.isPresent()) {
 					return nestedSlot;
 				}

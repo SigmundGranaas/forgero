@@ -99,6 +99,22 @@ public record ComponentUpgrades(SlotContainer slots) {
 	}
 
 	/**
+	 * Gets a slot of <em>any</em> kind by id (not filtered to ComponentUpgradeSlot), for generic
+	 * slot management.
+	 */
+	public Optional<Slot> getSlot(OpenIdentifier id) {
+		return slots.get(id);
+	}
+
+	/**
+	 * Returns a new upgrades with the given slot (any kind) updated. The generic counterpart of
+	 * {@link #withSlot(ComponentUpgradeSlot)}.
+	 */
+	public ComponentUpgrades withAnySlot(Slot slot) {
+		return new ComponentUpgrades(slots.with(slot));
+	}
+
+	/**
 	 * Returns true if there are no ComponentUpgradeSlot instances.
 	 */
 	public boolean isEmpty() {

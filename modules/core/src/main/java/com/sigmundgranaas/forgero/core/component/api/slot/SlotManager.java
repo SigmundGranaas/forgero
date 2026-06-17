@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.core.component.api.slot;
 
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
+import com.sigmundgranaas.forgero.core.component.api.Slot;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 
 import java.util.List;
@@ -81,6 +82,16 @@ public interface SlotManager {
 	 * @return List of all upgrade slots, empty if component has no upgrades
 	 */
 	List<ComponentUpgradeSlot> getAllUpgradeSlots(Component component);
+
+	/**
+	 * Gets all slots of <em>every</em> kind (not just {@link ComponentUpgradeSlot}), searching
+	 * recursively through structure parts. Lets a caller discover and manage plugin slot kinds
+	 * (a potion slot, a rune slot, …) alongside upgrade slots.
+	 *
+	 * @param component The component to inspect
+	 * @return List of all slots of any kind, empty if the component has none
+	 */
+	List<Slot> getAllSlots(Component component);
 
 	/**
 	 * Gets only empty upgrade slots.

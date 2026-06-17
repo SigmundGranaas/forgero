@@ -106,4 +106,17 @@ public interface Slot {
 	default Slot withComponentContent(Optional<Component> content) {
 		return this;  // Default: non-Component slots carry no overlayable content
 	}
+
+	/**
+	 * Validates whether the given Component may be installed in this slot, returning an error message
+	 * if not. This is the generic compatibility seam the slot manager uses to install into any slot
+	 * <em>kind</em> (not just {@code ComponentUpgradeSlot}). A kind with no install restriction (the
+	 * default) accepts anything; {@code ComponentUpgradeSlot} delegates to its {@code SlotValidator}.
+	 *
+	 * @param content the Component a caller wants to install
+	 * @return an error message if the content is not accepted, or empty if it is
+	 */
+	default java.util.Optional<String> validate(Component content) {
+		return java.util.Optional.empty();  // Default: accept any content
+	}
 }

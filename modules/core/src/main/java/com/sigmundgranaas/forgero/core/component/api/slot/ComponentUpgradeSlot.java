@@ -72,6 +72,12 @@ public record ComponentUpgradeSlot(
 		return newContent.<Slot>map(this::withContent).orElseGet(this::empty);
 	}
 
+	/** Compatibility seam (see {@link Slot#validate}): delegates to this slot's {@link SlotValidator}. */
+	@Override
+	public Optional<String> validate(Component content) {
+		return validator.validate(content, id);
+	}
+
 	// Implementation-specific API
 
 	/**

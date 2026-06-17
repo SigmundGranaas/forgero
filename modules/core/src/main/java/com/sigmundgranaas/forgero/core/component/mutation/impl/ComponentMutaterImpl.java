@@ -6,7 +6,6 @@ import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.Slot;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgrades;
-import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentStructure;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
 import com.sigmundgranaas.forgero.core.component.mutation.api.ComponentMutater;
@@ -57,15 +56,12 @@ public class ComponentMutaterImpl implements ComponentMutater {
 			}
 		}
 
-		// Check direct mutable slots on this component
+		// Check direct mutable slots on this component (any slot kind)
 		if (target instanceof CustomizableComponent customizable) {
-			var directSlot = customizable.upgrades().get(slotId);
+			var directSlot = customizable.upgrades().getSlot(slotId);
 			if (directSlot.isPresent()) {
-				Slot slot = directSlot.get();
-				if (slot instanceof ComponentUpgradeSlot upgradeSlot) {
-					ComponentUpgradeSlot updated = upgradeSlot.withContent(newContent);
-					return setComponentUpgradeSlot(target, updated);
-				}
+				Slot updated = directSlot.get().withComponentContent(java.util.Optional.of(newContent));
+				return setSlotInContainer(target, updated);
 			}
 		}
 
@@ -114,14 +110,12 @@ public class ComponentMutaterImpl implements ComponentMutater {
 			}
 		}
 
-		// Check direct mutable slots on this component
+		// Check direct mutable slots on this component (any slot kind)
 		if (target instanceof CustomizableComponent customizable) {
-			var directSlot = customizable.upgrades().get(slotId);
+			var directSlot = customizable.upgrades().getSlot(slotId);
 			if (directSlot.isPresent()) {
-				Slot slot = directSlot.get();
-				if (slot instanceof ComponentUpgradeSlot upgradeSlot) {
-					return setComponentUpgradeSlot(target, upgradeSlot.empty());
-				}
+				Slot emptied = directSlot.get().withComponentContent(java.util.Optional.empty());
+				return setSlotInContainer(target, emptied);
 			}
 		}
 
@@ -149,12 +143,12 @@ public class ComponentMutaterImpl implements ComponentMutater {
 		return structured.withStructure(newStructure);
 	}
 
-	private Component setComponentUpgradeSlot(Component target, ComponentUpgradeSlot updatedSlot) {
+	private Component setSlotInContainer(Component target, Slot updatedSlot) {
 		if (!(target instanceof CustomizableComponent customizable)) {
 			throw new IllegalArgumentException("Target component is not customizable.");
 		}
 
-		ComponentUpgrades newUpgrades = customizable.upgrades().withSlot(updatedSlot);
+		ComponentUpgrades newUpgrades = customizable.upgrades().withAnySlot(updatedSlot);
 		return customizable.withUpgrades(newUpgrades);
 	}
 
