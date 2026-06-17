@@ -123,7 +123,21 @@ public class SlotManagerImpl implements SlotManager {
 
 	@Override
 	public boolean canInstall(Component target, Component upgrade) {
-		return findCompatibleSlot(target, upgrade).isPresent();
+		return findCompatibleAnySlot(target, upgrade).isPresent();
+	}
+
+	/**
+	 * Finds the first compatible empty slot of <em>any</em> Component-holding kind for an upgrade.
+	 * Auto-routing ({@link #install}) uses this so a plugin slot kind is a valid destination; the
+	 * default-kind result is unchanged because only {@link ComponentUpgradeSlot} (and opted-in
+	 * plugin kinds) report {@link Slot#acceptsComponent()}.
+	 */
+	private Optional<Slot> findCompatibleAnySlot(Component target, Component upgrade) {
+		return getAllSlots(target).stream()
+				.filter(Slot::acceptsComponent)
+				.filter(slot -> slot.componentContent().isEmpty())
+				.filter(slot -> slot.validate(upgrade).isEmpty())
+				.findFirst();
 	}
 
 	@Override
@@ -161,7 +175,7 @@ public class SlotManagerImpl implements SlotManager {
 			throw new IllegalArgumentException("Upgrade component cannot be null");
 		}
 
-		Optional<ComponentUpgradeSlot> compatibleSlot = findCompatibleSlot(target, upgrade);
+		Optional<Slot> compatibleSlot = findCompatibleAnySlot(target, upgrade);
 
 		if (compatibleSlot.isEmpty()) {
 			return InstallationResult.failure(

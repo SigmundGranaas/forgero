@@ -78,6 +78,12 @@ public record ComponentUpgradeSlot(
 		return validator.validate(content, id);
 	}
 
+	/** Upgrade slots hold a Component, so they are valid auto-install targets. */
+	@Override
+	public boolean acceptsComponent() {
+		return true;
+	}
+
 	// Implementation-specific API
 
 	/**

@@ -119,4 +119,15 @@ public interface Slot {
 	default java.util.Optional<String> validate(Component content) {
 		return java.util.Optional.empty();  // Default: accept any content
 	}
+
+	/**
+	 * Whether this slot kind holds a {@link Component} and is therefore a valid target for
+	 * auto-routed Component installation. The slot manager's {@code install(target, upgrade)} only
+	 * considers kinds that opt in here, so a kind holding non-Component state (e.g.
+	 * {@code StatusModifierSlot}) is never picked as a destination for a Component upgrade.
+	 * {@code ComponentUpgradeSlot} and any Component-holding plugin slot return {@code true}.
+	 */
+	default boolean acceptsComponent() {
+		return false;  // Default: a slot does not accept auto-routed Component installs
+	}
 }

@@ -57,6 +57,32 @@ class GenericSlotManagementTest {
 		assertEquals(PluginSlot.KIND, emptied.type(), "kind preserved through remove");
 	}
 
+	@Test
+	void autoRouteInstallTargetsComponentHoldingKindAndSkipsOthers() {
+		SlotManager manager = new SlotManagerImpl(mutater());
+		Component gem = new StaticComponent(id("ruby"), Set.of(id("gem")), Collections.emptyMap());
+
+		// A charm with a non-Component slot first (acceptsComponent() == false) and a plugin
+		// Component slot second. Auto-routing must skip the first and install into the second.
+		OpenIdentifier inertId = id("inert");
+		OpenIdentifier vialId = id("vial");
+		Component charm = ExtensibleEquipment.create(id("charm"), Set.of(id("charm")), Collections.emptyMap(),
+				ComponentUpgrades.ofSlots(List.of(
+						new NonComponentSlot(inertId),
+						new PluginSlot(vialId, id("potion_slot"), Optional.empty()))));
+
+		var result = manager.install(charm, gem);
+		assertTrue(result.success(), "auto-routed install should find the Component-holding slot");
+		assertEquals(vialId, result.slotId().orElseThrow(), "installed into the plugin Component slot, not the inert one");
+
+		Component installed = result.component().orElseThrow();
+		assertTrue(manager.getAllSlots(installed).stream()
+				.anyMatch(s -> s.type().equals(PluginSlot.KIND) && s.componentContent().isPresent()));
+		assertTrue(manager.getAllSlots(installed).stream()
+				.anyMatch(s -> s.type().equals(NonComponentSlot.KIND) && s.componentContent().isEmpty()),
+				"inert slot untouched");
+	}
+
 	/** A minimal Component-holding slot kind standing in for a plugin-registered slot. */
 	private record PluginSlot(OpenIdentifier id, OpenIdentifier slotType, Optional<Component> content) implements Slot {
 		static final OpenIdentifier KIND = OpenIdentifier.parse("forgero:test_potion_slot");
@@ -80,5 +106,31 @@ class GenericSlotManagementTest {
 		public Slot withComponentContent(Optional<Component> newContent) {
 			return new PluginSlot(id, slotType, newContent);
 		}
+
+		@Override
+		public boolean acceptsComponent() {
+			return true;
+		}
+	}
+
+	/** A non-Component slot kind (like StatusModifierSlot): must never be an auto-install target. */
+	private record NonComponentSlot(OpenIdentifier id) implements Slot {
+		static final OpenIdentifier KIND = OpenIdentifier.parse("forgero:test_inert_slot");
+
+		@Override
+		public OpenIdentifier type() {
+			return KIND;
+		}
+
+		@Override
+		public OpenIdentifier slotType() {
+			return KIND;
+		}
+
+		@Override
+		public String description() {
+			return "";
+		}
+		// acceptsComponent() defaults to false; componentContent() defaults to empty.
 	}
 }
