@@ -33,17 +33,17 @@
     {
       "id": "binding_slot",
       "type": "forgero:binding",
-      "tags": ["forgero:parts/binding_type"]
+      "tags": ["forgero:upgrades/types/binding"]
     },
     {
       "id": "handle_grip_slot",
       "type": "forgero:grip",
-      "tags": ["forgero:parts/grip_type"]
+      "tags": ["forgero:upgrades/types/grip"]
     },
     {
       "id": "pommel_slot",
       "type": "forgero:pommel",
-      "tags": ["forgero:parts/pommel_type"]
+      "tags": ["forgero:upgrades/types/pommel"]
     }
   ]
 }

@@ -33,7 +33,7 @@
     {
       "id": "binding_slot",
       "type": "forgero:binding",
-      "tags": ["forgero:parts/binding_type"]
+      "tags": ["forgero:upgrades/types/binding"]
     }
   ]
 }

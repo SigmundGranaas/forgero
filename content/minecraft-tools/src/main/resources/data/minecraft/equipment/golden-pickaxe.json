@@ -38,17 +38,17 @@
     {
       "id": "binding_slot",
       "type": "forgero:binding",
-      "tags": ["forgero:parts/binding_type"]
+      "tags": ["forgero:upgrades/types/binding"]
     },
     {
       "id": "handle_grip_slot",
       "type": "forgero:grip",
-      "tags": ["forgero:parts/grip_type"]
+      "tags": ["forgero:upgrades/types/grip"]
     },
     {
       "id": "tip_reinforcement_slot",
       "type": "forgero:tip",
-      "tags": ["forgero:parts/tip_type"]
+      "tags": ["forgero:upgrades/types/tip"]
     }
   ]
 }
