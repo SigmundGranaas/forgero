@@ -15,7 +15,7 @@ import java.util.Map;
  * This is the load-time dispatch that lets new slot kinds be authored in part templates: a template
  * upgrade entry may carry a {@code "kind"} field, and the component builder uses this registry to
  * build the right {@link Slot} instead of hardcoding {@link ComponentUpgradeSlot}. Plugins register
- * their kinds via the registration context (mirroring {@link SlotRegistry} for codecs).
+ * their kinds via the registration context.
  * <p>
  * {@link #DEFAULT_KIND} ({@code forgero:component_upgrade}) is always registered, so existing content
  * with no {@code kind} field is unchanged.

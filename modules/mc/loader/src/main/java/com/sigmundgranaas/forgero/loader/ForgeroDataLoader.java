@@ -84,13 +84,7 @@ public class ForgeroDataLoader implements ModInitializer {
 			PluginRegistrationContextImpl registrationContext =
 					plugins.registerPluginRequirements(() -> this.tagResolver);
 
-			// Phase 3.5: Register slot codecs into SlotRegistry
-			registrationContext.getSlotCodecs().forEach((type, codec) -> {
-				com.sigmundgranaas.forgero.core.component.api.slot.SlotRegistry.register(type, codec);
-				LOGGER.debug("Registered slot codec for type: {}", type);
-			});
-
-			// Phase 3.6: Register slot factories into SlotFactoryRegistry (load-time slot dispatch)
+			// Phase 3.5: Register slot factories into SlotFactoryRegistry (load-time slot dispatch)
 			registrationContext.getSlotFactories().forEach((kind, factory) -> {
 				com.sigmundgranaas.forgero.core.component.api.slot.SlotFactoryRegistry.register(kind, factory);
 				LOGGER.debug("Registered slot factory for kind: {}", kind);

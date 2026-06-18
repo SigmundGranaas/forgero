@@ -61,6 +61,21 @@ public class SlotManagerImpl implements SlotManager {
 		return mutater.getAllSlots(component);
 	}
 
+	@Override
+	public List<Slot> getEmptySlots(Component component) {
+		return getAllSlots(component).stream()
+				.filter(Slot::acceptsComponent)
+				.filter(slot -> slot.componentContent().isEmpty())
+				.toList();
+	}
+
+	@Override
+	public List<Slot> getFilledSlots(Component component) {
+		return getAllSlots(component).stream()
+				.filter(slot -> slot.componentContent().isPresent())
+				.toList();
+	}
+
 	/**
 	 * Recursively collects all upgrade slots from a component and its nested structure parts.
 	 */

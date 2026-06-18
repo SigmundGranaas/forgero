@@ -110,19 +110,11 @@ public interface PluginRegistrationContext {
 	void registerPropertyCodec(PropertyKey<?> key, Function<Supplier<Codec<Condition>>, Codec<? extends List<?>>> codecBuilder);
 
 	/**
-	 * Registers a codec for a custom slot type.
-	 * This enables plugins to add new slot implementations (e.g., ArrowSlot, SoulSlot).
-	 *
-	 * @param type  The unique type identifier for the slot (e.g., "forgero:arrow", "forgero:soul").
-	 * @param codec The codec for parsing the slot.
-	 */
-	void registerSlotCodec(String type, Codec<? extends com.sigmundgranaas.forgero.core.component.api.Slot> codec);
-
-	/**
 	 * Registers a factory that builds a custom slot kind from data, so the kind can be authored
-	 * directly in part templates (the load-time counterpart to {@link #registerSlotCodec}). Register
-	 * both for a slot kind that is authorable <em>and</em> persists: the factory builds it at load,
-	 * the codec (de)serialises it at runtime.
+	 * directly in part templates. A Component-holding slot kind persists through the standard
+	 * component (COF/NBT) round-trip — its installed content is overlaid onto the data-built slot —
+	 * so registering a factory is all that is required for it to load, contribute, install, and
+	 * persist.
 	 *
 	 * @param kind    The slot kind identifier (its {@code Slot.type()}, e.g. "forgero:potion").
 	 * @param factory Builds a Slot of this kind from a parsed slot definition.

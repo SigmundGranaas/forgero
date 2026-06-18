@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.core.component.api.slot;
 
-import com.mojang.serialization.Codec;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Slot;
 
@@ -137,15 +136,4 @@ public final class SlotContainer {
 	public String toString() {
 		return "SlotContainer{" + slots.keySet() + "}";
 	}
-
-	/**
-	 * Polymorphic codec for SlotContainer.
-	 * Uses SlotRegistry.CODEC to deserialize heterogeneous slot types.
-	 */
-	public static final Codec<SlotContainer> CODEC =
-		SlotRegistry.CODEC.listOf()
-			.xmap(
-				slotList -> SlotContainer.of(slotList),
-				container -> new ArrayList<>(container.all())
-			);
 }

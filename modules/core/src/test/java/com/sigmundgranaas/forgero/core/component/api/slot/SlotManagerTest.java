@@ -268,7 +268,7 @@ class SlotManagerTest {
 		Component upgraded = slotManager.installInSlot(tool, GEM_SLOT_2, gem);
 
 		// Second slot should be filled
-		ComponentUpgradeSlot slot = ((CustomizableComponent) upgraded).upgrades().get(GEM_SLOT_2).orElseThrow();
+		ComponentUpgradeSlot slot = ((CustomizableComponent) upgraded).upgrades().getUpgradeSlot(GEM_SLOT_2).orElseThrow();
 		assertTrue(slot.isFilled());
 		assertEquals(GEM_ID, slot.content().orElseThrow().id());
 	}
@@ -312,7 +312,7 @@ class SlotManagerTest {
 		Component upgraded = slotManager.installOrReplace(tool, GEM_SLOT_1, emerald);
 
 		// Slot should now contain emerald
-		ComponentUpgradeSlot slot = ((CustomizableComponent) upgraded).upgrades().get(GEM_SLOT_1).orElseThrow();
+		ComponentUpgradeSlot slot = ((CustomizableComponent) upgraded).upgrades().getUpgradeSlot(GEM_SLOT_1).orElseThrow();
 		assertTrue(slot.isFilled());
 		assertEquals(EMERALD_ID, slot.content().orElseThrow().id());
 	}
@@ -346,7 +346,7 @@ class SlotManagerTest {
 
 		Component updated = slotManager.removeFromSlot(tool, GEM_SLOT_1);
 
-		ComponentUpgradeSlot slot = ((CustomizableComponent) updated).upgrades().get(GEM_SLOT_1).orElseThrow();
+		ComponentUpgradeSlot slot = ((CustomizableComponent) updated).upgrades().getUpgradeSlot(GEM_SLOT_1).orElseThrow();
 		assertTrue(slot.isEmpty());
 	}
 

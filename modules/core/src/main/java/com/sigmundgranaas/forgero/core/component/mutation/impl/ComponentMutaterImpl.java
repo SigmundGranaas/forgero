@@ -84,9 +84,9 @@ public class ComponentMutaterImpl implements ComponentMutater {
 	 * Checks if a component (or its nested parts) contains a slot with the given ID.
 	 */
 	private boolean hasSlot(Component component, OpenIdentifier slotId) {
-		// Check direct slots
+		// Check direct slots (any kind)
 		if (component instanceof CustomizableComponent customizable) {
-			if (customizable.upgrades().get(slotId).isPresent()) {
+			if (customizable.upgrades().getSlot(slotId).isPresent()) {
 				return true;
 			}
 		}

@@ -87,11 +87,28 @@ public interface SlotManager {
 	 * Gets all slots of <em>every</em> kind (not just {@link ComponentUpgradeSlot}), searching
 	 * recursively through structure parts. Lets a caller discover and manage plugin slot kinds
 	 * (a potion slot, a rune slot, …) alongside upgrade slots.
+	 * <p>
+	 * This manager exposes two coherent views: the {@code *UpgradeSlot*} methods are a typed
+	 * convenience view over {@link ComponentUpgradeSlot}; the {@code *Slots} methods
+	 * ({@link #getAllSlots}, {@link #getEmptySlots}, {@link #getFilledSlots}) are the generic
+	 * any-kind view. Install/remove and {@link #canInstall} operate over any Component-holding kind.
 	 *
 	 * @param component The component to inspect
 	 * @return List of all slots of any kind, empty if the component has none
 	 */
 	List<Slot> getAllSlots(Component component);
+
+	/**
+	 * Gets all empty slots of any kind that can hold a Component (the generic counterpart of
+	 * {@link #getEmptyUpgradeSlots}).
+	 */
+	List<Slot> getEmptySlots(Component component);
+
+	/**
+	 * Gets all filled slots of any kind holding a Component (the generic counterpart of
+	 * {@link #getFilledUpgradeSlots}).
+	 */
+	List<Slot> getFilledSlots(Component component);
 
 	/**
 	 * Gets only empty upgrade slots.

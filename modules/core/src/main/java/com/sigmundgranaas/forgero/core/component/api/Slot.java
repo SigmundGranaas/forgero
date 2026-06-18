@@ -43,11 +43,13 @@ public interface Slot {
 	String description();
 
 	/**
-	 * Controls property contribution during resolution.
-	 * Called once per PropertyKey during property bake phase.
-	 *
-	 * Implementations can filter or transform properties from their content.
-	 * For example, ArrowSlot might return an empty stream to prevent arrows from contributing properties.
+	 * Filters or transforms the properties this slot's content contributes, per PropertyKey.
+	 * <p>
+	 * <b>Scope:</b> this hook is applied on the <em>custom-property</em> resolution path (on-hit,
+	 * on-tick, tooltip, …), not on attribute compilation ({@code StatFold}). To suppress a slot's
+	 * contribution to the compiled tree <em>entirely</em> (attributes and properties), return
+	 * {@code false} from {@link #includeInTraversal()} instead — {@code filterProperties} is for
+	 * <em>partial</em>, per-property-key shaping of what does get through.
 	 *
 	 * @param propertyKey The property type being resolved
 	 * @param properties Properties from this slot's content (if applicable)

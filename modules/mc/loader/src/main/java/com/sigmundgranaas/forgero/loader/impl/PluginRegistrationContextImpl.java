@@ -27,7 +27,6 @@ public class PluginRegistrationContextImpl implements PluginRegistrationContext 
 	private final Map<String, Codec<? extends StaticCondition>> staticConditionCodecs = new HashMap<>();
 	private final Map<String, Codec<? extends DynamicCondition>> dynamicConditionCodecs = new HashMap<>();
 	private final Map<PropertyKey<?>, Function<Supplier<Codec<Condition>>, Codec<? extends List<?>>>> propertyCodecBuilders = new HashMap<>();
-	private final Map<String, Codec<? extends com.sigmundgranaas.forgero.core.component.api.Slot>> slotCodecs = new HashMap<>();
 	private final Map<com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier, com.sigmundgranaas.forgero.core.component.api.slot.SlotFactory> slotFactories = new HashMap<>();
 	private final Supplier<TagResolver> tagResolverSupplier;
 
@@ -82,15 +81,6 @@ public class PluginRegistrationContextImpl implements PluginRegistrationContext 
 	}
 
 	@Override
-	public void registerSlotCodec(String type, Codec<? extends com.sigmundgranaas.forgero.core.component.api.Slot> codec) {
-		if (slotCodecs.containsKey(type)) {
-			LOGGER.warn("Slot codec for type '{}' is being overwritten", type);
-		}
-		slotCodecs.put(type, codec);
-		LOGGER.trace("Registered slot codec for type '{}'", type);
-	}
-
-	@Override
 	public void registerSlotFactory(com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier kind,
 	                                com.sigmundgranaas.forgero.core.component.api.slot.SlotFactory factory) {
 		if (slotFactories.containsKey(kind)) {
@@ -115,10 +105,6 @@ public class PluginRegistrationContextImpl implements PluginRegistrationContext 
 
 	public Map<PropertyKey<?>, Function<Supplier<Codec<Condition>>, Codec<? extends List<?>>>> getPropertyCodecBuilders() {
 		return new HashMap<>(propertyCodecBuilders);
-	}
-
-	public Map<String, Codec<? extends com.sigmundgranaas.forgero.core.component.api.Slot>> getSlotCodecs() {
-		return new HashMap<>(slotCodecs);
 	}
 
 	public Map<com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier, com.sigmundgranaas.forgero.core.component.api.slot.SlotFactory> getSlotFactories() {

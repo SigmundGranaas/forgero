@@ -1,11 +1,8 @@
 package com.sigmundgranaas.forgero.core.component.api.slot;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.core.component.api.Component;
 import com.sigmundgranaas.forgero.core.component.api.Slot;
-import com.sigmundgranaas.forgero.data.loading.impl.codec.CodecConstants;
 
 import java.util.List;
 import java.util.Optional;
@@ -179,24 +176,4 @@ public record ComponentUpgradeSlot(
 	                                           SlotValidator validator, Component content) {
 		return new ComponentUpgradeSlot(id, slotType, description, Set.of(), validator, Optional.of(content));
 	}
-
-	// Codec for (de)serialization
-
-	/**
-	 * Codec for ComponentUpgradeSlot.
-	 * Serializes/deserializes slot configuration.
-	 * Note: This codec creates empty slots with tag-based validation.
-	 * Custom validators and content are not serialized (runtime-only).
-	 */
-	public static final Codec<ComponentUpgradeSlot> CODEC = RecordCodecBuilder.create(instance ->
-		instance.group(
-			CodecConstants.OPEN_IDENTIFIER_CODEC.fieldOf("id").forGetter(ComponentUpgradeSlot::id),
-			// Slot type is a tag-like classifier — preserve its full path (see CofCodecs).
-			CodecConstants.TAG_IDENTIFIER_CODEC.fieldOf("slot_type").forGetter(ComponentUpgradeSlot::slotType),
-			Codec.STRING.optionalFieldOf("description", "").forGetter(ComponentUpgradeSlot::description),
-			Codec.list(CodecConstants.TAG_IDENTIFIER_CODEC).optionalFieldOf("tags", List.of())
-					.forGetter(slot -> List.copyOf(slot.tags()))
-		).apply(instance, (id, slotType, description, tags) ->
-			ComponentUpgradeSlot.emptyWithTags(id, slotType, description, Set.copyOf(tags))
-		));
 }

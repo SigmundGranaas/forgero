@@ -12,9 +12,9 @@ import java.util.Set;
  * Builds a concrete {@link Slot} of a particular <em>kind</em> from a parsed slot definition.
  * <p>
  * The kind ({@code Slot.type()}, e.g. {@code forgero:component_upgrade}) selects which factory runs
- * when a slot is materialised from data — this is the load-time counterpart to {@link SlotRegistry}
- * (which selects the codec for (de)serialisation). A plugin registers a factory for its kind via the
- * registration context so its slot can be authored directly in a part template.
+ * when a slot is materialised from data. A plugin registers a factory for its kind via the
+ * registration context so its slot can be authored directly in a part template; a Component-holding
+ * kind then loads, contributes, installs, and persists through the standard component pipeline.
  */
 @FunctionalInterface
 public interface SlotFactory {

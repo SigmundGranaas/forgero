@@ -47,19 +47,21 @@ public record ComponentUpgrades(SlotContainer slots) {
 	}
 
 	/**
-	 * Gets a ComponentUpgradeSlot by ID.
+	 * Gets the {@link ComponentUpgradeSlot} with this id, or empty if the id is absent <em>or</em>
+	 * holds a slot of a different kind. This is the upgrade-typed view; use {@link #getSlot} to get a
+	 * slot of any kind by id (so a plugin slot kind is not silently invisible).
 	 */
-	public Optional<ComponentUpgradeSlot> get(OpenIdentifier id) {
+	public Optional<ComponentUpgradeSlot> getUpgradeSlot(OpenIdentifier id) {
 		return slots.get(id)
 				.filter(slot -> slot instanceof ComponentUpgradeSlot)
 				.map(slot -> (ComponentUpgradeSlot) slot);
 	}
 
 	/**
-	 * Checks if a ComponentUpgradeSlot with the given ID exists.
+	 * Checks if a slot (of any kind) with the given ID exists.
 	 */
 	public boolean contains(OpenIdentifier id) {
-		return get(id).isPresent();
+		return slots.get(id).isPresent();
 	}
 
 	/**

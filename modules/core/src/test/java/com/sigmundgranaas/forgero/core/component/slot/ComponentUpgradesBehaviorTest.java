@@ -68,7 +68,7 @@ class ComponentUpgradesBehaviorTest extends ForgeroTest {
 			var slot = upgradeSlot("gem_slot", GEM_SLOT_TYPE);
 			ComponentUpgrades upgrades = ComponentUpgrades.of(slot);
 
-			Optional<ComponentUpgradeSlot> result = upgrades.get(id("gem_slot"));
+			Optional<ComponentUpgradeSlot> result = upgrades.getUpgradeSlot(id("gem_slot"));
 
 			assertTrue(result.isPresent());
 			assertEquals(id("gem_slot"), result.get().id());
@@ -80,7 +80,7 @@ class ComponentUpgradesBehaviorTest extends ForgeroTest {
 			var slot = upgradeSlot("gem_slot", GEM_SLOT_TYPE);
 			ComponentUpgrades upgrades = ComponentUpgrades.of(slot);
 
-			Optional<ComponentUpgradeSlot> result = upgrades.get(id("nonexistent"));
+			Optional<ComponentUpgradeSlot> result = upgrades.getUpgradeSlot(id("nonexistent"));
 
 			assertTrue(result.isEmpty());
 		}
@@ -191,10 +191,10 @@ class ComponentUpgradesBehaviorTest extends ForgeroTest {
 			ComponentUpgrades modified = original.withSlot(filledSlot);
 
 			// Original should still be empty
-			assertTrue(original.get(id("gem_slot")).get().getContent().isEmpty());
+			assertTrue(original.getUpgradeSlot(id("gem_slot")).get().getContent().isEmpty());
 
 			// Modified should have content
-			assertTrue(modified.get(id("gem_slot")).get().getContent().isPresent());
+			assertTrue(modified.getUpgradeSlot(id("gem_slot")).get().getContent().isPresent());
 		}
 
 		@Test
@@ -223,7 +223,7 @@ class ComponentUpgradesBehaviorTest extends ForgeroTest {
 			assertTrue(empty.isEmpty());
 			assertEquals(0, empty.size());
 			assertEquals(0, empty.filledCount());
-			assertTrue(empty.get(id("any")).isEmpty());
+			assertTrue(empty.getUpgradeSlot(id("any")).isEmpty());
 			assertFalse(empty.contains(id("any")));
 			assertTrue(empty.allUpgradeSlots().isEmpty());
 			assertTrue(empty.filledContents().isEmpty());
