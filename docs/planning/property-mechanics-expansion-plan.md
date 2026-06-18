@@ -22,12 +22,24 @@ All phases are built, compile under Java 17, and pass GameTests
 context, so entity-based conditions (`minecraft:entity`, `forgero:backstab`,
 `forgero:target_has_mark`) actually evaluate in `on_hit` (previously only `TARGET_TAGS` was present).
 
-**Known deferrals (mechanism built + structurally validated; behavioural end-to-end test deferred
-because it needs Forgero items with compiled properties):** the firing of `on_crit` / `on_block` /
-`on_equip` / `on_unequip` is exercised only at the unit level (mixins inject, plugins register,
-managers compile); a content-pack integration test would close this. `create_zone` ships the
-entity (`ContextualEffectHandler`) variant only — a block (`OnHitBlockEffect`) variant remains
-future work. `wearing_set` matches against item-registry tags.
+**Coverage layers now in place per mechanic:** (1) behavioural — handlers/filters/conditions/
+selection logic exercised directly (`MarkGametest`, `PositionalCombatGametest`, `ZoneGametest`,
+`IdentityConditionGametest`, `WearingSetGametest`); (2) JSON authorability — new effects/filters
+parse through the registered dispatch codecs (`NewMechanicsCodecGametest`); (3) structural — the
+crit/shield mixins inject and the plugins register (server boots under `defaultRequire:1`).
+
+**Remaining deferral — full mixin→effect firing for `on_crit` / `on_block` / `on_equip` /
+`on_unequip`.** This needs a *real registered item* carrying the property: the runtime path
+(`PropertyDispatcher.active(stack, …)`) reads the compiled artifact off a stack, and only content
+loaded as a registered component has a host `Item` that `converter.toStack` can produce (a
+programmatically-built `StaticComponent` has no host item, so it can't be equipped/wielded in a
+test — see `OnHitEffectTest`, which uses `forgero:iron_sword`). Closing this therefore requires
+shipping **example content** (a material/schematic/gem/armor whose JSON uses the new property),
+which is a balance/design decision and is left for the content author to approve.
+
+**Other deferrals:** `create_zone` ships the entity (`ContextualEffectHandler`) variant only — a
+block (`OnHitBlockEffect`) variant remains future work. `wearing_set` matches against item-registry
+tags.
 
 ## Guiding principles
 
