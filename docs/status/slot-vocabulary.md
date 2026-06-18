@@ -65,6 +65,45 @@ full corpus green.
 > Pattern to reuse: when a `type` field is doing double duty as install-validator and match-identity,
 > put the canonical identity in `tags` and gate conditions on that, leaving `type` as the validator.
 
+## SlotFillabilityValidator (added) — and the 9 unfillable slot types it found
+
+A build-time guard (`modules/validation/.../SlotFillabilityValidator`) now cross-checks every upgrade
+slot's **validator** tag against the tags real content carries — the install-side complement to
+`SlotReferenceValidator` (which guards `in_slot_type` *conditions*). It mirrors runtime exactly: slot
+validation is `SlotValidator.test` → `component.getTags().contains(requiredTag)`, a **literal**
+membership test with no tag-graph walk (`SlotFactoryRegistry` builds `requireTag(slotType)` / 
+`requireAllTags(validTags)`; no `TagResolver`). So a slot whose required tag is carried by no content
+is silently **unfillable**. The guard is conservative — it only reports single-required-tag validators
+(accept-all / multi-tag / custom are never flagged), so no false positives — and emits **warnings**,
+because it surfaces pre-existing debt a new guard shouldn't hard-fail CI on. Promote to error once the
+debt below is migrated.
+
+It immediately found **9 distinct unfillable slot-validator tags**: the slot `type` vocabulary
+(`trinket`/`dye`/`binding`/`grip`/`tip`/`pommel`, plus diamond's `*_slot` names) predates the content,
+which moved to `upgrades/types/*` / `materials/roles/*` / `materials/types/*` and never updated the
+slots. (Gems still install — they carry `materials/roles/upgrade_material`, and those slots work — so
+the dedicated `trinket` "gem slots" are dead *redundant* slots, not a broken feature. That is why this
+was silent.) Evidence-mapped remediation:
+
+| Dead validator `type` | Slots | What the intended content actually carries | Likely target | Caveat (why not auto-fixed) |
+|---|---|---|---|---|
+| `forgero:trinket` | gem-slot (binding/handle/guard/soft_binding schematics) | `upgrades/types/gem` (46), `materials/roles/upgrade_material` (97) | `upgrades/types/gem` | DESIGN: do these slots intend gems, or reserve a future "trinket" item? |
+| `forgero:dye` | cosmetic-slot (handles/pommels/bindings) | `upgrades/types/cosmetic` (23), `materials/types/dye` (16) | `upgrades/types/cosmetic` | high confidence |
+| `forgero:binding` | vanilla binding (iron/golden/netherite) | `materials/types/binding` (24) | `materials/types/binding` | material model (static_part tools) |
+| `forgero:tip` | vanilla tip (golden) | `upgrades/types/tip_reinforcement` (13) | `upgrades/types/tip_reinforcement` | name mismatch: `tip` vs `tip_reinforcement` |
+| `forgero:grip` | vanilla grip (golden/netherite) | `upgrades/types/grip` (very few) | `upgrades/types/grip` | THIN — confirm installable grip content exists |
+| `forgero:pommel` | vanilla pommel (netherite) | `upgrades/types/pommel` (5 refs) | `upgrades/types/pommel` | confirm installable pommel content exists |
+| `forgero:binding_slot` | diamond binding | — | align to fixed binding | outlier `*_slot` naming |
+| `forgero:handle_grip_slot` | diamond grip | — | align to fixed grip | outlier `*_slot` naming |
+| `forgero:tip_reinforcement_slot` | diamond tip | — | align to fixed tip | outlier `*_slot` naming |
+
+**Why this is not auto-fixed (and "fix diamond-pickaxe" alone is insufficient):** aligning diamond's
+`*_slot` types to its siblings would only make it *consistently dead*, because `binding`/`grip`/`tip`
+are dead too. Each row is an install-semantics decision (what should the slot accept), and two families
+(`grip`, `pommel`) may have little or no installable content — which is a "build the content or remove
+the slot" call, not a rename. Each fix needs an install test confirming the same/intended content
+remains installable. This is the migration that promotes the guard from warning to error.
+
 ## Remaining — needs design intent, deliberately NOT auto-normalized
 These are entangled with the **validator** (`type`) field, so changing them changes *what installs
 where* — a semantics decision, not a rename. Left for a maintainer pass with install tests:

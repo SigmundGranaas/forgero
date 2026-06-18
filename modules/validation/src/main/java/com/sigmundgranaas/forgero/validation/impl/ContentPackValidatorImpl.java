@@ -105,6 +105,12 @@ public class ContentPackValidatorImpl implements ContentPackValidator {
 			List<ParsingError> slotReferenceErrors =
 					SlotReferenceValidator.validate(contentPaths, tagResolver, defaultNamespace);
 
+			// Install-side complement: cross-check every upgrade slot's required tag against the tags
+			// real content carries. A slot requiring a tag nothing declares is silently unfillable.
+			// Emitted as warnings (pre-existing content debt; see SlotFillabilityValidator javadoc).
+			List<DefinitionValidationResult.DefinitionWarning> slotFillabilityWarnings =
+					SlotFillabilityValidator.validate(pipelineResult.bundle().componentRegistry().all(), defaultNamespace);
+
 			// Build asset paths for texture validation
 			List<Path> assetPaths = buildAssetPaths();
 			
@@ -147,12 +153,13 @@ public class ContentPackValidatorImpl implements ContentPackValidator {
 						animatedResult.errorCount());
 			}
 
-			// Phase 8: Build aggregated result (definition parse errors + slot-reference errors)
+			// Phase 8: Build aggregated result (definition parse errors + slot-reference errors;
+			// slot-fillability findings are warnings, not build-failing errors).
 			List<ParsingError> definitionErrors = new ArrayList<>(pipelineResult.parsingErrors());
 			definitionErrors.addAll(slotReferenceErrors);
 			DefinitionValidationResult definitionResult = new DefinitionValidationResult(
 					definitionErrors,
-					List.of(),
+					slotFillabilityWarnings,
 					pipelineResult.rawDefinitions().size()
 			);
 
