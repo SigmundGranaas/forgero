@@ -1,0 +1,23 @@
+{
+  "type": "forgero:static_part",
+  "name": "Warped Fungus on a Stick",
+  "tags": [
+    "forgero:uncategorized/vanilla_tool"
+  ],
+  "host": {
+    "identifiers": [
+      { "type": "item", "id": "minecraft:warped_fungus_on_a_stick" }
+    ]
+  },
+  "attributes": [
+    { "id": "forgero:warped_fungus_on_a_stick-durability", "type": "forgero:durability", "computation": 100 }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:warped_fungus_on_a_stick-binding",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:materials/types/binding"],
+      "description": "slot.forgero.binding"
+    }
+  ]
+}

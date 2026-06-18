@@ -6,8 +6,9 @@ Your diamond sword stays a diamond sword - but now you can add a leather grip or
 
 ## What This Mod Does
 
-- Adds upgrade slots to all vanilla tools, weapons, and armor — including shields, bows,
-  crossbows, tridents, elytra, fishing rods, shears, and flint & steel
+- Adds upgrade slots to every vanilla tool, weapon, and armor piece — including shields, bows,
+  crossbows, tridents, turtle shells, elytra, fishing rods, shears, flint & steel, brushes, and
+  carrot/warped-fungus on a stick
 - Does NOT change vanilla item stats or crafting recipes
 - Adds one block, the **Upgrade Station**, used to install and remove upgrades
 

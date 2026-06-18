@@ -39,6 +39,40 @@ public class VanillaUpgradeInstallTest implements ForgeroGameTest {
 	}
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
+	public void gem_installs_into_newly_covered_trident(TestContext context) {
+		var ctx = ForgeroTestUtils.forgero(context);
+		ItemQueryApi query = ForgeroApi.itemQuery();
+		ItemMutationApi mutate = ForgeroApi.itemMutation();
+
+		ItemStack trident = new ItemStack(Items.TRIDENT);
+		ItemStack gem = ctx.toStack(ctx.component("forgero:diamond_gem").orElseThrow()).orElseThrow();
+
+		context.assertTrue(mutate.canInstallUpgrade(trident, gem),
+				"A diamond gem should install into the trident's gem slot");
+		ItemStack upgraded = mutate.installUpgrade(trident, gem);
+		context.assertTrue(query.getFilledSlotCount(upgraded) == 1,
+				"Trident should have one filled slot after install, got " + query.getFilledSlotCount(upgraded));
+		context.complete();
+	}
+
+	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
+	public void binding_installs_into_newly_covered_shield(TestContext context) {
+		var ctx = ForgeroTestUtils.forgero(context);
+		ItemQueryApi query = ForgeroApi.itemQuery();
+		ItemMutationApi mutate = ForgeroApi.itemMutation();
+
+		ItemStack shield = new ItemStack(Items.SHIELD);
+		ItemStack binding = ctx.toStack(ctx.component("forgero:leather").orElseThrow()).orElseThrow();
+
+		context.assertTrue(mutate.canInstallUpgrade(shield, binding),
+				"Leather (a binding material) should install into the shield's binding slot");
+		ItemStack upgraded = mutate.installUpgrade(shield, binding);
+		context.assertTrue(query.getFilledSlotCount(upgraded) == 1,
+				"Shield should have one filled slot after install, got " + query.getFilledSlotCount(upgraded));
+		context.complete();
+	}
+
+	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
 	public void installed_upgrade_can_be_removed(TestContext context) {
 		var ctx = ForgeroTestUtils.forgero(context);
 		ItemQueryApi query = ForgeroApi.itemQuery();

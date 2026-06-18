@@ -8,8 +8,9 @@ station-blocks module, and material/gem content.
 ## What works
 
 - **Coverage:** all vanilla tools (pickaxe/axe/shovel/hoe/sword × 6 tiers) and armor (6 tiers ×
-  4 pieces), plus shield, trident, elytra, fishing rod, shears, flint & steel, and ranged weapons
-  (bow, crossbow via the `vanilla-upgrades-ranged` pack).
+  4 pieces + turtle shell), plus shield, trident, elytra, fishing rod, shears, flint & steel,
+  brush, carrot/warped-fungus on a stick, and ranged weapons (bow, crossbow via the
+  `vanilla-upgrades-ranged` pack). Every durable vanilla item is covered.
 - **Installing upgrades:** the **Upgrade Station** block (from `modules/mc/blocks`, now bundled)
   installs and removes upgrades on vanilla items.
 - **Fillable slots:** binding, gem, reinforcement, tip-reinforcement, and lining slots all have

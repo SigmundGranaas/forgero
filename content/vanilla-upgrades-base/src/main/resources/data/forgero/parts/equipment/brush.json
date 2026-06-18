@@ -1,0 +1,23 @@
+{
+  "type": "forgero:static_part",
+  "name": "Brush",
+  "tags": [
+    "forgero:uncategorized/vanilla_tool"
+  ],
+  "host": {
+    "identifiers": [
+      { "type": "item", "id": "minecraft:brush" }
+    ]
+  },
+  "attributes": [
+    { "id": "forgero:brush-durability", "type": "forgero:durability", "computation": 64 }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:brush-binding",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:materials/types/binding"],
+      "description": "slot.forgero.binding"
+    }
+  ]
+}

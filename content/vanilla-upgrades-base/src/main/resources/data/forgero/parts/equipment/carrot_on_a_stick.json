@@ -1,0 +1,23 @@
+{
+  "type": "forgero:static_part",
+  "name": "Carrot on a Stick",
+  "tags": [
+    "forgero:uncategorized/vanilla_tool"
+  ],
+  "host": {
+    "identifiers": [
+      { "type": "item", "id": "minecraft:carrot_on_a_stick" }
+    ]
+  },
+  "attributes": [
+    { "id": "forgero:carrot_on_a_stick-durability", "type": "forgero:durability", "computation": 25 }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:carrot_on_a_stick-binding",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:materials/types/binding"],
+      "description": "slot.forgero.binding"
+    }
+  ]
+}

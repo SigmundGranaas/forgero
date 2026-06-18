@@ -20,7 +20,8 @@ public class NewItemCoverageTest implements FabricGameTest {
 	// main Forgero mod whose bows module owns minecraft:bow).
 	private static final Item[] NEW_ITEMS = {
 			Items.SHIELD, Items.TRIDENT, Items.BOW, Items.CROSSBOW,
-			Items.ELYTRA, Items.FISHING_ROD, Items.SHEARS, Items.FLINT_AND_STEEL
+			Items.ELYTRA, Items.FISHING_ROD, Items.SHEARS, Items.FLINT_AND_STEEL,
+			Items.TURTLE_HELMET, Items.CARROT_ON_A_STICK, Items.WARPED_FUNGUS_ON_A_STICK, Items.BRUSH
 	};
 
 	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
