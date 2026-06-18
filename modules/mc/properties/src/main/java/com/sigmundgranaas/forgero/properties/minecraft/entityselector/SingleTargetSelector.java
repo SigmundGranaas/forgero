@@ -12,11 +12,16 @@ public class SingleTargetSelector extends FilterableSelector {
 	public static final String TYPE = "forgero:single_target";
 
 	public static final Codec<SingleTargetSelector> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			Codec.list(EntityFilter.CODEC).optionalFieldOf("filters", Collections.emptyList()).forGetter(FilterableSelector::filters)
+			Codec.list(EntityFilter.CODEC).optionalFieldOf("filters", Collections.emptyList()).forGetter(FilterableSelector::filters),
+			FilterMode.CODEC.optionalFieldOf("match", FilterMode.ALL).forGetter(FilterableSelector::filterMode)
 	).apply(instance, SingleTargetSelector::new));
 
 	public SingleTargetSelector(List<EntityFilter> filters) {
-		super(filters);
+		this(filters, FilterMode.ALL);
+	}
+
+	public SingleTargetSelector(List<EntityFilter> filters, FilterMode filterMode) {
+		super(filters, filterMode, UNLIMITED_TARGETS);
 	}
 
 	@Override

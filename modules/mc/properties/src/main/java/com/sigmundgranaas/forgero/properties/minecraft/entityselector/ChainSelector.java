@@ -29,6 +29,12 @@ import java.util.Set;
 public class ChainSelector extends FilterableSelector {
 	public static final String TYPE = "forgero:chain";
 
+	/**
+	 * Upper bound on the number of chain hops. Caps worst-case work at construction time so a
+	 * mistyped {@code maxChains} can't drive an unbounded per-hit world scan.
+	 */
+	public static final int MAX_CHAINS = 256;
+
 	private final int maxChains;
 	private final float chainRange;
 	private final boolean allowRepeats;
@@ -37,16 +43,28 @@ public class ChainSelector extends FilterableSelector {
 			Codec.INT.fieldOf("maxChains").forGetter(ChainSelector::maxChains),
 			Codec.FLOAT.fieldOf("chainRange").forGetter(ChainSelector::chainRange),
 			Codec.BOOL.optionalFieldOf("allowRepeats", false).forGetter(ChainSelector::allowRepeats),
-			Codec.list(EntityFilter.CODEC).optionalFieldOf("filters", Collections.emptyList()).forGetter(FilterableSelector::filters)
+			Codec.list(EntityFilter.CODEC).optionalFieldOf("filters", Collections.emptyList()).forGetter(FilterableSelector::filters),
+			FilterMode.CODEC.optionalFieldOf("match", FilterMode.ALL).forGetter(FilterableSelector::filterMode)
 	).apply(instance, ChainSelector::new));
 
 	public ChainSelector(int maxChains, float chainRange, boolean allowRepeats, List<EntityFilter> filters) {
-		super(filters);
+		this(maxChains, chainRange, allowRepeats, filters, FilterMode.ALL);
+	}
+
+	public ChainSelector(int maxChains, float chainRange, boolean allowRepeats, List<EntityFilter> filters, FilterMode filterMode) {
+		// The chain is already bounded by maxChains, so it never sets a maxTargets cap.
+		super(filters, filterMode, UNLIMITED_TARGETS);
 		if (maxChains < 0) {
 			throw new IllegalArgumentException("maxChains must be >= 0, got: " + maxChains);
 		}
+		if (maxChains > MAX_CHAINS) {
+			throw new IllegalArgumentException("maxChains must be <= " + MAX_CHAINS + ", got: " + maxChains);
+		}
 		if (chainRange <= 0) {
 			throw new IllegalArgumentException("chainRange must be > 0, got: " + chainRange);
+		}
+		if (chainRange > MAX_RANGE) {
+			throw new IllegalArgumentException("chainRange must be <= " + (int) MAX_RANGE + " to avoid pathological world queries, got: " + chainRange);
 		}
 		this.maxChains = maxChains;
 		this.chainRange = chainRange;
@@ -111,6 +129,12 @@ public class ChainSelector extends FilterableSelector {
 		double nearestDistance = Double.MAX_VALUE;
 
 		for (Entity candidate : nearbyEntities) {
+			// A hop must move to a different entity; the current node is distance 0 from itself and
+			// would otherwise always "win", making the chain stand still instead of bouncing.
+			if (candidate == currentTarget) {
+				continue;
+			}
+
 			// Skip if already hit (when allowRepeats is false)
 			if (!allowRepeats && hitEntities.contains(candidate)) {
 				continue;

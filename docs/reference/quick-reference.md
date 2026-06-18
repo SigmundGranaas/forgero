@@ -133,12 +133,14 @@ Quick lookup tables for Forgero's JSON APIs. For detailed documentation, see:
 
 ## Selector Types
 
+All selectors also accept `match` (`"all"`/`"any"`, default `"all"`) and `maxTargets` (nearest-N cap). Ranges are capped at 64 blocks (`maxChains` at 256).
+
 | Type ID | Parameters | Description |
 |---------|------------|-------------|
-| `forgero:single_target` | - | Only hit target |
-| `forgero:aoe` | `radius`, `filters` | Radius around target |
-| `forgero:cone` | `angle`, `range`, `filters` | Cone in front |
-| `forgero:chain` | `maxChains`, `chainRange`, `filters` | Chain between entities |
+| `forgero:single_target` | `filters`, `match` | Only hit target |
+| `forgero:aoe` | `radius`, `filters`, `match`, `maxTargets` | Spherical radius around target |
+| `forgero:cone` | `angle`, `range`, `filters`, `match`, `maxTargets` | Cone in front |
+| `forgero:chain` | `maxChains`, `chainRange`, `allowRepeats`, `filters`, `match` | Chain between entities |
 
 ---
 

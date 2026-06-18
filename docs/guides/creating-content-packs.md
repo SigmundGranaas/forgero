@@ -1107,6 +1107,18 @@ Effect handlers define what happens when an event triggers.
 
 Selectors determine which entities are affected.
 
+### Shared selector options
+
+These optional fields are accepted by every selector:
+
+| Field | Type | Default | Meaning |
+|-------|------|---------|---------|
+| `filters` | array | `[]` | Filters applied after geometric selection (see [Entity Filters](#entity-filters)). |
+| `match` | `"all"` \| `"any"` | `"all"` | How the `filters` list is combined. `"all"` = a candidate must pass every filter (AND); `"any"` = it must pass at least one (OR). This lets you express OR without wrapping filters in a `forgero:or` composite. |
+| `maxTargets` | int (> 0) | unlimited | Caps the result to the N entities nearest the selector's anchor (the target for AOE, the source for cone). Use it to bound effect cost and gameplay impact. *(Not applicable to `single_target`; `chain` is already bounded by `maxChains`.)* |
+
+> **Range ceiling:** `radius`, `range`, and `chainRange` are capped at **64 blocks**, and `maxChains` at **256**. Values above these (or `<= 0`) are rejected at data-load time with a clear error rather than silently issuing a pathological per-hit world query — keep ranges sane, especially on `on_tick` properties.
+
 ### Single Target (`forgero:single_target`)
 
 ```json
@@ -1115,10 +1127,15 @@ Selectors determine which entities are affected.
 
 ### Area of Effect (`forgero:aoe`)
 
+Selects entities within a **spherical** radius (true distance) of the target — entities in the
+corners of the bounding box but outside the sphere are excluded.
+
 ```json
 {
   "type": "forgero:aoe",
   "radius": 5,
+  "match": "all",
+  "maxTargets": 8,
   "filters": [
     { "type": "forgero:is_hostile" },
     { "type": "forgero:is_alive" }
@@ -1133,8 +1150,10 @@ Selectors determine which entities are affected.
   "type": "forgero:cone",
   "angle": 90,
   "range": 10,
+  "match": "any",
   "filters": [
-    { "type": "forgero:is_hostile" }
+    { "type": "forgero:is_hostile" },
+    { "type": "forgero:is_burning" }
   ]
 }
 ```

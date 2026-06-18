@@ -28,16 +28,25 @@ public class ConeSelector extends FilterableSelector {
 	public static final Codec<ConeSelector> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.FLOAT.fieldOf("angle").forGetter(ConeSelector::angle),
 			Codec.FLOAT.fieldOf("range").forGetter(ConeSelector::range),
-			Codec.list(EntityFilter.CODEC).optionalFieldOf("filters", Collections.emptyList()).forGetter(FilterableSelector::filters)
+			Codec.list(EntityFilter.CODEC).optionalFieldOf("filters", Collections.emptyList()).forGetter(FilterableSelector::filters),
+			FilterMode.CODEC.optionalFieldOf("match", FilterMode.ALL).forGetter(FilterableSelector::filterMode),
+			Codec.INT.optionalFieldOf("maxTargets", UNLIMITED_TARGETS).forGetter(FilterableSelector::maxTargets)
 	).apply(instance, ConeSelector::new));
 
 	public ConeSelector(float angle, float range, List<EntityFilter> filters) {
-		super(filters);
+		this(angle, range, filters, FilterMode.ALL, UNLIMITED_TARGETS);
+	}
+
+	public ConeSelector(float angle, float range, List<EntityFilter> filters, FilterMode filterMode, int maxTargets) {
+		super(filters, filterMode, maxTargets);
 		if (angle <= 0 || angle > 360) {
 			throw new IllegalArgumentException("angle must be between 0 and 360 degrees, got: " + angle);
 		}
 		if (range <= 0) {
 			throw new IllegalArgumentException("range must be > 0, got: " + range);
+		}
+		if (range > MAX_RANGE) {
+			throw new IllegalArgumentException("range must be <= " + (int) MAX_RANGE + " to avoid pathological world queries, got: " + range);
 		}
 		this.angle = angle;
 		this.range = range;
@@ -85,6 +94,12 @@ public class ConeSelector extends FilterableSelector {
 		}
 
 		return targetsInCone;
+	}
+
+	@Override
+	protected Entity limitAnchor(Entity source, Entity initialTarget) {
+		// A cone radiates from the source, so the nearest-N cap is measured from the source.
+		return source;
 	}
 
 	@Override
