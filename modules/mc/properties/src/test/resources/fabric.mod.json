@@ -33,7 +33,8 @@
       "com.sigmundgranaas.forgero.properties.gametest.EntityFilterGametest",
       "com.sigmundgranaas.forgero.properties.gametest.MarkGametest",
       "com.sigmundgranaas.forgero.properties.gametest.PositionalCombatGametest",
-      "com.sigmundgranaas.forgero.properties.gametest.ZoneGametest"
+      "com.sigmundgranaas.forgero.properties.gametest.ZoneGametest",
+      "com.sigmundgranaas.forgero.properties.gametest.NewMechanicsCodecGametest"
     ]
   }
 }
