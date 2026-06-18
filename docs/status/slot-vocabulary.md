@@ -65,63 +65,57 @@ full corpus green.
 > Pattern to reuse: when a `type` field is doing double duty as install-validator and match-identity,
 > put the canonical identity in `tags` and gate conditions on that, leaving `type` as the validator.
 
-## SlotFillabilityValidator (added) — and the 9 unfillable slot types it found
+## SlotFillabilityValidator (added) — found 9 unfillable slot types, now migrated
 
-A build-time guard (`modules/validation/.../SlotFillabilityValidator`) now cross-checks every upgrade
+A build-time guard (`modules/validation/.../SlotFillabilityValidator`) cross-checks every upgrade
 slot's **validator** tag against the tags real content carries — the install-side complement to
 `SlotReferenceValidator` (which guards `in_slot_type` *conditions*). It mirrors runtime exactly: slot
 validation is `SlotValidator.test` → `component.getTags().contains(requiredTag)`, a **literal**
 membership test with no tag-graph walk (`SlotFactoryRegistry` builds `requireTag(slotType)` / 
 `requireAllTags(validTags)`; no `TagResolver`). So a slot whose required tag is carried by no content
 is silently **unfillable**. The guard is conservative — it only reports single-required-tag validators
-(accept-all / multi-tag / custom are never flagged), so no false positives — and emits **warnings**,
-because it surfaces pre-existing debt a new guard shouldn't hard-fail CI on. Promote to error once the
-debt below is migrated.
+(accept-all / multi-tag / custom are never flagged), so no false positives.
 
-It immediately found **9 distinct unfillable slot-validator tags**: the slot `type` vocabulary
-(`trinket`/`dye`/`binding`/`grip`/`tip`/`pommel`, plus diamond's `*_slot` names) predates the content,
+It found **9 distinct unfillable slot-validator tags**: the slot `type` vocabulary
+(`trinket`/`dye`/`binding`/`grip`/`tip`/`pommel`, plus diamond's `*_slot` names) predated the content,
 which moved to `upgrades/types/*` / `materials/roles/*` / `materials/types/*` and never updated the
-slots. (Gems still install — they carry `materials/roles/upgrade_material`, and those slots work — so
-the dedicated `trinket` "gem slots" are dead *redundant* slots, not a broken feature. That is why this
-was silent.) Evidence-mapped remediation:
+slots. (Gems still installed — they carry `materials/roles/upgrade_material`, and those slots worked —
+so the dedicated `trinket` "gem slots" were dead *redundant* slots, not a broken feature. That is why
+it was silent.) **All 9 are now migrated** (62 slot defs across 51 files), each validator repointed at
+the tag its intended content actually carries, decided by the slot's own identity tag and by working
+analogues:
 
-| Dead validator `type` | Slots | What the intended content actually carries | Likely target | Caveat (why not auto-fixed) |
-|---|---|---|---|---|
-| `forgero:trinket` | gem-slot (binding/handle/guard/soft_binding schematics) | `upgrades/types/gem` (46), `materials/roles/upgrade_material` (97) | `upgrades/types/gem` | DESIGN: do these slots intend gems, or reserve a future "trinket" item? |
-| `forgero:dye` | cosmetic-slot (handles/pommels/bindings) | `upgrades/types/cosmetic` (23), `materials/types/dye` (16) | `upgrades/types/cosmetic` | high confidence |
-| `forgero:binding` | vanilla binding (iron/golden/netherite) | `materials/types/binding` (24) | `materials/types/binding` | material model (static_part tools) |
-| `forgero:tip` | vanilla tip (golden) | `upgrades/types/tip_reinforcement` (13) | `upgrades/types/tip_reinforcement` | name mismatch: `tip` vs `tip_reinforcement` |
-| `forgero:grip` | vanilla grip (golden/netherite) | `upgrades/types/grip` (very few) | `upgrades/types/grip` | THIN — confirm installable grip content exists |
-| `forgero:pommel` | vanilla pommel (netherite) | `upgrades/types/pommel` (5 refs) | `upgrades/types/pommel` | confirm installable pommel content exists |
-| `forgero:binding_slot` | diamond binding | — | align to fixed binding | outlier `*_slot` naming |
-| `forgero:handle_grip_slot` | diamond grip | — | align to fixed grip | outlier `*_slot` naming |
-| `forgero:tip_reinforcement_slot` | diamond tip | — | align to fixed tip | outlier `*_slot` naming |
+| Dead validator `type` | Migrated to | Basis |
+|---|---|---|
+| `forgero:trinket` (gem-slot) | `forgero:upgrades/types/gem` | gems carry it (slot identity = gem) |
+| `forgero:trinket` (pommel-slot) | `forgero:upgrades/types/pommel` | pommel schematics carry it |
+| `forgero:trinket` (grip-slot) | `forgero:materials/properties/soft` | grips take soft materials (bow-limb grip slot uses the soft type; `upgrades/types/grip` has **no** content carrier) |
+| `forgero:trinket` (generic upgrade-slot) | `forgero:materials/roles/upgrade_material` | slot identity is the generic `upgrades` |
+| `forgero:dye` (cosmetic-slot) | `forgero:upgrades/types/cosmetic` | dyes carry it |
+| `forgero:binding` / `forgero:binding_slot` | `forgero:materials/types/binding` | binding materials carry it (material model for `static_part` tools; native tools keep `parts/binding`) |
+| `forgero:tip` / `forgero:tip_reinforcement_slot` | `forgero:upgrades/types/tip_reinforcement` | tip materials carry it (`tip` was a name near-miss) |
+| `forgero:grip` / `forgero:handle_grip_slot` | `forgero:materials/properties/soft` | soft materials = grips |
+| `forgero:pommel` | `forgero:upgrades/types/pommel` | pommel schematics carry it |
 
-**Why this is not auto-fixed (and "fix diamond-pickaxe" alone is insufficient):** aligning diamond's
-`*_slot` types to its siblings would only make it *consistently dead*, because `binding`/`grip`/`tip`
-are dead too. Each row is an install-semantics decision (what should the slot accept), and two families
-(`grip`, `pommel`) may have little or no installable content — which is a "build the content or remove
-the slot" call, not a rename. Each fix needs an install test confirming the same/intended content
-remains installable. This is the migration that promotes the guard from warning to error.
+Judgment calls made (per maintainer request to migrate all 9): the `trinket` gem-slots now accept gems
+(rather than reserving a future "trinket" item); grip slots — the one family with **no** native
+`upgrades/types/grip` content — accept soft materials, matching the bow-limb grip slot's `…/types/soft`
+validator and what soft materials (feather/string/…) carry. After migration the guard reports **zero**
+unfillable slots, so it is now an **error** (build-failing): any new dead slot is a regression.
+
+`validateContentPacks` and the full gametest corpus stay green.
 
 ## Remaining — needs design intent, deliberately NOT auto-normalized
-These are entangled with the **validator** (`type`) field, so changing them changes *what installs
-where* — a semantics decision, not a rename. Left for a maintainer pass with install tests:
-
-1. **The binding slot is still *validated* three ways.** Identity is now unified (above), but the
-   `type`/validator still differs: `parts/binding` (base/extended), `binding` (iron/golden/netherite),
-   `binding_slot` (diamond-pickaxe). These now-orphan validator names (no condition references them)
-   still decide what installs. Consolidating them is an install-semantics decision: pick one canonical
-   binding validator and confirm with install tests that the same parts remain installable.
-2. **Is binding/grip/pommel/tip an "upgrade" or a "structural part"?** They currently mix
-   `upgrades/types/*`, `parts/*`, and bare names. The right canonical prefix depends on whether these
-   are removable upgrades or fixed structural parts — a taxonomy decision.
-3. **`materials/types/gem` (2) vs `upgrades/types/gem` (1) vs the generic
-   `materials/roles/upgrade_material` + `upgrades/types/gem` tag (26)** — three ways a gem slot is
-   expressed. Consolidate once (1) and (2) are decided.
-4. **Harden `SlotReferenceValidator`** from "classifier exists *somewhere*" to "every slot a material
-   role can occupy carries the identity it's gated on" — that check would have caught the binding
-   drift at build time, and is what stops the next one.
+1. **Is binding/grip/pommel/tip an "upgrade" or a "structural part"?** Identity (`tags`) and now the
+   validators (`type`) are coherent and carrier-backed, but the *prefix* still mixes `upgrades/types/*`,
+   `materials/types/*`, `materials/properties/*`, `materials/roles/*`. That is a taxonomy decision
+   (removable upgrade vs fixed part vs material role), not a correctness gap.
+2. **Two binding install models coexist by design:** native tools take a crafted binding **part**
+   (`parts/binding`); vanilla `static_part` tools take a raw binding **material**
+   (`materials/types/binding`). Documented as intentional; revisit only if unifying the crafting flow.
+3. **Harden `SlotReferenceValidator`** from "classifier exists *somewhere*" to "every slot a material
+   role can occupy carries the identity it's gated on" — the condition-side analogue of the fillability
+   guard, to catch identity drift (not just validator drift) at build time.
 
 These were investigated fully (every slot type, its identity tags, and which conditions reference it
 are mapped) — the blocker is a design decision, not missing analysis. A blind rename of a `type`

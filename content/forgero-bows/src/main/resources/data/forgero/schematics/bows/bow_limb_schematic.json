@@ -26,7 +26,7 @@
     },
     {
       "id": "forgero:bow_limb-cosmetic-slot",
-      "type": "forgero:dye",
+      "type": "forgero:upgrades/types/cosmetic",
       "tags": [
         "forgero:upgrades/types/cosmetic"
       ],

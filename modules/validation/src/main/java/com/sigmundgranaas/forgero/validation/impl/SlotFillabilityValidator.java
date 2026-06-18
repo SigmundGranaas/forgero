@@ -6,7 +6,7 @@ import com.sigmundgranaas.forgero.core.component.api.CustomizableComponent;
 import com.sigmundgranaas.forgero.core.component.api.StructuredComponent;
 import com.sigmundgranaas.forgero.core.component.api.slot.ComponentUpgradeSlot;
 import com.sigmundgranaas.forgero.core.component.api.structure.ComponentPart;
-import com.sigmundgranaas.forgero.validation.api.DefinitionValidationResult.DefinitionWarning;
+import com.sigmundgranaas.forgero.data.pipeline.api.ParsingError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,11 +41,11 @@ import java.util.Set;
  * {@code type} case). Slots with an accept-all validator, a multi-tag {@code valid_tags} conjunction,
  * or a custom predicate are skipped — never flagged — so there are no false positives.
  * <p>
- * <b>Severity:</b> findings are emitted as <em>warnings</em>, not errors. The check surfaces a body of
- * pre-existing content debt (slot {@code type}s authored against a {@code trinket}/{@code dye}/
- * {@code binding}/… vocabulary the content later moved off of), and a brand-new guard should not
- * hard-fail CI on debt it did not introduce. Once the slot-type vocabulary is migrated to the tags
- * content actually carries, this can be promoted to an error. See {@code docs/status/slot-vocabulary.md}.
+ * <b>Severity:</b> findings are <em>errors</em> (build-failing). The original slot-type vocabulary debt
+ * (slot {@code type}s authored against a {@code trinket}/{@code dye}/{@code binding}/… vocabulary the
+ * content later moved off of) has been migrated to the tags content actually carries, so the corpus is
+ * clean and any new unfillable slot is a regression that should fail the build. See
+ * {@code docs/status/slot-vocabulary.md} for the migration and the per-family validator targets.
  */
 public final class SlotFillabilityValidator {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SlotFillabilityValidator.class);
@@ -55,10 +55,10 @@ public final class SlotFillabilityValidator {
 
 	/**
 	 * @param components       every built component (the universe of both slot owners and installable content)
-	 * @param defaultNamespace unused today; kept for signature symmetry with sibling validators
-	 * @return one warning per distinct unfillable required tag, naming an example owning slot
+	 * @param defaultNamespace namespace for the synthesized error identifier
+	 * @return one error per distinct unfillable required tag, naming an example owning slot
 	 */
-	public static List<DefinitionWarning> validate(Collection<Component> components, String defaultNamespace) {
+	public static List<ParsingError> validate(Collection<Component> components, String defaultNamespace) {
 		// The universe of installable content tags is every built component's declared tag set —
 		// the same set SlotValidator.test() checks against.
 		Set<OpenIdentifier> allContentTags = new HashSet<>();
@@ -73,24 +73,25 @@ public final class SlotFillabilityValidator {
 			collect(component, requiredTags, visited);
 		}
 
-		List<DefinitionWarning> warnings = new ArrayList<>();
+		List<ParsingError> errors = new ArrayList<>();
 		for (Map.Entry<OpenIdentifier, SlotRef> entry : requiredTags.entrySet()) {
 			OpenIdentifier requiredTag = entry.getKey();
 			if (allContentTags.contains(requiredTag)) {
 				continue;
 			}
 			SlotRef ref = entry.getValue();
-			warnings.add(new DefinitionWarning(
-					ref.owner().toString(),
+			errors.add(new ParsingError(
+					new OpenIdentifier(defaultNamespace, "slot_fillability"),
 					"Unfillable slot '" + ref.slotId() + "' on '" + ref.owner() + "': its validator requires tag '"
 							+ requiredTag + "', which no content component declares, so nothing can ever be installed "
 							+ "in it. Type the slot against a tag real content carries (e.g. a binding slot should use "
-							+ "forgero:materials/types/binding / forgero:parts/binding, matching its sibling tools)."));
+							+ "forgero:materials/types/binding / forgero:parts/binding, matching its sibling tools).",
+					null));
 		}
-		if (!warnings.isEmpty()) {
-			LOGGER.warn("SLOT FILLABILITY: {} slot type(s) require a tag no content provides (unfillable)", warnings.size());
+		if (!errors.isEmpty()) {
+			LOGGER.error("SLOT FILLABILITY ERRORS: {} slot type(s) require a tag no content provides (unfillable)", errors.size());
 		}
-		return warnings;
+		return errors;
 	}
 
 	private static void collect(Component current, Map<OpenIdentifier, SlotRef> requiredTags, Set<Component> visited) {

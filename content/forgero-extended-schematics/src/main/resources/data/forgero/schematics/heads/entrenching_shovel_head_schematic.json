@@ -40,7 +40,7 @@
     },
     {
       "id": "forgero:entrenching_shovel_head-cosmetic-slot",
-      "type": "forgero:dye",
+      "type": "forgero:upgrades/types/cosmetic",
       "tags": [
         "forgero:upgrades/types/cosmetic"
       ],

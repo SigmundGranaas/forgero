@@ -44,7 +44,7 @@
     },
     {
       "id": "forgero:sickle_blade-cosmetic-slot",
-      "type": "forgero:dye",
+      "type": "forgero:upgrades/types/cosmetic",
       "tags": [
         "forgero:upgrades/types/cosmetic"
       ],
