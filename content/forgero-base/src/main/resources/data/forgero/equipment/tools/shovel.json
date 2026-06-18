@@ -25,7 +25,7 @@
   "upgrades": [
     {
       "id": "forgero:shovel-binding",
-      "type": "forgero:parts/binding",
+      "type": "forgero:upgrades/types/binding",
       "tags": ["forgero:parts/binding", "forgero:upgrades/types/binding"],
       "description": "slot.forgero.binding"
     }

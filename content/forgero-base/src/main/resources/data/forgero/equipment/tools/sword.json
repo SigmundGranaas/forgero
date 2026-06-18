@@ -25,7 +25,7 @@
   "upgrades": [
     {
       "id": "forgero:sword-guard",
-      "type": "forgero:parts/binding",
+      "type": "forgero:upgrades/types/binding",
       "tags": ["forgero:parts/guard", "forgero:upgrades/types/binding"],
       "description": "slot.forgero.guard"
     }

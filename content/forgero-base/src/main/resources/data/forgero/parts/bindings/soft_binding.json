@@ -2,6 +2,7 @@
   "type": "forgero:part_template",
   "name": "soft_binding",
   "tags": [
+    "forgero:upgrades/types/binding",
     "forgero:parts/binding",
     "forgero:parts/soft_binding"
   ],

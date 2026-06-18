@@ -2,6 +2,7 @@
   "type": "forgero:part_template",
   "name": "sword_guard",
   "tags": [
+    "forgero:upgrades/types/binding",
     "forgero:parts/sword_guard",
     "forgero:parts/guard",
     "forgero:parts/binding"

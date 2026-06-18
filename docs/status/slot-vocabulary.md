@@ -117,11 +117,25 @@ a regression.
 
 `validateContentPacks` and the full gametest corpus stay green.
 
+## Binding model unified (done)
+The two binding install models are now one. Previously native tools validated their binding slot with
+`parts/binding` (accepting only crafted binding **parts**) while vanilla `static_part` tools validated
+`upgrades/types/binding` (accepting raw binding **materials**). Unified by giving the crafted parts the
+upgrade identity and pointing every binding slot at it:
+
+- Added `forgero:upgrades/types/binding` to the 3 crafted binding part templates (`parts/bindings/binding`,
+  `parts/bindings/soft_binding`, `parts/guards/sword_guard`) — they keep `parts/binding` as their part
+  identity, so structure/part conditions still match.
+- Repointed the 7 native binding slots (forgero-base axe/hoe/pickaxe/shovel/sword-guard +
+  extended-weapons mace/spear) from `type: parts/binding` → `upgrades/types/binding`. No slot validates
+  `parts/binding` anymore; it survives only as an identity tag (so `in_slot_type` still resolves).
+
+Now **every** binding slot validates `upgrades/types/binding`, and **both** crafted binding parts and raw
+binding materials carry it — so a binding (in either form) installs in any binding slot.
+**Gameplay note:** native tools now also accept a raw binding material directly (not only a crafted
+binding part), and vanilla tools accept crafted binding parts — the intended effect of unifying.
+
 ## Remaining — needs design intent, deliberately NOT auto-normalized
-1. **Two binding install models coexist by design:** native tools take a crafted binding **part**
-   (`parts/binding`); vanilla `static_part` tools take a raw binding **material** (now
-   `upgrades/types/binding`). Documented as intentional; revisit only if unifying the crafting flow —
-   that would mean teaching crafted binding parts to carry the `upgrades/types/binding` identity too.
-2. **Harden `SlotReferenceValidator`** from "classifier exists *somewhere*" to "every slot a material
+1. **Harden `SlotReferenceValidator`** from "classifier exists *somewhere*" to "every slot a material
    role can occupy carries the identity it's gated on" — the condition-side analogue of the fillability
    guard, to catch identity drift (not just validator drift) at build time.
