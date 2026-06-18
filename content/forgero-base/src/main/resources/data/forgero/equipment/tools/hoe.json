@@ -26,7 +26,7 @@
     {
       "id": "forgero:hoe-binding",
       "type": "forgero:parts/binding",
-      "tags": ["forgero:parts/binding"],
+      "tags": ["forgero:parts/binding", "forgero:upgrades/types/binding"],
       "description": "slot.forgero.binding"
     }
   ]
