@@ -1,0 +1,92 @@
+{
+  "type": "forgero:material",
+  "name": "Example Event Aspect",
+  "tags": [
+    "forgero:materials/types/binding",
+    "forgero:materials/properties/magical",
+    "forgero:materials/roles/upgrade_material",
+    "forgero:upgrades/types/tip_reinforcement"
+  ],
+  "host": {
+    "identifiers": [
+      {
+        "type": "item",
+        "id": "minecraft:heart_of_the_sea"
+      }
+    ]
+  },
+  "properties": {
+    "forgero:on_crit": [
+      {
+        "selector": {
+          "type": "forgero:single_target"
+        },
+        "effects": [
+          {
+            "type": "forgero:fire",
+            "duration": 3
+          }
+        ],
+        "condition": {
+          "type": "forgero:in_slot_type",
+          "slot_type": "forgero:materials/roles/upgrade_material"
+        }
+      }
+    ],
+    "forgero:on_block": [
+      {
+        "selector": {
+          "type": "forgero:single_target"
+        },
+        "effects": [
+          {
+            "type": "forgero:fire",
+            "duration": 3
+          }
+        ],
+        "condition": {
+          "type": "forgero:in_slot_type",
+          "slot_type": "forgero:materials/roles/upgrade_material"
+        }
+      }
+    ],
+    "forgero:on_equip": [
+      {
+        "selector": {
+          "type": "forgero:single_target"
+        },
+        "effects": [
+          {
+            "type": "forgero:status_effect",
+            "effect": "minecraft:speed",
+            "duration": 200,
+            "amplifier": 0
+          }
+        ],
+        "condition": {
+          "type": "forgero:in_slot_type",
+          "slot_type": "forgero:materials/roles/upgrade_material"
+        }
+      }
+    ],
+    "forgero:on_unequip": [
+      {
+        "selector": {
+          "type": "forgero:single_target"
+        },
+        "effects": [
+          {
+            "type": "forgero:status_effect",
+            "effect": "minecraft:glowing",
+            "duration": 60,
+            "amplifier": 0
+          }
+        ],
+        "condition": {
+          "type": "forgero:in_slot_type",
+          "slot_type": "forgero:materials/roles/upgrade_material"
+        }
+      }
+    ]
+  }
+}

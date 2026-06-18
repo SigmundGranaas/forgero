@@ -28,14 +28,14 @@ selection logic exercised directly (`MarkGametest`, `PositionalCombatGametest`, 
 parse through the registered dispatch codecs (`NewMechanicsCodecGametest`); (3) structural — the
 crit/shield mixins inject and the plugins register (server boots under `defaultRequire:1`).
 
-**Remaining deferral — full mixin→effect firing for `on_crit` / `on_block` / `on_equip` /
-`on_unequip`.** This needs a *real registered item* carrying the property: the runtime path
-(`PropertyDispatcher.active(stack, …)`) reads the compiled artifact off a stack, and only content
-loaded as a registered component has a host `Item` that `converter.toStack` can produce (a
-programmatically-built `StaticComponent` has no host item, so it can't be equipped/wielded in a
-test — see `OnHitEffectTest`, which uses `forgero:iron_sword`). Closing this therefore requires
-shipping **example content** (a material/schematic/gem/armor whose JSON uses the new property),
-which is a balance/design decision and is left for the content author to approve.
+**Event firing — CLOSED.** A real example upgrade material (`forgero:example_event_aspect`, hosted
+on `minecraft:heart_of_the_sea`) carries all four new event properties. `EventPropertyFiringTest`
+(in `mods/forgero`, where content loads) installs it on an iron sword and asserts: each property
+resolves onto the real item, and triggering the managers applies the effect (on_crit/on_block
+ignite the victim/attacker, on_equip grants speed, on_unequip applies glowing). `on_equip` /
+`on_unequip` were broadened to cover **all** equipment slots (hands + armor), so they fire on
+wielding as well as armoring. The content is intentionally a labelled demo — tune naming/balance
+as desired.
 
 **Other deferrals:** `create_zone` ships the entity (`ContextualEffectHandler`) variant only — a
 block (`OnHitBlockEffect`) variant remains future work. `wearing_set` matches against item-registry

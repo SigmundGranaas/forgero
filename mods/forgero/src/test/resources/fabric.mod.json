@@ -19,6 +19,7 @@
       "com.sigmundgranaas.forgero.tests.AttributeLeakRegressionTest",
       "com.sigmundgranaas.forgero.tests.ArmorAttributeTest",
       "com.sigmundgranaas.forgero.tests.OnHitEffectTest",
+      "com.sigmundgranaas.forgero.tests.EventPropertyFiringTest",
       "com.sigmundgranaas.forgero.tests.RecipeCraftingIntegrationTest",
       "com.sigmundgranaas.forgero.tests.CraftingStationTest",
       "com.sigmundgranaas.forgero.tests.BowContentGameTest",
