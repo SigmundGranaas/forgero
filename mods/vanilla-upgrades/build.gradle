@@ -19,6 +19,8 @@ dependencies {
     include(project(path: ":modules:mc:render", configuration: 'namedElements'))
     include(project(path: ":modules:mc:predicate", configuration: 'namedElements'))
     include(project(path: ":modules:mc:tools", configuration: 'namedElements'))
+    // Station blocks (Upgrade Station) — the in-game mechanism for installing/removing upgrades.
+    include(project(path: ":modules:mc:blocks", configuration: 'namedElements'))
 
     // Implementation dependencies (for compilation and development runtime)
     implementation(project(":modules:core"))
@@ -27,14 +29,18 @@ dependencies {
     implementation(project(path: ":modules:mc:properties", configuration: 'namedElements'))
     implementation(project(path: ":modules:mc:tools", configuration: 'namedElements'))
     modImplementation(project(path: ":modules:mc:render", configuration: 'namedElements'))
+    modImplementation(project(path: ":modules:mc:blocks", configuration: 'namedElements'))
 
     // === VANILLA-UPGRADES SPECIFIC CONTENT (bundled in JAR) ===
     // Note: Material upgrade bases are in forgero-base
     include(project(":content:vanilla-upgrades-base"))
+    // Gem upgrades — fillers for the gem slots on vanilla tools.
+    include(project(":content:forgero-gems"))
 
     // Core content runtimeOnly for development
     runtimeOnly(project(":content:forgero-base"))
     runtimeOnly(project(":content:forgero-materials"))
+    runtimeOnly(project(":content:forgero-gems"))
     runtimeOnly(project(":content:vanilla-upgrades-base"))
 
     // Fabric
@@ -50,6 +56,7 @@ dependencies {
     modImplementation(project(path: ":mods:recipe-generator", configuration: 'namedElements'))
 
     // Testing dependencies
+    testImplementation(project(path: ":modules:mc:test-common", configuration: 'namedElements'))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
     testImplementation("net.fabricmc:fabric-loader-junit:${project.loader_version}")
@@ -57,6 +64,9 @@ dependencies {
     // Test runtime needs drp and recipe-generator mods
     testRuntimeOnly(project(path: ":mods:drp", configuration: 'namedElements'))
     testRuntimeOnly(project(path: ":mods:recipe-generator", configuration: 'namedElements'))
+    // Station blocks + gem content for tests (install flow + slot fillability)
+    testRuntimeOnly(project(path: ":modules:mc:blocks", configuration: 'namedElements'))
+    testRuntimeOnly(project(":content:forgero-gems"))
 }
 
 loom {

@@ -1,0 +1,23 @@
+{
+  "type": "forgero:static_part",
+  "name": "Fishing Rod",
+  "tags": [
+    "forgero:uncategorized/vanilla_tool"
+  ],
+  "host": {
+    "identifiers": [
+      { "type": "item", "id": "minecraft:fishing_rod" }
+    ]
+  },
+  "attributes": [
+    { "id": "forgero:fishing_rod-durability", "type": "forgero:durability", "computation": 64 }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:fishing_rod-binding",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:materials/types/binding"],
+      "description": "slot.forgero.binding"
+    }
+  ]
+}

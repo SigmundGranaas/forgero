@@ -1,0 +1,29 @@
+{
+  "type": "forgero:static_part",
+  "name": "Shield",
+  "tags": [
+    "forgero:uncategorized/vanilla_tool"
+  ],
+  "host": {
+    "identifiers": [
+      { "type": "item", "id": "minecraft:shield" }
+    ]
+  },
+  "attributes": [
+    { "id": "forgero:shield-durability", "type": "forgero:durability", "computation": 336 }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:shield-binding",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:materials/types/binding"],
+      "description": "slot.forgero.binding"
+    },
+    {
+      "id": "forgero:shield-reinforcement",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/reinforcement"],
+      "description": "slot.forgero.reinforcement"
+    }
+  ]
+}

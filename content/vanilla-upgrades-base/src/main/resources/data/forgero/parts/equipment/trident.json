@@ -1,0 +1,37 @@
+{
+  "type": "forgero:static_part",
+  "name": "Trident",
+  "tags": [
+    "forgero:uncategorized/vanilla_tool"
+  ],
+  "host": {
+    "identifiers": [
+      { "type": "item", "id": "minecraft:trident" }
+    ]
+  },
+  "attributes": [
+    { "id": "forgero:trident-durability", "type": "forgero:durability", "computation": 250 },
+    { "id": "forgero:trident-attack_damage", "type": "forgero:attack_damage", "computation": 9 },
+    { "id": "forgero:trident-attack_speed", "type": "forgero:attack_speed", "computation": 1.1 }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:trident-binding",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:materials/types/binding"],
+      "description": "slot.forgero.binding"
+    },
+    {
+      "id": "forgero:trident-gem",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/gem"],
+      "description": "slot.forgero.gem"
+    },
+    {
+      "id": "forgero:trident-reinforcement",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/reinforcement"],
+      "description": "slot.forgero.reinforcement"
+    }
+  ]
+}

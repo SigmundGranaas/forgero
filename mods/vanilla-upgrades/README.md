@@ -6,31 +6,36 @@ Your diamond sword stays a diamond sword - but now you can add a leather grip or
 
 ## What This Mod Does
 
-- Adds upgrade slots to all vanilla tools, weapons, and armor
+- Adds upgrade slots to all vanilla tools, weapons, and armor — including shields, tridents,
+  elytra, fishing rods, shears, and flint & steel
 - Does NOT change vanilla item stats or crafting recipes
-- Does NOT add new items to the game
+- Adds one block, the **Upgrade Station**, used to install and remove upgrades
 
 ## Upgrade Slots by Tier
 
+The number of slots scales with the item's tier — higher-tier gear has more slots. As a rough guide:
+
 | Tier | Slots |
 |------|-------|
-| Wood/Leather/Stone/Chainmail | 1 slot (binding) |
-| Iron/Gold | 1-2 slots (binding, lining for armor) |
-| Diamond/Netherite | 2 slots (binding + reinforcement or lining) |
+| Wood / Leather / Stone / Chainmail | 1 slot |
+| Iron / Gold | 1–2 slots |
+| Diamond / Netherite | 3–5 slots |
 
 ## Upgrade Types
 
 **Tools & Weapons:**
 - Bindings - Leather, string, vines on the handle
-- Tip Reinforcements - Blaze rods, prismarine, metals on the blade/head
+- Gems - Diamond, emerald, amethyst, and other gems set into the tool
+- Reinforcements - Blaze rods, prismarine, metals on the blade/head
 
 **Armor:**
 - Linings - Leather, wool, phantom membrane inside
-- Reinforcements - Extra materials for protection (diamond tier+)
+- Reinforcements / Gems - Extra materials for protection (diamond tier+)
 
 ## How to Add Upgrades
 
-Use a Smithing Table to combine your tool with an upgrade material.
+Craft an **Upgrade Station** and use it to slot upgrade materials into your tools, weapons, and
+armor — or to remove them again.
 
 ## Installation
 
@@ -38,7 +43,8 @@ Requires Fabric Loader and Fabric API for Minecraft 1.20.1.
 
 ## Vanilla Upgrades vs Forgero
 
-**Vanilla Upgrades**: Adds upgrade slots to your existing vanilla items. No new items, no new crafting.
+**Vanilla Upgrades**: Adds upgrade slots to your existing vanilla items and an Upgrade Station to
+fill them. No new tools, no replaced crafting recipes.
 
 **Forgero**: Completely different crafting system where you build tools from separate parts (heads, handles, blades). Adds hundreds of new items.
 

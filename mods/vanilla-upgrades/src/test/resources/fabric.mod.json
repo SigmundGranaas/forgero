@@ -10,7 +10,9 @@
   "entrypoints": {
     "fabric-gametest": [
       "com.sigmundgranaas.vanillaupgrades.tests.VanillaItemGameplayTest",
-      "com.sigmundgranaas.vanillaupgrades.tests.VanillaUpgradeSlotTest"
+      "com.sigmundgranaas.vanillaupgrades.tests.VanillaUpgradeSlotTest",
+      "com.sigmundgranaas.vanillaupgrades.tests.VanillaUpgradeInstallTest",
+      "com.sigmundgranaas.vanillaupgrades.tests.NewItemCoverageTest"
     ]
   },
   "depends": {

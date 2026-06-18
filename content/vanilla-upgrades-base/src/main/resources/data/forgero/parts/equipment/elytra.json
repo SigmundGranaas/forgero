@@ -1,0 +1,23 @@
+{
+  "type": "forgero:static_part",
+  "name": "Elytra",
+  "tags": [
+    "forgero:uncategorized/vanilla_armor"
+  ],
+  "host": {
+    "identifiers": [
+      { "type": "item", "id": "minecraft:elytra" }
+    ]
+  },
+  "attributes": [
+    { "id": "forgero:elytra-durability", "type": "forgero:durability", "computation": 432 }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:elytra-lining",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:materials/roles/armor_lining_material"],
+      "description": "slot.forgero.lining"
+    }
+  ]
+}
