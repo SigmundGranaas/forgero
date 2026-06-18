@@ -2,6 +2,7 @@
   "type": "forgero:material",
   "name": "Blaze Rod",
   "tags": [
+    "forgero:upgrades/types/binding",
     "forgero:materials/types/binding",
     "forgero:materials/properties/hard",
     "forgero:materials/properties/magical",

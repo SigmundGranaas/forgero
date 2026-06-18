@@ -2,6 +2,7 @@
   "type": "forgero:material",
   "name": "Magma Cream",
   "tags": [
+    "forgero:upgrades/types/binding",
     "forgero:materials/types/binding",
     "forgero:materials/properties/hybrid",
     "forgero:materials/properties/magical",

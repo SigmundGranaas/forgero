@@ -2,6 +2,7 @@
   "type": "forgero:material",
   "name": "Slimeball",
   "tags": [
+    "forgero:upgrades/types/binding",
     "forgero:materials/types/binding",
     "forgero:materials/properties/hybrid",
     "forgero:materials/roles/upgrade_material"

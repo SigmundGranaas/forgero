@@ -2,6 +2,7 @@
   "type": "forgero:material",
   "name": "Warped Fungus",
   "tags": [
+    "forgero:upgrades/types/binding",
     "forgero:materials/types/binding"
   ],
   "host": {

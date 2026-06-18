@@ -32,12 +32,12 @@
   "upgrades": [
     {
       "id": "binding_slot",
-      "type": "forgero:materials/types/binding",
+      "type": "forgero:upgrades/types/binding",
       "tags": ["forgero:upgrades/types/binding"]
     },
     {
       "id": "handle_grip_slot",
-      "type": "forgero:materials/properties/soft",
+      "type": "forgero:upgrades/types/grip",
       "tags": ["forgero:upgrades/types/grip"]
     },
     {

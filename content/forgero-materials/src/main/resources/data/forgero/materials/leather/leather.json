@@ -3,6 +3,8 @@
   "name": "Leather",
   "include": ["forgero:soft_upgrade_base"],
   "tags": [
+    "forgero:upgrades/types/grip",
+    "forgero:upgrades/types/binding",
     "forgero:materials/roles/armor_lining_material",
     "forgero:materials/types/leather",
     "forgero:materials/properties/soft",

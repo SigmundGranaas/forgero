@@ -3,6 +3,8 @@
   "name": "Rabbit Hide",
   "include": ["forgero:soft_upgrade_base"],
   "tags": [
+    "forgero:upgrades/types/grip",
+    "forgero:upgrades/types/binding",
     "forgero:materials/properties/soft",
     "forgero:materials/types/binding"
   ],

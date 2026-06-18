@@ -3,6 +3,7 @@
   "name": "Bamboo",
   "include": ["forgero:hard_upgrade_base"],
   "tags": [
+    "forgero:upgrades/types/binding",
     "forgero:materials/properties/hard",
     "forgero:materials/types/binding",
     "forgero:upgrades/types/reinforcement"

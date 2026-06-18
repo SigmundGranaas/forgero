@@ -2,6 +2,7 @@
   "type": "forgero:material",
   "name": "Brown Mushroom",
   "tags": [
+    "forgero:upgrades/types/binding",
     "forgero:materials/types/binding"
   ],
   "host": {
