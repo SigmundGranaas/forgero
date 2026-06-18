@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.properties.minecraft.onhit;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.common.runtime.ContextKeys;
 import com.sigmundgranaas.forgero.common.runtime.DynamicContext;
+import com.sigmundgranaas.forgero.common.runtime.MinecraftContextKeys;
 import com.sigmundgranaas.forgero.common.runtime.PropertyDispatcher;
 import com.sigmundgranaas.forgero.properties.minecraft.EntityEffects;
 import net.minecraft.entity.Entity;
@@ -25,7 +26,8 @@ public class OnHitManager {
 			return;
 		}
 
-		// Build context with target tags for conditions
+		// Build context with target tags AND the entities/world so dynamic conditions
+		// (e.g. minecraft:entity, forgero:backstab, forgero:target_has_mark) can evaluate.
 		DynamicContext.Builder contextBuilder = new DynamicContext.Builder();
 		Set<OpenIdentifier> targetTags = Registries.ENTITY_TYPE.getEntry(target.getType())
 				.streamTags()
@@ -33,6 +35,11 @@ public class OnHitManager {
 				.map(id -> new OpenIdentifier(id.getNamespace(), id.getPath()))
 				.collect(Collectors.toSet());
 		contextBuilder.put(ContextKeys.TARGET_TAGS, targetTags);
+		contextBuilder.put(MinecraftContextKeys.SOURCE_ENTITY, source);
+		contextBuilder.put(MinecraftContextKeys.TARGET_ENTITY, target);
+		if (source.getWorld() != null) {
+			contextBuilder.put(MinecraftContextKeys.WORLD, source.getWorld());
+		}
 
 		List<OnHitProperty> properties = PropertyDispatcher.active(stack, OnHitProperty.KEY, contextBuilder.build());
 

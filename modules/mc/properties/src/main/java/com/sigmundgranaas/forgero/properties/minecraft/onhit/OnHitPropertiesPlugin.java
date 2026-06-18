@@ -21,6 +21,10 @@ import com.sigmundgranaas.forgero.effects.entity.SpawnEntityHandler;
 import com.sigmundgranaas.forgero.effects.entity.StatusEffectHandler;
 import com.sigmundgranaas.forgero.effects.entity.TeleportHandler;
 import com.sigmundgranaas.forgero.effects.entity.VelocityHandler;
+import com.sigmundgranaas.forgero.effects.mark.ClearMarkHandler;
+import com.sigmundgranaas.forgero.effects.mark.MarkHandler;
+import com.sigmundgranaas.forgero.effects.zone.CreateZoneHandler;
+import com.sigmundgranaas.forgero.properties.minecraft.condition.TargetHasMarkCondition;
 import com.sigmundgranaas.forgero.common.api.DataPlugin;
 import com.sigmundgranaas.forgero.common.api.PluginRegistrationContext;
 import com.sigmundgranaas.forgero.core.property.compiled.CompilerPasses;
@@ -65,6 +69,13 @@ public class OnHitPropertiesPlugin implements DataPlugin {
 		registerEffect(TeleportHandler.TYPE, TeleportHandler.CODEC);
 		registerEffect(FunctionExecuteHandler.TYPE, FunctionExecuteHandler.CODEC);
 
+		// Mark effects (Phase 1: marks & detonation)
+		registerEffect(MarkHandler.TYPE, MarkHandler.CODEC);
+		registerEffect(ClearMarkHandler.TYPE, ClearMarkHandler.CODEC);
+
+		// Zone effect (Phase 3: persistent zones)
+		registerEffect(CreateZoneHandler.TYPE, CreateZoneHandler.CODEC);
+
 		// Selectors
 		registerSelector(SingleTargetSelector.TYPE, SingleTargetSelector.CODEC);
 		registerSelector(AreaOfEffectSelector.TYPE, AreaOfEffectSelector.CODEC);
@@ -97,6 +108,14 @@ public class OnHitPropertiesPlugin implements DataPlugin {
 		// New Filters - Phase 4
 		registerFilter(EnvironmentFilter.TYPE, EnvironmentFilter.CODEC);
 		registerFilter(EntityStateFilter.TYPE, EntityStateFilter.CODEC);
+
+		// Mark filter (Phase 1: marks & detonation)
+		registerFilter(HasMarkFilter.TYPE, HasMarkFilter.CODEC);
+
+		// Positional filters (Phase 2: skill combat)
+		registerFilter(IsAirborneFilter.TYPE, IsAirborneFilter.CODEC);
+		registerFilter(FacingAwayFilter.TYPE, FacingAwayFilter.CODEC);
+		registerFilter(LineOfSightFilter.TYPE, LineOfSightFilter.CODEC);
 	}
 
 	public static void registerEffect(String type, Codec<? extends OnHitEffect> codec) {
@@ -136,6 +155,9 @@ public class OnHitPropertiesPlugin implements DataPlugin {
 				OnHitProperty.PROPERTY_KEY,
 				conditionCodecSupplier -> ListCodecWrapper.of(OnHitProperty.codec(conditionCodecSupplier.get()))
 		);
+
+		// Mark condition (Phase 1: marks & detonation)
+		context.registerDynamicConditionCodec(TargetHasMarkCondition.TYPE.toString(), TargetHasMarkCondition.CODEC);
 	}
 
 	@Override

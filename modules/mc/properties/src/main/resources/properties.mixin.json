@@ -26,8 +26,11 @@
     "LivingEntityDeathMixin",
     "LivingEntityDynamicAttributeMixin",
     "LivingEntityLootMixin",
+    "LivingEntityMarkDataMixin",
     "LivingEntityOnHitMixin",
+    "LivingEntityShieldBlockMixin",
     "LivingEntitySwingMixin",
-    "LivingEntityTickMixin"
+    "LivingEntityTickMixin",
+    "PlayerEntityCritMixin"
   ]
 }

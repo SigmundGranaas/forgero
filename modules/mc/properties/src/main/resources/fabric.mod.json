@@ -33,6 +33,9 @@
       "com.sigmundgranaas.forgero.properties.minecraft.onkill.OnKillPropertiesPlugin",
       "com.sigmundgranaas.forgero.properties.minecraft.onsneak.OnSneakTogglePropertiesPlugin",
       "com.sigmundgranaas.forgero.properties.minecraft.onblockplace.OnBlockPlacePropertiesPlugin",
+      "com.sigmundgranaas.forgero.properties.minecraft.oncrit.OnCritPropertiesPlugin",
+      "com.sigmundgranaas.forgero.properties.minecraft.onblock.OnBlockPropertiesPlugin",
+      "com.sigmundgranaas.forgero.properties.minecraft.onequip.OnEquipPropertiesPlugin",
       "com.sigmundgranaas.forgero.properties.minecraft.useinteraction.UseInteractionPropertiesPlugin"
     ]
   },

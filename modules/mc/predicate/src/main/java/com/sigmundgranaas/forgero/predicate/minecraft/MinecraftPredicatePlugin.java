@@ -7,9 +7,14 @@ import com.sigmundgranaas.forgero.common.api.DataPlugin;
 import com.sigmundgranaas.forgero.common.api.PluginRegistrationContext;
 import com.sigmundgranaas.forgero.predicate.minecraft.block.BlockPredicate;
 import com.sigmundgranaas.forgero.predicate.minecraft.entity.EntityPredicate;
+import com.sigmundgranaas.forgero.predicate.minecraft.standalone.BackstabPredicate;
+import com.sigmundgranaas.forgero.predicate.minecraft.standalone.CrowdCountPredicate;
 import com.sigmundgranaas.forgero.predicate.minecraft.standalone.DamagePredicate;
+import com.sigmundgranaas.forgero.predicate.minecraft.standalone.MoonPhasePredicate;
 import com.sigmundgranaas.forgero.predicate.minecraft.standalone.RandomPredicate;
+import com.sigmundgranaas.forgero.predicate.minecraft.standalone.TimeOfDayPredicate;
 import com.sigmundgranaas.forgero.predicate.minecraft.standalone.WeatherPredicate;
+import com.sigmundgranaas.forgero.predicate.minecraft.standalone.WearingSetPredicate;
 
 /**
  * A Forgero data plugin that registers all Minecraft-specific dynamic predicates.
@@ -41,6 +46,17 @@ public class MinecraftPredicatePlugin implements DataPlugin {
 		context.registerDynamicConditionCodec(WeatherPredicate.TYPE.toString(), WeatherPredicate.CODEC);
 		context.registerDynamicConditionCodec(DamagePredicate.TYPE.toString(), DamagePredicate.CODEC);
 		context.registerDynamicConditionCodec(RandomPredicate.TYPE.toString(), RandomPredicate.CODEC);
+
+		// Positional / crowd conditions (Phase 2: skill combat)
+		context.registerDynamicConditionCodec(BackstabPredicate.TYPE.toString(), BackstabPredicate.CODEC);
+		context.registerDynamicConditionCodec(CrowdCountPredicate.TYPE.toString(), CrowdCountPredicate.CODEC);
+
+		// Identity conditions (Phase 4: time-of-day / moon phase)
+		context.registerDynamicConditionCodec(TimeOfDayPredicate.TYPE.toString(), TimeOfDayPredicate.CODEC);
+		context.registerDynamicConditionCodec(MoonPhasePredicate.TYPE.toString(), MoonPhasePredicate.CODEC);
+
+		// Set-bonus condition (Phase 5)
+		context.registerDynamicConditionCodec(WearingSetPredicate.TYPE.toString(), WearingSetPredicate.CODEC);
 	}
 
 	@Override

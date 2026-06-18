@@ -21,7 +21,9 @@
       "com.sigmundgranaas.forgero.gametest.ItemPredicateGametest",
       "com.sigmundgranaas.forgero.gametest.LocationPredicateGametest",
       "com.sigmundgranaas.forgero.gametest.RelationalPredicateGametest",
-      "com.sigmundgranaas.forgero.gametest.StatusEffectPredicateGametest"
+      "com.sigmundgranaas.forgero.gametest.StatusEffectPredicateGametest",
+      "com.sigmundgranaas.forgero.gametest.IdentityConditionGametest",
+      "com.sigmundgranaas.forgero.gametest.WearingSetGametest"
     ]
   }
 }

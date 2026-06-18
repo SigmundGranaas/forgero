@@ -1,5 +1,6 @@
 package com.sigmundgranaas.forgero.properties.minecraft.mixin;
 
+import com.sigmundgranaas.forgero.properties.minecraft.onequip.EquipmentChangeManager;
 import com.sigmundgranaas.forgero.properties.minecraft.onsneak.OnSneakToggleManager;
 import com.sigmundgranaas.forgero.properties.minecraft.ontick.OnTickManager;
 import net.minecraft.entity.LivingEntity;
@@ -16,5 +17,6 @@ public abstract class LivingEntityTickMixin {
 		LivingEntity entity = (LivingEntity) (Object) this;
 		OnTickManager.handle(entity);
 		OnSneakToggleManager.handleTick(entity);
+		EquipmentChangeManager.handleTick(entity);
 	}
 }
