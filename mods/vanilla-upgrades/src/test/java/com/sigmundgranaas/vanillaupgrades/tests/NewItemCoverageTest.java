@@ -16,10 +16,10 @@ import net.minecraft.test.TestContext;
  */
 public class NewItemCoverageTest implements FabricGameTest {
 
-	// Ranged weapons (bow/crossbow) are owned by the Forgero bows module and are intentionally not
-	// re-covered here, since the vanilla-upgrades-base pack is shared with the main Forgero mod.
+	// Bow/crossbow come from the vanilla-upgrades-ranged pack (bundled only by this mod, not by the
+	// main Forgero mod whose bows module owns minecraft:bow).
 	private static final Item[] NEW_ITEMS = {
-			Items.SHIELD, Items.TRIDENT,
+			Items.SHIELD, Items.TRIDENT, Items.BOW, Items.CROSSBOW,
 			Items.ELYTRA, Items.FISHING_ROD, Items.SHEARS, Items.FLINT_AND_STEEL
 	};
 

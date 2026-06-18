@@ -8,7 +8,8 @@ station-blocks module, and material/gem content.
 ## What works
 
 - **Coverage:** all vanilla tools (pickaxe/axe/shovel/hoe/sword × 6 tiers) and armor (6 tiers ×
-  4 pieces), plus shield, trident, elytra, fishing rod, shears, and flint & steel.
+  4 pieces), plus shield, trident, elytra, fishing rod, shears, flint & steel, and ranged weapons
+  (bow, crossbow via the `vanilla-upgrades-ranged` pack).
 - **Installing upgrades:** the **Upgrade Station** block (from `modules/mc/blocks`, now bundled)
   installs and removes upgrades on vanilla items.
 - **Fillable slots:** binding, gem, reinforcement, tip-reinforcement, and lining slots all have
@@ -29,10 +30,9 @@ station-blocks module, and material/gem content.
   would improve armor builds.
 - **Smithing-table install:** the original README promised a smithing-table flow; the shipped
   mechanism is the Upgrade Station. A smithing path could be added later as a separate feature.
-- **Ranged weapons (bow / crossbow):** not covered. `vanilla-upgrades-base` is shared with the main
-  Forgero mod, where the bows module owns `minecraft:bow`; claiming it in the shared pack breaks
-  Forgero's bow registration. Covering ranged weapons needs a vanilla-upgrades-only content pack so
-  the parts don't load under Forgero.
+- **Ranged weapons (bow / crossbow):** covered via the dedicated `content/vanilla-upgrades-ranged`
+  pack, which is bundled only by the vanilla-upgrades mod (never by the main Forgero mod, whose bows
+  module owns `minecraft:bow`).
 
 ## Layout
 

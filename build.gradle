@@ -365,7 +365,8 @@ tasks.register('validateContentPacks') {
 			'content/forgero-secondary-materials',
 			'content/forgero-extended-weapons',
 			'content/forgero-gems',
-			'content/vanilla-upgrades-base'
+			'content/vanilla-upgrades-base',
+			'content/vanilla-upgrades-ranged'
 		].collect { file("${projectDir}/${it}").toPath() }
 
 		// Filter to only existing paths

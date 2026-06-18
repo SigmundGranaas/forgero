@@ -1,0 +1,29 @@
+{
+  "type": "forgero:static_part",
+  "name": "Crossbow",
+  "tags": [
+    "forgero:uncategorized/vanilla_tool"
+  ],
+  "host": {
+    "identifiers": [
+      { "type": "item", "id": "minecraft:crossbow" }
+    ]
+  },
+  "attributes": [
+    { "id": "forgero:crossbow-durability", "type": "forgero:durability", "computation": 465 }
+  ],
+  "upgrades": [
+    {
+      "id": "forgero:crossbow-binding",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:materials/types/binding"],
+      "description": "slot.forgero.binding"
+    },
+    {
+      "id": "forgero:crossbow-reinforcement",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/reinforcement"],
+      "description": "slot.forgero.reinforcement"
+    }
+  ]
+}

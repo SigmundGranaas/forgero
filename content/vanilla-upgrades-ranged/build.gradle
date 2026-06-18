@@ -1,0 +1,7 @@
+// Vanilla Upgrades ranged-weapon content module.
+// Static_part definitions for vanilla bow/crossbow. Kept OUT of the shared vanilla-upgrades-base
+// pack because that pack is also loaded by the main Forgero mod, whose bows module owns
+// minecraft:bow — this pack is bundled only by the vanilla-upgrades mod.
+dependencies {
+    implementation project(":content:forgero-materials")
+}

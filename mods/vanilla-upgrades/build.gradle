@@ -34,6 +34,9 @@ dependencies {
     // === VANILLA-UPGRADES SPECIFIC CONTENT (bundled in JAR) ===
     // Note: Material upgrade bases are in forgero-base
     include(project(":content:vanilla-upgrades-base"))
+    // Ranged-weapon slots (bow/crossbow) — vanilla-upgrades-only, kept out of the shared base pack
+    // so it never loads under the main Forgero mod (whose bows module owns minecraft:bow).
+    include(project(":content:vanilla-upgrades-ranged"))
     // Gem upgrades — fillers for the gem slots on vanilla tools.
     include(project(":content:forgero-gems"))
 
@@ -42,6 +45,7 @@ dependencies {
     runtimeOnly(project(":content:forgero-materials"))
     runtimeOnly(project(":content:forgero-gems"))
     runtimeOnly(project(":content:vanilla-upgrades-base"))
+    runtimeOnly(project(":content:vanilla-upgrades-ranged"))
 
     // Fabric
     modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
@@ -67,6 +71,7 @@ dependencies {
     // Station blocks + gem content for tests (install flow + slot fillability)
     testRuntimeOnly(project(path: ":modules:mc:blocks", configuration: 'namedElements'))
     testRuntimeOnly(project(":content:forgero-gems"))
+    testRuntimeOnly(project(":content:vanilla-upgrades-ranged"))
 }
 
 loom {
