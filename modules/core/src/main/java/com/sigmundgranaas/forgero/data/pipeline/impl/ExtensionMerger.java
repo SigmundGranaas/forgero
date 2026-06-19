@@ -1,8 +1,6 @@
 package com.sigmundgranaas.forgero.data.pipeline.impl;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.sigmundgranaas.forgero.common.identifier.api.OpenIdentifier;
 import com.sigmundgranaas.forgero.data.loading.api.RawDefinition;
 import com.sigmundgranaas.forgero.data.loading.api.data.DefinitionData;
@@ -109,140 +107,11 @@ public class ExtensionMerger {
 	 * @return A new definition with the extension merged
 	 */
 	private DefinitionData mergeInto(DefinitionData target, ExtensionData extension) {
-		List<OpenIdentifier> mergedTags = mergeTags(target.tags(), extension.tags());
-		List<AttributeData> mergedAttributes = mergeAttributes(target.attributes(), extension.attributes());
-		Map<String, JsonElement> mergedProperties = mergeProperties(target.properties(), extension.properties());
-		List<UpgradeSlotData> mergedUpgrades = mergeUpgrades(target.upgrades(), extension.upgrades());
+		List<OpenIdentifier> mergedTags = MergeOps.union(target.tags(), extension.tags());
+		List<AttributeData> mergedAttributes = MergeOps.mergeAttributesById(target.attributes(), extension.attributes());
+		Map<String, JsonElement> mergedProperties = MergeOps.mergeProperties(target.properties(), extension.properties());
+		List<UpgradeSlotData> mergedUpgrades = MergeOps.mergeUpgradesById(target.upgrades(), extension.upgrades());
 
 		return target.withMergedExtension(mergedTags, mergedAttributes, mergedProperties, mergedUpgrades);
-	}
-
-	/**
-	 * Merges two tag lists using union semantics.
-	 */
-	private List<OpenIdentifier> mergeTags(List<OpenIdentifier> target, List<OpenIdentifier> extension) {
-		if (extension == null || extension.isEmpty()) {
-			return target;
-		}
-		if (target == null || target.isEmpty()) {
-			return extension;
-		}
-
-		Set<OpenIdentifier> merged = new LinkedHashSet<>(target);
-		merged.addAll(extension);
-		return new ArrayList<>(merged);
-	}
-
-	/**
-	 * Merges two attribute lists by concatenation.
-	 */
-	private List<AttributeData> mergeAttributes(List<AttributeData> target, List<AttributeData> extension) {
-		if (extension == null || extension.isEmpty()) {
-			return target;
-		}
-		if (target == null || target.isEmpty()) {
-			return extension;
-		}
-
-		List<AttributeData> merged = new ArrayList<>(target);
-		merged.addAll(extension);
-		return merged;
-	}
-
-	/**
-	 * Merges upgrade slots by concatenation.
-	 * Duplicate IDs: extension slot wins with warning.
-	 */
-	private List<UpgradeSlotData> mergeUpgrades(List<UpgradeSlotData> target, List<UpgradeSlotData> extension) {
-		if (extension == null || extension.isEmpty()) {
-			return target;
-		}
-		if (target == null || target.isEmpty()) {
-			return extension;
-		}
-
-		// Build map of existing slots by ID
-		Map<OpenIdentifier, UpgradeSlotData> slotMap = new LinkedHashMap<>();
-		for (UpgradeSlotData slot : target) {
-			slotMap.put(slot.id(), slot);
-		}
-
-		// Extension slots override with warning
-		for (UpgradeSlotData slot : extension) {
-			if (slotMap.containsKey(slot.id())) {
-				LOGGER.warn("Extension overriding upgrade slot ID '{}' in target", slot.id());
-			}
-			slotMap.put(slot.id(), slot);
-		}
-
-		return new ArrayList<>(slotMap.values());
-	}
-
-	/**
-	 * Deep merges two property maps.
-	 * <ul>
-	 *   <li>Arrays: concatenated</li>
-	 *   <li>Objects: merged recursively</li>
-	 *   <li>Primitives: extension value wins</li>
-	 * </ul>
-	 */
-	private Map<String, JsonElement> mergeProperties(Map<String, JsonElement> target, Map<String, JsonElement> extension) {
-		if (extension == null || extension.isEmpty()) {
-			return target;
-		}
-		if (target == null || target.isEmpty()) {
-			return extension;
-		}
-
-		Map<String, JsonElement> merged = new HashMap<>(target);
-		for (Map.Entry<String, JsonElement> entry : extension.entrySet()) {
-			String key = entry.getKey();
-			JsonElement extValue = entry.getValue();
-			JsonElement targetValue = merged.get(key);
-
-			if (targetValue == null) {
-				merged.put(key, extValue);
-			} else {
-				merged.put(key, deepMergeJson(targetValue, extValue));
-			}
-		}
-		return merged;
-	}
-
-	/**
-	 * Deep merges two JSON elements.
-	 */
-	private JsonElement deepMergeJson(JsonElement target, JsonElement extension) {
-		if (target.isJsonArray() && extension.isJsonArray()) {
-			JsonArray merged = new JsonArray();
-			target.getAsJsonArray().forEach(merged::add);
-			extension.getAsJsonArray().forEach(merged::add);
-			return merged;
-		}
-
-		if (target.isJsonObject() && extension.isJsonObject()) {
-			JsonObject merged = new JsonObject();
-			JsonObject targetObj = target.getAsJsonObject();
-			JsonObject extObj = extension.getAsJsonObject();
-
-			// Add all target properties
-			for (Map.Entry<String, JsonElement> entry : targetObj.entrySet()) {
-				merged.add(entry.getKey(), entry.getValue());
-			}
-
-			// Merge extension properties
-			for (Map.Entry<String, JsonElement> entry : extObj.entrySet()) {
-				String key = entry.getKey();
-				if (merged.has(key)) {
-					merged.add(key, deepMergeJson(merged.get(key), entry.getValue()));
-				} else {
-					merged.add(key, entry.getValue());
-				}
-			}
-			return merged;
-		}
-
-		// For primitives or mismatched types, extension wins
-		return extension;
 	}
 }

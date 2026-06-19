@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -86,14 +87,18 @@ public class ForgeroDataInitializer {
 		List<String> namespaces = List.of(config.defaultNamespace(), "minecraft");
 		List<String> definitionDirs = List.of("materials", "shapes", "parts", "equipment", "schematics", "casts");
 
-		// 2. LOAD RAW DEFINITIONS from all configured namespaces
-		Map<OpenIdentifier, RawDefinition> rawDefinitions = namespaces.stream()
+		// 2. LOAD RAW DEFINITIONS from all configured namespaces.
+		// Definitions sharing the same id are MERGED (so two independent packs can each fully define
+		// the same resource), in ascending priority order with load-order tie-break.
+		Map<OpenIdentifier, List<RawDefinition>> definitionsById = namespaces.stream()
 				.flatMap(ns -> definitionDirs.stream().map(dir -> new OpenIdentifier(ns, dir)))
 				.flatMap(path -> dataLoader.load(path, true))
-				.collect(Collectors.toMap(RawDefinition::id, Function.identity(), (existing, replacement) -> {
-					LOGGER.warn("Duplicate definition ID found: [{}]. The existing entry will be kept.", existing.id());
-					return existing;
-				}));
+				.collect(Collectors.groupingBy(RawDefinition::id, LinkedHashMap::new, Collectors.toList()));
+		DefinitionMerger definitionMerger = new DefinitionMerger();
+		Map<OpenIdentifier, RawDefinition> rawDefinitions = new HashMap<>();
+		for (Map.Entry<OpenIdentifier, List<RawDefinition>> group : definitionsById.entrySet()) {
+			rawDefinitions.put(group.getKey(), definitionMerger.mergeGroup(group.getKey(), group.getValue()));
+		}
 
 		// 2b. LOAD EXTENSIONS from all configured namespaces
 		Map<OpenIdentifier, RawDefinition> extensionDefinitions = namespaces.stream()

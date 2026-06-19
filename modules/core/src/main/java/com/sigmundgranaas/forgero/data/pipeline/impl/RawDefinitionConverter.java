@@ -46,8 +46,12 @@ public class RawDefinitionConverter implements ResourceConverter<RawDefinition> 
 
 			// Use the id from the file path as the canonical ID
 			OpenIdentifier canonicalId = identifierFactory.of(id.namespace(), id.name());
+			// Optional top-level merge priority for same-id definitions across packs (default 0).
+			int priority = root.has("priority") && root.get("priority").isJsonPrimitive()
+					? root.get("priority").getAsInt()
+					: 0;
 			return codec.parse(JsonOps.INSTANCE, root)
-					.map(dto -> new RawDefinition(canonicalId, dto))
+					.map(dto -> new RawDefinition(canonicalId, dto, priority))
 					.resultOrPartial(err -> LOGGER.error("Codec parsing failed for [{}]: {}", id, err));
 		} catch (IOException | JsonSyntaxException e) {
 			LOGGER.error("Failed to parse file [{}]: {}", id, e.getMessage());
