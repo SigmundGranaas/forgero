@@ -39,11 +39,15 @@ dependencies {
     include(project(":content:vanilla-upgrades-ranged"))
     // Gem upgrades — fillers for the gem slots on vanilla tools.
     include(project(":content:forgero-gems"))
+    // Secondary materials — provide stat-applying upgrade materials (ender_pearl, glowstone, etc.)
+    // whose attributes actually propagate when slotted (unlike the part-composite-scoped gems).
+    include(project(":content:forgero-secondary-materials"))
 
     // Core content runtimeOnly for development
     runtimeOnly(project(":content:forgero-base"))
     runtimeOnly(project(":content:forgero-materials"))
     runtimeOnly(project(":content:forgero-gems"))
+    runtimeOnly(project(":content:forgero-secondary-materials"))
     runtimeOnly(project(":content:vanilla-upgrades-base"))
     runtimeOnly(project(":content:vanilla-upgrades-ranged"))
 
@@ -71,6 +75,7 @@ dependencies {
     // Station blocks + gem content for tests (install flow + slot fillability)
     testRuntimeOnly(project(path: ":modules:mc:blocks", configuration: 'namedElements'))
     testRuntimeOnly(project(":content:forgero-gems"))
+    testRuntimeOnly(project(":content:forgero-secondary-materials"))
     testRuntimeOnly(project(":content:vanilla-upgrades-ranged"))
 }
 

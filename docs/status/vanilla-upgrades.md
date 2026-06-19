@@ -27,6 +27,33 @@ station-blocks module, and material/gem content.
   tip slot. Non-head tools (fishing rod, shears, shield, etc.) and armor do not.
 - **Gem / reinforcement** — present on mid/high tiers, scaling with tier.
 
+## Upgrade effects on attributes (important)
+
+Installing an upgrade changes an item's **attributes only when the material's attribute uses an
+upgrade-applicable scope** (no scope = propagates normally, or conditioned on the slot's
+`in_slot_type`). Materials whose attributes use `forgero:scope/part-composite` (which exists for
+shape+material *part construction*, using intersection logic) are **stat-neutral when slotted as an
+upgrade** — they fill the slot and can still carry event properties, but they do not change stats.
+
+Verified on vanilla items (`UpgradeAttributeChangeTest`): `forgero:ender_pearl` (durability +105,
+no scope) raises a vanilla pickaxe/sword/trident's resolved durability by 105 through the gem slot.
+So the resolution path works on vanilla static parts — the determinant is the material's scope.
+
+Current stat-filler status per slot type (with the bundled packs):
+
+| Slot | Stat-applying filler available? |
+|------|-------------------------------|
+| gem | Yes — `ender_pearl` (and other secondary-materials gems) |
+| reinforcement | No — bundled reinforcement materials (e.g. calcite) are part-composite, stat-neutral as upgrades |
+| binding | No — bundled binding materials (e.g. leather) are part-composite/binding-conditioned, stat-neutral here |
+| lining (armor) | No — only `leather` has the lining role and it adds no stats in a lining slot |
+
+Events fire regardless of scope (verified: `on_hit` via blaze rod, `on_crit` via example aspect).
+
+`forgero-secondary-materials` is now bundled to provide at least one working stat-upgrade path
+(gem slot). Giving reinforcement/binding/lining slots real stat upgrades needs materials authored
+with upgrade-applicable scopes for those slots — a content decision (see follow-ups).
+
 ## Known follow-ups
 
 - **Slot-per-tier matrix:** gem/reinforcement counts per tier still vary and are not locked to a

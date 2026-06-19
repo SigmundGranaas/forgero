@@ -13,7 +13,9 @@
       "com.sigmundgranaas.vanillaupgrades.tests.VanillaUpgradeSlotTest",
       "com.sigmundgranaas.vanillaupgrades.tests.VanillaUpgradeInstallTest",
       "com.sigmundgranaas.vanillaupgrades.tests.NewItemCoverageTest",
-      "com.sigmundgranaas.vanillaupgrades.tests.TipSlotCoverageTest"
+      "com.sigmundgranaas.vanillaupgrades.tests.TipSlotCoverageTest",
+      "com.sigmundgranaas.vanillaupgrades.tests.UpgradeAttributeChangeTest",
+      "com.sigmundgranaas.vanillaupgrades.tests.UpgradeEventTest"
     ]
   },
   "depends": {
