@@ -106,6 +106,34 @@ class DefinitionMergerTest {
 	}
 
 	@Test
+	void listValuedPropertiesConcatenateAndObjectsDeepMerge() {
+		com.google.gson.JsonArray fire = new com.google.gson.JsonArray();
+		fire.add(new com.google.gson.JsonPrimitive("fire"));
+		com.google.gson.JsonArray lightning = new com.google.gson.JsonArray();
+		lightning.add(new com.google.gson.JsonPrimitive("lightning"));
+
+		com.google.gson.JsonObject objA = new com.google.gson.JsonObject();
+		objA.addProperty("a", 1);
+		com.google.gson.JsonObject objB = new com.google.gson.JsonObject();
+		objB.addProperty("b", 2);
+
+		ResourceData a = new ResourceData(id("forgero:material"), "iron", null, null, null, null, null, null,
+				java.util.Map.of("minecraft:on_hit", fire, "forgero:cfg", objA));
+		ResourceData b = new ResourceData(id("forgero:material"), "iron", null, null, null, null, null, null,
+				java.util.Map.of("minecraft:on_hit", lightning, "forgero:cfg", objB));
+
+		ResourceData merged = (ResourceData) merger.mergeGroup(id("forgero:iron"),
+				List.of(raw("forgero:iron", a, 0), raw("forgero:iron", b, 0))).data();
+
+		// List-valued property (e.g. on_hit) concatenates across packs.
+		assertEquals(2, merged.properties().get("minecraft:on_hit").getAsJsonArray().size(),
+				"on_hit effects from both packs should be combined");
+		// Object-valued property deep-merges.
+		com.google.gson.JsonObject cfg = merged.properties().get("forgero:cfg").getAsJsonObject();
+		assertTrue(cfg.has("a") && cfg.has("b"), "object properties merge key-wise across packs");
+	}
+
+	@Test
 	void conflictingTypesForSameIdFailFast() {
 		ResourceData asMaterial = material("iron", null, null, null);
 		ResourceData asPart = new ResourceData(id("forgero:static_part"), "iron", null, null, null, null, null, null, null);
