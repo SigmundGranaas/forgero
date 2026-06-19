@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.util.Optional;
 
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
+import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,6 +19,15 @@ public class MorphingItemUtil {
 	private static final Logger LOGGER = LogManager.getLogger("ForgeroMorphingItemUtil");
 
 	public static BufferedImage getStartImage(ItemStack stack) {
+		ItemStack startStack = MorphedItem.getStartStack(stack);
+
+		if (!startStack.isEmpty()) {
+			BufferedImage image = RuntimeModelUtil.getFirstQuadTextureImage(startStack, MinecraftClient.getInstance());
+			if (image != null) {
+				return image;
+			}
+		}
+
 		if (!stack.hasNbt()) return null;
 		String id = stack.getNbt().getString("morphStart");
 		LOGGER.trace("MorphingItemUtil.getStartImage id={}", id);
@@ -25,6 +35,15 @@ public class MorphingItemUtil {
 	}
 
 	public static BufferedImage getResultImage(ItemStack stack) {
+		ItemStack resultStack = MorphedItem.getResultStack(stack);
+
+		if (!resultStack.isEmpty()) {
+			BufferedImage image = RuntimeModelUtil.getFirstQuadTextureImage(resultStack, MinecraftClient.getInstance());
+			if (image != null) {
+				return image;
+			}
+		}
+
 		if (!stack.hasNbt()) return null;
 		String id = stack.getNbt().getString("morphResult");
 		LOGGER.trace("MorphingItemUtil.getResultImage id={}", id);

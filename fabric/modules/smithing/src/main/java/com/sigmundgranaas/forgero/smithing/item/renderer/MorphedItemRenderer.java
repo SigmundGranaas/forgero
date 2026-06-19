@@ -143,15 +143,16 @@ public class MorphedItemRenderer implements BuiltinItemRendererRegistry.DynamicI
 
 	private boolean renderMorphed3D(ItemStack morphedStack, double progress, MatrixStack matrices,
 									VertexConsumerProvider vertexConsumers, int light, int overlay) {
-		Identifier startId = MorphedItem.getStartItemId(morphedStack);
-		Identifier resultId = MorphedItem.getResultItemId(morphedStack);
-		if (startId == null && resultId == null) {
+		ItemStack startStack = MorphedItem.getStartStack(morphedStack);
+		ItemStack resultStack = MorphedItem.getResultStack(morphedStack);
+
+		if (startStack.isEmpty() || resultStack.isEmpty()) {
 			return false;
 		}
 
 		double progressClamped = MathHelper.clamp(progress, 0.0, 1.0);
 		double stepProgress = Math.round(progressClamped * CACHE_PRECISION) / CACHE_PRECISION;
-		String cacheKey = buildCacheKey(startId, resultId, stepProgress);
+		String cacheKey = buildCacheKey(startStack, resultStack, stepProgress);
 
 		MorphTextureCache cached = morphTextureCache.get(cacheKey);
 		if (cached != null && Math.abs(cached.lastProgress - stepProgress) < CACHE_TOLERANCE) {
@@ -160,8 +161,8 @@ public class MorphedItemRenderer implements BuiltinItemRendererRegistry.DynamicI
 		}
 
 		try {
-			BufferedImage startImage = getItemImage(startId);
-			BufferedImage resultImage = getItemImage(resultId);
+			BufferedImage startImage = getItemImage(startStack);
+			BufferedImage resultImage = getItemImage(resultStack);
 			if (startImage == null || resultImage == null) {
 				return false;
 			}
@@ -184,10 +185,12 @@ public class MorphedItemRenderer implements BuiltinItemRendererRegistry.DynamicI
 		return false;
 	}
 
-	private String buildCacheKey(Identifier startId, Identifier resultId, double stepProgress) {
-		String startStr = startId != null ? startId.toString() : "null";
-		String resultStr = resultId != null ? resultId.toString() : "null";
-		return startStr + "_" + resultStr + "_" + stepProgress;
+	private String buildCacheKey(ItemStack startStack, ItemStack resultStack, double stepProgress) {
+		return startStack.getItem() + "_"
+				+ startStack.getNbt() + "_"
+				+ resultStack.getItem() + "_"
+				+ resultStack.getNbt() + "_"
+				+ stepProgress;
 	}
 
 	private MorphTextureCache createAndRegisterTexture(String cacheKey, double stepProgress, BufferedImage morphedImage) {
@@ -302,17 +305,11 @@ public class MorphedItemRenderer implements BuiltinItemRendererRegistry.DynamicI
 		}
 	}
 
-	private BufferedImage getItemImage(Identifier itemId) {
-		if (itemId == null) return null;
-
+	private BufferedImage getItemImage(ItemStack stack) {
 		try {
-			Item item = Registries.ITEM.get(itemId);
-			if (item != null) {
-				ItemStack tempStack = new ItemStack(item);
-				return RuntimeModelUtil.getFirstQuadTextureImage(tempStack, MinecraftClient.getInstance());
-			}
+			return RuntimeModelUtil.getFirstQuadTextureImage(stack, MinecraftClient.getInstance());
 		} catch (Exception e) {
-			LOGGER.debug("Failed to get item image for {}: {}", itemId, e.getMessage());
+			LOGGER.debug("Failed to get item image for {}: {}", stack, e.getMessage());
 		}
 
 		return null;
@@ -321,31 +318,34 @@ public class MorphedItemRenderer implements BuiltinItemRendererRegistry.DynamicI
 	private ItemStack getFallbackItemStack(ItemStack morphedStack, double progress) {
 		Identifier startId = MorphedItem.getStartItemId(morphedStack);
 		Identifier resultId = MorphedItem.getResultItemId(morphedStack);
+		ItemStack startStack = MorphedItem.getStartStack(morphedStack);
+		ItemStack resultStack = MorphedItem.getResultStack(morphedStack);
 		double progressClamped = MathHelper.clamp(progress, 0.0, 1.0);
 
 		if (progressClamped <= MORPH_START_THRESHOLD) {
-			return createFallbackStack(startId, morphedStack);
+			return createFallbackStack(startStack, startId, morphedStack);
 		} else if (progressClamped >= MORPH_RESULT_THRESHOLD) {
-			return createFallbackStack(resultId, morphedStack);
+			return createFallbackStack(resultStack, resultId, morphedStack);
 		}
 
 		int step = (int) Math.floor(progressClamped * MinigameLogic.getRequiredHits(morphedStack));
 		boolean showResult = (step % 2) == 1;
-		Identifier chosenId = (showResult && resultId != null) ? resultId : startId;
+		ItemStack chosenStack = showResult ? resultStack : startStack;
+		Identifier chosenId = showResult ? resultId : startId;
 
-		return createFallbackStack(chosenId, morphedStack);
+		return createFallbackStack(chosenStack, chosenId, morphedStack);
 	}
 
-	private ItemStack createFallbackStack(Identifier itemId, ItemStack source) {
-		if (itemId == null) return ItemStack.EMPTY;
+	private ItemStack createFallbackStack(ItemStack storedStack, Identifier itemId, ItemStack source) {
+		ItemStack stack = storedStack.copy();
 
-		Item item = Registries.ITEM.get(itemId);
-		if (item != null) {
-			ItemStack stack = new ItemStack(item);
-			copyTemperatureData(source, stack);
-			return stack;
+		if (stack.isEmpty() && itemId != null) {
+			Item item = Registries.ITEM.get(itemId);
+			stack = item == null ? ItemStack.EMPTY : new ItemStack(item);
 		}
-		return ItemStack.EMPTY;
+
+		copyTemperatureData(source, stack);
+		return stack;
 	}
 
 	private void copyTemperatureData(ItemStack source, ItemStack target) {

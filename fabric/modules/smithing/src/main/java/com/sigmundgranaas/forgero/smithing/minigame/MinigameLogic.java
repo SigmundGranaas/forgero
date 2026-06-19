@@ -452,10 +452,14 @@ public class MinigameLogic {
 			ItemStack stack = callback.getCurrentStack();
 
 			if (!stack.isEmpty() && stack.getItem() instanceof MorphedItem) {
-				Item resultItem = MorphedItem.getResultItem(stack);
+				ItemStack storedResultStack = MorphedItem.getResultStack(stack);
+				Item resultItem = storedResultStack.isEmpty() ? MorphedItem.getResultItem(stack) : storedResultStack.getItem();
 
 				if (resultItem != null) {
-					ItemStack resultStack = new ItemStack(resultItem, stack.getCount());
+					ItemStack resultStack = storedResultStack.isEmpty()
+							? new ItemStack(resultItem, stack.getCount())
+							: storedResultStack.copy();
+					resultStack.setCount(stack.getCount());
 
 					var stateOpt = StateService.INSTANCE.convert(resultStack);
 

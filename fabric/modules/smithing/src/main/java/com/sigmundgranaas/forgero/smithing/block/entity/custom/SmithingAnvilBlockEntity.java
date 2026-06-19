@@ -1201,8 +1201,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 
 		ItemStack morphed = new ItemStack(morphedItem, 1);
 
-		MorphedItem.setResultItem(morphed, resultStack.getItem());
-		MorphedItem.setStartItem(morphed, current.getItem());
+		MorphedItem.setResultStack(morphed, resultStack);
+		MorphedItem.setStartStack(morphed, current);
 		MorphedItem.setMorphProgress(morphed, 0.0);
 
 		morphed.getOrCreateNbt().putInt(
