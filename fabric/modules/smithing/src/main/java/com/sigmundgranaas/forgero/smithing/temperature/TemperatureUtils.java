@@ -52,6 +52,38 @@ public class TemperatureUtils {
         nbt.putInt(TEMPERATURE_KEY, clamp(temperature, stack));
     }
 
+    public static void copyTemperatureData(ItemStack source, ItemStack target) {
+        if (source.isEmpty() || target.isEmpty()) {
+            return;
+        }
+
+        setMaxTemperature(target, getMaxTemp(source));
+        setWorkableTemperatureStart(target, getWorkableTemperatureStart(source));
+        setWorkableTemperatureEnd(target, getWorkableTemperatureEnd(source));
+        setTemperature(target, getTemperature(source));
+    }
+
+    public static void removeTemperatureData(ItemStack stack) {
+        if (stack.isEmpty() || !stack.hasNbt()) {
+            return;
+        }
+
+        NbtCompound nbt = stack.getNbt();
+
+        if (nbt == null) {
+            return;
+        }
+
+        nbt.remove(TEMPERATURE_KEY);
+        nbt.remove(MAX_TEMPERATURE_KEY);
+        nbt.remove(WORKABLE_TEMPERATURE_START_KEY);
+        nbt.remove(WORKABLE_TEMPERATURE_END_KEY);
+
+        if (nbt.isEmpty()) {
+            stack.setNbt(null);
+        }
+    }
+
     public static boolean areEqualIgnoringTemperature(ItemStack left, ItemStack right) {
         if (left == right || ItemStack.areEqual(left, right)) {
             return true;
@@ -151,10 +183,17 @@ public class TemperatureUtils {
             return false;
         }
 
-        if (stack.getItem() instanceof ToolStateItem && !(stack.getItem() instanceof MorphedItem)) {
+        if (stack.getItem() instanceof ToolStateItem
+                && !(stack.getItem() instanceof MorphedItem)
+                && !hasStoredTemperature(stack)) {
             return false;
         }
         return getMaxTemp(stack) > 0;
+    }
+
+    private static boolean hasStoredTemperature(ItemStack stack) {
+        NbtCompound nbt = stack.getNbt();
+        return nbt != null && nbt.contains(TEMPERATURE_KEY);
     }
 
     public static int clamp(int temperature, ItemStack stack) {
@@ -167,6 +206,10 @@ public class TemperatureUtils {
             && state.isOf(Blocks.WATER_CAULDRON)
             && state.contains(Properties.LEVEL_3)
             && state.get(Properties.LEVEL_3) == 3;
+    }
+
+    public static boolean isWaterCauldron(BlockState state) {
+        return state != null && state.isOf(Blocks.WATER_CAULDRON);
     }
 
     public static boolean isItemInFilledWaterCauldron(ItemEntity itemEntity, World world) {

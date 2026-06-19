@@ -529,10 +529,15 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		nbt.remove("hitStageIndices");
 		nbt.remove("morphProgress");
 		nbt.remove(MorphedItem.PROGRESS_KEY);
-		nbt.remove(TemperatureUtils.TEMPERATURE_KEY);
-		nbt.remove(TemperatureUtils.MAX_TEMPERATURE_KEY);
-		nbt.remove(TemperatureUtils.WORKABLE_TEMPERATURE_START_KEY);
-		nbt.remove(TemperatureUtils.WORKABLE_TEMPERATURE_END_KEY);
+
+		if (TemperatureUtils.getTemperature(stack) <= TemperatureUtils.DEFAULT_TEMPERATURE) {
+			TemperatureUtils.removeTemperatureData(stack);
+			nbt = stack.getNbt();
+		}
+
+		if (nbt == null) {
+			return;
+		}
 
 		if (nbt.isEmpty()) {
 			stack.setNbt(null);
@@ -1205,19 +1210,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 				requiredCost
 		);
 
-		TemperatureUtils.setTemperature(morphed, currentTemp);
 		TemperatureUtils.setMaxTemperature(morphed, maxTemp);
 		TemperatureUtils.setWorkableTemperatureStart(morphed, workableStart);
 		TemperatureUtils.setWorkableTemperatureEnd(morphed, workableEnd);
-
-		int verifyTemp = TemperatureUtils.getTemperature(morphed);
-
-		if (verifyTemp != currentTemp) {
-			morphed.getOrCreateNbt().putInt(
-					TemperatureUtils.TEMPERATURE_KEY,
-					currentTemp
-			);
-		}
+		TemperatureUtils.setTemperature(morphed, currentTemp);
 
 		int leftoverCount = current.getCount() - requiredCost;
 

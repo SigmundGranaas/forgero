@@ -6,18 +6,32 @@ import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.UseAction;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class SmithingTongsItem extends Item {
 	public static final String STORED_STACK_KEY = "forgero_stored_stack";
+	private static final int MAX_USE_TIME = 72_000;
+	private static final int QUENCH_INTERVAL_TICKS = 5;
+	private static final int QUENCH_DEGREES_PER_INTERVAL = 20;
 
 	public SmithingTongsItem(Settings settings) {
 		super(settings);
@@ -85,6 +99,11 @@ public class SmithingTongsItem extends Item {
 	public static ItemStack removeStoredStack(ItemStack tongsStack) {
 		ItemStack stored = getStoredStack(tongsStack);
 		clearStoredStack(tongsStack);
+
+		if (TemperatureUtils.getTemperature(stored) <= TemperatureUtils.DEFAULT_TEMPERATURE) {
+			TemperatureUtils.removeTemperatureData(stored);
+		}
+
 		return stored;
 	}
 
@@ -104,6 +123,99 @@ public class SmithingTongsItem extends Item {
 		if (nbt.isEmpty()) {
 			tongsStack.setNbt(null);
 		}
+	}
+
+	@Override
+	public ActionResult useOnBlock(ItemUsageContext context) {
+		PlayerEntity player = context.getPlayer();
+
+		if (player == null
+				|| !TemperatureUtils.isWaterCauldron(context.getWorld().getBlockState(context.getBlockPos()))
+				|| !canQuench(context.getStack())) {
+			return ActionResult.PASS;
+		}
+
+		player.setCurrentHand(context.getHand());
+		return ActionResult.success(context.getWorld().isClient);
+	}
+
+	@Override
+	public UseAction getUseAction(ItemStack stack) {
+		return UseAction.NONE;
+	}
+
+	@Override
+	public int getMaxUseTime(ItemStack stack) {
+		return MAX_USE_TIME;
+	}
+
+	@Override
+	public void usageTick(World world, LivingEntity user, ItemStack tongsStack, int remainingUseTicks) {
+		BlockPos cauldronPos = getTargetedWaterCauldron(world, user);
+
+		if (cauldronPos == null || !canQuench(tongsStack)) {
+			user.stopUsingItem();
+			return;
+		}
+
+		if (world.isClient || (MAX_USE_TIME - remainingUseTicks) % QUENCH_INTERVAL_TICKS != 0) {
+			return;
+		}
+
+		ItemStack stored = getStoredStack(tongsStack);
+		int temperature = TemperatureUtils.getTemperature(stored);
+
+		if (temperature <= TemperatureUtils.DEFAULT_TEMPERATURE) {
+			return;
+		}
+
+		int cooledTemperature = Math.max(
+				TemperatureUtils.DEFAULT_TEMPERATURE,
+				temperature - QUENCH_DEGREES_PER_INTERVAL
+		);
+
+		TemperatureUtils.setTemperature(stored, cooledTemperature);
+		setStoredStack(tongsStack, stored);
+
+		if (user instanceof PlayerEntity player) {
+			player.getInventory().markDirty();
+		}
+
+		emitQuenchingEffects((ServerWorld) world, cauldronPos);
+	}
+
+	private static boolean canQuench(ItemStack tongsStack) {
+		ItemStack stored = getStoredStack(tongsStack);
+		return !stored.isEmpty() && TemperatureUtils.hasMaxTemperature(stored);
+	}
+
+	@Nullable
+	private static BlockPos getTargetedWaterCauldron(World world, LivingEntity user) {
+		HitResult hitResult = user.raycast(5.0D, 1.0F, false);
+
+		if (!(hitResult instanceof BlockHitResult blockHit)) {
+			return null;
+		}
+
+		BlockPos pos = blockHit.getBlockPos();
+		return TemperatureUtils.isWaterCauldron(world.getBlockState(pos)) ? pos : null;
+	}
+
+	private static void emitQuenchingEffects(ServerWorld world, BlockPos pos) {
+		double x = pos.getX() + 0.5D;
+		double y = pos.getY() + 0.85D;
+		double z = pos.getZ() + 0.5D;
+
+		world.spawnParticles(ParticleTypes.CLOUD, x, y, z, 8, 0.25D, 0.1D, 0.25D, 0.02D);
+		world.spawnParticles(ParticleTypes.SMOKE, x, y, z, 5, 0.2D, 0.08D, 0.2D, 0.01D);
+		world.playSound(
+				null,
+				pos,
+				SoundEvents.BLOCK_FIRE_EXTINGUISH,
+				SoundCategory.BLOCKS,
+				0.7F,
+				1.2F
+		);
 	}
 
 	@Override

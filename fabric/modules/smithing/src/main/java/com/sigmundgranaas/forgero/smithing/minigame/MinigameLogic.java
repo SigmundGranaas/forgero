@@ -507,8 +507,7 @@ public class MinigameLogic {
 						}
 					}
 
-					double currentTemp = TemperatureUtils.getTemperature(stack);
-					TemperatureUtils.setTemperature(resultStack, (int) Math.round(currentTemp));
+					TemperatureUtils.copyTemperatureData(stack, resultStack);
 
 					callback.replaceWithResult(resultStack);
 
