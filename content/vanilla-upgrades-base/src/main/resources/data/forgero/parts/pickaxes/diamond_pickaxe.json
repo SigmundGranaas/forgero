@@ -42,6 +42,12 @@
       "type": "forgero:materials/roles/upgrade_material",
       "tags": ["forgero:upgrades/types/reinforcement"],
       "description": "slot.forgero.reinforcement"
+    },
+    {
+      "id": "forgero:diamond_pickaxe-tip_reinforcement",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/tip_reinforcement"],
+      "description": "slot.forgero.tip_reinforcement"
     }
   ]
 }

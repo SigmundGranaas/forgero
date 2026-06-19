@@ -19,11 +19,19 @@ station-blocks module, and material/gem content.
 - **Tests:** `runGameTest` green — vanilla attribute parity, slot queries, the install/remove
   flow, and new-item coverage.
 
+## Slot model
+
+- **Binding** — every tool and weapon has a binding slot (the handle). Armor has none; it uses a
+  **lining** slot instead.
+- **Tip reinforcement** — every head/blade tool (pickaxe, axe, shovel, hoe, sword, all tiers) has a
+  tip slot. Non-head tools (fishing rod, shears, shield, etc.) and armor do not.
+- **Gem / reinforcement** — present on mid/high tiers, scaling with tier.
+
 ## Known follow-ups
 
-- **Slot-per-tier matrix:** slot counts per tier have drifted over time and are not yet locked to
-  a single documented model (the README table is indicative, not exact). Worth pinning down with a
-  content-consistency test.
+- **Slot-per-tier matrix:** gem/reinforcement counts per tier still vary and are not locked to a
+  single documented model (the README table is indicative). Binding and tip coverage are now
+  uniform; gem/reinforcement scaling is worth pinning down with a content-consistency test.
 - **Binding tag migration:** vanilla parts still use `materials/types/binding` while
   `forgero-materials` is migrating toward `upgrades/types/binding`. Fillable today (≥1 material),
   but should be reconciled when the upstream migration settles.

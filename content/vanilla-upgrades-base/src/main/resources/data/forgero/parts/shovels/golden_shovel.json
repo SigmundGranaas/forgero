@@ -29,6 +29,12 @@
       "type": "forgero:materials/roles/upgrade_material",
       "tags": ["forgero:upgrades/types/gem"],
       "description": "slot.forgero.gem"
+    },
+    {
+      "id": "forgero:golden_shovel-tip_reinforcement",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/tip_reinforcement"],
+      "description": "slot.forgero.tip_reinforcement"
     }
   ]
 }

@@ -63,6 +63,12 @@
         "forgero:parts/guard"
       ],
       "description": "slot.forgero.guard"
+    },
+    {
+      "id": "forgero:golden_sword-tip_reinforcement",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/tip_reinforcement"],
+      "description": "slot.forgero.tip_reinforcement"
     }
   ]
 }

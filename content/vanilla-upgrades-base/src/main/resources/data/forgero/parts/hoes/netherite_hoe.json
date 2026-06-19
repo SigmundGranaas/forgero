@@ -30,6 +30,12 @@
       "tags": ["forgero:upgrades/types/gem"],
       "tier": 2,
       "description": "slot.forgero.gem"
+    },
+    {
+      "id": "forgero:netherite_hoe-tip_reinforcement",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/tip_reinforcement"],
+      "description": "slot.forgero.tip_reinforcement"
     }
   ]
 }

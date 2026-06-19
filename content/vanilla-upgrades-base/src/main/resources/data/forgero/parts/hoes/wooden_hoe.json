@@ -23,6 +23,12 @@
       "type": "forgero:materials/roles/upgrade_material",
       "tags": ["forgero:materials/types/binding"],
       "description": "slot.forgero.binding"
+    },
+    {
+      "id": "forgero:wooden_hoe-tip_reinforcement",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/tip_reinforcement"],
+      "description": "slot.forgero.tip_reinforcement"
     }
   ]
 }

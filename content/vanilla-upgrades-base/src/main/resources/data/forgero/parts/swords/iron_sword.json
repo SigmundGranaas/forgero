@@ -39,6 +39,12 @@
       "type": "forgero:parts/sword_guard",
       "tags": ["forgero:parts/sword_guard", "forgero:parts/guard"],
       "description": "slot.forgero.guard"
+    },
+    {
+      "id": "forgero:iron_sword-tip_reinforcement",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/tip_reinforcement"],
+      "description": "slot.forgero.tip_reinforcement"
     }
   ]
 }
