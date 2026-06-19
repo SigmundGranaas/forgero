@@ -24,6 +24,7 @@ import net.minecraft.test.TestContext;
 public class UpgradeAttributeChangeTest implements ForgeroGameTest {
 
 	private static final int ENDER_PEARL_DURABILITY = 105;
+	private static final float EPSILON = 0.001f;
 
 	private static ItemStack withEnderPearl(ForgeroTestContext ctx, Item base) {
 		ItemStack stack = new ItemStack(base);
@@ -59,5 +60,65 @@ public class UpgradeAttributeChangeTest implements ForgeroGameTest {
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
 	public void gem_upgrade_changes_trident_durability(TestContext context) {
 		assertDurabilityGain(context, Items.TRIDENT);
+	}
+
+	// ===== Slot-conditioned bonuses from the vanilla-upgrades-stats pack (id-merged onto materials) =====
+
+	private static ItemStack install(ForgeroTestContext ctx, Item base, String materialId) {
+		ItemStack stack = new ItemStack(base);
+		ItemStack material = ctx.toStack(ctx.component(materialId).orElseThrow()).orElseThrow();
+		ItemMutationApi mutate = ForgeroApi.itemMutation();
+		if (!mutate.canInstallUpgrade(stack, material)) {
+			throw new IllegalStateException(materialId + " must be installable on " + base);
+		}
+		return mutate.installUpgrade(stack, material);
+	}
+
+	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
+	public void reinforcement_slot_buffs_durability(TestContext context) {
+		var ctx = ForgeroTestUtils.forgero(context);
+		ItemQueryApi q = ForgeroApi.itemQuery();
+		int before = q.getMaxDurability(new ItemStack(Items.IRON_PICKAXE));
+		int after = q.getMaxDurability(install(ctx, Items.IRON_PICKAXE, "forgero:calcite"));
+		context.assertTrue(after == before + 150,
+				"Calcite in a reinforcement slot should add 150 durability (" + before + " -> "
+						+ (before + 150) + "), got " + after);
+		context.complete();
+	}
+
+	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
+	public void binding_slot_buffs_durability(TestContext context) {
+		var ctx = ForgeroTestUtils.forgero(context);
+		ItemQueryApi q = ForgeroApi.itemQuery();
+		int before = q.getMaxDurability(new ItemStack(Items.IRON_PICKAXE));
+		int after = q.getMaxDurability(install(ctx, Items.IRON_PICKAXE, "forgero:leather"));
+		context.assertTrue(after == before + 60,
+				"Leather in a binding slot should add 60 durability (" + before + " -> "
+						+ (before + 60) + "), got " + after);
+		context.complete();
+	}
+
+	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
+	public void gem_slot_buffs_attack_damage(TestContext context) {
+		var ctx = ForgeroTestUtils.forgero(context);
+		ItemQueryApi q = ForgeroApi.itemQuery();
+		float before = q.getAttackDamage(new ItemStack(Items.IRON_SWORD));
+		float after = q.getAttackDamage(install(ctx, Items.IRON_SWORD, "forgero:diamond_gem"));
+		context.assertTrue(Math.abs(after - (before + 2.0f)) < EPSILON,
+				"Diamond gem in a gem slot should add 2 attack damage (" + before + " -> "
+						+ (before + 2.0f) + "), got " + after);
+		context.complete();
+	}
+
+	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
+	public void lining_slot_buffs_armor_durability(TestContext context) {
+		var ctx = ForgeroTestUtils.forgero(context);
+		ItemQueryApi q = ForgeroApi.itemQuery();
+		int before = q.getMaxDurability(new ItemStack(Items.IRON_HELMET));
+		int after = q.getMaxDurability(install(ctx, Items.IRON_HELMET, "forgero:leather"));
+		context.assertTrue(after == before + 80,
+				"Leather in a lining slot should add 80 durability (" + before + " -> "
+						+ (before + 80) + "), got " + after);
+		context.complete();
 	}
 }

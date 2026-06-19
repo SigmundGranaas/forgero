@@ -1,0 +1,12 @@
+{
+  "type": "forgero:material",
+  "name": "diorite",
+  "priority": 10,
+  "attributes": [
+    {
+      "id": "forgero:diorite-reinforcement-bonus-durability",
+      "type": "forgero:durability",
+      "computation": { "value": 120 }
+    }
+  ]
+}

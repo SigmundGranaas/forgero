@@ -1,0 +1,12 @@
+{
+  "type": "forgero:material",
+  "name": "granite",
+  "priority": 10,
+  "attributes": [
+    {
+      "id": "forgero:granite-reinforcement-bonus-durability",
+      "type": "forgero:durability",
+      "computation": { "value": 180 }
+    }
+  ]
+}

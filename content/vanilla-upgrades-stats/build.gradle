@@ -1,0 +1,7 @@
+// Vanilla Upgrades stat-upgrade content module.
+// Adds slot-conditioned bonus attributes to existing upgrade materials via identity-merge, so that
+// reinforcement / binding / lining slots actually change stats when filled. Bundled ONLY by the
+// vanilla-upgrades mod, so it never alters Forgero's own material balance.
+dependencies {
+    implementation project(":content:forgero-materials")
+}

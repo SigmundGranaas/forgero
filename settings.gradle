@@ -39,6 +39,7 @@ include("content:forgero-conditions")  // Random item modifier conditions (sharp
 include("content:forgero-base")
 include("content:vanilla-upgrades-base")
 include("content:vanilla-upgrades-ranged")  // Vanilla bow/crossbow slots (vanilla-upgrades mod only)
+include("content:vanilla-upgrades-stats")   // Slot-conditioned upgrade bonuses (vanilla-upgrades mod only)
 include("content:forgero-extended-weapons")  // Extended weapon parts AND mining tools (hammer, spade, etc.)
 include("content:forgero-gems")
 include("content:forgero-mastercrafted")  // Quality schematics (refined, mastercrafted)

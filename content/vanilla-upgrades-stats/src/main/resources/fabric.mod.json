@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "vanilla-upgrades-stats-content",
+  "version": "${version}",
+  "name": "Vanilla Upgrades Stat Content",
+  "description": "Slot-conditioned upgrade bonuses merged onto existing materials so vanilla upgrade slots change stats. Bundled only by the Vanilla Upgrades mod.",
+  "authors": [
+    "Sigmund Granaas Sandring"
+  ],
+  "contact": {
+    "homepage": "https://sigmundgranaas.com",
+    "sources": "https://github.com/sigmundgranaas/forgero",
+    "issues": "https://github.com/sigmundgranaas/forgero/issues"
+  },
+  "license": "MIT",
+  "environment": "*",
+  "depends": {
+    "forgero-core": "*",
+    "forgero-materials": "*",
+    "java": ">=17"
+  },
+  "custom": {
+    "forgeroResource": true,
+    "modmenu": {
+      "badges": [
+        "library"
+      ],
+      "parent": {
+        "id": "vanilla-upgrades",
+        "name": "Vanilla Upgrades"
+      }
+    }
+  }
+}

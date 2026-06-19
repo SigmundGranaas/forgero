@@ -1,0 +1,25 @@
+{
+  "type": "forgero:material",
+  "name": "leather",
+  "priority": 10,
+  "attributes": [
+    {
+      "id": "forgero:leather-binding-bonus-durability",
+      "type": "forgero:durability",
+      "computation": { "value": 60 },
+      "condition": {
+        "type": "forgero:in_slot_type",
+        "slot_type": "forgero:materials/types/binding"
+      }
+    },
+    {
+      "id": "forgero:leather-lining-bonus-durability",
+      "type": "forgero:durability",
+      "computation": { "value": 80 },
+      "condition": {
+        "type": "forgero:in_slot_type",
+        "slot_type": "forgero:materials/roles/armor_lining_material"
+      }
+    }
+  ]
+}

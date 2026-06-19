@@ -43,16 +43,28 @@ Current stat-filler status per slot type (with the bundled packs):
 
 | Slot | Stat-applying filler available? |
 |------|-------------------------------|
-| gem | Yes — `ender_pearl` (and other secondary-materials gems) |
-| reinforcement | No — bundled reinforcement materials (e.g. calcite) are part-composite, stat-neutral as upgrades |
-| binding | No — bundled binding materials (e.g. leather) are part-composite/binding-conditioned, stat-neutral here |
-| lining (armor) | No — only `leather` has the lining role and it adds no stats in a lining slot |
+| gem | Yes — `ender_pearl` (durability), `diamond_gem` (attack), and other secondary-materials gems |
+| reinforcement | Yes — `calcite` / `granite` / `diorite` add durability (via the stats pack) |
+| binding | Yes — `leather` adds durability in a binding slot |
+| lining (armor) | Yes — `leather` adds durability in a lining slot |
 
 Events fire regardless of scope (verified: `on_hit` via blaze rod, `on_crit` via example aspect).
 
-`forgero-secondary-materials` is now bundled to provide at least one working stat-upgrade path
-(gem slot). Giving reinforcement/binding/lining slots real stat upgrades needs materials authored
-with upgrade-applicable scopes for those slots — a content decision (see follow-ups).
+The dedicated **`content/vanilla-upgrades-stats`** pack supplies these bonuses by **identity-merging**
+slot bonus attributes onto existing materials (so no base files are touched and Forgero's own balance
+is untouched — the pack is bundled by the vanilla-upgrades mod only). Two authoring patterns are used:
+
+- **Single-slot-type materials** (e.g. a reinforcement-only stone, or a gem): a plain attribute with
+  **no scope / no condition**. It propagates whenever the material is slotted; since these materials
+  only ever appear as upgrades in vanilla-upgrades, that is effectively "applies in its slot".
+- **Multi-slot materials** (e.g. `leather`, which fits both binding and lining): per-slot
+  `in_slot_type` conditions keyed on the slot's registered tag (`materials/types/binding`,
+  `materials/roles/armor_lining_material`).
+
+> Note: `in_slot_type` resolves against the slot's registered tags. Material-tag slot identities
+> (`materials/types/*`, `materials/roles/*`) resolve; the `upgrades/types/*` slot tags currently do
+> not, so per-slot conditions there don't fire. Registering those as tags would let
+> reinforcement/gem/tip use explicit per-slot conditions too — a clean follow-up.
 
 ## Known follow-ups
 
