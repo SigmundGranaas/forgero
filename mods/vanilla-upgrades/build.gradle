@@ -81,6 +81,8 @@ dependencies {
     testRuntimeOnly(project(":content:forgero-secondary-materials"))
     testRuntimeOnly(project(":content:vanilla-upgrades-stats"))
     testRuntimeOnly(project(":content:vanilla-upgrades-ranged"))
+    // Example extension pack (proves a separate pack can add slots to existing items) — test only.
+    testRuntimeOnly(project(":content:vanilla-upgrades-example-extension"))
 }
 
 loom {

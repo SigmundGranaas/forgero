@@ -1,0 +1,12 @@
+{
+  "type": "forgero:extension",
+  "target": "forgero:wooden_sword",
+  "upgrades": [
+    {
+      "id": "forgero:wooden_sword-example-gem",
+      "type": "forgero:materials/roles/upgrade_material",
+      "tags": ["forgero:upgrades/types/gem"],
+      "description": "slot.forgero.gem"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "vanilla-upgrades-example-extension",
+  "version": "${version}",
+  "name": "Vanilla Upgrades Example Extension",
+  "description": "Template/proof that a separate pack can add upgrade slots to existing items via a forgero:extension.",
+  "authors": [
+    "Sigmund Granaas Sandring"
+  ],
+  "license": "MIT",
+  "environment": "*",
+  "depends": {
+    "forgero-core": "*",
+    "java": ">=17"
+  },
+  "custom": {
+    "forgeroResource": true
+  }
+}

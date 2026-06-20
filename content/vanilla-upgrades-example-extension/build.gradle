@@ -1,0 +1,6 @@
+// Example pack-extension: demonstrates a third-party content pack ADDING an upgrade slot to an
+// existing item (here, a gem slot on the vanilla wooden sword) via a forgero:extension, without
+// touching the base definition. Loaded only in the vanilla-upgrades test runtime as a template/proof.
+dependencies {
+    implementation project(":content:forgero-materials")
+}
