@@ -1,0 +1,12 @@
+{
+  "type": "forgero:material",
+  "name": "amethyst_gem",
+  "priority": 10,
+  "attributes": [
+    {
+      "id": "forgero:amethyst_gem-upgrade-bonus-mining_speed",
+      "type": "forgero:mining_speed",
+      "computation": { "value": 3 }
+    }
+  ]
+}

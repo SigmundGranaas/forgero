@@ -111,6 +111,18 @@ public class UpgradeAttributeChangeTest implements ForgeroGameTest {
 	}
 
 	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
+	public void gem_slot_buffs_mining_speed(TestContext context) {
+		var ctx = ForgeroTestUtils.forgero(context);
+		ItemQueryApi q = ForgeroApi.itemQuery();
+		float before = q.getMiningSpeed(new ItemStack(Items.IRON_PICKAXE));
+		float after = q.getMiningSpeed(install(ctx, Items.IRON_PICKAXE, "forgero:amethyst_gem"));
+		context.assertTrue(Math.abs(after - (before + 3.0f)) < EPSILON,
+				"Amethyst gem in a gem slot should add 3 mining speed (" + before + " -> "
+						+ (before + 3.0f) + "), got " + after);
+		context.complete();
+	}
+
+	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
 	public void lining_slot_buffs_armor_durability(TestContext context) {
 		var ctx = ForgeroTestUtils.forgero(context);
 		ItemQueryApi q = ForgeroApi.itemQuery();

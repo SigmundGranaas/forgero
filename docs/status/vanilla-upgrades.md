@@ -44,9 +44,10 @@ Current stat-filler status per slot type (with the bundled packs):
 | Slot | Stat-applying filler available? |
 |------|-------------------------------|
 | gem | Yes — `ender_pearl` (durability), `diamond_gem` (attack), and other secondary-materials gems |
-| reinforcement | Yes — `calcite` / `granite` / `diorite` add durability (via the stats pack) |
+| reinforcement | Yes — `calcite` / `granite` / `diorite` / `andesite` / `tuff` / `deepslate` add durability (via the stats pack) |
 | binding | Yes — `leather` adds durability in a binding slot |
 | lining (armor) | Yes — `leather` adds durability in a lining slot |
+| gem (extra) | `diamond_gem` / `emerald_gem` add attack, `amethyst_gem` adds mining speed |
 
 Events fire regardless of scope (verified: `on_hit` via blaze rod, `on_crit` via example aspect).
 
@@ -61,10 +62,13 @@ is untouched — the pack is bundled by the vanilla-upgrades mod only). Two auth
   `in_slot_type` conditions keyed on the slot's registered tag (`materials/types/binding`,
   `materials/roles/armor_lining_material`).
 
-> Note: `in_slot_type` resolves against the slot's registered tags. Material-tag slot identities
-> (`materials/types/*`, `materials/roles/*`) resolve; the `upgrades/types/*` slot tags currently do
-> not, so per-slot conditions there don't fire. Registering those as tags would let
-> reinforcement/gem/tip use explicit per-slot conditions too — a clean follow-up.
+> Note: `in_slot_type` per-slot conditions fire reliably on material-tag slot identities
+> (`materials/types/*`, `materials/roles/*`). The `upgrades/types/*` slot tags ARE declared in
+> `forgero-base` (`tags/upgrades/types/*.json`) and the runtime slot carries them, yet a per-slot
+> `in_slot_type: upgrades/types/reinforcement` condition did not fire on the reinforcement slot in
+> testing — an unresolved slot-identity nuance (likely from the recent slot-identity migration). The
+> no-scope pattern sidesteps it entirely, so it is used for reinforcement/gem/tip; chasing the
+> per-slot-condition behavior for upgrade slots is a deeper follow-up that is not needed for buffs.
 
 ## Known follow-ups
 

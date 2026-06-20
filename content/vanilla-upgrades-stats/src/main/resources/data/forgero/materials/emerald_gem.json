@@ -1,0 +1,12 @@
+{
+  "type": "forgero:material",
+  "name": "emerald_gem",
+  "priority": 10,
+  "attributes": [
+    {
+      "id": "forgero:emerald_gem-upgrade-bonus-attack_damage",
+      "type": "forgero:attack_damage",
+      "computation": { "value": 2 }
+    }
+  ]
+}

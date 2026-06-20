@@ -1,0 +1,12 @@
+{
+  "type": "forgero:material",
+  "name": "deepslate",
+  "priority": 10,
+  "attributes": [
+    {
+      "id": "forgero:deepslate-reinforcement-bonus-durability",
+      "type": "forgero:durability",
+      "computation": { "value": 220 }
+    }
+  ]
+}

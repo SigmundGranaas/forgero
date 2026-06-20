@@ -1,0 +1,12 @@
+{
+  "type": "forgero:material",
+  "name": "andesite",
+  "priority": 10,
+  "attributes": [
+    {
+      "id": "forgero:andesite-reinforcement-bonus-durability",
+      "type": "forgero:durability",
+      "computation": { "value": 160 }
+    }
+  ]
+}

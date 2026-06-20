@@ -1,0 +1,12 @@
+{
+  "type": "forgero:material",
+  "name": "tuff",
+  "priority": 10,
+  "attributes": [
+    {
+      "id": "forgero:tuff-reinforcement-bonus-durability",
+      "type": "forgero:durability",
+      "computation": { "value": 130 }
+    }
+  ]
+}
