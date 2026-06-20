@@ -6,7 +6,11 @@
     {
       "id": "forgero:calcite-reinforcement-bonus-durability",
       "type": "forgero:durability",
-      "computation": { "value": 150 }
+      "computation": { "value": 150 },
+      "condition": {
+        "type": "forgero:in_slot_type",
+        "slot_type": "forgero:upgrades/types/reinforcement"
+      }
     }
   ]
 }

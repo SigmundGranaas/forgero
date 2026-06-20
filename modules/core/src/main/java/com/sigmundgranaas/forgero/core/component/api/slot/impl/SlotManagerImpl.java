@@ -148,11 +148,27 @@ public class SlotManagerImpl implements SlotManager {
 	 * plugin kinds) report {@link Slot#acceptsComponent()}.
 	 */
 	private Optional<Slot> findCompatibleAnySlot(Component target, Component upgrade) {
-		return getAllSlots(target).stream()
+		List<Slot> compatible = getAllSlots(target).stream()
 				.filter(Slot::acceptsComponent)
 				.filter(slot -> slot.componentContent().isEmpty())
 				.filter(slot -> slot.validate(upgrade).isEmpty())
-				.findFirst();
+				.toList();
+		// Prefer a slot whose identity tags the upgrade actually carries, so e.g. a reinforcement
+		// material routes to the reinforcement slot rather than the first generic upgrade slot. This
+		// keeps slot-specific behaviour (in_slot_type conditions, per-slot bonuses) meaningful. Falls
+		// back to first-compatible when no slot identity matches the upgrade.
+		return compatible.stream()
+				.filter(slot -> slotIdentityMatchesUpgrade(slot, upgrade))
+				.findFirst()
+				.or(() -> compatible.stream().findFirst());
+	}
+
+	/** True if the slot exposes an identity tag that the upgrade component carries. */
+	private static boolean slotIdentityMatchesUpgrade(Slot slot, Component upgrade) {
+		if (!(slot instanceof ComponentUpgradeSlot upgradeSlot)) {
+			return false;
+		}
+		return upgradeSlot.tags().stream().anyMatch(upgrade.getTags()::contains);
 	}
 
 	@Override

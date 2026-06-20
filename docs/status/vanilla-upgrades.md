@@ -62,13 +62,14 @@ is untouched — the pack is bundled by the vanilla-upgrades mod only). Two auth
   `in_slot_type` conditions keyed on the slot's registered tag (`materials/types/binding`,
   `materials/roles/armor_lining_material`).
 
-> Note: `in_slot_type` per-slot conditions fire reliably on material-tag slot identities
-> (`materials/types/*`, `materials/roles/*`). The `upgrades/types/*` slot tags ARE declared in
-> `forgero-base` (`tags/upgrades/types/*.json`) and the runtime slot carries them, yet a per-slot
-> `in_slot_type: upgrades/types/reinforcement` condition did not fire on the reinforcement slot in
-> testing — an unresolved slot-identity nuance (likely from the recent slot-identity migration). The
-> no-scope pattern sidesteps it entirely, so it is used for reinforcement/gem/tip; chasing the
-> per-slot-condition behavior for upgrade slots is a deeper follow-up that is not needed for buffs.
+> Slot routing (core fix): auto-install previously dropped an upgrade into the *first* compatible
+> slot. Since every upgrade slot validates on the generic `materials/roles/upgrade_material` type, a
+> reinforcement material landed in the *binding* slot, so per-slot `in_slot_type: upgrades/types/*`
+> conditions never fired. `SlotManagerImpl.findCompatibleAnySlot` now **prefers a slot whose identity
+> tags the upgrade carries** (falling back to first-compatible), so a reinforcement material routes
+> to the reinforcement slot, a gem to a gem slot, etc. Per-slot conditions on `upgrades/types/*` now
+> work (verified: `calcite` with `in_slot_type: upgrades/types/reinforcement`). The no-scope pattern
+> is still valid for single-slot materials; both are supported.
 
 ## Known follow-ups
 
