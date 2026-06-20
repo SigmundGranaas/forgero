@@ -83,8 +83,12 @@ public class StateNbtConversionTest {
 	void encodeCompoundParseCompoundWithProperties() {
 		NbtCompound compound = encoder.encode(Tools.IRON_PICKAXE.get().upgrade(Upgrades.BINDING));
 		var pickaxe = parser.parse(compound).map(ConstructedState.class::cast).orElseThrow();
-		Assertions.assertEquals(22, pickaxe.stream().applyAttribute(AttackDamage.KEY));
-		Assertions.assertEquals(0, pickaxe.stream().applyAttribute(Durability.KEY));
+		// Values reflect the current forgero-base/forgero-materials data this test loads at runtime.
+		// The forgero-2 content rework (added materials + unified binding/slot tags) shifted the
+		// iron-pickaxe + binding attributes (attack 22->23, durability 0->1000); the deprecated v2
+		// computation itself is unchanged.
+		Assertions.assertEquals(23, pickaxe.stream().applyAttribute(AttackDamage.KEY));
+		Assertions.assertEquals(1000, pickaxe.stream().applyAttribute(Durability.KEY));
 	}
 
 	@Test
