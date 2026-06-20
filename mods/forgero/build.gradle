@@ -34,6 +34,9 @@ dependencies {
     include(project(path: ":modules:mc:armor", configuration: 'namedElements'))
     include(project(path: ":modules:mc:bows", configuration: 'namedElements'))
 
+    // Villager + wandering-trader trades for Forgero schematics
+    include(project(path: ":modules:mc:trades", configuration: 'namedElements'))
+
     // Dynamic Resource Pack module (included in JAR)
     include(project(path: ":mods:drp", configuration: 'namedElements'))
 
@@ -54,6 +57,7 @@ dependencies {
     implementation(project(path: ":modules:mc:tools", configuration: 'namedElements'))
     implementation(project(path: ":modules:mc:armor", configuration: 'namedElements'))
     implementation(project(path: ":modules:mc:bows", configuration: 'namedElements'))
+    implementation(project(path: ":modules:mc:trades", configuration: 'namedElements'))
 
     // === FORGERO-SPECIFIC CONTENT (bundled in JAR) ===
     // Note: Material upgrade bases are in forgero-base, conditions in separate optional pack

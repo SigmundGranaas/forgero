@@ -29,6 +29,7 @@ include "modules:mc:predicate"
 include "modules:mc:development"
 include "modules:mc:bows"
 include "modules:mc:blocks"
+include "modules:mc:trades"
 include "modules:mc:test-common"
 // DRP is a standalone mod - see mods:drp
 
