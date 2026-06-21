@@ -23,7 +23,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.world.World;
@@ -73,8 +72,6 @@ public class MinigameLogic {
 
 	private int markerTimeout = 0;
 	private int markerSpawnDelay;
-
-	private double morphProgress = 0.0;
 
 	private enum MarkerOutcome {
 		HIT,
@@ -160,7 +157,6 @@ public class MinigameLogic {
 			if (nbt.contains(HITS_NBT_KEY) || nbt.contains(ATTEMPTS_NBT_KEY)) {
 				this.markerHitsCount = nbt.getInt(HITS_NBT_KEY);
 				this.markerAttempts = this.markerHitsCount;
-				this.morphProgress = nbt.getDouble("morphProgress");
 				this.coolingMarkerHits = nbt.getInt(COOLING_MARKER_HITS_NBT_KEY);
 				this.missMarkerHits = nbt.contains(MISS_MARKER_NBT_KEY)
 						? nbt.getInt(MISS_MARKER_NBT_KEY)
@@ -190,13 +186,11 @@ public class MinigameLogic {
 					randomizeCoolingMarkerIndices();
 				}
 			} else {
-				this.morphProgress = 0.0;
 				this.coolingMarkerHits = 0;
 				this.missMarkerHits = 0;
 				hitStageIndices.clear();
 			}
 		} else {
-			this.morphProgress = 0.0;
 			this.coolingMarkerHits = 0;
 			this.missMarkerHits = 0;
 			hitStageIndices.clear();
@@ -345,7 +339,7 @@ public class MinigameLogic {
 		ItemStack stack = callback.getCurrentStack();
 
 		if (!stack.isEmpty() && stack.getItem() instanceof MorphedItem) {
-			setMorphProgress(1.0, callback, null);
+			setMorphProgress(1.0, callback);
 		}
 	}
 
@@ -428,13 +422,7 @@ public class MinigameLogic {
 		return markerHitsCount >= requiredHits;
 	}
 
-	public void setMorphProgress(
-			double progress,
-			MinigameCallback callback,
-			@SuppressWarnings("unused") Identifier plannedProductId
-	) {
-		this.morphProgress = progress;
-
+	public void setMorphProgress(double progress, MinigameCallback callback) {
 		if (progress >= 1.0) {
 			ItemStack stack = callback.getCurrentStack();
 
@@ -483,7 +471,7 @@ public class MinigameLogic {
 
 							if (!applicableConditions.isEmpty()) {
 								com.sigmundgranaas.forgero.core.condition.NamedCondition randomCondition =
-										applicableConditions.get(new Random().nextInt(applicableConditions.size()));
+										applicableConditions.get(random.nextInt(applicableConditions.size()));
 
 								var conditioned = conditional.applyCondition(randomCondition);
 
@@ -616,7 +604,6 @@ public class MinigameLogic {
 				hitStageIndices.stream().mapToInt(Integer::intValue).toArray()
 		);
 
-		itemNbt.putDouble("morphProgress", getMorphProgress());
 	}
 	
 	public void writeNbt(NbtCompound nbt) {
@@ -712,9 +699,6 @@ public class MinigameLogic {
 
 		randomizeCoolingMarkerIndices();
 
-		if (nbt.contains("morphProgress")) {
-			morphProgress = nbt.getDouble("morphProgress");
-		}
 	}
 
 	public void restoreFromItemNbt(ItemStack stack) {
@@ -725,7 +709,6 @@ public class MinigameLogic {
 			this.markerAttempts = 0;
 			this.coolingMarkerHits = 0;
 			this.missMarkerHits = 0;
-			this.morphProgress = 0.0;
 			this.requiredHits = ONE_MATERIAL_REQUIRED_HITS;
 			this.hitStageIndices.clear();
 			this.coolingMarkerIndices.clear();
@@ -737,7 +720,6 @@ public class MinigameLogic {
 			this.markerAttempts = 0;
 			this.coolingMarkerHits = 0;
 			this.missMarkerHits = 0;
-			this.morphProgress = 0.0;
 			this.requiredHits = ONE_MATERIAL_REQUIRED_HITS;
 			this.hitStageIndices.clear();
 			this.coolingMarkerIndices.clear();
@@ -785,9 +767,6 @@ public class MinigameLogic {
 
 		randomizeCoolingMarkerIndices();
 
-		this.morphProgress = itemNbt.contains("morphProgress")
-				? itemNbt.getDouble("morphProgress")
-				: 0.0;
 	}
 
 	public double getMorphProgress() {

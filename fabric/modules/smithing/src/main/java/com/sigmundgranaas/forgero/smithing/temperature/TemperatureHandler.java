@@ -78,7 +78,7 @@ public class TemperatureHandler {
             boolean inFilledCauldron = TemperatureRules.isItemInFilledWaterCauldron(itemEntity, world);
 
             TemperatureStages stages = TemperatureRules.stages(stack);
-            emitTemperatureEffects(world, itemEntity, pos, temp, stages);
+            // emitTemperatureEffects(world, itemEntity, pos, temp, stages);
 
             if (inFilledCauldron) {
                 if (temp > 100) {
@@ -112,67 +112,5 @@ public class TemperatureHandler {
 
         TemperatureRules.setTemperature(stored, Math.max(TemperatureState.DEFAULT_TEMPERATURE, temp - INVENTORY_COOL_PER_TICK));
         SmithingTongsItem.setStoredStack(tongsStack, stored);
-    }
-
-    private static void emitTemperatureEffects(ServerWorld world, ItemEntity itemEntity, BlockPos pos, int temp, TemperatureStages stages) {
-        double x = itemEntity.getX();
-        double y = itemEntity.getY() + 0.3;
-        double z = itemEntity.getZ();
-        int entityId = itemEntity.getId();
-        long randomSeed = (long) entityId * 31 + world.getTime();
-
-        TemperatureStage stage = TemperatureRules.stage(temp, stages);
-
-        if (stage == TemperatureStage.COLD) {
-            // No effects for cold
-        } else if (stage == TemperatureStage.WARM) {
-            // Smoke for gentle warmth
-            if ((tickCounter + randomSeed) % 2 == 0) {
-                world.spawnParticles(ParticleTypes.SMOKE,
-                    x, y, z, 2, 0.03, 0.06, 0.03, 0.001);
-            }
-        } else if (stage == TemperatureStage.HOT) {
-            // Small flames for hot
-            if ((tickCounter + randomSeed * 2) % 3 == 0) {
-                world.spawnParticles(ParticleTypes.SMALL_FLAME,
-                    x, y + 0.04, z, 4, 0.025, 0.025, 0.025, 0.003);
-            }
-            if ((tickCounter + randomSeed * 3) % 3 == 0) {
-                world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_FIRE_AMBIENT,
-                    net.minecraft.sound.SoundCategory.BLOCKS, 0.5F, 0.8F + (float)Math.random() * 0.4F);
-            }
-        } else if (stage == TemperatureStage.WORKABLE) {
-            // Bright flames for workable range
-            if ((tickCounter + randomSeed * 2) % 2 == 0) {
-                world.spawnParticles(ParticleTypes.FLAME,
-                    x, y, z, 6, 0.03, 0.04, 0.03, 0.003);
-            }
-            if ((tickCounter + randomSeed * 3) % 4 == 0) {
-                world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_FIRE_AMBIENT,
-                    net.minecraft.sound.SoundCategory.BLOCKS, 0.6F, 1.0F + (float)Math.random() * 0.2F);
-            }
-        } else if (stage == TemperatureStage.OVERHEATED) {
-            // Maximum intensity: intense flames and smoke
-            if ((tickCounter + randomSeed * 2) % 2 == 0) {
-                world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME,
-                    x, y, z, 8, 0.04, 0.05, 0.04, 0.003);
-                world.spawnParticles(ParticleTypes.SMALL_FLAME,
-                    x, y + 0.04, z, 6, 0.03, 0.04, 0.03, 0.002);
-            }
-            if ((tickCounter + randomSeed * 3) % 2 == 0) {
-                world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_FIRE_AMBIENT,
-                    net.minecraft.sound.SoundCategory.BLOCKS, 0.8F, 0.9F + (float)Math.random() * 0.3F);
-            }
-            if ((tickCounter + randomSeed * 4) % 2 == 0) {
-                world.spawnParticles(ParticleTypes.FLAME,
-                    x, y, z, 18, 0.06, 0.07, 0.06, 0.004);
-                world.spawnParticles(ParticleTypes.SMOKE,
-                    x, y, z, 4, 0.04, 0.04, 0.04, 0.002);
-            }
-            if ((tickCounter + randomSeed * 5) % 2 == 0) {
-                world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_LAVA_AMBIENT,
-                    net.minecraft.sound.SoundCategory.BLOCKS, 1.2F, 0.6F + (float)Math.random() * 0.3F);
-            }
-        }
     }
 }

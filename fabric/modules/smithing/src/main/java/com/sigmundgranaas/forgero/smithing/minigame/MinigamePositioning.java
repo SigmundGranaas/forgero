@@ -7,7 +7,6 @@ import java.util.Random;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
 import com.sigmundgranaas.forgero.smithing.block.renderer.SmithingAnvilBlockEntityRenderer;
-
 import com.sigmundgranaas.forgero.smithing.util.BoundingBoxUtil;
 import com.sigmundgranaas.forgero.smithing.util.MorphingItemUtil;
 import com.sigmundgranaas.forgero.smithing.util.PositionPreservingMorpher;
@@ -21,8 +20,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 
-
-
 public final class MinigamePositioning {
 	private static final Random random = new Random();
 	private static final PositionPreservingMorpher MORPHER = new PositionPreservingMorpher();
@@ -34,23 +31,17 @@ public final class MinigamePositioning {
 	}
 
 	public static Vec2f worldHitToItemLocal(BlockHitResult hit, BlockState anvilState, Vec2f itemTextureOffset) {
-		double localX_block_center = hit.getPos().x - hit.getBlockPos().getX() - 0.5;
-		double localZ_block_center = hit.getPos().z - hit.getBlockPos().getZ() - 0.5;
+		double localXBlockCenter = hit.getPos().x - hit.getBlockPos().getX() - 0.5;
+		double localZBlockCenter = hit.getPos().z - hit.getBlockPos().getZ() - 0.5;
 
 		Direction facing = anvilState.get(net.minecraft.block.AnvilBlock.FACING);
-		float anvilAngleDegrees = switch (facing) {
-			case EAST -> -180.0f;
-			case SOUTH -> 90.0f;
-			case WEST -> 0.0f;
-			case NORTH -> -90.0f;
-			default -> 0.0f;
-		};
+		float anvilAngleDegrees = anvilAngleDegrees(facing);
 		float invAnvilAngleRadians = (float) Math.toRadians(-anvilAngleDegrees);
 		double cosInv = Math.cos(invAnvilAngleRadians);
 		double sinInv = Math.sin(invAnvilAngleRadians);
 
-		double xAfterAnvilRot = localX_block_center * cosInv - localZ_block_center * sinInv;
-		double zAfterAnvilRot = localX_block_center * sinInv + localZ_block_center * cosInv;
+		double xAfterAnvilRot = localXBlockCenter * cosInv - localZBlockCenter * sinInv;
+		double zAfterAnvilRot = localXBlockCenter * sinInv + localZBlockCenter * cosInv;
 
 		float xBeforeItemRot = (float) -xAfterAnvilRot;
 		float zBeforeItemRot = (float) -zAfterAnvilRot;
@@ -69,28 +60,21 @@ public final class MinigamePositioning {
 	}
 
 	public static Vec3d itemLocalToWorld(Vec2f itemLocalPos, BlockPos anvilBlockPos, BlockState anvilState, Vec2f itemTextureOffset, float baseY) {
-		float transformedX_preScale = itemLocalPos.x + itemTextureOffset.x;
-		float transformedZ_preScale = itemLocalPos.y + itemTextureOffset.y;
+		float transformedXPreScale = itemLocalPos.x + itemTextureOffset.x;
+		float transformedZPreScale = itemLocalPos.y + itemTextureOffset.y;
 
-		float transformedX_scaled = transformedX_preScale * SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
-		float transformedZ_scaled = transformedZ_preScale * SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
+		float transformedXScaled = transformedXPreScale * SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
+		float transformedZScaled = transformedZPreScale * SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
 
-		float transformedX_afterItemRot = -transformedX_scaled;
-		float transformedZ_afterItemRot = -transformedZ_scaled;
+		float transformedXAfterItemRot = -transformedXScaled;
+		float transformedZAfterItemRot = -transformedZScaled;
 
 		Direction facing = anvilState.get(net.minecraft.block.AnvilBlock.FACING);
-		float anvilAngleDegrees = switch (facing) {
-			case EAST -> -180.0f;
-			case SOUTH -> 90.0f;
-			case WEST -> 0.0f;
-			case NORTH -> -90.0f;
-			default -> 0.0f;
-		};
-		float angleRadians = (float) Math.toRadians(anvilAngleDegrees);
+		float angleRadians = (float) Math.toRadians(anvilAngleDegrees(facing));
 		float cos = (float) Math.cos(angleRadians);
 		float sin = (float) Math.sin(angleRadians);
-		double rotatedX = transformedX_afterItemRot * cos - transformedZ_afterItemRot * sin;
-		double rotatedZ = transformedX_afterItemRot * sin + transformedZ_afterItemRot * cos;
+		double rotatedX = transformedXAfterItemRot * cos - transformedZAfterItemRot * sin;
+		double rotatedZ = transformedXAfterItemRot * sin + transformedZAfterItemRot * cos;
 
 		double worldX = anvilBlockPos.getX() + 0.5 + rotatedX;
 		double worldY = anvilBlockPos.getY() + baseY;
@@ -100,35 +84,37 @@ public final class MinigamePositioning {
 	}
 
 	private static boolean isInsideAnvilTopLayer(float itemLocalX, float itemLocalZ, BlockState anvilState, Vec2f textureOffset) {
+		float transformedXPreScale = itemLocalX + textureOffset.x;
+		float transformedZPreScale = itemLocalZ + textureOffset.y;
+
+		float transformedXScaled = transformedXPreScale * SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
+		float transformedZScaled = transformedZPreScale * SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
+
+		float transformedXAfterItemRot = -transformedXScaled;
+		float transformedZAfterItemRot = -transformedZScaled;
+
 		Direction anvilFacing = anvilState.get(net.minecraft.block.AnvilBlock.FACING);
+		float angleRadians = (float) Math.toRadians(anvilAngleDegrees(anvilFacing));
+		float cos = (float) Math.cos(angleRadians);
+		float sin = (float) Math.sin(angleRadians);
 
-		float transformedX_preScale = itemLocalX + textureOffset.x;
-		float transformedZ_preScale = itemLocalZ + textureOffset.y;
+		float finalXBlockCenter = transformedXAfterItemRot * cos - transformedZAfterItemRot * sin;
+		float finalZBlockCenter = transformedXAfterItemRot * sin + transformedZAfterItemRot * cos;
 
-		float transformedX_scaled = transformedX_preScale * SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
-		float transformedZ_scaled = transformedZ_preScale * SmithingAnvilBlockEntityRenderer.RENDER_SCALE_FACTOR;
+		double testX = finalXBlockCenter + 0.5;
+		double testZ = finalZBlockCenter + 0.5;
 
-		float transformedX_afterItemRot = -transformedX_scaled;
-		float transformedZ_afterItemRot = -transformedZ_scaled;
+		return testX >= 0.0 && testX < 1.0 && testZ >= 0.0 && testZ < 1.0;
+	}
 
-		float anvilAngleDegrees = switch (anvilFacing) {
+	private static float anvilAngleDegrees(Direction facing) {
+		return switch (facing) {
 			case EAST -> -180.0f;
 			case SOUTH -> 90.0f;
 			case WEST -> 0.0f;
 			case NORTH -> -90.0f;
 			default -> 0.0f;
 		};
-		float angleRadians = (float) Math.toRadians(anvilAngleDegrees);
-		float cos = (float) Math.cos(angleRadians);
-		float sin = (float) Math.sin(angleRadians);
-
-		float finalX_block_center = transformedX_afterItemRot * cos - transformedZ_afterItemRot * sin;
-		float finalZ_block_center = transformedX_afterItemRot * sin + transformedZ_afterItemRot * cos;
-
-		double testX = finalX_block_center + 0.5;
-		double testZ = finalZ_block_center + 0.5;
-
-		return testX >= 0.0 && testX < 1.0 && testZ >= 0.0 && testZ < 1.0;
 	}
 
 	public static Vec2f getItemTextureOffsetVec2f(ItemStack stack) {

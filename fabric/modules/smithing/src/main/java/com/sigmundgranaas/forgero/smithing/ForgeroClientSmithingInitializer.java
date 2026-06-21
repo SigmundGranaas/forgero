@@ -29,6 +29,16 @@ import net.fabricmc.fabric.api.object.builder.v1.client.model.FabricModelPredica
 public class ForgeroClientSmithingInitializer implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
+		registerBlockEntityRenderers();
+		registerItemRenderers();
+		registerTongsModelPredicate();
+		registerRenderLayers();
+		registerHud();
+		registerClientEffects();
+		ModClientMessages.registerClientPackets();
+	}
+
+	private void registerBlockEntityRenderers() {
 		BlockEntityRendererRegistry.register(
 				ModBlockEntities.SMITHING_ANVIL,
 				SmithingAnvilBlockEntityRenderer::new
@@ -38,7 +48,9 @@ public class ForgeroClientSmithingInitializer implements ClientModInitializer {
 				ModBlockEntities.HEARTH,
 				HearthBlockEntityRenderer::new
 		);
+	}
 
+	private void registerItemRenderers() {
 		BuiltinItemRendererRegistry.INSTANCE.register(
 				ModItems.MORPHED_ITEM,
 				new MorphedItemRenderer()
@@ -48,19 +60,21 @@ public class ForgeroClientSmithingInitializer implements ClientModInitializer {
 				ModItems.SMITHING_TONGS,
 				new SmithingTongsItemRenderer()
 		);
+	}
 
-		registerTongsModelPredicate();
-
+	private void registerRenderLayers() {
 		BlockRenderLayerMap.INSTANCE.putBlock(
 				HEARTH,
 				RenderLayer.getCutout()
 		);
+	}
 
-		ModClientMessages.registerClientPackets();
-		WorkableWaxParticleFactory.register();
-
+	private void registerHud() {
 		HudRenderCallback.EVENT.register(new MinigameHudOverlay());
+	}
 
+	private void registerClientEffects() {
+		WorkableWaxParticleFactory.register();
 		TemperatureColorProvider.register();
 		SmithingTongsWorkableParticleHandler.register();
 	}
@@ -74,7 +88,3 @@ public class ForgeroClientSmithingInitializer implements ClientModInitializer {
 		);
 	}
 }
-
-//TODO
-// renderer fixes for all the items
-// Particles sounds/effects.

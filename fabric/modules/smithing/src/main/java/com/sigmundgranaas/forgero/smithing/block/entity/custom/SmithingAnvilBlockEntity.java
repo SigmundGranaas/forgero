@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.smithing.block.entity.custom;
 
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -18,7 +17,6 @@ import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
 import com.sigmundgranaas.forgero.smithing.particle.WorkableTemperatureParticleEffects;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureState;
-import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
 import com.sigmundgranaas.forgero.smithing.util.SchematicMaterialCost;
 import com.sigmundgranaas.forgero.smithing.util.SchematicResultUtil;
 
@@ -30,7 +28,6 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SimpleInventory;
@@ -110,9 +107,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	private Identifier plannedProductId = null;
 
 	private long guiBlockCooldownUntil = 0;
-
-	private transient BufferedImage startingItemImage = null;
-	private transient BufferedImage plannedProductImage = null;
 
 	private transient boolean showFinalMorphOnce = false;
 	private boolean pendingFinalMorphNotify = false;
@@ -957,7 +951,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	}
 
 	public void setMorphProgress(double progress) {
-		minigameLogic.setMorphProgress(progress, this, plannedProductId);
+		minigameLogic.setMorphProgress(progress, this);
 	}
 
 	public List<Integer> getCoolingMarkerIndices() {
@@ -1016,40 +1010,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 
 		minigameLogic.resetMarkerProgress(this);
 
-		if (world != null && world.isClient) {
-			ItemStack plannedStack = createProductFromPlanned(productId);
-
-			plannedProductImage = RuntimeModelUtil.getFirstQuadTextureImage(
-					plannedStack,
-					MinecraftClient.getInstance()
-			);
-		}
-
 		markDirty();
-	}
-
-	public void clientRefreshMorphImages() {
-		if (world == null || !world.isClient) {
-			return;
-		}
-
-		ItemStack stack = getInventory().getStack(0);
-
-		this.startingItemImage = RuntimeModelUtil.getFirstQuadTextureImage(
-				stack,
-				MinecraftClient.getInstance()
-		);
-
-		if (plannedProductId != null) {
-			ItemStack plannedStack = createProductFromPlanned(plannedProductId);
-
-			this.plannedProductImage = RuntimeModelUtil.getFirstQuadTextureImage(
-					plannedStack,
-					MinecraftClient.getInstance()
-			);
-		} else {
-			this.plannedProductImage = null;
-		}
 	}
 
 	public ItemStack createProductFromPlanned(Identifier productId) {

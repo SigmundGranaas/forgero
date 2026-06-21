@@ -103,17 +103,14 @@ public final class BoundingBoxUtil {
 			return new Point(offsetX, offsetY);
 		}
 
-		public Point getCenteringOffset16x16() {
-			return getCenteringOffset(16, 16);
-		}
 	}
 
 	public static int[] getItemTextureOffsetFromImage(BufferedImage image) {
 		BoundingBox box = calculateBoundingBox(image);
 		if (box == null) {
-			return new int[] { 8, 8 };
+			return new int[] { image.getWidth() / 2, image.getHeight() / 2 };
 		}
-		Point offset = box.getCenteringOffset16x16();
+		Point offset = box.getCenteringOffset(image.getWidth(), image.getHeight());
 		return new int[] { offset.x, offset.y };
 	}
 }

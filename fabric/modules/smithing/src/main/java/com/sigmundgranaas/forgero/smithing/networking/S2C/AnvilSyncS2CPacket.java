@@ -103,9 +103,6 @@ public class AnvilSyncS2CPacket {
 			// Update ingot crafting state
 			anvilEntity.clientSyncIngotState(ingotCrafting, plannedProductId);
 
-			// Refresh start/result images on the client so renderer has them
-			anvilEntity.clientRefreshMorphImages();
-
 			// Trigger final morph overlay if requested
 			if (finalMorphOnce) {
 				anvilEntity.clientTriggerFinalMorphOnce();

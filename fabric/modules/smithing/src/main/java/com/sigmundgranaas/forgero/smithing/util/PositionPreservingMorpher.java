@@ -6,11 +6,11 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 
 /**
- * Position-preserving palette morpher for Minecraft textures.
+ * Position-preserving texture morpher for Minecraft item sprites.
  */
-public class PositionPreservingMorpher {
+public final class PositionPreservingMorpher {
 
-	/* =========================== Masks & Edges =========================== */
+	/* =========================== Masks =========================== */
 
 	public boolean[][] alphaMask(BufferedImage img) {
 		int h = img.getHeight(), w = img.getWidth();
@@ -23,63 +23,29 @@ public class PositionPreservingMorpher {
 		return mask;
 	}
 
-	// Binary erosion with 3x3 ones (8-neighborhood). Pixel remains true if all neighbors (including itself) are true.
-	public boolean[][] binaryErosion(boolean[][] mask) {
-		int h = mask.length, w = mask[0].length;
-		boolean[][] out = new boolean[h][w];
-		for (int y = 0; y < h; y++) {
-			for (int x = 0; x < w; x++) {
-				boolean keep = true;
-				for (int dy = -1; dy <= 1 && keep; dy++) {
-					for (int dx = -1; dx <= 1 && keep; dx++) {
-						int yy = y + dy, xx = x + dx;
-						if (yy < 0 || yy >= h || xx < 0 || xx >= w || !mask[yy][xx]) {
-							keep = false;
-						}
-					}
-				}
-				out[y][x] = keep;
-			}
-		}
-		return out;
-	}
-
-	public boolean[][] edgePixels(boolean[][] mask) {
-		boolean any = false;
-		int h = mask.length, w = mask[0].length;
-		for (int y = 0; y < h && !any; y++)
-			for (int x = 0; x < w && !any; x++)
-				if (mask[y][x]) any = true;
-
-		if (!any) {
-			boolean[][] z = new boolean[h][w];
-			return z;
-		}
-		boolean[][] eroded = binaryErosion(mask);
-		boolean[][] edge = new boolean[h][w];
-		for (int y = 0; y < h; y++)
-			for (int x = 0; x < w; x++)
-				edge[y][x] = mask[y][x] && !eroded[y][x];
-		return edge;
-	}
-
 	/* =========================== Distance Transforms & SDF =========================== */
 
-	// Multi-source Dijkstra EDT to background (~mask). Returns distances AND nearest background indices.
-	// Uses 8-neighborhood with costs 1 for orthogonal, sqrt(2) for diagonal (implemented via squared costs to avoid sqrt in queue).
 	private static class Node {
-		int y, x;
-		int srcY, srcX;     // nearest source (background) coordinate
-		double dist2;       // squared distance
+		final int y;
+		final int x;
+		final int srcY;
+		final int srcX;
+		final double dist2;
+
 		Node(int y, int x, int srcY, int srcX, double dist2) {
-			this.y = y; this.x = x; this.srcY = srcY; this.srcX = srcX; this.dist2 = dist2;
+			this.y = y;
+			this.x = x;
+			this.srcY = srcY;
+			this.srcX = srcX;
+			this.dist2 = dist2;
 		}
 	}
 
 	public static class EDTResult {
-		public final double[][] dist; // Euclidean distance (not squared)
-		public final int[][] nearestY; // nearest background Y
-		public final int[][] nearestX; // nearest background X
+		public final double[][] dist;
+		public final int[][] nearestY;
+		public final int[][] nearestX;
+
 		EDTResult(int h, int w) {
 			dist = new double[h][w];
 			nearestY = new int[h][w];
@@ -94,13 +60,11 @@ public class PositionPreservingMorpher {
 		double[][] dist2 = new double[h][w];
 		int[][] srcY = new int[h][w];
 		int[][] srcX = new int[h][w];
-
 		PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingDouble(n -> n.dist2));
 
-		// Initialize: background pixels are sources with distance 0 to themselves
 		for (int y = 0; y < h; y++) {
 			for (int x = 0; x < w; x++) {
-				if (!mask[y][x]) { // background
+				if (!mask[y][x]) {
 					dist2[y][x] = 0.0;
 					srcY[y][x] = y;
 					srcX[y][x] = x;
@@ -115,17 +79,15 @@ public class PositionPreservingMorpher {
 
 		final int[] DY = {-1,-1,-1, 0,0, 1,1,1};
 		final int[] DX = {-1, 0, 1,-1,1,-1,0,1};
-		final double[] COST2 = {2,1,2,1,1,2,1,2}; // squared costs (diag=2, ortho=1)
 
 		while (!pq.isEmpty()) {
 			Node cur = pq.poll();
-			if (cur.dist2 != dist2[cur.y][cur.x]) continue; // stale
+			if (cur.dist2 != dist2[cur.y][cur.x]) continue;
 
 			for (int k = 0; k < 8; k++) {
 				int ny = cur.y + DY[k], nx = cur.x + DX[k];
 				if (ny < 0 || ny >= h || nx < 0 || nx >= w) continue;
 
-				// propose nearest source same as current's source
 				int sy = cur.srcY, sx = cur.srcX;
 				double cand = (ny - sy)*(ny - sy) + (nx - sx)*(nx - sx);
 
@@ -149,11 +111,8 @@ public class PositionPreservingMorpher {
 		return res;
 	}
 
-	// Signed Distance Field: distance to foreground minus distance to background.
 	public double[][] signedDistance(boolean[][] mask) {
-		// distance to background (outside of shape)
 		EDTResult toBg = edtToBackground(mask);
-		// distance to foreground: just invert mask
 		int h = mask.length, w = mask[0].length;
 		boolean[][] inv = new boolean[h][w];
 		for (int y = 0; y < h; y++)
@@ -165,7 +124,6 @@ public class PositionPreservingMorpher {
 		double[][] sdf = new double[h][w];
 		for (int y = 0; y < h; y++)
 			for (int x = 0; x < w; x++)
-				// Inside should be <= 0, outside > 0
 				sdf[y][x] = toFg.dist[y][x] - toBg.dist[y][x];
 		return sdf;
 	}
@@ -222,13 +180,12 @@ public class PositionPreservingMorpher {
 
 		boolean[][] inv1 = not(mask1);
 		boolean[][] inv2 = not(mask2);
-		EDTResult toFg1 = edtToBackground(inv1); // nearest foreground of mask1
-		EDTResult toFg2 = edtToBackground(inv2); // nearest foreground of mask2
+		EDTResult toFg1 = edtToBackground(inv1);
+		EDTResult toFg2 = edtToBackground(inv2);
 
 		for (int y = 0; y < h; y++) {
 			for (int x = 0; x < w; x++) {
 				if (!morphedMask[y][x]) {
-					// leave fully transparent outside
 					continue;
 				}
 
@@ -246,112 +203,7 @@ public class PositionPreservingMorpher {
 			}
 		}
 
-		// Create the edge masks from existing outline detection logic
-		boolean[][] darkMask = new boolean[h][w];
-		boolean[][] lightMask = new boolean[h][w];
-
-// Extract edge detection logic to populate the masks
-		for (int y = 0; y < h; y++) {
-			for (int x = 0; x < w; x++) {
-				// Check if this pixel is on a dark edge (shadow side)
-				darkMask[y][x] = isOnDarkEdge(x, y, morphedMask, w, h);
-				// Check if this pixel is on a light edge (highlight side)
-				lightMask[y][x] = isOnLightEdge(x, y, morphedMask, w, h);
-			}
-		}
-
-// Sample actual edge colors from the original images instead of forcing darkest/brightest
-		for (int y = 0; y < h; y++) {
-			for (int x = 0; x < w; x++) {
-				if (darkMask[y][x]) {
-					// Sample the actual color at this edge position from both images
-					int sx1 = mask1[y][x] ? x : clamp(toFg1.nearestX[y][x], 0, w - 1);
-					int sy1 = mask1[y][x] ? y : clamp(toFg1.nearestY[y][x], 0, h - 1);
-					int sx2 = mask2[y][x] ? x : clamp(toFg2.nearestX[y][x], 0, w - 1);
-					int sy2 = mask2[y][x] ? y : clamp(toFg2.nearestY[y][x], 0, h - 1);
-
-					int actualColor1 = img1.getRGB(sx1, sy1);
-					int actualColor2 = img2.getRGB(sx2, sy2);
-
-					// Ensure colors are opaque before darkening
-					if (((actualColor1 >>> 24) & 0xFF) > 0 && ((actualColor2 >>> 24) & 0xFF) > 0) {
-						result.setRGB(x, y, blendColor(actualColor1, actualColor2, weight));
-					}
-				} else if (lightMask[y][x]) {
-					// Sample actual colors and lighten slightly for highlight effect
-					int sx1 = mask1[y][x] ? x : clamp(toFg1.nearestX[y][x], 0, w - 1);
-					int sy1 = mask1[y][x] ? y : clamp(toFg1.nearestY[y][x], 0, h - 1);
-					int sx2 = mask2[y][x] ? x : clamp(toFg2.nearestX[y][x], 0, w - 1);
-					int sy2 = mask2[y][x] ? y : clamp(toFg2.nearestY[y][x], 0, h - 1);
-
-					int actualColor1 = img1.getRGB(sx1, sy1);
-					int actualColor2 = img2.getRGB(sx2, sy2);
-
-					// Ensure colors are opaque before lightening
-					if (((actualColor1 >>> 24) & 0xFF) > 0 && ((actualColor2 >>> 24) & 0xFF) > 0) {
-						result.setRGB(x, y, blendColor(actualColor1, actualColor2, weight));
-					}
-				}
-			}
-		}
-
 		return result;
-	}
-
-	private boolean isOnDarkEdge(int x, int y, boolean[][] morphedMask, int w, int h) {
-		// Check if this pixel is on an edge where we want dark outline
-		// This typically means it's a foreground pixel adjacent to background
-		if (!morphedMask[y][x]) return false; // Only apply to foreground pixels
-
-		// Check 4-connected neighbors for background pixels
-		boolean hasBackgroundNeighbor = false;
-		int[] dx = {-1, 1, 0, 0};
-		int[] dy = {0, 0, -1, 1};
-
-		for (int i = 0; i < 4; i++) {
-			int nx = x + dx[i];
-			int ny = y + dy[i];
-			if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
-				if (!morphedMask[ny][nx]) {
-					hasBackgroundNeighbor = true;
-					break;
-				}
-			} else {
-				// Edge of image counts as background
-				hasBackgroundNeighbor = true;
-				break;
-			}
-		}
-
-		return hasBackgroundNeighbor;
-	}
-
-	private boolean isOnLightEdge(int x, int y, boolean[][] morphedMask, int w, int h) {
-		// More conservative light edge detection - only apply to very specific inner edges
-		if (!morphedMask[y][x]) return false; // Only apply to foreground pixels
-
-		// Check 8-connected neighbors for inner edge detection
-		int foregroundNeighbors = 0;
-		int totalNeighbors = 0;
-
-		for (int dy = -1; dy <= 1; dy++) {
-			for (int dx = -1; dx <= 1; dx++) {
-				if (dx == 0 && dy == 0) continue; // Skip center pixel
-
-				int nx = x + dx;
-				int ny = y + dy;
-
-				if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
-					totalNeighbors++;
-					if (morphedMask[ny][nx]) {
-						foregroundNeighbors++;
-					}
-				}
-			}
-		}
-
-		// Much more conservative: only very specific inner edges, and reduce frequency
-		return totalNeighbors > 0 && foregroundNeighbors >= totalNeighbors * 0.8 && foregroundNeighbors < totalNeighbors;
 	}
 
 	/* =========================== Small Utils =========================== */
