@@ -1,6 +1,5 @@
 package com.sigmundgranaas.forgero.smithing.minigame;
 
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -13,14 +12,12 @@ import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureProfile;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureState;
-import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
 import com.sigmundgranaas.forgero.smithing.util.SchematicMaterialCost;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -78,9 +75,6 @@ public class MinigameLogic {
 	private int markerSpawnDelay;
 
 	private double morphProgress = 0.0;
-
-	private transient BufferedImage startingItemImage = null;
-	private transient BufferedImage plannedProductImage = null;
 
 	private enum MarkerOutcome {
 		HIT,
@@ -209,7 +203,6 @@ public class MinigameLogic {
 		}
 
 		updateMorphProgressOnItem(stack);
-		refreshMorphImages(callback);
 		callback.markDirty();
 	}
 
@@ -871,20 +864,6 @@ public class MinigameLogic {
 			if (!coolingMarkerIndices.contains(idx)) {
 				coolingMarkerIndices.add(idx);
 			}
-		}
-	}
-
-	private void refreshMorphImages(MinigameCallback callback) {
-		World world = callback.getWorld();
-
-		if (world != null && world.isClient) {
-			ItemStack stack = callback.getCurrentStack();
-			startingItemImage = RuntimeModelUtil.getFirstQuadTextureImage(
-					stack,
-					MinecraftClient.getInstance()
-			);
-
-			// plannedProductImage would need to be set based on planned product if available.
 		}
 	}
 }

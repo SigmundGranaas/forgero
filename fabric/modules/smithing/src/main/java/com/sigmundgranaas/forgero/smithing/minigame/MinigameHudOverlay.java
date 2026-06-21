@@ -1,7 +1,5 @@
 package com.sigmundgranaas.forgero.smithing.minigame;
 
-import java.util.Arrays;
-
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureProfile;
@@ -46,8 +44,6 @@ public class MinigameHudOverlay implements HudRenderCallback {
 		int effectiveMax = Math.min(max, 10000);
 
 		TemperatureStages stages = TemperatureRules.stages(profile);
-
-		int[] stageBoundaries = {0, stages.coldEnd, stages.warmEnd, stages.hotStart, stages.hotEnd, stages.overheatedStart, effectiveMax};
 
 		int minWindowWidth = 600;
 		int halfWindow = minWindowWidth / 2;
@@ -234,15 +230,6 @@ public class MinigameHudOverlay implements HudRenderCallback {
 		return v;
 	}
 
-	private int findSegmentIndex(int value, int[] boundaries) {
-		for (int i = 0; i < boundaries.length - 1; i++) {
-			if (value >= boundaries[i] && value < boundaries[i + 1]) {
-				return i;
-			}
-		}
-		return Math.max(0, boundaries.length - 2);
-	}
-
 	private int valueToX(int value, int minWindow, float unitsPerPixelX, int barLeft, int barWidth) {
 		float exactPixelOffset = (value - minWindow) / unitsPerPixelX;
 		int x = barLeft + Math.round(exactPixelOffset);
@@ -263,15 +250,4 @@ public class MinigameHudOverlay implements HudRenderCallback {
 		ctx.fill(x1, y1, x2, y2, argb);
 	}
 
-    private int segmentIndex(int value, int[] boundaries) {
-        int idx = Arrays.binarySearch(boundaries, value);
-        int maxSeg = Math.max(0, boundaries.length - 2);
-        if (idx >= 0) {
-            return Math.min(idx, maxSeg);
-        }
-        int insertionPoint = -(idx + 1);
-        int seg = Math.max(0, insertionPoint - 1);
-        if (seg > maxSeg) seg = maxSeg;
-        return seg;
-    }
 }
