@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.smithing.block.custom;
 import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.HearthBlockEntity;
 import com.sigmundgranaas.forgero.smithing.item.custom.SmithingTongsItem;
-import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CampfireBlock;
@@ -76,7 +76,7 @@ public class HearthBlock extends CampfireBlock implements Waterloggable {
 		}
 
 		if (!held.isEmpty() && slot.isEmpty()) {
-			if (!TemperatureUtils.hasMaxTemperature(held)) {
+			if (!TemperatureRules.canTrackTemperature(held)) {
 				if (world.isClient) {
 					player.sendMessage(Text.literal("Only temperature items can be placed on the hearth!"), true);
 				}

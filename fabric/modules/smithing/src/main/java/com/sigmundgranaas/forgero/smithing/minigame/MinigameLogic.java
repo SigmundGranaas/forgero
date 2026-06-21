@@ -10,8 +10,9 @@ import com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys;
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.smithing.condition.PredicateConditionLootRegistry;
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
-import com.sigmundgranaas.forgero.smithing.temperature.DynamicTemperatureSystem;
-import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureProfile;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureState;
 import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
 import com.sigmundgranaas.forgero.smithing.util.SchematicMaterialCost;
 
@@ -46,6 +47,7 @@ public class MinigameLogic {
 	public static final int MARKER_TIMEOUT_COOLING = 10;
 	public static final int NORMAL_MARKER_HEAT_CHANGE = 40;
 	public static final int COOLING_MARKER_HEAT_CHANGE = -25;
+	private static final int STAGE_COUNT = 5;
 
 	private static final double MARKER_HIT_RADIUS_SQ = 0.0075d;
 
@@ -304,24 +306,20 @@ public class MinigameLogic {
 			callback.playHitEffect(markerPositions.get(0));
 		}
 
-		int temperature = TemperatureUtils.getTemperature(stack);
-		int maxTemp = TemperatureUtils.getMaxTemp(stack);
-		int workableStart = TemperatureUtils.getWorkableTemperatureStart(stack);
-		int workableEnd = TemperatureUtils.getWorkableTemperatureEnd(stack);
+		int temperature = TemperatureState.currentTemperature(stack);
+		TemperatureProfile profile = TemperatureProfile.from(stack);
 
 		hitStageIndices.add(stageIndexFor(
 				temperature,
-				maxTemp,
-				workableStart,
-				workableEnd
+				profile
 		));
 
 		boolean coolingMarker = coolingMarkerIndices.contains(markerIndex);
 		int tempChange = coolingMarker ? COOLING_MARKER_HEAT_CHANGE : NORMAL_MARKER_HEAT_CHANGE;
 
-		TemperatureUtils.setTemperature(
+		TemperatureRules.setTemperature(
 				stack,
-				Math.max(0, Math.min(temperature + tempChange, maxTemp))
+				Math.max(0, Math.min(temperature + tempChange, profile.maxTemperature()))
 		);
 
 		if (coolingMarker) {
@@ -334,15 +332,15 @@ public class MinigameLogic {
 	}
 
 	private void applyMarkerTimeout(ItemStack stack) {
-		int temperature = TemperatureUtils.getTemperature(stack);
+		int temperature = TemperatureState.currentTemperature(stack);
 
-		if (temperature <= TemperatureUtils.DEFAULT_TEMPERATURE) {
+		if (temperature <= TemperatureState.DEFAULT_TEMPERATURE) {
 			return;
 		}
 
-		TemperatureUtils.setTemperature(
+		TemperatureRules.setTemperature(
 				stack,
-				Math.max(TemperatureUtils.DEFAULT_TEMPERATURE, temperature - MARKER_TIMEOUT_COOLING)
+				Math.max(TemperatureState.DEFAULT_TEMPERATURE, temperature - MARKER_TIMEOUT_COOLING)
 		);
 	}
 
@@ -358,12 +356,8 @@ public class MinigameLogic {
 		}
 	}
 
-	private int stageIndexFor(int temperature, int maxTemp, int workableStart, int workableEnd) {
-		DynamicTemperatureSystem.TemperatureStages stages =
-				DynamicTemperatureSystem.calculateStages(maxTemp, workableStart, workableEnd);
-
-		DynamicTemperatureSystem.TemperatureStage stage =
-				DynamicTemperatureSystem.getStage(temperature, stages);
+	private int stageIndexFor(int temperature, TemperatureProfile profile) {
+		var stage = TemperatureRules.stage(temperature, TemperatureRules.stages(profile));
 
 		return switch (stage) {
 			case COLD -> 0;
@@ -511,7 +505,8 @@ public class MinigameLogic {
 						}
 					}
 
-					TemperatureUtils.copyTemperatureData(stack, resultStack);
+					TemperatureProfile.from(stack).writeTo(resultStack);
+					TemperatureState.copyFrom(stack, resultStack);
 
 					callback.replaceWithResult(resultStack);
 
@@ -548,8 +543,56 @@ public class MinigameLogic {
 		context = context.put(MinecraftContextKeys.TOTAL_HITS, markerHitsCount);
 		context = context.put(MinecraftContextKeys.MISS_HITS, missMarkerHits);
 		context = context.put(MinecraftContextKeys.COOLING_MARKER_HITS, coolingMarkerHits);
+		context = context.put(MinecraftContextKeys.QUENCH_COUNT, TemperatureState.quenchCount(stack));
+		context = context.put(MinecraftContextKeys.REHEAT_COUNT, TemperatureState.reheatCount(stack));
+
+		int[] stageCounts = countStageHits();
+		context = context.put(MinecraftContextKeys.COLD_STAGE_HITS, stageCounts[0]);
+		context = context.put(MinecraftContextKeys.WARM_STAGE_HITS, stageCounts[1]);
+		context = context.put(MinecraftContextKeys.HOT_STAGE_HITS, stageCounts[2]);
+		context = context.put(MinecraftContextKeys.WORKABLE_STAGE_HITS, stageCounts[3]);
+		context = context.put(MinecraftContextKeys.OVERHEATED_STAGE_HITS, stageCounts[4]);
+
+		int totalStageHits = Math.max(1, hitStageIndices.size());
+		context = context.put(MinecraftContextKeys.COLD_STAGE_FRACTION, stageCounts[0] / (double) totalStageHits);
+		context = context.put(MinecraftContextKeys.WARM_STAGE_FRACTION, stageCounts[1] / (double) totalStageHits);
+		context = context.put(MinecraftContextKeys.HOT_STAGE_FRACTION, stageCounts[2] / (double) totalStageHits);
+		context = context.put(MinecraftContextKeys.WORKABLE_STAGE_FRACTION, stageCounts[3] / (double) totalStageHits);
+		context = context.put(MinecraftContextKeys.OVERHEATED_STAGE_FRACTION, stageCounts[4] / (double) totalStageHits);
+		context = context.put(MinecraftContextKeys.STAGE_TRANSITION_MATRIX, buildStageTransitionMatrix());
+		context = context.put(
+				MinecraftContextKeys.STAGE_CHANGE_SEQUENCE,
+				hitStageIndices.stream().mapToInt(Integer::intValue).toArray()
+		);
 
 		return context;
+	}
+
+	private int[] countStageHits() {
+		int[] counts = new int[STAGE_COUNT];
+
+		for (int stage : hitStageIndices) {
+			if (stage >= 0 && stage < STAGE_COUNT) {
+				counts[stage]++;
+			}
+		}
+
+		return counts;
+	}
+
+	private int[] buildStageTransitionMatrix() {
+		int[] matrix = new int[STAGE_COUNT * STAGE_COUNT];
+
+		for (int i = 1; i < hitStageIndices.size(); i++) {
+			int previous = hitStageIndices.get(i - 1);
+			int current = hitStageIndices.get(i);
+
+			if (previous >= 0 && previous < STAGE_COUNT && current >= 0 && current < STAGE_COUNT) {
+				matrix[previous * STAGE_COUNT + current]++;
+			}
+		}
+
+		return matrix;
 	}
 
 	public void saveProgressToItem(ItemStack stack) {

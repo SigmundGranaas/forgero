@@ -6,8 +6,7 @@ import java.util.WeakHashMap;
 
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import com.sigmundgranaas.forgero.smithing.minigame.MinigameLogic;
-import com.sigmundgranaas.forgero.smithing.temperature.DynamicTemperatureSystem;
-import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules;
 import com.sigmundgranaas.forgero.smithing.util.PositionPreservingMorpher;
 import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
 import org.apache.logging.log4j.LogManager;
@@ -133,12 +132,11 @@ public class MorphedItemRenderer implements BuiltinItemRendererRegistry.DynamicI
 	}
 
 	private int getTemperatureColor(ItemStack stack) {
-		if (!TemperatureUtils.hasMaxTemperature(stack)) {
+		if (!TemperatureRules.canTrackTemperature(stack)) {
 			return 0xFFFFFF;
 		}
-		int temp = TemperatureUtils.getTemperature(stack);
-		DynamicTemperatureSystem.TemperatureStages stages = DynamicTemperatureSystem.calculateStages(stack);
-		return DynamicTemperatureSystem.getTemperatureColor(temp, stages);
+
+		return TemperatureRules.color(stack);
 	}
 
 	private boolean renderMorphed3D(ItemStack morphedStack, double progress, MatrixStack matrices,
@@ -349,11 +347,8 @@ public class MorphedItemRenderer implements BuiltinItemRendererRegistry.DynamicI
 	}
 
 	private void copyTemperatureData(ItemStack source, ItemStack target) {
-		if (TemperatureUtils.hasMaxTemperature(source)) {
-			int temp = TemperatureUtils.getTemperature(source);
-			int maxTemp = TemperatureUtils.getMaxTemp(source);
-			TemperatureUtils.setTemperature(target, temp);
-			TemperatureUtils.setMaxTemperature(target, maxTemp);
+		if (TemperatureRules.canTrackTemperature(source)) {
+			TemperatureRules.copyTemperatureData(source, target);
 		}
 	}
 

@@ -1,7 +1,7 @@
 package com.sigmundgranaas.forgero.smithing.mixins;
 
 import com.sigmundgranaas.forgero.smithing.item.custom.SmithingTongsItem;
-import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -178,7 +178,7 @@ public abstract class HeldItemRendererMixin {
 
 	@Unique
 	private boolean forgero$areEqualOrTemperatureOnly(ItemStack left, ItemStack right) {
-		return TemperatureUtils.areEqualIgnoringTemperature(left, right);
+		return TemperatureRules.areEqualIgnoringTemperature(left, right);
 	}
 
 	@Unique

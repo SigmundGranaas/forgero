@@ -4,7 +4,7 @@ import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBloc
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import com.sigmundgranaas.forgero.smithing.item.custom.SmithingTongsItem;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
-import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules;
 
 import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.entity.BlockEntity;
@@ -74,7 +74,7 @@ public final class AnvilUseClientHandler {
 		}
 
 		return handStack.getItem() instanceof MorphedItem
-				|| TemperatureUtils.hasMaxTemperature(handStack);
+				|| TemperatureRules.canTrackTemperature(handStack);
 	}
 
 	private static boolean isTongsInteraction(ItemStack handStack, boolean anvilHasItem) {

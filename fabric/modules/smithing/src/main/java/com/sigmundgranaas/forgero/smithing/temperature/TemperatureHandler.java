@@ -2,8 +2,8 @@ package com.sigmundgranaas.forgero.smithing.temperature;
 
 import com.sigmundgranaas.forgero.smithing.item.custom.SmithingTongsItem;
 import com.sigmundgranaas.forgero.smithing.networking.S2C.TemperatureSyncS2CPacket;
-import com.sigmundgranaas.forgero.smithing.temperature.DynamicTemperatureSystem.TemperatureStage;
-import com.sigmundgranaas.forgero.smithing.temperature.DynamicTemperatureSystem.TemperatureStages;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules.TemperatureStage;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules.TemperatureStages;
 
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
@@ -42,16 +42,16 @@ public class TemperatureHandler {
                     continue;
                 }
 
-                if (!TemperatureUtils.hasMaxTemperature(stack)) {
+                if (!TemperatureRules.canTrackTemperature(stack)) {
                     continue;
                 }
-                int temp = TemperatureUtils.getTemperature(stack);
+                int temp = TemperatureState.currentTemperature(stack);
                 if (temp > 100) {
                     tookHeatDamage = true;
                 }
-                if (temp > 20) {
-                    temp = Math.max(20, temp - INVENTORY_COOL_PER_TICK);
-                    TemperatureUtils.setTemperature(stack, temp);
+                if (temp > TemperatureState.DEFAULT_TEMPERATURE) {
+                    temp = Math.max(TemperatureState.DEFAULT_TEMPERATURE, temp - INVENTORY_COOL_PER_TICK);
+                    TemperatureRules.setTemperature(stack, temp);
                 }
             }
             if (tookHeatDamage) {
@@ -65,19 +65,19 @@ public class TemperatureHandler {
                 continue;
             }
 
-            if (!TemperatureUtils.hasMaxTemperature(stack)) {
+            if (!TemperatureRules.canTrackTemperature(stack)) {
                 continue;
             }
-            int temp = TemperatureUtils.getTemperature(stack);
-            if (temp > 20) {
-                temp = Math.max(20, temp - INVENTORY_COOL_PER_TICK);
-                TemperatureUtils.setTemperature(stack, temp);
+            int temp = TemperatureState.currentTemperature(stack);
+            if (temp > TemperatureState.DEFAULT_TEMPERATURE) {
+                temp = Math.max(TemperatureState.DEFAULT_TEMPERATURE, temp - INVENTORY_COOL_PER_TICK);
+                TemperatureRules.setTemperature(stack, temp);
             }
             BlockPos pos = itemEntity.getBlockPos();
             boolean changed = false;
-            boolean inFilledCauldron = TemperatureUtils.isItemInFilledWaterCauldron(itemEntity, world);
+            boolean inFilledCauldron = TemperatureRules.isItemInFilledWaterCauldron(itemEntity, world);
 
-            TemperatureStages stages = DynamicTemperatureSystem.calculateStages(stack);
+            TemperatureStages stages = TemperatureRules.stages(stack);
             emitTemperatureEffects(world, itemEntity, pos, temp, stages);
 
             if (inFilledCauldron) {
@@ -85,9 +85,9 @@ public class TemperatureHandler {
                     world.spawnParticles(ParticleTypes.CLOUD, itemEntity.getX(), itemEntity.getY() + 0.2, itemEntity.getZ(), 8, 0.2, 0.1, 0.2, 0.01);
                     world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_FIRE_EXTINGUISH, net.minecraft.sound.SoundCategory.BLOCKS, 0.7F, 1.2F);
                 }
-                if (temp > 20) {
-                    temp = Math.max(20, temp - FLUID_COOL_PER_TICK);
-                    TemperatureUtils.setTemperature(stack, temp);
+                if (temp > TemperatureState.DEFAULT_TEMPERATURE) {
+                    temp = Math.max(TemperatureState.DEFAULT_TEMPERATURE, temp - FLUID_COOL_PER_TICK);
+                    TemperatureRules.quench(stack, temp);
                     changed = true;
                 }
             }
@@ -100,17 +100,17 @@ public class TemperatureHandler {
     private static void coolStoredTongsStack(ItemStack tongsStack) {
         ItemStack stored = SmithingTongsItem.getStoredStack(tongsStack);
 
-        if (stored.isEmpty() || !TemperatureUtils.hasMaxTemperature(stored)) {
+        if (stored.isEmpty() || !TemperatureRules.canTrackTemperature(stored)) {
             return;
         }
 
-        int temp = TemperatureUtils.getTemperature(stored);
+        int temp = TemperatureState.currentTemperature(stored);
 
-        if (temp <= 20) {
+        if (temp <= TemperatureState.DEFAULT_TEMPERATURE) {
             return;
         }
 
-        TemperatureUtils.setTemperature(stored, Math.max(20, temp - INVENTORY_COOL_PER_TICK));
+        TemperatureRules.setTemperature(stored, Math.max(TemperatureState.DEFAULT_TEMPERATURE, temp - INVENTORY_COOL_PER_TICK));
         SmithingTongsItem.setStoredStack(tongsStack, stored);
     }
 
@@ -121,7 +121,7 @@ public class TemperatureHandler {
         int entityId = itemEntity.getId();
         long randomSeed = (long) entityId * 31 + world.getTime();
 
-        TemperatureStage stage = DynamicTemperatureSystem.getStage(temp, stages);
+        TemperatureStage stage = TemperatureRules.stage(temp, stages);
 
         if (stage == TemperatureStage.COLD) {
             // No effects for cold

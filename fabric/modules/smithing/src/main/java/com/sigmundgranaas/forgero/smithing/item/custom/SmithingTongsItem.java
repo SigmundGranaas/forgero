@@ -2,7 +2,8 @@ package com.sigmundgranaas.forgero.smithing.item.custom;
 
 import java.util.List;
 
-import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureState;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.item.TooltipContext;
@@ -40,7 +41,7 @@ public class SmithingTongsItem extends Item {
 	public static boolean canStore(ItemStack stack) {
 		return !stack.isEmpty()
 				&& !(stack.getItem() instanceof SmithingTongsItem)
-				&& (stack.getItem() instanceof MorphedItem || TemperatureUtils.hasMaxTemperature(stack));
+				&& (stack.getItem() instanceof MorphedItem || TemperatureRules.canTrackTemperature(stack));
 	}
 
 	public static boolean hasStoredStack(ItemStack tongsStack) {
@@ -100,8 +101,8 @@ public class SmithingTongsItem extends Item {
 		ItemStack stored = getStoredStack(tongsStack);
 		clearStoredStack(tongsStack);
 
-		if (TemperatureUtils.getTemperature(stored) <= TemperatureUtils.DEFAULT_TEMPERATURE) {
-			TemperatureUtils.removeTemperatureData(stored);
+		if (TemperatureState.currentTemperature(stored) <= TemperatureState.DEFAULT_TEMPERATURE) {
+			TemperatureRules.removeTemperatureData(stored);
 		}
 
 		return stored;
@@ -130,7 +131,7 @@ public class SmithingTongsItem extends Item {
 		PlayerEntity player = context.getPlayer();
 
 		if (player == null
-				|| !TemperatureUtils.isWaterCauldron(context.getWorld().getBlockState(context.getBlockPos()))
+				|| !TemperatureRules.isWaterCauldron(context.getWorld().getBlockState(context.getBlockPos()))
 				|| !canQuench(context.getStack())) {
 			return ActionResult.PASS;
 		}
@@ -163,18 +164,18 @@ public class SmithingTongsItem extends Item {
 		}
 
 		ItemStack stored = getStoredStack(tongsStack);
-		int temperature = TemperatureUtils.getTemperature(stored);
+		int temperature = TemperatureState.currentTemperature(stored);
 
-		if (temperature <= TemperatureUtils.DEFAULT_TEMPERATURE) {
+		if (temperature <= TemperatureState.DEFAULT_TEMPERATURE) {
 			return;
 		}
 
 		int cooledTemperature = Math.max(
-				TemperatureUtils.DEFAULT_TEMPERATURE,
+				TemperatureState.DEFAULT_TEMPERATURE,
 				temperature - QUENCH_DEGREES_PER_INTERVAL
 		);
 
-		TemperatureUtils.setTemperature(stored, cooledTemperature);
+		TemperatureRules.quench(stored, cooledTemperature);
 		setStoredStack(tongsStack, stored);
 
 		if (user instanceof PlayerEntity player) {
@@ -186,7 +187,7 @@ public class SmithingTongsItem extends Item {
 
 	private static boolean canQuench(ItemStack tongsStack) {
 		ItemStack stored = getStoredStack(tongsStack);
-		return !stored.isEmpty() && TemperatureUtils.hasMaxTemperature(stored);
+		return !stored.isEmpty() && TemperatureRules.canTrackTemperature(stored);
 	}
 
 	@Nullable
@@ -198,7 +199,7 @@ public class SmithingTongsItem extends Item {
 		}
 
 		BlockPos pos = blockHit.getBlockPos();
-		return TemperatureUtils.isWaterCauldron(world.getBlockState(pos)) ? pos : null;
+		return TemperatureRules.isWaterCauldron(world.getBlockState(pos)) ? pos : null;
 	}
 
 	private static void emitQuenchingEffects(ServerWorld world, BlockPos pos) {

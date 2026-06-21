@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
-import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules;
 import com.sigmundgranaas.forgero.smithing.util.SchematicMaterialCost;
 import com.sigmundgranaas.forgero.smithing.util.SchematicResultUtil;
 
@@ -84,7 +84,7 @@ public final class SmithingPacketValidator {
 		 * SmithingAnvilBlockEntity.tryPlaceItem(...) does the exact validation:
 		 * same item, not morphed, max stack cap, planned product null, etc.
 		 */
-		return TemperatureUtils.hasMaxTemperature(stackInHand);
+		return TemperatureRules.canTrackTemperature(stackInHand);
 	}
 
 	public static boolean canSelectSchematicProduct(
@@ -106,7 +106,7 @@ public final class SmithingPacketValidator {
 			return false;
 		}
 
-		if (!TemperatureUtils.hasMaxTemperature(anvilStack)) {
+		if (!TemperatureRules.canTrackTemperature(anvilStack)) {
 			return false;
 		}
 

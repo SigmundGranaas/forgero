@@ -2,7 +2,10 @@ package com.sigmundgranaas.forgero.smithing.block.entity.custom;
 
 import com.sigmundgranaas.forgero.smithing.block.custom.HearthBlock;
 import com.sigmundgranaas.forgero.smithing.networking.S2C.HearthBlockSyncS2CPacket;
-import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
+import com.sigmundgranaas.forgero.smithing.particle.WorkableTemperatureParticleEffects;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureProfile;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureState;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CampfireBlock;
@@ -25,6 +28,8 @@ public class HearthBlockEntity extends BlockEntity implements Inventory {
 	private static final int HEAT_RATE = 2;
 	private static final float SMOKE_SPAWN_CHANCE = 0.11F;
 	private static final double Y_OFFSET = 1.0;
+	private static final double WORKABLE_PARTICLE_Y_OFFSET = 0.62D;
+	private static final double WORKABLE_PARTICLE_SPREAD = 0.16D;
 
 	private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1, ItemStack.EMPTY);
 
@@ -136,14 +141,14 @@ public class HearthBlockEntity extends BlockEntity implements Inventory {
 
 	public static void tick(World world, BlockPos pos, BlockState state, HearthBlockEntity blockEntity) {
 		if (world.isClient) {
-			clientTick(world, pos, state);
+			clientTick(world, pos, state, blockEntity);
 			return;
 		}
 
 		serverTick(state, blockEntity);
 	}
 
-	private static void clientTick(World world, BlockPos pos, BlockState state) {
+	private static void clientTick(World world, BlockPos pos, BlockState state, HearthBlockEntity blockEntity) {
 		Random random = world.random;
 		if (state.get(HearthBlock.LIT) && random.nextFloat() < SMOKE_SPAWN_CHANCE) {
 			for (int i = 0; i < random.nextInt(2) + 2; i++) {
@@ -155,6 +160,15 @@ public class HearthBlockEntity extends BlockEntity implements Inventory {
 				);
 			}
 		}
+
+		WorkableTemperatureParticleEffects.spawnIfWorkable(
+				world,
+				blockEntity.getStack(ITEM_SLOT),
+				pos.getX() + 0.5D,
+				pos.getY() + WORKABLE_PARTICLE_Y_OFFSET,
+				pos.getZ() + 0.5D,
+				WORKABLE_PARTICLE_SPREAD
+		);
 	}
 
 	private static void serverTick(BlockState state, HearthBlockEntity blockEntity) {
@@ -163,14 +177,14 @@ public class HearthBlockEntity extends BlockEntity implements Inventory {
 		}
 
 		ItemStack slotStack = blockEntity.getStack(ITEM_SLOT);
-		if (slotStack.isEmpty() || !TemperatureUtils.hasMaxTemperature(slotStack)) {
+		if (slotStack.isEmpty() || !TemperatureRules.canTrackTemperature(slotStack)) {
 			return;
 		}
 
-		int temp = TemperatureUtils.getTemperature(slotStack);
-		int maxTemp = TemperatureUtils.getMaxTemp(slotStack);
+		int temp = TemperatureState.currentTemperature(slotStack);
+		int maxTemp = TemperatureProfile.from(slotStack).maxTemperature();
 		if (temp < maxTemp) {
-			TemperatureUtils.setTemperature(slotStack, Math.min(maxTemp, temp + HEAT_RATE));
+			TemperatureRules.heat(slotStack, Math.min(maxTemp, temp + HEAT_RATE));
 			blockEntity.markDirtyAndSync();
 		}
 	}

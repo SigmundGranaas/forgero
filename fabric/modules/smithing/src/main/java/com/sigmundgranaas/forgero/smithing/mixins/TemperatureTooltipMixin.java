@@ -1,12 +1,10 @@
 package com.sigmundgranaas.forgero.smithing.mixins;
 
-import static com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils.hasMaxTemperature;
-
 import java.util.List;
 
-import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
-import com.sigmundgranaas.forgero.smithing.temperature.DynamicTemperatureSystem;
-import com.sigmundgranaas.forgero.smithing.temperature.DynamicTemperatureSystem.TemperatureStages;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules.TemperatureStages;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -23,13 +21,13 @@ import net.minecraft.world.World;
 public class TemperatureTooltipMixin {
 	@Inject(method = "appendTooltip", at = @At("TAIL"))
 	private void forgero$addTemperatureTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext, CallbackInfo ci) {
-		if (!hasMaxTemperature(itemStack)) {
+		if (!TemperatureRules.canTrackTemperature(itemStack)) {
 			return;
 		}
-		int temp = TemperatureUtils.getTemperature(itemStack);
+		int temp = TemperatureState.currentTemperature(itemStack);
 
-		TemperatureStages stages = DynamicTemperatureSystem.calculateStages(itemStack);
-		boolean isWorkable = DynamicTemperatureSystem.isWorkable(temp, stages);
+		TemperatureStages stages = TemperatureRules.stages(itemStack);
+		boolean isWorkable = TemperatureRules.isWorkable(temp, stages);
 		int tempColor = isWorkable ? 0x00FF00 : 0xFFFFFF;
 
 		Text label = Text.literal("Temperature: ").styled(style -> style.withColor(TextColor.fromRgb(0xFFFFFF)));

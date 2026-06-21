@@ -6,6 +6,8 @@ import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
 import com.sigmundgranaas.forgero.smithing.block.renderer.HearthBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.block.renderer.SmithingAnvilBlockEntityRenderer;
+import com.sigmundgranaas.forgero.smithing.client.SmithingTongsWorkableParticleHandler;
+import com.sigmundgranaas.forgero.smithing.client.WorkableWaxParticleFactory;
 import com.sigmundgranaas.forgero.smithing.item.ModItems;
 import com.sigmundgranaas.forgero.smithing.item.custom.SmithingTongsItem;
 import com.sigmundgranaas.forgero.smithing.item.renderer.MorphedItemRenderer;
@@ -55,10 +57,12 @@ public class ForgeroClientSmithingInitializer implements ClientModInitializer {
 		);
 
 		ModClientMessages.registerClientPackets();
+		WorkableWaxParticleFactory.register();
 
 		HudRenderCallback.EVENT.register(new MinigameHudOverlay());
 
 		TemperatureColorProvider.register();
+		SmithingTongsWorkableParticleHandler.register();
 	}
 
 	@SuppressWarnings("deprecation")
@@ -70,3 +74,7 @@ public class ForgeroClientSmithingInitializer implements ClientModInitializer {
 		);
 	}
 }
+
+//TODO
+// renderer fixes for all the items
+// Particles sounds/effects.

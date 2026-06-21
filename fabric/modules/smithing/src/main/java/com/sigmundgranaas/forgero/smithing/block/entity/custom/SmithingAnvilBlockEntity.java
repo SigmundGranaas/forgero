@@ -15,7 +15,9 @@ import com.sigmundgranaas.forgero.smithing.item.custom.SmithingTongsItem;
 import com.sigmundgranaas.forgero.smithing.minigame.MinigameLogic;
 import com.sigmundgranaas.forgero.smithing.minigame.MinigamePositioning;
 import com.sigmundgranaas.forgero.smithing.networking.ModMessages;
-import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
+import com.sigmundgranaas.forgero.smithing.particle.WorkableTemperatureParticleEffects;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureState;
 import com.sigmundgranaas.forgero.smithing.util.RuntimeModelUtil;
 import com.sigmundgranaas.forgero.smithing.util.SchematicMaterialCost;
 import com.sigmundgranaas.forgero.smithing.util.SchematicResultUtil;
@@ -54,6 +56,7 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -72,6 +75,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	private static final float ANVIL_TOP_Y = 0.9375f;
 	private static final float Y_FIGHTING_OFFSET = 0.001f;
 	private static final float MARKER_VISUAL_Y_OFFSET = 0.01f;
+	private static final float WORKABLE_PARTICLE_Y = ANVIL_TOP_Y + 0.13f;
+	private static final double WORKABLE_PARTICLE_SPREAD = 0.14D;
 
 	private static final TagKey<Item> INGOTS_TAG = TagKey.of(
 			RegistryKeys.ITEM,
@@ -263,10 +268,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		plannedProductId = null;
 	}
 
-	private void informPlayerHeatRequired(PlayerEntity player) {
-		player.sendMessage(net.minecraft.text.Text.of("That needs to be heaten up first!"), true);
-	}
-
 	public ActionResult onHammerHit(PlayerEntity player, BlockHitResult hitResult) {
 		if (!isServer()) {
 			return ActionResult.SUCCESS;
@@ -279,19 +280,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 			return ActionResult.FAIL;
 		}
 
-		if (anvilItem.getItem() instanceof MorphedItem) {
-			// if (!isHotEnoughForWork(anvilItem)) {
-			//     informPlayerHeatRequired(player);
-			//     return ActionResult.FAIL;
-			// }
-		}
-
 		if (shouldOpenSchematicSelection(anvilItem)) {
-			// if (!isHotEnoughForWork(anvilItem)) {
-			//     informPlayerHeatRequired(player);
-			//     return ActionResult.FAIL;
-			// }
-
 			openSchematicSelection(player);
 			return ActionResult.FAIL;
 		}
@@ -489,12 +478,12 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	}
 
 	private void addMaterialIngotFromTongs(ItemStack tongsStack, ItemStack anvilItem, ItemStack stored) {
-		int existingTemp = TemperatureUtils.getTemperature(anvilItem);
-		int addedTemp = TemperatureUtils.getTemperature(stored);
+		int existingTemp = TemperatureState.currentTemperature(anvilItem);
+		int addedTemp = TemperatureState.currentTemperature(stored);
 		int combinedTemp = Math.min(existingTemp, addedTemp);
 
 		anvilItem.increment(1);
-		TemperatureUtils.setTemperature(anvilItem, combinedTemp);
+		TemperatureRules.setTemperature(anvilItem, combinedTemp);
 
 		SmithingTongsItem.clearStoredStack(tongsStack);
 
@@ -530,8 +519,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		nbt.remove("morphProgress");
 		nbt.remove(MorphedItem.PROGRESS_KEY);
 
-		if (TemperatureUtils.getTemperature(stack) <= TemperatureUtils.DEFAULT_TEMPERATURE) {
-			TemperatureUtils.removeTemperatureData(stack);
+		if (TemperatureState.currentTemperature(stack) <= TemperatureState.DEFAULT_TEMPERATURE) {
+			TemperatureRules.removeTemperatureData(stack);
 			nbt = stack.getNbt();
 		}
 
@@ -607,7 +596,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	private boolean isValidSmithingMaterial(ItemStack stack) {
 		return !stack.isEmpty()
 				&& stack.isIn(INGOTS_TAG)
-				&& TemperatureUtils.hasMaxTemperature(stack);
+				&& TemperatureRules.canTrackTemperature(stack);
 	}
 
 	private void placeFirstMaterialIngot(ItemStack stackInHand) {
@@ -651,12 +640,12 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	}
 
 	private void addMaterialIngot(ItemStack anvilItem, ItemStack stackInHand) {
-		int existingTemp = TemperatureUtils.getTemperature(anvilItem);
-		int addedTemp = TemperatureUtils.getTemperature(stackInHand);
+		int existingTemp = TemperatureState.currentTemperature(anvilItem);
+		int addedTemp = TemperatureState.currentTemperature(stackInHand);
 		int combinedTemp = Math.min(existingTemp, addedTemp);
 
 		anvilItem.increment(1);
-		TemperatureUtils.setTemperature(anvilItem, combinedTemp);
+		TemperatureRules.setTemperature(anvilItem, combinedTemp);
 
 		stackInHand.decrement(1);
 
@@ -832,7 +821,12 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	}
 
 	public void tick() {
-		if (!isServer()) {
+		if (world == null) {
+			return;
+		}
+
+		if (world.isClient) {
+			clientTick();
 			return;
 		}
 
@@ -840,6 +834,32 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		updateTemperatureCooling();
 
 		minigameLogic.tick(this);
+	}
+
+	private void clientTick() {
+		ItemStack stack = currentStack();
+
+		if (stack.isEmpty()) {
+			return;
+		}
+
+		Vec2f offsetVec = resolveOffsetVec(stack);
+		Vec3d particlePos = MinigamePositioning.itemLocalToWorld(
+				Vec2f.ZERO,
+				getPos(),
+				getCachedState(),
+				offsetVec,
+				WORKABLE_PARTICLE_Y
+		);
+
+		WorkableTemperatureParticleEffects.spawnIfWorkable(
+				world,
+				stack,
+				particlePos.x,
+				particlePos.y,
+				particlePos.z,
+				WORKABLE_PARTICLE_SPREAD
+		);
 	}
 
 	private void updateGuiCooldown() {
@@ -871,7 +891,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	}
 
 	private boolean shouldCoolStack(ItemStack stack) {
-		if (stack.isEmpty() || !TemperatureUtils.hasMaxTemperature(stack)) {
+		if (stack.isEmpty() || !TemperatureRules.canTrackTemperature(stack)) {
 			return false;
 		}
 
@@ -882,19 +902,19 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	}
 
 	private boolean coolStack(ItemStack stack) {
-		int temp = TemperatureUtils.getTemperature(stack);
+		int temp = TemperatureState.currentTemperature(stack);
 
-		if (temp <= 20) {
+		if (temp <= TemperatureState.DEFAULT_TEMPERATURE) {
 			return false;
 		}
 
-		int newTemp = Math.max(20, temp - anvilInventoryCoolAmountPerTick);
+		int newTemp = Math.max(TemperatureState.DEFAULT_TEMPERATURE, temp - anvilInventoryCoolAmountPerTick);
 
 		if (newTemp == temp) {
 			return false;
 		}
 
-		TemperatureUtils.setTemperature(stack, newTemp);
+		TemperatureRules.setTemperature(stack, newTemp);
 
 		return true;
 	}
@@ -1142,7 +1162,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		Identifier id = Registries.ITEM.getId(stack.getItem());
 		String path = id.getPath();
 
-		if (TemperatureUtils.hasMaxTemperature(stack)) {
+		if (TemperatureRules.canTrackTemperature(stack)) {
 			if (path.endsWith("_ingot")) {
 				return path.substring(0, path.length() - "_ingot".length());
 			}
@@ -1182,11 +1202,6 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 			return false;
 		}
 
-		int currentTemp = TemperatureUtils.getTemperature(current);
-		int maxTemp = TemperatureUtils.getMaxTemp(current);
-		int workableStart = TemperatureUtils.getWorkableTemperatureStart(current);
-		int workableEnd = TemperatureUtils.getWorkableTemperatureEnd(current);
-
 		Item morphedItem = findMorphedItem();
 
 		if (morphedItem == null) {
@@ -1210,10 +1225,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 				requiredCost
 		);
 
-		TemperatureUtils.setMaxTemperature(morphed, maxTemp);
-		TemperatureUtils.setWorkableTemperatureStart(morphed, workableStart);
-		TemperatureUtils.setWorkableTemperatureEnd(morphed, workableEnd);
-		TemperatureUtils.setTemperature(morphed, currentTemp);
+		TemperatureRules.copyTemperatureData(current, morphed);
 
 		int leftoverCount = current.getCount() - requiredCost;
 

@@ -4,10 +4,11 @@ import java.util.Arrays;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
-import com.sigmundgranaas.forgero.smithing.temperature.DynamicTemperatureSystem;
-import com.sigmundgranaas.forgero.smithing.temperature.DynamicTemperatureSystem.TemperatureStage;
-import com.sigmundgranaas.forgero.smithing.temperature.DynamicTemperatureSystem.TemperatureStages;
-import com.sigmundgranaas.forgero.smithing.temperature.TemperatureUtils;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureProfile;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules.TemperatureStage;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules.TemperatureStages;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureState;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -39,12 +40,12 @@ public class MinigameHudOverlay implements HudRenderCallback {
 		double progress = MorphedItem.getMorphProgress(stack);
 		if (progress >= 1.0) return;
 
-		int temp = TemperatureUtils.getTemperature(stack);
-		int max = Math.max(TemperatureUtils.getMaxTemp(stack), 1);
+		int temp = TemperatureState.currentTemperature(stack);
+		TemperatureProfile profile = TemperatureProfile.from(stack);
+		int max = Math.max(profile.maxTemperature(), 1);
 		int effectiveMax = Math.min(max, 10000);
 
-		TemperatureStages stages = DynamicTemperatureSystem.calculateStages(stack);
-		TemperatureStage currentStage = DynamicTemperatureSystem.getStage(temp, stages);
+		TemperatureStages stages = TemperatureRules.stages(profile);
 
 		int[] stageBoundaries = {0, stages.coldEnd, stages.warmEnd, stages.hotStart, stages.hotEnd, stages.overheatedStart, effectiveMax};
 
@@ -79,17 +80,17 @@ public class MinigameHudOverlay implements HudRenderCallback {
 		float unitsPerPixelX = (float) (maxWindow - minWindow) / (float) (innerWidth);
 
 		int[] stageColors = new int[]{
-			DynamicTemperatureSystem.getHudColor(TemperatureStage.COLD),
-			DynamicTemperatureSystem.getHudColor(TemperatureStage.WARM),
-			DynamicTemperatureSystem.getHudColor(TemperatureStage.HOT),
-			DynamicTemperatureSystem.getHudColor(TemperatureStage.WORKABLE),
-			DynamicTemperatureSystem.getHudColor(TemperatureStage.OVERHEATED)
+			TemperatureRules.hudColor(TemperatureStage.COLD),
+			TemperatureRules.hudColor(TemperatureStage.WARM),
+			TemperatureRules.hudColor(TemperatureStage.HOT),
+			TemperatureRules.hudColor(TemperatureStage.WORKABLE),
+			TemperatureRules.hudColor(TemperatureStage.OVERHEATED)
 		};
 
 		for (int x = 0; x < innerWidth; x++) {
 			int tempValue = Math.round(minWindow + x * unitsPerPixelX);
-			TemperatureStage stage = DynamicTemperatureSystem.getStage(tempValue, stages);
-			int color = DynamicTemperatureSystem.getHudColor(stage);
+			TemperatureStage stage = TemperatureRules.stage(tempValue, stages);
+			int color = TemperatureRules.hudColor(stage);
 			fill(ctx, innerLeft + x, innerTop, innerLeft + x + 1, innerTop + innerHeight, color);
 		}
 
@@ -138,8 +139,8 @@ public class MinigameHudOverlay implements HudRenderCallback {
 			fill(ctx, x, yStart, x + 1, yEnd, 0xFF2e2728);
 		}
 
-		int workableStart = TemperatureUtils.getWorkableTemperatureStart(stack);
-		int workableEnd = TemperatureUtils.getWorkableTemperatureEnd(stack);
+		int workableStart = profile.workableStart();
+		int workableEnd = profile.workableEnd();
 
 		if (workableStart > minWindow && workableStart < maxWindow) {
 			int x = valueToX(workableStart, minWindow, unitsPerPixelX, innerLeft, innerWidth);

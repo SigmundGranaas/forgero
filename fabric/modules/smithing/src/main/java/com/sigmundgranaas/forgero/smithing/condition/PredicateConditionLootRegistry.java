@@ -48,13 +48,11 @@ public class PredicateConditionLootRegistry {
 	}
 
 	private static void registerTemperaturePredicates() {
-		register(TemperaturePredicates.veryHotStageHitPredicate(), NEUTRAL);
-		// New continuous-time based registrations
-		register(TemperaturePredicates.veryHotAllTimePredicate(), NEUTRAL);
-		register(TemperaturePredicates.coldStageFractionAtLeast(0.30), NEUTRAL);
-		// Stage transition and chain registrations
-		register(TemperaturePredicates.veryHotToMoltenOnce(), NEUTRAL);
-		register(TemperaturePredicates.veryHotToHotToColdChain(), NEUTRAL);
+		register(TemperaturePredicates.cleanWorkableRun(), NEUTRAL);
+		register(TemperaturePredicates.workableStageHitsAtLeast(6), NEUTRAL);
+		register(TemperaturePredicates.workableHitFractionAtLeast(0.5), NEUTRAL);
+		register(TemperaturePredicates.coolingMarkerHitsAtLeast(3), NEUTRAL);
+		register(TemperaturePredicates.reheatedAfterEveryQuench(), NEUTRAL);
 	}
 
 	public static List<NamedCondition> getLootTable(MatchContext context) {
@@ -101,7 +99,7 @@ public class PredicateConditionLootRegistry {
 					.map(entity -> entity.getWorld().getRegistryKey().getValue().toString().equals(dimensionId))
 					.orElse(false);
 
-			Integer forgingHits = context.get(MinecraftContextKeys.VERY_HOT_STAGE_HITS).orElse(0);
+			Integer forgingHits = context.get(MinecraftContextKeys.WORKABLE_STAGE_HITS).orElse(0);
 			Integer totalHits = context.get(com.sigmundgranaas.forgero.minecraft.common.match.MinecraftContextKeys.TOTAL_HITS).orElse(0);
 			boolean mostHitsInForgingStage = totalHits > 0 && forgingHits > totalHits / 2;
 
