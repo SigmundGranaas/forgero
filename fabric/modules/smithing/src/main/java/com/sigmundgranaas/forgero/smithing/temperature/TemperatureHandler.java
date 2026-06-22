@@ -1,23 +1,15 @@
 package com.sigmundgranaas.forgero.smithing.temperature;
 
-import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import com.sigmundgranaas.forgero.smithing.item.custom.SmithingTongsItem;
-import com.sigmundgranaas.forgero.smithing.minigame.MinigameLogic;
-import com.sigmundgranaas.forgero.smithing.networking.S2C.TemperatureSyncS2CPacket;
-import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules.TemperatureStage;
-import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules.TemperatureStages;
 
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 
 public class TemperatureHandler {
-    private static final int FLUID_COOL_PER_TICK = 20;
     private static int tickCounter = 0;
     private static final int TICK_INTERVAL = 20;
     private static final int INVENTORY_COOL_PER_TICK = 1;
@@ -67,67 +59,17 @@ public class TemperatureHandler {
                 continue;
             }
 
-            boolean tracksTemperature = TemperatureRules.canTrackTemperature(stack);
-
-            if (!tracksTemperature && !MorphedItem.needsQuench(stack)) {
+            if (TemperatureRules.isItemInFilledWaterCauldron(itemEntity, world)) {
                 continue;
             }
 
-            BlockPos pos = itemEntity.getBlockPos();
-            boolean inFilledCauldron = TemperatureRules.isItemInFilledWaterCauldron(itemEntity, world);
-
-            if (!tracksTemperature) {
-                if (inFilledCauldron) {
-                    ItemStack finalized = MinigameLogic.finalizeAfterQuenchIfReady(stack, world, pos);
-
-                    if (finalized != stack) {
-                        itemEntity.setStack(finalized);
-                    }
-                }
-
+            if (!TemperatureRules.canTrackTemperature(stack)) {
                 continue;
             }
-
             int temp = TemperatureState.currentTemperature(stack);
             if (temp > TemperatureState.DEFAULT_TEMPERATURE) {
                 temp = Math.max(TemperatureState.DEFAULT_TEMPERATURE, temp - INVENTORY_COOL_PER_TICK);
                 TemperatureRules.setTemperature(stack, temp);
-            }
-            boolean changed = false;
-
-            TemperatureStages stages = TemperatureRules.stages(stack);
-            // emitTemperatureEffects(world, itemEntity, pos, temp, stages);
-
-            if (inFilledCauldron) {
-                if (temp > 100) {
-                    world.spawnParticles(ParticleTypes.CLOUD, itemEntity.getX(), itemEntity.getY() + 0.2, itemEntity.getZ(), 8, 0.2, 0.1, 0.2, 0.01);
-                    world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_FIRE_EXTINGUISH, net.minecraft.sound.SoundCategory.BLOCKS, 0.7F, 1.2F);
-                }
-                if (temp > TemperatureState.DEFAULT_TEMPERATURE) {
-                    temp = Math.max(TemperatureState.DEFAULT_TEMPERATURE, temp - FLUID_COOL_PER_TICK);
-                    TemperatureRules.quench(stack, temp);
-                    ItemStack finalized = MinigameLogic.finalizeAfterQuenchIfReady(stack, world, pos);
-
-                    if (finalized != stack) {
-                        itemEntity.setStack(finalized);
-                        stack = finalized;
-                        temp = TemperatureState.currentTemperature(stack);
-                    }
-
-                    changed = true;
-                } else if (MorphedItem.needsQuench(stack)) {
-                    ItemStack finalized = MinigameLogic.finalizeAfterQuenchIfReady(stack, world, pos);
-
-                    if (finalized != stack) {
-                        itemEntity.setStack(finalized);
-                        stack = finalized;
-                        temp = TemperatureState.currentTemperature(stack);
-                        changed = true;
-                    }
-                }
-            }
-            if (changed) {
-                TemperatureSyncS2CPacket.sendToClient(itemEntity, temp);
             }
         }
     }

@@ -44,9 +44,20 @@ public class MinigameLogic {
 	public static final int MARKER_TIMEOUT_COOLING = 10;
 	public static final int NORMAL_MARKER_HEAT_CHANGE = 40;
 	public static final int COOLING_MARKER_HEAT_CHANGE = -25;
+	public static final int PERFECT_NORMAL_MARKER_HEAT_CHANGE = 25;
+	public static final int POOR_NORMAL_MARKER_HEAT_CHANGE = 55;
+	public static final int PERFECT_COOLING_MARKER_HEAT_CHANGE = -40;
+	public static final int POOR_COOLING_MARKER_HEAT_CHANGE = -10;
 	private static final int STAGE_COUNT = 5;
+	private static final int STRIKE_QUALITY_COUNT = 3;
 
 	private static final double MARKER_HIT_RADIUS_SQ = 0.0075d;
+	private static final double PERFECT_TIMING_START = 0.35d;
+	private static final double PERFECT_TIMING_END = 0.65d;
+	private static final double GOOD_TIMING_START = 0.20d;
+	private static final double GOOD_TIMING_END = 0.80d;
+	private static final double COOLING_MARKER_UPPER_WORKABLE_START = 0.65d;
+	private static final double COOLING_MARKER_MAX_CHANCE = 0.75d;
 
 	private static final String HITS_NBT_KEY = "forgero_markerHitsCount";
 	private static final String ATTEMPTS_NBT_KEY = "forgero_markerAttempts";
@@ -54,17 +65,30 @@ public class MinigameLogic {
 	private static final String MISS_MARKER_NBT_KEY = "forgero_missMarkerHits";
 	private static final String REQUIRED_HITS_NBT_KEY = "forgero_required_hits";
 	private static final String FAILED_HEAT_STAGE_COUNTS_NBT_KEY = "forgero_failedHeatStageCounts";
-	private static final Random RESULT_RANDOM = new Random();
+	private static final String STRIKE_QUALITY_COUNTS_NBT_KEY = "forgero_strikeQualityCounts";
+	private static final String COOLING_STRIKE_QUALITY_COUNTS_NBT_KEY = "forgero_coolingStrikeQualityCounts";
+	private static final String COOLING_STAGE_COUNTS_NBT_KEY = "forgero_coolingStageCounts";
+	private static final String CURRENT_PERFECT_STREAK_NBT_KEY = "forgero_currentPerfectStrikeStreak";
+	private static final String BEST_PERFECT_STREAK_NBT_KEY = "forgero_bestPerfectStrikeStreak";
+	private static final String CURRENT_SKILLED_STREAK_NBT_KEY = "forgero_currentSkilledStrikeStreak";
+	private static final String BEST_SKILLED_STREAK_NBT_KEY = "forgero_bestSkilledStrikeStreak";
 
 	private final List<Vec2f> markerPositions = new ArrayList<>();
 	private final List<Boolean> markerHits = new ArrayList<>();
 	private final List<Integer> hitStageIndices = new ArrayList<>();
 	private final List<Integer> coolingMarkerIndices = new ArrayList<>();
 	private final int[] failedHeatStageCounts = new int[STAGE_COUNT];
+	private final int[] strikeQualityCounts = new int[STRIKE_QUALITY_COUNT];
+	private final int[] coolingStrikeQualityCounts = new int[STRIKE_QUALITY_COUNT];
+	private final int[] coolingStageCounts = new int[STAGE_COUNT];
 	private final Random random = new Random();
 
 	private int coolingMarkerHits = 0;
 	private int missMarkerHits = 0;
+	private int currentPerfectStrikeStreak = 0;
+	private int bestPerfectStrikeStreak = 0;
+	private int currentSkilledStrikeStreak = 0;
+	private int bestSkilledStrikeStreak = 0;
 
 	@Setter
 	private int markerAttempts = 0;
@@ -83,10 +107,20 @@ public class MinigameLogic {
 		TIMEOUT
 	}
 
+	public enum StrikeQuality {
+		POOR,
+		GOOD,
+		PERFECT
+	}
+
 	public interface MinigameCallback {
 		void markDirty();
 
-		void playHitEffect(Vec2f markerLocalPos);
+		void playHitEffect(Vec2f markerLocalPos, StrikeQuality quality);
+
+		default void playHitEffect(Vec2f markerLocalPos) {
+			playHitEffect(markerLocalPos, StrikeQuality.GOOD);
+		}
 
 		void playMissEffect();
 
@@ -149,12 +183,13 @@ public class MinigameLogic {
 		coolingMarkerHits = 0;
 		missMarkerHits = 0;
 		clearFailedHeatStageCounts();
+		clearStrikeQualityCounts();
+		clearCoolingStageCounts();
+		clearStrikeStreaks();
 		markerTimeout = 0;
 		markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
 
 		coolingMarkerIndices.clear();
-
-		randomizeCoolingMarkerIndices();
 
 		if (!stack.isEmpty() && stack.getItem() instanceof MorphedItem) {
 			NbtCompound nbt = stack.getOrCreateNbt();
@@ -178,6 +213,8 @@ public class MinigameLogic {
 				}
 
 				readFailedHeatStageCounts(nbt);
+				readStrikeQualityCounts(nbt);
+				readStrikeStreaks(nbt);
 
 				if (nbt.contains("coolingMarkerIndices")) {
 					coolingMarkerIndices.clear();
@@ -189,19 +226,25 @@ public class MinigameLogic {
 							coolingMarkerIndices.add(idx);
 						}
 					}
-
-					randomizeCoolingMarkerIndices();
 				}
+
+				readCoolingStageCounts(nbt);
 			} else {
 				this.coolingMarkerHits = 0;
 				this.missMarkerHits = 0;
 				clearFailedHeatStageCounts();
+				clearStrikeQualityCounts();
+				clearCoolingStageCounts();
+				clearStrikeStreaks();
 				hitStageIndices.clear();
 			}
 		} else {
 			this.coolingMarkerHits = 0;
 			this.missMarkerHits = 0;
 			clearFailedHeatStageCounts();
+			clearStrikeQualityCounts();
+			clearCoolingStageCounts();
+			clearStrikeStreaks();
 			hitStageIndices.clear();
 		}
 
@@ -218,6 +261,9 @@ public class MinigameLogic {
 		coolingMarkerHits = 0;
 		missMarkerHits = 0;
 		clearFailedHeatStageCounts();
+		clearStrikeQualityCounts();
+		clearCoolingStageCounts();
+		clearStrikeStreaks();
 		markerTimeout = 0;
 		markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
 
@@ -322,19 +368,25 @@ public class MinigameLogic {
 	) {
 		int temperature = TemperatureState.currentTemperature(stack);
 		TemperatureProfile profile = TemperatureProfile.from(stack);
-		TemperatureStage stage = TemperatureRules.stage(temperature, TemperatureRules.stages(profile));
+		TemperatureRules.TemperatureStages stages = TemperatureRules.stages(profile);
+		TemperatureStage stage = TemperatureRules.stage(temperature, stages);
 		int stageIndex = stageIndexFor(stage);
 		boolean coolingMarker = coolingMarkerIndices.contains(markerIndex);
-		int tempChange = coolingMarker ? COOLING_MARKER_HEAT_CHANGE : NORMAL_MARKER_HEAT_CHANGE;
+		int baseTempChange = coolingMarker ? COOLING_MARKER_HEAT_CHANGE : NORMAL_MARKER_HEAT_CHANGE;
 
 		if (!canShapeAtTemperature(stage)) {
 			failedHeatStageCounts[stageIndex]++;
 			missMarkerHits++;
+			resetActiveStrikeStreaks();
 
 			callback.playMissEffect();
-			applyTemperatureChange(stack, profile, temperature, tempChange);
+			applyTemperatureChange(stack, profile, temperature, baseTempChange);
 			return;
 		}
+
+		StrikeQuality quality = strikeQualityFor(coolingMarker);
+		int tempChange = heatChangeFor(coolingMarker, quality, stage, temperature, stages);
+		recordStrikeQuality(quality, coolingMarker);
 
 		markerHitsCount++;
 
@@ -346,7 +398,7 @@ public class MinigameLogic {
 
 		if (!markerPositions.isEmpty()) {
 			markerHits.set(0, true);
-			callback.playHitEffect(markerPositions.get(0));
+			callback.playHitEffect(markerPositions.get(0), quality);
 		}
 
 		hitStageIndices.add(stageIndex);
@@ -355,6 +407,7 @@ public class MinigameLogic {
 
 		if (coolingMarker) {
 			coolingMarkerHits++;
+			coolingStageCounts[stageIndex]++;
 		}
 	}
 
@@ -362,6 +415,192 @@ public class MinigameLogic {
 		return stage == TemperatureStage.HOT
 				|| stage == TemperatureStage.WORKABLE
 				|| stage == TemperatureStage.OVERHEATED;
+	}
+
+	private StrikeQuality strikeQualityFor(boolean coolingMarker) {
+		int lifetime = markerLifetime(coolingMarker);
+
+		if (lifetime <= 0) {
+			return StrikeQuality.GOOD;
+		}
+
+		int elapsed = Math.max(0, Math.min(lifetime, lifetime - markerTimeout));
+		double timing = elapsed / (double) lifetime;
+
+		if (timing >= PERFECT_TIMING_START && timing <= PERFECT_TIMING_END) {
+			return StrikeQuality.PERFECT;
+		}
+
+		if (timing >= GOOD_TIMING_START && timing <= GOOD_TIMING_END) {
+			return StrikeQuality.GOOD;
+		}
+
+		return StrikeQuality.POOR;
+	}
+
+	private int markerLifetime(boolean coolingMarker) {
+		return coolingMarker ? MARKER_LIFETIME_TICKS_COOLING : MARKER_LIFETIME_TICKS_NORMAL;
+	}
+
+	private void recordStrikeQuality(StrikeQuality quality, boolean coolingMarker) {
+		int index = strikeQualityIndex(quality);
+		strikeQualityCounts[index]++;
+
+		if (coolingMarker) {
+			coolingStrikeQualityCounts[index]++;
+		}
+
+		updateStrikeStreaks(quality);
+	}
+
+	private void updateStrikeStreaks(StrikeQuality quality) {
+		if (quality == StrikeQuality.PERFECT) {
+			currentPerfectStrikeStreak++;
+		} else {
+			currentPerfectStrikeStreak = 0;
+		}
+
+		if (quality == StrikeQuality.POOR) {
+			currentSkilledStrikeStreak = 0;
+		} else {
+			currentSkilledStrikeStreak++;
+		}
+
+		bestPerfectStrikeStreak = Math.max(bestPerfectStrikeStreak, currentPerfectStrikeStreak);
+		bestSkilledStrikeStreak = Math.max(bestSkilledStrikeStreak, currentSkilledStrikeStreak);
+	}
+
+	private void resetActiveStrikeStreaks() {
+		currentPerfectStrikeStreak = 0;
+		currentSkilledStrikeStreak = 0;
+	}
+
+	private int heatChangeFor(
+			boolean coolingMarker,
+			StrikeQuality quality,
+			TemperatureStage stage,
+			int temperature,
+			TemperatureRules.TemperatureStages stages
+	) {
+		int baseHeatChange = switch (quality) {
+			case PERFECT -> coolingMarker ? PERFECT_COOLING_MARKER_HEAT_CHANGE : PERFECT_NORMAL_MARKER_HEAT_CHANGE;
+			case GOOD -> coolingMarker ? COOLING_MARKER_HEAT_CHANGE : NORMAL_MARKER_HEAT_CHANGE;
+			case POOR -> coolingMarker ? POOR_COOLING_MARKER_HEAT_CHANGE : POOR_NORMAL_MARKER_HEAT_CHANGE;
+		};
+
+		if (!coolingMarker) {
+			return baseHeatChange;
+		}
+
+		return baseHeatChange - coolingRewardBonus(stage, quality, temperature, stages);
+	}
+
+	private int coolingRewardBonus(
+			TemperatureStage stage,
+			StrikeQuality quality,
+			int temperature,
+			TemperatureRules.TemperatureStages stages
+	) {
+		if (stage == TemperatureStage.WORKABLE && heatPressureWithWorkableRange(temperature, stages) > 0.0d) {
+			return switch (quality) {
+				case PERFECT -> 12;
+				case GOOD -> 8;
+				case POOR -> 4;
+			};
+		}
+
+		return switch (stage) {
+			case OVERHEATED -> switch (quality) {
+				case PERFECT -> 30;
+				case GOOD -> 25;
+				case POOR -> 15;
+			};
+			case HOT -> switch (quality) {
+				case PERFECT -> 15;
+				case GOOD -> 10;
+				case POOR -> 5;
+			};
+			default -> 0;
+		};
+	}
+
+	private boolean selectCoolingMarkerForNextMarker(ItemStack stack) {
+		int markerIndex = markerHitsCount;
+
+		if (!shouldOfferCoolingMarker(stack)) {
+			coolingMarkerIndices.remove(Integer.valueOf(markerIndex));
+			return false;
+		}
+
+		if (!coolingMarkerIndices.contains(markerIndex)) {
+			coolingMarkerIndices.add(markerIndex);
+		}
+
+		return true;
+	}
+
+	private boolean shouldOfferCoolingMarker(ItemStack stack) {
+		if (coolingMarkerIndices.size() >= maxCoolingMarkers()) {
+			return false;
+		}
+
+		double pressure = heatPressure(stack);
+
+		if (pressure <= 0.0d) {
+			return false;
+		}
+
+		return pressure >= 1.0d || random.nextDouble() < pressure;
+	}
+
+	private int maxCoolingMarkers() {
+		return Math.min(COOLING_MARKERS, Math.max(0, requiredHits - 1));
+	}
+
+	private double heatPressure(ItemStack stack) {
+		if (stack.isEmpty() || !TemperatureRules.canTrackTemperature(stack)) {
+			return 0.0d;
+		}
+
+		int temperature = TemperatureState.currentTemperature(stack);
+		TemperatureRules.TemperatureStages stages = TemperatureRules.stages(stack);
+
+		if (stages.workableStart > TemperatureState.DEFAULT_TEMPERATURE
+				&& stages.workableEnd > stages.workableStart) {
+			return heatPressureWithWorkableRange(temperature, stages);
+		}
+
+		return switch (TemperatureRules.stage(temperature, stages)) {
+			case OVERHEATED -> 1.0d;
+			case HOT -> 0.4d;
+			default -> 0.0d;
+		};
+	}
+
+	private double heatPressureWithWorkableRange(
+			int temperature,
+			TemperatureRules.TemperatureStages stages
+	) {
+		if (temperature < stages.workableStart) {
+			return 0.0d;
+		}
+
+		if (temperature > stages.workableEnd
+				|| temperature + NORMAL_MARKER_HEAT_CHANGE > stages.workableEnd) {
+			return 1.0d;
+		}
+
+		double workableProgress = (temperature - stages.workableStart)
+				/ (double) (stages.workableEnd - stages.workableStart);
+
+		if (workableProgress < COOLING_MARKER_UPPER_WORKABLE_START) {
+			return 0.0d;
+		}
+
+		double upperProgress = (workableProgress - COOLING_MARKER_UPPER_WORKABLE_START)
+				/ (1.0d - COOLING_MARKER_UPPER_WORKABLE_START);
+
+		return Math.min(COOLING_MARKER_MAX_CHANCE, 0.25d + upperProgress * 0.5d);
 	}
 
 	private void applyTemperatureChange(
@@ -378,9 +617,12 @@ public class MinigameLogic {
 
 	private void applyFailedMarkerAttempt() {
 		missMarkerHits++;
+		resetActiveStrikeStreaks();
 	}
 
 	private void applyMarkerTimeout(ItemStack stack) {
+		resetActiveStrikeStreaks();
+
 		int temperature = TemperatureState.currentTemperature(stack);
 
 		if (temperature <= TemperatureState.DEFAULT_TEMPERATURE) {
@@ -489,10 +731,12 @@ public class MinigameLogic {
 					return;
 				}
 
+				boolean coolingMarker = selectCoolingMarkerForNextMarker(stackForMarker);
+
 				markerPositions.add(marker);
 				markerHits.add(false);
 
-				markerTimeout = coolingMarkerIndices.contains(markerHitsCount)
+				markerTimeout = coolingMarker
 						? MARKER_LIFETIME_TICKS_COOLING
 						: MARKER_LIFETIME_TICKS_NORMAL;
 
@@ -543,8 +787,7 @@ public class MinigameLogic {
 
 		ItemStack resultStack = createFinalResultStack(
 				stack,
-				logic.createMatchContext(world, pos, stack),
-				RESULT_RANDOM
+				logic.createMatchContext(world, pos, stack)
 		);
 
 		if (resultStack.isEmpty()) {
@@ -559,22 +802,12 @@ public class MinigameLogic {
 			return false;
 		}
 
-		if (!TemperatureRules.canTrackTemperature(stack)) {
-			return true;
-		}
-
-		TemperatureRules.TemperatureStages stages = TemperatureRules.stages(stack);
-		int temperature = TemperatureState.currentTemperature(stack);
-
-		return stages.workableStart <= TemperatureState.DEFAULT_TEMPERATURE
-				|| temperature < stages.workableStart
-				|| temperature <= TemperatureState.DEFAULT_TEMPERATURE;
+		return TemperatureState.currentTemperature(stack) <= TemperatureState.DEFAULT_TEMPERATURE;
 	}
 
 	private static ItemStack createFinalResultStack(
 			ItemStack stack,
-			MatchContext context,
-			Random random
+			MatchContext context
 	) {
 		ItemStack storedResultStack = MorphedItem.getResultStack(stack);
 		Item resultItem = storedResultStack.isEmpty() ? MorphedItem.getResultItem(stack) : storedResultStack.getItem();
@@ -588,7 +821,7 @@ public class MinigameLogic {
 				: storedResultStack.copy();
 		resultStack.setCount(stack.getCount());
 
-		resultStack = applyCondition(resultStack, context, random);
+		resultStack = applyCondition(resultStack, context);
 
 		TemperatureProfile.from(stack).writeTo(resultStack);
 		TemperatureState.copyFrom(stack, resultStack);
@@ -598,8 +831,7 @@ public class MinigameLogic {
 
 	private static ItemStack applyCondition(
 			ItemStack resultStack,
-			MatchContext context,
-			Random random
+			MatchContext context
 	) {
 		var stateOpt = StateService.INSTANCE.convert(resultStack);
 
@@ -611,9 +843,12 @@ public class MinigameLogic {
 		var state = stateOpt.get();
 
 		com.sigmundgranaas.forgero.core.condition.NamedCondition directCondition =
-				PredicateConditionLootRegistry.getCondition(context);
+				PredicateConditionLootRegistry.getConditions(context).stream()
+						.filter(condition -> condition.matches(state))
+						.findFirst()
+						.orElse(null);
 
-		if (directCondition != null && directCondition.matches(state)) {
+		if (directCondition != null) {
 			var conditioned = conditional.applyCondition(directCondition);
 			var newStackOpt = StateService.INSTANCE.convert(
 					(com.sigmundgranaas.forgero.core.state.State) conditioned
@@ -621,26 +856,7 @@ public class MinigameLogic {
 
 			return newStackOpt.orElse(resultStack);
 		}
-
-		var lootTable = PredicateConditionLootRegistry.getLootTable(context);
-		List<com.sigmundgranaas.forgero.core.condition.NamedCondition> applicableConditions =
-				lootTable.stream()
-						.filter(cond -> cond.matches(state))
-						.toList();
-
-		if (applicableConditions.isEmpty()) {
-			return resultStack;
-		}
-
-		com.sigmundgranaas.forgero.core.condition.NamedCondition randomCondition =
-				applicableConditions.get(random.nextInt(applicableConditions.size()));
-
-		var conditioned = conditional.applyCondition(randomCondition);
-		var newStackOpt = StateService.INSTANCE.convert(
-				(com.sigmundgranaas.forgero.core.state.State) conditioned
-		);
-
-		return newStackOpt.orElse(resultStack);
+		return resultStack;
 	}
 
 	private MatchContext createMatchContext(MinigameCallback callback, ItemStack stack) {
@@ -664,12 +880,15 @@ public class MinigameLogic {
 		context = context.put(MinecraftContextKeys.COOLING_MARKER_HITS, coolingMarkerHits);
 		context = context.put(MinecraftContextKeys.QUENCH_COUNT, TemperatureState.quenchCount(stack));
 		context = context.put(MinecraftContextKeys.REHEAT_COUNT, TemperatureState.reheatCount(stack));
+		context = putStrikeQualityContext(context);
+		context = putQuenchContext(context, stack);
 
 		context = context.put(MinecraftContextKeys.COLD_STAGE_HITS, stageCounts[0]);
 		context = context.put(MinecraftContextKeys.WARM_STAGE_HITS, stageCounts[1]);
 		context = context.put(MinecraftContextKeys.HOT_STAGE_HITS, stageCounts[2]);
 		context = context.put(MinecraftContextKeys.WORKABLE_STAGE_HITS, stageCounts[3]);
 		context = context.put(MinecraftContextKeys.OVERHEATED_STAGE_HITS, stageCounts[4]);
+		context = putCoolingStageContext(context);
 
 		int stageFractionDenominator = Math.max(1, totalStageHits);
 		context = context.put(MinecraftContextKeys.COLD_STAGE_FRACTION, stageCounts[0] / (double) stageFractionDenominator);
@@ -682,6 +901,65 @@ public class MinigameLogic {
 				MinecraftContextKeys.STAGE_CHANGE_SEQUENCE,
 				hitStageIndices.stream().mapToInt(Integer::intValue).toArray()
 		);
+
+		return context;
+	}
+
+	private MatchContext putStrikeQualityContext(MatchContext context) {
+		int poor = strikeQualityCounts[strikeQualityIndex(StrikeQuality.POOR)];
+		int good = strikeQualityCounts[strikeQualityIndex(StrikeQuality.GOOD)];
+		int perfect = strikeQualityCounts[strikeQualityIndex(StrikeQuality.PERFECT)];
+		int total = Math.max(1, poor + good + perfect);
+
+		context = context.put(MinecraftContextKeys.POOR_STRIKES, poor);
+		context = context.put(MinecraftContextKeys.GOOD_STRIKES, good);
+		context = context.put(MinecraftContextKeys.PERFECT_STRIKES, perfect);
+		context = context.put(MinecraftContextKeys.POOR_STRIKE_FRACTION, poor / (double) total);
+		context = context.put(MinecraftContextKeys.GOOD_STRIKE_FRACTION, good / (double) total);
+		context = context.put(MinecraftContextKeys.PERFECT_STRIKE_FRACTION, perfect / (double) total);
+		context = context.put(MinecraftContextKeys.PERFECT_STRIKE_STREAK, bestPerfectStrikeStreak);
+		context = context.put(MinecraftContextKeys.SKILLED_STRIKE_STREAK, bestSkilledStrikeStreak);
+
+		context = context.put(
+				MinecraftContextKeys.POOR_COOLING_STRIKES,
+				coolingStrikeQualityCounts[strikeQualityIndex(StrikeQuality.POOR)]
+		);
+		context = context.put(
+				MinecraftContextKeys.GOOD_COOLING_STRIKES,
+				coolingStrikeQualityCounts[strikeQualityIndex(StrikeQuality.GOOD)]
+		);
+		context = context.put(
+				MinecraftContextKeys.PERFECT_COOLING_STRIKES,
+				coolingStrikeQualityCounts[strikeQualityIndex(StrikeQuality.PERFECT)]
+		);
+
+		return context;
+	}
+
+	private MatchContext putCoolingStageContext(MatchContext context) {
+		context = context.put(MinecraftContextKeys.COOLING_COLD_STAGE_HITS, coolingStageCounts[0]);
+		context = context.put(MinecraftContextKeys.COOLING_WARM_STAGE_HITS, coolingStageCounts[1]);
+		context = context.put(MinecraftContextKeys.COOLING_HOT_STAGE_HITS, coolingStageCounts[2]);
+		context = context.put(MinecraftContextKeys.COOLING_WORKABLE_STAGE_HITS, coolingStageCounts[3]);
+		context = context.put(MinecraftContextKeys.COOLING_OVERHEATED_STAGE_HITS, coolingStageCounts[4]);
+		context = context.put(MinecraftContextKeys.COOLING_STAGE_HIT_COUNTS, Arrays.copyOf(coolingStageCounts, coolingStageCounts.length));
+
+		return context;
+	}
+
+	private MatchContext putQuenchContext(MatchContext context, ItemStack stack) {
+		context = context.put(MinecraftContextKeys.TOTAL_QUENCH_SESSIONS, SmithingRewardData.totalQuenchSessions(stack));
+		context = context.put(MinecraftContextKeys.IN_PROGRESS_QUENCH_SESSIONS, SmithingRewardData.inProgressQuenchSessions(stack));
+		context = context.put(MinecraftContextKeys.FINAL_QUENCH_SESSIONS, SmithingRewardData.finalQuenchSessions(stack));
+		context = context.put(MinecraftContextKeys.FINAL_QUENCH_START_TEMPERATURE, SmithingRewardData.finalQuenchStartTemperature(stack));
+		context = context.put(MinecraftContextKeys.FINAL_QUENCH_START_STAGE, SmithingRewardData.finalQuenchStartStage(stack));
+		context = context.put(MinecraftContextKeys.LAST_QUENCH_START_TEMPERATURE, SmithingRewardData.lastQuenchStartTemperature(stack));
+		context = context.put(MinecraftContextKeys.LAST_QUENCH_START_STAGE, SmithingRewardData.lastQuenchStartStage(stack));
+		context = context.put(MinecraftContextKeys.FINAL_QUENCH_COMPLETED_IN_ONE_GO, SmithingRewardData.finalQuenchCompletedInOneGo(stack));
+		context = context.put(MinecraftContextKeys.QUENCHED_DURING_SMITHING, SmithingRewardData.quenchedDuringSmithing(stack));
+		context = context.put(MinecraftContextKeys.QUENCH_START_TEMPERATURES, SmithingRewardData.quenchStartTemperatures(stack));
+		context = context.put(MinecraftContextKeys.QUENCH_START_STAGES, SmithingRewardData.quenchStartStages(stack));
+		context = context.put(MinecraftContextKeys.QUENCH_CONTEXT_SEQUENCE, SmithingRewardData.quenchContextSequence(stack));
 
 		return context;
 	}
@@ -749,6 +1027,13 @@ public class MinigameLogic {
 				FAILED_HEAT_STAGE_COUNTS_NBT_KEY,
 				failedHeatStageCounts
 		);
+		itemNbt.putIntArray(STRIKE_QUALITY_COUNTS_NBT_KEY, strikeQualityCounts);
+		itemNbt.putIntArray(COOLING_STRIKE_QUALITY_COUNTS_NBT_KEY, coolingStrikeQualityCounts);
+		itemNbt.putIntArray(COOLING_STAGE_COUNTS_NBT_KEY, coolingStageCounts);
+		itemNbt.putInt(CURRENT_PERFECT_STREAK_NBT_KEY, currentPerfectStrikeStreak);
+		itemNbt.putInt(BEST_PERFECT_STREAK_NBT_KEY, bestPerfectStrikeStreak);
+		itemNbt.putInt(CURRENT_SKILLED_STREAK_NBT_KEY, currentSkilledStrikeStreak);
+		itemNbt.putInt(BEST_SKILLED_STREAK_NBT_KEY, bestSkilledStrikeStreak);
 
 	}
 	
@@ -781,6 +1066,13 @@ public class MinigameLogic {
 				coolingMarkerIndices.stream().mapToInt(Integer::intValue).toArray()
 		);
 		nbt.putIntArray(FAILED_HEAT_STAGE_COUNTS_NBT_KEY, failedHeatStageCounts);
+		nbt.putIntArray(STRIKE_QUALITY_COUNTS_NBT_KEY, strikeQualityCounts);
+		nbt.putIntArray(COOLING_STRIKE_QUALITY_COUNTS_NBT_KEY, coolingStrikeQualityCounts);
+		nbt.putIntArray(COOLING_STAGE_COUNTS_NBT_KEY, coolingStageCounts);
+		nbt.putInt(CURRENT_PERFECT_STREAK_NBT_KEY, currentPerfectStrikeStreak);
+		nbt.putInt(BEST_PERFECT_STREAK_NBT_KEY, bestPerfectStrikeStreak);
+		nbt.putInt(CURRENT_SKILLED_STREAK_NBT_KEY, currentSkilledStrikeStreak);
+		nbt.putInt(BEST_SKILLED_STREAK_NBT_KEY, bestSkilledStrikeStreak);
 		nbt.putDouble("morphProgress", getMorphProgress());
 	}
 
@@ -833,6 +1125,8 @@ public class MinigameLogic {
 		}
 
 		readFailedHeatStageCounts(nbt);
+		readStrikeQualityCounts(nbt);
+		readStrikeStreaks(nbt);
 
 		coolingMarkerIndices.clear();
 
@@ -846,7 +1140,7 @@ public class MinigameLogic {
 			}
 		}
 
-		randomizeCoolingMarkerIndices();
+		readCoolingStageCounts(nbt);
 
 	}
 
@@ -861,6 +1155,9 @@ public class MinigameLogic {
 			this.requiredHits = ONE_MATERIAL_REQUIRED_HITS;
 			this.hitStageIndices.clear();
 			clearFailedHeatStageCounts();
+			clearStrikeQualityCounts();
+			clearCoolingStageCounts();
+			clearStrikeStreaks();
 			this.coolingMarkerIndices.clear();
 			return;
 		}
@@ -873,6 +1170,9 @@ public class MinigameLogic {
 			this.requiredHits = ONE_MATERIAL_REQUIRED_HITS;
 			this.hitStageIndices.clear();
 			clearFailedHeatStageCounts();
+			clearStrikeQualityCounts();
+			clearCoolingStageCounts();
+			clearStrikeStreaks();
 			this.coolingMarkerIndices.clear();
 			return;
 		}
@@ -901,6 +1201,8 @@ public class MinigameLogic {
 		}
 
 		readFailedHeatStageCounts(itemNbt);
+		readStrikeQualityCounts(itemNbt);
+		readStrikeStreaks(itemNbt);
 
 		this.coolingMarkerHits = itemNbt.contains(COOLING_MARKER_HITS_NBT_KEY)
 				? itemNbt.getInt(COOLING_MARKER_HITS_NBT_KEY)
@@ -918,7 +1220,7 @@ public class MinigameLogic {
 			}
 		}
 
-		randomizeCoolingMarkerIndices();
+		readCoolingStageCounts(itemNbt);
 
 	}
 
@@ -996,6 +1298,22 @@ public class MinigameLogic {
 		Arrays.fill(failedHeatStageCounts, 0);
 	}
 
+	private void clearStrikeQualityCounts() {
+		Arrays.fill(strikeQualityCounts, 0);
+		Arrays.fill(coolingStrikeQualityCounts, 0);
+	}
+
+	private void clearCoolingStageCounts() {
+		Arrays.fill(coolingStageCounts, 0);
+	}
+
+	private void clearStrikeStreaks() {
+		currentPerfectStrikeStreak = 0;
+		bestPerfectStrikeStreak = 0;
+		currentSkilledStrikeStreak = 0;
+		bestSkilledStrikeStreak = 0;
+	}
+
 	private void readFailedHeatStageCounts(NbtCompound nbt) {
 		clearFailedHeatStageCounts();
 
@@ -1010,16 +1328,68 @@ public class MinigameLogic {
 		}
 	}
 
-	private void randomizeCoolingMarkerIndices() {
-		int availableCoolingMarkerSlots = Math.max(0, requiredHits - 1);
-		int coolingMarkerCount = Math.min(COOLING_MARKERS, availableCoolingMarkerSlots);
+	private void readStrikeQualityCounts(NbtCompound nbt) {
+		clearStrikeQualityCounts();
+		readIntCounts(nbt, STRIKE_QUALITY_COUNTS_NBT_KEY, strikeQualityCounts);
+		readIntCounts(nbt, COOLING_STRIKE_QUALITY_COUNTS_NBT_KEY, coolingStrikeQualityCounts);
+	}
 
-		while (coolingMarkerIndices.size() < coolingMarkerCount) {
-			int idx = 1 + random.nextInt(availableCoolingMarkerSlots);
+	private void readCoolingStageCounts(NbtCompound nbt) {
+		clearCoolingStageCounts();
 
-			if (!coolingMarkerIndices.contains(idx)) {
-				coolingMarkerIndices.add(idx);
+		if (nbt.contains(COOLING_STAGE_COUNTS_NBT_KEY)) {
+			readIntCounts(nbt, COOLING_STAGE_COUNTS_NBT_KEY, coolingStageCounts);
+			return;
+		}
+
+		rebuildCoolingStageCountsFromHitHistory();
+	}
+
+	private void rebuildCoolingStageCountsFromHitHistory() {
+		for (int hitIndex = 0; hitIndex < hitStageIndices.size(); hitIndex++) {
+			if (!coolingMarkerIndices.contains(hitIndex)) {
+				continue;
+			}
+
+			int stage = hitStageIndices.get(hitIndex);
+
+			if (stage >= 0 && stage < STAGE_COUNT) {
+				coolingStageCounts[stage]++;
 			}
 		}
 	}
+
+	private void readStrikeStreaks(NbtCompound nbt) {
+		currentPerfectStrikeStreak = readNonNegativeInt(nbt, CURRENT_PERFECT_STREAK_NBT_KEY);
+		bestPerfectStrikeStreak = Math.max(
+				readNonNegativeInt(nbt, BEST_PERFECT_STREAK_NBT_KEY),
+				currentPerfectStrikeStreak
+		);
+		currentSkilledStrikeStreak = readNonNegativeInt(nbt, CURRENT_SKILLED_STREAK_NBT_KEY);
+		bestSkilledStrikeStreak = Math.max(
+				readNonNegativeInt(nbt, BEST_SKILLED_STREAK_NBT_KEY),
+				currentSkilledStrikeStreak
+		);
+	}
+
+	private void readIntCounts(NbtCompound nbt, String key, int[] target) {
+		if (!nbt.contains(key)) {
+			return;
+		}
+
+		int[] counts = nbt.getIntArray(key);
+
+		for (int i = 0; i < Math.min(counts.length, target.length); i++) {
+			target[i] = Math.max(0, counts[i]);
+		}
+	}
+
+	private int readNonNegativeInt(NbtCompound nbt, String key) {
+		return nbt.contains(key) ? Math.max(0, nbt.getInt(key)) : 0;
+	}
+
+	private int strikeQualityIndex(StrikeQuality quality) {
+		return Math.max(0, Math.min(STRIKE_QUALITY_COUNT - 1, quality.ordinal()));
+	}
+
 }

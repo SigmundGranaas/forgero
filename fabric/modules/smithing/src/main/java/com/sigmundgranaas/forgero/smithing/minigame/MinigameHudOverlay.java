@@ -11,6 +11,7 @@ import com.sigmundgranaas.forgero.smithing.temperature.TemperatureState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -165,6 +166,7 @@ public class MinigameHudOverlay implements HudRenderCallback {
 		}
 		int arrowBottomY = innerTop + innerHeight + 1;
 		drawDownArrow(ctx, tempArrowX, arrowBottomY, 0xFFFFFFFF);
+		drawStrikeFeedback(ctx, mc, be, screenW / 2, barTop + barHeight + 3);
 
 		final int missBaseX = barLeft + 155;
 		final int missBaseY = barTop + 5;
@@ -176,6 +178,7 @@ public class MinigameHudOverlay implements HudRenderCallback {
 		for (int i = 0; i < toRender; i++) {
 			int x = missBaseX;
 			int y = missBaseY + i * boxStep;
+			fill(ctx, x, y, x + 3, y + 3, 0xFF000000);
 			fill(ctx, x, y, x + 1, y + 1, crossColor);
 			fill(ctx, x + 1, y + 1, x + 2, y + 2, crossColor);
 			fill(ctx, x + 2, y + 2, x + 3, y + 3, crossColor);
@@ -183,6 +186,44 @@ public class MinigameHudOverlay implements HudRenderCallback {
 			fill(ctx, x + 1, y + 1, x + 2, y + 2, crossColor);
 			fill(ctx, x, y + 2, x + 1, y + 3, crossColor);
 		}
+	}
+
+	private void drawStrikeFeedback(
+			DrawContext ctx,
+			MinecraftClient mc,
+			SmithingAnvilBlockEntity be,
+			int centerX,
+			int y
+	) {
+		MinigameLogic.StrikeQuality quality = be.getStrikeFeedbackQuality();
+
+		if (quality == null || be.getStrikeFeedbackTicks() <= 0) {
+			return;
+		}
+
+		ctx.drawCenteredTextWithShadow(
+				mc.textRenderer,
+				strikeFeedbackText(quality),
+				centerX,
+				y,
+				strikeFeedbackColor(quality)
+		);
+	}
+
+	private Text strikeFeedbackText(MinigameLogic.StrikeQuality quality) {
+		return switch (quality) {
+			case PERFECT -> Text.translatable("message.forgero.smithing.strike.clean");
+			case GOOD -> Text.translatable("message.forgero.smithing.strike.solid");
+			case POOR -> Text.translatable("message.forgero.smithing.strike.glancing");
+		};
+	}
+
+	private int strikeFeedbackColor(MinigameLogic.StrikeQuality quality) {
+		return switch (quality) {
+			case PERFECT -> 0xFF55FF55;
+			case GOOD -> 0xFFFFFFFF;
+			case POOR -> 0xFFAAAAAA;
+		};
 	}
 
     private SmithingAnvilBlockEntity findNearestActiveAnvil(MinecraftClient mc) {

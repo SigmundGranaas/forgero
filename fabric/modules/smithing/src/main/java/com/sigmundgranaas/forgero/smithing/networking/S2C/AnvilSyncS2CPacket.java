@@ -50,6 +50,12 @@ public class AnvilSyncS2CPacket {
 
 		// NEW: one-shot final morph overlay flag
 		boolean finalMorphOnce = buf.readBoolean();
+		int strikeFeedbackOrdinal = buf.readInt();
+		int strikeFeedbackTicks = buf.readInt();
+		MinigameLogic.StrikeQuality strikeFeedbackQuality = strikeFeedbackOrdinal >= 0
+				&& strikeFeedbackOrdinal < MinigameLogic.StrikeQuality.values().length
+				? MinigameLogic.StrikeQuality.values()[strikeFeedbackOrdinal]
+				: null;
 
 		client.execute(() -> {
 			// All logic that interacts with the world must be executed on the client thread
@@ -103,6 +109,7 @@ public class AnvilSyncS2CPacket {
 
 			// Update ingot crafting state
 			anvilEntity.clientSyncIngotState(ingotCrafting, plannedProductId);
+			anvilEntity.clientSyncStrikeFeedback(strikeFeedbackQuality, strikeFeedbackTicks);
 
 			// Trigger final morph overlay if requested
 			if (finalMorphOnce) {

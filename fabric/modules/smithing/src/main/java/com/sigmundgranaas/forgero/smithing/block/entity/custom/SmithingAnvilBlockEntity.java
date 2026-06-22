@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
@@ -68,6 +69,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	private static final int GUI_COOLDOWN_TICKS = 20;
 	private static final int DEFAULT_COOLING_AMOUNT = 4;
 	private static final int MAX_MATERIAL_STACK_ON_ANVIL = SchematicMaterialCost.MAX_MATERIAL_COST;
+	private static final int STRIKE_FEEDBACK_DURATION_TICKS = 12;
 
 	private static final float ANVIL_TOP_Y = 0.9375f;
 	private static final float Y_FIGHTING_OFFSET = 0.001f;
@@ -109,6 +111,12 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	private long guiBlockCooldownUntil = 0;
 
 	private transient boolean showFinalMorphOnce = false;
+	private transient MinigameLogic.StrikeQuality lastStrikeQuality = null;
+	@Nullable
+	private transient MinigameLogic.StrikeQuality strikeFeedbackQuality = null;
+	@Nullable
+	private transient UUID strikeFeedbackPlayerId = null;
+	private transient int strikeFeedbackTicks = 0;
 	private boolean pendingFinalMorphNotify = false;
 
 	public SmithingAnvilBlockEntity(BlockPos pos, BlockState state) {
@@ -116,7 +124,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	}
 
 	@Override
-	public void playHitEffect(Vec2f markerLocalPos) {
+	public void playHitEffect(Vec2f markerLocalPos, MinigameLogic.StrikeQuality quality) {
+		lastStrikeQuality = quality;
+
 		if (!(world instanceof ServerWorld serverWorld)) {
 			return;
 		}
@@ -132,16 +142,43 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 				particleY
 		);
 
+		int flameCount = switch (quality) {
+			case PERFECT -> 8;
+			case GOOD -> 4;
+			case POOR -> 2;
+		};
+		int lavaCount = switch (quality) {
+			case PERFECT -> 4;
+			case GOOD -> 2;
+			case POOR -> 1;
+		};
+		int smokeCount = quality == MinigameLogic.StrikeQuality.POOR ? 4 : 0;
+		double flameSpeed = switch (quality) {
+			case PERFECT -> 0.08D;
+			case GOOD -> 0.05D;
+			case POOR -> 0.025D;
+		};
+		float volume = switch (quality) {
+			case PERFECT -> 1.1F;
+			case GOOD -> 1.0F;
+			case POOR -> 0.65F;
+		};
+		float pitch = switch (quality) {
+			case PERFECT -> 1.25F;
+			case GOOD -> 1.0F;
+			case POOR -> 0.75F;
+		};
+
 		serverWorld.spawnParticles(
 				ParticleTypes.FLAME,
 				worldPos.x,
 				worldPos.y,
 				worldPos.z,
-				4,
+				flameCount,
 				0.001,
 				0.001,
 				0.001,
-				0.05
+				flameSpeed
 		);
 
 		serverWorld.spawnParticles(
@@ -149,20 +186,34 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 				worldPos.x,
 				worldPos.y,
 				worldPos.z,
-				2,
+				lavaCount,
 				0.01,
 				0.01,
 				0.01,
 				0.02
 		);
 
+		if (smokeCount > 0) {
+			serverWorld.spawnParticles(
+					ParticleTypes.SMOKE,
+					worldPos.x,
+					worldPos.y,
+					worldPos.z,
+					smokeCount,
+					0.04,
+					0.01,
+					0.04,
+					0.01
+			);
+		}
+
 		serverWorld.playSound(
 				null,
 				getPos(),
 				SoundEvents.BLOCK_ANVIL_PLACE,
 				SoundCategory.BLOCKS,
-				1f,
-				1f
+				volume,
+				pitch
 		);
 	}
 
@@ -297,7 +348,12 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 			playMissEffect();
 		}
 
+		lastStrikeQuality = null;
 		minigameLogic.processMarkerAttempt(hit, this);
+
+		if (lastStrikeQuality != null && player instanceof ServerPlayerEntity serverPlayer) {
+			showStrikeFeedback(serverPlayer, lastStrikeQuality);
+		}
 
 		if (minigameLogic.isComplete()) {
 			minigameLogic.resetMarkerProgress(this);
@@ -802,6 +858,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 
 			data.writeBoolean(pendingFinalMorphNotify);
 
+			MinigameLogic.StrikeQuality strikeFeedback = strikeFeedbackFor(player);
+			data.writeInt(strikeFeedback == null ? -1 : strikeFeedback.ordinal());
+			data.writeInt(strikeFeedback == null ? 0 : strikeFeedbackTicks);
+
 			ServerPlayNetworking.send(player, ModMessages.ITEM_SYNC, data);
 		}
 
@@ -826,14 +886,57 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		}
 
 		if (world.isClient) {
+			updateClientStrikeFeedbackTimer();
 			clientTick();
 			return;
 		}
 
 		updateGuiCooldown();
+		updateStrikeFeedbackTimer();
 		updateTemperatureCooling();
 
 		minigameLogic.tick(this);
+	}
+
+	private void showStrikeFeedback(ServerPlayerEntity player, MinigameLogic.StrikeQuality quality) {
+		strikeFeedbackQuality = quality;
+		strikeFeedbackPlayerId = player.getUuid();
+		strikeFeedbackTicks = STRIKE_FEEDBACK_DURATION_TICKS;
+		syncCustomDataToClients();
+	}
+
+	@Nullable
+	private MinigameLogic.StrikeQuality strikeFeedbackFor(ServerPlayerEntity player) {
+		if (strikeFeedbackTicks <= 0 || strikeFeedbackQuality == null || strikeFeedbackPlayerId == null) {
+			return null;
+		}
+
+		return strikeFeedbackPlayerId.equals(player.getUuid()) ? strikeFeedbackQuality : null;
+	}
+
+	private void updateStrikeFeedbackTimer() {
+		if (strikeFeedbackTicks <= 0) {
+			return;
+		}
+
+		strikeFeedbackTicks--;
+
+		if (strikeFeedbackTicks <= 0) {
+			strikeFeedbackQuality = null;
+			strikeFeedbackPlayerId = null;
+		}
+	}
+
+	private void updateClientStrikeFeedbackTimer() {
+		if (strikeFeedbackTicks <= 0) {
+			return;
+		}
+
+		strikeFeedbackTicks--;
+
+		if (strikeFeedbackTicks <= 0) {
+			strikeFeedbackQuality = null;
+		}
 	}
 
 	private void clientTick() {
@@ -1150,6 +1253,14 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	) {
 		this.isSmithing = ingotCrafting;
 		this.plannedProductId = plannedProductId;
+	}
+
+	public void clientSyncStrikeFeedback(
+			@Nullable MinigameLogic.StrikeQuality quality,
+			int ticks
+	) {
+		this.strikeFeedbackQuality = quality;
+		this.strikeFeedbackTicks = Math.max(0, ticks);
 	}
 
 	public void clientTriggerFinalMorphOnce() {

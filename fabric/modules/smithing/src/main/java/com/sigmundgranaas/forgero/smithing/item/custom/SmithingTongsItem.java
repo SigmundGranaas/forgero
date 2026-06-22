@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.smithing.item.custom;
 import java.util.List;
 
 import com.sigmundgranaas.forgero.smithing.minigame.MinigameLogic;
+import com.sigmundgranaas.forgero.smithing.minigame.SmithingRewardData;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureState;
 import org.jetbrains.annotations.Nullable;
@@ -33,7 +34,7 @@ public class SmithingTongsItem extends Item {
 	public static final String STORED_STACK_KEY = "forgero_stored_stack";
 	private static final int MAX_USE_TIME = 72_000;
 	private static final int QUENCH_INTERVAL_TICKS = 5;
-	private static final int QUENCH_DEGREES_PER_INTERVAL = 20;
+	private static final int QUENCH_DEGREES_PER_INTERVAL = 80;
 
 	public SmithingTongsItem(Settings settings) {
 		super(settings);
@@ -169,6 +170,11 @@ public class SmithingTongsItem extends Item {
 		int temperature = TemperatureState.currentTemperature(stored);
 
 		if (temperature <= TemperatureState.DEFAULT_TEMPERATURE) {
+			if (MorphedItem.needsQuench(stored)) {
+				SmithingRewardData.beginQuenchSessionIfNeeded(stored);
+				SmithingRewardData.completeFinalQuenchIfReady(stored);
+			}
+
 			ItemStack finalized = MinigameLogic.finalizeAfterQuenchIfReady(stored, world, cauldronPos);
 
 			if (finalized != stored) {
@@ -177,10 +183,14 @@ public class SmithingTongsItem extends Item {
 				if (user instanceof PlayerEntity player) {
 					player.getInventory().markDirty();
 				}
+			} else if (MorphedItem.needsQuench(stored)) {
+				setStoredStack(tongsStack, stored);
 			}
 
 			return;
 		}
+
+		SmithingRewardData.beginQuenchSessionIfNeeded(stored);
 
 		int cooledTemperature = Math.max(
 				TemperatureState.DEFAULT_TEMPERATURE,
@@ -188,6 +198,7 @@ public class SmithingTongsItem extends Item {
 		);
 
 		TemperatureRules.quench(stored, cooledTemperature);
+		SmithingRewardData.completeFinalQuenchIfReady(stored);
 		setStoredStack(tongsStack, MinigameLogic.finalizeAfterQuenchIfReady(stored, world, cauldronPos));
 
 		if (user instanceof PlayerEntity player) {
@@ -195,6 +206,26 @@ public class SmithingTongsItem extends Item {
 		}
 
 		emitQuenchingEffects((ServerWorld) world, cauldronPos);
+	}
+
+	@Override
+	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+		if (world.isClient) {
+			return;
+		}
+
+		ItemStack stored = getStoredStack(stack);
+
+		if (stored.isEmpty()) {
+			return;
+		}
+
+		SmithingRewardData.clearActiveQuenchSession(stored);
+		setStoredStack(stack, stored);
+
+		if (user instanceof PlayerEntity player) {
+			player.getInventory().markDirty();
+		}
 	}
 
 	private static boolean canQuench(ItemStack tongsStack) {
