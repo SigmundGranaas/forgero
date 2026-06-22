@@ -104,7 +104,7 @@
       {
         "id": "metal-max_temperature-composite",
         "type": "forgero:max_temperature",
-        "value": 1080
+        "value": 1085
       },
       {
         "id": "metal-workable_temperature_start-composite",
@@ -114,7 +114,7 @@
       {
         "id": "metal-workable_temperature_end-composite",
         "type": "forgero:workable_temperature_end",
-        "value": 800
+        "value": 900
       }
     ],
     "features": [
