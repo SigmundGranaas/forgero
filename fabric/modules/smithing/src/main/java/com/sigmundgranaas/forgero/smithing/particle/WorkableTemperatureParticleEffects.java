@@ -4,39 +4,36 @@ import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.DefaultParticleType;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
 public final class WorkableTemperatureParticleEffects {
-	private static final DefaultParticleType WORKABLE_WAX = ModParticles.WORKABLE_WAX;
-
 	/*
-	 * Subtle sparkle settings.
-	 * Lower frequency + fewer particles keeps the item readable.
+	 * END_ROD is a small white sparkle-like vanilla particle.
+	 * This looks much cleaner than a wax/smoke style particle.
 	 */
+	private static final DefaultParticleType WORKABLE_SPARKLE = ParticleTypes.WAX_OFF;
+
 	private static final int BURST_INTERVAL_TICKS = 8;
-	private static final int PARTICLES_PER_BURST = 2;
+	private static final int PARTICLES_PER_BURST = 1;
 
 	/*
-	 * Ring placement.
-	 * Particles spawn around the item, not through the center.
+	 * Spawn outside the center so the item stays visible.
 	 */
-	private static final double MIN_RING_RADIUS_FACTOR = 0.55D;
-	private static final double MAX_RING_RADIUS_FACTOR = 0.95D;
+	private static final double MIN_RING_RADIUS_FACTOR = 1.15D;
+	private static final double MAX_RING_RADIUS_FACTOR = 1.65D;
+
+	private static final double MIN_VERTICAL_OFFSET_FACTOR = 0.25D;
+	private static final double MAX_VERTICAL_OFFSET_FACTOR = 0.95D;
 
 	/*
-	 * Small vertical range so the effect hugs the item.
+	 * Very low movement so it feels like a shimmer/sparkle,
+	 * not smoke or fire.
 	 */
-	private static final double MIN_VERTICAL_OFFSET_FACTOR = 0.15D;
-	private static final double MAX_VERTICAL_OFFSET_FACTOR = 0.75D;
-
-	/*
-	 * Very gentle motion.
-	 * Sparkles should float, not look like smoke/fire.
-	 */
-	private static final double OUTWARD_SPEED = 0.004D;
-	private static final double DRIFT_SPEED = 0.003D;
-	private static final double RISE_SPEED = 0.008D;
+	private static final double OUTWARD_SPEED = 0.0015D;
+	private static final double DRIFT_SPEED = 0.001D;
+	private static final double RISE_SPEED = 0.0035D;
 
 	private WorkableTemperatureParticleEffects() {
 	}
@@ -97,17 +94,12 @@ public final class WorkableTemperatureParticleEffects {
 				MAX_VERTICAL_OFFSET_FACTOR
 		);
 
-		/*
-		 * Move slightly outward from the item center.
-		 * This makes it feel like small heat sparkles around the metal,
-		 * without covering the actual item texture.
-		 */
 		double velocityX = Math.cos(angle) * OUTWARD_SPEED + random.nextGaussian() * DRIFT_SPEED;
 		double velocityY = RISE_SPEED + random.nextDouble() * RISE_SPEED;
 		double velocityZ = Math.sin(angle) * OUTWARD_SPEED + random.nextGaussian() * DRIFT_SPEED;
 
 		world.addParticle(
-				WORKABLE_WAX,
+				WORKABLE_SPARKLE,
 				x + offsetX,
 				y + offsetY,
 				z + offsetZ,

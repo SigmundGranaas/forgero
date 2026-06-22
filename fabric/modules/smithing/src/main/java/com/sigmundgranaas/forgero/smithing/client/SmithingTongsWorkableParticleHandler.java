@@ -13,10 +13,14 @@ import net.minecraft.util.math.Vec3d;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 
 public final class SmithingTongsWorkableParticleHandler {
-	private static final double HAND_FORWARD_OFFSET = 0.45D;
-	private static final double HAND_SIDE_OFFSET = 0.34D;
-	private static final double HAND_VERTICAL_OFFSET = -0.42D;
-	private static final double PARTICLE_SPREAD = 0.08D;
+
+	private static final double HAND_FORWARD_OFFSET = 0.25;
+	private static final double HAND_SIDE_OFFSET = 0.30D;
+	private static final double HAND_VERTICAL_OFFSET = -0.25D;
+
+
+	private static final double PARTICLE_SPREAD = 0.14D;
+
 	private static final double MIN_SIDE_LENGTH_SQUARED = 1.0E-4D;
 
 	private SmithingTongsWorkableParticleHandler() {
@@ -37,6 +41,11 @@ public final class SmithingTongsWorkableParticleHandler {
 
 	private static void spawnForHand(MinecraftClient client, Hand hand) {
 		ClientPlayerEntity player = client.player;
+
+		if (player == null || client.world == null) {
+			return;
+		}
+
 		ItemStack tongsStack = player.getStackInHand(hand);
 
 		if (!(tongsStack.getItem() instanceof SmithingTongsItem)) {
@@ -44,6 +53,11 @@ public final class SmithingTongsWorkableParticleHandler {
 		}
 
 		ItemStack stored = SmithingTongsItem.getStoredStack(tongsStack);
+
+		if (stored.isEmpty()) {
+			return;
+		}
+
 		Vec3d particlePos = heldItemParticlePos(player, hand);
 
 		WorkableTemperatureParticleEffects.spawnIfWorkable(

@@ -73,7 +73,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	private static final float Y_FIGHTING_OFFSET = 0.001f;
 	private static final float MARKER_VISUAL_Y_OFFSET = 0.01f;
 	private static final float WORKABLE_PARTICLE_Y = ANVIL_TOP_Y + 0.13f;
-	private static final double WORKABLE_PARTICLE_SPREAD = 0.14D;
+	private static final double WORKABLE_PARTICLE_SPREAD = 0.20D;
 
 	private static final TagKey<Item> INGOTS_TAG = TagKey.of(
 			RegistryKeys.ITEM,
@@ -833,7 +833,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	private void clientTick() {
 		ItemStack stack = currentStack();
 
-		if (stack.isEmpty()) {
+		if (stack.isEmpty() || hasVisibleMinigameMarker()) {
 			return;
 		}
 
@@ -854,6 +854,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 				particlePos.z,
 				WORKABLE_PARTICLE_SPREAD
 		);
+	}
+
+	private boolean hasVisibleMinigameMarker() {
+		return !minigameLogic.getMarkerPositions().isEmpty();
 	}
 
 	private void updateGuiCooldown() {
