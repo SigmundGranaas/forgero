@@ -6,6 +6,7 @@ import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
 import com.sigmundgranaas.forgero.smithing.block.renderer.HearthBlockEntityRenderer;
 import com.sigmundgranaas.forgero.smithing.block.renderer.SmithingAnvilBlockEntityRenderer;
+import com.sigmundgranaas.forgero.smithing.client.ClientMinigameTextureResolver;
 import com.sigmundgranaas.forgero.smithing.client.SmithingTongsWorkableParticleHandler;
 import com.sigmundgranaas.forgero.smithing.client.WorkableWaxParticleFactory;
 import com.sigmundgranaas.forgero.smithing.item.ModItems;
@@ -13,6 +14,7 @@ import com.sigmundgranaas.forgero.smithing.item.custom.SmithingTongsItem;
 import com.sigmundgranaas.forgero.smithing.item.renderer.MorphedItemRenderer;
 import com.sigmundgranaas.forgero.smithing.item.renderer.SmithingTongsItemRenderer;
 import com.sigmundgranaas.forgero.smithing.minigame.MinigameHudOverlay;
+import com.sigmundgranaas.forgero.smithing.minigame.MinigamePositioning;
 import com.sigmundgranaas.forgero.smithing.networking.ModClientMessages;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureColorProvider;
 
@@ -35,6 +37,7 @@ public class ForgeroClientSmithingInitializer implements ClientModInitializer {
 		registerRenderLayers();
 		registerHud();
 		registerClientEffects();
+		registerTextureResolver();
 		ModClientMessages.registerClientPackets();
 	}
 
@@ -77,6 +80,10 @@ public class ForgeroClientSmithingInitializer implements ClientModInitializer {
 		WorkableWaxParticleFactory.register();
 		TemperatureColorProvider.register();
 		SmithingTongsWorkableParticleHandler.register();
+	}
+
+	private void registerTextureResolver() {
+		MinigamePositioning.setTextureResolver(new ClientMinigameTextureResolver());
 	}
 
 	@SuppressWarnings("deprecation")

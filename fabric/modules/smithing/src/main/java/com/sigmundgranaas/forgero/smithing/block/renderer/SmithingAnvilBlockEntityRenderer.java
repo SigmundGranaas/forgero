@@ -3,7 +3,7 @@ package com.sigmundgranaas.forgero.smithing.block.renderer;
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import com.sigmundgranaas.forgero.smithing.minigame.MinigamePositioning;
-
+import com.sigmundgranaas.forgero.smithing.minigame.MinigameTransforms;
 import com.sigmundgranaas.forgero.smithing.util.SchematicMaterialCost;
 
 import net.minecraft.block.AnvilBlock;
@@ -31,7 +31,7 @@ import net.fabricmc.api.Environment;
 
 @Environment(EnvType.CLIENT)
 public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<SmithingAnvilBlockEntity> {
-	public static final float RENDER_SCALE_FACTOR = 0.5f;
+	private static final float RENDER_SCALE_FACTOR = MinigameTransforms.ITEM_RENDER_SCALE;
 	private static final float ITEM_RENDER_Y = 1.0f + 0.001f + 0.01f;
 	private static final float BASE_ANVIL_ANGLE = 180.0f;
 
@@ -82,18 +82,7 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 	}
 
 	private void applyAnvilFacingRotation(MatrixStack matrices, Direction facing) {
-		float rotationDegrees = getRotationForFacing(facing);
-		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(rotationDegrees));
-	}
-
-	private float getRotationForFacing(Direction facing) {
-		return switch (facing) {
-			case EAST -> -180.0f;
-			case SOUTH -> 90.0f;
-			case WEST -> 0.0f;
-			case NORTH -> -90.0f;
-			default -> 0.0f;
-		};
+		matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(MinigameTransforms.anvilAngleDegrees(facing)));
 	}
 
 	private void renderMarker(MatrixStack matrices, VertexConsumerProvider vertexConsumers,
