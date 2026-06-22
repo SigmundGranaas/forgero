@@ -24,6 +24,22 @@ public final class TemperaturePredicates {
 		return context -> context.get(MinecraftContextKeys.WORKABLE_STAGE_FRACTION).orElse(0.0) >= fraction;
 	}
 
+	public static Predicate<MatchContext> coldHitFractionAtLeast(double fraction) {
+		return context -> context.get(MinecraftContextKeys.COLD_STAGE_FRACTION).orElse(0.0) >= fraction;
+	}
+
+	public static Predicate<MatchContext> warmHitFractionAtLeast(double fraction) {
+		return context -> context.get(MinecraftContextKeys.WARM_STAGE_FRACTION).orElse(0.0) >= fraction;
+	}
+
+	public static Predicate<MatchContext> hotHitFractionAtLeast(double fraction) {
+		return context -> context.get(MinecraftContextKeys.HOT_STAGE_FRACTION).orElse(0.0) >= fraction;
+	}
+
+	public static Predicate<MatchContext> overheatedHitFractionAtLeast(double fraction) {
+		return context -> context.get(MinecraftContextKeys.OVERHEATED_STAGE_FRACTION).orElse(0.0) >= fraction;
+	}
+
 	public static Predicate<MatchContext> overheatedHitsAtMost(int maxHits) {
 		return context -> context.get(MinecraftContextKeys.OVERHEATED_STAGE_HITS).orElse(0) <= maxHits;
 	}

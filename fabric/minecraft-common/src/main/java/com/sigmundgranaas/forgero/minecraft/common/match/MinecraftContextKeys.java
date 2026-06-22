@@ -27,7 +27,7 @@ public class MinecraftContextKeys {
 	public static final ContextKey<Integer> QUENCH_COUNT = ContextKey.of("quench_count", Integer.class);
 	public static final ContextKey<Integer> REHEAT_COUNT = ContextKey.of("reheat_count", Integer.class);
 
-	// Fractions (0.0 - 1.0) derived from successful hammer hits.
+	// Fractions (0.0 - 1.0) derived from temperature-classified hammer strikes.
 	public static final ContextKey<Double> COLD_STAGE_FRACTION = ContextKey.of("cold_stage_fraction", Double.class);
 	public static final ContextKey<Double> WARM_STAGE_FRACTION = ContextKey.of("warm_stage_fraction", Double.class);
 	public static final ContextKey<Double> HOT_STAGE_FRACTION = ContextKey.of("hot_stage_fraction", Double.class);

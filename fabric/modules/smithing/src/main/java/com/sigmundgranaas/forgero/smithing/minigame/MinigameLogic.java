@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.smithing.minigame;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -11,6 +12,7 @@ import com.sigmundgranaas.forgero.smithing.condition.PredicateConditionLootRegis
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureProfile;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules.TemperatureStage;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureState;
 import com.sigmundgranaas.forgero.smithing.util.SchematicMaterialCost;
 
@@ -21,8 +23,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.world.World;
@@ -40,6 +40,7 @@ public class MinigameLogic {
 	public static final int TWO_MATERIAL_REQUIRED_HITS = 10;
 	public static final int THREE_MATERIAL_REQUIRED_HITS = 12;
 	public static final int FOUR_MATERIAL_REQUIRED_HITS = 15;
+	public static final int MAX_MISSES_BEFORE_RUINED = 5;
 	public static final int MARKER_TIMEOUT_COOLING = 10;
 	public static final int NORMAL_MARKER_HEAT_CHANGE = 40;
 	public static final int COOLING_MARKER_HEAT_CHANGE = -25;
@@ -52,11 +53,14 @@ public class MinigameLogic {
 	private static final String COOLING_MARKER_HITS_NBT_KEY = "forgero_coolingMarkerHits";
 	private static final String MISS_MARKER_NBT_KEY = "forgero_missMarkerHits";
 	private static final String REQUIRED_HITS_NBT_KEY = "forgero_required_hits";
+	private static final String FAILED_HEAT_STAGE_COUNTS_NBT_KEY = "forgero_failedHeatStageCounts";
+	private static final Random RESULT_RANDOM = new Random();
 
 	private final List<Vec2f> markerPositions = new ArrayList<>();
 	private final List<Boolean> markerHits = new ArrayList<>();
 	private final List<Integer> hitStageIndices = new ArrayList<>();
 	private final List<Integer> coolingMarkerIndices = new ArrayList<>();
+	private final int[] failedHeatStageCounts = new int[STAGE_COUNT];
 	private final Random random = new Random();
 
 	private int coolingMarkerHits = 0;
@@ -144,6 +148,7 @@ public class MinigameLogic {
 		markerHitsCount = 0;
 		coolingMarkerHits = 0;
 		missMarkerHits = 0;
+		clearFailedHeatStageCounts();
 		markerTimeout = 0;
 		markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
 
@@ -172,6 +177,8 @@ public class MinigameLogic {
 					}
 				}
 
+				readFailedHeatStageCounts(nbt);
+
 				if (nbt.contains("coolingMarkerIndices")) {
 					coolingMarkerIndices.clear();
 
@@ -188,11 +195,13 @@ public class MinigameLogic {
 			} else {
 				this.coolingMarkerHits = 0;
 				this.missMarkerHits = 0;
+				clearFailedHeatStageCounts();
 				hitStageIndices.clear();
 			}
 		} else {
 			this.coolingMarkerHits = 0;
 			this.missMarkerHits = 0;
+			clearFailedHeatStageCounts();
 			hitStageIndices.clear();
 		}
 
@@ -208,6 +217,7 @@ public class MinigameLogic {
 		markerHitsCount = 0;
 		coolingMarkerHits = 0;
 		missMarkerHits = 0;
+		clearFailedHeatStageCounts();
 		markerTimeout = 0;
 		markerSpawnDelay = INITIAL_MARKER_DELAY_TICKS;
 
@@ -250,6 +260,19 @@ public class MinigameLogic {
 			return;
 		}
 
+		if (MorphedItem.isRuined(stack)) {
+			clearActiveMarker();
+			callback.markDirty();
+			return;
+		}
+
+		if (MorphedItem.needsQuench(stack)) {
+			clearActiveMarker();
+			markerSpawnDelay = 0;
+			callback.markDirty();
+			return;
+		}
+
 		updateRequiredHits(stack);
 
 		switch (outcome) {
@@ -261,9 +284,11 @@ public class MinigameLogic {
 			case TIMEOUT -> applyMarkerTimeout(stack);
 		}
 
+		boolean ruined = ruinIfMissLimitReached(stack);
+
 		clearActiveMarker();
 
-		markerSpawnDelay = isComplete()
+		markerSpawnDelay = isComplete() || ruined
 				? 0
 				: SUBSEQUENT_MARKER_DELAY_TICKS;
 
@@ -272,7 +297,22 @@ public class MinigameLogic {
 
 		callback.markDirty();
 
-		finishIfComplete(callback);
+		if (!ruined) {
+			finishIfComplete(callback);
+		}
+	}
+
+	private boolean ruinIfMissLimitReached(ItemStack stack) {
+		if (isComplete() || MorphedItem.isRuined(stack) || !(stack.getItem() instanceof MorphedItem)) {
+			return false;
+		}
+
+		if (missMarkerHits < MAX_MISSES_BEFORE_RUINED) {
+			return false;
+		}
+
+		MorphedItem.markRuined(stack);
+		return true;
 	}
 
 	private void applySuccessfulMarkerHit(
@@ -280,11 +320,27 @@ public class MinigameLogic {
 			ItemStack stack,
 			MinigameCallback callback
 	) {
+		int temperature = TemperatureState.currentTemperature(stack);
+		TemperatureProfile profile = TemperatureProfile.from(stack);
+		TemperatureStage stage = TemperatureRules.stage(temperature, TemperatureRules.stages(profile));
+		int stageIndex = stageIndexFor(stage);
+		boolean coolingMarker = coolingMarkerIndices.contains(markerIndex);
+		int tempChange = coolingMarker ? COOLING_MARKER_HEAT_CHANGE : NORMAL_MARKER_HEAT_CHANGE;
+
+		if (!canShapeAtTemperature(stage)) {
+			failedHeatStageCounts[stageIndex]++;
+			missMarkerHits++;
+
+			callback.playMissEffect();
+			applyTemperatureChange(stack, profile, temperature, tempChange);
+			return;
+		}
+
 		markerHitsCount++;
 
 		/*
 		 * markerAttempts now tracks successful marker progress only.
-		 * Misses and timeouts do not advance this.
+		 * Misses, timeouts, and bad-temperature blows do not advance this.
 		 */
 		markerAttempts = markerHitsCount;
 
@@ -293,25 +349,31 @@ public class MinigameLogic {
 			callback.playHitEffect(markerPositions.get(0));
 		}
 
-		int temperature = TemperatureState.currentTemperature(stack);
-		TemperatureProfile profile = TemperatureProfile.from(stack);
+		hitStageIndices.add(stageIndex);
 
-		hitStageIndices.add(stageIndexFor(
-				temperature,
-				profile
-		));
-
-		boolean coolingMarker = coolingMarkerIndices.contains(markerIndex);
-		int tempChange = coolingMarker ? COOLING_MARKER_HEAT_CHANGE : NORMAL_MARKER_HEAT_CHANGE;
-
-		TemperatureRules.setTemperature(
-				stack,
-				Math.max(0, Math.min(temperature + tempChange, profile.maxTemperature()))
-		);
+		applyTemperatureChange(stack, profile, temperature, tempChange);
 
 		if (coolingMarker) {
 			coolingMarkerHits++;
 		}
+	}
+
+	private boolean canShapeAtTemperature(TemperatureStage stage) {
+		return stage == TemperatureStage.HOT
+				|| stage == TemperatureStage.WORKABLE
+				|| stage == TemperatureStage.OVERHEATED;
+	}
+
+	private void applyTemperatureChange(
+			ItemStack stack,
+			TemperatureProfile profile,
+			int temperature,
+			int tempChange
+	) {
+		TemperatureRules.setTemperature(
+				stack,
+				Math.max(0, Math.min(temperature + tempChange, profile.maxTemperature()))
+		);
 	}
 
 	private void applyFailedMarkerAttempt() {
@@ -343,9 +405,7 @@ public class MinigameLogic {
 		}
 	}
 
-	private int stageIndexFor(int temperature, TemperatureProfile profile) {
-		var stage = TemperatureRules.stage(temperature, TemperatureRules.stages(profile));
-
+	private int stageIndexFor(TemperatureStage stage) {
 		return switch (stage) {
 			case COLD -> 0;
 			case WARM -> 1;
@@ -369,6 +429,36 @@ public class MinigameLogic {
 	public void tick(MinigameCallback callback) {
 		ItemStack stackForMarker = callback.getCurrentStack();
 		updateRequiredHits(stackForMarker);
+
+		if (MorphedItem.isRuined(stackForMarker)) {
+			boolean changed = !markerPositions.isEmpty()
+					|| markerTimeout != 0
+					|| markerSpawnDelay != 0;
+
+			clearActiveMarker();
+			markerSpawnDelay = 0;
+
+			if (changed) {
+				callback.markDirty();
+			}
+
+			return;
+		}
+
+		if (MorphedItem.needsQuench(stackForMarker)) {
+			boolean changed = !markerPositions.isEmpty()
+					|| markerTimeout != 0
+					|| markerSpawnDelay != 0;
+
+			clearActiveMarker();
+			markerSpawnDelay = 0;
+
+			if (changed) {
+				callback.markDirty();
+			}
+
+			return;
+		}
 
 		boolean activeMorph = isMorphingActive(stackForMarker);
 
@@ -423,123 +513,170 @@ public class MinigameLogic {
 	}
 
 	public void setMorphProgress(double progress, MinigameCallback callback) {
-		if (progress >= 1.0) {
-			ItemStack stack = callback.getCurrentStack();
+		ItemStack stack = callback.getCurrentStack();
 
-			if (!stack.isEmpty() && stack.getItem() instanceof MorphedItem) {
-				ItemStack storedResultStack = MorphedItem.getResultStack(stack);
-				Item resultItem = storedResultStack.isEmpty() ? MorphedItem.getResultItem(stack) : storedResultStack.getItem();
-
-				if (resultItem != null) {
-					ItemStack resultStack = storedResultStack.isEmpty()
-							? new ItemStack(resultItem, stack.getCount())
-							: storedResultStack.copy();
-					resultStack.setCount(stack.getCount());
-
-					var stateOpt = StateService.INSTANCE.convert(resultStack);
-
-					if (stateOpt.isPresent()
-							&& stateOpt.get() instanceof com.sigmundgranaas.forgero.core.condition.Conditional<?> conditional) {
-						var state = stateOpt.get();
-
-						MatchContext context = createMatchContext(callback, stack);
-
-						com.sigmundgranaas.forgero.core.condition.NamedCondition directCondition =
-								PredicateConditionLootRegistry.getCondition(context);
-
-						if (directCondition != null) {
-							var conditioned = conditional.applyCondition(directCondition);
-
-							var newStackOpt = StateService.INSTANCE.convert(
-									(com.sigmundgranaas.forgero.core.state.State) conditioned
-							);
-
-							if (newStackOpt.isPresent()) {
-								resultStack = newStackOpt.get();
-							}
-						} else {
-							var lootTable = PredicateConditionLootRegistry.getLootTable(context);
-
-							if (lootTable.isEmpty()) {
-								lootTable = PredicateConditionLootRegistry.NEUTRAL;
-							}
-
-							List<com.sigmundgranaas.forgero.core.condition.NamedCondition> applicableConditions =
-									lootTable.stream()
-											.filter(cond -> cond.matches(state))
-											.toList();
-
-							if (!applicableConditions.isEmpty()) {
-								com.sigmundgranaas.forgero.core.condition.NamedCondition randomCondition =
-										applicableConditions.get(random.nextInt(applicableConditions.size()));
-
-								var conditioned = conditional.applyCondition(randomCondition);
-
-								var newStackOpt = StateService.INSTANCE.convert(
-										(com.sigmundgranaas.forgero.core.state.State) conditioned
-								);
-
-								if (newStackOpt.isPresent()) {
-									resultStack = newStackOpt.get();
-								}
-							}
-						}
-					}
-
-					TemperatureProfile.from(stack).writeTo(resultStack);
-					TemperatureState.copyFrom(stack, resultStack);
-
-					callback.replaceWithResult(resultStack);
-
-					World world = callback.getWorld();
-
-					if (world != null && !world.isClient) {
-						world.playSound(
-								null,
-								callback.getPos(),
-								SoundEvents.BLOCK_ANVIL_USE,
-								SoundCategory.BLOCKS,
-								1.0f,
-								1.0f
-						);
-					}
-				}
+		if (!stack.isEmpty() && stack.getItem() instanceof MorphedItem && !MorphedItem.isRuined(stack)) {
+			if (progress >= 1.0) {
+				MorphedItem.setMorphProgress(stack, 1.0);
+				MorphedItem.markNeedsQuench(stack);
+				updateRequiredHits(stack);
+				markerHitsCount = Math.max(markerHitsCount, requiredHits);
+				markerAttempts = markerHitsCount;
+				saveProgressToItem(stack);
+				clearActiveMarker();
+				markerSpawnDelay = 0;
+			} else if (!MorphedItem.needsQuench(stack)) {
+				MorphedItem.setMorphProgress(stack, Math.max(0.0, progress));
 			}
 		}
 
 		callback.markDirty();
 	}
 
-	private MatchContext createMatchContext(MinigameCallback callback, ItemStack stack) {
-		MatchContext context = MatchContext.of();
+	public static ItemStack finalizeAfterQuenchIfReady(ItemStack stack, World world, BlockPos pos) {
+		if (!isReadyForQuenchFinalization(stack)) {
+			return stack;
+		}
 
-		World world = callback.getWorld();
+		MinigameLogic logic = new MinigameLogic();
+		logic.restoreFromItemNbt(stack);
+
+		ItemStack resultStack = createFinalResultStack(
+				stack,
+				logic.createMatchContext(world, pos, stack),
+				RESULT_RANDOM
+		);
+
+		if (resultStack.isEmpty()) {
+			return stack;
+		}
+
+		return resultStack;
+	}
+
+	private static boolean isReadyForQuenchFinalization(ItemStack stack) {
+		if (!MorphedItem.needsQuench(stack)) {
+			return false;
+		}
+
+		if (!TemperatureRules.canTrackTemperature(stack)) {
+			return true;
+		}
+
+		TemperatureRules.TemperatureStages stages = TemperatureRules.stages(stack);
+		int temperature = TemperatureState.currentTemperature(stack);
+
+		return stages.workableStart <= TemperatureState.DEFAULT_TEMPERATURE
+				|| temperature < stages.workableStart
+				|| temperature <= TemperatureState.DEFAULT_TEMPERATURE;
+	}
+
+	private static ItemStack createFinalResultStack(
+			ItemStack stack,
+			MatchContext context,
+			Random random
+	) {
+		ItemStack storedResultStack = MorphedItem.getResultStack(stack);
+		Item resultItem = storedResultStack.isEmpty() ? MorphedItem.getResultItem(stack) : storedResultStack.getItem();
+
+		if (resultItem == null) {
+			return ItemStack.EMPTY;
+		}
+
+		ItemStack resultStack = storedResultStack.isEmpty()
+				? new ItemStack(resultItem, stack.getCount())
+				: storedResultStack.copy();
+		resultStack.setCount(stack.getCount());
+
+		resultStack = applyCondition(resultStack, context, random);
+
+		TemperatureProfile.from(stack).writeTo(resultStack);
+		TemperatureState.copyFrom(stack, resultStack);
+
+		return resultStack;
+	}
+
+	private static ItemStack applyCondition(
+			ItemStack resultStack,
+			MatchContext context,
+			Random random
+	) {
+		var stateOpt = StateService.INSTANCE.convert(resultStack);
+
+		if (stateOpt.isEmpty()
+				|| !(stateOpt.get() instanceof com.sigmundgranaas.forgero.core.condition.Conditional<?> conditional)) {
+			return resultStack;
+		}
+
+		var state = stateOpt.get();
+
+		com.sigmundgranaas.forgero.core.condition.NamedCondition directCondition =
+				PredicateConditionLootRegistry.getCondition(context);
+
+		if (directCondition != null && directCondition.matches(state)) {
+			var conditioned = conditional.applyCondition(directCondition);
+			var newStackOpt = StateService.INSTANCE.convert(
+					(com.sigmundgranaas.forgero.core.state.State) conditioned
+			);
+
+			return newStackOpt.orElse(resultStack);
+		}
+
+		var lootTable = PredicateConditionLootRegistry.getLootTable(context);
+		List<com.sigmundgranaas.forgero.core.condition.NamedCondition> applicableConditions =
+				lootTable.stream()
+						.filter(cond -> cond.matches(state))
+						.toList();
+
+		if (applicableConditions.isEmpty()) {
+			return resultStack;
+		}
+
+		com.sigmundgranaas.forgero.core.condition.NamedCondition randomCondition =
+				applicableConditions.get(random.nextInt(applicableConditions.size()));
+
+		var conditioned = conditional.applyCondition(randomCondition);
+		var newStackOpt = StateService.INSTANCE.convert(
+				(com.sigmundgranaas.forgero.core.state.State) conditioned
+		);
+
+		return newStackOpt.orElse(resultStack);
+	}
+
+	private MatchContext createMatchContext(MinigameCallback callback, ItemStack stack) {
+		return createMatchContext(callback.getWorld(), callback.getPos(), stack);
+	}
+
+	private MatchContext createMatchContext(World world, BlockPos pos, ItemStack stack) {
+		MatchContext context = MatchContext.of();
 
 		if (world != null) {
 			context = context.put(MinecraftContextKeys.WORLD, world);
-			context = context.put(MinecraftContextKeys.BLOCK_TARGET, callback.getPos());
+			context = context.put(MinecraftContextKeys.BLOCK_TARGET, pos);
 		}
 
 		context = context.put(MinecraftContextKeys.STACK, stack);
-		context = context.put(MinecraftContextKeys.TOTAL_HITS, markerHitsCount);
+		int[] stageCounts = countStageHits();
+		int totalStageHits = Arrays.stream(stageCounts).sum();
+
+		context = context.put(MinecraftContextKeys.TOTAL_HITS, Math.max(markerHitsCount, totalStageHits));
 		context = context.put(MinecraftContextKeys.MISS_HITS, missMarkerHits);
 		context = context.put(MinecraftContextKeys.COOLING_MARKER_HITS, coolingMarkerHits);
 		context = context.put(MinecraftContextKeys.QUENCH_COUNT, TemperatureState.quenchCount(stack));
 		context = context.put(MinecraftContextKeys.REHEAT_COUNT, TemperatureState.reheatCount(stack));
 
-		int[] stageCounts = countStageHits();
 		context = context.put(MinecraftContextKeys.COLD_STAGE_HITS, stageCounts[0]);
 		context = context.put(MinecraftContextKeys.WARM_STAGE_HITS, stageCounts[1]);
 		context = context.put(MinecraftContextKeys.HOT_STAGE_HITS, stageCounts[2]);
 		context = context.put(MinecraftContextKeys.WORKABLE_STAGE_HITS, stageCounts[3]);
 		context = context.put(MinecraftContextKeys.OVERHEATED_STAGE_HITS, stageCounts[4]);
 
-		int totalStageHits = Math.max(1, hitStageIndices.size());
-		context = context.put(MinecraftContextKeys.COLD_STAGE_FRACTION, stageCounts[0] / (double) totalStageHits);
-		context = context.put(MinecraftContextKeys.WARM_STAGE_FRACTION, stageCounts[1] / (double) totalStageHits);
-		context = context.put(MinecraftContextKeys.HOT_STAGE_FRACTION, stageCounts[2] / (double) totalStageHits);
-		context = context.put(MinecraftContextKeys.WORKABLE_STAGE_FRACTION, stageCounts[3] / (double) totalStageHits);
-		context = context.put(MinecraftContextKeys.OVERHEATED_STAGE_FRACTION, stageCounts[4] / (double) totalStageHits);
+		int stageFractionDenominator = Math.max(1, totalStageHits);
+		context = context.put(MinecraftContextKeys.COLD_STAGE_FRACTION, stageCounts[0] / (double) stageFractionDenominator);
+		context = context.put(MinecraftContextKeys.WARM_STAGE_FRACTION, stageCounts[1] / (double) stageFractionDenominator);
+		context = context.put(MinecraftContextKeys.HOT_STAGE_FRACTION, stageCounts[2] / (double) stageFractionDenominator);
+		context = context.put(MinecraftContextKeys.WORKABLE_STAGE_FRACTION, stageCounts[3] / (double) stageFractionDenominator);
+		context = context.put(MinecraftContextKeys.OVERHEATED_STAGE_FRACTION, stageCounts[4] / (double) stageFractionDenominator);
 		context = context.put(MinecraftContextKeys.STAGE_TRANSITION_MATRIX, buildStageTransitionMatrix());
 		context = context.put(
 				MinecraftContextKeys.STAGE_CHANGE_SEQUENCE,
@@ -556,6 +693,10 @@ public class MinigameLogic {
 			if (stage >= 0 && stage < STAGE_COUNT) {
 				counts[stage]++;
 			}
+		}
+
+		for (int i = 0; i < STAGE_COUNT; i++) {
+			counts[i] += failedHeatStageCounts[i];
 		}
 
 		return counts;
@@ -604,6 +745,11 @@ public class MinigameLogic {
 				hitStageIndices.stream().mapToInt(Integer::intValue).toArray()
 		);
 
+		itemNbt.putIntArray(
+				FAILED_HEAT_STAGE_COUNTS_NBT_KEY,
+				failedHeatStageCounts
+		);
+
 	}
 	
 	public void writeNbt(NbtCompound nbt) {
@@ -634,6 +780,7 @@ public class MinigameLogic {
 				"coolingMarkerIndices",
 				coolingMarkerIndices.stream().mapToInt(Integer::intValue).toArray()
 		);
+		nbt.putIntArray(FAILED_HEAT_STAGE_COUNTS_NBT_KEY, failedHeatStageCounts);
 		nbt.putDouble("morphProgress", getMorphProgress());
 	}
 
@@ -685,6 +832,8 @@ public class MinigameLogic {
 			}
 		}
 
+		readFailedHeatStageCounts(nbt);
+
 		coolingMarkerIndices.clear();
 
 		if (nbt.contains("coolingMarkerIndices")) {
@@ -711,6 +860,7 @@ public class MinigameLogic {
 			this.missMarkerHits = 0;
 			this.requiredHits = ONE_MATERIAL_REQUIRED_HITS;
 			this.hitStageIndices.clear();
+			clearFailedHeatStageCounts();
 			this.coolingMarkerIndices.clear();
 			return;
 		}
@@ -722,6 +872,7 @@ public class MinigameLogic {
 			this.missMarkerHits = 0;
 			this.requiredHits = ONE_MATERIAL_REQUIRED_HITS;
 			this.hitStageIndices.clear();
+			clearFailedHeatStageCounts();
 			this.coolingMarkerIndices.clear();
 			return;
 		}
@@ -748,6 +899,8 @@ public class MinigameLogic {
 				hitStageIndices.add(v);
 			}
 		}
+
+		readFailedHeatStageCounts(itemNbt);
 
 		this.coolingMarkerHits = itemNbt.contains(COOLING_MARKER_HITS_NBT_KEY)
 				? itemNbt.getInt(COOLING_MARKER_HITS_NBT_KEY)
@@ -799,7 +952,9 @@ public class MinigameLogic {
 
 	private boolean isMorphingActive(ItemStack stack) {
 		return stack.getItem() instanceof MorphedItem
-				&& MorphedItem.getMorphProgress(stack) < 1.0;
+				&& MorphedItem.getMorphProgress(stack) < 1.0
+				&& !MorphedItem.isRuined(stack)
+				&& !MorphedItem.needsQuench(stack);
 	}
 
 	private Vec2f nextMarkerPosition(ItemStack stackForMarker, MinigameCallback callback) {
@@ -824,6 +979,10 @@ public class MinigameLogic {
 		}
 
 		if (stack.getItem() instanceof MorphedItem) {
+			if (MorphedItem.isRuined(stack) || MorphedItem.needsQuench(stack)) {
+				return;
+			}
+
 			updateRequiredHits(stack);
 			stack.getOrCreateNbt().putDouble(MorphedItem.PROGRESS_KEY, getMorphProgress());
 		}
@@ -831,6 +990,24 @@ public class MinigameLogic {
 
 	private void updateRequiredHits(ItemStack stack) {
 		requiredHits = getRequiredHits(stack);
+	}
+
+	private void clearFailedHeatStageCounts() {
+		Arrays.fill(failedHeatStageCounts, 0);
+	}
+
+	private void readFailedHeatStageCounts(NbtCompound nbt) {
+		clearFailedHeatStageCounts();
+
+		if (!nbt.contains(FAILED_HEAT_STAGE_COUNTS_NBT_KEY)) {
+			return;
+		}
+
+		int[] counts = nbt.getIntArray(FAILED_HEAT_STAGE_COUNTS_NBT_KEY);
+
+		for (int i = 0; i < Math.min(counts.length, failedHeatStageCounts.length); i++) {
+			failedHeatStageCounts[i] = Math.max(0, counts[i]);
+		}
 	}
 
 	private void randomizeCoolingMarkerIndices() {

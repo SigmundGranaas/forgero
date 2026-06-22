@@ -35,6 +35,8 @@ public class MinigameHudOverlay implements HudRenderCallback {
 
 		ItemStack stack = be.getInventory().getStack(0);
 		if (stack.isEmpty() || !(stack.getItem() instanceof MorphedItem)) return;
+		if (MorphedItem.isRuined(stack)) return;
+		if (MorphedItem.needsQuench(stack)) return;
 		double progress = MorphedItem.getMorphProgress(stack);
 		if (progress >= 1.0) return;
 
@@ -221,7 +223,7 @@ public class MinigameHudOverlay implements HudRenderCallback {
     private boolean isActiveMinigame(SmithingAnvilBlockEntity be) {
         ItemStack stack = be.getInventory().getStack(0);
         if (stack.isEmpty() || !(stack.getItem() instanceof MorphedItem)) return false;
-        return MorphedItem.getMorphProgress(stack) < 1.0;
+        return MorphedItem.getMorphProgress(stack) < 1.0 && !MorphedItem.isRuined(stack);
     }
 
 	private int clamp(int v, int lo, int hi) {

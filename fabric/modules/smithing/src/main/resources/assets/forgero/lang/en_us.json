@@ -4,5 +4,9 @@
   "item.forgero.smithing_tongs": "Smithing Tongs",
   "item.forgero.smithing_tongs.empty": "Empty",
   "item.forgero.smithing_tongs.stored": "Holding: %s",
-  "item.forgero.smithing_hammer": "Smithing Hammer"
+  "item.forgero.smithing_hammer": "Smithing Hammer",
+  "item.forgero.morphed_item.ruined": "Ruined Unfinished %s",
+  "item.forgero.morphed_item.ruined.tooltip": "Ruined",
+  "item.forgero.morphed_item.needs_quench": "Hot Unfinished %s",
+  "item.forgero.morphed_item.needs_quench.tooltip": "Needs quenching"
 }

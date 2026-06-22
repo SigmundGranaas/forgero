@@ -279,6 +279,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 			return ActionResult.FAIL;
 		}
 
+		if (MorphedItem.isRuined(anvilItem) || MorphedItem.needsQuench(anvilItem)) {
+			return ActionResult.FAIL;
+		}
+
 		Vec2f offsetVec = resolveOffsetVec(anvilItem);
 
 		Vec2f itemLocalHit = MinigamePositioning.worldHitToItemLocal(
@@ -702,7 +706,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 
 		NbtCompound itemNbt = stack.getOrCreateNbt();
 
-		double progress = logic.getMorphProgress();
+		double progress = MorphedItem.isRuined(stack) || MorphedItem.needsQuench(stack)
+				? MorphedItem.getMorphProgress(stack)
+				: logic.getMorphProgress();
 
 		itemNbt.putInt("forgero_markerHitsCount", logic.getMarkerHitsCount());
 		itemNbt.putInt("forgero_markerAttempts", logic.getMarkerAttempts());

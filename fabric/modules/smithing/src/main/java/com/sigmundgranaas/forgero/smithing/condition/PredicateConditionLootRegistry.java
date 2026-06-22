@@ -39,20 +39,36 @@ public class PredicateConditionLootRegistry {
 	).stream().filter(java.util.Objects::nonNull).toList();
 
 	static {
-		// Register dimension-based predicates
-		registerCondition(createDimensionPredicate("minecraft:the_nether"), Conditions.INSTANCE.of("forgero:netherborn").orElse(null));
-		registerCondition(createDimensionPredicate("minecraft:the_end"), Conditions.INSTANCE.of("forgero:voidtouched").orElse(null));
-
-		// Register temperature and performance-based predicates
+		// Register temperature and performance-based predicates first so forging quality drives the result.
 		registerTemperaturePredicates();
+
+		// Register dimension-based predicates
+		registerCondition(createDimensionPredicate("minecraft:the_nether"), condition("forgero:netherborn"));
+		registerCondition(createDimensionPredicate("minecraft:the_end"), condition("forgero:voidtouched"));
 	}
 
 	private static void registerTemperaturePredicates() {
-		register(TemperaturePredicates.cleanWorkableRun(), NEUTRAL);
-		register(TemperaturePredicates.workableStageHitsAtLeast(6), NEUTRAL);
-		register(TemperaturePredicates.workableHitFractionAtLeast(0.5), NEUTRAL);
-		register(TemperaturePredicates.coolingMarkerHitsAtLeast(3), NEUTRAL);
-		register(TemperaturePredicates.reheatedAfterEveryQuench(), NEUTRAL);
+		registerCondition(TemperaturePredicates.overheatedHitFractionAtLeast(0.25), condition("forgero:brittle"));
+		registerCondition(TemperaturePredicates.coldHitFractionAtLeast(0.25), condition("forgero:dull"));
+		registerCondition(TemperaturePredicates.warmHitFractionAtLeast(0.35), condition("forgero:worn"));
+		registerCondition(
+				TemperaturePredicates.cleanWorkableRun()
+						.and(TemperaturePredicates.workableHitFractionAtLeast(0.75)),
+				condition("forgero:tempered")
+		);
+		registerCondition(
+				TemperaturePredicates.coolingMarkerHitsAtLeast(3)
+						.and(TemperaturePredicates.workableHitFractionAtLeast(0.5))
+						.and(TemperaturePredicates.missHitsAtMost(1))
+						.and(TemperaturePredicates.overheatedHitsAtMost(0)),
+				condition("forgero:hardened")
+		);
+		registerCondition(TemperaturePredicates.workableHitFractionAtLeast(0.5), condition("forgero:honed"));
+		registerCondition(TemperaturePredicates.hotHitFractionAtLeast(0.5), condition("forgero:sharp"));
+	}
+
+	private static NamedCondition condition(String id) {
+		return Conditions.INSTANCE.of(id).orElse(null);
 	}
 
 	public static List<NamedCondition> getLootTable(MatchContext context) {

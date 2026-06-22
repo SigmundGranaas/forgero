@@ -1,11 +1,18 @@
 package com.sigmundgranaas.forgero.smithing.item.custom;
 
+import java.util.List;
+
+import org.jetbrains.annotations.Nullable;
+
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Formatting;
+import net.minecraft.world.World;
 
 public class MorphedItem extends Item {
 	public static final String PROGRESS_KEY = "morphProgress";
@@ -13,6 +20,10 @@ public class MorphedItem extends Item {
 	public static final String RESULT_KEY = "morphResult";
 	public static final String START_STACK_KEY = "morphStartStack";
 	public static final String RESULT_STACK_KEY = "morphResultStack";
+	public static final String RUINED_KEY = "forgero_ruined";
+	public static final String RUINED_CONDITION_KEY = "forgero_ruined_condition";
+	public static final String RUINED_CONDITION_ID = "forgero:ruined";
+	public static final String NEEDS_QUENCH_KEY = "forgero_needs_quench";
 
 	public MorphedItem(Settings settings) {
 		super(settings);
@@ -52,6 +63,54 @@ public class MorphedItem extends Item {
 
 	public static double getMorphProgress(ItemStack stack) {
 		return stack.hasNbt() ? stack.getNbt().getDouble(PROGRESS_KEY) : 0.0;
+	}
+
+	public static boolean isRuined(ItemStack stack) {
+		return !stack.isEmpty()
+				&& stack.getItem() instanceof MorphedItem
+				&& stack.hasNbt()
+				&& stack.getNbt().getBoolean(RUINED_KEY);
+	}
+
+	public static void markRuined(ItemStack stack) {
+		if (stack.isEmpty() || !(stack.getItem() instanceof MorphedItem)) {
+			return;
+		}
+
+		NbtCompound nbt = stack.getOrCreateNbt();
+		nbt.putBoolean(RUINED_KEY, true);
+		nbt.putString(RUINED_CONDITION_KEY, RUINED_CONDITION_ID);
+		nbt.remove(NEEDS_QUENCH_KEY);
+	}
+
+	public static boolean needsQuench(ItemStack stack) {
+		return !stack.isEmpty()
+				&& stack.getItem() instanceof MorphedItem
+				&& stack.hasNbt()
+				&& stack.getNbt().getBoolean(NEEDS_QUENCH_KEY)
+				&& !isRuined(stack);
+	}
+
+	public static void markNeedsQuench(ItemStack stack) {
+		if (stack.isEmpty() || !(stack.getItem() instanceof MorphedItem) || isRuined(stack)) {
+			return;
+		}
+
+		NbtCompound nbt = stack.getOrCreateNbt();
+		nbt.putBoolean(NEEDS_QUENCH_KEY, true);
+		nbt.putDouble(PROGRESS_KEY, 1.0);
+	}
+
+	public static void clearNeedsQuench(ItemStack stack) {
+		if (stack.isEmpty() || !stack.hasNbt()) {
+			return;
+		}
+
+		NbtCompound nbt = stack.getNbt();
+
+		if (nbt != null) {
+			nbt.remove(NEEDS_QUENCH_KEY);
+		}
 	}
 
 	public static Identifier getStartItemId(ItemStack stack) {
@@ -120,8 +179,28 @@ public class MorphedItem extends Item {
 		Item resultItem = getResultItem(stack);
 		if (resultItem != null) {
 			Text resultName = resultItem.getName(new ItemStack(resultItem));
+			if (isRuined(stack)) {
+				return Text.translatable("item.forgero.morphed_item.ruined", resultName);
+			}
+			if (needsQuench(stack)) {
+				return Text.translatable("item.forgero.morphed_item.needs_quench", resultName);
+			}
 			return Text.literal("Unfinished ").append(resultName);
 		}
 		return super.getName(stack);
+	}
+
+	@Override
+	public void appendTooltip(
+			ItemStack stack,
+			@Nullable World world,
+			List<Text> tooltip,
+			TooltipContext context
+	) {
+		if (isRuined(stack)) {
+			tooltip.add(Text.translatable("item.forgero.morphed_item.ruined.tooltip").formatted(Formatting.DARK_RED));
+		} else if (needsQuench(stack)) {
+			tooltip.add(Text.translatable("item.forgero.morphed_item.needs_quench.tooltip").formatted(Formatting.GOLD));
+		}
 	}
 }

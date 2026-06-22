@@ -64,11 +64,12 @@ public class AnvilSyncS2CPacket {
 			if (itemStacks.length > 0
 					&& !itemStacks[0].isEmpty()
 					&& itemStacks[0].getItem() instanceof MorphedItem) {
-				int requiredHits = MinigameLogic.getRequiredHits(itemStacks[0]);
-				double progress = Math.min(
-						1.0,
-						(double) markerHitsCount / requiredHits
-				);
+				double progress = MorphedItem.isRuined(itemStacks[0]) || MorphedItem.needsQuench(itemStacks[0])
+						? MorphedItem.getMorphProgress(itemStacks[0])
+						: Math.min(
+								1.0,
+								(double) markerHitsCount / MinigameLogic.getRequiredHits(itemStacks[0])
+						);
 
 				MorphedItem.setMorphProgress(itemStacks[0], progress);
 				itemStacks[0].getOrCreateNbt().putDouble("morphProgress", progress);

@@ -2,6 +2,7 @@ package com.sigmundgranaas.forgero.smithing.item.custom;
 
 import java.util.List;
 
+import com.sigmundgranaas.forgero.smithing.minigame.MinigameLogic;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureState;
 import org.jetbrains.annotations.Nullable;
@@ -101,7 +102,8 @@ public class SmithingTongsItem extends Item {
 		ItemStack stored = getStoredStack(tongsStack);
 		clearStoredStack(tongsStack);
 
-		if (TemperatureState.currentTemperature(stored) <= TemperatureState.DEFAULT_TEMPERATURE) {
+		if (!MorphedItem.needsQuench(stored)
+				&& TemperatureState.currentTemperature(stored) <= TemperatureState.DEFAULT_TEMPERATURE) {
 			TemperatureRules.removeTemperatureData(stored);
 		}
 
@@ -167,6 +169,16 @@ public class SmithingTongsItem extends Item {
 		int temperature = TemperatureState.currentTemperature(stored);
 
 		if (temperature <= TemperatureState.DEFAULT_TEMPERATURE) {
+			ItemStack finalized = MinigameLogic.finalizeAfterQuenchIfReady(stored, world, cauldronPos);
+
+			if (finalized != stored) {
+				setStoredStack(tongsStack, finalized);
+
+				if (user instanceof PlayerEntity player) {
+					player.getInventory().markDirty();
+				}
+			}
+
 			return;
 		}
 
@@ -176,7 +188,7 @@ public class SmithingTongsItem extends Item {
 		);
 
 		TemperatureRules.quench(stored, cooledTemperature);
-		setStoredStack(tongsStack, stored);
+		setStoredStack(tongsStack, MinigameLogic.finalizeAfterQuenchIfReady(stored, world, cauldronPos));
 
 		if (user instanceof PlayerEntity player) {
 			player.getInventory().markDirty();
@@ -187,7 +199,8 @@ public class SmithingTongsItem extends Item {
 
 	private static boolean canQuench(ItemStack tongsStack) {
 		ItemStack stored = getStoredStack(tongsStack);
-		return !stored.isEmpty() && TemperatureRules.canTrackTemperature(stored);
+		return !stored.isEmpty()
+				&& (TemperatureRules.canTrackTemperature(stored) || MorphedItem.needsQuench(stored));
 	}
 
 	@Nullable

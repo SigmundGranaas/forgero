@@ -1,6 +1,8 @@
 package com.sigmundgranaas.forgero.smithing.temperature;
 
+import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import com.sigmundgranaas.forgero.smithing.item.custom.SmithingTongsItem;
+import com.sigmundgranaas.forgero.smithing.minigame.MinigameLogic;
 import com.sigmundgranaas.forgero.smithing.networking.S2C.TemperatureSyncS2CPacket;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules.TemperatureStage;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules.TemperatureStages;
@@ -65,17 +67,33 @@ public class TemperatureHandler {
                 continue;
             }
 
-            if (!TemperatureRules.canTrackTemperature(stack)) {
+            boolean tracksTemperature = TemperatureRules.canTrackTemperature(stack);
+
+            if (!tracksTemperature && !MorphedItem.needsQuench(stack)) {
                 continue;
             }
+
+            BlockPos pos = itemEntity.getBlockPos();
+            boolean inFilledCauldron = TemperatureRules.isItemInFilledWaterCauldron(itemEntity, world);
+
+            if (!tracksTemperature) {
+                if (inFilledCauldron) {
+                    ItemStack finalized = MinigameLogic.finalizeAfterQuenchIfReady(stack, world, pos);
+
+                    if (finalized != stack) {
+                        itemEntity.setStack(finalized);
+                    }
+                }
+
+                continue;
+            }
+
             int temp = TemperatureState.currentTemperature(stack);
             if (temp > TemperatureState.DEFAULT_TEMPERATURE) {
                 temp = Math.max(TemperatureState.DEFAULT_TEMPERATURE, temp - INVENTORY_COOL_PER_TICK);
                 TemperatureRules.setTemperature(stack, temp);
             }
-            BlockPos pos = itemEntity.getBlockPos();
             boolean changed = false;
-            boolean inFilledCauldron = TemperatureRules.isItemInFilledWaterCauldron(itemEntity, world);
 
             TemperatureStages stages = TemperatureRules.stages(stack);
             // emitTemperatureEffects(world, itemEntity, pos, temp, stages);
@@ -88,7 +106,24 @@ public class TemperatureHandler {
                 if (temp > TemperatureState.DEFAULT_TEMPERATURE) {
                     temp = Math.max(TemperatureState.DEFAULT_TEMPERATURE, temp - FLUID_COOL_PER_TICK);
                     TemperatureRules.quench(stack, temp);
+                    ItemStack finalized = MinigameLogic.finalizeAfterQuenchIfReady(stack, world, pos);
+
+                    if (finalized != stack) {
+                        itemEntity.setStack(finalized);
+                        stack = finalized;
+                        temp = TemperatureState.currentTemperature(stack);
+                    }
+
                     changed = true;
+                } else if (MorphedItem.needsQuench(stack)) {
+                    ItemStack finalized = MinigameLogic.finalizeAfterQuenchIfReady(stack, world, pos);
+
+                    if (finalized != stack) {
+                        itemEntity.setStack(finalized);
+                        stack = finalized;
+                        temp = TemperatureState.currentTemperature(stack);
+                        changed = true;
+                    }
                 }
             }
             if (changed) {
