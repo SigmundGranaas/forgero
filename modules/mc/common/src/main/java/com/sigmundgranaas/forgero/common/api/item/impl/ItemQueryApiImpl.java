@@ -366,8 +366,16 @@ public class ItemQueryApiImpl implements ItemQueryApi {
 
 		Component component = componentOpt.get();
 
-		// Only equipment components apply their attributes to the player
-		if (!(component instanceof EquipmentComponent)) {
+		// Apply Forgero attributes when this stack functions as equipment in `slot`. Two cases qualify:
+		//  - a native Forgero EquipmentComponent (tools/armor built by Forgero), or
+		//  - a non-equipment component (e.g. an ExtensiblePart wrapping a vanilla tool/armor via
+		//    vanilla-upgrades) whose underlying vanilla item already contributes this slot's modifiers.
+		// The second case lets vanilla-upgrade items carry their upgraded stats while still excluding
+		// Forgero crafting-part items (heads/handles), whose vanilla host contributes nothing here.
+		Set<UUID> ownedForSlot = ownedModifierIds(slot);
+		boolean vanillaActsAsSlotEquipment = !ownedForSlot.isEmpty()
+				&& vanillaMap.values().stream().anyMatch(mod -> ownedForSlot.contains(mod.getId()));
+		if (!(component instanceof EquipmentComponent) && !vanillaActsAsSlotEquipment) {
 			return vanillaMap;
 		}
 
