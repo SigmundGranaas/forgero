@@ -1,6 +1,12 @@
 package com.sigmundgranaas.forgero.properties.gametest;
 
+import java.util.Optional;
+
+import com.sigmundgranaas.forgero.common.runtime.EvaluableCondition;
+import com.sigmundgranaas.forgero.predicate.minecraft.entity.EntityPredicate;
+import com.sigmundgranaas.forgero.predicate.minecraft.entity.EntityStatsPredicate;
 import com.sigmundgranaas.forgero.predicate.minecraft.standalone.BackstabPredicate;
+import com.sigmundgranaas.forgero.predicate.minecraft.util.NumericPredicate;
 
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 
@@ -53,6 +59,41 @@ public class PredicateGatingGametest implements FabricGameTest {
 		ServerPlayerEntity front = attackerAt(context, 3, 2, 5);
 		boolean fired = EffectGatingTestHelper.gatedFireFires(front, target, new BackstabPredicate(90.0f));
 		context.assertFalse(fired, "Backstab-gated fire MUST be withheld when attacking from the front");
+		context.complete();
+	}
+
+	/** "Execute" gate: the target's health is at or below the threshold (forgero:entity stats.health). */
+	private static EvaluableCondition executeBelow(double maxHealth) {
+		EntityStatsPredicate stats = new EntityStatsPredicate(
+				Optional.of(new NumericPredicate(Optional.empty(), Optional.of(maxHealth), Optional.empty())),
+				Optional.empty());
+		return new EntityPredicate(
+				Optional.of(EntityPredicate.Target.TARGET_ENTITY),
+				Optional.empty(), Optional.empty(), Optional.of(stats),
+				Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
+	}
+
+	/** Execute condition true: target below the HP threshold → effect fires. */
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, required = true)
+	public void execute_gates_fire_on_low_health_target(TestContext context) {
+		ServerPlayerEntity attacker = attackerAt(context, 3, 2, 1);
+		LivingEntity target = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(3, 2, 3));
+		target.setHealth(4.0f); // <= 6 threshold
+		target.setFireTicks(0);
+		boolean fired = EffectGatingTestHelper.gatedFireFires(attacker, target, executeBelow(6.0));
+		context.assertTrue(fired, "Execute-gated fire MUST fire when the target is at/below the HP threshold");
+		context.complete();
+	}
+
+	/** Execute condition false: target above the HP threshold → effect withheld. */
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE, required = true)
+	public void execute_withholds_fire_on_healthy_target(TestContext context) {
+		ServerPlayerEntity attacker = attackerAt(context, 3, 2, 1);
+		LivingEntity target = context.spawnEntity(EntityType.ZOMBIE, new BlockPos(3, 2, 3));
+		target.setHealth(20.0f); // > 6 threshold
+		target.setFireTicks(0);
+		boolean fired = EffectGatingTestHelper.gatedFireFires(attacker, target, executeBelow(6.0));
+		context.assertFalse(fired, "Execute-gated fire MUST be withheld when the target is above the HP threshold");
 		context.complete();
 	}
 }
