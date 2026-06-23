@@ -4,7 +4,9 @@
   "version": "1.0.0",
   "name": "Vanilla Upgrades Test",
   "description": "Gameplay validation tests for Vanilla Upgrades.",
-  "authors": ["Sigmund Granaas"],
+  "authors": [
+    "Sigmund Granaas"
+  ],
   "license": "MIT",
   "environment": "*",
   "entrypoints": {
@@ -16,7 +18,8 @@
       "com.sigmundgranaas.vanillaupgrades.tests.TipSlotCoverageTest",
       "com.sigmundgranaas.vanillaupgrades.tests.UpgradeAttributeChangeTest",
       "com.sigmundgranaas.vanillaupgrades.tests.UpgradeEventTest",
-      "com.sigmundgranaas.vanillaupgrades.tests.ExtensionAddsSlotTest"
+      "com.sigmundgranaas.vanillaupgrades.tests.ExtensionAddsSlotTest",
+      "com.sigmundgranaas.vanillaupgrades.tests.UpgradeGameplayImpactTest"
     ]
   },
   "depends": {

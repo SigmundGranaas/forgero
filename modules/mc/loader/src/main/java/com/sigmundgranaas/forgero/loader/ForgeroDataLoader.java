@@ -15,6 +15,7 @@ import com.sigmundgranaas.forgero.data.pipeline.api.ForgeroDataBundle;
 import com.sigmundgranaas.forgero.data.pipeline.api.ForgeroDataInitializer;
 import com.sigmundgranaas.forgero.common.api.DataLoadingContext;
 import com.sigmundgranaas.forgero.common.api.ForgeroInitializedCallback;
+import com.sigmundgranaas.forgero.common.api.MixinServiceAccessor;
 import com.sigmundgranaas.forgero.loader.impl.*;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.item.Item;
@@ -124,6 +125,12 @@ public class ForgeroDataLoader implements ModInitializer {
 
 			initialized = true;
 			ForgeroTooltipRenderer.initialize(context.converter());
+
+			// Bridge the resolved services into the ItemStack stat mixins (getMaxDamage /
+			// getAttributeModifiers / getMiningSpeedMultiplier). Without this the loader mixins
+			// hold a null service reference and silently no-op, so upgrades on non-native items
+			// (e.g. vanilla-upgrades) change the Forgero API numbers but never reach real gameplay.
+			ForgeroInitializedCallback.EVENT.register(MixinServiceAccessor::initialize);
 
 			// Phase 11: Fire initialization event (external subscribers via ForgeroInitializedCallback)
 			apiInitializer.fireInitializationEvent(context);
