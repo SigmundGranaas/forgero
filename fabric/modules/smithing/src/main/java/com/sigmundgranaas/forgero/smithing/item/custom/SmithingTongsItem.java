@@ -5,22 +5,27 @@ import java.util.List;
 import com.sigmundgranaas.forgero.smithing.minigame.MinigameLogic;
 import com.sigmundgranaas.forgero.smithing.minigame.SmithingRewardData;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules.TemperatureStages;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureState;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.ClickType;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -82,6 +87,46 @@ public class SmithingTongsItem extends Item {
 		setStoredStack(tongsStack, stored);
 		sourceStack.decrement(1);
 
+		return true;
+	}
+
+	@Override
+	public boolean onClicked(
+			ItemStack stack,
+			ItemStack otherStack,
+			Slot slot,
+			ClickType clickType,
+			PlayerEntity player,
+			StackReference cursorStackReference
+	) {
+		if (clickType != ClickType.RIGHT || !tryStoreOne(stack, otherStack)) {
+			return false;
+		}
+
+		cursorStackReference.set(otherStack.isEmpty() ? ItemStack.EMPTY : otherStack);
+		player.getInventory().markDirty();
+		return true;
+	}
+
+	@Override
+	public boolean onStackClicked(ItemStack stack, Slot slot, ClickType clickType, PlayerEntity player) {
+		if (clickType != ClickType.RIGHT || hasStoredStack(stack) || !slot.canTakeItems(player)) {
+			return false;
+		}
+
+		ItemStack slotStack = slot.getStack();
+		if (!canStore(slotStack)) {
+			return false;
+		}
+
+		ItemStack stored = slot.takeStack(1);
+		if (stored.isEmpty()) {
+			return false;
+		}
+
+		setStoredStack(stack, stored);
+		slot.markDirty();
+		player.getInventory().markDirty();
 		return true;
 	}
 
@@ -316,5 +361,42 @@ public class SmithingTongsItem extends Item {
 				"item.forgero.smithing_tongs.stored",
 				stored.getName()
 		).formatted(Formatting.GRAY));
+
+		appendStoredStatusTooltip(stored, tooltip);
+		appendStoredTemperatureTooltip(stored, tooltip);
+	}
+
+	private void appendStoredStatusTooltip(ItemStack stored, List<Text> tooltip) {
+		if (MorphedItem.isRuined(stored)) {
+			tooltip.add(Text.translatable("item.forgero.morphed_item.ruined.tooltip").formatted(Formatting.DARK_RED));
+			return;
+		}
+
+		if (MorphedItem.needsQuench(stored)) {
+			tooltip.add(Text.translatable("item.forgero.morphed_item.needs_quench.tooltip").formatted(Formatting.GOLD));
+		}
+	}
+
+	private void appendStoredTemperatureTooltip(ItemStack stored, List<Text> tooltip) {
+		if (!TemperatureRules.canTrackTemperature(stored)) {
+			return;
+		}
+
+		int temp = TemperatureState.currentTemperature(stored);
+		TemperatureStages stages = TemperatureRules.stages(stored);
+		boolean isWorkable = TemperatureRules.isWorkable(temp, stages);
+		int tempColor = isWorkable ? 0x00FF00 : 0xFFFFFF;
+
+		Text label = Text.literal("Temperature: ").styled(style -> style.withColor(TextColor.fromRgb(0xFFFFFF)));
+		Text value = Text.literal(String.format("%d°C ", temp))
+				.styled(style -> style.withColor(TextColor.fromRgb(tempColor)));
+
+		Text workingRange = Text.literal("");
+		if (stages.workableStart > 0 && stages.workableEnd > 0) {
+			workingRange = Text.literal(String.format("(%d–%d°C)", stages.workableStart, stages.workableEnd))
+					.styled(style -> style.withColor(TextColor.fromRgb(0x00FF00)));
+		}
+
+		tooltip.add(label.copy().append(value).append(workingRange));
 	}
 }
