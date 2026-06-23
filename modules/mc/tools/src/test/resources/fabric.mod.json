@@ -12,7 +12,8 @@
   "entrypoints": {
     "fabric-gametest": [
       "com.sigmundgranaas.forgero.tools.ToolItemTest",
-      "com.sigmundgranaas.forgero.tools.ToolBehaviorIntegrationGametest"
+      "com.sigmundgranaas.forgero.tools.ToolBehaviorIntegrationGametest",
+      "com.sigmundgranaas.forgero.tools.ToolGameplayImpactTest"
     ]
   },
   "depends": {

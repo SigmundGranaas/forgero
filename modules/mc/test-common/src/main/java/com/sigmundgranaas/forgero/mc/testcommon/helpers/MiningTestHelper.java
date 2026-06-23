@@ -1,15 +1,15 @@
 package com.sigmundgranaas.forgero.mc.testcommon.helpers;
 
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.test.GameTestException;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
 
@@ -52,8 +52,10 @@ public final class MiningTestHelper {
 	}
 
 	/**
-	 * Returns true if {@code tool}'s mining level is high enough to actually harvest {@code block}
-	 * (i.e. breaking it yields drops). E.g. a wooden pickaxe returns false for obsidian.
+	 * Returns true if {@code tool}'s mining level is high enough to actually harvest {@code block} —
+	 * i.e. breaking it in survival through the interaction manager spawns a drop. This exercises the
+	 * real {@code canHarvest}/{@code isSuitableFor} gate (a wooden pickaxe breaks iron ore but drops
+	 * nothing), not just the block's loot table. Returns false if the tool is too low a tier.
 	 */
 	public static boolean harvestYieldsDrop(TestContext context, ItemStack tool, Block block) {
 		ServerPlayerEntity player = context.createMockCreativeServerPlayerInWorld();
@@ -63,11 +65,15 @@ public final class MiningTestHelper {
 		ServerWorld world = context.getWorld();
 		BlockPos pos = context.getAbsolutePos(new BlockPos(2, 2, 2));
 		world.setBlockState(pos, block.getDefaultState());
-		BlockState state = world.getBlockState(pos);
 
-		List<ItemStack> drops = Block.getDroppedStacks(state, world, pos, world.getBlockEntity(pos), player, tool);
+		Box area = new Box(pos).expand(2.0);
+		world.getEntitiesByClass(ItemEntity.class, area, e -> true).forEach(ItemEntity::discard); // clear strays
+		player.interactionManager.tryBreakBlock(pos);
+		boolean dropped = !world.getEntitiesByClass(ItemEntity.class, area, e -> true).isEmpty();
+
+		world.getEntitiesByClass(ItemEntity.class, area, e -> true).forEach(ItemEntity::discard);
 		world.removeBlock(pos, false);
-		return !drops.isEmpty();
+		return dropped;
 	}
 
 	/**
