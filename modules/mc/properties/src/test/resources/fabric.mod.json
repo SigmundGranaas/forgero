@@ -9,8 +9,7 @@
     "SigmundGranaas"
   ],
   "entrypoints": {
-    "main": [
-    ],
+    "main": [],
     "fabric-gametest": [
       "com.sigmundgranaas.forgero.properties.gametest.BlockEffectGametest",
       "com.sigmundgranaas.forgero.properties.gametest.BlockFilterGametest",
@@ -34,7 +33,8 @@
       "com.sigmundgranaas.forgero.properties.gametest.MarkGametest",
       "com.sigmundgranaas.forgero.properties.gametest.PositionalCombatGametest",
       "com.sigmundgranaas.forgero.properties.gametest.ZoneGametest",
-      "com.sigmundgranaas.forgero.properties.gametest.NewMechanicsCodecGametest"
+      "com.sigmundgranaas.forgero.properties.gametest.NewMechanicsCodecGametest",
+      "com.sigmundgranaas.forgero.properties.gametest.PredicateGatingGametest"
     ]
   }
 }
