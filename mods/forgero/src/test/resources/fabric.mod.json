@@ -37,7 +37,8 @@
       "com.sigmundgranaas.forgero.tests.UpgradeSlotSystemTest",
       "com.sigmundgranaas.forgero.tests.UpgradeAttributeApplicationTest",
       "com.sigmundgranaas.forgero.tests.PublicApiExtensionTest",
-      "com.sigmundgranaas.forgero.tests.SchematicTradesTest"
+      "com.sigmundgranaas.forgero.tests.SchematicTradesTest",
+      "com.sigmundgranaas.forgero.tests.ToolTierEffectivenessTest"
     ]
   },
   "depends": {
