@@ -1,6 +1,7 @@
 package com.sigmundgranaas.forgero.smithing;
 
 import static com.sigmundgranaas.forgero.smithing.block.ModBlocks.HEARTH;
+import static com.sigmundgranaas.forgero.smithing.block.ModBlocks.SOUL_HEARTH;
 
 import com.sigmundgranaas.forgero.core.Forgero;
 import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
@@ -68,6 +69,10 @@ public class ForgeroClientSmithingInitializer implements ClientModInitializer {
 	private void registerRenderLayers() {
 		BlockRenderLayerMap.INSTANCE.putBlock(
 				HEARTH,
+				RenderLayer.getCutout()
+		);
+		BlockRenderLayerMap.INSTANCE.putBlock(
+				SOUL_HEARTH,
 				RenderLayer.getCutout()
 		);
 	}

@@ -1,0 +1,10 @@
+{
+  "parent": "forgero:block/hearth",
+  "textures": {
+    "3": "forgero:block/campfire_bars",
+    "particle": "minecraft:block/campfire_log",
+    "log": "minecraft:block/campfire_log",
+    "fire": "minecraft:block/soul_campfire_fire",
+    "lit_log": "minecraft:block/soul_campfire_log_lit"
+  }
+}

@@ -46,6 +46,7 @@ public final class ModItemGroups {
 
 							// Keep this if you want the hearth visible in the smithing tab.
 							entries.add(ModBlocks.HEARTH);
+							entries.add(ModBlocks.SOUL_HEARTH);
 						})
 						.build()
 		);

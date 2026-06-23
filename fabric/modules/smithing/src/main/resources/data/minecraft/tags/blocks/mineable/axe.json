@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "forgero:hearth"
+    "forgero:hearth",
+    "forgero:soul_hearth"
   ]
 }

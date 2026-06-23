@@ -9,8 +9,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.CampfireBlock;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -34,18 +34,16 @@ public class CampfireBlockMixin {
 
 		if (itemStack.getItem() == Items.IRON_BARS) {
 			if (!world.isClient) {
-				BlockEntity oldBlockEntity = world.getBlockEntity(pos);
 				world.removeBlockEntity(pos);
 
-				BlockState newState = ModBlocks.HEARTH.getDefaultState()
+				Block hearth = state.isOf(Blocks.SOUL_CAMPFIRE) ? ModBlocks.SOUL_HEARTH : ModBlocks.HEARTH;
+				BlockState newState = hearth.getDefaultState()
 						.with(HearthBlock.FACING, state.get(CampfireBlock.FACING))
 						.with(HearthBlock.LIT, state.get(CampfireBlock.LIT))
 						.with(HearthBlock.SIGNAL_FIRE, state.get(CampfireBlock.SIGNAL_FIRE))
 						.with(HearthBlock.WATERLOGGED, state.get(CampfireBlock.WATERLOGGED));
 
 				world.setBlockState(pos, newState, Block.NOTIFY_ALL);
-
-				// Optionally transfer data from oldBlockEntity to new HearthBlockEntity here
 
 				if (!player.getAbilities().creativeMode) {
 					itemStack.decrement(1);

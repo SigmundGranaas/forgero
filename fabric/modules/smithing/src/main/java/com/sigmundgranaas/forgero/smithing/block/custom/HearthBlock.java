@@ -1,7 +1,13 @@
 package com.sigmundgranaas.forgero.smithing.block.custom;
 
+import java.util.Set;
+
+import com.sigmundgranaas.forgero.core.state.Composite;
+import com.sigmundgranaas.forgero.core.state.State;
+import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.smithing.block.entity.ModBlockEntities;
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.HearthBlockEntity;
+import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import com.sigmundgranaas.forgero.smithing.item.custom.SmithingTongsItem;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules;
 
@@ -13,6 +19,7 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -22,13 +29,37 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
 public class HearthBlock extends CampfireBlock implements Waterloggable {
+	// Add material id/name fragments here when more materials should require the Soul Hearth.
+	private static final Set<String> SOUL_HEARTH_REQUIRED_MATERIALS = Set.of(
+			"netherite"
+	);
+	private static final int MORPHED_STACK_CHECK_DEPTH = 4;
 
-	public HearthBlock(boolean emitsParticles, int fireDamage, Settings settings) {
+	private final boolean heatsSoulHearthMaterials;
+
+	public HearthBlock(boolean emitsParticles, int fireDamage, boolean heatsSoulHearthMaterials, Settings settings) {
 		super(emitsParticles, fireDamage, settings);
+		this.heatsSoulHearthMaterials = heatsSoulHearthMaterials;
 		this.setDefaultState(this.getStateManager().getDefaultState()
 				.with(FACING, Direction.NORTH)
 				.with(LIT, true)
 				.with(WATERLOGGED, false));
+	}
+
+	public boolean canHeat(ItemStack stack) {
+		return TemperatureRules.canTrackTemperature(stack) && canWarm(stack);
+	}
+
+	private boolean canPlaceHeldItem(ItemStack stack) {
+		return TemperatureRules.canTrackTemperature(stack) && canWarm(stack);
+	}
+
+	private boolean canPlaceTongsItem(ItemStack stack) {
+		return SmithingTongsItem.canStore(stack) && canWarm(stack);
+	}
+
+	private boolean canWarm(ItemStack stack) {
+		return heatsSoulHearthMaterials || !requiresSoulHearth(stack);
 	}
 
 	@Override
@@ -76,10 +107,8 @@ public class HearthBlock extends CampfireBlock implements Waterloggable {
 		}
 
 		if (!held.isEmpty() && slot.isEmpty()) {
-			if (!TemperatureRules.canTrackTemperature(held)) {
-				if (world.isClient) {
-					player.sendMessage(Text.literal("Only temperature items can be placed on the hearth!"), true);
-				}
+			if (!canPlaceHeldItem(held)) {
+				sendRejectedStackMessage(world, player, held);
 				return ActionResult.PASS;
 			}
 			if (!world.isClient) {
@@ -107,8 +136,14 @@ public class HearthBlock extends CampfireBlock implements Waterloggable {
 				return ActionResult.PASS;
 			}
 
+			ItemStack stored = SmithingTongsItem.getStoredStack(tongsStack);
+			if (!canPlaceTongsItem(stored)) {
+				sendRejectedStackMessage(world, player, stored);
+				return ActionResult.PASS;
+			}
+
 			if (!world.isClient) {
-				ItemStack stored = SmithingTongsItem.removeStoredStack(tongsStack);
+				stored = SmithingTongsItem.removeStoredStack(tongsStack);
 
 				if (!stored.isEmpty()) {
 					hearth.setStack(0, stored);
@@ -141,5 +176,61 @@ public class HearthBlock extends CampfireBlock implements Waterloggable {
 		}
 
 		return ActionResult.SUCCESS;
+	}
+
+	private void sendRejectedStackMessage(World world, PlayerEntity player, ItemStack stack) {
+		if (!world.isClient) {
+			return;
+		}
+
+		if (requiresSoulHearth(stack) && !heatsSoulHearthMaterials) {
+			player.sendMessage(Text.literal("This material can only be warmed on the Soul Hearth!"), true);
+			return;
+		}
+
+		if (!TemperatureRules.canTrackTemperature(stack)) {
+			player.sendMessage(Text.literal("Only temperature items can be placed on the hearth!"), true);
+		}
+	}
+
+	private static boolean requiresSoulHearth(ItemStack stack) {
+		return requiresSoulHearth(stack, 0);
+	}
+
+	private static boolean requiresSoulHearth(ItemStack stack, int depth) {
+		if (stack.isEmpty() || depth > MORPHED_STACK_CHECK_DEPTH) {
+			return false;
+		}
+
+		if (matchesSoulHearthMaterial(Registries.ITEM.getId(stack.getItem()).toString())) {
+			return true;
+		}
+
+		if (StateService.INSTANCE.convert(stack).map(HearthBlock::requiresSoulHearth).orElse(false)) {
+			return true;
+		}
+
+		if (stack.getItem() instanceof MorphedItem) {
+			return requiresSoulHearth(MorphedItem.getStartStack(stack), depth + 1)
+					|| requiresSoulHearth(MorphedItem.getResultStack(stack), depth + 1);
+		}
+
+		return false;
+	}
+
+	private static boolean requiresSoulHearth(State state) {
+		if (matchesSoulHearthMaterial(state.identifier())) {
+			return true;
+		}
+
+		if (state instanceof Composite composite) {
+			return SOUL_HEARTH_REQUIRED_MATERIALS.stream().anyMatch(material -> composite.has(material).isPresent());
+		}
+
+		return false;
+	}
+
+	private static boolean matchesSoulHearthMaterial(String id) {
+		return SOUL_HEARTH_REQUIRED_MATERIALS.stream().anyMatch(id::contains);
 	}
 }

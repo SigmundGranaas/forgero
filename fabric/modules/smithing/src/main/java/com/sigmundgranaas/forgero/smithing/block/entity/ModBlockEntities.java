@@ -37,7 +37,8 @@ public final class ModBlockEntities {
 				new Identifier(Forgero.NAMESPACE, "hearth"),
 				FabricBlockEntityTypeBuilder.create(
 						HearthBlockEntity::new,
-						ModBlocks.HEARTH
+						ModBlocks.HEARTH,
+						ModBlocks.SOUL_HEARTH
 				).build(null)
 		);
 	}

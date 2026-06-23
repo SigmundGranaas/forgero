@@ -18,6 +18,7 @@ public final class ModBlocks {
 	private static boolean registered = false;
 
 	public static Block HEARTH;
+	public static Block SOUL_HEARTH;
 
 	private ModBlocks() {
 	}
@@ -34,7 +35,18 @@ public final class ModBlocks {
 				new HearthBlock(
 						true,
 						2,
+						false,
 						FabricBlockSettings.copyOf(Blocks.CAMPFIRE)
+				)
+		);
+
+		SOUL_HEARTH = registerBlock(
+				"soul_hearth",
+				new HearthBlock(
+						true,
+						2,
+						true,
+						FabricBlockSettings.copyOf(Blocks.SOUL_CAMPFIRE)
 				)
 		);
 	}

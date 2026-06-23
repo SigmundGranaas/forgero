@@ -176,8 +176,12 @@ public class HearthBlockEntity extends BlockEntity implements Inventory {
 			return;
 		}
 
+		if (!(state.getBlock() instanceof HearthBlock hearthBlock)) {
+			return;
+		}
+
 		ItemStack slotStack = blockEntity.getStack(ITEM_SLOT);
-		if (slotStack.isEmpty() || !TemperatureRules.canTrackTemperature(slotStack)) {
+		if (slotStack.isEmpty() || !hearthBlock.canHeat(slotStack)) {
 			return;
 		}
 
