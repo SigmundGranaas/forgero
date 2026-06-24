@@ -13,5 +13,6 @@
   "item.forgero.morphed_item.needs_quench.tooltip": "Needs quenching",
   "message.forgero.smithing.strike.clean": "Clean strike",
   "message.forgero.smithing.strike.solid": "Solid strike",
-  "message.forgero.smithing.strike.glancing": "Glancing strike"
+  "message.forgero.smithing.strike.glancing": "Glancing strike",
+  "message.forgero.smithing.strike.miss": "Missed strike"
 }

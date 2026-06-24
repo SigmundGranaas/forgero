@@ -100,23 +100,7 @@
         ]
       }
     ],
-    "attributes": [
-      {
-        "id": "metal-max_temperature-composite",
-        "type": "forgero:max_temperature",
-        "value": 1085
-      },
-      {
-        "id": "metal-workable_temperature_start-composite",
-        "type": "forgero:workable_temperature_start",
-        "value": 700
-      },
-      {
-        "id": "metal-workable_temperature_end-composite",
-        "type": "forgero:workable_temperature_end",
-        "value": 900
-      }
-    ],
+    "attributes": [],
     "features": [
       {
         "type": "minecraft:entity_tick",
@@ -130,6 +114,33 @@
         "description": "feature.forgero.magnetic.description"
       }
     ]
+  },
+  "custom_data": {
+    "temperature_profile": {
+      "max": 1085,
+      "stages": [
+        {
+          "id": "cold",
+          "end": 450
+        },
+        {
+          "id": "warm",
+          "end": 699
+        },
+        {
+          "id": "workable",
+          "end": 840
+        },
+        {
+          "id": "hot",
+          "end": 1000
+        },
+        {
+          "id": "overheated",
+          "end": 1085
+        }
+      ]
+    }
   },
   "palette": {
     "name": "copper"

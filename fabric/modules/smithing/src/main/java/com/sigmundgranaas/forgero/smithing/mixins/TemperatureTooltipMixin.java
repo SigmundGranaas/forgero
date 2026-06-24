@@ -35,7 +35,7 @@ public class TemperatureTooltipMixin {
 			.styled(style -> style.withColor(TextColor.fromRgb(tempColor)));
 
 		Text workingRange;
-		if (stages.workableStart > 0 && stages.workableEnd > 0) {
+		if (stages.hasWorkableRange()) {
 			workingRange = Text.literal(String.format("(%d–%d°C)", stages.workableStart, stages.workableEnd))
 				.styled(style -> style.withColor(TextColor.fromRgb(0x00FF00)));
 		} else {

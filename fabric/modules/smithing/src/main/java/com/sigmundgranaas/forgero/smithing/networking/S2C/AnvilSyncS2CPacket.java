@@ -42,6 +42,7 @@ public class AnvilSyncS2CPacket {
 
 		int markerAttempts = buf.readInt();
 		int markerHitsCount = buf.readInt();
+		int markerTimeout = buf.readInt();
 
 		// NEW: read ingot crafting state
 		boolean ingotCrafting = buf.readBoolean();
@@ -52,9 +53,9 @@ public class AnvilSyncS2CPacket {
 		boolean finalMorphOnce = buf.readBoolean();
 		int strikeFeedbackOrdinal = buf.readInt();
 		int strikeFeedbackTicks = buf.readInt();
-		MinigameLogic.StrikeQuality strikeFeedbackQuality = strikeFeedbackOrdinal >= 0
-				&& strikeFeedbackOrdinal < MinigameLogic.StrikeQuality.values().length
-				? MinigameLogic.StrikeQuality.values()[strikeFeedbackOrdinal]
+		MinigameLogic.StrikeFeedback strikeFeedback = strikeFeedbackOrdinal >= 0
+				&& strikeFeedbackOrdinal < MinigameLogic.StrikeFeedback.values().length
+				? MinigameLogic.StrikeFeedback.values()[strikeFeedbackOrdinal]
 				: null;
 
 		client.execute(() -> {
@@ -106,10 +107,11 @@ public class AnvilSyncS2CPacket {
 			// Update progress
 			anvilEntity.setMarkerAttempts(markerAttempts);
 			anvilEntity.setMarkerHitsCount(markerHitsCount);
+			anvilEntity.setMarkerTimeout(markerTimeout);
 
 			// Update ingot crafting state
 			anvilEntity.clientSyncIngotState(ingotCrafting, plannedProductId);
-			anvilEntity.clientSyncStrikeFeedback(strikeFeedbackQuality, strikeFeedbackTicks);
+			anvilEntity.clientSyncStrikeFeedback(strikeFeedback, strikeFeedbackTicks);
 
 			// Trigger final morph overlay if requested
 			if (finalMorphOnce) {

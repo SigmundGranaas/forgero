@@ -11,6 +11,7 @@ import com.sigmundgranaas.forgero.minecraft.common.service.StateService;
 import com.sigmundgranaas.forgero.smithing.condition.PredicateConditionLootRegistry;
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureProfile;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureProfile.TemperatureBand;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules.TemperatureStage;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureState;
@@ -35,13 +36,13 @@ public class MinigameLogic {
 	public static final int MARKER_LIFETIME_TICKS_COOLING = 20;
 	public static final int TOTAL_MARKERS = 10;
 	public static final int MAX_MARKERS = 15;
-	public static final int COOLING_MARKERS = 3;
+	public static final int COOLING_MARKERS = 0;
 	public static final int ONE_MATERIAL_REQUIRED_HITS = 7;
 	public static final int TWO_MATERIAL_REQUIRED_HITS = 10;
 	public static final int THREE_MATERIAL_REQUIRED_HITS = 12;
 	public static final int FOUR_MATERIAL_REQUIRED_HITS = 15;
 	public static final int MAX_MISSES_BEFORE_RUINED = 5;
-	public static final int MARKER_TIMEOUT_COOLING = 10;
+	public static final int MARKER_TIMEOUT_COOLING = 0;
 	public static final int NORMAL_MARKER_HEAT_CHANGE = 40;
 	public static final int COOLING_MARKER_HEAT_CHANGE = -25;
 	public static final int PERFECT_NORMAL_MARKER_HEAT_CHANGE = 25;
@@ -52,10 +53,10 @@ public class MinigameLogic {
 	private static final int STRIKE_QUALITY_COUNT = 3;
 
 	private static final double MARKER_HIT_RADIUS_SQ = 0.0075d;
-	private static final double PERFECT_TIMING_START = 0.35d;
-	private static final double PERFECT_TIMING_END = 0.65d;
-	private static final double GOOD_TIMING_START = 0.20d;
-	private static final double GOOD_TIMING_END = 0.80d;
+	private static final double PERFECT_TIMING_START = 0.43d;
+	private static final double PERFECT_TIMING_END = 0.57d;
+	private static final double GOOD_TIMING_START = 0.25d;
+	private static final double GOOD_TIMING_END = 0.75d;
 	private static final double COOLING_MARKER_UPPER_WORKABLE_START = 0.65d;
 	private static final double COOLING_MARKER_MAX_CHANCE = 0.75d;
 
@@ -111,6 +112,21 @@ public class MinigameLogic {
 		POOR,
 		GOOD,
 		PERFECT
+	}
+
+	public enum StrikeFeedback {
+		MISS,
+		POOR,
+		GOOD,
+		PERFECT;
+
+		public static StrikeFeedback fromQuality(StrikeQuality quality) {
+			return switch (quality) {
+				case POOR -> POOR;
+				case GOOD -> GOOD;
+				case PERFECT -> PERFECT;
+			};
+		}
 	}
 
 	public interface MinigameCallback {
@@ -321,13 +337,18 @@ public class MinigameLogic {
 
 		updateRequiredHits(stack);
 
+		int markerIndex = markerHitsCount;
+
 		switch (outcome) {
-			case HIT -> {
-				int markerIndex = markerHitsCount;
-				applySuccessfulMarkerHit(markerIndex, stack, callback);
+			case HIT -> applySuccessfulMarkerHit(markerIndex, stack, callback);
+			case MISS -> {
+				clearCoolingMarker(markerIndex);
+				applyFailedMarkerAttempt();
 			}
-			case MISS -> applyFailedMarkerAttempt();
-			case TIMEOUT -> applyMarkerTimeout(stack);
+			case TIMEOUT -> {
+				clearCoolingMarker(markerIndex);
+				applyMarkerTimeout(stack);
+			}
 		}
 
 		boolean ruined = ruinIfMissLimitReached(stack);
@@ -371,10 +392,10 @@ public class MinigameLogic {
 		TemperatureRules.TemperatureStages stages = TemperatureRules.stages(profile);
 		TemperatureStage stage = TemperatureRules.stage(temperature, stages);
 		int stageIndex = stageIndexFor(stage);
-		boolean coolingMarker = coolingMarkerIndices.contains(markerIndex);
+		boolean coolingMarker = isCoolingMarker(markerIndex);
 		int baseTempChange = coolingMarker ? COOLING_MARKER_HEAT_CHANGE : NORMAL_MARKER_HEAT_CHANGE;
 
-		if (!canShapeAtTemperature(stage)) {
+		if (!coolingMarker && !canShapeAtTemperature(stage)) {
 			failedHeatStageCounts[stageIndex]++;
 			missMarkerHits++;
 			resetActiveStrikeStreaks();
@@ -386,13 +407,29 @@ public class MinigameLogic {
 
 		StrikeQuality quality = strikeQualityFor(coolingMarker);
 		int tempChange = heatChangeFor(coolingMarker, quality, stage, temperature, stages);
-		recordStrikeQuality(quality, coolingMarker);
+
+		if (coolingMarker) {
+			recordCoolingStrikeQuality(quality);
+
+			if (!markerPositions.isEmpty()) {
+				markerHits.set(0, true);
+				callback.playHitEffect(markerPositions.get(0), quality);
+			}
+
+			applyTemperatureChange(stack, profile, temperature, tempChange);
+			coolingMarkerHits++;
+			coolingStageCounts[stageIndex]++;
+			clearCoolingMarker(markerIndex);
+			return;
+		}
+
+		recordStrikeQuality(quality);
 
 		markerHitsCount++;
 
 		/*
-		 * markerAttempts now tracks successful marker progress only.
-		 * Misses, timeouts, and bad-temperature blows do not advance this.
+		 * markerAttempts now tracks successful forge progress only.
+		 * Cooling markers, misses, timeouts, and bad-temperature blows do not advance this.
 		 */
 		markerAttempts = markerHitsCount;
 
@@ -404,11 +441,6 @@ public class MinigameLogic {
 		hitStageIndices.add(stageIndex);
 
 		applyTemperatureChange(stack, profile, temperature, tempChange);
-
-		if (coolingMarker) {
-			coolingMarkerHits++;
-			coolingStageCounts[stageIndex]++;
-		}
 	}
 
 	private boolean canShapeAtTemperature(TemperatureStage stage) {
@@ -418,15 +450,10 @@ public class MinigameLogic {
 	}
 
 	private StrikeQuality strikeQualityFor(boolean coolingMarker) {
-		int lifetime = markerLifetime(coolingMarker);
+		return strikeQualityForTiming(getMarkerTimingProgress(coolingMarker));
+	}
 
-		if (lifetime <= 0) {
-			return StrikeQuality.GOOD;
-		}
-
-		int elapsed = Math.max(0, Math.min(lifetime, lifetime - markerTimeout));
-		double timing = elapsed / (double) lifetime;
-
+	private static StrikeQuality strikeQualityForTiming(double timing) {
 		if (timing >= PERFECT_TIMING_START && timing <= PERFECT_TIMING_END) {
 			return StrikeQuality.PERFECT;
 		}
@@ -438,19 +465,46 @@ public class MinigameLogic {
 		return StrikeQuality.POOR;
 	}
 
+	public double getMarkerTimingProgress(boolean coolingMarker) {
+		int lifetime = markerLifetime(coolingMarker);
+
+		if (lifetime <= 0) {
+			return 0.0d;
+		}
+
+		int elapsed = Math.max(0, Math.min(lifetime, lifetime - markerTimeout));
+		return elapsed / (double) lifetime;
+	}
+
+	public StrikeQuality getMarkerTimingQuality(boolean coolingMarker) {
+		return strikeQualityForTiming(getMarkerTimingProgress(coolingMarker));
+	}
+
+	public void tickClientMarkerTimer() {
+		if (markerPositions.isEmpty() || markerTimeout <= 0) {
+			return;
+		}
+
+		markerTimeout--;
+	}
+
+	public void setMarkerTimeout(int markerTimeout) {
+		this.markerTimeout = Math.max(0, markerTimeout);
+	}
+
 	private int markerLifetime(boolean coolingMarker) {
 		return coolingMarker ? MARKER_LIFETIME_TICKS_COOLING : MARKER_LIFETIME_TICKS_NORMAL;
 	}
 
-	private void recordStrikeQuality(StrikeQuality quality, boolean coolingMarker) {
+	private void recordStrikeQuality(StrikeQuality quality) {
 		int index = strikeQualityIndex(quality);
 		strikeQualityCounts[index]++;
 
-		if (coolingMarker) {
-			coolingStrikeQualityCounts[index]++;
-		}
-
 		updateStrikeStreaks(quality);
+	}
+
+	private void recordCoolingStrikeQuality(StrikeQuality quality) {
+		coolingStrikeQualityCounts[strikeQualityIndex(quality)]++;
 	}
 
 	private void updateStrikeStreaks(StrikeQuality quality) {
@@ -501,7 +555,10 @@ public class MinigameLogic {
 			int temperature,
 			TemperatureRules.TemperatureStages stages
 	) {
-		if (stage == TemperatureStage.WORKABLE && heatPressureWithWorkableRange(temperature, stages) > 0.0d) {
+		if (stage == TemperatureStage.WORKABLE
+				&& stages.band(TemperatureStage.WORKABLE)
+				.map(band -> heatPressureWithWorkableRange(temperature, band) > 0.0d)
+				.orElse(false)) {
 			return switch (quality) {
 				case PERFECT -> 12;
 				case GOOD -> 8;
@@ -528,7 +585,7 @@ public class MinigameLogic {
 		int markerIndex = markerHitsCount;
 
 		if (!shouldOfferCoolingMarker(stack)) {
-			coolingMarkerIndices.remove(Integer.valueOf(markerIndex));
+			clearCoolingMarker(markerIndex);
 			return false;
 		}
 
@@ -540,7 +597,7 @@ public class MinigameLogic {
 	}
 
 	private boolean shouldOfferCoolingMarker(ItemStack stack) {
-		if (coolingMarkerIndices.size() >= maxCoolingMarkers()) {
+		if (coolingMarkerHits >= maxCoolingMarkers()) {
 			return false;
 		}
 
@@ -557,6 +614,14 @@ public class MinigameLogic {
 		return Math.min(COOLING_MARKERS, Math.max(0, requiredHits - 1));
 	}
 
+	private boolean isCoolingMarker(int markerIndex) {
+		return coolingMarkerIndices.contains(markerIndex);
+	}
+
+	private void clearCoolingMarker(int markerIndex) {
+		coolingMarkerIndices.remove(Integer.valueOf(markerIndex));
+	}
+
 	private double heatPressure(ItemStack stack) {
 		if (stack.isEmpty() || !TemperatureRules.canTrackTemperature(stack)) {
 			return 0.0d;
@@ -565,9 +630,10 @@ public class MinigameLogic {
 		int temperature = TemperatureState.currentTemperature(stack);
 		TemperatureRules.TemperatureStages stages = TemperatureRules.stages(stack);
 
-		if (stages.workableStart > TemperatureState.DEFAULT_TEMPERATURE
-				&& stages.workableEnd > stages.workableStart) {
-			return heatPressureWithWorkableRange(temperature, stages);
+		var workableBand = stages.band(TemperatureStage.WORKABLE);
+
+		if (workableBand.isPresent()) {
+			return heatPressureWithWorkableRange(temperature, workableBand.get());
 		}
 
 		return switch (TemperatureRules.stage(temperature, stages)) {
@@ -579,19 +645,23 @@ public class MinigameLogic {
 
 	private double heatPressureWithWorkableRange(
 			int temperature,
-			TemperatureRules.TemperatureStages stages
+			TemperatureBand workableBand
 	) {
-		if (temperature < stages.workableStart) {
+		if (temperature < workableBand.start()) {
 			return 0.0d;
 		}
 
-		if (temperature > stages.workableEnd
-				|| temperature + NORMAL_MARKER_HEAT_CHANGE > stages.workableEnd) {
+		if (workableBand.end() <= workableBand.start()) {
+			return temperature >= workableBand.start() ? 1.0d : 0.0d;
+		}
+
+		if (temperature > workableBand.end()
+				|| temperature + NORMAL_MARKER_HEAT_CHANGE > workableBand.end()) {
 			return 1.0d;
 		}
 
-		double workableProgress = (temperature - stages.workableStart)
-				/ (double) (stages.workableEnd - stages.workableStart);
+		double workableProgress = (temperature - workableBand.start())
+				/ (double) (workableBand.end() - workableBand.start());
 
 		if (workableProgress < COOLING_MARKER_UPPER_WORKABLE_START) {
 			return 0.0d;
@@ -1247,6 +1317,7 @@ public class MinigameLogic {
 	}
 
 	private void clearActiveMarker() {
+		clearCoolingMarker(markerHitsCount);
 		markerPositions.clear();
 		markerHits.clear();
 		markerTimeout = 0;

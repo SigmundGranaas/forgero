@@ -3,6 +3,7 @@ package com.sigmundgranaas.forgero.smithing.minigame;
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureProfile;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureProfile.TemperatureBand;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules.TemperatureStage;
 import com.sigmundgranaas.forgero.smithing.temperature.TemperatureRules.TemperatureStages;
@@ -26,8 +27,8 @@ public class MinigameHudOverlay implements HudRenderCallback {
 	private static final Identifier BAR_TEXTURE = new Identifier("forgero", "textures/gui/bar_texture_new.png");
 	private static final Identifier THERMOMETER_ARROW = new Identifier("forgero", "textures/gui/thermometer_arrow.png");
 
-    @Override
-    public void onHudRender(DrawContext ctx, float tickDelta) {
+	@Override
+	public void onHudRender(DrawContext ctx, float tickDelta) {
 		var mc = MinecraftClient.getInstance();
 		if (mc == null || mc.player == null || mc.world == null || mc.options.hudHidden) return;
 
@@ -37,33 +38,21 @@ public class MinigameHudOverlay implements HudRenderCallback {
 		ItemStack stack = be.getInventory().getStack(0);
 		if (stack.isEmpty() || !(stack.getItem() instanceof MorphedItem)) return;
 		if (MorphedItem.isRuined(stack)) return;
-		if (MorphedItem.needsQuench(stack)) return;
 		double progress = MorphedItem.getMorphProgress(stack);
-		if (progress >= 1.0) return;
+		if (MorphedItem.needsQuench(stack) || progress >= 1.0) {
+			if (hasStrikeFeedback(be)) {
+				drawStrikeFeedback(ctx, mc, be, ctx.getScaledWindowWidth() / 2, 42);
+			}
+			return;
+		}
 
 		int temp = TemperatureState.currentTemperature(stack);
 		TemperatureProfile profile = TemperatureProfile.from(stack);
-		int max = Math.max(profile.maxTemperature(), 1);
-		int effectiveMax = Math.min(max, 10000);
-
 		TemperatureStages stages = TemperatureRules.stages(profile);
-
-		int minWindowWidth = 600;
-		int halfWindow = minWindowWidth / 2;
-		int minWindow = Math.max(0, temp - halfWindow);
-		int maxWindow = Math.min(effectiveMax, minWindow + minWindowWidth);
-
-		if (maxWindow == effectiveMax && maxWindow - minWindow < minWindowWidth) {
-			minWindow = Math.max(0, maxWindow - minWindowWidth);
-		}
-
-		int margin = Math.max(50, (maxWindow - minWindow) / 20);
-		minWindow = Math.max(0, minWindow - margin);
-		maxWindow = Math.min(effectiveMax, maxWindow + margin);
+		int minWindow = hudWindowStart(stages);
+		int maxWindow = hudWindowEnd(stages);
 
 		if (maxWindow <= minWindow) return;
-
-		int[] stageBoundariesForTicks = {stages.coldEnd, stages.warmEnd, stages.hotStart, stages.hotEnd, stages.overheatedStart};
 
 		int screenW = ctx.getScaledWindowWidth();
 		int barWidth = 165;
@@ -86,11 +75,8 @@ public class MinigameHudOverlay implements HudRenderCallback {
 			TemperatureRules.hudColor(TemperatureStage.OVERHEATED)
 		};
 
-		for (int x = 0; x < innerWidth; x++) {
-			int tempValue = Math.round(minWindow + x * unitsPerPixelX);
-			TemperatureStage stage = TemperatureRules.stage(tempValue, stages);
-			int color = TemperatureRules.hudColor(stage);
-			fill(ctx, innerLeft + x, innerTop, innerLeft + x + 1, innerTop + innerHeight, color);
+		for (TemperatureBand band : stages.bands()) {
+			drawTemperatureBand(ctx, band, minWindow, maxWindow, unitsPerPixelX, innerLeft, innerTop, innerWidth, innerHeight);
 		}
 
 		int progressBarWidth = 134;
@@ -126,7 +112,7 @@ public class MinigameHudOverlay implements HudRenderCallback {
 
 		ctx.drawTexture(BAR_TEXTURE, barLeft, barTop, 0, 0, barWidth, barHeight, barWidth, barHeight);
 
-		for (int boundary : stageBoundariesForTicks) {
+		for (int boundary : stages.boundaries()) {
 			if (boundary < minWindow || boundary > maxWindow) continue;
 			int x = valueToX(boundary, minWindow, unitsPerPixelX, innerLeft, innerWidth);
 			int rightBorder = innerLeft + innerWidth;
@@ -137,24 +123,6 @@ public class MinigameHudOverlay implements HudRenderCallback {
 			int yEnd = innerTop + innerHeight - 1;
 			fill(ctx, x, yStart, x + 1, yEnd, 0xFF2e2728);
 		}
-
-		int workableStart = profile.workableStart();
-		int workableEnd = profile.workableEnd();
-
-		if (workableStart > minWindow && workableStart < maxWindow) {
-			int x = valueToX(workableStart, minWindow, unitsPerPixelX, innerLeft, innerWidth);
-			int rightBorder = innerLeft + innerWidth;
-			if (x >= rightBorder) x = rightBorder - 1;
-			fill(ctx, x, innerTop + 1, x + 1, innerTop + innerHeight - 1, 0xFF2e2728);
-		}
-
-		if (workableEnd > minWindow && workableEnd < maxWindow) {
-			int x = valueToX(workableEnd, minWindow, unitsPerPixelX, innerLeft, innerWidth);
-			int rightBorder = innerLeft + innerWidth;
-			if (x >= rightBorder) x = rightBorder - 1;
-			fill(ctx, x, innerTop + 1, x + 1, innerTop + innerHeight - 1, 0xFF2e2728);
-		}
-
 
 		int tempArrowX = valueToX(temp, minWindow, unitsPerPixelX, innerLeft, innerWidth);
 		int leftEdge = innerLeft;
@@ -195,35 +163,41 @@ public class MinigameHudOverlay implements HudRenderCallback {
 			int centerX,
 			int y
 	) {
-		MinigameLogic.StrikeQuality quality = be.getStrikeFeedbackQuality();
+		MinigameLogic.StrikeFeedback feedback = be.getStrikeFeedbackQuality();
 
-		if (quality == null || be.getStrikeFeedbackTicks() <= 0) {
+		if (!hasStrikeFeedback(be)) {
 			return;
 		}
 
 		ctx.drawCenteredTextWithShadow(
 				mc.textRenderer,
-				strikeFeedbackText(quality),
+				strikeFeedbackText(feedback),
 				centerX,
 				y,
-				strikeFeedbackColor(quality)
+				strikeFeedbackColor(feedback)
 		);
 	}
 
-	private Text strikeFeedbackText(MinigameLogic.StrikeQuality quality) {
-		return switch (quality) {
+	private Text strikeFeedbackText(MinigameLogic.StrikeFeedback feedback) {
+		return switch (feedback) {
+			case MISS -> Text.translatable("message.forgero.smithing.strike.miss");
 			case PERFECT -> Text.translatable("message.forgero.smithing.strike.clean");
 			case GOOD -> Text.translatable("message.forgero.smithing.strike.solid");
 			case POOR -> Text.translatable("message.forgero.smithing.strike.glancing");
 		};
 	}
 
-	private int strikeFeedbackColor(MinigameLogic.StrikeQuality quality) {
-		return switch (quality) {
+	private int strikeFeedbackColor(MinigameLogic.StrikeFeedback feedback) {
+		return switch (feedback) {
+			case MISS -> 0xFFFF5555;
 			case PERFECT -> 0xFF55FF55;
 			case GOOD -> 0xFFFFFFFF;
 			case POOR -> 0xFFAAAAAA;
 		};
+	}
+
+	private boolean hasStrikeFeedback(SmithingAnvilBlockEntity be) {
+		return be.getStrikeFeedbackQuality() != null && be.getStrikeFeedbackTicks() > 0;
 	}
 
     private SmithingAnvilBlockEntity findNearestActiveAnvil(MinecraftClient mc) {
@@ -264,13 +238,53 @@ public class MinigameHudOverlay implements HudRenderCallback {
     private boolean isActiveMinigame(SmithingAnvilBlockEntity be) {
         ItemStack stack = be.getInventory().getStack(0);
         if (stack.isEmpty() || !(stack.getItem() instanceof MorphedItem)) return false;
-        return MorphedItem.getMorphProgress(stack) < 1.0 && !MorphedItem.isRuined(stack);
+        if (MorphedItem.isRuined(stack)) return false;
+        return (MorphedItem.getMorphProgress(stack) < 1.0 && !MorphedItem.needsQuench(stack))
+				|| hasStrikeFeedback(be);
     }
 
 	private int clamp(int v, int lo, int hi) {
 		if (v < lo) return lo;
 		if (v > hi) return hi;
 		return v;
+	}
+
+	private int hudWindowStart(TemperatureStages stages) {
+		if (!stages.hasWorkableRange()) {
+			return TemperatureState.MIN_TEMPERATURE;
+		}
+
+		return Math.max(TemperatureState.MIN_TEMPERATURE, stages.workableStart - hudWindowMargin(stages));
+	}
+
+	private int hudWindowEnd(TemperatureStages stages) {
+		return Math.max(stages.max, hudWindowStart(stages) + 1);
+	}
+
+	private int hudWindowMargin(TemperatureStages stages) {
+		int workableWidth = Math.max(1, stages.workableEnd - stages.workableStart);
+		return Math.max(80, workableWidth / 2);
+	}
+
+	private void drawTemperatureBand(
+			DrawContext ctx,
+			TemperatureBand band,
+			int minWindow,
+			int maxWindow,
+			float unitsPerPixelX,
+			int innerLeft,
+			int innerTop,
+			int innerWidth,
+			int innerHeight
+	) {
+		if (band.end() < minWindow || band.start() > maxWindow) {
+			return;
+		}
+
+		int startX = valueToX(Math.max(band.start(), minWindow), minWindow, unitsPerPixelX, innerLeft, innerWidth);
+		int endX = valueToX(Math.min(band.end(), maxWindow), minWindow, unitsPerPixelX, innerLeft, innerWidth) + 1;
+		endX = Math.min(innerLeft + innerWidth, Math.max(startX + 1, endX));
+		fill(ctx, startX, innerTop, endX, innerTop + innerHeight, TemperatureRules.hudColor(band.stage()));
 	}
 
 	private int valueToX(int value, int minWindow, float unitsPerPixelX, int barLeft, int barWidth) {

@@ -2,9 +2,11 @@ package com.sigmundgranaas.forgero.smithing.block.renderer;
 
 import com.sigmundgranaas.forgero.smithing.block.entity.custom.SmithingAnvilBlockEntity;
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
+import com.sigmundgranaas.forgero.smithing.minigame.MinigameLogic;
 import com.sigmundgranaas.forgero.smithing.minigame.MinigamePositioning;
 import com.sigmundgranaas.forgero.smithing.minigame.MinigameTransforms;
 import com.sigmundgranaas.forgero.smithing.util.SchematicMaterialCost;
+import org.joml.Matrix4f;
 
 import net.minecraft.block.AnvilBlock;
 import net.minecraft.client.MinecraftClient;
@@ -45,6 +47,17 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 	private static final float MARKER_COOLING_GREEN = 0.85f;
 	private static final float MARKER_COOLING_BLUE = 1.0f;
 	private static final float MARKER_ALPHA = 1.0f;
+	private static final float MARKER_FILL_Y_OFFSET = 0.002f;
+	private static final int MARKER_FILL_ALPHA = 190;
+	private static final int MARKER_POOR_RED = 255;
+	private static final int MARKER_POOR_GREEN = 56;
+	private static final int MARKER_POOR_BLUE = 42;
+	private static final int MARKER_GOOD_RED = 255;
+	private static final int MARKER_GOOD_GREEN = 214;
+	private static final int MARKER_GOOD_BLUE = 48;
+	private static final int MARKER_CLEAN_RED = 80;
+	private static final int MARKER_CLEAN_GREEN = 255;
+	private static final int MARKER_CLEAN_BLUE = 96;
 
 	// Lighting constants
 	private static final int DEFAULT_LIGHT_LEVEL = 15728880;
@@ -98,7 +111,11 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 		matrices.translate(markerPos.x, MARKER_RENDER_OFFSET_Y, markerPos.y);
 
 		boolean isCoolingMarker = entity.getCoolingMarkerIndices().contains(entity.getMarkerAttempts());
-		drawMarkerBox(matrices, vertexConsumers, isCoolingMarker);
+		MinigameLogic logic = entity.getMinigameLogic();
+		double timingProgress = logic.getMarkerTimingProgress(isCoolingMarker);
+		MinigameLogic.StrikeQuality timingQuality = logic.getMarkerTimingQuality(isCoolingMarker);
+
+		drawMarkerBox(matrices, vertexConsumers, isCoolingMarker, timingProgress, timingQuality);
 
 		matrices.pop();
 	}
@@ -110,7 +127,13 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 		}
 	}
 
-	private void drawMarkerBox(MatrixStack matrices, VertexConsumerProvider vertexConsumers, boolean isCoolingMarker) {
+	private void drawMarkerBox(
+			MatrixStack matrices,
+			VertexConsumerProvider vertexConsumers,
+			boolean isCoolingMarker,
+			double timingProgress,
+			MinigameLogic.StrikeQuality timingQuality
+	) {
 		float red = isCoolingMarker ? MARKER_COOLING_RED : MARKER_NORMAL_RED;
 		float green = isCoolingMarker ? MARKER_COOLING_GREEN : MARKER_NORMAL_GREEN;
 		float blue = isCoolingMarker ? MARKER_COOLING_BLUE : MARKER_NORMAL_BLUE;
@@ -120,6 +143,50 @@ public class SmithingAnvilBlockEntityRenderer implements BlockEntityRenderer<Smi
 			-MARKER_SIZE, 0, -MARKER_SIZE,
 			MARKER_SIZE, 0, MARKER_SIZE,
 			red, green, blue, MARKER_ALPHA);
+
+		drawMarkerTimingFill(matrices, vertexConsumers, timingProgress, timingQuality);
+	}
+
+	private void drawMarkerTimingFill(
+			MatrixStack matrices,
+			VertexConsumerProvider vertexConsumers,
+			double timingProgress,
+			MinigameLogic.StrikeQuality timingQuality
+	) {
+		double centerCharge = 1.0d - Math.min(1.0d, Math.abs(timingProgress - 0.5d) * 2.0d);
+
+		if (centerCharge <= 0.0d) {
+			return;
+		}
+
+		float fillSize = (float) (MARKER_SIZE * centerCharge);
+		MarkerColor color = markerColor(timingQuality);
+		VertexConsumer quadConsumer = vertexConsumers.getBuffer(RenderLayer.getDebugQuads());
+		Matrix4f matrix = matrices.peek().getPositionMatrix();
+
+		quadConsumer.vertex(matrix, -fillSize, MARKER_FILL_Y_OFFSET, -fillSize)
+				.color(color.red(), color.green(), color.blue(), MARKER_FILL_ALPHA)
+				.next();
+		quadConsumer.vertex(matrix, -fillSize, MARKER_FILL_Y_OFFSET, fillSize)
+				.color(color.red(), color.green(), color.blue(), MARKER_FILL_ALPHA)
+				.next();
+		quadConsumer.vertex(matrix, fillSize, MARKER_FILL_Y_OFFSET, fillSize)
+				.color(color.red(), color.green(), color.blue(), MARKER_FILL_ALPHA)
+				.next();
+		quadConsumer.vertex(matrix, fillSize, MARKER_FILL_Y_OFFSET, -fillSize)
+				.color(color.red(), color.green(), color.blue(), MARKER_FILL_ALPHA)
+				.next();
+	}
+
+	private MarkerColor markerColor(MinigameLogic.StrikeQuality timingQuality) {
+		return switch (timingQuality) {
+			case PERFECT -> new MarkerColor(MARKER_CLEAN_RED, MARKER_CLEAN_GREEN, MARKER_CLEAN_BLUE);
+			case GOOD -> new MarkerColor(MARKER_GOOD_RED, MARKER_GOOD_GREEN, MARKER_GOOD_BLUE);
+			case POOR -> new MarkerColor(MARKER_POOR_RED, MARKER_POOR_GREEN, MARKER_POOR_BLUE);
+		};
+	}
+
+	private record MarkerColor(int red, int green, int blue) {
 	}
 
 	private void renderItem(

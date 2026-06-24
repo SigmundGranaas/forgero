@@ -1,10 +1,13 @@
 package com.sigmundgranaas.forgero.smithing.temperature;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import com.sigmundgranaas.forgero.minecraft.common.item.ToolStateItem;
 import com.sigmundgranaas.forgero.smithing.item.custom.MorphedItem;
+import com.sigmundgranaas.forgero.smithing.temperature.TemperatureProfile.TemperatureBand;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -39,17 +42,58 @@ public final class TemperatureRules {
 		public final int workableStart;
 		public final int workableEnd;
 		public final int max;
+		private final List<TemperatureBand> bands;
 
-		public TemperatureStages(int ambient, int coldEnd, int warmEnd, int hotStart, int hotEnd, int overheatedStart, int workableStart, int workableEnd, int max) {
-			this.ambient = ambient;
-			this.coldEnd = coldEnd;
-			this.warmEnd = warmEnd;
-			this.hotStart = hotStart;
-			this.hotEnd = hotEnd;
-			this.overheatedStart = overheatedStart;
-			this.workableStart = workableStart;
-			this.workableEnd = workableEnd;
-			this.max = max;
+		public TemperatureStages(int max, List<TemperatureBand> bands) {
+			this.ambient = TemperatureState.DEFAULT_TEMPERATURE;
+			this.max = Math.max(TemperatureState.MIN_TEMPERATURE, max);
+			this.bands = List.copyOf(bands == null ? List.of() : bands);
+
+			this.coldEnd = band(TemperatureStage.COLD)
+					.map(TemperatureBand::end)
+					.orElse(ambient);
+			this.warmEnd = band(TemperatureStage.WARM)
+					.map(TemperatureBand::end)
+					.orElse(coldEnd);
+			this.hotStart = band(TemperatureStage.HOT)
+					.map(TemperatureBand::start)
+					.orElse(0);
+			this.hotEnd = band(TemperatureStage.HOT)
+					.map(TemperatureBand::end)
+					.orElse(warmEnd);
+			this.overheatedStart = band(TemperatureStage.OVERHEATED)
+					.map(TemperatureBand::start)
+					.orElse(this.max + 1);
+			this.workableStart = band(TemperatureStage.WORKABLE)
+					.map(TemperatureBand::start)
+					.orElse(0);
+			this.workableEnd = band(TemperatureStage.WORKABLE)
+					.map(TemperatureBand::end)
+					.orElse(0);
+		}
+
+		public List<TemperatureBand> bands() {
+			return bands;
+		}
+
+		public Optional<TemperatureBand> band(TemperatureStage stage) {
+			return bands.stream()
+					.filter(band -> band.stage() == stage)
+					.findFirst();
+		}
+
+		public boolean hasWorkableRange() {
+			return band(TemperatureStage.WORKABLE)
+					.map(band -> band.end() > band.start())
+					.orElse(false);
+		}
+
+		public int[] boundaries() {
+			return bands.stream()
+					.mapToInt(TemperatureBand::end)
+					.filter(boundary -> boundary < max)
+					.distinct()
+					.toArray();
 		}
 	}
 
@@ -156,51 +200,31 @@ public final class TemperatureRules {
 
 	public static TemperatureStages stages(TemperatureProfile profile) {
 		int effectiveMax = Math.min(Math.max(profile.maxTemperature(), 1), REAL_CAP);
-		int workableStart = profile.workableStart();
-		int workableEnd = profile.workableEnd();
+		TemperatureProfile effectiveProfile = profile.maxTemperature() == effectiveMax
+				? profile
+				: TemperatureProfile.of(effectiveMax, profile.bands());
 
-		if (!hasUsableWorkableRange(profile, effectiveMax)) {
-			workableStart = 0;
-			workableEnd = 0;
-		}
-
-		int coldEnd = (int) (effectiveMax * 0.25);
-		int warmEnd = (int) (effectiveMax * 0.55);
-		int hotStart = (int) (effectiveMax * 0.55);
-		int hotEnd = (int) (effectiveMax * 0.85);
-		int overheatedStart = hotEnd;
-
-		return new TemperatureStages(
-				TemperatureState.DEFAULT_TEMPERATURE,
-				coldEnd,
-				warmEnd,
-				hotStart,
-				hotEnd,
-				overheatedStart,
-				workableStart,
-				workableEnd,
-				effectiveMax
-		);
+		return new TemperatureStages(effectiveMax, effectiveProfile.bands());
 	}
 
 	public static TemperatureStage stage(int temperature, TemperatureStages stages) {
-		if (isWorkable(temperature, stages)) {
-			return TemperatureStage.WORKABLE;
-		}
-		if (temperature < stages.coldEnd) {
-			return TemperatureStage.COLD;
-		}
-		if (temperature < stages.warmEnd) {
-			return TemperatureStage.WARM;
-		}
-		if (temperature < stages.hotEnd) {
-			return TemperatureStage.HOT;
-		}
-		if (temperature >= stages.overheatedStart) {
-			return TemperatureStage.OVERHEATED;
+		for (TemperatureBand band : stages.bands()) {
+			if (band.contains(temperature)) {
+				return band.stage();
+			}
 		}
 
-		return TemperatureStage.HOT;
+		if (stages.bands().isEmpty()) {
+			return temperature <= TemperatureState.DEFAULT_TEMPERATURE
+					? TemperatureStage.COLD
+					: TemperatureStage.HOT;
+		}
+
+		if (temperature < stages.bands().get(0).start()) {
+			return stages.bands().get(0).stage();
+		}
+
+		return stages.bands().get(stages.bands().size() - 1).stage();
 	}
 
 	public static boolean isWorkable(ItemStack stack) {
@@ -208,10 +232,9 @@ public final class TemperatureRules {
 	}
 
 	public static boolean isWorkable(int temperature, TemperatureStages stages) {
-		return stages.workableStart > 0
-				&& stages.workableEnd > 0
-				&& temperature >= stages.workableStart
-				&& temperature <= stages.workableEnd;
+		return stages.band(TemperatureStage.WORKABLE)
+				.map(band -> band.contains(temperature))
+				.orElse(false);
 	}
 
 	public static int color(ItemStack stack) {
@@ -219,7 +242,7 @@ public final class TemperatureRules {
 	}
 
 	public static int color(int temperature, TemperatureStages stages) {
-		if (stages.workableStart > 0 && stages.workableEnd > 0) {
+		if (stages.hasWorkableRange()) {
 			return colorWithWorkableRange(temperature, stages);
 		}
 
@@ -415,13 +438,6 @@ public final class TemperatureRules {
 	}
 
 	private static int validWorkableStart(TemperatureProfile profile) {
-		int effectiveMax = Math.min(Math.max(profile.maxTemperature(), 1), REAL_CAP);
-		return hasUsableWorkableRange(profile, effectiveMax) ? profile.workableStart() : 0;
-	}
-
-	private static boolean hasUsableWorkableRange(TemperatureProfile profile, int effectiveMax) {
-		return profile.workableStart() > TemperatureState.DEFAULT_TEMPERATURE
-				&& profile.workableEnd() > profile.workableStart()
-				&& profile.workableEnd() <= effectiveMax;
+		return profile.hasWorkableRange() ? profile.workableStart() : 0;
 	}
 }

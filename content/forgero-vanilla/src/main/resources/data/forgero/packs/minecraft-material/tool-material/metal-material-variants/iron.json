@@ -7,23 +7,34 @@
     "tag": "c:iron_ingot"
   },
   "properties": {
-    "attributes": [
-      {
-        "id": "metal-max_temperature-composite",
-        "type": "forgero:max_temperature",
-        "value": 1538
-      },
-      {
-        "id": "metal-workable_temperature_start-composite",
-        "type": "forgero:workable_temperature_start",
-        "value": 950
-      },
-      {
-        "id": "metal-workable_temperature_end-composite",
-        "type": "forgero:workable_temperature_end",
-        "value": 1250
-      }
-    ]
+    "attributes": []
+  },
+  "custom_data": {
+    "temperature_profile": {
+      "max": 1538,
+      "stages": [
+        {
+          "id": "cold",
+          "end": 650
+        },
+        {
+          "id": "warm",
+          "end": 949
+        },
+        {
+          "id": "workable",
+          "end": 1100
+        },
+        {
+          "id": "hot",
+          "end": 1425
+        },
+        {
+          "id": "overheated",
+          "end": 1538
+        }
+      ]
+    }
   },
   "palette": {
     "name": "iron"

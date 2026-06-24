@@ -112,8 +112,9 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 
 	private transient boolean showFinalMorphOnce = false;
 	private transient MinigameLogic.StrikeQuality lastStrikeQuality = null;
+	private transient boolean lastStrikeMiss = false;
 	@Nullable
-	private transient MinigameLogic.StrikeQuality strikeFeedbackQuality = null;
+	private transient MinigameLogic.StrikeFeedback strikeFeedbackQuality = null;
 	@Nullable
 	private transient UUID strikeFeedbackPlayerId = null;
 	private transient int strikeFeedbackTicks = 0;
@@ -219,6 +220,8 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 
 	@Override
 	public void playMissEffect() {
+		lastStrikeMiss = true;
+
 		if (!(world instanceof ServerWorld serverWorld)) {
 			return;
 		}
@@ -342,17 +345,23 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 				offsetVec
 		);
 
+		lastStrikeQuality = null;
+		lastStrikeMiss = false;
+
 		boolean hit = minigameLogic.processHit(itemLocalHit, this);
 
 		if (!hit) {
 			playMissEffect();
 		}
 
-		lastStrikeQuality = null;
 		minigameLogic.processMarkerAttempt(hit, this);
 
-		if (lastStrikeQuality != null && player instanceof ServerPlayerEntity serverPlayer) {
-			showStrikeFeedback(serverPlayer, lastStrikeQuality);
+		if (player instanceof ServerPlayerEntity serverPlayer) {
+			if (lastStrikeQuality != null) {
+				showStrikeFeedback(serverPlayer, MinigameLogic.StrikeFeedback.fromQuality(lastStrikeQuality));
+			} else if (lastStrikeMiss) {
+				showStrikeFeedback(serverPlayer, MinigameLogic.StrikeFeedback.MISS);
+			}
 		}
 
 		if (minigameLogic.isComplete()) {
@@ -848,6 +857,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 
 			data.writeInt(minigameLogic.getMarkerAttempts());
 			data.writeInt(minigameLogic.getMarkerHitsCount());
+			data.writeInt(minigameLogic.getMarkerTimeout());
 
 			data.writeBoolean(isSmithing);
 			data.writeBoolean(plannedProductId != null);
@@ -858,7 +868,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 
 			data.writeBoolean(pendingFinalMorphNotify);
 
-			MinigameLogic.StrikeQuality strikeFeedback = strikeFeedbackFor(player);
+			MinigameLogic.StrikeFeedback strikeFeedback = strikeFeedbackFor(player);
 			data.writeInt(strikeFeedback == null ? -1 : strikeFeedback.ordinal());
 			data.writeInt(strikeFeedback == null ? 0 : strikeFeedbackTicks);
 
@@ -886,6 +896,7 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		}
 
 		if (world.isClient) {
+			minigameLogic.tickClientMarkerTimer();
 			updateClientStrikeFeedbackTimer();
 			clientTick();
 			return;
@@ -898,15 +909,15 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 		minigameLogic.tick(this);
 	}
 
-	private void showStrikeFeedback(ServerPlayerEntity player, MinigameLogic.StrikeQuality quality) {
-		strikeFeedbackQuality = quality;
+	private void showStrikeFeedback(ServerPlayerEntity player, MinigameLogic.StrikeFeedback feedback) {
+		strikeFeedbackQuality = feedback;
 		strikeFeedbackPlayerId = player.getUuid();
 		strikeFeedbackTicks = STRIKE_FEEDBACK_DURATION_TICKS;
 		syncCustomDataToClients();
 	}
 
 	@Nullable
-	private MinigameLogic.StrikeQuality strikeFeedbackFor(ServerPlayerEntity player) {
+	private MinigameLogic.StrikeFeedback strikeFeedbackFor(ServerPlayerEntity player) {
 		if (strikeFeedbackTicks <= 0 || strikeFeedbackQuality == null || strikeFeedbackPlayerId == null) {
 			return null;
 		}
@@ -1057,6 +1068,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 
 	public void setMarkerHitsCount(int count) {
 		minigameLogic.setMarkerHitsCount(count);
+	}
+
+	public void setMarkerTimeout(int markerTimeout) {
+		minigameLogic.setMarkerTimeout(markerTimeout);
 	}
 
 	public double getMorphProgress() {
@@ -1256,10 +1271,10 @@ public class SmithingAnvilBlockEntity extends BlockEntity implements MinigameLog
 	}
 
 	public void clientSyncStrikeFeedback(
-			@Nullable MinigameLogic.StrikeQuality quality,
+			@Nullable MinigameLogic.StrikeFeedback feedback,
 			int ticks
 	) {
-		this.strikeFeedbackQuality = quality;
+		this.strikeFeedbackQuality = feedback;
 		this.strikeFeedbackTicks = Math.max(0, ticks);
 	}
 
