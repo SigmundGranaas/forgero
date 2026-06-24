@@ -24,6 +24,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.world.GameMode;
 
 import java.util.List;
 import java.util.Set;
@@ -72,6 +73,12 @@ public class LootGametest {
 	}
 
 
+	// NOT registered (@GameTest intentionally omitted): enabling it reveals auto-smelt-on-block-break
+	// is not verifiable as written. BlockLootMixin only fires from Block.getDroppedStacks, which
+	// tryBreakBlock reaches ONLY when the tool can harvest the ore (mining-level gate). The synthetic
+	// createStack pickaxe has no mining level, so iron ore yields NO drop for auto-smelt to transform
+	// (and a creative break drops nothing either). A working test needs a tool with real harvest level.
+	// See coverage-gap notes; left here as the starting point for that fix.
 	public void testBlockLootMixinWithAutoSmelt(TestContext context) {
 		// 1. Create a dynamic pickaxe with auto-smelt property
 		var filter = new TagFilter(new Identifier("forgero", "smeltable_ores"));
@@ -86,11 +93,14 @@ public class LootGametest {
 		BlockPos orePos = new BlockPos(1, 1, 1);
 		context.setBlockState(orePos, Blocks.IRON_ORE);
 
-		// 3. Simulate mining
+		// 3. Break the ore in SURVIVAL via the interaction manager: this fully breaks the block AND
+		// produces drops (a creative break yields no drops, so the loot transform has nothing to act on).
 		ServerPlayerEntity player = context.createMockCreativeServerPlayerInWorld();
+		player.changeGameMode(GameMode.SURVIVAL);
+		BlockPos oreAbs = context.getAbsolutePos(orePos);
+		player.teleport(oreAbs.getX(), oreAbs.getY(), oreAbs.getZ());
 		player.setStackInHand(Hand.MAIN_HAND, pickaxe);
-		PlayerActionTestHelper actionHelper = new PlayerActionTestHelper(context, player);
-		actionHelper.mineBlock(context.getAbsolutePos(orePos));
+		player.interactionManager.tryBreakBlock(oreAbs);
 
 		// 4. Assert outcome
 		context.waitAndRun(5, () -> {

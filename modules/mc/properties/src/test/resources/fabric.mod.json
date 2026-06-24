@@ -35,7 +35,8 @@
       "com.sigmundgranaas.forgero.properties.gametest.ZoneGametest",
       "com.sigmundgranaas.forgero.properties.gametest.NewMechanicsCodecGametest",
       "com.sigmundgranaas.forgero.properties.gametest.PredicateGatingGametest",
-      "com.sigmundgranaas.forgero.properties.gametest.FilterSelectionGametest"
+      "com.sigmundgranaas.forgero.properties.gametest.FilterSelectionGametest",
+      "com.sigmundgranaas.forgero.properties.gametest.BlockBreakAdversarialGametest"
     ]
   }
 }
