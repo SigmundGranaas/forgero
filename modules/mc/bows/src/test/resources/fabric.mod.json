@@ -9,8 +9,7 @@
     "SigmundGranaas"
   ],
   "entrypoints": {
-    "main": [
-    ],
+    "main": [],
     "fabric-gametest": [
       "com.sigmundgranaas.forgero.bows.gametest.BowHandlerGametest",
       "com.sigmundgranaas.forgero.bows.gametest.BowMixinIntegrationTest",
@@ -20,7 +19,8 @@
       "com.sigmundgranaas.forgero.bows.gametest.OnHitBlockEffectTest",
       "com.sigmundgranaas.forgero.bows.gametest.OnHitEffectTest",
       "com.sigmundgranaas.forgero.bows.gametest.ArrowPersistenceTest",
-      "com.sigmundgranaas.forgero.bows.gametest.ArrowItemRegistrationTest"
+      "com.sigmundgranaas.forgero.bows.gametest.ArrowItemRegistrationTest",
+      "com.sigmundgranaas.forgero.bows.gametest.ArrowPhysicsGametest"
     ]
   },
   "custom": {
