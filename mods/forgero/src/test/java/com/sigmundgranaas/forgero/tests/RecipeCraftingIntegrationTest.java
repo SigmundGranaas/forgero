@@ -4,6 +4,7 @@ import com.sigmundgranaas.forgero.common.api.ForgeroApi;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroGameTest;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroTestUtils;
 import com.sigmundgranaas.forgero.mc.testcommon.gametest.ForgeroTestContext;
+import com.sigmundgranaas.forgero.mc.testcommon.helpers.MiningTestHelper;
 import com.sigmundgranaas.forgero.mc.testcommon.helpers.PlayerFactory;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
@@ -199,6 +200,43 @@ public class RecipeCraftingIntegrationTest implements ForgeroGameTest {
 			LOGGER.info("Tool assembly test passed: {} with durability {}", resultId, durability);
 		}
 
+		context.complete();
+	}
+
+	/**
+	 * Craft → USE: a pickaxe assembled from parts must actually function in-world, not just have a
+	 * pickaxe-shaped NBT blob with a durability number (the gap in the assembly tests above).
+	 */
+	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
+	public void crafted_pickaxe_actually_mines(TestContext context) {
+		var ctx = ForgeroTestUtils.forgero(context);
+		RecipeManager recipeManager = context.getWorld().getRecipeManager();
+		ItemStack head = ctx.toStack(ctx.component("forgero:iron-pickaxe_head").orElseThrow()).orElseThrow();
+		ItemStack handle = ctx.toStack(ctx.component("forgero:oak-handle").orElseThrow()).orElseThrow();
+
+		RecipeInputInventory inventory = createCraftingInventory(
+				head, ItemStack.EMPTY, ItemStack.EMPTY,
+				handle, ItemStack.EMPTY, ItemStack.EMPTY,
+				ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY);
+		Optional<CraftingRecipe> recipe = recipeManager.getFirstMatch(RecipeType.CRAFTING, inventory, context.getWorld());
+		if (recipe.isEmpty()) {
+			inventory = createCraftingInventory(
+					ItemStack.EMPTY, head, ItemStack.EMPTY,
+					ItemStack.EMPTY, handle, ItemStack.EMPTY,
+					ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY);
+			recipe = recipeManager.getFirstMatch(RecipeType.CRAFTING, inventory, context.getWorld());
+		}
+		context.assertTrue(recipe.isPresent(), "iron pickaxe assembly recipe must exist");
+
+		ItemStack crafted = recipe.get().craft(inventory, context.getWorld().getRegistryManager());
+		context.assertFalse(crafted.isEmpty(), "crafted pickaxe must not be empty");
+
+		// The real proof: the crafted tool mines and harvests stone in-world.
+		int ticks = MiningTestHelper.ticksToBreak(context, crafted.copy(), Blocks.STONE);
+		context.assertTrue(ticks > 0 && ticks < 200,
+				"crafted pickaxe must actually mine stone in a sane time, got " + ticks + " ticks");
+		context.assertTrue(MiningTestHelper.harvestYieldsDrop(context, crafted.copy(), Blocks.STONE),
+				"crafted pickaxe must actually harvest stone (produce a drop)");
 		context.complete();
 	}
 
