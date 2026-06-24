@@ -8,6 +8,7 @@ import com.sigmundgranaas.forgero.mc.testcommon.helpers.DurabilityTestHelper;
 import com.sigmundgranaas.forgero.mc.testcommon.helpers.MiningTestHelper;
 
 import net.minecraft.block.Blocks;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.test.GameTest;
@@ -77,6 +78,39 @@ public class ToolGameplayImpactTest implements ForgeroGameTest {
 		int target = Math.max(1, max - 5);
 		context.assertTrue(DurabilityTestHelper.survivesBreaks(context, tool("iron", "pickaxe"), Blocks.STONE, target),
 				"Native iron pickaxe should survive ~" + target + " real block-breaks");
+		context.complete();
+	}
+
+	/** Efficiency must speed up real mining on a Forgero tool. */
+	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
+	public void efficiency_enchantment_speeds_real_mining(TestContext context) {
+		ItemStack plain = tool("iron", "pickaxe");
+		ItemStack enchanted = tool("iron", "pickaxe");
+		enchanted.addEnchantment(Enchantments.EFFICIENCY, 5);
+		MiningTestHelper.assertBreaksFaster(context, plain, enchanted, Blocks.STONE);
+		context.complete();
+	}
+
+	/** Sharpness must add real melee damage on a Forgero weapon. */
+	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
+	public void sharpness_enchantment_adds_real_damage(TestContext context) {
+		float base = CombatTestHelper.measureMeleeDamage(context, tool("iron", "sword"), EntityType.COW);
+		ItemStack sharp = tool("iron", "sword");
+		sharp.addEnchantment(Enchantments.SHARPNESS, 5);
+		float enchanted = CombatTestHelper.measureMeleeDamage(context, sharp, EntityType.COW);
+		context.assertTrue(enchanted - base > 1.5f,
+				"Sharpness V must add real melee damage (base=" + base + ", sharp=" + enchanted + ")");
+		context.complete();
+	}
+
+	/** Unbreaking must let a Forgero tool outlast its plain self in real use. */
+	@GameTest(templateName = EMPTY_STRUCTURE, required = true)
+	public void unbreaking_enchantment_outlasts_plain(TestContext context) {
+		int max = ForgeroApi.itemQuery().getMaxDurability(tool("iron", "pickaxe"));
+		ItemStack unbreaking = tool("iron", "pickaxe");
+		unbreaking.addEnchantment(Enchantments.UNBREAKING, 3);
+		// Plain shatters within its base durability; Unbreaking III (~4x effective) survives it.
+		DurabilityTestHelper.assertOutlasts(context, tool("iron", "pickaxe"), unbreaking, Blocks.STONE, max + 8);
 		context.complete();
 	}
 }
