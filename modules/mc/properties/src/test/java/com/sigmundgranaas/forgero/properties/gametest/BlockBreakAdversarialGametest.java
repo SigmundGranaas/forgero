@@ -100,15 +100,7 @@ public class BlockBreakAdversarialGametest implements FabricGameTest {
 		line(context, Blocks.IRON_ORE, 2, 2, 2, 3);
 		context.setBlockState(new BlockPos(2, 2, 5), Blocks.STONE);
 
-		// Creative + teleport-to-block = instant break (the property's AOE then applies), mirroring the
-		// working 3x3 integration test. A survival mock player never accrues break progress on hardness>0.
-		ServerPlayerEntity player = context.createMockCreativeServerPlayerInWorld();
-		BlockPos rootAbs = context.getAbsolutePos(new BlockPos(2, 2, 2));
-		player.teleport(rootAbs.getX(), rootAbs.getY(), rootAbs.getZ());
-		player.setStackInHand(Hand.MAIN_HAND, pick);
-		player.setYaw(0);
-		player.setPitch(45);
-		new PlayerActionTestHelper(context, player).mineBlock(rootAbs);
+		BlockBreakTestHelper.aoeMine(context, pick, new BlockPos(2, 2, 2));
 
 		context.waitAndRun(2, () -> {
 			context.assertTrue(context.getBlockState(new BlockPos(2, 2, 3)).isAir(), "vein block z=3 must be broken");

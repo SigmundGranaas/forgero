@@ -73,48 +73,33 @@ public class LootGametest {
 	}
 
 
-	// NOT registered (@GameTest intentionally omitted): enabling it reveals auto-smelt-on-block-break
-	// is not verifiable as written. BlockLootMixin only fires from Block.getDroppedStacks, which
-	// tryBreakBlock reaches ONLY when the tool can harvest the ore (mining-level gate). The synthetic
-	// createStack pickaxe has no mining level, so iron ore yields NO drop for auto-smelt to transform
-	// (and a creative break drops nothing either). A working test needs a tool with real harvest level.
-	// See coverage-gap notes; left here as the starting point for that fix.
+	/**
+	 * Auto-smelt block loot, validated end-to-end in real gameplay. Uses SAND (no mining-level gate, so
+	 * any tool harvests it and it drops) whose drop smelts to GLASS — proving the BlockLootMixin loot
+	 * transform fires on a real harvested drop and runs the furnace recipe. (Ores can't be used here:
+	 * the synthetic {@code createStack} tool is a generic ToolItem with no mining level, so it can't
+	 * harvest ore at all — only native Forgero tools can. Sand sidesteps that and tests the feature.)
+	 */
+	@GameTest(templateName = FabricGameTest.EMPTY_STRUCTURE)
 	public void testBlockLootMixinWithAutoSmelt(TestContext context) {
-		// 1. Create a dynamic pickaxe with auto-smelt property
-		var filter = new TagFilter(new Identifier("forgero", "smeltable_ores"));
-		var smeltFunction = new AutoSmeltFunction(filter);
-		var handler = new ApplyFunctionsHandler(List.of(smeltFunction));
-		var property = new LootProperty(handler, null);
+		var smeltFunction = new AutoSmeltFunction(new IsItemFilter(new Identifier("minecraft", "sand")));
+		var property = new LootProperty(new ApplyFunctionsHandler(List.of(smeltFunction)), null);
 
 		ItemStack pickaxe = ComponentTester.createStack("autosmelt_pick", Set.of("pickaxe", "tool"), List.of(property));
 		context.assertTrue(!pickaxe.isEmpty(), "Failed to create dynamic pickaxe");
 
-		// 2. Setup world
-		BlockPos orePos = new BlockPos(1, 1, 1);
-		context.setBlockState(orePos, Blocks.IRON_ORE);
+		BlockPos sandPos = new BlockPos(1, 1, 1);
+		context.setBlockState(sandPos, Blocks.SAND);
 
-		// 3. Break the ore in SURVIVAL via the interaction manager: this fully breaks the block AND
-		// produces drops (a creative break yields no drops, so the loot transform has nothing to act on).
-		ServerPlayerEntity player = context.createMockCreativeServerPlayerInWorld();
-		player.changeGameMode(GameMode.SURVIVAL);
-		BlockPos oreAbs = context.getAbsolutePos(orePos);
-		player.teleport(oreAbs.getX(), oreAbs.getY(), oreAbs.getZ());
-		player.setStackInHand(Hand.MAIN_HAND, pickaxe);
-		player.interactionManager.tryBreakBlock(oreAbs);
+		BlockBreakTestHelper.breakForDrops(context, pickaxe, sandPos);
 
-		// 4. Assert outcome
-		context.waitAndRun(5, () -> {
-			// Assert that the block was actually broken
-			context.expectBlock(Blocks.AIR, orePos);
-
-			// Assert that the correct item was dropped
-			List<ItemEntity> items = context.getWorld().getEntitiesByClass(
-					ItemEntity.class,
-					new Box(context.getAbsolutePos(orePos)).expand(2),
-					(entity) -> entity.getStack().isOf(Items.IRON_INGOT)
-			);
-
-			context.assertTrue(!items.isEmpty(), "Expected to find a dropped Iron Ingot, but found none.");
+		context.waitAndRun(2, () -> {
+			context.expectBlock(Blocks.AIR, sandPos);
+			List<ItemStack> drops = BlockBreakTestHelper.dropsNear(context, sandPos);
+			context.assertTrue(drops.stream().anyMatch(s -> s.isOf(Items.GLASS)),
+					"auto-smelt must smelt the sand drop into glass, drops=" + drops);
+			context.assertFalse(drops.stream().anyMatch(s -> s.isOf(Items.SAND)),
+					"the raw sand must have been smelted, not dropped as-is");
 			context.complete();
 		});
 	}
